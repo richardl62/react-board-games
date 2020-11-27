@@ -36,7 +36,7 @@ const games = GameAndDisplayNames.map(([component, displayName]) => {
   return {
     component: component,
     displayName: displayName,
-    path: '/' + displayName.replace(/\s/g, ''),
+    path: '/' + displayName.replace(/\s/g, ''), // Remove add whitespace
   }
 });
 
@@ -63,7 +63,7 @@ function HomePage () {
 function PageNotFound () {
   return (
     <div>
-      <h2 style={{color:"red"}}>Page Not Found</h2>
+      <h2 style={{color:"red"}}>404: Page Not Found</h2>
       <p>You could try one of these links:</p>
       <GameLinks />
     </div>
@@ -74,11 +74,11 @@ function App() {
   return (
     <nav>
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route key="home" exact path="/" component={HomePage} />
         {games.map(g =>
-           <Route exact to={g.path} component={g.component} />,
+           <Route key={g.path} exact path={g.path} component={g.component} />,
         )}
-        <Route path="/" component={PageNotFound} />
+        <Route key="404" path="/" component={PageNotFound} />
       </Switch>
     </nav>
   );
