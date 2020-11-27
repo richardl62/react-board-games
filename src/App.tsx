@@ -78,7 +78,7 @@ function App() {
         {games.map(g =>
            <Route key={g.path} exact path={g.path} component={g.component} />,
         )}
-        <Route key="404" path="/" component={PageNotFound} />
+        <Route key="pageNotFound" component={PageNotFound} />
       </Switch>
     </nav>
   );
