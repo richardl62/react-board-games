@@ -1,10 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import Chess from './simple-board-game';
-
+import BoardGame from './simple-board-game';
+import ChessPiece from './chess';
 import './app.css';
 
 const homePage = "react-board-games";
+
+const makeChessPiece = (name: string) => (<ChessPiece piece={name} />);
 
 function ChessStandard() {
 
@@ -25,7 +27,9 @@ function ChessStandard() {
     copyableBottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
   };
 
-  return <Chess layout={layout}/>
+  return <BoardGame layout={layout}
+    makePiece={makeChessPiece}
+  />
 }
 
 function Chess5ASide() {
@@ -45,7 +49,7 @@ function Chess5ASide() {
     copyableBottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
   };
 
-  return <Chess layout={layout}/>
+  return <BoardGame layout={layout} makePiece={makeChessPiece}/>
 }
 
 function Draughts() {

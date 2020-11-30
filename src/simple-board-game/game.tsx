@@ -9,7 +9,7 @@ import GameControl from './game-control';
 import { useBoardControl } from './board-control'
 import { useDisplayOptions } from './display-options';
 
-import './chess.css';
+import './index.css';
 
 interface GameLayout {
         copyableTop: Array<string>;
@@ -19,8 +19,9 @@ interface GameLayout {
 
 interface GameProps {
     layout: GameLayout;
+    makePiece: (arg0: string) => JSX.Element;
 }
-const Game : React.FC<GameProps> = ({layout}: GameProps) => {
+const Game : React.FC<GameProps> = ({layout, makePiece}: GameProps) => {
     
     const boardControl = useBoardControl(layout); 
     const displayOptions = useDisplayOptions();

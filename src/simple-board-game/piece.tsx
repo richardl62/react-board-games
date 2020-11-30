@@ -4,9 +4,6 @@ import { itemTypes } from './constants';
 import { CorePiece } from './core-piece';
 import { BoardControl } from './board-control';
 
-import SVGPiece from 'react-chess-pieces';
-
-
 interface PieceProps {
   boardControl: BoardControl;
   corePiece: CorePiece;
@@ -35,7 +32,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
         className='chess__piece-div'
         ref={drag}
       >
-        <SVGPiece piece={corePiece.name} />
+        <div>{corePiece.name}</div>
       </div>
     );
   }
