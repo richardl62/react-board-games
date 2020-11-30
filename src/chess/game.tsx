@@ -26,9 +26,9 @@ const Game : React.FC = () => {
     }
 
     return (
-        <>
+        <div className="chess">
             <DndProvider backend={HTML5Backend}>
-                <div className="game">
+                <div className="chess__game">
 
                     <RowOfPieces
                         corePieces={copyablePieces('top')}
@@ -47,7 +47,7 @@ const Game : React.FC = () => {
                 </div>
             </DndProvider>
             <GameControl boardControl={boardControl} displayOptions={displayOptions} />
-        </>
+        </div>
     );
 }
 

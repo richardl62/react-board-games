@@ -14,19 +14,19 @@ class SimpleSquare extends React.PureComponent<Props> {
         const color = this.props.color;
         const children = this.props.children;
 
-        let className = 'square';
+        let className = 'chess__square';
         if (color) {
             if(color === 'black') {
-                className += ' black-square';
+                className += ' chess__black-square';
             } else if(color === 'white') {
-                className += ' white-square';
+                className += ' chess__white-square';
             } else {
                 throw new Error(`Unrecognised square color: ${color}`)
             }
         }
         
         return (
-            <div className='square-placeholder'>
+            <div className='chess__square-placeholder'>
                 <div className={className}>
                     {children}
                 </div>

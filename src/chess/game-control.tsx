@@ -31,17 +31,17 @@ const GameControl : React.FC<GameControlProps>  = ({boardControl, displayOptions
     );
 
     return (
-        <div className="game-control" >
-            <div className="game-type">
+        <div className="chess__game-control" >
+            <div className="chess__game-type">
                 {layoutNames.map(makeGameTypeItem)}
             </div>
 
-            <div className='buttons'>
+            <div className='chess__buttons'>
                 <button type='button' onClick={()=>boardControl.clear()}> Clear</button>
                 <button type='button' onClick={()=>displayOptions.flipRowOrder()}>Flip</button>
             </div>
 
-            <div className='buttons'>
+            <div className='chess__buttons'>
                 <button type='button'
                     disabled={!boardControl.canUndo}
                     onClick={() => boardControl.undo()}>

@@ -32,7 +32,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
   else {
     return (
       <div
-        className='piece-div'
+        className='chess__piece-div'
         ref={drag}
       >
         <SVGPiece piece={corePiece.name} />
