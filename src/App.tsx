@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import Chess from './chess';
+import Chess from './simple-board-game';
 
 import './app.css';
 
