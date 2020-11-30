@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    --square-size: 50px;
+
+    --board-background: rgb(100,0,0); /* Dark brown*/
+    --board-black-square: rgb(165 42 42); /* brown */
+    --board-white-square:  rgb(255 248 220); /* cornsilk */
+    --active-square-highlight: rgb(200 200 100); /* dark yellow */
+}
+
+#root {
+    display: flex;
+    justify-content:center;
+    
+    font-family: verdana;
+}
+
+.game-control {
+    margin-top: calc(var(--square-size) + 8px /* kludge */ );
+    margin-left: 8px;
+}
+
+
+.game-type > div {
+    display: inline;
+    white-space: nowrap;
+    font-size: 20px;
+ 
+}
+
+.game-type label {
+    margin-left: .3em;
+    margin-right: 0.8em;
+}
+
+.buttons {
+    margin-top: 6px;
+}
+
+.game-control button {
+   font-size: 20px;
+   width: 3.5em;
+   margin-right: 5px;
+}
+
+.game-control button:last-of-type {
+       margin-right: 0px;
+}
+
+.game {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-left: 5%;
+}
+
+.board {
+    justify-items: center;
+    align-items: center;
+    background-color: var(--board-background);
+}
+
+.square-placeholder {
+    position: relative;
+    width: var(--square-size);
+    height: var(--square-size);
+}
+
+.square {
+    width: 100%;
+    height: 100%;
+}
+
+.black-square, .white-square {
+    /* Use border rather tha grid-gap to avoid 'dead' areas that are not 
+    drag targets */
+    border: 1px solid var(--board-background, brown);
+}
+
+.black-square {
+    background-color: var(--board-black-square, black); /* brown */
+}
+
+.white-square {
+ background-color: var(--board-white-square, white); /* cornsilk */ 
+}
+
+.board-boarder {
+    color:white;
+}
+
+.board-boarder-letter {
+    font-size: 20px;
+    padding: 3px 0;
+}
+
+.board-boarder-number {
+    font-size: 25px;
+    padding: 0 7px;
+}
+
+.row-of-pieces {
+    display: flex;
+    margin: 5px;
+}
+
+.piece-div {
+    position: absolute;
+    top:0; left:0;
+    z-index: 1;
+    
+    width: var(--square-size);
+    height: var(--square-size);
+}
+
+.board .square:hover:active  {
+    border: 4px solid var(--active-square-highlight, purple);
+    background-color: none;
+}
+
+
+.board-row {
+    display: flex;
+}
+
+.board-label {
+    display: flex;
+}

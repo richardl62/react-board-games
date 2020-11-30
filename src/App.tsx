@@ -1,15 +1,17 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
+import Chess from './chess';
+
 import './app.css';
 
 const homePage = "react-board-games";
 
-function Chess() {
-  return <h2>Chess: Not yet implemented</h2>
+function ChessStandard() {
+  return <Chess />
 }
 
 function Chess5ASide() {
-  return <h2>Chess5ASide: Not yet implemented</h2>
+  return <Chess />
 }
 
 function Draughts() {
@@ -27,7 +29,7 @@ function Bobail() {
 // Functions and display name
 type GameAndDisplayName = [FunctionComponent, string];
 const GameAndDisplayNames: Array<GameAndDisplayName> = [
-  [Chess, "chess"],
+  [ChessStandard, "chess"],
   [Chess5ASide, "chess 5-a-side"],
   [Draughts, "draughts"],
   [Draughts10x10, "draughts 10x10"],
