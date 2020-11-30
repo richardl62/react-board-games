@@ -11,9 +11,18 @@ import { useDisplayOptions } from './display-options';
 
 import './chess.css';
 
-const Game : React.FC = () => {
+interface GameLayout {
+        copyableTop: Array<string>;
+        board: Array<Array<string|null>>;
+        copyableBottom: Array<string>;
+}
+
+interface GameProps {
+    layout: GameLayout;
+}
+const Game : React.FC<GameProps> = ({layout}: GameProps) => {
     
-    const boardControl = useBoardControl(); 
+    const boardControl = useBoardControl(layout); 
     const displayOptions = useDisplayOptions();
 
     let copyablePieces = (which : 'top' | 'bottom') => {
@@ -51,4 +60,5 @@ const Game : React.FC = () => {
     );
 }
 
-export { Game }
+export { Game };
+export type { GameLayout };

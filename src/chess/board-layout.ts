@@ -11,10 +11,8 @@ class BoardLayout {
     //     [r1c0, r1c1. ...], 
     //     ...
     // ]
-    constructor(corePieces: CorePieceArray, topLeftBlack: boolean) {
-        if(!(corePieces instanceof Array && typeof topLeftBlack === "boolean")) {
-            throw new Error("Bad input to BoardLayout");
-        }
+    constructor(corePieces: CorePieceArray, topLeftBlack = false) {
+
         this._corePieces = corePieces;
         this._topLeftBlack = topLeftBlack;
         Object.seal(this);

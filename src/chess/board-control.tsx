@@ -1,30 +1,22 @@
 import { useState, useRef } from 'react';
 import { BoardLayout } from './board-layout';
 
-import { defaultLayoutName } from './starting-layouts';
 import { StateManager } from '../state-manager';
 import {  CorePieceFactory, CorePieceId } from './core-piece';
-import startingLayouts from './starting-layouts';
+import { GameLayout } from './game';
 
-type BoardLayoutName = keyof typeof startingLayouts;
 
-function makeBoardState(name: BoardLayoutName, cpf: CorePieceFactory) {
+function makeBoardState(layout: GameLayout, cpf: CorePieceFactory) {
 
     const makeCorePiece = (name: string) => cpf.make(name);
     const makeCorePieceOrNull = (name: string | null) => (name ? cpf.make(name) : null);
-
-    const layout = startingLayouts[name];
-    if (!layout) {
-        throw new Error(`Unrecognised layout name: ${name}`)
-    }
 
     const pieces = layout.board.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
 
     return {
         copyablePiecesTop: layout.copyableTop.map(makeCorePiece),
-        boardLayout: new BoardLayout(pieces, layout.topLeftBlack),
+        boardLayout: new BoardLayout(pieces),
         copyablePiecesBottom: layout.copyableBottom.map(makeCorePiece),
-        layoutName: name,
     };
 }
 
@@ -65,8 +57,8 @@ class BoardControl {
     redo () { this.setGameState( this.stateManager.redo());}
     restart () { this.setGameState( this.stateManager.restart());}
 
-    setBoardLayout (layoutName: BoardLayoutName) {
-        this.doSetGameState(makeBoardState(layoutName, this.corePieceFactory));
+    setBoardLayout (layout: GameLayout) {
+        this.doSetGameState(makeBoardState(layout, this.corePieceFactory));
     }
 
     get copyablePiecesTop() {return this.stateManager.state.copyablePiecesTop;}
@@ -74,7 +66,6 @@ class BoardControl {
 
 
     get boardLayout() {return this.stateManager.state.boardLayout;}
-    get boardLayoutName() {return this.stateManager.state.layoutName;}
 
     clear () {
         this.doSetGameState({
@@ -141,9 +132,9 @@ class BoardControl {
     }
 }
 
-function useBoardControl() {
+function useBoardControl(layout: GameLayout) {
     let corePieceFactory = useRef(new CorePieceFactory()).current;
-    const [gameState, setGameState] = useState(makeBoardState(defaultLayoutName, corePieceFactory));
+    const [gameState, setGameState] = useState(makeBoardState(layout, corePieceFactory));
     let stateManager = useRef(new StateManager(gameState)).current;
     return new BoardControl(stateManager, setGameState, corePieceFactory); 
 }

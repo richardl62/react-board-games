@@ -1,15 +1,6 @@
 import React from 'react';
-import layouts from './starting-layouts';
 import { BoardControl } from './board-control';
 import { DisplayOptions } from './display-options';
-
-type LayoutKey = keyof typeof layouts;
-const layoutNames = Object.keys(layouts) as Array<LayoutKey>; // Kludge?
-
-function displayName(layoutName: LayoutKey) {
-    // replace '-' with non-breaking space
-    return layouts[layoutName].displayName.replace("o", "&#8209;");
-}
 
 interface GameControlProps {
     boardControl: BoardControl,
@@ -17,24 +8,9 @@ interface GameControlProps {
 };
 
 const GameControl : React.FC<GameControlProps>  = ({boardControl, displayOptions}) => {
-    const currentLayout = boardControl.boardLayoutName;
-
-    const makeGameTypeItem = (name: LayoutKey) => (
-        <div key={name}>
-            <input type="radio" name="game-type" id={name}
-                onChange={() => boardControl.setBoardLayout(name)}
-                checked={currentLayout === name}
-            />
-
-            <label htmlFor={name}>{displayName(name)}</label>
-        </div>
-    );
 
     return (
         <div className="chess__game-control" >
-            <div className="chess__game-type">
-                {layoutNames.map(makeGameTypeItem)}
-            </div>
 
             <div className='chess__buttons'>
                 <button type='button' onClick={()=>boardControl.clear()}> Clear</button>

@@ -7,11 +7,45 @@ import './app.css';
 const homePage = "react-board-games";
 
 function ChessStandard() {
-  return <Chess />
+
+  const layout = {
+    copyableTop: ['p', 'n', 'b', 'r', 'q', 'k'],
+
+    board: [
+      ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+      ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+      ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+    ],
+
+    copyableBottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
+  };
+
+  return <Chess layout={layout}/>
 }
 
 function Chess5ASide() {
-  return <Chess />
+
+  const layout = {
+    copyableTop: ['p', 'n',  'b',  'r',  'q',  'k'],
+
+    board: [
+        ['r', 'n', 'b', 'q', 'k'],
+        ['p', 'p', 'p', 'p', 'p'],
+        [null, null, null, null, null],
+        [null, null, null, null, null],
+        ['P', 'P', 'P', 'P', 'P'],
+        ['R', 'N', 'B', 'Q', 'K'],
+    ],
+
+    copyableBottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
+  };
+
+  return <Chess layout={layout}/>
 }
 
 function Draughts() {
@@ -50,7 +84,9 @@ function GameLinks() {
   return (
     <ul>
       {games.map(g => {
-        return <li><Link className="game-link" to={g.path}>{g.displayName}</Link></li>
+        return (<li key={g.path}>
+          <Link className="game-link" to={g.path}>{g.displayName}</Link>
+          </li>);
         }
       )}
     </ul>
