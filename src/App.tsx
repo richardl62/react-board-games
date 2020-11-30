@@ -1,6 +1,8 @@
-import React,{ FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import './app.css';
+
+const homePage = "react-board-games";
 
 function Chess() {
   return <h2>Chess: Not yet implemented</h2>
@@ -33,10 +35,12 @@ const GameAndDisplayNames: Array<GameAndDisplayName> = [
 ];
 
 const games = GameAndDisplayNames.map(([component, displayName]) => {
+  const gamePage = displayName.replace(/\s/g, ''); // Remove add whitespace
+
   return {
     component: component,
     displayName: displayName,
-    path: '/' + displayName.replace(/\s/g, ''), // Remove add whitespace
+    path: `/${homePage}/${gamePage}`,
   }
 });
 
@@ -74,7 +78,7 @@ function App() {
   return (
     <nav>
       <Switch>
-        <Route key="home" exact path="/" component={HomePage} />
+        <Route key="react-board-games" exact path="/react-board-games" component={HomePage} />
         {games.map(g =>
            <Route key={g.path} exact path={g.path} component={g.component} />,
         )}
