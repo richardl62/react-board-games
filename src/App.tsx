@@ -48,7 +48,7 @@ function GameLinks() {
   return (
     <ul>
       {games.map(g => {
-        return <li><Link to={g.path}>{g.displayName}</Link></li>
+        return <li><Link className="game-link" to={g.path}>{g.displayName}</Link></li>
         }
       )}
     </ul>
@@ -66,9 +66,9 @@ function HomePage () {
 
 function PageNotFound () {
   return (
-    <div>
-      <h2 style={{color:"red"}}>404: Page Not Found</h2>
-      <p>You could try one of these links:</p>
+    <div className="page-not-found">
+      <div>404: Page Not Found</div>
+      <div>You could try one of these links:</div>
       <GameLinks />
     </div>
   )
@@ -76,15 +76,13 @@ function PageNotFound () {
 
 function App() {
   return (
-    <nav>
-      <Switch>
-        <Route key="react-board-games" exact path="/react-board-games" component={HomePage} />
-        {games.map(g =>
-           <Route key={g.path} exact path={g.path} component={g.component} />,
-        )}
-        <Route key="pageNotFound" component={PageNotFound} />
-      </Switch>
-    </nav>
+    <Switch>
+      <Route key="react-board-games" exact path="/react-board-games" component={HomePage} />
+      {games.map(g =>
+        <Route key={g.path} exact path={g.path} component={g.component} />,
+      )}
+      <Route key="pageNotFound" component={PageNotFound} />
+    </Switch>
   );
 }
 
