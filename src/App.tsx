@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import BoardGame from './simple-board-game';
 import ChessPiece from './chess';
+import BobailPiece from './bobail';
 import './app.css';
 
 const homePage = "react-board-games";
@@ -63,7 +64,21 @@ function Draughts10x10() {
 }
 
 function Bobail() {
-  return <h2>Bobail: Not yet implemented</h2>
+
+  const options = {
+
+    board: [
+        ['p1', 'p1', 'p1', 'p1', 'p1'],
+        [null, null, null, null, null],
+        [null, null, 'bb', null, null],
+        [null, null, null, null, null],
+        ['p2', 'p2', 'p2', 'p2', 'p2'],
+    ],
+
+    makePiece: (name: string ) => (<BobailPiece name={name} />),
+  };
+
+  return <BoardGame options={options} />
 }
 
 // Functions and display name

@@ -12,11 +12,10 @@ import { useDisplayOptions } from './display-options';
 import './index.css';
 
 interface GameLayout {
-        copyableTop: Array<string>;
+        copyableTop?: Array<string>;
         board: Array<Array<string|null>>;
-        copyableBottom: Array<string>;
+        copyableBottom?: Array<string>;
         makePiece: (arg0: string) => JSX.Element;
-    
 }
 
 interface GameProps {

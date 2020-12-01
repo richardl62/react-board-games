@@ -13,11 +13,13 @@ function makeBoardState(layout: GameLayout, cpf: CorePieceFactory) {
 
     const pieces = layout.board.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
 
-    return {
-        copyablePiecesTop: layout.copyableTop.map(makeCorePiece),
+    const state = {
         boardLayout: new BoardLayout(pieces),
-        copyablePiecesBottom: layout.copyableBottom.map(makeCorePiece),
+        copyablePiecesTop: layout.copyableTop ? layout.copyableTop.map(makeCorePiece) : [],
+        copyablePiecesBottom: layout.copyableBottom ? layout.copyableBottom.map(makeCorePiece) : [],
     };
+
+    return state;
 }
 
 type GameState = ReturnType<typeof makeBoardState>;
