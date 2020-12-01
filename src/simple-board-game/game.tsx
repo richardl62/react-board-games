@@ -15,15 +15,16 @@ interface GameLayout {
         copyableTop: Array<string>;
         board: Array<Array<string|null>>;
         copyableBottom: Array<string>;
+        makePiece: (arg0: string) => JSX.Element;
+    
 }
 
 interface GameProps {
-    layout: GameLayout;
-    makePiece: (arg0: string) => JSX.Element;
+    options: GameLayout;
 }
-const Game : React.FC<GameProps> = ({layout, makePiece}: GameProps) => {
+const Game : React.FC<GameProps> = ({options}: GameProps) => {
     
-    const boardControl = useBoardControl(layout); 
+    const boardControl = useBoardControl(options); 
     const displayOptions = useDisplayOptions();
 
     let copyablePieces = (which : 'top' | 'bottom') => {

@@ -21,21 +21,25 @@ function makeBoardState(layout: GameLayout, cpf: CorePieceFactory) {
 }
 
 type GameState = ReturnType<typeof makeBoardState>;
+type MakePiece = (arg0: string) => JSX.Element;
 
 class BoardControl {
 
     private stateManager: StateManager<GameState>;
     private setGameState: (arg: GameState) => void;
     private corePieceFactory: CorePieceFactory;
+    private _makePiece: MakePiece;
 
     constructor(
         manager: StateManager<GameState>,
         setGameState: (arg: GameState) => void,
         corePieceFactory: CorePieceFactory,
+        makePiece: MakePiece,
         ) {
         this.stateManager = manager;
         this.setGameState = setGameState;
         this.corePieceFactory = corePieceFactory;
+        this._makePiece = makePiece;
         }
 
 
@@ -66,6 +70,8 @@ class BoardControl {
 
 
     get boardLayout() {return this.stateManager.state.boardLayout;}
+
+    makePiece(name: string) {return this._makePiece(name);}
 
     clear () {
         this.doSetGameState({
@@ -136,7 +142,7 @@ function useBoardControl(layout: GameLayout) {
     let corePieceFactory = useRef(new CorePieceFactory()).current;
     const [gameState, setGameState] = useState(makeBoardState(layout, corePieceFactory));
     let stateManager = useRef(new StateManager(gameState)).current;
-    return new BoardControl(stateManager, setGameState, corePieceFactory); 
+    return new BoardControl(stateManager, setGameState, corePieceFactory, layout.makePiece); 
 }
 
 export { BoardControl, useBoardControl }

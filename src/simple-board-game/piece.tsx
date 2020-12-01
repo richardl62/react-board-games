@@ -32,7 +32,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
         className='chess__piece-div'
         ref={drag}
       >
-        <div>{corePiece.name}</div>
+        {boardControl.makePiece(corePiece.name)}
       </div>
     );
   }

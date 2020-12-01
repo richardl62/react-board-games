@@ -10,7 +10,7 @@ const makeChessPiece = (name: string) => (<ChessPiece piece={name} />);
 
 function ChessStandard() {
 
-  const layout = {
+  const options = {
     copyableTop: ['p', 'n', 'b', 'r', 'q', 'k'],
 
     board: [
@@ -25,16 +25,16 @@ function ChessStandard() {
     ],
 
     copyableBottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
+
+    makePiece: makeChessPiece,
   };
 
-  return <BoardGame layout={layout}
-    makePiece={makeChessPiece}
-  />
+  return <BoardGame options={options} />
 }
 
 function Chess5ASide() {
 
-  const layout = {
+  const options = {
     copyableTop: ['p', 'n',  'b',  'r',  'q',  'k'],
 
     board: [
@@ -47,9 +47,11 @@ function Chess5ASide() {
     ],
 
     copyableBottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
+
+    makePiece: makeChessPiece,
   };
 
-  return <BoardGame layout={layout} makePiece={makeChessPiece}/>
+  return <BoardGame options={options} />
 }
 
 function Draughts() {
