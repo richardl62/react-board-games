@@ -10,7 +10,7 @@ function RowOfPieces({ corePieces, boardControl }: {
     boardControl: BoardControl,
 }) {
     return (
-        <div className='chess__row-of-pieces'>
+        <div className='sbg__row-of-pieces'>
             {corePieces.map(
                 (cp, index) => (
                     <SimpleSquare key={index}>

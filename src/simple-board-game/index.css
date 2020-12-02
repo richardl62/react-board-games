@@ -1,4 +1,4 @@
-.chess {
+.sbg {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -16,39 +16,38 @@
     --active-square-highlight: rgb(200 200 100); /* dark yellow */
 }
 
-.chess__game-control {
+.sbg__game-control {
     margin-top: calc(var(--square-size) + 8px /* kludge */ );
     margin-left: 8px;
 }
 
-
-.chess__game-type > div {
+.sbg__game-type > div {
     display: inline;
     white-space: nowrap;
     font-size: 20px;
  
 }
 
-.chess__game-type label {
+.sbg__game-type label {
     margin-left: .3em;
     margin-right: 0.8em;
 }
 
-.chess__buttons {
+.sbg__buttons {
     margin-top: 6px;
 }
 
-.chess__game-control button {
+.sbg__game-control button {
    font-size: 20px;
    width: 3.5em;
    margin-right: 5px;
 }
 
-.chess__game-control button:last-of-type {
+.sbg__game-control button:last-of-type {
        margin-right: 0px;
 }
 
-.chess__game {
+.sbg__game {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -56,58 +55,58 @@
     margin-left: 5%;
 }
 
-.chess__board {
+.sbg__board {
     justify-items: center;
     align-items: center;
     background-color: var(--board-background);
 }
 
-.chess__square-placeholder {
+.sbg__square-placeholder {
     position: relative;
     width: var(--square-size);
     height: var(--square-size);
 }
 
-.chess__square {
+.sbg__square {
     width: 100%;
     height: 100%;
 }
 
-.chess__simple-square {
+.sbg__simple-square {
     border: 2px solid var(--board-background, brown);
     background-color: var(--board-white-square, white);
 }
 
 
-.chess__black-square {
+.sbg__black-square {
     background-color: var(--board-black-square, black);
 }
 
-.chess__white-square {
+.sbg__white-square {
     background-color: var(--board-white-square, white);
 }
 
 
-.chess__board-boarder {
+.sbg__board-boarder {
     color:white;
 }
 
-.chess__board-boarder-letter {
+.sbg__board-boarder-letter {
     font-size: 20px;
     padding: 3px 0;
 }
 
-.chess__board-boarder-number {
+.sbg__board-boarder-number {
     font-size: 25px;
     padding: 0 7px;
 }
 
-.chess__row-of-pieces {
+.sbg__row-of-pieces {
     display: flex;
     margin: 5px;
 }
 
-.chess__piece-div {
+.sbg__piece-div {
     position: absolute;
     top:0; left:0;
     z-index: 1;
@@ -116,16 +115,16 @@
     height: var(--square-size);
 }
 
-.chess__board .square:hover:active  {
+.sbg__board .square:hover:active  {
     border: 4px solid var(--active-square-highlight, purple);
     background-color: none;
 }
 
 
-.chess__board-row {
+.sbg__board-row {
     display: flex;
 }
 
-.chess__board-label {
+.sbg__board-label {
     display: flex;
 }

@@ -29,7 +29,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
   else {
     return (
       <div
-        className='chess__piece-div'
+        className='sbg__piece-div'
         ref={drag}
       >
         {boardControl.makePiece(corePiece.name)}

@@ -14,7 +14,7 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
         elems.push(
             <div
                 key={key(col)}
-                className='chess__board-boarder chess__board-boarder-letter'
+                className='sbg__board-boarder sbg__board-boarder-letter'
             >
                 {String.fromCharCode(65+col)}
             </div>
@@ -30,7 +30,7 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
     let makeBoarderElem = (name: string) => (
         <div
             key={key(name)}
-            className='chess__board-boarder chess__board-boarder-number'
+            className='sbg__board-boarder sbg__board-boarder-number'
         >
             {layout.nRows - row}
         </div>
@@ -93,7 +93,7 @@ function Board({ boardControl, displayOptions }: {
     };
 
     return (
-        <div className="chess__board" style={style}>
+        <div className="sbg__board" style={style}>
             {elems}
         </div>
     )

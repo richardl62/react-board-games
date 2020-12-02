@@ -46,9 +46,10 @@ const Game : React.FC<GameProps> = ({options}: GameProps) => {
     }
 
     return (
-        <div className="chess">
-            <DndProvider backend={HTML5Backend}>
-                <div className="chess__game">
+        // sbg -> Simple Board Game
+        <div className="sbg"> 
+             <DndProvider backend={HTML5Backend}>
+                <div className="sbg__game">
 
                     <RowOfPieces
                         corePieces={copyablePieces('top')}

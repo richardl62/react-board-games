@@ -18,20 +18,20 @@ class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
     render() {
         const {children, squareStyle} = this.props;
         
-        let className = 'chess__square';
+        let className = 'sbg__square';
         if (squareStyle) {
             const { checkered, black } = squareStyle;
             if (!checkered) {
-                className += ' chess__simple-square';
+                className += ' sbg__simple-square';
             } else if (black) {
-                className += ' chess__black-square';
+                className += ' sbg__black-square';
             } else {
-                className += ' chess__white-square';
+                className += ' sbg__white-square';
             } 
         }
     
         return (
-            <div className='chess__square-placeholder'>
+            <div className='sbg__square-placeholder'>
                 <div className={className}>
                     {children}
                 </div>

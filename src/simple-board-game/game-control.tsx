@@ -10,14 +10,14 @@ interface GameControlProps {
 const GameControl : React.FC<GameControlProps>  = ({boardControl, displayOptions}) => {
 
     return (
-        <div className="chess__game-control" >
+        <div className="sbg__game-control" >
 
-            <div className='chess__buttons'>
+            <div className='sbg__buttons'>
                 <button type='button' onClick={()=>boardControl.clear()}> Clear</button>
                 <button type='button' onClick={()=>displayOptions.flipRowOrder()}>Flip</button>
             </div>
 
-            <div className='chess__buttons'>
+            <div className='sbg__buttons'>
                 <button type='button'
                     disabled={!boardControl.canUndo}
                     onClick={() => boardControl.undo()}>
