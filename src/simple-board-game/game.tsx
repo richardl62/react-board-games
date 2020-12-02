@@ -11,12 +11,22 @@ import { useDisplayOptions } from './display-options';
 
 import './index.css';
 
-interface GameLayout {
-        copyableTop?: Array<string>;
-        board: Array<Array<string|null>>;
-        copyableBottom?: Array<string>;
-        makePiece: (arg0: string) => JSX.Element;
+type StyleName = 'checkered';
+const checkered: StyleName = 'checkered';
+
+interface Copyable {
+    top: Array<string>;
+    bottom: Array<string>;
 }
+
+interface GameLayout {
+        copyable: Copyable | null;
+
+        board: Array<Array<string|null>>;
+        makePiece: (arg0: string) => JSX.Element;
+
+        style: StyleName | null;  // For now
+    };
 
 interface GameProps {
     options: GameLayout;
@@ -61,5 +71,5 @@ const Game : React.FC<GameProps> = ({options}: GameProps) => {
     );
 }
 
-export { Game };
+export { Game, checkered };
 export type { GameLayout };

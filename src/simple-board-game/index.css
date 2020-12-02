@@ -73,19 +73,20 @@
     height: 100%;
 }
 
-.chess__black-square, .white-square {
-    /* Use border rather tha grid-gap to avoid 'dead' areas that are not 
-    drag targets */
-    border: 1px solid var(--board-background, brown);
+.chess__simple-square {
+    border: 2px solid var(--board-background, brown);
+    background-color: var(--board-white-square, white);
 }
 
+
 .chess__black-square {
-    background-color: var(--board-black-square, black); /* brown */
+    background-color: var(--board-black-square, black);
 }
 
 .chess__white-square {
- background-color: var(--board-white-square, white); /* cornsilk */ 
+    background-color: var(--board-white-square, white);
 }
+
 
 .chess__board-boarder {
     color:white;

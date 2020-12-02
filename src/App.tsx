@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import BoardGame from './simple-board-game';
+import BoardGame, {checkered} from './simple-board-game';
 import ChessPiece from './chess';
 import BobailPiece from './bobail';
 import './app.css';
@@ -9,10 +9,16 @@ const homePage = "react-board-games";
 
 const makeChessPiece = (name: string) => (<ChessPiece piece={name} />);
 
+
 function ChessStandard() {
 
   const options = {
-    copyableTop: ['p', 'n', 'b', 'r', 'q', 'k'],
+    style: checkered,
+
+    copyable: {
+      top: ['p', 'n',  'b',  'r',  'q',  'k'],
+      bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
+    },
 
     board: [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
@@ -24,9 +30,6 @@ function ChessStandard() {
       ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
       ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
     ],
-
-    copyableBottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
-
     makePiece: makeChessPiece,
   };
 
@@ -36,7 +39,7 @@ function ChessStandard() {
 function Chess5ASide() {
 
   const options = {
-    copyableTop: ['p', 'n',  'b',  'r',  'q',  'k'],
+    style: checkered,
 
     board: [
         ['r', 'n', 'b', 'q', 'k'],
@@ -47,7 +50,10 @@ function Chess5ASide() {
         ['R', 'N', 'B', 'Q', 'K'],
     ],
 
-    copyableBottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
+    copyable: {
+      top: ['p', 'n',  'b',  'r',  'q',  'k'],
+      bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
+    },
 
     makePiece: makeChessPiece,
   };
@@ -66,7 +72,7 @@ function Draughts10x10() {
 function Bobail() {
 
   const options = {
-
+    style: null,
     board: [
         ['p1', 'p1', 'p1', 'p1', 'p1'],
         [null, null, null, null, null],
@@ -74,6 +80,8 @@ function Bobail() {
         [null, null, null, null, null],
         ['p2', 'p2', 'p2', 'p2', 'p2'],
     ],
+
+    copyable: null,
 
     makePiece: (name: string ) => (<BobailPiece name={name} />),
   };

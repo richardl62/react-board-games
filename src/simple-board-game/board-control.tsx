@@ -3,7 +3,7 @@ import { BoardLayout } from './board-layout';
 
 import { StateManager } from '../state-manager';
 import {  CorePieceFactory, CorePieceId } from './core-piece';
-import { GameLayout } from './game';
+import { GameLayout, checkered } from './game';
 
 
 function makeBoardState(layout: GameLayout, cpf: CorePieceFactory) {
@@ -13,10 +13,15 @@ function makeBoardState(layout: GameLayout, cpf: CorePieceFactory) {
 
     const pieces = layout.board.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
 
+    const squarePattern = {
+        checkered: layout.style === checkered,
+        topLeftBlack: false,
+    };
+    
     const state = {
-        boardLayout: new BoardLayout(pieces),
-        copyablePiecesTop: layout.copyableTop ? layout.copyableTop.map(makeCorePiece) : [],
-        copyablePiecesBottom: layout.copyableBottom ? layout.copyableBottom.map(makeCorePiece) : [],
+        boardLayout: new BoardLayout(pieces, squarePattern),
+        copyablePiecesTop: layout.copyable ? layout.copyable.top.map(makeCorePiece) : [],
+        copyablePiecesBottom: layout.copyable ? layout.copyable.bottom.map(makeCorePiece) : [],
     };
 
     return state;
@@ -36,12 +41,12 @@ class BoardControl {
         manager: StateManager<GameState>,
         setGameState: (arg: GameState) => void,
         corePieceFactory: CorePieceFactory,
-        makePiece: MakePiece,
+        layout: GameLayout,
         ) {
         this.stateManager = manager;
         this.setGameState = setGameState;
         this.corePieceFactory = corePieceFactory;
-        this._makePiece = makePiece;
+        this._makePiece = layout.makePiece;
         }
 
 
@@ -144,7 +149,7 @@ function useBoardControl(layout: GameLayout) {
     let corePieceFactory = useRef(new CorePieceFactory()).current;
     const [gameState, setGameState] = useState(makeBoardState(layout, corePieceFactory));
     let stateManager = useRef(new StateManager(gameState)).current;
-    return new BoardControl(stateManager, setGameState, corePieceFactory, layout.makePiece); 
+    return new BoardControl(stateManager, setGameState, corePieceFactory, layout); 
 }
 
 export { BoardControl, useBoardControl }

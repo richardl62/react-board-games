@@ -36,20 +36,27 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
         </div>
     );
 
-    let makeSquare = (col: number) => (
-        <BoardSquare
-            key={key(col)}
+    let makeSquare = (col: number) => {
 
-            corePiece={layout.corePiece(row, col)}
-            boardControl={boardControl}
+        const squareStyle = {
+            checkered: layout.checkered,
+            black: layout.isBlack(row, col),
+        }
 
-            // This is the 'conceptual' color which must be black or white.
-            color={layout.isBlack(row, col) ? 'black' : 'white'}
+        return (
+            <BoardSquare
+                key={key(col)}
 
-            row={row}
-            col={col}
-        />
-    )
+                corePiece={layout.corePiece(row, col)}
+                boardControl={boardControl}
+
+                squareStyle={squareStyle}
+
+                row={row}
+                col={col}
+            />
+        );
+    };
 
     elems.push(makeBoarderElem('start'));
 

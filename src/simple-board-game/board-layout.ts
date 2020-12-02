@@ -1,27 +1,32 @@
 import {CorePiece} from "./core-piece";
 type CorePieceArray = Array<Array<CorePiece|null>>;
 
+interface SquarePattern {
+    checkered: boolean;
+    topLeftBlack: boolean;
+}
+
 class BoardLayout {
 
     private _corePieces : CorePieceArray;
-    private _topLeftBlack : boolean;
+    private _squarePattern: SquarePattern;
     // Input is of form show below.  Each element is CorePiece or null.
     // [
     //     [r0c0, r0c1. ...],
     //     [r1c0, r1c1. ...], 
     //     ...
     // ]
-    constructor(corePieces: CorePieceArray, topLeftBlack = false) {
+    constructor(corePieces: CorePieceArray, squarePattern: SquarePattern) {
 
         this._corePieces = corePieces;
-        this._topLeftBlack = topLeftBlack;
+        this._squarePattern =  squarePattern;
         Object.seal(this);
     }
 
     copy() {
         return new BoardLayout(
             this._corePieces.map(row => [...row]), 
-            this._topLeftBlack
+            this._squarePattern,
         );
     }
 
@@ -47,9 +52,15 @@ class BoardLayout {
         return this._corePieces[row][col];
     }
 
+    get checkered() {return this._squarePattern.checkered;}
+    
     isBlack(row: number, col: number) {
-        const asTopLeft = (row + col) % 2 === 0;
-        return asTopLeft ? this._topLeftBlack : !this._topLeftBlack;
+        const {checkered, topLeftBlack} = this._squarePattern;
+        if(checkered) {
+            const asTopLeft = (row + col) % 2 === 0;
+            return asTopLeft ? topLeftBlack : !topLeftBlack;
+        }
+        return false;
     }
 
    findCorePiecebyId(id: number) {
@@ -74,7 +85,7 @@ class BoardLayout {
     }
 
     reserveRows() {
-        this._topLeftBlack = this.isBlack(this.nRows-1, 0);
+        this._squarePattern.topLeftBlack = this.isBlack(this.nRows-1, 0);
 
         let cp = this._corePieces; 
         for(let row = 0; row < this.nRows/2; ++row) {

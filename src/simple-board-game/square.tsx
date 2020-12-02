@@ -5,26 +5,31 @@ import { Piece } from './piece';
 import { CorePiece } from './core-piece';
 import { BoardControl } from './board-control';
 
-interface Props {
-    color?: 'black' | 'white';
+interface SquareStyle {
+    checkered: boolean,
+    black: boolean,
 }
 
-class SimpleSquare extends React.PureComponent<Props> {
-    render() {
-        const color = this.props.color;
-        const children = this.props.children;
+interface SimpleSquareProps {
+    squareStyle?: SquareStyle;
+}
 
-        let className = 'chess__square';
-        if (color) {
-            if(color === 'black') {
-                className += ' chess__black-square';
-            } else if(color === 'white') {
-                className += ' chess__white-square';
-            } else {
-                throw new Error(`Unrecognised square color: ${color}`)
-            }
-        }
+class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
+    render() {
+        const {children, squareStyle} = this.props;
         
+        let className = 'chess__square';
+        if (squareStyle) {
+            const { checkered, black } = squareStyle;
+            if (!checkered) {
+                className += ' chess__simple-square';
+            } else if (black) {
+                className += ' chess__black-square';
+            } else {
+                className += ' chess__white-square';
+            } 
+        }
+    
         return (
             <div className='chess__square-placeholder'>
                 <div className={className}>
@@ -39,12 +44,12 @@ function DroppableSquare(options:
     {
         corePiece: CorePiece | null,
         boardControl: BoardControl, 
-        color: 'black' | 'white',
+        squareStyle: SquareStyle,
         row: number,
         col: number,
     }) {
 
-    const { corePiece, boardControl, color, row, col} = options;
+    const { corePiece, boardControl, squareStyle, row, col} = options;
 
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
@@ -64,7 +69,7 @@ function DroppableSquare(options:
                 height: '100%',
             }}
         >
-            <SimpleSquare color={color}>
+            <SimpleSquare squareStyle={squareStyle}>
                 {corePiece ? <Piece corePiece={corePiece} boardControl={boardControl} /> : null}
             </SimpleSquare>
 
