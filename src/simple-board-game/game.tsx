@@ -20,12 +20,12 @@ interface Copyable {
 }
 
 interface GameLayout {
-        copyable: Copyable | null;
+        copyable?: Copyable;
 
-        board: Array<Array<string|null>>;
+        pieces: Array<Array<string|null>>;
         makePiece: (arg0: string) => JSX.Element;
 
-        style: StyleName | null;  // For now
+        style?: StyleName;
     };
 
 interface GameProps {

@@ -1,26 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import BoardGame, {checkered} from './simple-board-game';
-import ChessPiece from './chess';
+import BoardGame from './simple-board-game';
+import Chess from './chess/chess';
 import BobailPiece from './bobail';
 import './app.css';
 
 const homePage = "react-board-games";
 
-const makeChessPiece = (name: string) => (<ChessPiece piece={name} />);
-
-
 function ChessStandard() {
 
-  const options = {
-    style: checkered,
-
-    copyable: {
-      top: ['p', 'n',  'b',  'r',  'q',  'k'],
-      bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
-    },
-
-    board: [
+  const pieces  = [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
       ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
       [null, null, null, null, null, null, null, null],
@@ -29,36 +18,25 @@ function ChessStandard() {
       [null, null, null, null, null, null, null, null],
       ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
       ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
-    ],
-    makePiece: makeChessPiece,
-  };
+    ];
 
-  return <BoardGame options={options} />
+  return <Chess pieces={pieces} />
 }
+
+
 
 function Chess5ASide() {
 
-  const options = {
-    style: checkered,
-
-    board: [
+    const pieces = [
         ['r', 'n', 'b', 'q', 'k'],
         ['p', 'p', 'p', 'p', 'p'],
         [null, null, null, null, null],
         [null, null, null, null, null],
         ['P', 'P', 'P', 'P', 'P'],
         ['R', 'N', 'B', 'Q', 'K'],
-    ],
+    ];
 
-    copyable: {
-      top: ['p', 'n',  'b',  'r',  'q',  'k'],
-      bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
-    },
-
-    makePiece: makeChessPiece,
-  };
-
-  return <BoardGame options={options} />
+  return <Chess pieces={pieces} />
 }
 
 function Draughts() {
@@ -72,16 +50,13 @@ function Draughts10x10() {
 function Bobail() {
 
   const options = {
-    style: null,
-    board: [
+    pieces: [
         ['p1', 'p1', 'p1', 'p1', 'p1'],
         [null, null, null, null, null],
         [null, null, 'bb', null, null],
         [null, null, null, null, null],
         ['p2', 'p2', 'p2', 'p2', 'p2'],
     ],
-
-    copyable: null,
 
     makePiece: (name: string ) => (<BobailPiece name={name} />),
   };

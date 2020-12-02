@@ -11,7 +11,7 @@ function makeBoardState(layout: GameLayout, cpf: CorePieceFactory) {
     const makeCorePiece = (name: string) => cpf.make(name);
     const makeCorePieceOrNull = (name: string | null) => (name ? cpf.make(name) : null);
 
-    const pieces = layout.board.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
+    const pieces = layout.pieces.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
 
     const squarePattern = {
         checkered: layout.style === checkered,
