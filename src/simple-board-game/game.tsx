@@ -26,6 +26,8 @@ interface GameLayout {
         makePiece: (arg0: string) => JSX.Element;
 
         style?: StyleName;
+
+        borderLabels?: boolean;
     };
 
 interface GameProps {

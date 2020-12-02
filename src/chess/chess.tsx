@@ -17,6 +17,8 @@ let Chess:FC<Props> = ({pieces} : Props) => {
         top: ['p', 'n',  'b',  'r',  'q',  'k'],
         bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
       },
+
+      borderLabels: true,
   
       makePiece: (name: string) => (<ChessPiece piece={name} />),
     };

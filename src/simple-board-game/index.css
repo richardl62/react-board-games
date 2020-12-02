@@ -87,16 +87,16 @@
 }
 
 
-.sbg__board-boarder {
+.sbg__board-border {
     color:white;
 }
 
-.sbg__board-boarder-letter {
+.sbg__board-border-letter {
     font-size: 20px;
     padding: 3px 0;
 }
 
-.sbg__board-boarder-number {
+.sbg__board-border-number {
     font-size: 25px;
     padding: 0 7px;
 }

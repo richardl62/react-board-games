@@ -14,7 +14,7 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
         elems.push(
             <div
                 key={key(col)}
-                className='sbg__board-boarder sbg__board-boarder-letter'
+                className='sbg__board-border sbg__board-border-letter'
             >
                 {String.fromCharCode(65+col)}
             </div>
@@ -30,7 +30,7 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
     let makeBoarderElem = (name: string) => (
         <div
             key={key(name)}
-            className='sbg__board-boarder sbg__board-boarder-number'
+            className='sbg__board-border sbg__board-border-number'
         >
             {layout.nRows - row}
         </div>
@@ -58,13 +58,17 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
         );
     };
 
-    elems.push(makeBoarderElem('start'));
+    if(boardControl.borderLabels) {
+        elems.push(makeBoarderElem('start'));
+    }
 
     for (let col = 0; col < layout.nCols; ++col) {
         elems.push(makeSquare(col));
     }
 
-    elems.push(makeBoarderElem('end'));
+    if(boardControl.borderLabels) {
+        elems.push(makeBoarderElem('end'));
+    }
 }
 
 
@@ -79,17 +83,24 @@ function Board({ boardControl, displayOptions }: {
 
     let elems: Elems = [];
 
-    addHeader(nCols, elems, 'top');
+    if(boardControl.borderLabels) {
+        addHeader(nCols, elems, 'top');
+    }
     for (let row = 0; row < nRows; ++row) {
         const rowToAdd = displayOptions.reverseBoardRows ? nRows - 1 - row : row;
         addRow(layout, rowToAdd, boardControl, elems);
     }
-    addHeader(nCols, elems, 'bottom');
 
+    if(boardControl.borderLabels) {
+        addHeader(nCols, elems, 'bottom');
+    }
+
+    const nGridCols = nCols + (boardControl.borderLabels ? 2 : 0);
+    const nGridRows = nRows + (boardControl.borderLabels ? 2 : 0);
     const style = { // For now
         display: 'grid',
-        gridTemplateColumns: `repeat(${nCols+2},auto)`,
-        gridTemplateRows: `repeat(${nRows+2},auto)`,
+        gridTemplateColumns: `repeat(${nGridCols},auto)`,
+        gridTemplateRows: `repeat(${nGridRows},auto)`,
     };
 
     return (

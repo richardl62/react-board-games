@@ -36,6 +36,7 @@ class BoardControl {
     private setGameState: (arg: GameState) => void;
     private corePieceFactory: CorePieceFactory;
     private _makePiece: MakePiece;
+    private _borderLabels: boolean;
 
     constructor(
         manager: StateManager<GameState>,
@@ -47,15 +48,11 @@ class BoardControl {
         this.setGameState = setGameState;
         this.corePieceFactory = corePieceFactory;
         this._makePiece = layout.makePiece;
+        this._borderLabels = Boolean(layout.borderLabels);
         }
 
 
     doSetGameState(newState: Partial<GameState>) {
-
-        // if(!equivalentState(gameState,  this.stateManager.gameState)) {
-        //     console.log("gameState", gameState, "tateManager.gameState",  this.stateManager.gameState);
-        //     throw new Error("StateManager out of sync with client");
-        // }
 
         this.stateManager.setState(newState);
         this.setGameState(this.stateManager.state);
@@ -77,6 +74,8 @@ class BoardControl {
 
 
     get boardLayout() {return this.stateManager.state.boardLayout;}
+
+    get borderLabels() {return this._borderLabels;}
 
     makePiece(name: string) {return this._makePiece(name);}
 
