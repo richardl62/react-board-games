@@ -1,19 +1,23 @@
-import {FC} from 'react';
 import BoardGame from '../simple-board-game';
-import './bobail.css';
+import { Counter } from '../pieces';
 
-interface PieceParams {
-    name: string;
+interface StringMap { [key: string]: string; }
+
+const colors : StringMap = {
+    p1: 'red',
+    p2: 'green',
+    bb: 'yellow',
 };
 
-const PieceNames = ['p1', 'p2', 'bb'];
+function makePiece(name: string) {
 
-const Piece:FC<PieceParams> = ({name}: PieceParams) => {
-    if(!PieceNames.find(p => p === name)) {
+    const color = colors[name];
+
+    if(!color) {
         throw new Error(`Unrecognised name for Bobail Piece: '${name}'`)
     }
-    const className = "bobail bobail-" + name; 
-    return <div className={className}/>;
+ 
+    return <Counter color={color}/>;
 }
 
 function Bobail() {
@@ -27,7 +31,7 @@ function Bobail() {
           ['p2', 'p2', 'p2', 'p2', 'p2'],
       ],
   
-      makePiece: (name: string ) => (<Piece name={name} />),
+      makePiece: makePiece,
     };
   
     return <BoardGame options={options} />
