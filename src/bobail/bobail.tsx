@@ -6,7 +6,7 @@ interface StringMap { [key: string]: string; }
 const colors : StringMap = {
     p1: 'red',
     p2: 'green',
-    bb: 'yellow',
+    bb: '#e0e000',
 };
 
 function makePiece(name: string) {
@@ -23,15 +23,17 @@ function makePiece(name: string) {
 function Bobail() {
 
     const options = {
-      pieces: [
-          ['p1', 'p1', 'p1', 'p1', 'p1'],
-          [null, null, null, null, null],
-          [null, null, 'bb', null, null],
-          [null, null, null, null, null],
-          ['p2', 'p2', 'p2', 'p2', 'p2'],
-      ],
-  
-      makePiece: makePiece,
+        borderLabels: true,
+        
+        pieces: [
+            ['p1', 'p1', 'p1', 'p1', 'p1'],
+            [null, null, null, null, null],
+            [null, null, 'bb', null, null],
+            [null, null, null, null, null],
+            ['p2', 'p2', 'p2', 'p2', 'p2'],
+        ],
+
+        makePiece: makePiece,
     };
   
     return <BoardGame options={options} />

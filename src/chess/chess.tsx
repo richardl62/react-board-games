@@ -10,15 +10,14 @@ type Props = {
 let Chess:FC<Props> = ({pieces} : Props) => {
     const options = {
       style: checkered,
+      borderLabels: true,
   
       pieces: pieces,
-  
+
       copyable: {
         top: ['p', 'n',  'b',  'r',  'q',  'k'],
         bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
       },
-
-      borderLabels: true,
   
       makePiece: (name: string) => (<ChessPiece piece={name} />),
     };
