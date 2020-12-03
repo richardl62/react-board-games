@@ -1,22 +1,26 @@
 import {FC} from 'react';
+import './pieces.css';
 
 interface Props {
-    color?: string;
+    color: string;
+    text?: string | null;
+    textColor?: string | null;
 }
 
-const Counter:FC<Props> = ({color} : Props) => {
+const Counter:FC<Props> = ({color, text, textColor} : Props) => {
     
-    let style =  {
-        height: '80%',
-        width: '80%',
-        margin: '10%',
-        borderRadius: '50%',
-        backgroundColor: color,
+
+
+    const innerText = () => {
+        const style =  {color: textColor ? textColor: undefined};
+
+        return <div style={style}>{text}</div>
     }
 
+    const style =  {backgroundColor: color};
     return (
-        <div style={style}>
-    
+        <div className="pieces--counter" style={style}>
+            {text ? innerText() : null }
         </div>
     );
 }

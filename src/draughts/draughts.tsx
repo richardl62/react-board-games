@@ -1,12 +1,24 @@
 import { FC } from 'react';
 import BoardGame, {checkered} from '../simple-board-game';
+import { Counter } from '../pieces';
 
-interface PieceParams {
-    name: string;
-};
+function pieceColor(black: boolean) {
+    return black ? 'black' : 
+        'rgb(230 220 200)'  // kludge? Depemds (sort of) on color of squares on board
+    ;
+}
 
-const Piece: FC<PieceParams> = ({ name }: PieceParams) => {
-    return <div>{name}</div>;
+function makePiece(name: string) {
+
+    const isBlack = name.toLowerCase() === 'b';
+    const isKing =  name === name.toUpperCase();;
+
+    return (
+        <Counter color={pieceColor(isBlack)}
+            text={isKing ? "K" : null}
+            textColor={pieceColor(!isBlack)}
+        />
+    );
 }
 
 interface DraughtProps {
@@ -53,7 +65,7 @@ const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProp
 
         pieces: pieces,
 
-        makePiece: (name: string) => (<Piece name={name} />),
+        makePiece: makePiece,
     };
 
     return <BoardGame options={options} />

@@ -1,0 +1,12 @@
+.pieces--counter {
+    height: 80%;
+    width: 80%;
+    margin: 10%;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 150%;
+}
