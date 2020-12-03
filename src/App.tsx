@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import BoardGame from './simple-board-game';
 import Chess from './chess/chess';
-import BobailPiece from './bobail';
+import Bobail from './bobail';
 import './app.css';
 
 const homePage = "react-board-games";
@@ -47,22 +46,6 @@ function Draughts10x10() {
   return <h2>Draughts10x10: Not yet implemented</h2>
 }
 
-function Bobail() {
-
-  const options = {
-    pieces: [
-        ['p1', 'p1', 'p1', 'p1', 'p1'],
-        [null, null, null, null, null],
-        [null, null, 'bb', null, null],
-        [null, null, null, null, null],
-        ['p2', 'p2', 'p2', 'p2', 'p2'],
-    ],
-
-    makePiece: (name: string ) => (<BobailPiece name={name} />),
-  };
-
-  return <BoardGame options={options} />
-}
 
 // Functions and display name
 type GameAndDisplayName = [FunctionComponent, string];
