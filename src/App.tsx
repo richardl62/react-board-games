@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import Chess from './chess/chess';
+
+import Chess from './chess';
+import Draughts from './draughts'
 import Bobail from './bobail';
 import './app.css';
 
@@ -22,8 +24,6 @@ function ChessStandard() {
   return <Chess pieces={pieces} />
 }
 
-
-
 function Chess5ASide() {
 
     const pieces = [
@@ -38,12 +38,12 @@ function Chess5ASide() {
   return <Chess pieces={pieces} />
 }
 
-function Draughts() {
-  return <h2>Draughts: Not yet implemented</h2>
+function DraughtsStandard() {
+  return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
 }
 
 function Draughts10x10() {
-  return <h2>Draughts10x10: Not yet implemented</h2>
+  return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
 }
 
 
@@ -52,7 +52,7 @@ type GameAndDisplayName = [FunctionComponent, string];
 const GameAndDisplayNames: Array<GameAndDisplayName> = [
   [ChessStandard, "chess"],
   [Chess5ASide, "chess 5-a-side"],
-  [Draughts, "draughts"],
+  [DraughtsStandard, "draughts"],
   [Draughts10x10, "draughts 10x10"],
   [Bobail, "bobail"],
 ];

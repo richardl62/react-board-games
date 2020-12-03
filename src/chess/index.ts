@@ -1,1 +1,1 @@
-export * from './chess';
+export {default} from './chess';
