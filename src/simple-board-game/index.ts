@@ -1,1 +1,2 @@
-export { Game as default, checkered } from './game'
+export { default } from './game'
+export { checkered } from './game-interfaces'

@@ -68,7 +68,7 @@ const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProp
         makePiece: makePiece,
     };
 
-    return <BoardGame options={options} />
+    return <BoardGame {...options} />
 }
 
 export default Draughts;

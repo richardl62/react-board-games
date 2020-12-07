@@ -36,7 +36,7 @@ function Bobail() {
         makePiece: makePiece,
     };
   
-    return <BoardGame options={options} />
+    return <BoardGame {...options} />
   }
 
   export default Bobail;

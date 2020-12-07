@@ -8,34 +8,13 @@ import GameControl from './game-control';
 
 import { useBoardControl } from './board-control'
 import { useDisplayOptions } from './display-options';
+import { GameProps } from './game-interfaces';
 
 import './index.css';
 
-type StyleName = 'checkered';
-const checkered: StyleName = 'checkered';
-
-interface Copyable {
-    top: Array<string>;
-    bottom: Array<string>;
-}
-
-interface GameLayout {
-        copyable?: Copyable;
-
-        pieces: Array<Array<string|null>>;
-        makePiece: (arg0: string) => JSX.Element;
-
-        style?: StyleName;
-
-        borderLabels?: boolean;
-    };
-
-interface GameProps {
-    options: GameLayout;
-}
-const Game : React.FC<GameProps> = ({options}: GameProps) => {
+const Game : React.FC<GameProps> = (props: GameProps) => {
     
-    const boardControl = useBoardControl(options); 
+    const boardControl = useBoardControl(props); 
     const displayOptions = useDisplayOptions();
 
     let copyablePieces = (which : 'top' | 'bottom') => {
@@ -74,5 +53,4 @@ const Game : React.FC<GameProps> = ({options}: GameProps) => {
     );
 }
 
-export { Game, checkered };
-export type { GameLayout };
+export default Game;

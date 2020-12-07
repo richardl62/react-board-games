@@ -22,7 +22,7 @@ let Chess:FC<Props> = ({pieces} : Props) => {
       makePiece: (name: string) => (<ChessPiece piece={name} />),
     };
   
-    return <BoardGame options={options} />
+    return <BoardGame {...options} />
   }
 
 export default Chess;
