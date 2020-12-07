@@ -9,9 +9,13 @@ import GameControl from './game-control';
 import { useBoardControl } from './board-control'
 import { useDisplayOptions } from './display-options';
 import { GameProps } from './game-interfaces';
+import { Client as BgioClient } from 'boardgame.io/react';
 
 import './index.css';
 
+const DummyComponent = () => {
+    return <div>Hello from DummyComponent</div>
+} 
 const Game : React.FC<GameProps> = (props: GameProps) => {
     
     const boardControl = useBoardControl(props); 
@@ -26,7 +30,7 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
         return top ? boardControl.copyablePiecesTop : boardControl.copyablePiecesBottom;
     }
 
-    return (
+    const board = () => (
         // sbg -> Simple Board Game
         <div className="sbg"> 
              <DndProvider backend={HTML5Backend}>
@@ -51,6 +55,26 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
             <GameControl boardControl={boardControl} displayOptions={displayOptions} />
         </div>
     );
+
+
+    const TicTacToe = {
+        name: 'tic-tac-toe',
+
+        setup: () => ({ cells: Array(9).fill(null) }),
+      
+        moves: {
+          clickCell: (G: any, ctx: any, id: number) => {
+            G.cells[id] = ctx.currentPlayer;
+          },
+        },
+      };
+
+    const options ={
+        game: TicTacToe,
+        board: board,
+    };
+
+    return BgioClient(options);
 }
 
 export default Game;
