@@ -11,7 +11,7 @@
     "@types/node": "^12.19.7",
     "@types/react": "^16.14.2",
     "@types/react-dom": "^16.9.10",
-    "boardgame.io": "^0.42.0",
+    "boardgame.io": "^0.42.2",
     "react": "^17.0.1",
     "react-chess-pieces": "^1.0.5",
     "react-dnd": "^11.1.3",
