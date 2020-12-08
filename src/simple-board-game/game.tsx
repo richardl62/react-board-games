@@ -13,9 +13,9 @@ import { Client as BgioClient } from 'boardgame.io/react';
 
 import './index.css';
 
-const DummyComponent = () => {
-    return <div>Hello from DummyComponent</div>
-} 
+// const DummyComponent = () => {
+//     return <div>Hello from DummyComponent</div>
+// } 
 const Game : React.FC<GameProps> = (props: GameProps) => {
     
     const boardControl = useBoardControl(props); 
@@ -33,7 +33,7 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
     const board = () => (
         // sbg -> Simple Board Game
         <div className="sbg"> 
-             <DndProvider backend={HTML5Backend}>
+
                 <div className="sbg__game">
 
                     <RowOfPieces
@@ -51,14 +51,14 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
                         boardControl={boardControl}
                     />
                 </div>
-            </DndProvider>
             <GameControl boardControl={boardControl} displayOptions={displayOptions} />
         </div>
     );
 
 
-    const TicTacToe = {
-        name: 'tic-tac-toe',
+
+    const dummyGame = {
+        name: 'dummyGame',
 
         setup: () => ({ cells: Array(9).fill(null) }),
       
@@ -70,11 +70,19 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
       };
 
     const options ={
-        game: TicTacToe,
+        game: dummyGame,
         board: board,
     };
 
-    return BgioClient(options);
+    const Bg = BgioClient(options);
+
+    // Having DndProvider here, rather than in 'board' prevents error
+    // Cannot have two HTML5 backends at the same time
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <Bg/>
+        </DndProvider>
+    );
 }
 
 export default Game;
