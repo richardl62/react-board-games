@@ -12,9 +12,10 @@ type MakePiece = (arg0: PieceId) => JSX.Element;
 
 type StyleName = 'checkered';
 const checkered: StyleName = 'checkered';
+type SharedGameState = Array<Array<PieceId|null>>;
 
 interface GameState {
-    pieces: Array<Array<PieceId|null>>;
+    pieces: SharedGameState;
 }
 
 interface LocalState {
@@ -42,7 +43,7 @@ interface GameProps {
     style?: StyleName;
     borderLabels?: boolean;
 
-    pieces: Array<Array<PieceId|null>>;
+    pieces: SharedGameState;
     copyablePieces?: CopyablePieces;
 
     makePiece: MakePiece;
@@ -68,4 +69,4 @@ function makeGameControl(props: GameProps): GameControl {
 }
 
 export {makeGameState, makeLocalProps, makeGameControl, checkered};
-export type {GameState, LocalState, GameControl, GameProps};
+export type {GameState, LocalState, GameControl, GameProps, SharedGameState};

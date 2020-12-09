@@ -6,19 +6,17 @@ import { Board } from './board';
 import { RowOfPieces } from './row-of-pieces';
 import GameControl from './game-control';
 
-import { useBoardControl } from './board-control'
+import { BoardControl, useBoardControl } from './board-control'
 import { useDisplayOptions } from './display-options';
 import { GameProps } from './game-interfaces';
 import { Client as BgioClient } from 'boardgame.io/react';
 
 import './index.css';
 
-// const DummyComponent = () => {
-//     return <div>Hello from DummyComponent</div>
-// } 
-const Game : React.FC<GameProps> = (props: GameProps) => {
-    
-    const boardControl = useBoardControl(props); 
+interface CoreGameProps {
+    boardControl: BoardControl;
+}
+const CoreGame:  React.FC<CoreGameProps> = ({boardControl} : CoreGameProps) => {
     const displayOptions = useDisplayOptions();
 
     let copyablePieces = (which : 'top' | 'bottom') => {
@@ -30,7 +28,7 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
         return top ? boardControl.copyablePiecesTop : boardControl.copyablePiecesBottom;
     }
 
-    const board = () => (
+   return (
         // sbg -> Simple Board Game
         <div className="sbg"> 
 
@@ -54,13 +52,19 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
             <GameControl boardControl={boardControl} displayOptions={displayOptions} />
         </div>
     );
+}
+
+const Game : React.FC<GameProps> = (props: GameProps) => {
+    
+    const boardControl = useBoardControl(props); 
+
+    const board = () => (<CoreGame boardControl={boardControl} />);
 
 
+    const bgioGame  = {
+        name: 'BoardGame',
 
-    const dummyGame = {
-        name: 'dummyGame',
-
-        setup: () => ({ cells: Array(9).fill(null) }),
+        setup: () => props.pieces,
       
         moves: {
           clickCell: (G: any, ctx: any, id: number) => {
@@ -70,7 +74,7 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
       };
 
     const options ={
-        game: dummyGame,
+        game: bgioGame,
         board: board,
     };
 
