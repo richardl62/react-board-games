@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { DroppableSquare as BoardSquare } from './square';
 import { BoardLayout } from './board-layout';
-import { BoardControl } from './board-control';
+import { GameControl } from './game-control';
 import { DisplayOptions } from './display-options';
 
 type Elems = Array<ReactElement>;
@@ -23,7 +23,7 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
     elems.push(<div key={key('end')} />);
 }
 
-function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, elems: Elems) {
+function addRow(layout: BoardLayout, row: number, gameControl: GameControl, elems: Elems) {
 
     let key = (name: string | number) =>  'r' + row + '-' + name;
 
@@ -48,7 +48,7 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
                 key={key(col)}
 
                 corePiece={layout.corePiece(row, col)}
-                boardControl={boardControl}
+                gameControl={gameControl}
 
                 squareStyle={squareStyle}
 
@@ -58,7 +58,7 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
         );
     };
 
-    if(boardControl.borderLabels) {
+    if(gameControl.borderLabels) {
         elems.push(makeBoarderElem('start'));
     }
 
@@ -66,37 +66,37 @@ function addRow(layout: BoardLayout, row: number, boardControl: BoardControl, el
         elems.push(makeSquare(col));
     }
 
-    if(boardControl.borderLabels) {
+    if(gameControl.borderLabels) {
         elems.push(makeBoarderElem('end'));
     }
 }
 
 
-function Board({ boardControl, displayOptions }: {
-    boardControl: BoardControl,
+function Board({ gameControl, displayOptions }: {
+    gameControl: GameControl,
     displayOptions: DisplayOptions,
     })
     {
-    const layout = boardControl.boardLayout;
+    const layout = gameControl.boardLayout;
     const nRows = layout.nRows;
     const nCols = layout.nCols;
 
     let elems: Elems = [];
 
-    if(boardControl.borderLabels) {
+    if(gameControl.borderLabels) {
         addHeader(nCols, elems, 'top');
     }
     for (let row = 0; row < nRows; ++row) {
         const rowToAdd = displayOptions.reverseBoardRows ? nRows - 1 - row : row;
-        addRow(layout, rowToAdd, boardControl, elems);
+        addRow(layout, rowToAdd, gameControl, elems);
     }
 
-    if(boardControl.borderLabels) {
+    if(gameControl.borderLabels) {
         addHeader(nCols, elems, 'bottom');
     }
 
-    const nGridCols = nCols + (boardControl.borderLabels ? 2 : 0);
-    const nGridRows = nRows + (boardControl.borderLabels ? 2 : 0);
+    const nGridCols = nCols + (gameControl.borderLabels ? 2 : 0);
+    const nGridRows = nRows + (gameControl.borderLabels ? 2 : 0);
     const style = { // For now
         display: 'grid',
         gridTemplateColumns: `repeat(${nGridCols},auto)`,

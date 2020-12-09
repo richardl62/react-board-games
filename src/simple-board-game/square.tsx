@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd';
 import { itemTypes } from './constants';
 import { Piece } from './piece';
 import { CorePiece } from './core-piece';
-import { BoardControl } from './board-control';
+import { GameControl } from './game-control';
 
 interface SquareStyle {
     checkered: boolean,
@@ -43,20 +43,20 @@ class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
 function DroppableSquare(options:
     {
         corePiece: CorePiece | null,
-        boardControl: BoardControl, 
+        gameControl: GameControl, 
         squareStyle: SquareStyle,
         row: number,
         col: number,
     }) {
 
-    const { corePiece, boardControl, squareStyle, row, col} = options;
+    const { corePiece, gameControl, squareStyle, row, col} = options;
 
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
  
         // The use of 'any' below is a kludge.  I am not sure how to type if properly, or
         // even if proper typing is possible.
-        drop: (corePiece: any) => boardControl.movePiece(corePiece.id, row, col),
+        drop: (corePiece: any) => gameControl.movePiece(corePiece.id, row, col),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
@@ -70,7 +70,7 @@ function DroppableSquare(options:
             }}
         >
             <SimpleSquare squareStyle={squareStyle}>
-                {corePiece ? <Piece corePiece={corePiece} boardControl={boardControl} /> : null}
+                {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
             </SimpleSquare>
 
         </div>

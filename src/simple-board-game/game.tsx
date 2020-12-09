@@ -6,7 +6,7 @@ import { Board } from './board';
 import { RowOfPieces } from './row-of-pieces';
 import UserOptions from './user-options';
 
-import { BoardControl, useBoardControl } from './board-control'
+import { GameControl, useGameControl } from './game-control'
 import { useDisplayOptions } from './display-options';
 import { GameProps } from './game-interfaces';
 import { Client as BgioClient } from 'boardgame.io/react';
@@ -14,9 +14,9 @@ import { Client as BgioClient } from 'boardgame.io/react';
 import './index.css';
 
 interface CoreGameProps {
-    boardControl: BoardControl;
+    gameControl: GameControl;
 }
-const CoreGame:  React.FC<CoreGameProps> = ({boardControl} : CoreGameProps) => {
+const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
     const displayOptions = useDisplayOptions();
 
     let copyablePieces = (which : 'top' | 'bottom') => {
@@ -25,7 +25,7 @@ const CoreGame:  React.FC<CoreGameProps> = ({boardControl} : CoreGameProps) => {
             top = !top;
         }
 
-        return top ? boardControl.copyablePiecesTop : boardControl.copyablePiecesBottom;
+        return top ? gameControl.copyablePiecesTop : gameControl.copyablePiecesBottom;
     }
 
    return (
@@ -36,29 +36,29 @@ const CoreGame:  React.FC<CoreGameProps> = ({boardControl} : CoreGameProps) => {
 
                     <RowOfPieces
                         corePieces={copyablePieces('top')}
-                        boardControl={boardControl}
+                        gameControl={gameControl}
                     />
 
                     <Board
-                        boardControl={boardControl}
+                        gameControl={gameControl}
                         displayOptions={displayOptions}
                     />
 
                     <RowOfPieces
                         corePieces={copyablePieces('bottom')}
-                        boardControl={boardControl}
+                        gameControl={gameControl}
                     />
                 </div>
-            <UserOptions boardControl={boardControl} displayOptions={displayOptions} />
+            <UserOptions gameControl={gameControl} displayOptions={displayOptions} />
         </div>
     );
 }
 
 const Game : React.FC<GameProps> = (props: GameProps) => {
     
-    const boardControl = useBoardControl(props); 
+    const gameControl = useGameControl(props); 
 
-    const board = () => (<CoreGame boardControl={boardControl} />);
+    const board = () => (<CoreGame gameControl={gameControl} />);
 
 
     const bgioGame  = {

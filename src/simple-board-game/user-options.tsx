@@ -1,38 +1,38 @@
 import React from 'react';
-import { BoardControl } from './board-control';
+import { GameControl } from './game-control';
 import { DisplayOptions } from './display-options';
 
 interface UserOptionsProps {
-    boardControl: BoardControl,
+    gameControl: GameControl,
     displayOptions: DisplayOptions,
 };
 
-const UserOptions : React.FC<UserOptionsProps>  = ({boardControl, displayOptions}) => {
+const UserOptions : React.FC<UserOptionsProps>  = ({gameControl, displayOptions}) => {
 
     return (
         <div className="sbg__game-control" >
 
             <div className='sbg__buttons'>
-                <button type='button' onClick={()=>boardControl.clear()}> Clear</button>
+                <button type='button' onClick={()=>gameControl.clear()}> Clear</button>
                 <button type='button' onClick={()=>displayOptions.flipRowOrder()}>Flip</button>
             </div>
 
             <div className='sbg__buttons'>
                 <button type='button'
-                    disabled={!boardControl.canUndo}
-                    onClick={() => boardControl.undo()}>
+                    disabled={!gameControl.canUndo}
+                    onClick={() => gameControl.undo()}>
                     Undo
                 </button>
 
                 <button type='button'
-                    disabled={!boardControl.canRedo}
-                    onClick={() => boardControl.redo()}>
+                    disabled={!gameControl.canRedo}
+                    onClick={() => gameControl.redo()}>
                     Redo
                 </button>
 
                 <button type='button'
-                    disabled={!boardControl.canUndo} //Kludge? 
-                    onClick={()=>boardControl.restart()}>
+                    disabled={!gameControl.canUndo} //Kludge? 
+                    onClick={()=>gameControl.restart()}>
                     Restart
                 </button>
             </div>

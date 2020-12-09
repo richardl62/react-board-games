@@ -2,14 +2,14 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import { itemTypes } from './constants';
 import { CorePiece } from './core-piece';
-import { BoardControl } from './board-control';
+import { GameControl } from './game-control';
 
 interface PieceProps {
-  boardControl: BoardControl;
+  gameControl: GameControl;
   corePiece: CorePiece;
 }
 
-const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
+const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
 
   const [{ isDragging }, drag ] = useDrag({
     item: {
@@ -19,10 +19,10 @@ const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
-    end: (item, monitor) => boardControl.dragEnd(corePiece.id, monitor.didDrop()),
+    end: (item, monitor) => gameControl.dragEnd(corePiece.id, monitor.didDrop()),
   });
 
-  if (isDragging && boardControl.dragBehaviour(corePiece.id).move) {
+  if (isDragging && gameControl.dragBehaviour(corePiece.id).move) {
     /* Hide the original piece when moving */
     return null;
   }
@@ -32,7 +32,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, boardControl }) => {
         className='sbg__piece-div'
         ref={drag}
       >
-        {boardControl.makePiece(corePiece.name)}
+        {gameControl.makePiece(corePiece.name)}
       </div>
     );
   }

@@ -29,7 +29,7 @@ function makeBoardState(layout: GameProps, cpf: CorePieceFactory) {
 type GameState = ReturnType<typeof makeBoardState>;
 type MakePiece = (arg0: string) => JSX.Element;
 
-class BoardControl {
+class GameControl {
 
     private stateManager: StateManager<GameState>;
     private setGameState: (arg: GameState) => void;
@@ -143,11 +143,11 @@ class BoardControl {
     }
 }
 
-function useBoardControl(layout: GameProps) {
+function useGameControl(layout: GameProps) {
     let corePieceFactory = useRef(new CorePieceFactory()).current;
     const [gameState, setGameState] = useState(makeBoardState(layout, corePieceFactory));
     let stateManager = useRef(new StateManager(gameState)).current;
-    return new BoardControl(stateManager, setGameState, corePieceFactory, layout); 
+    return new GameControl(stateManager, setGameState, corePieceFactory, layout); 
 }
 
-export { BoardControl, useBoardControl }
+export { GameControl, useGameControl }
