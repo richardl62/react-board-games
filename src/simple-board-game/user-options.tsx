@@ -2,12 +2,12 @@ import React from 'react';
 import { BoardControl } from './board-control';
 import { DisplayOptions } from './display-options';
 
-interface GameControlProps {
+interface UserOptionsProps {
     boardControl: BoardControl,
     displayOptions: DisplayOptions,
 };
 
-const GameControl : React.FC<GameControlProps>  = ({boardControl, displayOptions}) => {
+const UserOptions : React.FC<UserOptionsProps>  = ({boardControl, displayOptions}) => {
 
     return (
         <div className="sbg__game-control" >
@@ -41,4 +41,4 @@ const GameControl : React.FC<GameControlProps>  = ({boardControl, displayOptions
 }
 
 
-export default GameControl;
+export default UserOptions;

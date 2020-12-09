@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { Board } from './board';
 import { RowOfPieces } from './row-of-pieces';
-import GameControl from './game-control';
+import UserOptions from './user-options';
 
 import { BoardControl, useBoardControl } from './board-control'
 import { useDisplayOptions } from './display-options';
@@ -49,7 +49,7 @@ const CoreGame:  React.FC<CoreGameProps> = ({boardControl} : CoreGameProps) => {
                         boardControl={boardControl}
                     />
                 </div>
-            <GameControl boardControl={boardControl} displayOptions={displayOptions} />
+            <UserOptions boardControl={boardControl} displayOptions={displayOptions} />
         </div>
     );
 }

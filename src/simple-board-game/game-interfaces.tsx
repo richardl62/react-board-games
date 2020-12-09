@@ -3,7 +3,7 @@ GameState: State sent to server (if used) and shared between players.
 
 LcoalState: State that is local to a player.
 
-GameControl: data amd functions do not change.
+UserOptions: data amd functions do not change.
 
 GameProps:  Properties suppplied by client code when creating a game.
 */
@@ -28,7 +28,7 @@ interface CopyablePieces {
 }
 const defaultcopyablePieces = {top:[], bottom:[]};
 
-interface GameControl {
+interface UserOptions {
 
     style?: StyleName,
     borderLabels?: boolean;
@@ -57,7 +57,7 @@ function makeLocalProps(props: GameProps): LocalState {
     return {reverseBoardRows: false};
 }
 
-function makeGameControl(props: GameProps): GameControl {
+function makeUserOptions(props: GameProps): UserOptions {
     return {
         style : props.style,
         borderLabels: Boolean(props.borderLabels),
@@ -68,5 +68,5 @@ function makeGameControl(props: GameProps): GameControl {
     };
 }
 
-export {makeGameState, makeLocalProps, makeGameControl, checkered};
-export type {GameState, LocalState, GameControl, GameProps, SharedGameState};
+export {makeGameState, makeLocalProps, makeUserOptions, checkered};
+export type {GameState, LocalState, UserOptions, GameProps, SharedGameState};
