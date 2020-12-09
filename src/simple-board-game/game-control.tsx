@@ -31,11 +31,11 @@ type MakePiece = (arg0: string) => JSX.Element;
 
 class GameControl {
 
-    private stateManager: StateManager<GameState>;
-    private setGameState: (arg: GameState) => void;
+    private _stateManager: StateManager<GameState>;
+    private _setGameState: (arg: GameState) => void;
     private _reverseBoardRows: boolean;
-    private setReverseBoardRows: (arg: boolean) => void;
-    private corePieceFactory: CorePieceFactory;
+    private _setReverseBoardRows: (arg: boolean) => void;
+    private _corePieceFactory: CorePieceFactory;
     private _makePiece: MakePiece;
     private _borderLabels: boolean;
 
@@ -48,36 +48,36 @@ class GameControl {
         corePieceFactory: CorePieceFactory,
         layout: GameProps,
         ) {
-        this.stateManager = manager;
-        this.setGameState = setGameState;
+        this._stateManager = manager;
+        this._setGameState = setGameState;
         this._reverseBoardRows = reverseBoardRows;
-        this.setReverseBoardRows = setReverseBoardRows;
-        this.corePieceFactory = corePieceFactory;
+        this._setReverseBoardRows = setReverseBoardRows;
+        this._corePieceFactory = corePieceFactory;
         this._makePiece = layout.makePiece;
         this._borderLabels = Boolean(layout.borderLabels);
         }
 
 
-    doSetGameState(newState: Partial<GameState>) {
+    private _doSetGameState(newState: Partial<GameState>) {
 
-        this.stateManager.setState(newState);
-        this.setGameState(this.stateManager.state);
+        this._stateManager.setState(newState);
+        this._setGameState(this._stateManager.state);
     }
 
-    get canUndo()  {return this.stateManager.canUndo;}
-    get canRedo()  {return this.stateManager.canRedo;}
+    get canUndo()  {return this._stateManager.canUndo;}
+    get canRedo()  {return this._stateManager.canRedo;}
 
-    undo() { this.setGameState( this.stateManager.undo());}
-    redo () { this.setGameState( this.stateManager.redo());}
-    restart () { this.setGameState( this.stateManager.restart());}
+    undo() { this._setGameState( this._stateManager.undo());}
+    redo () { this._setGameState( this._stateManager.redo());}
+    restart () { this._setGameState( this._stateManager.restart());}
 
     get reverseBoardRows() { return this._reverseBoardRows;}
 
     setBoardLayout (layout: GameProps) {
-        this.doSetGameState(makeBoardState(layout, this.corePieceFactory));
+        this._doSetGameState(makeBoardState(layout, this._corePieceFactory));
     }
 
-    flipRowOrder() { this.setReverseBoardRows(!this.reverseBoardRows);}
+    flipRowOrder() { this._setReverseBoardRows(!this.reverseBoardRows);}
 
 
     copyablePieces(which : 'top' | 'bottom') {
@@ -86,19 +86,19 @@ class GameControl {
             top = !top;
         }
 
-        const state = this.stateManager.state;
+        const state = this._stateManager.state;
         return top ? state.copyablePiecesTop : state.copyablePiecesBottom;
     }
 
-    get boardLayout() {return this.stateManager.state.boardLayout;}
+    get boardLayout() {return this._stateManager.state.boardLayout;}
 
     get borderLabels() {return this._borderLabels;}
 
     makePiece(name: string) {return this._makePiece(name);}
 
     clear () {
-        this.doSetGameState({
-            boardLayout: this.stateManager.state.boardLayout.copy().clearSquares()
+        this._doSetGameState({
+            boardLayout: this._stateManager.state.boardLayout.copy().clearSquares()
         });
     };
 
@@ -106,22 +106,22 @@ class GameControl {
 
         const findOffBoardPiece = (pieceId: CorePieceId) => {
             // Kludge: p should never be null
-            let piece = this.stateManager.state.copyablePiecesTop.find(p => p && p.id === pieceId);
+            let piece = this._stateManager.state.copyablePiecesTop.find(p => p && p.id === pieceId);
             if (!piece) {
-                piece = this.stateManager.state.copyablePiecesBottom.find(p => p && p.id === pieceId);
+                piece = this._stateManager.state.copyablePiecesBottom.find(p => p && p.id === pieceId);
             }
     
             return piece;
         }
 
-        let newBoardLayout = this.stateManager.state.boardLayout.copy();
+        let newBoardLayout = this._stateManager.state.boardLayout.copy();
 
         const bp = newBoardLayout.findCorePiecebyId(pieceId);
         if (bp) {
             if (row !== bp.row || col !== bp.col) {
                 newBoardLayout.setCorePiece(row, col, bp.piece);
                 newBoardLayout.setCorePiece(bp.row, bp.col, null);
-                this.doSetGameState({ boardLayout: newBoardLayout, });
+                this._doSetGameState({ boardLayout: newBoardLayout, });
             }
         } else {
             let obp = findOffBoardPiece(pieceId);
@@ -130,19 +130,19 @@ class GameControl {
                 throw new Error(`Piece with id ${pieceId} not found`);
             }
 
-            const copiedPiece = this.corePieceFactory.copy(obp);
+            const copiedPiece = this._corePieceFactory.copy(obp);
             newBoardLayout.setCorePiece(row, col, copiedPiece);
-            this.doSetGameState({ boardLayout: newBoardLayout, });
+            this._doSetGameState({ boardLayout: newBoardLayout, });
         }
     };
 
     clearPiece (pieceId: CorePieceId) {
-        const bp = this.stateManager.state.boardLayout.findCorePiecebyId(pieceId);
+        const bp = this._stateManager.state.boardLayout.findCorePiecebyId(pieceId);
         if (bp) {
-            let newBoardLayout = this.stateManager.state.boardLayout.copy();
+            let newBoardLayout = this._stateManager.state.boardLayout.copy();
             newBoardLayout.setCorePiece(bp.row, bp.col, null);
 
-            this.doSetGameState({
+            this._doSetGameState({
                 boardLayout: newBoardLayout,
             })
         }
@@ -150,7 +150,7 @@ class GameControl {
 
     // Piece on the board are movable. Off-board pieces should be copied.
     moveable (pieceId: CorePieceId) {
-        return Boolean(this.stateManager.state.boardLayout.findCorePiecebyId(pieceId));
+        return Boolean(this._stateManager.state.boardLayout.findCorePiecebyId(pieceId));
     }
 }
 
