@@ -19,10 +19,15 @@ const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
-    end: (item, monitor) => gameControl.dragEnd(corePiece.id, monitor.didDrop()),
+    end: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        // The piece was dragged off the board.
+        gameControl.clearPiece(corePiece.id);
+        }
+    }
   });
 
-  if (isDragging && gameControl.dragBehaviour(corePiece.id).move) {
+  if (isDragging && gameControl.moveable(corePiece.id)) {
     /* Hide the original piece when moving */
     return null;
   }

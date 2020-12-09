@@ -136,28 +136,21 @@ class GameControl {
         }
     };
 
-    dragEnd (pieceId: CorePieceId, dropped: boolean) {
-        if (!dropped) {
-            // The piece was dragged off the board. Now clear it.
-            const bp = this.stateManager.state.boardLayout.findCorePiecebyId(pieceId);
-            if (bp) {
-                let newBoardLayout = this.stateManager.state.boardLayout.copy();
-                newBoardLayout.setCorePiece(bp.row, bp.col, null);
+    clearPiece (pieceId: CorePieceId) {
+        const bp = this.stateManager.state.boardLayout.findCorePiecebyId(pieceId);
+        if (bp) {
+            let newBoardLayout = this.stateManager.state.boardLayout.copy();
+            newBoardLayout.setCorePiece(bp.row, bp.col, null);
 
-                this.doSetGameState({
-                    boardLayout: newBoardLayout,
-                })
-            }
+            this.doSetGameState({
+                boardLayout: newBoardLayout,
+            })
         }
     };
 
-    dragBehaviour (pieceId: CorePieceId) {
-        const onBoard = Boolean(this.stateManager.state.boardLayout.findCorePiecebyId(pieceId));
-
-        return {
-            move: onBoard,
-            copy: !onBoard,
-        };
+    // Piece on the board are movable. Off-board pieces should be copied.
+    moveable (pieceId: CorePieceId) {
+        return Boolean(this.stateManager.state.boardLayout.findCorePiecebyId(pieceId));
     }
 }
 
