@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import { DroppableSquare as BoardSquare } from './square';
 import { BoardLayout } from './board-layout';
 import { GameControl } from './game-control';
-import { DisplayOptions } from './display-options';
 
 type Elems = Array<ReactElement>;
 
@@ -72,9 +71,8 @@ function addRow(layout: BoardLayout, row: number, gameControl: GameControl, elem
 }
 
 
-function Board({ gameControl, displayOptions }: {
-    gameControl: GameControl,
-    displayOptions: DisplayOptions,
+function Board({ gameControl }: {
+    gameControl: GameControl
     })
     {
     const layout = gameControl.boardLayout;
@@ -87,7 +85,7 @@ function Board({ gameControl, displayOptions }: {
         addHeader(nCols, elems, 'top');
     }
     for (let row = 0; row < nRows; ++row) {
-        const rowToAdd = displayOptions.reverseBoardRows ? nRows - 1 - row : row;
+        const rowToAdd = gameControl.reverseBoardRows ? nRows - 1 - row : row;
         addRow(layout, rowToAdd, gameControl, elems);
     }
 

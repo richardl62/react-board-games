@@ -1,14 +1,15 @@
 import React from 'react';
 
 import { SimpleSquare } from './square'
-import { CorePiece } from './core-piece';
 import { Piece } from './piece';
 import { GameControl }  from './game-control';
 
-function RowOfPieces({ corePieces, gameControl }: {
-    corePieces: Array<CorePiece>,
+function RowOfPieces({ where, gameControl }: {
+    where: 'top' | 'bottom',
     gameControl: GameControl,
 }) {
+
+    const corePieces = gameControl.copyablePieces(where);
     return (
         <div className='sbg__row-of-pieces'>
             {corePieces.map(

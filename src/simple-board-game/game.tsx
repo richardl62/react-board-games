@@ -7,7 +7,6 @@ import { RowOfPieces } from './row-of-pieces';
 import UserOptions from './user-options';
 
 import { GameControl, useGameControl } from './game-control'
-import { useDisplayOptions } from './display-options';
 import { GameProps } from './game-interfaces';
 import { Client as BgioClient } from 'boardgame.io/react';
 
@@ -17,39 +16,19 @@ interface CoreGameProps {
     gameControl: GameControl;
 }
 const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
-    const displayOptions = useDisplayOptions();
-
-    let copyablePieces = (which : 'top' | 'bottom') => {
-        let top = which === 'top';
-        if(displayOptions.reverseBoardRows) {
-            top = !top;
-        }
-
-        return top ? gameControl.copyablePiecesTop : gameControl.copyablePiecesBottom;
-    }
-
    return (
         // sbg -> Simple Board Game
         <div className="sbg"> 
 
                 <div className="sbg__game">
 
-                    <RowOfPieces
-                        corePieces={copyablePieces('top')}
-                        gameControl={gameControl}
-                    />
+                    <RowOfPieces where='top' gameControl={gameControl} />
 
-                    <Board
-                        gameControl={gameControl}
-                        displayOptions={displayOptions}
-                    />
+                    <Board gameControl={gameControl} />
 
-                    <RowOfPieces
-                        corePieces={copyablePieces('bottom')}
-                        gameControl={gameControl}
-                    />
+                    <RowOfPieces where='bottom' gameControl={gameControl} />
                 </div>
-            <UserOptions gameControl={gameControl} displayOptions={displayOptions} />
+            <UserOptions gameControl={gameControl} />
         </div>
     );
 }

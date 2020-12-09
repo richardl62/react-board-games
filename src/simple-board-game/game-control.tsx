@@ -5,8 +5,8 @@ import { StateManager } from '../state-manager';
 import {  CorePieceFactory, CorePieceId } from './core-piece';
 import { GameProps, checkered } from './game-interfaces';
 
-function makeBoardState(layout: GameProps, cpf: CorePieceFactory) {
 
+function makeBoardState(layout: GameProps, cpf: CorePieceFactory) {
     const makeCorePiece = (name: string) => cpf.make(name);
     const makeCorePieceOrNull = (name: string | null) => (name ? cpf.make(name) : null);
 
@@ -33,18 +33,25 @@ class GameControl {
 
     private stateManager: StateManager<GameState>;
     private setGameState: (arg: GameState) => void;
+    private _reverseBoardRows: boolean;
+    private setReverseBoardRows: (arg: boolean) => void;
     private corePieceFactory: CorePieceFactory;
     private _makePiece: MakePiece;
     private _borderLabels: boolean;
 
+
     constructor(
         manager: StateManager<GameState>,
         setGameState: (arg: GameState) => void,
+        reverseBoardRows: boolean,
+        setReverseBoardRows: (arg: boolean) => void,
         corePieceFactory: CorePieceFactory,
         layout: GameProps,
         ) {
         this.stateManager = manager;
         this.setGameState = setGameState;
+        this._reverseBoardRows = reverseBoardRows;
+        this.setReverseBoardRows = setReverseBoardRows;
         this.corePieceFactory = corePieceFactory;
         this._makePiece = layout.makePiece;
         this._borderLabels = Boolean(layout.borderLabels);
@@ -64,13 +71,24 @@ class GameControl {
     redo () { this.setGameState( this.stateManager.redo());}
     restart () { this.setGameState( this.stateManager.restart());}
 
+    get reverseBoardRows() { return this._reverseBoardRows;}
+
     setBoardLayout (layout: GameProps) {
         this.doSetGameState(makeBoardState(layout, this.corePieceFactory));
     }
 
-    get copyablePiecesTop() {return this.stateManager.state.copyablePiecesTop;}
-    get copyablePiecesBottom() {return this.stateManager.state.copyablePiecesBottom;}
+    flipRowOrder() { this.setReverseBoardRows(!this.reverseBoardRows);}
 
+
+    copyablePieces(which : 'top' | 'bottom') {
+        let top = which === 'top';
+        if(this._reverseBoardRows) {
+            top = !top;
+        }
+
+        const state = this.stateManager.state;
+        return top ? state.copyablePiecesTop : state.copyablePiecesBottom;
+    }
 
     get boardLayout() {return this.stateManager.state.boardLayout;}
 
@@ -147,7 +165,9 @@ function useGameControl(layout: GameProps) {
     let corePieceFactory = useRef(new CorePieceFactory()).current;
     const [gameState, setGameState] = useState(makeBoardState(layout, corePieceFactory));
     let stateManager = useRef(new StateManager(gameState)).current;
-    return new GameControl(stateManager, setGameState, corePieceFactory, layout); 
+
+    const [reverseBoardRows, setReverseBoardRows] = useState(false);
+    return new GameControl(stateManager, setGameState, reverseBoardRows, setReverseBoardRows, corePieceFactory, layout); 
 }
 
 export { GameControl, useGameControl }

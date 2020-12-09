@@ -33,6 +33,8 @@ function Bobail() {
             ['p2', 'p2', 'p2', 'p2', 'p2'],
         ],
 
+        copyablePieces: null,
+
         makePiece: makePiece,
     };
   

@@ -1,20 +1,18 @@
 import React from 'react';
 import { GameControl } from './game-control';
-import { DisplayOptions } from './display-options';
 
 interface UserOptionsProps {
     gameControl: GameControl,
-    displayOptions: DisplayOptions,
 };
 
-const UserOptions : React.FC<UserOptionsProps>  = ({gameControl, displayOptions}) => {
+const UserOptions : React.FC<UserOptionsProps>  = ({gameControl}) => {
 
     return (
         <div className="sbg__game-control" >
 
             <div className='sbg__buttons'>
                 <button type='button' onClick={()=>gameControl.clear()}> Clear</button>
-                <button type='button' onClick={()=>displayOptions.flipRowOrder()}>Flip</button>
+                <button type='button' onClick={()=>gameControl.flipRowOrder()}>Flip</button>
             </div>
 
             <div className='sbg__buttons'>

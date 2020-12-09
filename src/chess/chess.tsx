@@ -14,7 +14,7 @@ let Chess:FC<Props> = ({pieces} : Props) => {
   
       pieces: pieces,
 
-      copyable: {
+      copyablePieces: {
         top: ['p', 'n',  'b',  'r',  'q',  'k'],
         bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
       },

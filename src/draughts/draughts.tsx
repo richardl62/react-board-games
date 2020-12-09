@@ -58,7 +58,7 @@ const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProp
         style: checkered,
         borderLabels: true,
 
-        copyable: {
+        copyablePieces: {
             top: ['w', 'W'],
             bottom: ['b', 'B' ],
           },
