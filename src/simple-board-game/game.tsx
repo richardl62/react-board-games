@@ -6,7 +6,7 @@ import { Board } from './board';
 import { RowOfPieces } from './row-of-pieces';
 import UserOptions from './user-options';
 
-import { GameControl, useGameControlSetup } from './game-control'
+import { GameControl, useGameHooks } from './game-control'
 import { GameProps, SharedGameState} from './game-interfaces';
 import * as Bgio from 'boardgame.io/react';
 
@@ -36,19 +36,19 @@ const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
 
 type BgioProps = Bgio.BoardProps<SharedGameState>;
 
-const Game : React.FC<GameProps> = (props: GameProps) => {
+const Game : React.FC<GameProps> = (gameProps: GameProps) => {
     
-    const gameControlSetup = useGameControlSetup(props); 
+    const gameHooks = useGameHooks(); 
 
     const board = (bgioProps: BgioProps) => {
-        const gameControl = new GameControl(gameControlSetup, bgioProps);
+        const gameControl = new GameControl(gameHooks, gameProps, bgioProps);
         return (<CoreGame gameControl={gameControl}/>);
     };
 
     const bgioGame  = {
         name: 'BoardGame',
 
-        setup: () => props.pieces,
+        setup: () => gameProps.pieces,
       
         moves: {
           clickCell: (G: any, ctx: any, id: number) => {
