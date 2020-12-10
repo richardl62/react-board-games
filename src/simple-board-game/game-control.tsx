@@ -3,24 +3,25 @@ import { BoardLayout } from './board-layout';
 
 import { StateManager } from '../state-manager';
 import {  CorePieceFactory, CorePieceId } from './core-piece';
-import { GameProps, checkered } from './game-interfaces';
+import { GameProps, checkered, SharedGameState } from './game-interfaces';
+import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
+type BgioProps = BgioBoardProps<SharedGameState>;
 
-
-function makeBoardState(layout: GameProps, cpf: CorePieceFactory) {
+function makeBoardState(gameProps: GameProps, cpf: CorePieceFactory) {
     const makeCorePiece = (name: string) => cpf.make(name);
     const makeCorePieceOrNull = (name: string | null) => (name ? cpf.make(name) : null);
 
-    const pieces = layout.pieces.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
+    const pieces = gameProps.pieces.map((row: Array<string | null>) => row.map(makeCorePieceOrNull));
 
     const squarePattern = {
-        checkered: layout.style === checkered,
+        checkered: gameProps.style === checkered,
         topLeftBlack: false,
     };
     
     const state = {
         boardLayout: new BoardLayout(pieces, squarePattern),
-        copyablePiecesTop: layout.copyablePieces ? layout.copyablePieces.top.map(makeCorePiece) : [],
-        copyablePiecesBottom: layout.copyablePieces ? layout.copyablePieces.bottom.map(makeCorePiece) : [],
+        copyablePiecesTop: gameProps.copyablePieces ? gameProps.copyablePieces.top.map(makeCorePiece) : [],
+        copyablePiecesBottom: gameProps.copyablePieces ? gameProps.copyablePieces.bottom.map(makeCorePiece) : [],
     };
 
     return state;
@@ -28,6 +29,15 @@ function makeBoardState(layout: GameProps, cpf: CorePieceFactory) {
 
 type GameState = ReturnType<typeof makeBoardState>;
 type MakePiece = (arg0: string) => JSX.Element;
+
+interface GameControlParams {
+    manager: StateManager<GameState>;
+    setGameState: (arg: GameState) => void;
+    reverseBoardRows: boolean;
+    setReverseBoardRows: (arg: boolean) => void;
+    corePieceFactory: CorePieceFactory;
+    gameProps: GameProps;
+};
 
 class GameControl {
 
@@ -38,24 +48,19 @@ class GameControl {
     private _corePieceFactory: CorePieceFactory;
     private _makePiece: MakePiece;
     private _borderLabels: boolean;
+    private _bgioProps: BgioProps;
 
 
-    constructor(
-        manager: StateManager<GameState>,
-        setGameState: (arg: GameState) => void,
-        reverseBoardRows: boolean,
-        setReverseBoardRows: (arg: boolean) => void,
-        corePieceFactory: CorePieceFactory,
-        layout: GameProps,
-        ) {
-        this._stateManager = manager;
-        this._setGameState = setGameState;
-        this._reverseBoardRows = reverseBoardRows;
-        this._setReverseBoardRows = setReverseBoardRows;
-        this._corePieceFactory = corePieceFactory;
-        this._makePiece = layout.makePiece;
-        this._borderLabels = Boolean(layout.borderLabels);
-        }
+    constructor(params: GameControlParams, bgioProps: BgioProps) {
+        this._stateManager = params.manager;
+        this._setGameState = params.setGameState;
+        this._reverseBoardRows = params.reverseBoardRows;
+        this._setReverseBoardRows = params.setReverseBoardRows;
+        this._corePieceFactory = params.corePieceFactory;
+        this._makePiece = params.gameProps.makePiece;
+        this._borderLabels = Boolean(params.gameProps.borderLabels);
+        this._bgioProps = bgioProps;    
+    }
 
 
     private _doSetGameState(newState: Partial<GameState>) {
@@ -73,8 +78,8 @@ class GameControl {
 
     get reverseBoardRows() { return this._reverseBoardRows;}
 
-    setBoardLayout (layout: GameProps) {
-        this._doSetGameState(makeBoardState(layout, this._corePieceFactory));
+    setBoardLayout (gameProps: GameProps) {
+        this._doSetGameState(makeBoardState(gameProps, this._corePieceFactory));
     }
 
     flipRowOrder() { this._setReverseBoardRows(!this.reverseBoardRows);}
@@ -154,13 +159,21 @@ class GameControl {
     }
 }
 
-function useGameControl(layout: GameProps) {
+function useGameControlSetup(gameProps: GameProps) {
     let corePieceFactory = useRef(new CorePieceFactory()).current;
-    const [gameState, setGameState] = useState(makeBoardState(layout, corePieceFactory));
+    const [gameState, setGameState] = useState(makeBoardState(gameProps, corePieceFactory));
     let stateManager = useRef(new StateManager(gameState)).current;
-
     const [reverseBoardRows, setReverseBoardRows] = useState(false);
-    return new GameControl(stateManager, setGameState, reverseBoardRows, setReverseBoardRows, corePieceFactory, layout); 
+    
+    return {
+        manager: stateManager, 
+        setGameState: setGameState, 
+        reverseBoardRows: reverseBoardRows, 
+        setReverseBoardRows: setReverseBoardRows, 
+        corePieceFactory: corePieceFactory,
+        gameProps: gameProps,
+    };
+
 }
 
-export { GameControl, useGameControl }
+export { GameControl, useGameControlSetup }

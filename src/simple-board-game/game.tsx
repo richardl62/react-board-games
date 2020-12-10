@@ -6,14 +6,14 @@ import { Board } from './board';
 import { RowOfPieces } from './row-of-pieces';
 import UserOptions from './user-options';
 
-import { GameControl, useGameControl } from './game-control'
-import { GameProps } from './game-interfaces';
-import { Client as BgioClient } from 'boardgame.io/react';
+import { GameControl, useGameControlSetup } from './game-control'
+import { GameProps, SharedGameState} from './game-interfaces';
+import * as Bgio from 'boardgame.io/react';
 
 import './index.css';
 
 interface CoreGameProps {
-    gameControl: GameControl;
+    gameControl: GameControl ;
 }
 const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
    return (
@@ -33,12 +33,17 @@ const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
     );
 }
 
+
+type BgioProps = Bgio.BoardProps<SharedGameState>;
+
 const Game : React.FC<GameProps> = (props: GameProps) => {
     
-    const gameControl = useGameControl(props); 
+    const gameControlSetup = useGameControlSetup(props); 
 
-    const board = () => (<CoreGame gameControl={gameControl} />);
-
+    const board = (bgioProps: BgioProps) => {
+        const gameControl = new GameControl(gameControlSetup, bgioProps);
+        return (<CoreGame gameControl={gameControl}/>);
+    };
 
     const bgioGame  = {
         name: 'BoardGame',
@@ -57,7 +62,7 @@ const Game : React.FC<GameProps> = (props: GameProps) => {
         board: board,
     };
 
-    const Bg = BgioClient(options);
+    const Bg = Bgio.Client(options);
 
     // Having DndProvider here, rather than in 'board' prevents error
     // Cannot have two HTML5 backends at the same time
