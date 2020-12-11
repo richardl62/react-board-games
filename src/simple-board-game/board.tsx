@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { DroppableSquare as BoardSquare } from './square';
-import { BoardLayout } from './board-layout';
 import { GameControl } from './game-control';
+
 
 type Elems = Array<ReactElement>;
 
@@ -22,34 +22,32 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
     elems.push(<div key={key('end')} />);
 }
 
-function addRow(layout: BoardLayout, row: number, gameControl: GameControl, elems: Elems) {
+function addRow(row: number, gameControl: GameControl, elems: Elems) {
 
-    let key = (name: string | number) =>  'r' + row + '-' + name;
+    const nRows = gameControl.nRows;
+    const nCols = gameControl.nCols;
+
+    const key = (name: string | number) =>  'r' + row + '-' + name;
 
     let makeBoarderElem = (name: string) => (
         <div
             key={key(name)}
             className='sbg__board-border sbg__board-border-number'
         >
-            {layout.nRows - row}
+            {nRows - row}
         </div>
     );
 
     let makeSquare = (col: number) => {
 
-        const squareStyle = {
-            checkered: layout.checkered,
-            black: layout.isBlack(row, col),
-        }
-
         return (
             <BoardSquare
                 key={key(col)}
 
-                corePiece={layout.corePiece(row, col)}
+                corePiece={gameControl.corePiece(row, col)}
                 gameControl={gameControl}
 
-                squareStyle={squareStyle}
+                squareStyle={gameControl.squareStyle(row, col)}
 
                 row={row}
                 col={col}
@@ -61,7 +59,7 @@ function addRow(layout: BoardLayout, row: number, gameControl: GameControl, elem
         elems.push(makeBoarderElem('start'));
     }
 
-    for (let col = 0; col < layout.nCols; ++col) {
+    for (let col = 0; col < nCols; ++col) {
         elems.push(makeSquare(col));
     }
 
@@ -75,9 +73,8 @@ function Board({ gameControl }: {
     gameControl: GameControl
     })
     {
-    const layout = gameControl.boardLayout;
-    const nRows = layout.nRows;
-    const nCols = layout.nCols;
+    const nRows = gameControl.nRows;
+    const nCols = gameControl.nCols;
 
     let elems: Elems = [];
 
@@ -86,7 +83,7 @@ function Board({ gameControl }: {
     }
     for (let row = 0; row < nRows; ++row) {
         const rowToAdd = gameControl.reverseBoardRows ? nRows - 1 - row : row;
-        addRow(layout, rowToAdd, gameControl, elems);
+        addRow(rowToAdd, gameControl, elems);
     }
 
     if(gameControl.borderLabels) {

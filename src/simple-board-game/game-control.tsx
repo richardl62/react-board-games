@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
-import {  CorePieceFactory, CorePieceId } from './core-piece';
-import { GameProps, SharedGameState } from './game-interfaces';
+import {  CorePiece, CorePieceFactory, CorePieceId } from './core-piece';
+import { GameProps, SharedGameState, checkered } from './game-interfaces';
 import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
 type BgioProps = BgioBoardProps<SharedGameState>;
 
@@ -15,16 +15,37 @@ type GameHooks = ReturnType<typeof useGameHooks>;
 
 //type MakePiece = (arg0: string) => JSX.Element;
 
-class GameControl {
+type BoardPieces = Array<Array<CorePiece | null>>;
 
-    private _gameHooks: GameHooks;
-    private _gameProps: GameProps;
-    private _bgioProps: BgioProps;
+const topLeftBlack = false; // KLUDGE
+
+class GameControl {
 
     constructor(gameHooks: GameHooks, gameProps: GameProps, bgioProps: BgioProps) {
         this._gameHooks = gameHooks;
         this._gameProps = gameProps;
         this._bgioProps = bgioProps;
+
+        const makeCorePiece = (name:string) => gameHooks.corePieceFactory.make(name); 
+
+        this._boardPieces = gameProps.pieces.map(row =>
+            row.map(name => (name ? makeCorePiece(name) : null))
+            );
+        
+        const copyable = gameProps.copyablePieces;
+        this._copyablePieces = {
+            top: copyable ? copyable.top.map(makeCorePiece) : [],
+            bottom: copyable ? copyable.bottom.map(makeCorePiece) : [],
+        }
+    }
+
+    private _gameHooks: GameHooks;
+    private _gameProps: GameProps;
+    private _bgioProps: BgioProps;
+    private _boardPieces: BoardPieces;
+    private _copyablePieces: {
+        top: Array<CorePiece>,
+        bottom: Array<CorePiece>,
     }
 
     get canUndo() {return true; /* KLUDGE */ }
@@ -38,19 +59,45 @@ class GameControl {
 
     flipRowOrder() { this._gameHooks.reverseBoardState[1](!this.reverseBoardRows);}
 
-    copyablePieces(which : 'top' | 'bottom') {
-        // let top = which === 'top';
-        // if(this.reverseBoardRows) {
-        //     top = !top;
-        // }
+    get nRows() {
+        return this._boardPieces.length;
+    }
 
-        return [];
+    get nCols() {
+        return this._boardPieces[0].length;
+    }
+
+    corePiece(row: number, col: number) {
+        return this._boardPieces[row][col];
+    }
+
+    squareStyle(row: number, col: number) {
+
+        const isCheckered = this._gameProps.style === checkered;
+        const asTopLeft = (row + col) % 2 === 0;
+
+        return {
+            checkered: this._gameProps.style === checkered,
+            black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
+        };
+    }
+
+    copyablePieces(which : 'top' | 'bottom') {
+        let top = which === 'top';
+        if(this.reverseBoardRows) {
+            top = !top;
+        }
+
+        return top ? this._copyablePieces.top : this._copyablePieces.bottom;
     }
 
     get borderLabels() {return Boolean(this._gameProps.borderLabels);}
 
-    //makePiece(name: string) {return this._makePiece(name);}
+    makePiece(name: string) {return this._gameProps.makePiece(name);}
 
+    // copyPiece(corePiece: cp) {
+    //     return 
+    // }
     clear () { /* KLUDGE*/ };
 
     movePiece (pieceId: CorePieceId, row: number, col: number) {
