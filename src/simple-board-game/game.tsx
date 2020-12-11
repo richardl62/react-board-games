@@ -51,9 +51,9 @@ const Game : React.FC<GameProps> = (gameProps: GameProps) => {
         setup: () => gameProps.pieces,
       
         moves: {
-          clickCell: (G: any, ctx: any, id: number) => {
-            G.cells[id] = ctx.currentPlayer;
-          },
+          clear(g: SharedGameState) {
+            g.forEach(row => row.fill(null));
+          }
         },
       };
 

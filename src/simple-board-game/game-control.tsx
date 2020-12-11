@@ -28,7 +28,7 @@ class GameControl {
 
         const makeCorePiece = (name:string) => gameHooks.corePieceFactory.make(name); 
 
-        this._boardPieces = gameProps.pieces.map(row =>
+        this._boardPieces = bgioProps.G.map(row =>
             row.map(name => (name ? makeCorePiece(name) : null))
             );
         
@@ -95,17 +95,15 @@ class GameControl {
 
     makePiece(name: string) {return this._gameProps.makePiece(name);}
 
-    // copyPiece(corePiece: cp) {
-    //     return 
-    // }
-    clear () { /* KLUDGE*/ };
+
+    clear () { this._bgioProps.moves.clear(); };
 
     movePiece (pieceId: CorePieceId, row: number, col: number) {
         /* KLUDGE*/ 
     };
 
     clearPiece (pieceId: CorePieceId) {
-        /* KLUDGE*/ 
+        this._bgioProps.moves.clear();
     };
 
     // Piece on the board are movable. Off-board pieces should be copied.
