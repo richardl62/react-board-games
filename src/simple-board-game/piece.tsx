@@ -22,12 +22,12 @@ const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
         // The piece was dragged off the board.
-        gameControl.clearPiece(corePiece.id);
+        gameControl.clearPiece(corePiece);
         }
     }
   });
 
-  if (isDragging && gameControl.moveable(corePiece.id)) {
+  if (isDragging && gameControl.moveable(corePiece)) {
     /* Hide the original piece when moving */
     return null;
   }
@@ -37,7 +37,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
         className='sbg__piece-div'
         ref={drag}
       >
-        {gameControl.makePiece(corePiece.name)}
+        {gameControl.makePiece(corePiece)}
       </div>
     );
   }

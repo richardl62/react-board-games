@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import {  CorePiece, CorePieceFactory, CorePieceId } from './core-piece';
+import {  CorePiece, CorePieceFactory } from './core-piece';
 import { GameProps, SharedGameState, checkered } from './game-interfaces';
 import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
 type BgioProps = BgioBoardProps<SharedGameState>;
@@ -13,9 +13,12 @@ function useGameHooks() {
 
 type GameHooks = ReturnType<typeof useGameHooks>;
 
-//type MakePiece = (arg0: string) => JSX.Element;
-
 type BoardPieces = Array<Array<CorePiece | null>>;
+
+interface Position {
+    row: number;
+    col: number;
+}
 
 const topLeftBlack = false; // KLUDGE
 
@@ -48,12 +51,9 @@ class GameControl {
         bottom: Array<CorePiece>,
     }
 
-    get canUndo() {return true; /* KLUDGE */ }
-    get canRedo() {return true; /* KLUDGE */ }
-
     undo() { this._bgioProps.undo();}
     redo () { this._bgioProps.redo();}
-    restart () { /* KLUDGE */ }
+    restart () { this._bgioProps.reset();}
 
     get reverseBoardRows() { return this._gameHooks.reverseBoardState[0];}
 
@@ -69,6 +69,29 @@ class GameControl {
 
     corePiece(row: number, col: number) {
         return this._boardPieces[row][col];
+    }
+
+    // const findOffBoardPiece = (pieceId: CorePieceId) => {
+    //     // Kludge: p should never be null
+    //     let piece = this._stateManager.state.copyablePiecesTop.find(p => p && p.id === pieceId);
+    //     if (!piece) {
+    //         piece = this._stateManager.state.copyablePiecesBottom.find(p => p && p.id === pieceId);
+    //     }
+
+    //     return piece;
+    // }
+    
+    findRowAndCol(wanted: CorePiece) {
+        for(let row = 0; row < this.nRows; ++row) {
+            for(let col = 0; col < this.nCols; ++col) {
+                const cp = this.corePiece(row,col);
+                if(cp && cp.id === wanted.id) {
+                    return {row: row, col: col};
+                 }
+            }
+        }
+
+        return null;
     }
 
     squareStyle(row: number, col: number) {
@@ -93,23 +116,31 @@ class GameControl {
 
     get borderLabels() {return Boolean(this._gameProps.borderLabels);}
 
-    makePiece(name: string) {return this._gameProps.makePiece(name);}
+    makePiece(cp: CorePiece) {return this._gameProps.makePiece(cp.name);}
 
+    clearAll() { this._bgioProps.moves.clearAll(); };
 
-    clear () { this._bgioProps.moves.clear(); };
-
-    movePiece (pieceId: CorePieceId, row: number, col: number) {
-        /* KLUDGE*/ 
+    movePiece (piece: CorePiece, to: Position) {
+        const from = this.findRowAndCol(piece);
+        if(!from) {
+            throw Error(`Internal error: piece ${piece.id} not found on game board`)
+        }
+        this._bgioProps.moves.move(from, to);
     };
 
-    clearPiece (pieceId: CorePieceId) {
-        this._bgioProps.moves.clear();
+    clearPiece (piece: CorePiece) {
+        const from = this.findRowAndCol(piece);
+        if(!from) {
+            throw Error(`Internal error: piece ${piece.id} not found on game board`)
+        }
+        this._bgioProps.moves.clear(from);
     };
 
     // Piece on the board are movable. Off-board pieces should be copied.
-    moveable (pieceId: CorePieceId) {
-        return true; /* KLUDGE*/ 
+    moveable (piece: CorePiece) {
+        return Boolean(this.findRowAndCol(piece));
     }
 }
 
 export { GameControl, useGameHooks }
+export type { Position }

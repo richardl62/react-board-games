@@ -11,25 +11,22 @@ const UserOptions : React.FC<UserOptionsProps>  = ({gameControl}) => {
         <div className="sbg__game-control" >
 
             <div className='sbg__buttons'>
-                <button type='button' onClick={()=>gameControl.clear()}> Clear</button>
+                <button type='button' onClick={()=>gameControl.clearAll()}> Clear</button>
                 <button type='button' onClick={()=>gameControl.flipRowOrder()}>Flip</button>
             </div>
 
             <div className='sbg__buttons'>
                 <button type='button'
-                    disabled={!gameControl.canUndo}
                     onClick={() => gameControl.undo()}>
                     Undo
                 </button>
 
                 <button type='button'
-                    disabled={!gameControl.canRedo}
                     onClick={() => gameControl.redo()}>
                     Redo
                 </button>
 
                 <button type='button'
-                    disabled={!gameControl.canUndo} //Kludge? 
                     onClick={()=>gameControl.restart()}>
                     Restart
                 </button>
