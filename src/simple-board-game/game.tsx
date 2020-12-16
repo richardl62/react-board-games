@@ -8,9 +8,21 @@ import UserOptions from './user-options';
 
 import { GameControl, useGameHooks, Position } from './game-control'
 import { GameProps, SharedGameState} from './game-interfaces';
+import { Local as BgioLocal } from 'boardgame.io/multiplayer'
+import { SocketIO as BgioSocketIO } from 'boardgame.io/multiplayer'
 import * as Bgio from 'boardgame.io/react';
-
 import './index.css';
+
+const local = false;
+
+function bgioServer() {
+    if(local) {
+        return BgioLocal();
+    } else {
+        BgioSocketIO({ server: 'localhost:8000' });
+    }
+}
+
 
 interface CoreGameProps {
     gameControl: GameControl ;
@@ -68,6 +80,7 @@ const Game : React.FC<GameProps> = (gameProps: GameProps) => {
             moves: moves,
           },
         board: board,
+        multiplayer: bgioServer(),
     };
 
     const Bg = Bgio.Client(options);
@@ -76,7 +89,8 @@ const Game : React.FC<GameProps> = (gameProps: GameProps) => {
     // Cannot have two HTML5 backends at the same time
     return (
         <DndProvider backend={HTML5Backend}>
-            <Bg/>
+            <Bg playerID="0"/>
+            {/* <Bg playerID="1"/> */}
         </DndProvider>
     );
 }
