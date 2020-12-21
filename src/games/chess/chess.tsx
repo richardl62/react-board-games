@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import BoardGame, { checkered } from '../simple-board-game';
+import BoardGame, { checkered } from '../../simple-board-game';
 import { Chess as ChessPiece } from '../pieces';
 
 type PieceArray = Array<Array<string | null>>;

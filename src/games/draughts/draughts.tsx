@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import BoardGame, {checkered} from '../simple-board-game';
+import BoardGame, {checkered} from '../../simple-board-game';
 import { Counter } from '../pieces';
 
 function pieceColor(black: boolean) {

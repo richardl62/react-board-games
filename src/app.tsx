@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
-import Chess from './chess';
-import Draughts from './draughts'
-import Bobail from './bobail';
+import Chess from './games/chess';
+import Draughts from './games/draughts'
+import Bobail from './games/bobail';
 import './app.css';
 
 const homePage = "react-board-games";

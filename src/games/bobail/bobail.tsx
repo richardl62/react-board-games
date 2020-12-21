@@ -1,4 +1,4 @@
-import BoardGame from '../simple-board-game';
+import BoardGame from '../../simple-board-game';
 import { Counter } from '../pieces';
 
 interface StringMap { [key: string]: string; }
