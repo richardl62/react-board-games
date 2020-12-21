@@ -41,4 +41,4 @@ function Bobail() {
     return <BoardGame {...options} />
   }
 
-  export default Bobail;
+  export { Bobail };

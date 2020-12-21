@@ -71,4 +71,12 @@ const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProp
     return <BoardGame {...options} />
 }
 
-export default Draughts;
+function DraughtsStandard() {
+    return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
+}
+
+function Draughts10x10() {
+    return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
+}
+  
+export { DraughtsStandard, Draughts10x10 }

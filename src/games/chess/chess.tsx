@@ -25,4 +25,34 @@ let Chess:FC<Props> = ({pieces} : Props) => {
     return <BoardGame {...options} />
   }
 
-export default Chess;
+  function ChessStandard() {
+
+    const pieces = [
+        ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+        ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+        ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+    ];
+
+    return <Chess pieces={ pieces } />;
+}
+
+function Chess5ASide() {
+
+    const pieces = [
+        ['r', 'n', 'b', 'q', 'k'],
+        ['p', 'p', 'p', 'p', 'p'],
+        [null, null, null, null, null],
+        [null, null, null, null, null],
+        ['P', 'P', 'P', 'P', 'P'],
+        ['R', 'N', 'B', 'Q', 'K'],
+    ];
+
+    return  <Chess pieces={ pieces } />
+}
+
+export { ChessStandard, Chess5ASide }

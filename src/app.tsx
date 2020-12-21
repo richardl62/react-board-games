@@ -1,50 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
-import Chess from './games/chess';
-import Draughts from './games/draughts'
-import Bobail from './games/bobail';
+import {ChessStandard, Chess5ASide, DraughtsStandard, Draughts10x10, Bobail } from './games';
 import './app.css';
 
 const homePage = "react-board-games";
 
-function ChessStandard() {
 
-  const pieces  = [
-      ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-      ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-      ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
-    ];
-
-  return <Chess pieces={pieces} />
-}
-
-function Chess5ASide() {
-
-    const pieces = [
-        ['r', 'n', 'b', 'q', 'k'],
-        ['p', 'p', 'p', 'p', 'p'],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        ['P', 'P', 'P', 'P', 'P'],
-        ['R', 'N', 'B', 'Q', 'K'],
-    ];
-
-  return <Chess pieces={pieces} />
-}
-
-function DraughtsStandard() {
-  return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
-}
-
-function Draughts10x10() {
-  return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
-}
 
 
 // Functions and display name
