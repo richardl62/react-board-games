@@ -19,7 +19,7 @@ function bgioServer() {
     if(local) {
         return BgioLocal();
     } else {
-        BgioSocketIO({ server: 'localhost:8000' });
+        return BgioSocketIO({ server: 'localhost:8000' });
     }
 }
 
@@ -66,7 +66,7 @@ function bgioGame(gameProps: GameProps) {
     };
 
     return {
-        name: 'BoardGame',
+        name: gameProps.name,
         setup: () => gameProps.pieces,
         moves: moves,
     };

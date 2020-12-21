@@ -21,7 +21,7 @@ function makePiece(name: string) {
 
 const games = {
     bobail: {
-        displayName: "Bobail",
+        name: "Bobail",
 
         borderLabels: true,
 

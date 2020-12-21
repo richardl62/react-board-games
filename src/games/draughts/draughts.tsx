@@ -55,7 +55,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
     }
 
     return {
-        displayName: name,
+        name: name,
         style: checkered,
         borderLabels: true,
 

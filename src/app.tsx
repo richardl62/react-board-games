@@ -10,7 +10,7 @@ const homePage = "react-board-games";
 
 interface Game {
   component: () => any;
-  displayName: string;
+  name: string;
   path: string;
 }
 
@@ -19,10 +19,10 @@ let games: Array<Game> = [];
 for(const key in gameDefinitions) {
   const game = gameDefinitions[key];
 
-  const gamePage = game.displayName.replace(/\s/g, ''); // Remove add whitespace
+  const gamePage = game.name.replace(/\s/g, ''); // Remove add whitespace
   games.push( {
     component: () => <BoardGame {...game} />,
-    displayName: game.displayName,
+    name: game.name,
     path: `/${homePage}/${gamePage}`,
 });
 }
@@ -33,7 +33,7 @@ function GameLinks() {
     <ul>
       {games.map(g => {
         return (<li key={g.path}>
-          <Link className="game-link" to={g.path}>{g.displayName}</Link>
+          <Link className="game-link" to={g.path}>{g.name}</Link>
           </li>);
         }
       )}

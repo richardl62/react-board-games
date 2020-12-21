@@ -5,7 +5,7 @@ type PieceArray = Array<Array<string | null>>;
 
 function chess(name: string, pieces: PieceArray) {
     return {
-      displayName: name,
+      name: name,
 
       style: checkered,
       borderLabels: true,

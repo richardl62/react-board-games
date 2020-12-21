@@ -19,6 +19,8 @@ interface CopyablePieces {
 }
 
 interface GameProps {
+    name: string;
+    
     style?: StyleName;
     borderLabels?: boolean;
 
