@@ -1,5 +1,4 @@
-import { FC } from 'react';
-import BoardGame, {checkered} from '../../simple-board-game';
+import {checkered} from '../../simple-board-game';
 import { Counter } from '../pieces';
 
 function pieceColor(black: boolean) {
@@ -22,12 +21,13 @@ function makePiece(name: string) {
 }
 
 interface DraughtProps {
+    name: string,
     nRows: number;
     nCols: number;
     nRowsOfPieces: number;
 }
 
-const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProps) => {
+function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
 
     const startingPiece = (row: number, col: number) => {
         let name = null;
@@ -54,7 +54,8 @@ const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProp
         }
     }
 
-    const options = {
+    return {
+        displayName: name,
         style: checkered,
         borderLabels: true,
 
@@ -67,16 +68,18 @@ const Draughts: FC<DraughtProps> = ({ nRows, nCols, nRowsOfPieces }: DraughtProp
 
         makePiece: makePiece,
     };
-
-    return <BoardGame {...options} />
 }
 
-function DraughtsStandard() {
-    return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
-}
+const games = {
+    draughts: draughts({
+        name: "Draughts",
+        nRows: 8, nCols: 8, nRowsOfPieces: 3,
+    }),
 
-function Draughts10x10() {
-    return <Draughts nRows={8} nCols={8} nRowsOfPieces={3} />
-}
+    draughts10x10: draughts({
+        name: "Draughts 10x10",
+        nRows: 10, nCols: 10, nRowsOfPieces: 3,
+    }),
+};
   
-export { DraughtsStandard, Draughts10x10 }
+export default games;

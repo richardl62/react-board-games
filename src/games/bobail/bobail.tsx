@@ -1,4 +1,3 @@
-import BoardGame from '../../simple-board-game';
 import { Counter } from '../pieces';
 
 interface StringMap { [key: string]: string; }
@@ -20,11 +19,12 @@ function makePiece(name: string) {
     return <Counter color={color}/>;
 }
 
-function Bobail() {
+const games = {
+    bobail: {
+        displayName: "Bobail",
 
-    const options = {
         borderLabels: true,
-        
+
         pieces: [
             ['p1', 'p1', 'p1', 'p1', 'p1'],
             [null, null, null, null, null],
@@ -36,9 +36,7 @@ function Bobail() {
         copyablePieces: null,
 
         makePiece: makePiece,
-    };
-  
-    return <BoardGame {...options} />
-  }
+    }
+};
 
-  export { Bobail };
+export default games;

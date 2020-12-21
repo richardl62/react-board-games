@@ -1,33 +1,32 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-
-import {ChessStandard, Chess5ASide, DraughtsStandard, Draughts10x10, Bobail } from './games';
 import './app.css';
+
+
+import BoardGame from './simple-board-game';
+import gameDefinitions from './games';
 
 const homePage = "react-board-games";
 
+interface Game {
+  component: () => any;
+  displayName: string;
+  path: string;
+}
 
+let games: Array<Game> = [];
 
+for(const key in gameDefinitions) {
+  const game = gameDefinitions[key];
 
-// Functions and display name
-type GameAndDisplayName = [FunctionComponent, string];
-const GameAndDisplayNames: Array<GameAndDisplayName> = [
-  [ChessStandard, "chess"],
-  [Chess5ASide, "chess 5-a-side"],
-  [DraughtsStandard, "draughts"],
-  [Draughts10x10, "draughts 10x10"],
-  [Bobail, "bobail"],
-];
-
-const games = GameAndDisplayNames.map(([component, displayName]) => {
-  const gamePage = displayName.replace(/\s/g, ''); // Remove add whitespace
-
-  return {
-    component: component,
-    displayName: displayName,
+  const gamePage = game.displayName.replace(/\s/g, ''); // Remove add whitespace
+  games.push( {
+    component: () => <BoardGame {...game} />,
+    displayName: game.displayName,
     path: `/${homePage}/${gamePage}`,
-  }
 });
+}
+
 
 function GameLinks() {
   return (
