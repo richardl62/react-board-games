@@ -48,15 +48,7 @@ const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
 
 type BgioProps = Bgio.BoardProps<SharedGameState>;
 
-const Game : React.FC<GameProps> = (gameProps: GameProps) => {
-    
-    const gameHooks = useGameHooks(); 
-
-    const board = (bgioProps: BgioProps) => {
-        const gameControl = new GameControl(gameHooks, gameProps, bgioProps);
-        return (<CoreGame gameControl={gameControl}/>);
-    };
-    
+function bgioGame(gameProps: GameProps) {
     const moves = {
         clearAll(g: SharedGameState, ctx: any) {
           g.forEach(row => row.fill(null));
@@ -73,12 +65,24 @@ const Game : React.FC<GameProps> = (gameProps: GameProps) => {
         }
     };
 
+    return {
+        name: 'BoardGame',
+        setup: () => gameProps.pieces,
+        moves: moves,
+    };
+}
+
+const Game : React.FC<GameProps> = (gameProps: GameProps) => {
+    
+    const gameHooks = useGameHooks(); 
+
+    const board = (bgioProps: BgioProps) => {
+        const gameControl = new GameControl(gameHooks, gameProps, bgioProps);
+        return (<CoreGame gameControl={gameControl}/>);
+    };
+    
     const options ={
-        game: {
-            name: 'BoardGame',
-            setup: () => gameProps.pieces,
-            moves: moves,
-          },
+        game: bgioGame(gameProps),
         board: board,
         multiplayer: bgioServer(),
     };
@@ -93,6 +97,7 @@ const Game : React.FC<GameProps> = (gameProps: GameProps) => {
             {/* <Bg playerID="1"/> */}
         </DndProvider>
     );
-}
+};
 
 export default Game;
+export {bgioGame};

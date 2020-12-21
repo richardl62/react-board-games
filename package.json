@@ -13,6 +13,7 @@
     "@types/react-dom": "^16.9.10",
     "boardgame.io": "^0.42.2",
     "esm": "^3.2.25",
+    "ignore-styles": "^5.0.1",
     "react": "^17.0.1",
     "react-chess-pieces": "^1.0.5",
     "react-dnd": "^11.1.3",
@@ -31,7 +32,7 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "serve": "ts-node -r esm src/server.js"
+    "serve": "ts-node -r esm src/server.ts"
   },
   "eslintConfig": {
     "extends": [
