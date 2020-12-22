@@ -1,5 +1,7 @@
 import React from 'react';
 import { GameControl } from './game-control';
+import { Board } from './board';
+import { RowOfPieces } from './row-of-pieces';
 
 function UserOptions({ gameControl } : {gameControl: GameControl}) {
 
@@ -31,4 +33,21 @@ function UserOptions({ gameControl } : {gameControl: GameControl}) {
     );
 }
 
-export default UserOptions;
+function SimpleGame({gameControl} : {gameControl: GameControl})
+{
+    return (
+        // sbg -> Simple Board Game
+        <div className="sbg">
+            <div className="sbg__game">
+                <RowOfPieces where='top' gameControl={gameControl} />
+
+                <Board gameControl={gameControl} />
+
+                <RowOfPieces where='bottom' gameControl={gameControl} />
+            </div>
+            <UserOptions gameControl={gameControl} />
+        </div>
+    );
+}
+
+export default SimpleGame;

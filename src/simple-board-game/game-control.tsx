@@ -1,19 +1,14 @@
-import { useState, useRef } from 'react';
 import {  CorePiece, CorePieceFactory } from './core-piece';
 import { GameProps, SharedGameState, checkered } from './game-interfaces';
 import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
+
 type BgioProps = BgioBoardProps<SharedGameState>;
 
-function useGameHooks() {
-    return {
-        reverseBoardState: useState(false), 
-        corePieceFactory: useRef(new CorePieceFactory()).current,
-    };
-}
-
-type GameHooks = ReturnType<typeof useGameHooks>;
-
 type BoardPieces = Array<Array<CorePiece | null>>;
+
+interface LocalState {
+    reverseBoard: [boolean, (arg: boolean)=>void],
+}
 
 interface Position {
     row: number;
@@ -24,12 +19,13 @@ const topLeftBlack = false; // KLUDGE
 
 class GameControl {
 
-    constructor(gameHooks: GameHooks, gameProps: GameProps, bgioProps: BgioProps) {
-        this._gameHooks = gameHooks;
+    constructor(gameProps: GameProps, bgioProps: BgioProps,
+        localState: LocalState, corePieceFactory: CorePieceFactory) {
         this._gameProps = gameProps;
         this._bgioProps = bgioProps;
+        this._localState = localState;
 
-        const makeCorePiece = (name:string) => gameHooks.corePieceFactory.make(name); 
+        const makeCorePiece = (name:string) => corePieceFactory.make(name); 
 
         this._boardPieces = bgioProps.G.map(row =>
             row.map(name => (name ? makeCorePiece(name) : null))
@@ -41,10 +37,10 @@ class GameControl {
             bottom: copyable ? copyable.bottom.map(makeCorePiece) : [],
         }
     }
-
-    private _gameHooks: GameHooks;
     private _gameProps: GameProps;
     private _bgioProps: BgioProps;
+    private _localState: LocalState;
+
     private _boardPieces: BoardPieces;
     private _copyablePieces: {
         top: Array<CorePiece>,
@@ -55,9 +51,9 @@ class GameControl {
     redo () { this._bgioProps.redo();}
     restart () { this._bgioProps.reset();}
 
-    get reverseBoardRows() { return this._gameHooks.reverseBoardState[0];}
+    get reverseBoardRows() { return this._localState.reverseBoard[0];}
 
-    flipRowOrder() { this._gameHooks.reverseBoardState[1](!this.reverseBoardRows);}
+    flipRowOrder() { this._localState.reverseBoard[1](!this.reverseBoardRows);}
 
     get nRows() {
         return this._boardPieces.length;
@@ -142,5 +138,5 @@ class GameControl {
     }
 }
 
-export { GameControl, useGameHooks }
+export { GameControl }
 export type { Position }

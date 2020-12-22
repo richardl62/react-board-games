@@ -1,41 +1,27 @@
+// This file provides the infrastructure (as opposed to layout) for a 'full game'.
+// In particular, it sets React hooks and creates a boardgame.io (Bgio) client. 
 import React from 'react';
+import { useState, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { Board } from './board';
-import { RowOfPieces } from './row-of-pieces';
-import UserOptions from './user-options';
-
-import { GameControl, useGameHooks, Position } from './game-control'
-import { GameProps, SharedGameState} from './game-interfaces';
-
 import * as Bgio from 'boardgame.io/react';
 import * as BgioMultiplayer from 'boardgame.io/multiplayer'
+
+import { GameControl, Position } from './game-control'
+import { GameProps, SharedGameState} from './game-interfaces';
+import {  CorePieceFactory } from './core-piece';
+import SimpleGame from './simple-game';
+
 import './index.css';
 
 type BgioBoardProps = Bgio.BoardProps<SharedGameState>;
 
-const local=true;
+const useServer=false; // If false, play is limited to a single browser.  
 const nPlayersPerBrowser=2;
 
 
-function SimpleGame({gameControl} : {gameControl: GameControl})
-{
-    return (
-        // sbg -> Simple Board Game
-        <div className="sbg">
-            <div className="sbg__game">
-                <RowOfPieces where='top' gameControl={gameControl} />
-
-                <Board gameControl={gameControl} />
-
-                <RowOfPieces where='bottom' gameControl={gameControl} />
-            </div>
-            <UserOptions gameControl={gameControl} />
-        </div>
-    );
-}
-
+// Provide the 'game' object required for a boardgame.io client.
 function bgioGame(gameProps: GameProps) {
     const moves = {
         clearAll(g: SharedGameState, ctx: any) {
@@ -62,22 +48,24 @@ function bgioGame(gameProps: GameProps) {
 
 const FullGame : React.FC<GameProps> = (gameProps: GameProps) => {
     
-    const gameHooks = useGameHooks(); 
+    const corePieceFactory = useRef(new CorePieceFactory()).current;
 
-    function makeBoard(bgioProps: BgioBoardProps) {
-        return (<SimpleGame 
-            gameControl={new GameControl(gameHooks, gameProps, bgioProps)}
-        />);
-    }
-
-    const multiplayer = local ? 
-    BgioMultiplayer.Local() :
-    BgioMultiplayer.SocketIO({ server: 'localhost:8000' });
+    // Shared state is handled by boardgame.io.  (Is this separation a kludge?)
+    const localState = {
+            reverseBoard: useState(false), 
+        };
 
     const BgClient = Bgio.Client({
+        multiplayer: useServer ? 
+            BgioMultiplayer.SocketIO({ server: 'localhost:8000' }) :
+            BgioMultiplayer.Local(),
+
         game: bgioGame(gameProps),
-        board: makeBoard,
-        multiplayer: multiplayer
+
+        board: (bgioProps: BgioBoardProps) => (<SimpleGame 
+            gameControl={new GameControl(gameProps, bgioProps, localState, corePieceFactory)}
+        />),
+
     });
 
     // Having DndProvider here, rather than in 'board' prevents error
@@ -92,4 +80,4 @@ const FullGame : React.FC<GameProps> = (gameProps: GameProps) => {
 };
 
 export default FullGame;
-export {bgioGame};
+export { bgioGame };
