@@ -8,45 +8,33 @@ import UserOptions from './user-options';
 
 import { GameControl, useGameHooks, Position } from './game-control'
 import { GameProps, SharedGameState} from './game-interfaces';
-import { Local as BgioLocal } from 'boardgame.io/multiplayer'
-import { SocketIO as BgioSocketIO } from 'boardgame.io/multiplayer'
+
 import * as Bgio from 'boardgame.io/react';
+import * as BgioMultiplayer from 'boardgame.io/multiplayer'
 import './index.css';
 
-const local = false;
+type BgioBoardProps = Bgio.BoardProps<SharedGameState>;
 
-function bgioServer() {
-    if(local) {
-        return BgioLocal();
-    } else {
-        return BgioSocketIO({ server: 'localhost:8000' });
-    }
-}
+const local=true;
+const nPlayersPerBrowser=2;
 
 
-interface CoreGameProps {
-    gameControl: GameControl ;
-}
-const CoreGame:  React.FC<CoreGameProps> = ({gameControl} : CoreGameProps) => {
-   return (
+function SimpleGame({gameControl} : {gameControl: GameControl})
+{
+    return (
         // sbg -> Simple Board Game
-        <div className="sbg"> 
+        <div className="sbg">
+            <div className="sbg__game">
+                <RowOfPieces where='top' gameControl={gameControl} />
 
-                <div className="sbg__game">
+                <Board gameControl={gameControl} />
 
-                    <RowOfPieces where='top' gameControl={gameControl} />
-
-                    <Board gameControl={gameControl} />
-
-                    <RowOfPieces where='bottom' gameControl={gameControl} />
-                </div>
+                <RowOfPieces where='bottom' gameControl={gameControl} />
+            </div>
             <UserOptions gameControl={gameControl} />
         </div>
     );
 }
-
-
-type BgioProps = Bgio.BoardProps<SharedGameState>;
 
 function bgioGame(gameProps: GameProps) {
     const moves = {
@@ -72,32 +60,36 @@ function bgioGame(gameProps: GameProps) {
     };
 }
 
-const Game : React.FC<GameProps> = (gameProps: GameProps) => {
+const FullGame : React.FC<GameProps> = (gameProps: GameProps) => {
     
     const gameHooks = useGameHooks(); 
 
-    const board = (bgioProps: BgioProps) => {
-        const gameControl = new GameControl(gameHooks, gameProps, bgioProps);
-        return (<CoreGame gameControl={gameControl}/>);
-    };
-    
-    const options ={
-        game: bgioGame(gameProps),
-        board: board,
-        multiplayer: bgioServer(),
-    };
+    function makeBoard(bgioProps: BgioBoardProps) {
+        return (<SimpleGame 
+            gameControl={new GameControl(gameHooks, gameProps, bgioProps)}
+        />);
+    }
 
-    const Bg = Bgio.Client(options);
+    const multiplayer = local ? 
+    BgioMultiplayer.Local() :
+    BgioMultiplayer.SocketIO({ server: 'localhost:8000' });
+
+    const BgClient = Bgio.Client({
+        game: bgioGame(gameProps),
+        board: makeBoard,
+        multiplayer: multiplayer
+    });
 
     // Having DndProvider here, rather than in 'board' prevents error
     // Cannot have two HTML5 backends at the same time
     return (
         <DndProvider backend={HTML5Backend}>
-            <Bg playerID="0"/>
-            {/* <Bg playerID="1"/> */}
+            {Array(nPlayersPerBrowser).fill(null).map((_,index) => 
+                <BgClient key={index} playerID={index.toString()}/>
+            )}
         </DndProvider>
     );
 };
 
-export default Game;
+export default FullGame;
 export {bgioGame};

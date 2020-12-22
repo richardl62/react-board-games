@@ -1,18 +1,14 @@
 import React from 'react';
 import { GameControl } from './game-control';
 
-interface UserOptionsProps {
-    gameControl: GameControl,
-};
-
-const UserOptions : React.FC<UserOptionsProps>  = ({gameControl}) => {
+function UserOptions({ gameControl } : {gameControl: GameControl}) {
 
     return (
-        <div className="sbg__game-control" >
+        <div className="sbg__game-control">
 
             <div className='sbg__buttons'>
-                <button type='button' onClick={()=>gameControl.clearAll()}> Clear</button>
-                <button type='button' onClick={()=>gameControl.flipRowOrder()}>Flip</button>
+                <button type='button' onClick={() => gameControl.clearAll()}> Clear</button>
+                <button type='button' onClick={() => gameControl.flipRowOrder()}>Flip</button>
             </div>
 
             <div className='sbg__buttons'>
@@ -23,17 +19,16 @@ const UserOptions : React.FC<UserOptionsProps>  = ({gameControl}) => {
 
                 <button type='button'
                     onClick={() => gameControl.redo()}>
-                    Redo
+                                   Redo
                 </button>
 
                 <button type='button'
-                    onClick={()=>gameControl.restart()}>
-                    Restart
+                    onClick={() => gameControl.restart()}>
+                             Restart
                 </button>
             </div>
         </div>
     );
 }
-
 
 export default UserOptions;
