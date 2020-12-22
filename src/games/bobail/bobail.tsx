@@ -40,3 +40,4 @@ const games = {
 };
 
 export default games;
+export {games as Bobail};

@@ -19,7 +19,7 @@ let games: Array<Game> = [];
 for(const key in gameDefinitions) {
   const game = gameDefinitions[key];
 
-  const gamePage = game.name.replace(/\s/g, ''); // Remove add whitespace
+  const gamePage = game.name.replace(/\s/g, ''); // Remove any whitespace
   games.push( {
     component: () => <BoardGame {...game} />,
     name: game.name,

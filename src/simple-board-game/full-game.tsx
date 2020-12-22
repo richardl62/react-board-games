@@ -17,7 +17,7 @@ import './index.css';
 
 type BgioBoardProps = Bgio.BoardProps<SharedGameState>;
 
-const useServer=false; // If false, play is limited to a single browser.  
+const useServer=true; // If false, play is limited to a single browser.  
 const nPlayersPerBrowser=2;
 
 
@@ -40,7 +40,7 @@ function bgioGame(gameProps: GameProps) {
     };
 
     return {
-        name: gameProps.name,
+        name: gameProps.name.replace(/\s/g, ''), // Remove whitespace,
         setup: () => gameProps.pieces,
         moves: moves,
     };
@@ -58,7 +58,10 @@ const FullGame : React.FC<GameProps> = (gameProps: GameProps) => {
     const BgClient = Bgio.Client({
         multiplayer: useServer ? 
             BgioMultiplayer.SocketIO({ server: 'localhost:8000' }) :
-            BgioMultiplayer.Local(),
+            BgioMultiplayer.Local({ 
+                persist: true, // Enable localStorage cache.
+                storageKey: 'bgio',
+            }),
 
         game: bgioGame(gameProps),
 
