@@ -6,15 +6,15 @@ import { Server } from 'boardgame.io/server';
  * Start of kludged imports.
  */
 
-// Explicitly load the dependancies of 'games'.
-// Without this requires the gameList is empty.
-require('./games/bobail/bobail');
-require('./games/chess/chess');
-require('./games/draughts/draughts');
+// Explicitly import the dependancies of 'games'.
+// Without this gameList is empty.
+import './games/bobail/bobail';
+import './games/chess/chess';
+import './games/draughts/draughts';
 
-// Import seems to give empty objects.
-const games:any = require('./games');
-const sbg:any = require('./simple-board-game');
+// Imports other than '*' seems not to work.
+import * as games from './games';
+import * as sbg from './simple-board-game';
 
 const gamesList = games.default;
 const bgioGame = sbg.bgioGame;
