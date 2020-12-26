@@ -1,3 +1,4 @@
+// Used locally and by the server
 import 'ignore-styles'
 
 import { Server } from 'boardgame.io/server';
@@ -8,16 +9,15 @@ import { Server } from 'boardgame.io/server';
 
 // Explicitly import the dependancies of 'games'.
 // Without this gameList is empty.
-import './games/bobail/bobail';
-import './games/chess/chess';
-import './games/draughts/draughts';
+import './piece/bobail';
+import './game-definition/chess';
+import './piece/draughts';
 
 // Imports other than '*' seems not to work.
-import * as games from './games';
-import * as sbg from './simple-board-game';
+import * as games from './game-definition';
+import bgioGame from './simple-board-game/bgio-game';
 
 const gamesList = games.default;
-const bgioGame = sbg.bgioGame;
 
 /*
  * End of kludged imports.
@@ -32,4 +32,4 @@ for(const key in gamesList) {
 
 const server = Server({ games: bgioGames });
 
-server.run(8000);
+export default server;

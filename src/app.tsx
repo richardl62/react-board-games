@@ -2,9 +2,8 @@ import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import './app.css';
 
-
 import BoardGame from './simple-board-game';
-import gameDefinitions from './games';
+import gameDefinitions from './game-definition';
 
 const homePage = "react-board-games";
 

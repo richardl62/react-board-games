@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import './pieces.css';
+import './piece.css';
 
 interface Props {
     color: string;

@@ -1,18 +1,22 @@
+import { GameType } from '../interfaces'
 type CorePieceName = string; // Could do better
 type CorePieceId = number;
 
 class CorePiece {
+
     name: CorePieceName;
+    gameType: GameType;
     id: CorePieceId;
 
-    constructor(name: CorePieceName, id: CorePieceId) {
+    constructor(name: CorePieceName,  gameType: GameType, id: CorePieceId) {
       this.id = id;
       this.name = name;
+      this.gameType = gameType;
       Object.freeze(this);
     }
-  }
+}
   
-  class CorePieceFactory {
+class CorePieceFactory {
     private _lastUsedId: number;
     
     constructor() {
@@ -20,13 +24,13 @@ class CorePiece {
     }
   
 
-    make(name: CorePieceName) {
+    make(name: CorePieceName, gameType: GameType) {
       ++this._lastUsedId;
-      return new CorePiece(name, this._lastUsedId);
+      return new CorePiece(name, gameType, this._lastUsedId);
     }
 
     copy(corePiece: CorePiece) {
-      return this.make(corePiece.name);
+      return this.make(corePiece.name, corePiece.gameType);
     }
   }
 

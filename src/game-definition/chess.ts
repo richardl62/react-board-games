@@ -1,29 +1,29 @@
-import { checkered } from '../../simple-board-game';
-import { Chess as ChessPiece } from '../pieces';
+// Use of GameDefinition is not strictly necessary, but it allows type checking to be
+// done in this file rather than at point of use.
+import { GameDefinition } from '../interfaces';
 
-type PieceArray = Array<Array<string | null>>;
-
-function chess(name: string, pieces: PieceArray) {
+function chess(name: string, pieces: GameDefinition['pieces']) : GameDefinition  {
     return {
       name: name,
+      gameType: 'chess',
 
-      style: checkered,
-      borderLabels: true,
+      boardStyle: {
+        checkered: true,
+        labels: true,
+    },
   
       pieces: pieces,
 
-      copyablePieces: {
+      offBoardPieces: {
         top: ['p', 'n',  'b',  'r',  'q',  'k'],
         bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
       },
-  
-      makePiece: (name: string) => (<ChessPiece piece={name} />),
     };
   }
 
-const games = {
-  chess: chess(
-    "Chess",
+const games = [
+  chess(
+    "chess",
     [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
       ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -36,8 +36,8 @@ const games = {
     ]
   ),
 
-  chess5ASide: chess(
-    "Chess 5-a-side",
+  chess(
+    "chess 5-a-side",
     [
       ['r', 'n', 'b', 'q', 'k'],
       ['p', 'p', 'p', 'p', 'p'],
@@ -47,6 +47,7 @@ const games = {
       ['R', 'N', 'B', 'Q', 'K'],
     ]
   ),
-}
+  ]
+
 
 export default games;

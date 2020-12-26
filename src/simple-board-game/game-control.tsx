@@ -1,5 +1,5 @@
 import {  CorePiece, CorePieceFactory } from './core-piece';
-import { GameProps, SharedGameState, checkered } from './game-interfaces';
+import { GameDefinition, SharedGameState} from './internal-interfaces';
 import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
 
 type BgioProps = BgioBoardProps<SharedGameState>;
@@ -19,30 +19,30 @@ const topLeftBlack = false; // KLUDGE
 
 class GameControl {
 
-    constructor(gameProps: GameProps, bgioProps: BgioProps,
+    constructor(gameDefinition: GameDefinition, bgioProps: BgioProps,
         localState: LocalState, corePieceFactory: CorePieceFactory) {
-        this._gameProps = gameProps;
+        this._gameDefinition = gameDefinition;
         this._bgioProps = bgioProps;
         this._localState = localState;
 
-        const makeCorePiece = (name:string) => corePieceFactory.make(name); 
+        const makeCorePiece = (name:string) => corePieceFactory.make(name, gameDefinition.gameType); 
 
         this._boardPieces = bgioProps.G.map(row =>
             row.map(name => (name ? makeCorePiece(name) : null))
             );
         
-        const copyable = gameProps.copyablePieces;
-        this._copyablePieces = {
-            top: copyable ? copyable.top.map(makeCorePiece) : [],
-            bottom: copyable ? copyable.bottom.map(makeCorePiece) : [],
+        const offBoard = gameDefinition.offBoardPieces;
+        this._offBoardPieces = {
+            top: offBoard ? offBoard.top.map(makeCorePiece) : [],
+            bottom: offBoard ? offBoard.bottom.map(makeCorePiece) : [],
         }
     }
-    private _gameProps: GameProps;
+    private _gameDefinition: GameDefinition;
     private _bgioProps: BgioProps;
     private _localState: LocalState;
 
     private _boardPieces: BoardPieces;
-    private _copyablePieces: {
+    private _offBoardPieces: {
         top: Array<CorePiece>,
         bottom: Array<CorePiece>,
     }
@@ -69,9 +69,9 @@ class GameControl {
 
     // const findOffBoardPiece = (pieceId: CorePieceId) => {
     //     // Kludge: p should never be null
-    //     let piece = this._stateManager.state.copyablePiecesTop.find(p => p && p.id === pieceId);
+    //     let piece = this._stateManager.state.offBoardPiecesTop.find(p => p && p.id === pieceId);
     //     if (!piece) {
-    //         piece = this._stateManager.state.copyablePiecesBottom.find(p => p && p.id === pieceId);
+    //         piece = this._stateManager.state.offBoardPiecesBottom.find(p => p && p.id === pieceId);
     //     }
 
     //     return piece;
@@ -92,27 +92,25 @@ class GameControl {
 
     squareStyle(row: number, col: number) {
 
-        const isCheckered = this._gameProps.style === checkered;
+        const isCheckered = this._gameDefinition.boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
 
         return {
-            checkered: this._gameProps.style === checkered,
+            checkered: this._gameDefinition.boardStyle.checkered,
             black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
         };
     }
 
-    copyablePieces(which : 'top' | 'bottom') {
+    offBoardPieces(which : 'top' | 'bottom') {
         let top = which === 'top';
         if(this.reverseBoardRows) {
             top = !top;
         }
 
-        return top ? this._copyablePieces.top : this._copyablePieces.bottom;
+        return top ? this._offBoardPieces.top : this._offBoardPieces.bottom;
     }
 
-    get borderLabels() {return Boolean(this._gameProps.borderLabels);}
-
-    makePiece(cp: CorePiece) {return this._gameProps.makePiece(cp.name);}
+    get borderLabels() {return Boolean(this._gameDefinition.boardStyle.labels);}
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 

@@ -3,7 +3,7 @@ import { useDrag } from 'react-dnd';
 import { itemTypes } from './constants';
 import { CorePiece } from './core-piece';
 import { GameControl } from './game-control';
-
+import SimplePiece from '../piece';
 interface PieceProps {
   gameControl: GameControl;
   corePiece: CorePiece;
@@ -37,7 +37,7 @@ const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
         className='sbg__piece-div'
         ref={drag}
       >
-        {gameControl.makePiece(corePiece)}
+        <SimplePiece name={corePiece.name} gameType={corePiece.gameType} />
       </div>
     );
   }

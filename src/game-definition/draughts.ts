@@ -1,24 +1,7 @@
-import {checkered} from '../../simple-board-game';
-import { Counter } from '../pieces';
+// Use of GameDefinition is not strictly necessary, but it allows type checking to be
+// done in this file rather than at point of use.
+import { GameDefinition } from '../interfaces';
 
-function pieceColor(black: boolean) {
-    return black ? 'black' : 
-        'rgb(230 220 200)'  // kludge? Depemds (sort of) on color of squares on board
-    ;
-}
-
-function makePiece(name: string) {
-
-    const isBlack = name.toLowerCase() === 'b';
-    const isKing =  name === name.toUpperCase();;
-
-    return (
-        <Counter color={pieceColor(isBlack)}
-            text={isKing ? "K" : null}
-            textColor={pieceColor(!isBlack)}
-        />
-    );
-}
 
 interface DraughtProps {
     name: string,
@@ -27,7 +10,7 @@ interface DraughtProps {
     nRowsOfPieces: number;
 }
 
-function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
+function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) : GameDefinition  {
 
     const startingPiece = (row: number, col: number) => {
         let name = null;
@@ -56,30 +39,32 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
 
     return {
         name: name,
-        style: checkered,
-        borderLabels: true,
+        gameType: "draughts",
 
-        copyablePieces: {
-            top: ['w', 'W'],
-            bottom: ['b', 'B' ],
-          },
+        boardStyle: {
+            checkered: true,
+            labels: true,
+        },
 
         pieces: pieces,
 
-        makePiece: makePiece,
+        offBoardPieces: {
+            top: ['w', 'W'],
+            bottom: ['b', 'B' ],
+          },
     };
 }
 
-const games = {
-    draughts: draughts({
+const games = [
+    draughts({
         name: "Draughts",
         nRows: 8, nCols: 8, nRowsOfPieces: 3,
     }),
 
-    draughts10x10: draughts({
+    draughts({
         name: "Draughts 10x10",
         nRows: 10, nCols: 10, nRowsOfPieces: 3,
     }),
-};
+];
   
 export default games;

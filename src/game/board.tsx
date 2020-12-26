@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { DroppableSquare as BoardSquare } from './square';
-import { GameControl } from './game-control';
+import { GameControl } from '../simple-board-game/game-control';
 
 
 type Elems = Array<ReactElement>;

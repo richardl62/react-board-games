@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameControl } from './game-control';
+import { GameControl } from '../simple-board-game/game-control';
 import { Board } from './board';
 import { RowOfPieces } from './row-of-pieces';
 
@@ -33,7 +33,7 @@ function UserOptions({ gameControl } : {gameControl: GameControl}) {
     );
 }
 
-function SimpleGame({gameControl} : {gameControl: GameControl})
+function Game({gameControl} : {gameControl: GameControl})
 {
     return (
         // sbg -> Simple Board Game
@@ -50,4 +50,4 @@ function SimpleGame({gameControl} : {gameControl: GameControl})
     );
 }
 
-export default SimpleGame;
+export default Game;
