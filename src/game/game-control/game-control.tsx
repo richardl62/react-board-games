@@ -1,6 +1,6 @@
-import {  CorePiece, CorePieceFactory } from './core-piece';
-import { GameDefinition, SharedGameState} from './internal-interfaces';
 import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
+import { GameDefinition, SharedGameState, BoardPosition } from '../../interfaces';
+import CorePiece, { CorePieceFactory } from './core-piece';
 
 type BgioProps = BgioBoardProps<SharedGameState>;
 
@@ -8,11 +8,6 @@ type BoardPieces = Array<Array<CorePiece | null>>;
 
 interface LocalState {
     reverseBoard: [boolean, (arg: boolean)=>void],
-}
-
-interface Position {
-    row: number;
-    col: number;
 }
 
 const topLeftBlack = false; // KLUDGE
@@ -27,7 +22,7 @@ class GameControl {
 
         const makeCorePiece = (name:string) => corePieceFactory.make(name, gameDefinition.gameType); 
 
-        this._boardPieces = bgioProps.G.map(row =>
+        this._boardPieces = bgioProps.G.pieces.map(row =>
             row.map(name => (name ? makeCorePiece(name) : null))
             );
         
@@ -67,16 +62,6 @@ class GameControl {
         return this._boardPieces[row][col];
     }
 
-    // const findOffBoardPiece = (pieceId: CorePieceId) => {
-    //     // Kludge: p should never be null
-    //     let piece = this._stateManager.state.offBoardPiecesTop.find(p => p && p.id === pieceId);
-    //     if (!piece) {
-    //         piece = this._stateManager.state.offBoardPiecesBottom.find(p => p && p.id === pieceId);
-    //     }
-
-    //     return piece;
-    // }
-    
     findRowAndCol(wanted: CorePiece) {
         for(let row = 0; row < this.nRows; ++row) {
             for(let col = 0; col < this.nCols; ++col) {
@@ -114,7 +99,7 @@ class GameControl {
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
-    movePiece (piece: CorePiece, to: Position) {
+    movePiece (piece: CorePiece, to: BoardPosition) {
         const from = this.findRowAndCol(piece);
         if(!from) {
             throw Error(`Internal error: piece ${piece.id} not found on game board`)
@@ -136,5 +121,4 @@ class GameControl {
     }
 }
 
-export { GameControl }
-export type { Position }
+export default GameControl

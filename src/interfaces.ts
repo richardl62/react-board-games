@@ -7,7 +7,7 @@ type GameType = 'bobail' | 'chess' | 'draughts';
 type PieceType = string;
 
 // The positions of the pieces on the board
-type PiecePositions = Array<Array<PieceType|null>>;
+type Pieces = Array<Array<PieceType|null>>;
 
 // Determines how the board is displayed. Does not affect game play.
 // Is this needed give we have GameType?
@@ -38,9 +38,19 @@ interface GameDefinition {
     // games.
     name: string;
 
-    pieces: PiecePositions;
+    pieces: Pieces;
 
     offBoardPieces: OffBoardPieces;
 };
 
-export type {GameDefinition, GameType, PiecePositions, BoardStyle, OffBoardPieces};
+interface BoardPosition {
+    row: number;
+    col: number;
+}
+
+interface SharedGameState {
+    pieces: Pieces, // Just pieces for now
+};
+
+export type {GameDefinition, GameType, Pieces, BoardStyle, OffBoardPieces, 
+    BoardPosition, SharedGameState};

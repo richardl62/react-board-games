@@ -2,30 +2,26 @@ import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import './app.css';
 
-import BoardGame from './simple-board-game';
+import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
 const homePage = "react-board-games";
 
-interface Game {
-  component: () => any;
-  name: string;
-  path: string;
-}
+const localServer=true; // If truw, play is limited to a single browser.  
+const nPlayersPerBrowser=2;
 
-let games: Array<Game> = [];
-
-for(const key in gameDefinitions) {
-  const game = gameDefinitions[key];
-
-  const gamePage = game.name.replace(/\s/g, ''); // Remove any whitespace
-  games.push( {
-    component: () => <BoardGame {...game} />,
-    name: game.name,
+let games = gameDefinitions.map(gameDef => {
+  const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
+  return {
+    component: () => (<BoardGame 
+        gameDefinition={gameDef} 
+        localServer={localServer} 
+        nPlayersPerBrowser={nPlayersPerBrowser}
+      />),
+    name: gameDef.name,
     path: `/${homePage}/${gamePage}`,
+  };
 });
-}
-
 
 function GameLinks() {
   return (

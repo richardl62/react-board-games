@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { SimpleSquare } from './square'
-import { Piece } from '../simple-board-game/controlled-piece';
-import { GameControl }  from '../simple-board-game/game-control';
+import Piece from '../full-game/controlled-piece';
+import GameControl from '../game-control/game-control';
 
 function RowOfPieces({ where, gameControl }: {
     where: 'top' | 'bottom',
@@ -23,4 +23,4 @@ function RowOfPieces({ where, gameControl }: {
     );
 }
 
-export { RowOfPieces }
+export default RowOfPieces;

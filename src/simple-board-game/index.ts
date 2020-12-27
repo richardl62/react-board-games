@@ -1,1 +1,0 @@
-export { default, bgioGame } from './full-game'

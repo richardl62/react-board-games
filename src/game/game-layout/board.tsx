@@ -1,10 +1,8 @@
 import React, { ReactElement } from 'react';
 import { DroppableSquare as BoardSquare } from './square';
-import { GameControl } from '../simple-board-game/game-control';
-
+import GameControl from '../game-control/game-control';
 
 type Elems = Array<ReactElement>;
-
 
 function addHeader(nCols: number, elems: Elems, rowName: string) {
     const key = (elemName: string | number) => rowName + '-' + elemName;
@@ -106,4 +104,4 @@ function Board({ gameControl }: {
 
 }
 
-export { Board }
+export default Board;

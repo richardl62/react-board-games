@@ -1,7 +1,8 @@
 import React from 'react';
-import { GameControl } from '../simple-board-game/game-control';
-import { Board } from './board';
-import { RowOfPieces } from './row-of-pieces';
+import GameControl from '../game-control/game-control';
+import Board from './board';
+import RowOfPieces from './row-of-pieces';
+import './game.css';
 
 function UserOptions({ gameControl } : {gameControl: GameControl}) {
 

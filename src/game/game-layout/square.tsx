@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import { itemTypes } from '../simple-board-game/constants';
-import { Piece } from '../simple-board-game/controlled-piece';
-import { CorePiece } from '../simple-board-game/core-piece';
-import { GameControl } from '../simple-board-game/game-control';
+import { itemTypes } from '../full-game/constants';
+import Piece from '../full-game/controlled-piece';
+import { CorePiece } from '../game-control';
+import GameControl from '../game-control';
 
 interface SquareStyle {
     checkered: boolean,

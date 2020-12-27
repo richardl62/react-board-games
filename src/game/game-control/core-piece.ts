@@ -1,4 +1,4 @@
-import { GameType } from '../interfaces'
+import { GameType } from '../../interfaces'
 type CorePieceName = string; // Could do better
 type CorePieceId = number;
 
@@ -34,5 +34,6 @@ class CorePieceFactory {
     }
   }
 
-  export { CorePiece, CorePieceFactory }
-  export type { CorePieceId, CorePieceName }
+  export default CorePiece;
+  export { CorePieceFactory };
+ 

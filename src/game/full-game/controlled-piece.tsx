@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { itemTypes } from './constants';
-import { CorePiece } from './core-piece';
-import { GameControl } from './game-control';
-import SimplePiece from '../piece';
+import GameControl, { CorePiece } from '../game-control';
+import SimplePiece from '../../piece';
+
 interface PieceProps {
   gameControl: GameControl;
   corePiece: CorePiece;
@@ -43,4 +43,4 @@ const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
   }
 }
 
-export { Piece } 
+export default Piece; 
