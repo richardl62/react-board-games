@@ -56,15 +56,17 @@ function DroppableSquare(options:
  
         // The use of 'any' below is a kludge.  I am not sure how to type if properly, or
         // even if proper typing is possible.
-        drop: (corePiece: any /*KLUDGE - see above */) => 
+        drop: (dragParam: any) => 
         {
-            // Quick and dirty test that 'corePiece' is a corePiece    
-            if(corePiece.id && corePiece.name)
-            {
-                throw new Error(`Object to drop is not a CorePiece`);
-            }
+            const pieceID : number = dragParam.id;
+            console.log(pieceID);
 
-            gameControl.movePiece(corePiece as CorePiece, {row: row, col: col});
+            const pos = {row: row, col: col};
+            if(gameControl.moveable(pieceID)) {
+                gameControl.movePiece(pieceID, pos);
+            } else {
+                gameControl.copyPiece(pieceID, pos);
+            }
         },
         collect: monitor => ({
             isOver: !!monitor.isOver(),

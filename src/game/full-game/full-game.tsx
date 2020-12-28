@@ -37,8 +37,6 @@ function FullGame( {gameDefinition, localServer, nPlayersPerBrowser} : Props) {
 
 
     function renderGame(bgioProps: BgioBoardProps<SharedGameState>) {
-        console.log(bgioProps);
-
         let gameControl= new GameControl(gameDefinition, bgioProps, localState, 
             corePieceFactory);
         return <SimpleGame gameControl={gameControl} />;
