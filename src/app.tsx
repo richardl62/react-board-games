@@ -5,16 +5,16 @@ import './app.css';
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
-const localServer=false; // If true, play is limited to a single browser.  
-const nPlayersPerBrowser= localServer ? 2 : 1;
+const multiplayerMode='auto'; // 'local', 'remote' or 'auto'  
+const nPlayersLocal =  2;
 
 let games = gameDefinitions.map(gameDef => {
   const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
   return {
     component: () => (<BoardGame 
-        gameDefinition={gameDef} 
-        localServer={localServer} 
-        nPlayersPerBrowser={nPlayersPerBrowser}
+        gameDefinition={gameDef}
+        multiplayerMode={multiplayerMode} 
+        nPlayersLocal={nPlayersLocal} 
       />),
     name: gameDef.name,
     path: `/${gamePage}`,

@@ -19,11 +19,11 @@ import { makeBgioGame } from '../../shared-utilities';
 
 interface Props {
     gameDefinition: GameDefinition; 
-    localServer: boolean;
-    nPlayersPerBrowser: number;
+    multiplayerMode: "local" | "remote" | "auto";  
+    nPlayersLocal: number;
 }
 
-function FullGame( {gameDefinition, localServer, nPlayersPerBrowser} : Props) {
+function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal} : Props) {
 
     const corePieceFactory = useRef(new CorePieceFactory()).current;
 
@@ -32,15 +32,32 @@ function FullGame( {gameDefinition, localServer, nPlayersPerBrowser} : Props) {
         reverseBoard: useState(false),
     };
 
+    
+    const { protocol, hostname, port } = window.location;
+    console.log(window.location);
+    
+    let localMode;
+    if(multiplayerMode === 'auto') {
+        localMode = window.location.host === "localhost:3000";
+        if(localMode) {
+            console.log("Setting local mode: Given mode is 'auto' and " +
+               "host is 'localhost:3000'");
+        }
+    } else {
+        localMode = multiplayerMode === 'local';
+    }
+
     let multiplayer;
-    if (localServer) {
+    let nPlayers;
+    if (localMode) {
         console.log('Running locally');
         multiplayer = BgioLocal();
+        nPlayers = nPlayersLocal;
     } else {
-        const { protocol, hostname, port } = window.location;
         const server = `${protocol}//${hostname}:${port}`;
         console.log('server:', server);
         multiplayer = BgioSocketIO({ server: server });
+        nPlayers = 1;
     }
 
     function renderGame(bgioProps: BgioBoardProps<SharedGameState>) {
@@ -56,7 +73,7 @@ function FullGame( {gameDefinition, localServer, nPlayersPerBrowser} : Props) {
     });
 
     let games = [];
-    for(let count = 0; count < nPlayersPerBrowser; ++count) {
+    for(let count = 0; count < nPlayers; ++count) {
         games.push(
             <DndProvider key={count} backend={HTML5Backend}>
                 <BgClient playerID={count.toString()} />
