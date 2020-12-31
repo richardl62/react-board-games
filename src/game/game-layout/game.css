@@ -1,0 +1,130 @@
+.sbg {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content:center;
+    
+    font-family: verdana;
+
+    --square-size: 50px;
+
+    --board-background: rgb(100,0,0); /* Dark brown*/
+    --board-black-square: rgb(165 42 42); /* brown */
+    --board-white-square:  rgb(255 248 220); /* cornsilk */
+    --active-square-highlight: rgb(200 200 100); /* dark yellow */
+}
+
+.sbg__game-control {
+    margin-top: calc(var(--square-size) + 8px /* kludge */ );
+    margin-left: 8px;
+}
+
+.sbg__game-type > div {
+    display: inline;
+    white-space: nowrap;
+    font-size: 20px;
+ 
+}
+
+.sbg__game-type label {
+    margin-left: .3em;
+    margin-right: 0.8em;
+}
+
+.sbg__buttons {
+    margin-top: 6px;
+}
+
+.sbg__game-control button {
+   font-size: 20px;
+   width: 3.5em;
+   margin-right: 5px;
+}
+
+.sbg__game-control button:last-of-type {
+       margin-right: 0px;
+}
+
+.sbg__game {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-left: 5%;
+}
+
+.sbg__board {
+    justify-items: center;
+    align-items: center;
+    background-color: var(--board-background);
+}
+
+.sbg__square-placeholder {
+    position: relative;
+    width: var(--square-size);
+    height: var(--square-size);
+}
+
+.sbg__square {
+    width: 100%;
+    height: 100%;
+}
+
+.sbg__simple-square {
+    border: 2px solid var(--board-background, brown);
+    background-color: var(--board-white-square, white);
+}
+
+
+.sbg__black-square {
+    background-color: var(--board-black-square, black);
+}
+
+.sbg__white-square {
+    background-color: var(--board-white-square, white);
+}
+
+
+.sbg__board-border {
+    color:white;
+}
+
+.sbg__board-border-letter {
+    font-size: 20px;
+    padding: 3px 0;
+}
+
+.sbg__board-border-number {
+    font-size: 25px;
+    padding: 0 7px;
+}
+
+.sbg__row-of-pieces {
+    display: flex;
+    margin: 5px;
+}
+
+.sbg__piece-div {
+    position: absolute;
+    top:0; left:0;
+    z-index: 1;
+    
+    width: var(--square-size);
+    height: var(--square-size);
+}
+
+.sbg__board .square:hover:active  {
+    border: 4px solid var(--active-square-highlight, purple);
+    background-color: none;
+}
+
+
+.sbg__board-row {
+    display: flex;
+}
+
+.sbg__board-label {
+    display: flex;
+}

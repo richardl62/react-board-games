@@ -1,0 +1,1 @@
+export { default as makeBgioGame } from './make-bgio-game'; 
