@@ -32,9 +32,16 @@ function FullGame( {gameDefinition, localServer, nPlayersPerBrowser} : Props) {
         reverseBoard: useState(false),
     };
 
-    const server = localServer ? BgioLocal() :
-        BgioSocketIO({ server: 'localhost:8000' });
-
+    let multiplayer;
+    if (localServer) {
+        console.log('Running locally');
+        multiplayer = BgioLocal();
+    } else {
+        const { protocol, hostname, port } = window.location;
+        const server = `${protocol}//${hostname}:${port}`;
+        console.log('server:', server);
+        multiplayer = BgioSocketIO({ server: server });
+    }
 
     function renderGame(bgioProps: BgioBoardProps<SharedGameState>) {
         let gameControl= new GameControl(gameDefinition, bgioProps, localState, 
@@ -43,7 +50,7 @@ function FullGame( {gameDefinition, localServer, nPlayersPerBrowser} : Props) {
     }
 
     const BgClient = BgioClient({
-        multiplayer: server,
+        multiplayer: multiplayer,
         game: makeBgioGame(gameDefinition),
         board: renderGame,
     });
