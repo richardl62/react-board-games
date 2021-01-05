@@ -1,7 +1,9 @@
 
-import bobail from './bobail';
-import chess from './chess';
-import draughts from './draughts';
+// Using 'require' helps with loading this in the server.
+const bobail = require('./bobail').default;
+const chess = require('./chess').default;
+const draughts = require('./draughts').default;
+
 
 const games = [...bobail, ...chess, ...draughts];
 

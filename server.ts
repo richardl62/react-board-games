@@ -3,12 +3,8 @@ import { Server } from 'boardgame.io/server';
 import path from 'path';
 import serve from 'koa-static';
 
-
-const bobail = require('./src/game-definition/bobail').default;
-const chess = require('./src/game-definition/chess').default;
-const draughts = require('./src/game-definition/draughts').default;
+const gameDefinitions = require('./src/game-definition').default;
 const makeBgioGame = require('./src/shared-utilities').makeBgioGame;
-const gameDefinitions = [...bobail, ...chess, ...draughts];
 const bgioGames = gameDefinitions.map(makeBgioGame);
 
 // @ts-ignore
