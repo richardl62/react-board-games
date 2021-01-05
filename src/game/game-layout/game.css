@@ -86,6 +86,13 @@
     background-color: var(--board-white-square, white);
 }
 
+.sbg__move-from {
+    border: yellow 5px solid;
+}
+
+.sbg__can-move-to {
+    border: green 5px solid; 
+}
 
 .sbg__board-border {
     color:white;

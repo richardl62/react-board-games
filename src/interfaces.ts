@@ -48,8 +48,19 @@ export interface BoardPosition {
     col: number;
 }
 
+export function samePosition(p1 : BoardPosition , p2 : BoardPosition ) {
+    return p1.row === p2.row && p1.col === p2.col;
+}
+
 export interface SharedGameState {
     pieces: Pieces, // Just pieces for now
+};
+
+export interface SquareProperties {
+    checkered: boolean;
+    black: boolean;
+    movingFrom: boolean;
+    canMoveTo: boolean;
 };
 
 // Exports are done inline

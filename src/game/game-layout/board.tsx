@@ -41,12 +41,8 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
         return (
             <BoardSquare
                 key={key(col)}
-
-                corePiece={gameControl.corePiece(pos)}
+                
                 gameControl={gameControl}
-
-                squareStyle={gameControl.squareStyle(pos)}
-
                 pos={pos}
             />
         );

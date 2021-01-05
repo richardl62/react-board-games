@@ -1,5 +1,6 @@
 import { BoardProps  as BgioBoardProps } from 'boardgame.io/react';
-import { GameDefinition, SharedGameState, BoardPosition } from '../../interfaces';
+import { GameDefinition, SharedGameState, SquareProperties, BoardPosition,
+     samePosition } from '../../interfaces';
 import CorePiece, { CorePieceFactory } from './core-piece';
 type CorePieceID = CorePiece['id'];
 
@@ -69,16 +70,18 @@ class GameControl {
         return this._boardPieces[pos.row][pos.col];
     }
 
-    findRowAndCol(wanted: CorePieceID) {
-        for(let row = 0; row < this.nRows; ++row) {
-            for(let col = 0; col < this.nCols; ++col) {
-                const cp = this.corePiece({row:row, col:col});
-                if(cp && cp.id === wanted) {
-                    return {row: row, col: col};
-                 }
+    findRowAndCol(wanted: CorePiece | CorePieceID ) {
+
+        const wantedId = (typeof wanted === "object") ? wanted.id : wanted;
+        for (let row = 0; row < this.nRows; ++row) {
+            for (let col = 0; col < this.nCols; ++col) {
+                const cp = this.corePiece({ row: row, col: col });
+                if (cp && cp.id === wantedId) {
+                    return { row: row, col: col };
+                }
             }
         }
-
+        
         return null;
     }
 
@@ -92,14 +95,28 @@ class GameControl {
         return allPieces.find(p => p && p.id === wanted);
     }
     
-    squareStyle({row, col } : BoardPosition) {
+    squareProperties(pos : BoardPosition) : SquareProperties  {
 
+        const {row, col } = pos;
         const isCheckered = this._gameDefinition.boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
+        
+        let movingFrom = false;
+        if(this._pieceToMove) {
+            const moveFromPos = this.findRowAndCol(this._pieceToMove);
+            if(!moveFromPos) {
+                throw new Error('"move from" position not found');
+            }
+            movingFrom = samePosition(pos, moveFromPos);
+            console.log(pos, movingFrom);
+        }
 
         return {
             checkered: this._gameDefinition.boardStyle.checkered,
             black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
+            movingFrom: movingFrom || col === 0, //For now
+
+            canMoveTo: row === 0, // For now
         };
     }
 

@@ -2,38 +2,41 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 import { itemTypes } from '../full-game/constants';
 import Piece from '../full-game/controlled-piece';
-import { CorePiece } from '../game-control';
 import GameControl from '../game-control';
-import { BoardPosition } from '../../interfaces';
-
-interface SquareStyle {
-    checkered: boolean,
-    black: boolean,
-}
+import { BoardPosition, SquareProperties } from '../../interfaces';
 
 interface SimpleSquareProps {
-    squareStyle?: SquareStyle;
+    squareProperties?: SquareProperties;
 }
 
 class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
     render() {
-        const {children, squareStyle} = this.props;
-        
-        let className = 'sbg__square';
-        if (squareStyle) {
-            const { checkered, black } = squareStyle;
+        const {squareProperties, children} = this.props;
+
+        let squareClass = 'sbg__square';
+        let placeholderClass = 'sbg__square-placeholder';
+
+        if (squareProperties) {
+            const { checkered, black, movingFrom, canMoveTo } = squareProperties;
             if (!checkered) {
-                className += ' sbg__simple-square';
+                squareClass += ' sbg__simple-square';
             } else if (black) {
-                className += ' sbg__black-square';
+                squareClass += ' sbg__black-square';
             } else {
-                className += ' sbg__white-square';
+                squareClass += ' sbg__white-square';
             } 
+
+            if(movingFrom) {
+                placeholderClass += ' sbg__move-from';
+            } else if (canMoveTo) {
+                placeholderClass += ' sbg__can-move-to';
+            }
+
         }
     
         return (
-            <div className='sbg__square-placeholder'>
-                <div className={className}>
+            <div className={placeholderClass} >
+                <div className={squareClass}>
                     {children}
                 </div>
            </div>
@@ -42,20 +45,18 @@ class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
 }
 
 interface DroppableSquareProps {
-    corePiece: CorePiece | null,
     gameControl: GameControl, 
-    squareStyle: SquareStyle,
     pos: BoardPosition,
 };
 
-function DroppableSquare({ corePiece, gameControl, squareStyle, pos} : DroppableSquareProps )
+function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
 {
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
  
-        // The use of 'any' below is a kludge.  I am not sure how to type if properly, or
-        // even if proper typing is possible.
-        drop: (dragParam: any) => 
+        // The use of 'any' below is a kludge.  I am not sure how to type if 
+        // properly, or even if proper typing is possible.
+        drop: (dragParam: any /* KLUDGE */) => 
         {
             const pieceID : number = dragParam.id;
             console.log(pieceID);
@@ -70,6 +71,8 @@ function DroppableSquare({ corePiece, gameControl, squareStyle, pos} : Droppable
             isOver: !!monitor.isOver(),
         }),
     })
+
+    const corePiece = gameControl.corePiece(pos);
     return (
         <div ref={drop}
             style={{
@@ -79,7 +82,7 @@ function DroppableSquare({ corePiece, gameControl, squareStyle, pos} : Droppable
             }}
             onClick={()=>gameControl.squareClicked(pos)}
         >
-            <SimpleSquare squareStyle={squareStyle}>
+            <SimpleSquare squareProperties={gameControl.squareProperties(pos)}>
                 {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
             </SimpleSquare>
 
