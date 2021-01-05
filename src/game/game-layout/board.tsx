@@ -37,18 +37,17 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     );
 
     let makeSquare = (col: number) => {
-
+        const pos = {row: row, col: col};
         return (
             <BoardSquare
                 key={key(col)}
 
-                corePiece={gameControl.corePiece({row: row, col: col})}
+                corePiece={gameControl.corePiece(pos)}
                 gameControl={gameControl}
 
-                squareStyle={gameControl.squareStyle(row, col)}
+                squareStyle={gameControl.squareStyle(pos)}
 
-                row={row}
-                col={col}
+                pos={pos}
             />
         );
     };

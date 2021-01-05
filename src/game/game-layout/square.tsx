@@ -4,6 +4,7 @@ import { itemTypes } from '../full-game/constants';
 import Piece from '../full-game/controlled-piece';
 import { CorePiece } from '../game-control';
 import GameControl from '../game-control';
+import { BoardPosition } from '../../interfaces';
 
 interface SquareStyle {
     checkered: boolean,
@@ -40,17 +41,15 @@ class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
     }
 }
 
-function DroppableSquare(options:
-    {
-        corePiece: CorePiece | null,
-        gameControl: GameControl, 
-        squareStyle: SquareStyle,
-        row: number,
-        col: number,
-    }) {
+interface DroppableSquareProps {
+    corePiece: CorePiece | null,
+    gameControl: GameControl, 
+    squareStyle: SquareStyle,
+    pos: BoardPosition,
+};
 
-    const { corePiece, gameControl, squareStyle, row, col} = options;
-
+function DroppableSquare({ corePiece, gameControl, squareStyle, pos} : DroppableSquareProps )
+{
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
  
@@ -61,7 +60,6 @@ function DroppableSquare(options:
             const pieceID : number = dragParam.id;
             console.log(pieceID);
 
-            const pos = {row: row, col: col};
             if(gameControl.moveable(pieceID)) {
                 gameControl.movePiece(pieceID, pos);
             } else {
@@ -79,7 +77,7 @@ function DroppableSquare(options:
                 width: '100%',
                 height: '100%',
             }}
-            onClick={()=>gameControl.squareClicked({row: row, col:col})}
+            onClick={()=>gameControl.squareClicked(pos)}
         >
             <SimpleSquare squareStyle={squareStyle}>
                 {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}

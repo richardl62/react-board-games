@@ -92,7 +92,7 @@ class GameControl {
         return allPieces.find(p => p && p.id === wanted);
     }
     
-    squareStyle(row: number, col: number) {
+    squareStyle({row, col } : BoardPosition) {
 
         const isCheckered = this._gameDefinition.boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
