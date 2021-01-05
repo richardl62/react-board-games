@@ -33,6 +33,8 @@ class GameControl {
             top: offBoard ? offBoard.top.map(makeCorePiece) : [],
             bottom: offBoard ? offBoard.bottom.map(makeCorePiece) : [],
         }
+                
+        this._pieceToMove = null;
     }
     private _gameDefinition: GameDefinition;
     private _bgioProps: BgioProps;
@@ -44,6 +46,9 @@ class GameControl {
         bottom: Array<CorePiece>,
     }
 
+    private _pieceToMove: CorePiece | null;
+    
+    
     undo() { this._bgioProps.undo();}
     redo () { this._bgioProps.redo();}
     restart () { this._bgioProps.reset();}
@@ -60,14 +65,14 @@ class GameControl {
         return this._boardPieces[0].length;
     }
 
-    corePiece(row: number, col: number) {
-        return this._boardPieces[row][col];
+    corePiece(pos: BoardPosition) {
+        return this._boardPieces[pos.row][pos.col];
     }
 
     findRowAndCol(wanted: CorePieceID) {
         for(let row = 0; row < this.nRows; ++row) {
             for(let col = 0; col < this.nCols; ++col) {
-                const cp = this.corePiece(row,col);
+                const cp = this.corePiece({row:row, col:col});
                 if(cp && cp.id === wanted) {
                     return {row: row, col: col};
                  }
@@ -76,6 +81,7 @@ class GameControl {
 
         return null;
     }
+
     private _findCorePiece(wanted: CorePieceID) {
         // ineffecient.
         const empty: Array<CorePiece|null> = [];
@@ -108,11 +114,34 @@ class GameControl {
 
     get borderLabels() {return Boolean(this._gameDefinition.boardStyle.labels);}
 
+    squareClicked(pos: BoardPosition) {
+        console.log(`Square clicked`, pos);
+
+        const clickedPiece = this.corePiece(pos);
+
+        if(this._pieceToMove) {
+            if(clickedPiece && clickedPiece.id === this._pieceToMove.id) {
+                // The same piece was clicked twice.
+                this._pieceToMove = null;
+            }
+            else {
+                this.movePiece(this._pieceToMove.id, pos);
+            }
+        } else {
+
+            if(clickedPiece) {
+                this._pieceToMove = clickedPiece;
+            }
+        }
+    } 
+
     clearAll() { this._bgioProps.moves.clearAll(); };
 
     movePiece (pieceID: CorePieceID, to: BoardPosition) {
         this.copyPiece(pieceID, to);
         this.clearPiece(pieceID);
+
+        this._pieceToMove = null;
     };
 
     copyPiece (pieceID: CorePieceID, to: BoardPosition) {

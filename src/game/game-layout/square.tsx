@@ -79,6 +79,7 @@ function DroppableSquare(options:
                 width: '100%',
                 height: '100%',
             }}
+            onClick={()=>gameControl.squareClicked({row: row, col:col})}
         >
             <SimpleSquare squareStyle={squareStyle}>
                 {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}

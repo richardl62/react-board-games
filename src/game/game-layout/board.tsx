@@ -42,7 +42,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
             <BoardSquare
                 key={key(col)}
 
-                corePiece={gameControl.corePiece(row, col)}
+                corePiece={gameControl.corePiece({row: row, col: col})}
                 gameControl={gameControl}
 
                 squareStyle={gameControl.squareStyle(row, col)}
