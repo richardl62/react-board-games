@@ -114,9 +114,9 @@ class GameControl {
         return {
             checkered: this._gameDefinition.boardStyle.checkered,
             black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
-            movingFrom: movingFrom || col === 0, //For now
+            movingFrom: false, //movingFrom || col === 0, //For now
 
-            canMoveTo: row === 0, // For now
+            canMoveTo: false, //row === 0, // For now
         };
     }
 

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { SimpleSquare } from './square'
 import Piece from '../full-game/controlled-piece';
 import GameControl from '../game-control/game-control';
 
@@ -14,9 +13,9 @@ function RowOfPieces({ where, gameControl }: {
         <div className='sbg__row-of-pieces'>
             {corePieces.map(
                 (cp, index) => (
-                    <SimpleSquare key={index}>
+                    <div key={index}>
                         { <Piece corePiece={cp} gameControl={gameControl} /> }
-                    </SimpleSquare>
+                    </div>
                 )
             )}
         </div>

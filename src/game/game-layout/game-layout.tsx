@@ -7,7 +7,7 @@ import './game.css';
 function UserOptions({ gameControl } : {gameControl: GameControl}) {
 
     return (
-        <div className="sbg__game-control">
+        <div className="sbg__user_options">
 
             <div className='sbg__buttons'>
                 <button type='button' onClick={() => gameControl.clearAll()}> Clear</button>
@@ -38,8 +38,8 @@ function Game({gameControl} : {gameControl: GameControl})
 {
     return (
         // sbg -> Simple Board Game
-        <div className="sbg">
-            <div className="sbg__game">
+        <div className="sbg__everything">
+            <div>
                 <RowOfPieces where='top' gameControl={gameControl} />
 
                 <Board gameControl={gameControl} />

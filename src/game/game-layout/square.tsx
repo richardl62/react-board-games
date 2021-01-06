@@ -3,46 +3,7 @@ import { useDrop } from 'react-dnd';
 import { itemTypes } from '../full-game/constants';
 import Piece from '../full-game/controlled-piece';
 import GameControl from '../game-control';
-import { BoardPosition, SquareProperties } from '../../interfaces';
-
-interface SimpleSquareProps {
-    squareProperties?: SquareProperties;
-}
-
-class SimpleSquare extends React.PureComponent<SimpleSquareProps> {
-    render() {
-        const {squareProperties, children} = this.props;
-
-        let squareClass = 'sbg__square';
-        let placeholderClass = 'sbg__square-placeholder';
-
-        if (squareProperties) {
-            const { checkered, black, movingFrom, canMoveTo } = squareProperties;
-            if (!checkered) {
-                squareClass += ' sbg__simple-square';
-            } else if (black) {
-                squareClass += ' sbg__black-square';
-            } else {
-                squareClass += ' sbg__white-square';
-            } 
-
-            if(movingFrom) {
-                placeholderClass += ' sbg__move-from';
-            } else if (canMoveTo) {
-                placeholderClass += ' sbg__can-move-to';
-            }
-
-        }
-    
-        return (
-            <div className={placeholderClass} >
-                <div className={squareClass}>
-                    {children}
-                </div>
-           </div>
-        );
-    }
-}
+import { BoardPosition } from '../../interfaces';
 
 interface DroppableSquareProps {
     gameControl: GameControl, 
@@ -72,23 +33,29 @@ function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
         }),
     })
 
+
+    const squareProperties = gameControl.squareProperties(pos);
+    let squareClass = 'sbg__square';
+
+    const { checkered, black } = squareProperties;
+    if (!checkered) {
+        squareClass += 'sbg__plain-square';
+    } else if (black) {
+        squareClass += ' sbg__black-square';
+    } else {
+        squareClass += ' sbg__white-square';
+    }
+
     const corePiece = gameControl.corePiece(pos);
     return (
-        <div ref={drop}
-            style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-            }}
+        <div ref={drop} className={squareClass}
             onClick={()=>gameControl.squareClicked(pos)}
         >
-            <SimpleSquare squareProperties={gameControl.squareProperties(pos)}>
-                {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
-            </SimpleSquare>
-
+            <div className="sbg__square_highlighter"/>
+            {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
         </div>
 
     );
 }
 
-export {SimpleSquare, DroppableSquare};
+export { DroppableSquare};

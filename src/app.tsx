@@ -1,9 +1,13 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import './app.css';
+import { nonNull } from './tools';
+import styles from './app.module.css';
+
 
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
+
+console.log(styles);
 
 const multiplayerMode='auto'; // 'local', 'remote' or 'auto'  
 const nPlayersLocal =  1;
@@ -26,7 +30,7 @@ function GameLinks() {
     <ul>
       {games.map(g => {
         return (<li key={g.path}>
-          <Link className="game-link" to={g.path}>{g.name}</Link>
+          <Link className={nonNull(styles.gameLink)} to={g.path}>{g.name}</Link>
           </li>);
         }
       )}
@@ -45,7 +49,7 @@ function HomePage () {
 
 function PageNotFound () {
   return (
-    <div className="page-not-found">
+    <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
       <div>You could try one of these links:</div>
       <GameLinks />
