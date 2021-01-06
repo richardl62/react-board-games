@@ -5,6 +5,9 @@ import Piece from '../full-game/controlled-piece';
 import GameControl from '../game-control';
 import { BoardPosition } from '../../interfaces';
 
+import { nonNull } from './../../tools';
+import styles from './game.module.css';
+
 interface DroppableSquareProps {
     gameControl: GameControl, 
     pos: BoardPosition,
@@ -35,15 +38,15 @@ function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
 
 
     const squareProperties = gameControl.squareProperties(pos);
-    let squareClass = 'sbg__square';
+    let squareClass = nonNull(styles.square);
 
     const { checkered, black } = squareProperties;
     if (!checkered) {
-        squareClass += 'sbg__plain-square';
+        squareClass += nonNull(styles.plainSquare);
     } else if (black) {
-        squareClass += ' sbg__black-square';
+        squareClass += nonNull(styles.blackSquare);
     } else {
-        squareClass += ' sbg__white-square';
+        squareClass += nonNull(styles.whiteSquare);
     }
 
     const corePiece = gameControl.corePiece(pos);
@@ -51,7 +54,6 @@ function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
         <div ref={drop} className={squareClass}
             onClick={()=>gameControl.squareClicked(pos)}
         >
-            <div className="sbg__square_highlighter"/>
             {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
         </div>
 

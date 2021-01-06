@@ -2,19 +2,20 @@ import React from 'react';
 import GameControl from '../game-control/game-control';
 import Board from './board';
 import RowOfPieces from './row-of-pieces';
-import './game.css';
+import { nonNull } from './../../tools';
+import styles from './game.module.css';
 
 function UserOptions({ gameControl } : {gameControl: GameControl}) {
 
     return (
-        <div className="sbg__user_options">
+        <div className={nonNull(styles.userOptions)}>
 
-            <div className='sbg__buttons'>
+            <div className={nonNull(styles.buttons)}>
                 <button type='button' onClick={() => gameControl.clearAll()}> Clear</button>
                 <button type='button' onClick={() => gameControl.flipRowOrder()}>Flip</button>
             </div>
 
-            <div className='sbg__buttons'>
+            <div className={nonNull(styles.buttons)}>
                 <button type='button'
                     onClick={() => gameControl.undo()}>
                     Undo
@@ -38,7 +39,7 @@ function Game({gameControl} : {gameControl: GameControl})
 {
     return (
         // sbg -> Simple Board Game
-        <div className="sbg__everything">
+        <div className={nonNull(styles.game)}>
             <div>
                 <RowOfPieces where='top' gameControl={gameControl} />
 

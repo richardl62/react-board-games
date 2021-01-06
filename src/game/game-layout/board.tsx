@@ -2,6 +2,13 @@ import React, { ReactElement } from 'react';
 import { DroppableSquare as BoardSquare } from './square';
 import GameControl from '../game-control/game-control';
 
+import { nonNull } from './../../tools';
+import styles from './game.module.css';
+
+const boardBorder = nonNull(styles.boardBorder);
+const boarderLetter = nonNull(styles.boarderLetter);
+const boarderNumber = nonNull(styles.boarderNumber);
+
 type Elems = Array<ReactElement>;
 
 function addHeader(nCols: number, elems: Elems, rowName: string) {
@@ -11,7 +18,7 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
         elems.push(
             <div
                 key={key(col)}
-                className='sbg__board-border sbg__board-border-letter'
+                className={`${boardBorder} ${boarderLetter}`}
             >
                 {String.fromCharCode(65+col)}
             </div>
@@ -30,7 +37,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     let makeBoarderElem = (name: string) => (
         <div
             key={key(name)}
-            className='sbg__board-border sbg__board-border-number'
+            className={`${boardBorder} ${boarderNumber}`}
         >
             {nRows - row}
         </div>
@@ -92,7 +99,7 @@ function Board({ gameControl }: {
     };
 
     return (
-        <div className="sbg__board" style={style}>
+        <div className={nonNull(styles.board)} style={style}>
             {elems}
         </div>
     )
