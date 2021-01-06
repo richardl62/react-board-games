@@ -9,7 +9,7 @@ interface PieceProps {
   corePiece: CorePiece;
 }
 
-const Piece : React.FC<PieceProps> = ({ corePiece, gameControl }) => {
+function Piece({ corePiece, gameControl } : PieceProps ) {
 
   const [{ isDragging }, drag ] = useDrag({
     item: {
