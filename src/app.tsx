@@ -7,8 +7,6 @@ import styles from './app.module.css';
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
-console.log(styles);
-
 const multiplayerMode='auto'; // 'local', 'remote' or 'auto'  
 const nPlayersLocal =  1;
 

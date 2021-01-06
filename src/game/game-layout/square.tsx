@@ -23,7 +23,6 @@ function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
         drop: (dragParam: any /* KLUDGE */) => 
         {
             const pieceID : number = dragParam.id;
-            console.log(pieceID);
 
             if(gameControl.moveable(pieceID)) {
                 gameControl.movePiece(pieceID, pos);

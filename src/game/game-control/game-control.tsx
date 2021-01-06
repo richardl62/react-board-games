@@ -132,8 +132,6 @@ class GameControl {
     get borderLabels() {return Boolean(this._gameDefinition.boardStyle.labels);}
 
     squareClicked(pos: BoardPosition) {
-        console.log(`Square clicked`, pos);
-
         const clickedPiece = this.corePiece(pos);
 
         if(this._pieceToMove) {
