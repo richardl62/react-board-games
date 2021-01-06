@@ -6,7 +6,7 @@ import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
 const multiplayerMode='auto'; // 'local', 'remote' or 'auto'  
-const nPlayersLocal =  2;
+const nPlayersLocal =  1;
 
 let games = gameDefinitions.map(gameDef => {
   const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
