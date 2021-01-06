@@ -12,7 +12,6 @@ interface LocalState {
     reverseBoard: [boolean, (arg: boolean)=>void],
 }
 
-
 const topLeftBlack = false; // KLUDGE
 
 class GameControl {

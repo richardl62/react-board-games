@@ -4,6 +4,9 @@ import { itemTypes } from './constants';
 import GameControl, { CorePiece } from '../game-control';
 import SimplePiece from '../../piece';
 
+import { nonNull } from '../../tools';
+import styles from '../game-layout/game.module.css';
+
 interface PieceProps {
   gameControl: GameControl;
   corePiece: CorePiece;
@@ -36,8 +39,8 @@ function Piece({ corePiece, gameControl } : PieceProps ) {
   else {
     return (
       <div
-        className='sbg__piece-div'
         ref={drag}
+        className={nonNull(styles.pieceContainer)}
       >
         <SimplePiece name={corePiece.name} gameType={corePiece.gameType} />
       </div>

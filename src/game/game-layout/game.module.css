@@ -1,48 +1,30 @@
-.game {
+/* The 'game proper'.  Everything that is not in userOptions */
+.playingArea {
     box-sizing: border-box;
-    margin: 0;
     padding: 0;
 
-    display: flex;
-    justify-content:center;
-    
-    font-family: verdana;
+    margin: 0;
+    margin-left: 5%;
 
+    display: inline-flex;
+    
     --square-size: 50px;
 
     --board-background: rgb(100,0,0); /* Dark brown*/
     --board-black-square: rgb(165 42 42); /* brown */
     --board-white-square:  rgb(255 248 220); /* cornsilk */
     --active-square-highlight: rgb(200 200 100); /* dark yellow */
-
-
-        /* display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-    
-        margin-left: 5%; */
-    
 }
 
-.gameType > div {
-    display: inline;
-    white-space: nowrap;
-    font-size: 20px;
- 
-}
-
-.gameType label {
-    margin-left: .3em;
-    margin-right: 0.8em;
-}
-
-.buttons {
-    margin-top: 6px;
-}
-
+/* Options to control the game including redo, undo etc. */
 .userOptions {
     margin-top: calc(var(--square-size) + 8px /* kludge */ );
     margin-left: 8px;
+}
+
+/* A row of buttons */
+.userOptionsButtons {
+    margin-top: 6px;
 }
 
 .userOptions button {
@@ -61,18 +43,16 @@
     background-color: var(--board-background);
 }
 
+/* Use of board squares and off-board piece */
 .square {
-    /* width: var(--square-size);
-    height: var(--square-size); */
-    width: 50px;
-    height: 50px;
+    width: var(--square-size);
+    height: var(--square-size);
 }
 
 .plainSquare {
     border: 2px solid var(--board-background, brown);
     background-color: var(--board-white-square, white);
 }
-
 
 .blackSquare {
     background-color: var(--board-black-square, black);
@@ -98,5 +78,11 @@
 
 .rowOfPieces {
     display: flex;
+    justify-content: center;
     margin: 5px;
+}
+
+.pieceContainer {
+    height: 100%;
+    width: 100%;
 }

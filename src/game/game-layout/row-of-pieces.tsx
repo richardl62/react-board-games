@@ -17,7 +17,7 @@ function RowOfPieces({ where, gameControl }: {
         <div className={nonNull(styles.rowOfPieces)}>
             {corePieces.map(
                 (cp, index) => (
-                    <div key={index}>
+                    <div key={index}  className={nonNull(styles.square)} >
                         { <Piece corePiece={cp} gameControl={gameControl} /> }
                     </div>
                 )

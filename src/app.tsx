@@ -3,7 +3,6 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from './tools';
 import styles from './app.module.css';
 
-
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
 

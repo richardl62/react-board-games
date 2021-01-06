@@ -41,11 +41,11 @@ function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
 
     const { checkered, black } = squareProperties;
     if (!checkered) {
-        squareClass += nonNull(styles.plainSquare);
+        squareClass += " " + nonNull(styles.plainSquare);
     } else if (black) {
-        squareClass += nonNull(styles.blackSquare);
+        squareClass += " " + nonNull(styles.blackSquare);
     } else {
-        squareClass += nonNull(styles.whiteSquare);
+        squareClass += " " + nonNull(styles.whiteSquare);
     }
 
     const corePiece = gameControl.corePiece(pos);

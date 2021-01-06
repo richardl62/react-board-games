@@ -10,12 +10,12 @@ function UserOptions({ gameControl } : {gameControl: GameControl}) {
     return (
         <div className={nonNull(styles.userOptions)}>
 
-            <div className={nonNull(styles.buttons)}>
+            <div className={nonNull(styles.userOptionsButtons)}>
                 <button type='button' onClick={() => gameControl.clearAll()}> Clear</button>
                 <button type='button' onClick={() => gameControl.flipRowOrder()}>Flip</button>
             </div>
 
-            <div className={nonNull(styles.buttons)}>
+            <div className={nonNull(styles.userOptionsButtons)}>
                 <button type='button'
                     onClick={() => gameControl.undo()}>
                     Undo
@@ -39,7 +39,7 @@ function Game({gameControl} : {gameControl: GameControl})
 {
     return (
         // sbg -> Simple Board Game
-        <div className={nonNull(styles.game)}>
+        <div className={nonNull(styles.playingArea)}>
             <div>
                 <RowOfPieces where='top' gameControl={gameControl} />
 
