@@ -1,15 +1,16 @@
 import React from 'react';
+import { SquareProperties } from '../../interfaces';
 
 import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
 
 interface BoardSquareProps {
-    squareProperties: {checkered:boolean, black: boolean};
+    squareProperties: SquareProperties;
     children?: React.ReactNode;
 };
 
 function BoardSquare({squareProperties, children} : BoardSquareProps) {
-    const {checkered, black} = squareProperties;
+    const {checkered, black, selected, canMoveTo} = squareProperties;
 
     let className = nonNull(styles.square);
 
@@ -21,7 +22,19 @@ function BoardSquare({squareProperties, children} : BoardSquareProps) {
         className += " " + nonNull(styles.whiteSquare);
     }
 
-    return <div className={className}> {children} </div>;
+    if (selected) {
+        className += " " + nonNull(styles.selectedSquare);
+    }
+
+    if (canMoveTo) {
+        className += " " + nonNull(styles.canMoveTo);
+    }
+
+    return (
+        <div className={className}>
+            {children}
+        </div>
+        );
 }
 
 

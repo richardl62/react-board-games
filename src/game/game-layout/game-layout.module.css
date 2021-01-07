@@ -81,3 +81,11 @@
     justify-content: center;
     margin: 5px;
 }
+
+.selectedSquare {
+    border: yellow 8px solid;
+}
+
+.canMoveTo {
+    border: green 5px solid;
+}

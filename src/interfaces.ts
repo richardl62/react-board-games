@@ -59,7 +59,7 @@ export interface SharedGameState {
 export interface SquareProperties {
     checkered: boolean;
     black: boolean;
-    movingFrom: boolean;
+    selected: boolean;
     canMoveTo: boolean;
 };
 

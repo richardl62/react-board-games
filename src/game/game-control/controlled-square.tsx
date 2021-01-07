@@ -11,9 +11,11 @@ const PIECE = 'piece';
 interface ControlledPieceProps {
     gameControl: GameControl;
     corePiece: CorePiece;
+    reportClicks?: boolean;
   }
   
-function ControlledPiece({ corePiece, gameControl } : ControlledPieceProps ) {
+function ControlledPiece({ corePiece, gameControl, reportClicks = true }
+   : ControlledPieceProps ) {
   
     const [{ isDragging }, drag ] = useDrag({
       item: {
@@ -41,7 +43,7 @@ function ControlledPiece({ corePiece, gameControl } : ControlledPieceProps ) {
       return (
         <div style={{height:"100%", width:"100%"}}
           ref={drag}
-          onClick={()=>gameControl.pieceClicked(corePiece.id)}
+          onClick={()=>reportClicks && gameControl.pieceClicked(corePiece)}
 
         >
           <SimplePiece name={corePiece.name} gameType={corePiece.gameType} />
@@ -90,6 +92,10 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
             {corePiece ? <ControlledPiece 
                 corePiece={corePiece} 
                 gameControl={gameControl} 
+
+                // Clicks are reported from the containing div.
+                //  Don't aslo report them from the ControlledPiece.
+                reportClicks={false}
                 /> : null
             }
         </div>
