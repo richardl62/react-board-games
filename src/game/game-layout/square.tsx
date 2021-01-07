@@ -8,6 +8,27 @@ import { BoardPosition } from '../../interfaces';
 import { nonNull } from './../../tools';
 import styles from './game.module.css';
 
+
+interface SimpleSquareProps {
+    checkered: boolean;
+    black: boolean;
+    children: React.ReactNode;
+};
+
+function SimpleSquare({checkered, black, children} : SimpleSquareProps) {
+    let className = nonNull(styles.square);
+
+    if (!checkered) {
+        className += " " + nonNull(styles.plainSquare);
+    } else if (black) {
+        className += " " + nonNull(styles.blackSquare);
+    } else {
+        className += " " + nonNull(styles.whiteSquare);
+    }
+
+    return <div className={className}> {children} </div>;
+}
+
 interface DroppableSquareProps {
     gameControl: GameControl, 
     pos: BoardPosition,
@@ -35,28 +56,27 @@ function DroppableSquare({ gameControl, pos} : DroppableSquareProps )
         }),
     })
 
-
     const squareProperties = gameControl.squareProperties(pos);
-    let squareClass = nonNull(styles.square);
 
-    const { checkered, black } = squareProperties;
-    if (!checkered) {
-        squareClass += " " + nonNull(styles.plainSquare);
-    } else if (black) {
-        squareClass += " " + nonNull(styles.blackSquare);
-    } else {
-        squareClass += " " + nonNull(styles.whiteSquare);
-    }
 
     const corePiece = gameControl.corePiece(pos);
     return (
-        <div ref={drop} className={squareClass}
-            onClick={()=>gameControl.squareClicked(pos)}
-        >
-            {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
-        </div>
 
-    );
+        <SimpleSquare
+            black={squareProperties.black}
+            checkered={squareProperties.checkered}
+        >
+            {/* pieceContainer sets z-index to 'lift' the piece and so prevents 
+                the background being dragged. */}
+            <div
+                className={nonNull(styles.pieceContainer)}
+                onClick={() => gameControl.squareClicked(pos)}
+                ref={drop}
+            >
+                {corePiece ? <Piece corePiece={corePiece} gameControl={gameControl} /> : null}
+            </div>
+        </SimpleSquare>
+    )
 }
 
 export { DroppableSquare};
