@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
-import { DroppableSquare as BoardSquare } from './square';
+import BoardSquare  from './board-square';
+import {ControlledSquare}  from './controlled-square';
 import GameControl from '../game-control/game-control';
 
 import { nonNull } from './../../tools';
@@ -49,9 +50,10 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
             <BoardSquare
                 key={key(col)}
                 
-                gameControl={gameControl}
-                pos={pos}
-            />
+                squareProperties={gameControl.squareProperties(pos)}
+            >
+                <ControlledSquare gameControl={gameControl} pos={pos} />
+            </BoardSquare>
         );
     };
 
