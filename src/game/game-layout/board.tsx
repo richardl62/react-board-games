@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import BoardSquare  from './board-square';
-import {ControlledSquare}  from './controlled-square';
+import {ControlledSquare}  from '../game-control/controlled-square';
 import GameControl from '../game-control/game-control';
 
 import { nonNull } from './../../tools';
-import styles from './game.module.css';
+import styles from './game-layout.module.css';
 
 const boardBorder = nonNull(styles.boardBorder);
 const boarderLetter = nonNull(styles.boarderLetter);

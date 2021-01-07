@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { nonNull } from '../../tools';
-import styles from './game.module.css';
+import styles from './game-layout.module.css';
 
 interface BoardSquareProps {
     squareProperties: {checkered:boolean, black: boolean};

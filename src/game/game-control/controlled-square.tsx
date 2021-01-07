@@ -1,11 +1,10 @@
 import React from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { BoardPosition } from '../../interfaces';
-import GameControl, { CorePiece } from '../game-control';
+import GameControl, { CorePiece } from '.';
 import SimplePiece from '../../piece';
-
-import { nonNull } from '../../tools';
-import styles from './game.module.css';
+import styles from "./control-square.module.css";
+import { nonNull } from "../../tools";
 
 const PIECE = 'piece';
 
@@ -42,6 +41,8 @@ function ControlledPiece({ corePiece, gameControl } : ControlledPieceProps ) {
       return (
         <div style={{height:"100%", width:"100%"}}
           ref={drag}
+          onClick={()=>gameControl.pieceClicked(corePiece.id)}
+
         >
           <SimplePiece name={corePiece.name} gameType={corePiece.gameType} />
         </div>
@@ -77,13 +78,14 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
     })
 
     const corePiece = gameControl.corePiece(pos);
+
     return (
         /* pieceContainer sets z-index to 'lift' the piece and so prevents 
             the background being dragged. */
         <div
-            className={nonNull(styles.pieceContainer)}
             onClick={() => gameControl.squareClicked(pos)}
             ref={drop}
+            className={nonNull(styles.pieceContainer)}
         >
             {corePiece ? <ControlledPiece 
                 corePiece={corePiece} 

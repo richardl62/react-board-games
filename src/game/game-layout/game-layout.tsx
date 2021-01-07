@@ -3,7 +3,7 @@ import GameControl from '../game-control/game-control';
 import Board from './board';
 import RowOfPieces from './row-of-pieces';
 import { nonNull } from './../../tools';
-import styles from './game.module.css';
+import styles from './game-layout.module.css';
 
 function UserOptions({ gameControl } : {gameControl: GameControl}) {
 

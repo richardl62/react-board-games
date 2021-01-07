@@ -149,6 +149,10 @@ class GameControl {
         }
     } 
 
+    pieceClicked(pieceID: CorePieceID) {
+        console.log("Piece clicks", pieceID);
+    }
+
     clearAll() { this._bgioProps.moves.clearAll(); };
 
     movePiece (pieceID: CorePieceID, to: BoardPosition) {

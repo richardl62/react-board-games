@@ -81,16 +81,3 @@
     justify-content: center;
     margin: 5px;
 }
-
-
-.pieceContainer {
-    /* Setting the z-index (which required non-static position) 'lifts' a piece
-    and so prevent the background being dragged with it. */
-    position: relative;
-    z-index: 1;
-
-    /* Making the container full size allows it to be clicked or dragged-to
-    even when empty. */
-    height: 100%;
-    width: 100%;
-}
