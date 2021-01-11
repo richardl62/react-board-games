@@ -21,9 +21,10 @@ interface Props {
     gameDefinition: GameDefinition; 
     multiplayerMode: "local" | "remote" | "auto";  
     nPlayersLocal: number;
+    bgioDebugPanel: boolean;
 }
 
-function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal} : Props) {
+function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPanel} : Props) {
 
     const corePieceFactory = useRef(new CorePieceFactory()).current;
 
@@ -69,6 +70,7 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal} : Props) {
         multiplayer: multiplayer,
         game: makeBgioGame(gameDefinition),
         board: renderGame,
+        debug: bgioDebugPanel,
     });
 
     let games = [];

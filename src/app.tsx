@@ -8,6 +8,7 @@ import gameDefinitions from './game-definition';
 
 const multiplayerMode='auto'; // 'local', 'remote' or 'auto'  
 const nPlayersLocal =  1;
+const bgioDebugPanel = false;
 
 let games = gameDefinitions.map(gameDef => {
   const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
@@ -15,7 +16,8 @@ let games = gameDefinitions.map(gameDef => {
     component: () => (<BoardGame 
         gameDefinition={gameDef}
         multiplayerMode={multiplayerMode} 
-        nPlayersLocal={nPlayersLocal} 
+        nPlayersLocal={nPlayersLocal}
+        bgioDebugPanel={bgioDebugPanel} 
       />),
     name: gameDef.name,
     path: `/${gamePage}`,
