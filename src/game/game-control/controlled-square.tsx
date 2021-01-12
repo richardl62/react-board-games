@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrop, useDrag } from 'react-dnd';
-import { BoardPosition } from '../../interfaces';
-import GameControl, { CorePiece } from '.';
+import { BoardPosition, CorePiece } from '../../interfaces';
+import GameControl from './game-control';
 import SimplePiece from '../../piece';
 import styles from "./control-square.module.css";
 import { nonNull } from "../../tools";

@@ -5,8 +5,8 @@ export type GameType = 'bobail' | 'chess' | 'draughts';
 // This plus the GameType determines how pieces are displayed.
 export type PieceType = string;
 
-// The positions of the pieces on the board
-export type Pieces = Array<Array<PieceType|null>>;
+// A unique ID for each piece
+export type PieceID = number;
 
 // Determines how the board is displayed. Does not affect game play.
 // Is this needed give we have GameType?
@@ -17,9 +17,11 @@ export interface BoardStyle {
     labels: boolean;
 }
 
-
+// The positions of the pieces on the board
+export type Pieces = Array<Array<PieceType|null>>;
 // Pieces placed off board.  This can be copied onto the board. 
 // (Is this a kludge?)
+
 export interface OffBoardPieces {
     top: Array<PieceType>;
     bottom: Array<PieceType>;
@@ -62,5 +64,19 @@ export interface SquareProperties {
     selected: boolean;
     canMoveTo: boolean;
 };
+
+export class CorePiece {
+
+    name: string;
+    gameType: GameType;
+    id: PieceID;
+
+    constructor(name: string,  gameType: GameType, id: PieceID) {
+      this.id = id;
+      this.name = name;
+      this.gameType = gameType;
+      Object.freeze(this);
+    }
+}
 
 // Exports are done inline

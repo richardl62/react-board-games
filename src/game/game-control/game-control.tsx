@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react';
 
-import { GameDefinition, SquareProperties, BoardPosition,
-     } from '../../interfaces';
-import CorePiece, { CorePieceFactory } from './core-piece';
-
+import { GameDefinition, SquareProperties, BoardPosition, CorePiece}
+    from '../../interfaces';
+import { CorePieceFactory } from './core-piece';
 import * as Bgio from '../../bgio';
 
 type CorePieceID = CorePiece['id'];

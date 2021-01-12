@@ -1,21 +1,5 @@
-import { GameType } from '../../interfaces'
-type CorePieceId = number;
-type CorePieceName = string;
+import { GameType, CorePiece} from '../../interfaces'
 
-class CorePiece {
-
-    name: CorePieceName;
-    gameType: GameType;
-    id: CorePieceId;
-
-    constructor(name: CorePieceName,  gameType: GameType, id: CorePieceId) {
-      this.id = id;
-      this.name = name;
-      this.gameType = gameType;
-      Object.freeze(this);
-    }
-}
-  
 class CorePieceFactory {
     private _lastUsedId: number;
     
@@ -24,7 +8,7 @@ class CorePieceFactory {
     }
   
 
-    make(name: CorePieceName, gameType: GameType) {
+    make(name: string, gameType: GameType) {
       ++this._lastUsedId;
       return new CorePiece(name, gameType, this._lastUsedId);
     }
@@ -33,7 +17,5 @@ class CorePieceFactory {
       return this.make(corePiece.name, corePiece.gameType);
     }
   }
-
-  export default CorePiece;
   export { CorePieceFactory };
  
