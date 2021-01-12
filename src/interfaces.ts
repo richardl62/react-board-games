@@ -1,4 +1,3 @@
-
 // The types of the supported games. 
 export type GameType = 'bobail' | 'chess' | 'draughts';
 

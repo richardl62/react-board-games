@@ -15,9 +15,9 @@ function RowOfPieces({ where, gameControl }: {
     return (
         // Kludge? Use outer div to control the size (via class 'square')
         <div className={nonNull(styles.rowOfPieces)}>
-            {corePieces.map((cp, index) =>
+            {corePieces.map((piece, index) =>
                 <div key={index} className={nonNull(styles.square)}>
-                    <ControlledPiece corePiece={cp} gameControl={gameControl} />
+                    <ControlledPiece piece={piece} gameControl={gameControl} />
                 </div> 
             )}
         </div>

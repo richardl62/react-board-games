@@ -1,6 +1,6 @@
 import { GameType } from '../../interfaces'
-type CorePieceName = string; // Could do better
 type CorePieceId = number;
+type CorePieceName = string;
 
 class CorePiece {
 

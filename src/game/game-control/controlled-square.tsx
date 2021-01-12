@@ -10,17 +10,17 @@ const PIECE = 'piece';
 
 interface ControlledPieceProps {
     gameControl: GameControl;
-    corePiece: CorePiece;
+    piece: CorePiece;
     reportClicks?: boolean;
   }
   
-function ControlledPiece({ corePiece, gameControl, reportClicks = true }
+function ControlledPiece({ piece, gameControl, reportClicks = true }
    : ControlledPieceProps ) {
   
     const [{ isDragging }, drag ] = useDrag({
       item: {
         type: PIECE,
-        id: corePiece.id,
+        id: piece.id,
       },
       collect: monitor => ({
         isDragging: !!monitor.isDragging(),
@@ -28,14 +28,14 @@ function ControlledPiece({ corePiece, gameControl, reportClicks = true }
       end: (item, monitor) => {
         if (!monitor.didDrop()) {
           // The piece was dragged off the board.
-          if (gameControl.moveable(corePiece.id)) {
-            gameControl.clearPiece(corePiece.id);
+          if (gameControl.moveable(piece.id)) {
+            gameControl.clearPiece(piece.id);
           }
         }
       }
     });
   
-    if (isDragging && gameControl.moveable(corePiece.id)) {
+    if (isDragging && gameControl.moveable(piece.id)) {
       /* Hide the original piece when moving */
       return null;
     }
@@ -43,15 +43,15 @@ function ControlledPiece({ corePiece, gameControl, reportClicks = true }
       return (
         <div style={{height:"100%", width:"100%"}}
           ref={drag}
-          onClick={()=>reportClicks && gameControl.pieceClicked(corePiece)}
+          onClick={()=>reportClicks && gameControl.pieceClicked(piece)}
 
         >
-          <SimplePiece name={corePiece.name} gameType={corePiece.gameType} />
+          <SimplePiece name={piece.name} gameType={piece.gameType} />
         </div>
       );
     }
-  }
-
+}
+ 
 interface ControlledSquareProps {
     gameControl: GameControl, 
     pos: BoardPosition,
@@ -79,7 +79,7 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
         }),
     })
 
-    const corePiece = gameControl.corePiece(pos);
+    const piece = gameControl.corePiece(pos);
 
     return (
         /* pieceContainer sets z-index to 'lift' the piece and so prevents 
@@ -89,8 +89,8 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
             ref={drop}
             className={nonNull(styles.pieceContainer)}
         >
-            {corePiece ? <ControlledPiece 
-                corePiece={corePiece} 
+            {piece ? <ControlledPiece 
+                piece={piece} 
                 gameControl={gameControl} 
 
                 // Clicks are reported from the containing div.

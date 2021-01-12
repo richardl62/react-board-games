@@ -43,23 +43,23 @@ class ClickManager {
 
     get selected() {return this._selected;}
     
-    clicked(cp: CorePiece | null, position: BoardPosition | null) {
-        // console.log("cp:", cp && cp.id, "position:", position, "_selected:", 
+    clicked(piece: CorePiece | null, position: BoardPosition | null) {
+        // console.log("piece:", piece && piece.id, "position:", position, "_selected:", 
         //     this._selected && this._selected.id);
 
-        if(this._selected === cp) {
+        if(this._selected === piece) {
             // This same piece has been clicked twice, so cancel the first
             // click.
             this._selected = null;
         } else if(!this._selected) {
             // As there is no _selected piece, we record the current piece.
-            // (If cp is null, this implied that an empty square was
+            // (If piece is null, this implied that an empty square was
             // clicked with no _selected piece. This is OK, but does nothing.)
-            this._selected = cp;
+            this._selected = piece;
         } else if (!position) {
             // An off-board piece has been clicked. It can't be moved so just
             // select it.
-            this._selected = cp;
+            this._selected = piece;
         }
         else if(this._selected && position) {
             // An on-board square this been clicked after a piece was _selected.
@@ -96,11 +96,11 @@ class GameControl {
             bottom: offBoard ? offBoard.bottom.map(makeCorePiece) : [],
         }
         
-        const doMove = (cp: CorePiece, position: BoardPosition) => {
-            if(this.moveable(cp.id)) {
-                this.movePiece(cp.id, position);
+        const doMove = (piece: CorePiece, position: BoardPosition) => {
+            if(this.moveable(piece.id)) {
+                this.movePiece(piece.id, position);
             } else {
-                this.copyPiece(cp.id, position);
+                this.copyPiece(piece.id, position);
             }
         }
         this._clickManager = new ClickManager(doMove);
@@ -142,8 +142,8 @@ class GameControl {
         const wantedId = (typeof wanted === "object") ? wanted.id : wanted;
         for (let row = 0; row < this.nRows; ++row) {
             for (let col = 0; col < this.nCols; ++col) {
-                const cp = this.corePiece({ row: row, col: col });
-                if (cp && cp.id === wantedId) {
+                const piece = this.corePiece({ row: row, col: col });
+                if (piece && piece.id === wantedId) {
                     return { row: row, col: col };
                 }
             }
@@ -168,10 +168,10 @@ class GameControl {
         const isCheckered = this._boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
 
-        const cp = this.corePiece(pos);
+        const piece = this.corePiece(pos);
         const clicked = this._clickManager.selected;
-        const selected = Boolean(cp && clicked && 
-            cp.id === clicked.id);
+        const selected = Boolean(piece && clicked && 
+            piece.id === clicked.id);
 
         return {
             checkered: this._boardStyle.checkered,
