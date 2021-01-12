@@ -5,6 +5,7 @@ import GameControl from '../game-control/game-control';
 
 import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
+import { BoardPosition } from '../../interfaces';
 
 const boardBorder = nonNull(styles.boardBorder);
 const boarderLetter = nonNull(styles.boarderLetter);
@@ -45,7 +46,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     );
 
     let makeSquare = (col: number) => {
-        const pos = {row: row, col: col};
+        const pos = new BoardPosition(row, col);
         return (
             <BoardSquare
                 key={key(col)}

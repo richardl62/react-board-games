@@ -42,18 +42,19 @@ export interface GameDefinition {
     offBoardPieces: OffBoardPieces;
 };
 
-export interface BoardPosition {
+export class BoardPosition {
     row: number;
     col: number;
-}
 
-export function samePosition(p1 : BoardPosition , p2 : BoardPosition ) {
-    return p1.row === p2.row && p1.col === p2.col;
-}
+    constructor(row: number, col: number) {
+        this.row = row;
+        this.col = col;
+    }
 
-export interface SharedGameState {
-    pieces: Pieces, // Just pieces for now
-};
+    static same(p1 : BoardPosition , p2 : BoardPosition ) {
+        return p1.row === p2.row && p1.col === p2.col;
+    };
+}
 
 export interface SquareProperties {
     checkered: boolean;
