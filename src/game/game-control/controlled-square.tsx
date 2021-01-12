@@ -28,14 +28,14 @@ function ControlledPiece({ piece, gameControl, reportClicks = true }
       end: (item, monitor) => {
         if (!monitor.didDrop()) {
           // The piece was dragged off the board.
-          if (gameControl.moveable(piece.id)) {
-            gameControl.clearPiece(piece.id);
+          if (gameControl.moveable(piece)) {
+            gameControl.clearPiece(piece);
           }
         }
       }
     });
   
-    if (isDragging && gameControl.moveable(piece.id)) {
+    if (isDragging && gameControl.moveable(piece)) {
       /* Hide the original piece when moving */
       return null;
     }
@@ -66,12 +66,12 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
         // properly, or even if proper typing is possible.
         drop: (dragParam: any /* KLUDGE */) => 
         {
-            const pieceID : number = dragParam.id;
+            const piece = gameControl.findPiece(dragParam.id);
 
-            if(gameControl.moveable(pieceID)) {
-                gameControl.movePiece(pieceID, pos);
+            if(gameControl.moveable(piece)) {
+                gameControl.movePiece(piece, pos);
             } else {
-                gameControl.copyPiece(pieceID, pos);
+                gameControl.copyPiece(piece, pos);
             }
         },
         collect: monitor => ({
@@ -80,6 +80,7 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
     })
 
     const piece = gameControl.getPiece(pos);
+    console.log("CS: ",piece);
 
     return (
         /* pieceContainer sets z-index to 'lift' the piece and so prevents 

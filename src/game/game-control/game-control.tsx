@@ -97,10 +97,10 @@ class GameControl {
         }
         
         const doMove = (piece: CorePiece, position: BoardPosition) => {
-            if(this.moveable(piece.id)) {
-                this.movePiece(piece.id, position);
+            if(this.moveable(piece)) {
+                this.movePiece(piece, position);
             } else {
-                this.copyPiece(piece.id, position);
+                this.copyPiece(piece, position);
             }
         }
         this._clickManager = new ClickManager(doMove);
@@ -138,13 +138,12 @@ class GameControl {
         return this._boardPieces[pos.row][pos.col];
     }
 
-    findPosition(wanted: CorePiece | PieceID ) {
+    findPosition(wanted: CorePiece ) {
 
-        const wantedId = (typeof wanted === "object") ? wanted.id : wanted;
         for (let row = 0; row < this.nRows; ++row) {
             for (let col = 0; col < this.nCols; ++col) {
                 const piece = this.getPiece({ row: row, col: col });
-                if (piece && piece.id === wantedId) {
+                if (piece && piece.id === wanted.id) {
                     return new BoardPosition(row,col);
                 }
             }
@@ -154,7 +153,7 @@ class GameControl {
     }
 
     // Find the CorePiece with the given ID.  Throw an error if non is found.
-    findCorePiece(wanted: PieceID) {
+    findPiece(wanted: PieceID) {
         // ineffecient.
         const empty: Array<CorePiece|null> = [];
         const allPieces = empty.concat(...this._boardPieces, 
@@ -213,29 +212,28 @@ class GameControl {
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
-    movePiece (pieceID: PieceID, to: BoardPosition) {
-        this.copyPiece(pieceID, to);
-        this.clearPiece(pieceID);
+    movePiece (piece: CorePiece, to: BoardPosition) {
+        this.copyPiece(piece, to);
+        this.clearPiece(piece);
 
         this._clickManager.clear();
     };
 
-    copyPiece (pieceID: PieceID, to: BoardPosition) {
-        const piece = this.findCorePiece(pieceID);
+    copyPiece (piece: CorePiece, to: BoardPosition) {
+        this._bgioProps.moves.add(piece.name, to);    
+    };
 
-        this._bgioProps.moves.add(piece.name, to);    };
-
-    clearPiece (pieceID: PieceID) {
-        const from = this.findPosition(pieceID);
+    clearPiece (piece: CorePiece) {
+        const from = this.findPosition(piece);
         if(!from) {
-            throw Error(`Internal error: piece ${pieceID} not found on game board`)
+            throw Error(`Internal error: piece ${piece} not found on game board`)
         }
         this._bgioProps.moves.clear(from);
     };
 
     // Piece on the board are movable. Off-board pieces should be copied.
-    moveable (pieceID: PieceID) {
-        return Boolean(this.findPosition(pieceID));
+    moveable (piece: CorePiece) {
+        return Boolean(this.findPosition(piece));
     }
 }
 
