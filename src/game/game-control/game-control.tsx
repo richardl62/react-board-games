@@ -2,14 +2,18 @@ import { useState, useRef } from 'react';
 
 import { GameDefinition, SquareProperties, BoardPosition, CorePiece}
     from '../../interfaces';
-import { CorePieceFactory } from './core-piece';
+
 import * as Bgio from '../../bgio';
 
-type CorePieceID = CorePiece['id'];
+import  { CorePieceFactory } from './core-piece';
+
+type PieceID = CorePiece['id'];
 
 type BoardPieces = Array<Array<CorePiece | null>>;
 
+const topLeftBlack = false; // KLUDGE
 
+type DoMove = (id: CorePiece, position: BoardPosition) => void;
 
 function useGameControlProps(gameDefinition: GameDefinition) {
 
@@ -23,9 +27,6 @@ function useGameControlProps(gameDefinition: GameDefinition) {
 }
 
 type GameControlProps = ReturnType<typeof useGameControlProps>;
-const topLeftBlack = false; // KLUDGE
-
-type DoMove = (id: CorePiece, position: BoardPosition) => void;
 
 // KLUDGE: The click strategy is a bit messy.
 class ClickManager {
@@ -104,6 +105,7 @@ class GameControl {
         }
         this._clickManager = new ClickManager(doMove);
     }
+
     private _bgioProps: Bgio.BoardProps;
     private _localProps: GameControlProps
     private _boardPieces: BoardPieces;
@@ -132,18 +134,18 @@ class GameControl {
         return this._boardPieces[0].length;
     }
 
-    corePiece(pos: BoardPosition) {
+    getPiece(pos: BoardPosition) {
         return this._boardPieces[pos.row][pos.col];
     }
 
-    findPosition(wanted: CorePiece | CorePieceID ) {
+    findPosition(wanted: CorePiece | PieceID ) {
 
         const wantedId = (typeof wanted === "object") ? wanted.id : wanted;
         for (let row = 0; row < this.nRows; ++row) {
             for (let col = 0; col < this.nCols; ++col) {
-                const piece = this.corePiece({ row: row, col: col });
+                const piece = this.getPiece({ row: row, col: col });
                 if (piece && piece.id === wantedId) {
-                    return { row: row, col: col };
+                    return new BoardPosition(row,col);
                 }
             }
         }
@@ -151,26 +153,35 @@ class GameControl {
         return null;
     }
 
-    private _findCorePiece(wanted: CorePieceID) {
+    // Find the CorePiece with the given ID.  Throw an error if non is found.
+    findCorePiece(wanted: PieceID) {
         // ineffecient.
         const empty: Array<CorePiece|null> = [];
         const allPieces = empty.concat(...this._boardPieces, 
             this._offBoardPieces.top, 
             this._offBoardPieces.bottom);
 
-        return allPieces.find(p => p && p.id === wanted);
+        const found = allPieces.find(p => p && p.id === wanted);
+
+        if(!found) {
+            throw Error("No piece found with ID " + wanted);
+        }
+
+        return found;
     }
     
     squareProperties(pos : BoardPosition) : SquareProperties  {
 
-        const {row, col } = pos;
+        const { row, col } = pos;
         const isCheckered = this._boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
 
-        const piece = this.corePiece(pos);
+        const piece = this.getPiece(pos);
         const clicked = this._clickManager.selected;
         const selected = Boolean(piece && clicked && 
             piece.id === clicked.id);
+
+        //console.log(piece && piece.id, clicked);
 
         return {
             checkered: this._boardStyle.checkered,
@@ -193,7 +204,7 @@ class GameControl {
     get borderLabels() {return Boolean(this._boardStyle.labels);}
 
     squareClicked(pos: BoardPosition) {
-        this._clickManager.clicked(this.corePiece(pos), pos);
+        this._clickManager.clicked(this.getPiece(pos), pos);
     } 
 
     pieceClicked(corePiece: CorePiece) {
@@ -202,23 +213,19 @@ class GameControl {
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
-    movePiece (pieceID: CorePieceID, to: BoardPosition) {
+    movePiece (pieceID: PieceID, to: BoardPosition) {
         this.copyPiece(pieceID, to);
         this.clearPiece(pieceID);
 
         this._clickManager.clear();
     };
 
-    copyPiece (pieceID: CorePieceID, to: BoardPosition) {
-        const corePiece = this._findCorePiece(pieceID);
-        if(!corePiece) {
-            throw Error("No piece found with ID " + pieceID);
-        }
-    
-        this._bgioProps.moves.add(corePiece.name, to);
-    };
+    copyPiece (pieceID: PieceID, to: BoardPosition) {
+        const piece = this.findCorePiece(pieceID);
 
-    clearPiece (pieceID: CorePieceID) {
+        this._bgioProps.moves.add(piece.name, to);    };
+
+    clearPiece (pieceID: PieceID) {
         const from = this.findPosition(pieceID);
         if(!from) {
             throw Error(`Internal error: piece ${pieceID} not found on game board`)
@@ -227,7 +234,7 @@ class GameControl {
     };
 
     // Piece on the board are movable. Off-board pieces should be copied.
-    moveable (pieceID: CorePieceID) {
+    moveable (pieceID: PieceID) {
         return Boolean(this.findPosition(pieceID));
     }
 }

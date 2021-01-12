@@ -79,7 +79,7 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
         }),
     })
 
-    const piece = gameControl.corePiece(pos);
+    const piece = gameControl.getPiece(pos);
 
     return (
         /* pieceContainer sets z-index to 'lift' the piece and so prevents 
