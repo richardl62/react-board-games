@@ -58,18 +58,10 @@ export interface SquareProperties {
     canMoveTo: boolean;
 };
 
-export class CorePiece {
-
+export interface CorePiece {
     name: string;
     gameType: GameType;
     id: PieceID;
-
-    constructor(name: string,  gameType: GameType, id: PieceID) {
-      this.id = id;
-      this.name = name;
-      this.gameType = gameType;
-      Object.freeze(this);
-    }
 }
 
 // Exports are done inline

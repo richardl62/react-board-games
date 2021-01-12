@@ -8,9 +8,9 @@ class CorePieceFactory {
     }
   
 
-    make(name: string, gameType: GameType) {
-      ++this._lastUsedId;
-      return new CorePiece(name, gameType, this._lastUsedId);
+    make(name: string, gameType: GameType) : CorePiece {
+      const id = ++this._lastUsedId;
+      return {name: name, gameType:gameType, id: id};
     }
 
     copy(corePiece: CorePiece) {
