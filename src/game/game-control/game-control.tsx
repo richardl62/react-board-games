@@ -1,17 +1,29 @@
-import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
-import { GameDefinition, SharedGameState, SquareProperties, BoardPosition,
+import { useState, useRef } from 'react';
+
+import { GameDefinition, SquareProperties, BoardPosition,
      } from '../../interfaces';
 import CorePiece, { CorePieceFactory } from './core-piece';
-type CorePieceID = CorePiece['id'];
 
-type BgioProps = BgioBoardProps<SharedGameState>;
+import * as Bgio from '../../bgio';
+
+type CorePieceID = CorePiece['id'];
 
 type BoardPieces = Array<Array<CorePiece | null>>;
 
-interface LocalState {
-    reverseBoard: [boolean, (arg: boolean)=>void],
+
+
+function useGameControlProps(gameDefinition: GameDefinition) {
+
+    let corePieceFactory = useRef(new CorePieceFactory()).current;
+
+    return {
+        gameDefinition: gameDefinition,
+        reverseBoard: useState(false),
+        corePieceFactory: corePieceFactory,
+    };
 }
 
+type GameControlProps = ReturnType<typeof useGameControlProps>;
 const topLeftBlack = false; // KLUDGE
 
 type DoMove = (id: CorePiece, position: BoardPosition) => void;
@@ -67,19 +79,18 @@ class ClickManager {
 
 class GameControl {
 
-    constructor(gameDefinition: GameDefinition, bgioProps: BgioProps,
-        localState: LocalState, corePieceFactory: CorePieceFactory) {
-        this._gameDefinition = gameDefinition;
+    constructor(bgioProps: Bgio.BoardProps, localProps: GameControlProps) {
         this._bgioProps = bgioProps;
-        this._localState = localState;
+        this._localProps = localProps;
 
-        const makeCorePiece = (name:string) => corePieceFactory.make(name, gameDefinition.gameType); 
+        const makeCorePiece = (name:string) => 
+            localProps.corePieceFactory.make(name, localProps.gameDefinition.gameType); 
 
         this._boardPieces = bgioProps.G.pieces.map(row =>
             row.map(name => (name ? makeCorePiece(name) : null))
             );
         
-        const offBoard = gameDefinition.offBoardPieces;
+        const offBoard = localProps.gameDefinition.offBoardPieces;
         this._offBoardPieces = {
             top: offBoard ? offBoard.top.map(makeCorePiece) : [],
             bottom: offBoard ? offBoard.bottom.map(makeCorePiece) : [],
@@ -94,24 +105,25 @@ class GameControl {
         }
         this._clickManager = new ClickManager(doMove);
     }
-    private _gameDefinition: GameDefinition;
-    private _bgioProps: BgioProps;
-    private _localState: LocalState;
-
+    private _bgioProps: Bgio.BoardProps;
+    private _localProps: GameControlProps
     private _boardPieces: BoardPieces;
     private _offBoardPieces: {
         top: Array<CorePiece>,
         bottom: Array<CorePiece>,
     }
+
     private _clickManager: ClickManager;
-    
+
+    private get _boardStyle() { return this._localProps.gameDefinition.boardStyle;}
+
     undo() { this._bgioProps.undo();}
     redo () { this._bgioProps.redo();}
     restart () { this._bgioProps.reset();}
 
-    get reverseBoardRows() { return this._localState.reverseBoard[0];}
+    get reverseBoardRows() { return this._localProps.reverseBoard[0];}
 
-    flipRowOrder() { this._localState.reverseBoard[1](!this.reverseBoardRows);}
+    flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows);}
 
     get nRows() {
         return this._boardPieces.length;
@@ -153,7 +165,7 @@ class GameControl {
     squareProperties(pos : BoardPosition) : SquareProperties  {
 
         const {row, col } = pos;
-        const isCheckered = this._gameDefinition.boardStyle.checkered;
+        const isCheckered = this._boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
 
         const cp = this.corePiece(pos);
@@ -162,7 +174,7 @@ class GameControl {
             cp.id === clicked.id);
 
         return {
-            checkered: this._gameDefinition.boardStyle.checkered,
+            checkered: this._boardStyle.checkered,
             black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
             selected: selected,
 
@@ -179,7 +191,7 @@ class GameControl {
         return top ? this._offBoardPieces.top : this._offBoardPieces.bottom;
     }
 
-    get borderLabels() {return Boolean(this._gameDefinition.boardStyle.labels);}
+    get borderLabels() {return Boolean(this._boardStyle.labels);}
 
     squareClicked(pos: BoardPosition) {
         this._clickManager.clicked(this.corePiece(pos), pos);
@@ -221,4 +233,5 @@ class GameControl {
     }
 }
 
-export default GameControl
+export default GameControl;
+export { useGameControlProps };

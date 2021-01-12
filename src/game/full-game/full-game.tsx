@@ -1,14 +1,12 @@
 // This file provides the infrastructure (as opposed to layout) for a 'full game'.
 // In particular, it sets React hooks and creates a boardgame.io (Bgio) client. 
 import React from 'react';
-import { useState, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import GameControl from '../game-control/game-control'
+import GameControl, {useGameControlProps} from '../game-control'
 
 import { GameDefinition } from '../../interfaces';
-import {  CorePieceFactory } from '../game-control/core-piece';
 import SimpleGame from '../game-layout/game-layout';
 
 import * as Bgio from '../../bgio';
@@ -21,14 +19,6 @@ interface Props {
 }
 
 function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPanel} : Props) {
-
-    const corePieceFactory = useRef(new CorePieceFactory()).current;
-
-    // Shared state is handled by boardgame.io.  (Is this separation a kludge?)
-    const localState = {
-        reverseBoard: useState(false),
-    };
-
     
     const { protocol, hostname, port } = window.location;
     
@@ -56,9 +46,9 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
         nPlayers = 1;
     }
 
+    let gameControlProps = useGameControlProps(gameDefinition);
     function renderGame(bgioProps: Bgio.BoardProps) {
-        let gameControl= new GameControl(gameDefinition, bgioProps, localState, 
-            corePieceFactory);
+        let gameControl= new GameControl(bgioProps, gameControlProps);
         return <SimpleGame gameControl={gameControl} />;
     }
 
