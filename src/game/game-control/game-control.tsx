@@ -7,13 +7,13 @@ import * as Bgio from '../../bgio';
 
 import  { CorePieceFactory } from './core-piece';
 
-type PieceID = CorePiece['id'];
 
 type BoardPieces = Array<Array<CorePiece | null>>;
 
 const topLeftBlack = false; // KLUDGE
 
-type DoMove = (id: CorePiece, position: BoardPosition) => void;
+type DoMove = (from: BoardPosition, to: BoardPosition) => void;
+
 
 function useGameControlProps(gameDefinition: GameDefinition) {
 
@@ -28,11 +28,16 @@ function useGameControlProps(gameDefinition: GameDefinition) {
 
 type GameControlProps = ReturnType<typeof useGameControlProps>;
 
+interface PositionStatus {
+    moveablePiece: boolean;
+    empty: boolean;
+}
+
 // KLUDGE: The click strategy is a bit messy.
 class ClickManager {
     // A piece that has been selected by a first click and is available to
     // move on a second click.
-    private _selected: CorePiece | null;
+    private _selected: BoardPosition | null;
  
     private _doMove: DoMove;
 
@@ -43,32 +48,22 @@ class ClickManager {
 
     get selected() {return this._selected;}
     
-    clicked(piece: CorePiece | null, position: BoardPosition | null) {
-        // console.log("piece:", piece && piece.id, "position:", position, "_selected:", 
-        //     this._selected && this._selected.id);
-
-        if(this._selected === piece) {
-            // This same piece has been clicked twice, so cancel the first
-            // click.
-            this._selected = null;
-        } else if(!this._selected) {
-            // As there is no _selected piece, we record the current piece.
-            // (If piece is null, this implied that an empty square was
-            // clicked with no _selected piece. This is OK, but does nothing.)
-            this._selected = piece;
-        } else if (!position) {
-            // An off-board piece has been clicked. It can't be moved so just
-            // select it.
-            this._selected = piece;
-        }
-        else if(this._selected && position) {
-            // An on-board square this been clicked after a piece was _selected.
-            // So it's time to make move.
-            this._doMove(this._selected, position);
-            this._selected = null;
+    clicked(pos: BoardPosition, positionStatus: PositionStatus) {
+        if (this._selected) {
+            if(BoardPosition.same(this._selected, pos)) {
+                // This same square has been clicked twice. Cancel the first click.
+                this._selected = null;
+            } else {
+                this._doMove(this._selected, pos);
+                this._selected = null;
+            }
         } else {
-            // Should never happen
-            throw new Error("Cannot process user clicks");
+            // No square is currently selected.
+            if (positionStatus.empty) {
+                // An empty square is clicked with nothing selected. Do nothing.
+            } else {
+                this._selected = pos;
+            }
         }
     }
 
@@ -96,11 +91,12 @@ class GameControl {
             bottom: offBoard ? offBoard.bottom.map(makeCorePiece) : [],
         }
         
-        const doMove = (piece: CorePiece, position: BoardPosition) => {
-            if(this.moveable(piece)) {
-                this.movePiece(piece, position);
+        const doMove = (from: BoardPosition, to: BoardPosition) => {
+            console.log("doMove", from, to);
+            if(this.positionStatus(from).moveablePiece) {
+                this.movePiece(from, to);
             } else {
-                this.copyPiece(piece, position);
+                this.copyPiece(from, to);
             }
         }
         this._clickManager = new ClickManager(doMove);
@@ -137,37 +133,6 @@ class GameControl {
     getPiece(pos: BoardPosition) {
         return this._boardPieces[pos.row][pos.col];
     }
-
-    findPosition(wanted: CorePiece ) {
-
-        for (let row = 0; row < this.nRows; ++row) {
-            for (let col = 0; col < this.nCols; ++col) {
-                const piece = this.getPiece({ row: row, col: col });
-                if (piece && piece.id === wanted.id) {
-                    return new BoardPosition(row,col);
-                }
-            }
-        }
-        
-        return null;
-    }
-
-    // Find the CorePiece with the given ID.  Throw an error if non is found.
-    findPiece(wanted: PieceID) {
-        // ineffecient.
-        const empty: Array<CorePiece|null> = [];
-        const allPieces = empty.concat(...this._boardPieces, 
-            this._offBoardPieces.top, 
-            this._offBoardPieces.bottom);
-
-        const found = allPieces.find(p => p && p.id === wanted);
-
-        if(!found) {
-            throw Error("No piece found with ID " + wanted);
-        }
-
-        return found;
-    }
     
     squareProperties(pos : BoardPosition) : SquareProperties  {
 
@@ -175,10 +140,10 @@ class GameControl {
         const isCheckered = this._boardStyle.checkered;
         const asTopLeft = (row + col) % 2 === 0;
 
-        const piece = this.getPiece(pos);
-        const clicked = this._clickManager.selected;
-        const selected = Boolean(piece && clicked && 
-            piece.id === clicked.id);
+        // const piece = this.getPiece(pos);
+        // const clicked = this._clickManager.selected;
+        const selected = false; // KLUDGE - was Boolean(piece && clicked && 
+        //     piece.id === clicked.id);
 
         //console.log(piece && piece.id, clicked);
 
@@ -203,37 +168,38 @@ class GameControl {
     get borderLabels() {return Boolean(this._boardStyle.labels);}
 
     squareClicked(pos: BoardPosition) {
-        this._clickManager.clicked(this.getPiece(pos), pos);
+        this._clickManager.clicked(pos, this.positionStatus(pos));
     } 
 
-    pieceClicked(corePiece: CorePiece) {
-        this._clickManager.clicked(corePiece, this.findPosition(corePiece));
-    }
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
-    movePiece (piece: CorePiece, to: BoardPosition) {
-        this.copyPiece(piece, to);
-        this.clearPiece(piece);
+    movePiece (from: BoardPosition, to: BoardPosition) {
+        this.copyPiece(from, to);
+        this.clearPiece(from);
 
         this._clickManager.clear();
     };
 
-    copyPiece (piece: CorePiece, to: BoardPosition) {
+    copyPiece (from: BoardPosition, to: BoardPosition) {
+        const piece = this.getPiece(from);
+        if(!piece) {
+            throw new Error("Oops");
+        }
         this._bgioProps.moves.add(piece.name, to);    
     };
 
-    clearPiece (piece: CorePiece) {
-        const from = this.findPosition(piece);
-        if(!from) {
-            throw Error(`Internal error: piece ${piece} not found on game board`)
-        }
+    clearPiece(from: BoardPosition) {
         this._bgioProps.moves.clear(from);
     };
 
     // Piece on the board are movable. Off-board pieces should be copied.
-    moveable (piece: CorePiece) {
-        return Boolean(this.findPosition(piece));
+    positionStatus(from: BoardPosition) : PositionStatus {
+        const onBoard = Boolean(this.getPiece(from));
+        return {
+            moveablePiece: onBoard,
+            empty: !onBoard, // Kludge - just for now.
+        }
     }
 }
 

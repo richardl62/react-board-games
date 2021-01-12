@@ -1,12 +1,12 @@
 import React from 'react';
-import { useDrop, useDrag } from 'react-dnd';
+// import { useDrop, useDrag } from 'react-dnd';
 import { BoardPosition, CorePiece } from '../../interfaces';
 import GameControl from './game-control';
 import SimplePiece from '../../piece';
 import styles from "./control-square.module.css";
 import { nonNull } from "../../tools";
 
-const PIECE = 'piece';
+// const PIECE = 'piece';
 
 interface ControlledPieceProps {
     gameControl: GameControl;
@@ -17,39 +17,39 @@ interface ControlledPieceProps {
 function ControlledPiece({ piece, gameControl, reportClicks = true }
    : ControlledPieceProps ) {
   
-    const [{ isDragging }, drag ] = useDrag({
-      item: {
-        type: PIECE,
-        id: piece.id,
-      },
-      collect: monitor => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-      end: (item, monitor) => {
-        if (!monitor.didDrop()) {
-          // The piece was dragged off the board.
-          if (gameControl.moveable(piece)) {
-            gameControl.clearPiece(piece);
-          }
-        }
-      }
-    });
+    // const [{ isDragging }, drag ] = useDrag({
+    //   item: {
+    //     type: PIECE,
+    //     id: piece.id,
+    //   },
+    //   collect: monitor => ({
+    //     isDragging: !!monitor.isDragging(),
+    //   }),
+    //   end: (item, monitor) => {
+    //     if (!monitor.didDrop()) {
+    //       // The piece was dragged off the board.
+    //       if (gameControl.moveable(piece)) {
+    //         gameControl.clearPiece(piece);
+    //       }
+    //     }
+    //   }
+    // });
   
-    if (isDragging && gameControl.moveable(piece)) {
-      /* Hide the original piece when moving */
-      return null;
-    }
-    else {
+    // if (isDragging && gameControl.moveable(piece)) {
+    //   /* Hide the original piece when moving */
+    //   return null;
+    // }
+    // else {
       return (
         <div style={{height:"100%", width:"100%"}}
-          ref={drag}
-          onClick={()=>reportClicks && gameControl.pieceClicked(piece)}
+        //   ref={drag}
+        //   onClick={()=>reportClicks && gameControl.pieceClicked(piece)}
 
         >
           <SimplePiece name={piece.name} gameType={piece.gameType} />
         </div>
       );
-    }
+    // }
 }
  
 interface ControlledSquareProps {
@@ -59,25 +59,25 @@ interface ControlledSquareProps {
 
 function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
 {
-    const [, drop] = useDrop({
-        accept: PIECE,
+    // const [, drop] = useDrop({
+    //     accept: PIECE,
  
-        // The use of 'any' below is a kludge.  I am not sure how to type if 
-        // properly, or even if proper typing is possible.
-        drop: (dragParam: any /* KLUDGE */) => 
-        {
-            const piece = gameControl.findPiece(dragParam.id);
+    //     // The use of 'any' below is a kludge.  I am not sure how to type if 
+    //     // properly, or even if proper typing is possible.
+    //     drop: (dragParam: any /* KLUDGE */) => 
+    //     {
+    //         const piece = gameControl.findPiece(dragParam.id);
 
-            if(gameControl.moveable(piece)) {
-                gameControl.movePiece(piece, pos);
-            } else {
-                gameControl.copyPiece(piece, pos);
-            }
-        },
-        collect: monitor => ({
-            isOver: !!monitor.isOver(),
-        }),
-    })
+    //         if(gameControl.moveable(piece)) {
+    //             gameControl.movePiece(piece, pos);
+    //         } else {
+    //             gameControl.copyPiece(piece, pos);
+    //         }
+    //     },
+    //     collect: monitor => ({
+    //         isOver: !!monitor.isOver(),
+    //     }),
+    // })
 
     const piece = gameControl.getPiece(pos);
     console.log("CS: ",piece);
@@ -87,7 +87,7 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
             the background being dragged. */
         <div
             onClick={() => gameControl.squareClicked(pos)}
-            ref={drop}
+            // ref={drop}
             className={nonNull(styles.pieceContainer)}
         >
             {piece ? <ControlledPiece 

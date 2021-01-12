@@ -5,9 +5,6 @@ export type GameType = 'bobail' | 'chess' | 'draughts';
 // This plus the GameType determines how pieces are displayed.
 export type PieceType = string;
 
-// A unique ID for each piece
-export type PieceID = number;
-
 // Determines how the board is displayed. Does not affect game play.
 // Is this needed give we have GameType?
 export interface BoardStyle {
@@ -61,7 +58,6 @@ export interface SquareProperties {
 export interface CorePiece {
     name: string;
     gameType: GameType;
-    id: PieceID;
 }
 
 // Exports are done inline
