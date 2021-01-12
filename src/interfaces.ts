@@ -17,16 +17,6 @@ export interface BoardStyle {
     labels: boolean;
 }
 
-// The positions of the pieces on the board
-export type Pieces = Array<Array<PieceType|null>>;
-// Pieces placed off board.  This can be copied onto the board. 
-// (Is this a kludge?)
-
-export interface OffBoardPieces {
-    top: Array<PieceType>;
-    bottom: Array<PieceType>;
-}
-
 // The properties that define an individual game.
 // KLUDGE? Mixes display and functionality (so no clear distinction of what
 // needs to be sent to the server.)
@@ -39,9 +29,12 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    pieces: Pieces;
+    pieces: Array<Array<PieceType|null>>;
 
-    offBoardPieces: OffBoardPieces;
+    offBoardPieces:  {
+        top: Array<PieceType>;
+        bottom: Array<PieceType>;
+    };
 };
 
 export class BoardPosition {
