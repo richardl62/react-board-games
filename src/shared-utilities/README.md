@@ -1,1 +1,0 @@
-Utilities shared between the React UI and the server.

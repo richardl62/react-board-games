@@ -5,17 +5,13 @@ import { useState, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { BoardProps as BgioBoardProps, Client as BgioClient }
-     from 'boardgame.io/react';
-import { SocketIO as BgioSocketIO, Local as BgioLocal}
-     from 'boardgame.io/multiplayer'
 import GameControl from '../game-control/game-control'
 
-import { GameDefinition, SharedGameState } from '../../interfaces';
+import { GameDefinition } from '../../interfaces';
 import {  CorePieceFactory } from '../game-control/core-piece';
 import SimpleGame from '../game-layout/game-layout';
 
-import { makeBgioGame } from '../../shared-utilities';
+import * as Bgio from '../../bgio';
 
 interface Props {
     gameDefinition: GameDefinition; 
@@ -51,24 +47,24 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
     let nPlayers;
     if (localMode) {
         // console.log('Running locally');
-        multiplayer = BgioLocal();
+        multiplayer = Bgio.Local();
         nPlayers = nPlayersLocal;
     } else {
         const server = `${protocol}//${hostname}:${port}`;
         // console.log('server:', server);
-        multiplayer = BgioSocketIO({ server: server });
+        multiplayer = Bgio.SocketIO({ server: server });
         nPlayers = 1;
     }
 
-    function renderGame(bgioProps: BgioBoardProps<SharedGameState>) {
+    function renderGame(bgioProps: Bgio.BoardProps) {
         let gameControl= new GameControl(gameDefinition, bgioProps, localState, 
             corePieceFactory);
         return <SimpleGame gameControl={gameControl} />;
     }
 
-    const BgClient = BgioClient({
+    const BgClient = Bgio.Client<Bgio.G>({
         multiplayer: multiplayer,
-        game: makeBgioGame(gameDefinition),
+        game: Bgio.makeGame(gameDefinition),
         board: renderGame,
         debug: bgioDebugPanel,
     });
