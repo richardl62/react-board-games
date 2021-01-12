@@ -5,8 +5,6 @@ import { GameDefinition, SquareProperties, BoardPosition, CorePiece}
 
 import * as Bgio from '../../bgio';
 
-import  { CorePieceFactory } from './core-piece';
-
 
 type BoardPieces = Array<Array<CorePiece | null>>;
 
@@ -14,15 +12,11 @@ const topLeftBlack = false; // KLUDGE
 
 type DoMove = (from: BoardPosition, to: BoardPosition) => void;
 
-
 function useGameControlProps(gameDefinition: GameDefinition) {
-
-    let corePieceFactory = useRef(new CorePieceFactory()).current;
 
     return {
         gameDefinition: gameDefinition,
         reverseBoard: useState(false),
-        corePieceFactory: corePieceFactory,
     };
 }
 
@@ -78,8 +72,11 @@ class GameControl {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
 
-        const makeCorePiece = (name:string) => 
-            localProps.corePieceFactory.make(name, localProps.gameDefinition.gameType); 
+        const makeCorePiece = (name:string) => {
+            return {
+                name:name, 
+                gameType:localProps.gameDefinition.gameType};
+        } 
 
         this._boardPieces = bgioProps.G.pieces.map(row =>
             row.map(name => (name ? makeCorePiece(name) : null))
@@ -92,7 +89,6 @@ class GameControl {
         }
         
         const doMove = (from: BoardPosition, to: BoardPosition) => {
-            console.log("doMove", from, to);
             if(this.positionStatus(from).moveablePiece) {
                 this.movePiece(from, to);
             } else {

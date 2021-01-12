@@ -5,10 +5,10 @@ import {
 
 import { GameDefinition, BoardPosition } from './interfaces';
 
-type PieceID = string;
+type PieceType = string;
 
 interface G {
-    pieces: Array<Array<PieceID | null>>;
+    pieces: Array<Array<PieceType | null>>;
 };
 
 type BoardProps = BoardPropsTemplate<G>;
@@ -19,11 +19,8 @@ function makeGame(gameDefinition: GameDefinition) {
         clearAll(g: G, ctx: any) {
             g.pieces.forEach(row => row.fill(null));
         },
-        add(g: G, ctx: any, piece: PieceID, to: BoardPosition) {
-            // if(!(piece instanceof PieceID)) {
-            //     throw new Error("Object to add is not a CorePiece");
-            // }
-            g.pieces[to.row][to.col] = piece;
+        add(g: G, ctx: any, name: PieceType, to: BoardPosition) {
+            g.pieces[to.row][to.col] = name;
         },
         clear(g: G, ctx: any, pos: BoardPosition) {
             g.pieces[pos.row][pos.col] = null;
