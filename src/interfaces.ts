@@ -3,7 +3,7 @@ export type GameType = 'bobail' | 'chess' | 'draughts';
 
 // Brief name of the piece, e.g. 'p', 'P', 'n', 'N', etc. for Chess
 // This plus the GameType determines how pieces are displayed.
-export type PieceType = string;
+export type PieceName = string;
 
 // Determines how the board is displayed. Does not affect game play.
 // Is this needed give we have GameType?
@@ -26,11 +26,11 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    pieces: Array<Array<PieceType|null>>;
+    pieces: Array<Array<PieceName|null>>;
 
     offBoardPieces:  {
-        top: Array<PieceType>;
-        bottom: Array<PieceType>;
+        top: Array<PieceName>;
+        bottom: Array<PieceName>;
     };
 };
 
@@ -54,10 +54,5 @@ export interface SquareProperties {
     selected: boolean;
     canMoveTo: boolean;
 };
-
-export interface CorePiece {
-    name: string;
-    gameType: GameType;
-}
 
 // Exports are done inline

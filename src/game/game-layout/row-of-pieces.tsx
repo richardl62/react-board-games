@@ -11,13 +11,13 @@ function RowOfPieces({ where, gameControl }: {
     where: 'top' | 'bottom',
     gameControl: GameControl,
 }) {
-    const corePieces = gameControl.offBoardPieces(where);
+    const offBoard = gameControl.offBoardPieces(where);
     return (
         // Kludge? Use outer div to control the size (via class 'square')
         <div className={nonNull(styles.rowOfPieces)}>
-            {corePieces.map((piece, index) =>
+            {offBoard.map((pieceName, index) =>
                 <div key={index} className={nonNull(styles.square)}>
-                    <ControlledPiece piece={piece} gameControl={gameControl} />
+                    <ControlledPiece pieceName={pieceName} gameControl={gameControl} />
                 </div> 
             )}
         </div>

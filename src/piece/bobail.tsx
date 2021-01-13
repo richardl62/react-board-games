@@ -10,15 +10,15 @@ const colors : StringMap = {
 };
 
 interface Props {
-    name: string;
+    pieceName: string;
 }
 
-function Bobail({name}: Props) {
+function Bobail({pieceName}: Props) {
 
-    const color = colors[name];
+    const color = colors[pieceName];
 
     if(!color) {
-        throw new Error(`Unrecognised name for Bobail Piece: '${name}'`)
+        throw new Error(`Unrecognised name for Bobail Piece: '${pieceName}'`)
     }
  
     return <Counter color={color}/>;

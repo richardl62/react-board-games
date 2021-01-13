@@ -4,11 +4,11 @@ const ReactChessPieces:any = require('react-chess-pieces');
 const ChessPiece = ReactChessPieces.default;
 
 interface Props {
-    name: string;
+    pieceName: string;
 }
 
-function Chess({name}: Props) {
-    return <ChessPiece piece={name} />;
+function Chess({pieceName}: Props) {
+    return <ChessPiece piece={pieceName} />;
 }
 
 export default Chess

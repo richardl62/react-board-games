@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useDrop, useDrag } from 'react-dnd';
-import { BoardPosition, CorePiece } from '../../interfaces';
+import { BoardPosition, PieceName } from '../../interfaces';
 import GameControl from './game-control';
 import SimplePiece from '../../piece';
 import styles from "./control-square.module.css";
@@ -10,11 +10,11 @@ import { nonNull } from "../../tools";
 
 interface ControlledPieceProps {
     gameControl: GameControl;
-    piece: CorePiece;
+    pieceName: PieceName;
     reportClicks?: boolean;
   }
   
-function ControlledPiece({ piece, gameControl, reportClicks = true }
+function ControlledPiece({ pieceName, gameControl, reportClicks = true }
    : ControlledPieceProps ) {
   
     // const [{ isDragging }, drag ] = useDrag({
@@ -46,7 +46,7 @@ function ControlledPiece({ piece, gameControl, reportClicks = true }
         //   onClick={()=>reportClicks && gameControl.pieceClicked(piece)}
 
         >
-          <SimplePiece name={piece.name} gameType={piece.gameType} />
+          <SimplePiece pieceName={pieceName} gameType={gameControl.gameType} />
         </div>
       );
     // }
@@ -79,8 +79,7 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
     //     }),
     // })
 
-    const piece = gameControl.getPiece(pos);
-
+    const pieceName = gameControl.positionStatus(pos).pieceName;
 
     return (
         /* pieceContainer sets z-index to 'lift' the piece and so prevents 
@@ -90,8 +89,8 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
             // ref={drop}
             className={nonNull(styles.pieceContainer)}
         >
-            {piece ? <ControlledPiece 
-                piece={piece} 
+            {pieceName ? <ControlledPiece 
+                pieceName={pieceName} 
                 gameControl={gameControl} 
 
                 // Clicks are reported from the containing div.

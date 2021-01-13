@@ -8,13 +8,13 @@ function pieceColor(black: boolean) {
 }
 
 interface Props {
-    name: string;
+    pieceName: string;
 }
 
-function Draughts({name}: Props) {
+function Draughts({pieceName}: Props) {
 
-    const isBlack = name.toLowerCase() === 'b';
-    const isKing =  name === name.toUpperCase();;
+    const isBlack = pieceName.toLowerCase() === 'b';
+    const isKing =  pieceName === pieceName.toUpperCase();;
 
     return (
         <Counter color={pieceColor(isBlack)}

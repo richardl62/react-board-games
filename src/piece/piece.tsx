@@ -5,7 +5,7 @@ import Chess from './chess';
 import Draughts from './draughts'; 
 
 interface PieceProps {
-    name: string;
+    pieceName: string;
     gameType: GameType;
 }
 
@@ -13,17 +13,17 @@ function unrecognisedGameType(x: never): never {
     throw new Error('unrecognised game type');
 }
 
-function Piece ({name, gameType}: PieceProps )  {
+function Piece ({pieceName, gameType}: PieceProps )  {
     if(gameType === 'bobail') {
-        return <Bobail name={name} />;
+        return <Bobail pieceName={pieceName} />;
     }
 
     if(gameType === 'chess') {
-        return <Chess name={name} />;
+        return <Chess pieceName={pieceName} />;
     }
 
     if(gameType === 'draughts') {
-         return <Draughts name={name} />;
+         return <Draughts pieceName={pieceName} />;
     }
 
     unrecognisedGameType(gameType)

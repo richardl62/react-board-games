@@ -1,12 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
-import { GameDefinition, SquareProperties, BoardPosition, CorePiece}
+import { GameDefinition, SquareProperties, BoardPosition, PieceName}
     from '../../interfaces';
 
 import * as Bgio from '../../bgio';
 
-
-type BoardPieces = Array<Array<CorePiece | null>>;
 
 const topLeftBlack = false; // KLUDGE
 
@@ -22,9 +20,12 @@ function useGameControlProps(gameDefinition: GameDefinition) {
 
 type GameControlProps = ReturnType<typeof useGameControlProps>;
 
-interface PositionStatus {
-    moveablePiece: boolean;
-    empty: boolean;
+class PositionStatus {
+    pieceName: PieceName | null = null;
+    offBoard: boolean = false
+
+    get moveable() {return !this.offBoard;}
+    get empty() {return !this.pieceName;}
 }
 
 // KLUDGE: The click strategy is a bit messy.
@@ -72,24 +73,9 @@ class GameControl {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
 
-        const makeCorePiece = (name:string) => {
-            return {
-                name:name, 
-                gameType:localProps.gameDefinition.gameType};
-        } 
-
-        this._boardPieces = bgioProps.G.pieces.map(row =>
-            row.map(name => (name ? makeCorePiece(name) : null))
-            );
-        
-        const offBoard = localProps.gameDefinition.offBoardPieces;
-        this._offBoardPieces = {
-            top: offBoard ? offBoard.top.map(makeCorePiece) : [],
-            bottom: offBoard ? offBoard.bottom.map(makeCorePiece) : [],
-        }
         
         const doMove = (from: BoardPosition, to: BoardPosition) => {
-            if(this.positionStatus(from).moveablePiece) {
+            if(this.positionStatus(from).moveable) {
                 this.movePiece(from, to);
             } else {
                 this.copyPiece(from, to);
@@ -100,15 +86,16 @@ class GameControl {
 
     private _bgioProps: Bgio.BoardProps;
     private _localProps: GameControlProps
-    private _boardPieces: BoardPieces;
-    private _offBoardPieces: {
-        top: Array<CorePiece>,
-        bottom: Array<CorePiece>,
-    }
-
     private _clickManager: ClickManager;
 
+
+    get _boardPieces() {return this._bgioProps.G.pieces;}
+    get _offBoardPieces() {return this._localProps.gameDefinition.offBoardPieces;}
+
+    get gameType() {return this._localProps.gameDefinition.gameType;}
     private get _boardStyle() { return this._localProps.gameDefinition.boardStyle;}
+
+
 
     undo() { this._bgioProps.undo();}
     redo () { this._bgioProps.redo();}
@@ -126,9 +113,6 @@ class GameControl {
         return this._boardPieces[0].length;
     }
 
-    getPiece(pos: BoardPosition) {
-        return this._boardPieces[pos.row][pos.col];
-    }
     
     squareProperties(pos : BoardPosition) : SquareProperties  {
 
@@ -177,26 +161,28 @@ class GameControl {
         this._clickManager.clear();
     };
 
+    // Piece on the board are movable. Off-board pieces should be copied.
+    positionStatus(pos: BoardPosition): PositionStatus {
+        let status = new PositionStatus();
+        status.pieceName = this._boardPieces[pos.row][pos.col];
+        status.offBoard = false; //KLUDGE - for now.
+        
+        return status;
+    }
+
     copyPiece (from: BoardPosition, to: BoardPosition) {
-        const piece = this.getPiece(from);
-        if(!piece) {
-            throw new Error("Oops");
+        const status = this.positionStatus(from);
+        if(status.empty) {
+            throw new Error("Attempt to copy empty piece");
         }
-        this._bgioProps.moves.add(piece.name, to);    
+        this._bgioProps.moves.add(status.pieceName, to);    
     };
 
     clearPiece(from: BoardPosition) {
         this._bgioProps.moves.clear(from);
     };
 
-    // Piece on the board are movable. Off-board pieces should be copied.
-    positionStatus(from: BoardPosition) : PositionStatus {
-        const onBoard = Boolean(this.getPiece(from));
-        return {
-            moveablePiece: onBoard,
-            empty: !onBoard, // Kludge - just for now.
-        }
-    }
+
 }
 
 export default GameControl;
