@@ -34,17 +34,65 @@ export interface GameDefinition {
     };
 };
 
-export class BoardPosition {
-    row: number;
-    col: number;
+interface PiecePositionProps {
+    row?: number;
+    col?: number;
+    
+    top?: number;
+    bottom?: number;
+}
 
-    constructor(row: number, col: number) {
-        this.row = row;
-        this.col = col;
+function num(n: number| undefined) {
+    if(n === undefined) {
+        throw Error("Found undefined when expecting a number");
     }
 
-    static same(p1 : BoardPosition , p2 : BoardPosition ) {
-        return p1.row === p2.row && p1.col === p2.col;
+    return n;
+}
+
+// Return the positions where a piece _might_ be. (So it could refer
+// to an empty square.)
+export class PiecePosition {
+    constructor(props: PiecePositionProps)
+        {
+        this.props = props;
+
+        this.sanityCheck();
+
+        Object.freeze(this);
+        }
+    
+    private props: PiecePositionProps;
+
+    get onBoard() { return this.props.row !== undefined && this.props.col !== undefined; }
+    get onTop() { return this.props.top !== undefined; }
+    get onBotton() { return this.props.bottom !== undefined; }
+    
+    sanityCheck() {
+        const {row, col, top, bottom} = this.props;
+
+        const cn = (v : number| undefined) => (v === undefined) ? 0 : 1;
+
+        if(cn(row) !== cn(col)) {
+            throw new Error("Row and col are inconsitent");
+        } 
+
+        if(cn(row) + cn(top) + cn(bottom) !== 1)
+        {
+            throw new Error("Position properties are inconsitent");
+        }
+    }
+
+    get row() { return num(this.props.row);}
+    get col() { return num(this.props.col);}
+    get top() { return num(this.props.top);}
+    get bottom() { return num(this.props.bottom);}
+    
+    static same(p1 : PiecePosition , p2 : PiecePosition ) {
+        return p1.props.row === p2.props.row
+            && p1.props.col === p2.props.col
+            && p1.props.top === p2.props.top
+            && p1.props.bottom === p2.props.bottom;
     };
 }
 

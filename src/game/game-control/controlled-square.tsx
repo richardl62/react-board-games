@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useDrop, useDrag } from 'react-dnd';
-import { BoardPosition, PieceName } from '../../interfaces';
+import { PiecePosition, PieceName } from '../../interfaces';
 import GameControl from './game-control';
 import SimplePiece from '../../piece';
 import styles from "./control-square.module.css";
@@ -54,7 +54,7 @@ function ControlledPiece({ pieceName, gameControl, reportClicks = true }
  
 interface ControlledSquareProps {
     gameControl: GameControl, 
-    pos: BoardPosition,
+    pos: PiecePosition,
 };
 
 function ControlledSquare({ gameControl, pos} : ControlledSquareProps )

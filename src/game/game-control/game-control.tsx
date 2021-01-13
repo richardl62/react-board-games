@@ -1,14 +1,13 @@
 import { useState } from 'react';
 
-import { GameDefinition, SquareProperties, BoardPosition, PieceName}
+import { GameDefinition, SquareProperties, PiecePosition, PieceName}
     from '../../interfaces';
 
 import * as Bgio from '../../bgio';
 
-
 const topLeftBlack = false; // KLUDGE
 
-type DoMove = (from: BoardPosition, to: BoardPosition) => void;
+type DoMove = (from: PiecePosition, to: PiecePosition) => void;
 
 function useGameControlProps(gameDefinition: GameDefinition) {
 
@@ -22,16 +21,16 @@ type GameControlProps = ReturnType<typeof useGameControlProps>;
 
 class PositionStatus {
     pieceName: PieceName | null = null;
-    offBoard: boolean = false
+    onBoard: boolean = false
 
-    get moveable() {return !this.offBoard;}
+    get moveable() {return this.onBoard;}
     get empty() {return !this.pieceName;}
 }
 
 class ClickManager {
     // A piece that has been selected by a first click and is available to
     // move on a second click.
-    private _selected: BoardPosition | null;
+    private _selected: PiecePosition | null;
  
     private _doMove: DoMove;
 
@@ -42,9 +41,9 @@ class ClickManager {
 
     get selected() {return this._selected;}
     
-    clicked(pos: BoardPosition, positionStatus: PositionStatus) {
+    clicked(pos: PiecePosition, positionStatus: PositionStatus) {
         if (this._selected) {
-            if(BoardPosition.same(this._selected, pos)) {
+            if(PiecePosition.same(this._selected, pos)) {
                 // This same square has been clicked twice. Cancel the first click.
                 this._selected = null;
             } else {
@@ -73,7 +72,7 @@ class GameControl {
         this._localProps = localProps;
 
         
-        const doMove = (from: BoardPosition, to: BoardPosition) => {
+        const doMove = (from: PiecePosition, to: PiecePosition) => {
             console.log("GC move", from, to);
             if(this.positionStatus(from).moveable) {
                 this.movePiece(from, to);
@@ -114,11 +113,10 @@ class GameControl {
     }
 
     
-    squareProperties(pos : BoardPosition) : SquareProperties  {
+    squareProperties(pos : PiecePosition) : SquareProperties  {
 
-        const { row, col } = pos;
         const isCheckered = this._boardStyle.checkered;
-        const asTopLeft = (row + col) % 2 === 0;
+        const asTopLeft = (pos.row + pos.col) % 2 === 0;
 
         // const piece = this.getPiece(pos);
         // const clicked = this._clickManager.selected;
@@ -132,16 +130,22 @@ class GameControl {
             black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
             selected: selected,
 
-            canMoveTo: col === 0, // For now
+            canMoveTo: false, // For now
         };
     }
 
     // Piece on the board are movable. Off-board pieces should be copied.
-    positionStatus(pos: BoardPosition): PositionStatus {
+    positionStatus(pos: PiecePosition): PositionStatus {
         let status = new PositionStatus();
-        status.pieceName = this._boardPieces[pos.row][pos.col];
-        status.offBoard = false; //KLUDGE - for now.
-
+        status.onBoard = pos.onBoard;
+        if(pos.onBoard) {
+            status.pieceName = this._boardPieces[pos.row as number][pos.col as number];
+        } else if(pos.onTop) {
+            status.pieceName = this._offBoardPieces.top[pos.top];
+        } else {
+            status.pieceName = this._offBoardPieces.bottom[pos.bottom];
+        }
+        
         return status;
     }
 
@@ -156,17 +160,17 @@ class GameControl {
 
     get borderLabels() {return Boolean(this._boardStyle.labels);}
 
-    squareClicked(pos: BoardPosition) {
+    squareClicked(pos: PiecePosition) {
         this._clickManager.clicked(pos, this.positionStatus(pos));
     } 
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
-    movePiece (from: BoardPosition, to: BoardPosition) {
+    movePiece (from: PiecePosition, to: PiecePosition) {
         this._bgioProps.moves.movePiece(from, to);
     };
 
-    copyPiece (from: BoardPosition, to: BoardPosition) {
+    copyPiece (from: PiecePosition, to: PiecePosition) {
         const pieceName = this.positionStatus(from).pieceName;
         if(!pieceName) {
             throw new Error("Attempt to copy from empty square");
@@ -174,7 +178,7 @@ class GameControl {
         this._bgioProps.moves.addPiece(pieceName, to);    
     };
 
-    clearPiece(from: BoardPosition) {
+    clearPiece(from: PiecePosition) {
         this._bgioProps.moves.clear(from);
     };
 

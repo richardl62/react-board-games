@@ -3,7 +3,7 @@ import {
     Client, // To do: (Somehow) set the template parameter before exporting
 } from 'boardgame.io/react';
 
-import { GameDefinition, BoardPosition, PieceName } from './interfaces';
+import { GameDefinition, PiecePosition, PieceName } from './interfaces';
 
 type PieceType = string;
 
@@ -20,13 +20,13 @@ function makeGame(gameDefinition: GameDefinition) {
             g.pieces.forEach(row => row.fill(null));
         },
 
-        movePiece(g: G, ctx: any, from:BoardPosition, to: BoardPosition) {
+        movePiece(g: G, ctx: any, from:PiecePosition, to: PiecePosition) {
             console.log("Bgio movePiece", from, to);
             g.pieces[to.row][to.col] = g.pieces[from.row][from.col];
             g.pieces[from.row][from.col] = null;
         },
 
-        addPiece(g: G, ctx: any, pieceName: PieceName, pos: BoardPosition) {
+        addPiece(g: G, ctx: any, pieceName: PieceName, pos: PiecePosition) {
             console.log("Bgio addPiece", pieceName, pos);
             g.pieces[pos.row][pos.col] = pieceName;
         },
