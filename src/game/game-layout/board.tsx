@@ -33,6 +33,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
 
     const nRows = gameControl.nRows;
     const nCols = gameControl.nCols;
+    const borderLabels = gameControl.boardStyle.labels;
 
     const key = (name: string | number) =>  'r' + row + '-' + name;
 
@@ -58,7 +59,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
         );
     };
 
-    if(gameControl.borderLabels) {
+    if(borderLabels) {
         elems.push(makeBoarderElem('start'));
     }
 
@@ -66,7 +67,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
         elems.push(makeSquare(col));
     }
 
-    if(gameControl.borderLabels) {
+    if(borderLabels) {
         elems.push(makeBoarderElem('end'));
     }
 }
@@ -78,10 +79,11 @@ function Board({ gameControl }: {
     {
     const nRows = gameControl.nRows;
     const nCols = gameControl.nCols;
+    const borderLabels = gameControl.boardStyle.labels;
 
     let elems: Elems = [];
 
-    if(gameControl.borderLabels) {
+    if(borderLabels) {
         addHeader(nCols, elems, 'top');
     }
     for (let row = 0; row < nRows; ++row) {
@@ -89,12 +91,12 @@ function Board({ gameControl }: {
         addRow(rowToAdd, gameControl, elems);
     }
 
-    if(gameControl.borderLabels) {
+    if(borderLabels) {
         addHeader(nCols, elems, 'bottom');
     }
 
-    const nGridCols = nCols + (gameControl.borderLabels ? 2 : 0);
-    const nGridRows = nRows + (gameControl.borderLabels ? 2 : 0);
+    const nGridCols = nCols + (borderLabels ? 2 : 0);
+    const nGridRows = nRows + (borderLabels ? 2 : 0);
     const style = { // For now
         display: 'grid',
         gridTemplateColumns: `repeat(${nGridCols},auto)`,

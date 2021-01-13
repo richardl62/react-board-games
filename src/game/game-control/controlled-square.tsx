@@ -28,9 +28,7 @@ function ControlledPiece({ pieceName, gameControl, pos }: ControlledPieceProps) 
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
         // The piece was dragged off the board.
-        if (moveable) {
-          gameControl.clearPiece(pos);
-        }
+        gameControl.pieceDragged(pos, null);
       }
     }
   });

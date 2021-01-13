@@ -71,7 +71,6 @@ class GameControl {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
 
-        
         const doMove = (from: PiecePosition, to: PiecePosition) => {
             console.log("GC move", from, to);
             if(this.positionStatus(from).moveable) {
@@ -87,14 +86,13 @@ class GameControl {
     private _localProps: GameControlProps;
     private _clickManager: ClickManager;
 
-
-    get _boardPieces() {return this._bgioProps.G.pieces;}
-    get _offBoardPieces() {return this._localProps.gameDefinition.offBoardPieces;}
+    // Public access to on-board or off-board pieces is though functions that
+    // take account of flipping.
+    private get _boardPieces() {return this._bgioProps.G.pieces;}
+    private get _offBoardPieces() {return this._localProps.gameDefinition.offBoardPieces;}
 
     get gameType() {return this._localProps.gameDefinition.gameType;}
-    private get _boardStyle() { return this._localProps.gameDefinition.boardStyle;}
-
-
+    get boardStyle() { return this._localProps.gameDefinition.boardStyle;}
 
     undo() { this._bgioProps.undo();}
     redo () { this._bgioProps.redo();}
@@ -111,22 +109,17 @@ class GameControl {
     get nCols() {
         return this._boardPieces[0].length;
     }
-
     
     squareProperties(pos : PiecePosition) : SquareProperties  {
-
-        const isCheckered = this._boardStyle.checkered;
+        const isCheckered = this.boardStyle.checkered;
         const asTopLeft = (pos.row + pos.col) % 2 === 0;
 
-        // const piece = this.getPiece(pos);
-        // const clicked = this._clickManager.selected;
-        const selected = false; // KLUDGE - was Boolean(piece && clicked && 
-        //     piece.id === clicked.id);
 
-        //console.log(piece && piece.id, clicked);
+        const clickedPos = this._clickManager.selected;
+        const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));  
 
         return {
-            checkered: this._boardStyle.checkered,
+            checkered: this.boardStyle.checkered,
             black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
             selected: selected,
 
@@ -158,8 +151,6 @@ class GameControl {
         return top ? this._offBoardPieces.top : this._offBoardPieces.bottom;
     }
 
-    get borderLabels() {return Boolean(this._boardStyle.labels);}
-
     squareClicked(pos: PiecePosition) {
         this._clickManager.clicked(pos, this.positionStatus(pos));
     } 
@@ -167,6 +158,9 @@ class GameControl {
     clearAll() { this._bgioProps.moves.clearAll(); };
 
     movePiece (from: PiecePosition, to: PiecePosition) {
+        if(!from.onBoard) {
+            throw new Error("Attempt to move an off-board piece");
+        }
         this._bgioProps.moves.movePiece(from, to);
     };
 
@@ -175,19 +169,28 @@ class GameControl {
         if(!pieceName) {
             throw new Error("Attempt to copy from empty square");
         }
-        this._bgioProps.moves.addPiece(pieceName, to);    
+        this._bgioProps.moves.setPiece(to, pieceName);    
     };
 
-    clearPiece(from: PiecePosition) {
-        this._bgioProps.moves.clear(from);
+    clearPiece(pos: PiecePosition) {
+        if(!pos.onBoard) {
+            throw new Error("Attempt to clear an off-board piece");
+        }
+        this._bgioProps.moves.setPiece(pos, null);
     };
 
-    pieceDragged(from: PiecePosition, to: PiecePosition) {
+    pieceDragged(from: PiecePosition, to: PiecePosition | null) {
         console.log("dragged", from, to);
-        if(this.positionStatus(from).moveable) {
+        if(this.positionStatus(from).moveable && to) {
             this.movePiece(from, to);
-        } else {
+        } else if (to) {
             this.copyPiece(from, to);
+        } else {
+            // A piece has been dragged off the board.
+            // (Do nothing if it is not on the board)
+            if(from.onBoard) {
+                this.clearPiece(from);
+            }
         }
     }
 }

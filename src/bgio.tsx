@@ -26,8 +26,8 @@ function makeGame(gameDefinition: GameDefinition) {
             g.pieces[from.row][from.col] = null;
         },
 
-        addPiece(g: G, ctx: any, pieceName: PieceName, pos: PiecePosition) {
-            console.log("Bgio addPiece", pieceName, pos);
+        setPiece(g: G, ctx: any, pos: PiecePosition, pieceName: PieceName | null) {
+            console.log("Bgio setPiece", pieceName, pos);
             g.pieces[pos.row][pos.col] = pieceName;
         },
 
