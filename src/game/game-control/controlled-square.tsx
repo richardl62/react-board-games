@@ -28,7 +28,7 @@ function ControlledPiece({ pieceName, gameControl, pos }: ControlledPieceProps) 
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
         // The piece was dragged off the board.
-        gameControl.pieceDragged(pos, null);
+        gameControl.movePieceRequest(pos, null);
       }
     }
   });
@@ -63,7 +63,7 @@ function ControlledSquare({ gameControl, pos }: ControlledSquareProps) {
       const posProps: PiecePositionProps = dragParam.id;
       const from = new PiecePosition(posProps);
 
-      gameControl.pieceDragged(from, pos);
+      gameControl.movePieceRequest(from, pos);
     },
     collect: monitor => ({
       isOver: !!monitor.isOver(),

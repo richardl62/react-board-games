@@ -13,6 +13,12 @@ interface G {
 
 type BoardProps = BoardPropsTemplate<G>;
 
+function checkPiecePosition(obj: any) {
+    if(! (obj instanceof PiecePosition)) {
+        throw new Error("Object is not a PiecePosition");
+    }
+}
+
 // Provide the 'game' object required for a boardgame.io client.
 function makeGame(gameDefinition: GameDefinition) {
     const moves = {
@@ -21,13 +27,16 @@ function makeGame(gameDefinition: GameDefinition) {
         },
 
         movePiece(g: G, ctx: any, from:PiecePosition, to: PiecePosition) {
-            console.log("Bgio movePiece", from, to);
+            checkPiecePosition(from);
+            checkPiecePosition(to);
+            console.log("Bgio movePiece", from.props, to.props);
             g.pieces[to.row][to.col] = g.pieces[from.row][from.col];
             g.pieces[from.row][from.col] = null;
         },
 
         setPiece(g: G, ctx: any, pos: PiecePosition, pieceName: PieceName | null) {
-            console.log("Bgio setPiece", pieceName, pos);
+            checkPiecePosition(pos);
+            console.log("Bgio setPiece", pos.props, pieceName,);
             g.pieces[pos.row][pos.col] = pieceName;
         },
 

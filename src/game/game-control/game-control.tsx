@@ -72,12 +72,7 @@ class GameControl {
         this._localProps = localProps;
 
         const doMove = (from: PiecePosition, to: PiecePosition) => {
-            console.log("GC move", from, to);
-            if(this.positionStatus(from).moveable) {
-                this.movePiece(from, to);
-            } else {
-                this.copyPiece(from, to);
-            }
+            this.movePieceRequest(from, to);
         }
         this._clickManager = new ClickManager(doMove);
     }
@@ -157,41 +152,33 @@ class GameControl {
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
-    movePiece (from: PiecePosition, to: PiecePosition) {
-        if(!from.onBoard) {
-            throw new Error("Attempt to move an off-board piece");
+    // Process a user request - by drag or clicks - to move a piece.
+    movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
+        console.log("Move request", from.props, to && to.props);
+        
+        const changeable = (pos : PiecePosition | null) => {
+            return pos && this.positionStatus(pos).moveable;
         }
-        this._bgioProps.moves.movePiece(from, to);
-    };
 
-    copyPiece (from: PiecePosition, to: PiecePosition) {
-        const pieceName = this.positionStatus(from).pieceName;
-        if(!pieceName) {
-            throw new Error("Attempt to copy from empty square");
+        const pieceName = (pos : PiecePosition | null) => {
+            return pos && this.positionStatus(pos).pieceName;
         }
-        this._bgioProps.moves.setPiece(to, pieceName);    
-    };
-
-    clearPiece(pos: PiecePosition) {
-        if(!pos.onBoard) {
-            throw new Error("Attempt to clear an off-board piece");
-        }
-        this._bgioProps.moves.setPiece(pos, null);
-    };
-
-    pieceDragged(from: PiecePosition, to: PiecePosition | null) {
-        console.log("dragged", from, to);
-        if(this.positionStatus(from).moveable && to) {
-            this.movePiece(from, to);
-        } else if (to) {
-            this.copyPiece(from, to);
-        } else {
-            // A piece has been dragged off the board.
-            // (Do nothing if it is not on the board)
-            if(from.onBoard) {
-                this.clearPiece(from);
+        
+        if(changeable(to)) {
+            if(changeable(from)) {
+                this._bgioProps.moves.movePiece(from, to);
+            } else {
+                this._bgioProps.moves.setPiece(to, pieceName(from));
+            }
+        } else  {
+            // A piece has been dragged or click-moved somewhere if won't go,
+            // i.e. off the board. Treat this as a request to clear the piece.
+            if(changeable(from)) {
+                this._bgioProps.moves.setPiece(from, null);
             }
         }
+
+        this._clickManager.clear();
     }
 }
 
