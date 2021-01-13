@@ -182,7 +182,14 @@ class GameControl {
         this._bgioProps.moves.clear(from);
     };
 
-
+    pieceDragged(from: PiecePosition, to: PiecePosition) {
+        console.log("dragged", from, to);
+        if(this.positionStatus(from).moveable) {
+            this.movePiece(from, to);
+        } else {
+            this.copyPiece(from, to);
+        }
+    }
 }
 
 export default GameControl;

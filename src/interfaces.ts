@@ -35,7 +35,7 @@ export interface GameDefinition {
     };
 };
 
-interface PiecePositionProps {
+export interface PiecePositionProps {
     row?: number;
     col?: number;
     
@@ -48,15 +48,16 @@ interface PiecePositionProps {
 export class PiecePosition {
     constructor(props: PiecePositionProps)
         {
-        this.props = props;
+        this._props = props;
 
         this.sanityCheck();
 
         Object.freeze(this);
         }
     
-    private props: PiecePositionProps;
+    private _props: PiecePositionProps;
 
+    get props() {return this._props;}
     get onBoard() { return this.props.row !== undefined && this.props.col !== undefined; }
     get onTop() { return this.props.top !== undefined; }
     get onBotton() { return this.props.bottom !== undefined; }

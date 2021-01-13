@@ -2,7 +2,7 @@ import React from 'react';
 
 //import Piece from '../full-game/controlled-piece';
 import GameControl from '../game-control/game-control';
-import { ControlledSquare} from '../game-control/controlled-square'
+import ControlledSquare from '../game-control/controlled-square'
 import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
 import { PiecePosition } from '../../interfaces';
