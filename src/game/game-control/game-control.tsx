@@ -28,7 +28,6 @@ class PositionStatus {
     get empty() {return !this.pieceName;}
 }
 
-// KLUDGE: The click strategy is a bit messy.
 class ClickManager {
     // A piece that has been selected by a first click and is available to
     // move on a second click.
@@ -75,6 +74,7 @@ class GameControl {
 
         
         const doMove = (from: BoardPosition, to: BoardPosition) => {
+            console.log("GC move", from, to);
             if(this.positionStatus(from).moveable) {
                 this.movePiece(from, to);
             } else {
@@ -85,7 +85,7 @@ class GameControl {
     }
 
     private _bgioProps: Bgio.BoardProps;
-    private _localProps: GameControlProps
+    private _localProps: GameControlProps;
     private _clickManager: ClickManager;
 
 
@@ -136,6 +136,15 @@ class GameControl {
         };
     }
 
+    // Piece on the board are movable. Off-board pieces should be copied.
+    positionStatus(pos: BoardPosition): PositionStatus {
+        let status = new PositionStatus();
+        status.pieceName = this._boardPieces[pos.row][pos.col];
+        status.offBoard = false; //KLUDGE - for now.
+
+        return status;
+    }
+
     offBoardPieces(which : 'top' | 'bottom') {
         let top = which === 'top';
         if(this.reverseBoardRows) {
@@ -151,31 +160,18 @@ class GameControl {
         this._clickManager.clicked(pos, this.positionStatus(pos));
     } 
 
-
     clearAll() { this._bgioProps.moves.clearAll(); };
 
     movePiece (from: BoardPosition, to: BoardPosition) {
-        this.copyPiece(from, to);
-        this.clearPiece(from);
-
-        this._clickManager.clear();
+        this._bgioProps.moves.movePiece(from, to);
     };
 
-    // Piece on the board are movable. Off-board pieces should be copied.
-    positionStatus(pos: BoardPosition): PositionStatus {
-        let status = new PositionStatus();
-        status.pieceName = this._boardPieces[pos.row][pos.col];
-        status.offBoard = false; //KLUDGE - for now.
-        
-        return status;
-    }
-
     copyPiece (from: BoardPosition, to: BoardPosition) {
-        const status = this.positionStatus(from);
-        if(status.empty) {
-            throw new Error("Attempt to copy empty piece");
+        const pieceName = this.positionStatus(from).pieceName;
+        if(!pieceName) {
+            throw new Error("Attempt to copy from empty square");
         }
-        this._bgioProps.moves.add(status.pieceName, to);    
+        this._bgioProps.moves.addPiece(pieceName, to);    
     };
 
     clearPiece(from: BoardPosition) {
