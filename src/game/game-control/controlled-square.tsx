@@ -11,10 +11,9 @@ import { nonNull } from "../../tools";
 interface ControlledPieceProps {
     gameControl: GameControl;
     pieceName: PieceName;
-    reportClicks?: boolean;
   }
   
-function ControlledPiece({ pieceName, gameControl, reportClicks = true }
+function ControlledPiece({ pieceName, gameControl }
    : ControlledPieceProps ) {
   
     // const [{ isDragging }, drag ] = useDrag({
@@ -92,10 +91,6 @@ function ControlledSquare({ gameControl, pos} : ControlledSquareProps )
             {pieceName ? <ControlledPiece 
                 pieceName={pieceName} 
                 gameControl={gameControl} 
-
-                // Clicks are reported from the containing div.
-                //  Don't aslo report them from the ControlledPiece.
-                reportClicks={false}
                 /> : null
             }
         </div>

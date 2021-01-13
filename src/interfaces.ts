@@ -1,3 +1,4 @@
+import { nonNull } from './tools';
 // The types of the supported games. 
 export type GameType = 'bobail' | 'chess' | 'draughts';
 
@@ -42,14 +43,6 @@ interface PiecePositionProps {
     bottom?: number;
 }
 
-function num(n: number| undefined) {
-    if(n === undefined) {
-        throw Error("Found undefined when expecting a number");
-    }
-
-    return n;
-}
-
 // Return the positions where a piece _might_ be. (So it could refer
 // to an empty square.)
 export class PiecePosition {
@@ -83,10 +76,10 @@ export class PiecePosition {
         }
     }
 
-    get row() { return num(this.props.row);}
-    get col() { return num(this.props.col);}
-    get top() { return num(this.props.top);}
-    get bottom() { return num(this.props.bottom);}
+    get row() { return nonNull(this.props.row);}
+    get col() { return nonNull(this.props.col);}
+    get top() { return nonNull(this.props.top);}
+    get bottom() { return nonNull(this.props.bottom);}
     
     static same(p1 : PiecePosition , p2 : PiecePosition ) {
         return p1.props.row === p2.props.row
