@@ -9,6 +9,7 @@ type PieceType = string;
 
 interface G {
     pieces: Array<Array<PieceType | null>>;
+    selectedSquare: PiecePosition | null;
 };
 
 type BoardProps = BoardPropsTemplate<G>;
@@ -29,22 +30,31 @@ function makeGame(gameDefinition: GameDefinition) {
         movePiece(g: G, ctx: any, from:PiecePosition, to: PiecePosition) {
             checkPiecePosition(from);
             checkPiecePosition(to);
-            console.log("Bgio movePiece", from.props, to.props);
+            //console.log("Bgio movePiece", from.props, to.props);
             g.pieces[to.row][to.col] = g.pieces[from.row][from.col];
             g.pieces[from.row][from.col] = null;
         },
 
         setPiece(g: G, ctx: any, pos: PiecePosition, pieceName: PieceName | null) {
             checkPiecePosition(pos);
-            console.log("Bgio setPiece", pos.props, pieceName,);
+            //console.log("Bgio setPiece", pos.props, pieceName,);
             g.pieces[pos.row][pos.col] = pieceName;
         },
+
+        setSelectedSquare(g: G, ctx: any, selected: PiecePosition | null) {
+            g.selectedSquare = selected;
+        }
 
     };
 
     return {
         name: gameDefinition.name.replace(/\s/g, ''),
-        setup: () => gameDefinition,
+        setup: () : G => {
+            return { 
+                pieces: gameDefinition.pieces,
+                selectedSquare: null,
+            }
+        },
         moves: moves,
     };
 }

@@ -7,8 +7,6 @@ import * as Bgio from '../../bgio';
 
 const topLeftBlack = false; // KLUDGE
 
-type DoMove = (from: PiecePosition, to: PiecePosition) => void;
-
 function useGameControlProps(gameDefinition: GameDefinition) {
 
     return {
@@ -27,27 +25,44 @@ class PositionStatus {
     get empty() {return !this.pieceName;}
 }
 
+function props(p: PiecePosition | null) {
+    return p && p.props;
+}
+
+interface ClickManagerProps {
+    getSelectedSquare: () => PiecePosition | null;
+    setSelectedSquare: (arg: PiecePosition | null) => void;
+    doMove: (from: PiecePosition, to: PiecePosition | null) => void;
+}
 class ClickManager {
     // A piece that has been selected by a first click and is available to
     // move on a second click.
-    private _selected: PiecePosition | null;
- 
-    private _doMove: DoMove;
+    private _props: ClickManagerProps;
 
-    constructor(doMove: DoMove) {
-        this._selected = null;
-        this._doMove = doMove;
+    constructor(cmProps: ClickManagerProps) {
+        this._props = cmProps;
+
+        //console.log("CM Constructor:", props(this.selected));
     }
 
-    get selected() {return this._selected;}
+    get selected() {
+        return this._props.getSelectedSquare();
+    }
+
+    private set _selected(val : PiecePosition| null) {
+        //console.log("CM set: old", props(this.selected) , "new", props(val));
+
+        this._props.setSelectedSquare(val);;
+    }
     
     clicked(pos: PiecePosition, positionStatus: PositionStatus) {
-        if (this._selected) {
-            if(PiecePosition.same(this._selected, pos)) {
+        // console.log("CM clicked: selected", props(this.selected), "clicked", props(pos));
+        if (this.selected) {
+            if(PiecePosition.same(this.selected, pos)) {
                 // This same square has been clicked twice. Cancel the first click.
                 this._selected = null;
             } else {
-                this._doMove(this._selected, pos);
+                this._props.doMove(this.selected, pos);
                 this._selected = null;
             }
         } else {
@@ -71,10 +86,12 @@ class GameControl {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
 
-        const doMove = (from: PiecePosition, to: PiecePosition) => {
-            this.movePieceRequest(from, to);
-        }
-        this._clickManager = new ClickManager(doMove);
+        this._clickManager = new ClickManager({
+            getSelectedSquare: () => bgioProps.G.selectedSquare,
+            setSelectedSquare: (p: PiecePosition | null) => {bgioProps.moves.setSelectedSquare(p)},
+            doMove: (p1: PiecePosition, p2: PiecePosition | null) =>
+                this.movePieceRequest(p1, p2),
+        });
     }
 
     private _bgioProps: Bgio.BoardProps;
@@ -154,7 +171,7 @@ class GameControl {
 
     // Process a user request - by drag or clicks - to move a piece.
     movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
-        console.log("Move request", from.props, to && to.props);
+        //console.log("Move request", from.props, to && to.props);
         
         const changeable = (pos : PiecePosition | null) => {
             return pos && this.positionStatus(pos).moveable;
