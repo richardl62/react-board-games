@@ -1,22 +1,27 @@
 import React from 'react';
-import { SquareProperties } from '../../interfaces';
 
 import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
 
 interface BoardSquareProps {
-    squareProperties: SquareProperties;
+
+    background: {
+        checkered: boolean;
+        black: boolean;
+    };
+    selected: boolean;
+    canMoveTo: boolean;
+
     children?: React.ReactNode;
 };
 
-function BoardSquare({squareProperties, children} : BoardSquareProps) {
-    const {checkered, black, selected, canMoveTo} = squareProperties;
+function BoardSquare({background, selected, canMoveTo, children} : BoardSquareProps) {
 
     let className = nonNull(styles.square);
 
-    if (!checkered) {
+    if (!background.checkered) {
         className += " " + nonNull(styles.plainSquare);
-    } else if (black) {
+    } else if (background.black) {
         className += " " + nonNull(styles.blackSquare);
     } else {
         className += " " + nonNull(styles.whiteSquare);

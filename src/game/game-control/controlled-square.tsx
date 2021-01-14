@@ -15,7 +15,7 @@ interface ControlledPieceProps {
 }
 
 function ControlledPiece({ pieceName, gameControl, pos }: ControlledPieceProps) {
-  const moveable = gameControl.positionStatus(pos).moveable;
+  const changeable = gameControl.squareProperties(pos).changeable;
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -33,7 +33,7 @@ function ControlledPiece({ pieceName, gameControl, pos }: ControlledPieceProps) 
     }
   });
 
-  if (isDragging && moveable) {
+  if (isDragging && changeable) {
     /* Hide the original piece when moving */
     return null;
   }
@@ -70,7 +70,7 @@ function ControlledSquare({ gameControl, pos }: ControlledSquareProps) {
     }),
   })
 
-  const pieceName = gameControl.positionStatus(pos).pieceName;
+  const pieceName = gameControl.squareProperties(pos).pieceName;
 
   return (
     /* pieceContainer sets z-index to 'lift' the piece and so prevents 

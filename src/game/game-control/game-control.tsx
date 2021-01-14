@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { GameDefinition, SquareProperties, PiecePosition, PieceName}
+import { GameDefinition, PiecePosition, PieceName}
     from '../../interfaces';
 
 import * as Bgio from '../../bgio';
@@ -17,16 +17,19 @@ function useGameControlProps(gameDefinition: GameDefinition) {
 
 type GameControlProps = ReturnType<typeof useGameControlProps>;
 
-class PositionStatus {
-    pieceName: PieceName | null = null;
-    onBoard: boolean = false
+interface SquareProperties {
+    background: {
+        checkered: boolean;
+        black: boolean;
+    };
 
-    get moveable() {return this.onBoard;}
-    get empty() {return !this.pieceName;}
-}
-
-function props(p: PiecePosition | null) {
-    return p && p.props;
+    pieceName: PieceName | null;
+    changeable: boolean;
+    
+    gameStatus: {
+        selected: boolean;
+        canMoveTo: boolean;
+    }
 }
 
 interface ClickManagerProps {
@@ -55,7 +58,7 @@ class ClickManager {
         this._props.setSelectedSquare(val);;
     }
     
-    clicked(pos: PiecePosition, positionStatus: PositionStatus) {
+    clicked(pos: PiecePosition, squareProperties: SquareProperties) {
         // console.log("CM clicked: selected", props(this.selected), "clicked", props(pos));
         if (this.selected) {
             if(PiecePosition.same(this.selected, pos)) {
@@ -67,7 +70,7 @@ class ClickManager {
             }
         } else {
             // No square is currently selected.
-            if (positionStatus.empty) {
+            if (!squareProperties.pieceName) {
                 // An empty square is clicked with nothing selected. Do nothing.
             } else {
                 this._selected = pos;
@@ -122,36 +125,43 @@ class GameControl {
         return this._boardPieces[0].length;
     }
     
-    squareProperties(pos : PiecePosition) : SquareProperties  {
-        const isCheckered = this.boardStyle.checkered;
-        const asTopLeft = (pos.row + pos.col) % 2 === 0;
+    squareProperties(pos: PiecePosition): SquareProperties {
 
+        const pieceName = () => {
+            if (pos.onBoard) {
+                return this._boardPieces[pos.row as number][pos.col as number];
+            } else if (pos.onTop) {
+                return this._offBoardPieces.top[pos.top];
+            } else if (pos.onBottom) {
+                return this._offBoardPieces.bottom[pos.bottom];
+            }
+            throw new Error("squareProperties cannot find square");
+        }
+
+
+        let black=false;
+        if(this.boardStyle.checkered && pos.onBoard) {
+            const asTopLeft = (pos.row + pos.col) % 2 === 0;
+            black = asTopLeft === topLeftBlack;
+        }
 
         const clickedPos = this._clickManager.selected;
         const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));  
 
         return {
-            checkered: this.boardStyle.checkered,
-            black: isCheckered && (asTopLeft ? topLeftBlack : !topLeftBlack),
-            selected: selected,
+            background: {
+                checkered: this.boardStyle.checkered,
+                black: black,
+            },
 
-            canMoveTo: false, // For now
-        };
-    }
+            pieceName: pieceName(),
+            changeable: pos.onBoard,
 
-    // Piece on the board are movable. Off-board pieces should be copied.
-    positionStatus(pos: PiecePosition): PositionStatus {
-        let status = new PositionStatus();
-        status.onBoard = pos.onBoard;
-        if(pos.onBoard) {
-            status.pieceName = this._boardPieces[pos.row as number][pos.col as number];
-        } else if(pos.onTop) {
-            status.pieceName = this._offBoardPieces.top[pos.top];
-        } else {
-            status.pieceName = this._offBoardPieces.bottom[pos.bottom];
+            gameStatus: {
+                selected: selected,
+                canMoveTo: false, // For now,
+            },
         }
-        
-        return status;
     }
 
     offBoardPieces(which : 'top' | 'bottom') {
@@ -164,7 +174,7 @@ class GameControl {
     }
 
     squareClicked(pos: PiecePosition) {
-        this._clickManager.clicked(pos, this.positionStatus(pos));
+        this._clickManager.clicked(pos, this.squareProperties(pos));
     } 
 
     clearAll() { this._bgioProps.moves.clearAll(); };
@@ -174,11 +184,11 @@ class GameControl {
         //console.log("Move request", from.props, to && to.props);
         
         const changeable = (pos : PiecePosition | null) => {
-            return pos && this.positionStatus(pos).moveable;
+            return pos && this.squareProperties(pos).changeable;
         }
 
         const pieceName = (pos : PiecePosition | null) => {
-            return pos && this.positionStatus(pos).pieceName;
+            return pos && this.squareProperties(pos).pieceName;
         }
         
         if(changeable(to)) {

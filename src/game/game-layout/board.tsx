@@ -48,11 +48,14 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
 
     let makeSquare = (col: number) => {
         const pos = new PiecePosition({row:row, col:col});
+        const squareProperties = gameControl.squareProperties(pos);
         return (
             <BoardSquare
                 key={key(col)}
                 
-                squareProperties={gameControl.squareProperties(pos)}
+                background={squareProperties.background}
+                selected={squareProperties.gameStatus.selected}
+                canMoveTo={squareProperties.gameStatus.canMoveTo}
             >
                 <ControlledSquare gameControl={gameControl} pos={pos} />
             </BoardSquare>

@@ -60,7 +60,7 @@ export class PiecePosition {
     get props() {return this._props;}
     get onBoard() { return this.props.row !== undefined && this.props.col !== undefined; }
     get onTop() { return this.props.top !== undefined; }
-    get onBotton() { return this.props.bottom !== undefined; }
+    get onBottom() { return this.props.bottom !== undefined; }
     
     sanityCheck() {
         const {row, col, top, bottom} = this.props;
@@ -90,11 +90,9 @@ export class PiecePosition {
     };
 }
 
-export interface SquareProperties {
-    checkered: boolean;
-    black: boolean;
-    selected: boolean;
-    canMoveTo: boolean;
-};
+// Intend for use in debug output.
+export function pieceProps(p: PiecePosition | null) {
+    return p && p.props;
+}
 
 // Exports are done inline
