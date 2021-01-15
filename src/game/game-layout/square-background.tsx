@@ -1,3 +1,8 @@
+// This file provides a 'dumb' board square that does not contain any pieces. 
+// The idea is that gives the background (including any hightlighting),
+// and any pieces 'sit on top of' it. (This can be achieved using CSS
+// 'position' and 'z-index'.)
+
 import React from 'react';
 
 import { nonNull } from '../../tools';
@@ -10,8 +15,6 @@ interface BoardSquareProps {
     canMoveTo: boolean;
 };
 
-// This is a 'dumb' square that does not contain any pieces. The idea
-// is that pieces go in a separate element that 'sits' on to of this.
 function BoardSquare({background, selected, canMoveTo} : BoardSquareProps) {
 
     let className = nonNull(styles.square);

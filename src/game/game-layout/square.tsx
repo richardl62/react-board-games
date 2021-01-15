@@ -1,8 +1,8 @@
 import React from 'react';
-import {useDragRef, useDropRef} from '../game-control';
+import {usePieceControl, useSquareControl} from '../game-control';
 import { PiecePosition, PieceName } from '../../interfaces';
 import GameControl from '../game-control/game-control';
-import BoardSquare from './board-square'
+import Backgroud from './square-background'
 import SimplePiece from '../../piece';
 
 import styles from "./game-layout.module.css";
@@ -16,12 +16,12 @@ interface ControlledPieceProps {
 
 function ControlledPiece({ pieceName, gameControl, pos } : ControlledPieceProps) {
   
-  const {ref, renderPiece} = useDragRef(gameControl, pos);
+  const {props, render} = usePieceControl(gameControl, pos);
 
-  if(renderPiece) {
+  if(render) {
     return (
       <div className={nonNull(styles.controlledPiece)}
-        ref={ref}
+        {...props}
       >
         <SimplePiece pieceName={pieceName} gameType={gameControl.gameType} />
       </div>
@@ -36,9 +36,8 @@ interface ControlledSquareProps {
   pos: PiecePosition,
 };
 
-function ControlledSquare(props: ControlledSquareProps) {
-  const { gameControl, pos } = props;
-  const ref = useDropRef(gameControl, pos);
+function Square({ gameControl, pos } : ControlledSquareProps) {
+  const { props } = useSquareControl(gameControl, pos);
 
   const squareProperties = gameControl.squareProperties(pos);
 
@@ -46,11 +45,11 @@ function ControlledSquare(props: ControlledSquareProps) {
     /* pieceContainer sets z-index to 'lift' the piece and so prevents 
         the background being dragged. */
     <div
-      onClick={() => gameControl.squareClicked(pos)}
-      ref={ref}
       className={nonNull(styles.pieceContainer)}
+
+      {...props }
     >
-      <BoardSquare
+      <Backgroud
         background={squareProperties.background}
         selected={squareProperties.gameStatus.selected}
         canMoveTo={squareProperties.gameStatus.canMoveTo}
@@ -66,4 +65,4 @@ function ControlledSquare(props: ControlledSquareProps) {
   )
 }
 
-export default ControlledSquare;
+export default Square;

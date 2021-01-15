@@ -4,8 +4,7 @@ import GameControl from './game-control';
 
 const PIECE = 'piece';
 
-
-function useDragRef(gameControl: GameControl, pos: PiecePosition) {
+function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
   const changeable = gameControl.squareProperties(pos).changeable;
 
   const [{ isDragging }, drag] = useDrag({
@@ -25,13 +24,15 @@ function useDragRef(gameControl: GameControl, pos: PiecePosition) {
   });
 
   return {
-    ref: drag,
+    props: {
+      ref: drag,
+    },
     /* Hide the original piece when moving */
-    renderPiece: !(isDragging && changeable),
+    render: !(isDragging && changeable),
   };
 }
 
-function useDropRef(gameControl: GameControl, pos: PiecePosition) {
+function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
   const [, drop] = useDrop({
     accept: PIECE,
 
@@ -48,8 +49,12 @@ function useDropRef(gameControl: GameControl, pos: PiecePosition) {
     }),
   })
 
-  return drop;
+  return {
+    props: {
+      ref: drop,
+      onClick: () => gameControl.squareClicked(pos),
+    },
+  };
 }
 
-
-export {useDragRef, useDropRef};
+export {usePieceControl, useSquareControl};

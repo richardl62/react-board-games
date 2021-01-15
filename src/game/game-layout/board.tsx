@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import ControlledSquare  from './controlled-square';
+import ControlledSquare  from './square';
 import GameControl from '../game-control/game-control';
 
 import { nonNull } from './../../tools';
