@@ -5,15 +5,14 @@ import { SquareBackground } from '../game-control/game-control';
 import styles from './game-layout.module.css';
 
 interface BoardSquareProps {
-
     background: SquareBackground;
     selected: boolean;
     canMoveTo: boolean;
-
-    children?: React.ReactNode;
 };
 
-function BoardSquare({background, selected, canMoveTo, children} : BoardSquareProps) {
+// This is a 'dumb' square that does not contain any pieces. The idea
+// is that pieces go in a separate element that 'sits' on to of this.
+function BoardSquare({background, selected, canMoveTo} : BoardSquareProps) {
 
     let className = nonNull(styles.square);
 
@@ -33,11 +32,7 @@ function BoardSquare({background, selected, canMoveTo, children} : BoardSquarePr
         className += " " + nonNull(styles.canMoveTo);
     }
 
-    return (
-        <div className={className}>
-            {children}
-        </div>
-        );
+    return (<div className={className} />);
 }
 
 

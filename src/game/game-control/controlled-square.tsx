@@ -2,7 +2,9 @@ import React from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { PiecePosition, PiecePositionProps, PieceName } from '../../interfaces';
 import GameControl from './game-control';
+import BoardSquare from '../game-layout/board-square'
 import SimplePiece from '../../piece';
+
 import styles from "./control-square.module.css";
 import { nonNull } from "../../tools";
 
@@ -39,7 +41,7 @@ function ControlledPiece({ pieceName, gameControl, pos }: ControlledPieceProps) 
   }
   else {
     return (
-      <div style={{ height: "100%", width: "100%" }}
+      <div className={nonNull(styles.controlledPiece)}
         ref={drag}
       >
         <SimplePiece pieceName={pieceName} gameType={gameControl.gameType} />
@@ -70,7 +72,7 @@ function ControlledSquare({ gameControl, pos }: ControlledSquareProps) {
     }),
   })
 
-  const pieceName = gameControl.squareProperties(pos).pieceName;
+  const squareProperties = gameControl.squareProperties(pos);
 
   return (
     /* pieceContainer sets z-index to 'lift' the piece and so prevents 
@@ -80,8 +82,14 @@ function ControlledSquare({ gameControl, pos }: ControlledSquareProps) {
       ref={drop}
       className={nonNull(styles.pieceContainer)}
     >
-      {pieceName ? <ControlledPiece
-        pieceName={pieceName}
+      <BoardSquare
+        background={squareProperties.background}
+        selected={squareProperties.gameStatus.selected}
+        canMoveTo={squareProperties.gameStatus.canMoveTo}
+      />
+
+      {squareProperties.pieceName ? <ControlledPiece
+        pieceName={squareProperties.pieceName}
         gameControl={gameControl}
         pos={pos}
       /> : null

@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import BoardSquare  from './board-square';
 import ControlledSquare  from '../game-control/controlled-square';
 import GameControl from '../game-control/game-control';
 
@@ -48,18 +47,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
 
     let makeSquare = (col: number) => {
         const pos = new PiecePosition({row:row, col:col});
-        const squareProperties = gameControl.squareProperties(pos);
-        return (
-            <BoardSquare
-                key={key(col)}
-                
-                background={squareProperties.background}
-                selected={squareProperties.gameStatus.selected}
-                canMoveTo={squareProperties.gameStatus.canMoveTo}
-            >
-                <ControlledSquare gameControl={gameControl} pos={pos} />
-            </BoardSquare>
-        );
+        return <ControlledSquare key={key(col)} gameControl={gameControl} pos={pos} />
     };
 
     if(borderLabels) {

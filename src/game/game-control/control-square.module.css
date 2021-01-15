@@ -9,4 +9,16 @@
     even when empty. */
     height: 100%;
     width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.controlledPiece {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    height: 100%;
+    width: 100%;
+    z-index: 1;
 }
