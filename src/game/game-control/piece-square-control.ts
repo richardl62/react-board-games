@@ -5,8 +5,7 @@ import GameControl from './game-control';
 const PIECE = 'piece';
 
 function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
-  const changeable = gameControl.squareProperties(pos).changeable;
-
+  
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: PIECE,
@@ -23,16 +22,22 @@ function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
     }
   });
 
+  const squareProps = gameControl.squareProperties(pos);
+  let render = Boolean(squareProps.pieceName
+    && !(isDragging && squareProps.changeable)
+  );
+
   return {
     props: {
       ref: drag,
     },
-    /* Hide the original piece when moving */
-    render: !(isDragging && changeable),
+
+    render: render,
   };
 }
 
 function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
+  
   const [, drop] = useDrop({
     accept: PIECE,
 

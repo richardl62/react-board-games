@@ -6,17 +6,12 @@
 import React from 'react';
 
 import { nonNull } from '../../tools';
-import { SquareBackground } from '../game-control/game-control';
+import { SquareProperties} from '../game-control';
 import styles from './game-layout.module.css';
 
-interface BoardSquareProps {
-    background: SquareBackground;
-    selected: boolean;
-    canMoveTo: boolean;
-};
 
-function BoardSquare({background, selected, canMoveTo} : BoardSquareProps) {
-
+function BoardSquare({background, gameStatus} : SquareProperties) {
+    const { selected, canMoveTo } = gameStatus;
     let className = nonNull(styles.square);
 
     if (background === 'plain') {
