@@ -17,11 +17,10 @@ function useGameControlProps(gameDefinition: GameDefinition) {
 
 type GameControlProps = ReturnType<typeof useGameControlProps>;
 
+type SquareBackground = null | 'plain' | 'checkered-white' | 'checkered-black';
+
 interface SquareProperties {
-    background: {
-        checkered: boolean;
-        black: boolean;
-    };
+    background: SquareBackground;
 
     pieceName: PieceName | null;
     changeable: boolean;
@@ -138,21 +137,21 @@ class GameControl {
             throw new Error("squareProperties cannot find square");
         }
 
-
-        let black=false;
-        if(this.boardStyle.checkered && pos.onBoard) {
-            const asTopLeft = (pos.row + pos.col) % 2 === 0;
-            black = asTopLeft === topLeftBlack;
-        }
-
         const clickedPos = this._clickManager.selected;
         const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));  
 
+        const background = () => {
+            if(!pos.onBoard) {
+                return null;
+            } else if(!this.boardStyle.checkered) {
+                return 'plain';
+            } else {
+                const asTopLeft = (pos.row + pos.col) % 2 === 0;
+                return(asTopLeft === topLeftBlack) ? 'checkered-black' : 'checkered-white';
+            }
+        }
         return {
-            background: {
-                checkered: this.boardStyle.checkered,
-                black: black,
-            },
+            background: background(),
 
             pieceName: pieceName(),
             changeable: pos.onBoard,
@@ -209,5 +208,5 @@ class GameControl {
     }
 }
 
-export default GameControl;
-export { useGameControlProps };
+export {GameControl as default, useGameControlProps};
+export type {SquareBackground}

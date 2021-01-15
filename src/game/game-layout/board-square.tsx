@@ -1,14 +1,12 @@
 import React from 'react';
 
 import { nonNull } from '../../tools';
+import { SquareBackground } from '../game-control/game-control';
 import styles from './game-layout.module.css';
 
 interface BoardSquareProps {
 
-    background: {
-        checkered: boolean;
-        black: boolean;
-    };
+    background: SquareBackground;
     selected: boolean;
     canMoveTo: boolean;
 
@@ -19,11 +17,11 @@ function BoardSquare({background, selected, canMoveTo, children} : BoardSquarePr
 
     let className = nonNull(styles.square);
 
-    if (!background.checkered) {
+    if (background === 'plain') {
         className += " " + nonNull(styles.plainSquare);
-    } else if (background.black) {
+    } else if (background === 'checkered-black') {
         className += " " + nonNull(styles.blackSquare);
-    } else {
+    } else if (background === 'checkered-white') {
         className += " " + nonNull(styles.whiteSquare);
     }
 
