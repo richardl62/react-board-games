@@ -3,14 +3,10 @@ import {
     Client, // To do: (Somehow) set the template parameter before exporting
 } from 'boardgame.io/react';
 
-import { GameDefinition, PiecePosition, PieceName } from './interfaces';
+import { GameDefinition, PiecePosition, PieceName, GameState } from './interfaces';
 
-type PieceType = string;
 
-interface G {
-    pieces: Array<Array<PieceType | null>>;
-    selectedSquare: PiecePosition | null;
-};
+type G = GameState;
 
 type BoardProps = BoardPropsTemplate<G>;
 
