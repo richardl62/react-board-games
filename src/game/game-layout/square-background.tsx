@@ -7,12 +7,12 @@ import React from 'react';
 
 import { nonNull } from '../../tools';
 import { SquareProperties} from '../game-control';
-import styles from './game-layout.module.css';
+import styles from './square.module.css';
 
 
 function Background({background, gameStatus} : SquareProperties) {
     const { selected, canMoveTo } = gameStatus;
-    let className = nonNull(styles.square);
+    let className = nonNull(styles.squareBackground);
 
     if (background === 'plain') {
         className += " " + nonNull(styles.plainSquare);

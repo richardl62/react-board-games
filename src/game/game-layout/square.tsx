@@ -5,7 +5,7 @@ import GameControl, { useSquareControl, usePieceControl}
 import {Background, CanMoveToMarker} from './square-background'
 import Piece from '../../piece';
 
-import styles from "./game-layout.module.css";
+import styles from "./square.module.css";
 import { nonNull } from "../../tools";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   pos: PiecePosition,
 };
 
-function ControlledPiece({ gameControl, pos }: Props) {
+function PieceWrapper({ gameControl, pos }: Props) {
   const pieceControl = usePieceControl(gameControl, pos);
   const pieceName = gameControl.squareProperties(pos).pieceName
   if (!pieceControl.render || !pieceName) {
@@ -21,7 +21,7 @@ function ControlledPiece({ gameControl, pos }: Props) {
   }
 
   return (<div
-    className={nonNull(styles.controlledPiece)}
+    className={nonNull(styles.pieceWrapper)}
     {...pieceControl.props}
   >
     <Piece
@@ -40,16 +40,16 @@ function Square(props : Props) {
   const squareProperties = gameControl.squareProperties(pos);
 
   return (
-    /* ControlledPiece sets z-index to 'lift' the piece and so prevents 
+    /* PieceWrapper sets z-index to 'lift' the piece and so prevents 
       the background being dragged. */
     <div
-      className={nonNull(styles.pieceContainer)}
+      className={nonNull(styles.square)}
       {...squareControl.props }
     >
       <Background {...squareProperties} />
       <CanMoveToMarker {...squareProperties} />
 
-      <ControlledPiece {...props} />
+      <PieceWrapper {...props} />
     </div>
   )
 }

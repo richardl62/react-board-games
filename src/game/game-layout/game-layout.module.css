@@ -43,24 +43,6 @@
     background-color: var(--board-background);
 }
 
-/* Use of board squares and off-board piece */
-.square {
-    width: var(--square-size);
-    height: var(--square-size);
-}
-
-.plainSquare {
-    border: 2px solid var(--board-background, brown);
-    background-color: var(--board-white-square, white);
-}
-
-.blackSquare {
-    background-color: var(--board-black-square, black);
-}
-
-.whiteSquare {
-    background-color: var(--board-white-square, white);
-}
 
 .boardBorder {
     color:white;
@@ -80,51 +62,4 @@
     display: flex;
     justify-content: center;
     margin: 5px;
-}
-
-.selectedSquare {
-    border: yellow 8px solid;
-}
-
-.canMoveTo {
-    background-color: rgb(0, 225, 0, .8); /* opaque  green */;
-    border-radius: 50%;
-
-    /* make blob-size + 2*border-offset = 100% */
-    --blob-size: 40%;
-    --border-offset: calc((100% - var(--blob-size)) / 2);
-    
-    position: relative;
-    height: var(--blob-size);
-    width: var(--blob-size);
-
-    top: var(--border-offset);
-    left: var(--border-offset);
-
-    z-index: 2;
-}
-
-.pieceContainer {
-    /* Setting the z-index (which required non-static position) 'lifts' a piece
-    and so prevent the background being dragged with it. */
-    position: relative;
-
-    z-index: 1;
-
-    /* Making the container full size allows it to be clicked or dragged-to
-    even when empty. */
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-}
-
-.controlledPiece {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-
-    height: 100%;
-    width: 100%;
-    z-index: 1;
 }
