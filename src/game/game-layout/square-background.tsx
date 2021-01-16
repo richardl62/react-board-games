@@ -11,7 +11,7 @@ import styles from './square.module.css';
 
 
 function Background({background, gameStatus} : SquareProperties) {
-    const { selected, canMoveTo } = gameStatus;
+    const { selected } = gameStatus;
     let className = nonNull(styles.squareBackground);
 
     if (background === 'plain') {
@@ -26,11 +26,7 @@ function Background({background, gameStatus} : SquareProperties) {
         className += " " + nonNull(styles.selectedSquare);
     }
 
-    return (
-        <div className={className} >
-            {canMoveTo? <div className={nonNull(styles.canMoveTo)} /> : null}    
-        </div>
-        );
+    return (<div className={className} />);
 }
 
 function CanMoveToMarker({gameStatus} : SquareProperties) {

@@ -27,14 +27,14 @@
 }
 
 .canMoveTo {
-    background-color: rgb(0, 225, 0, .8); /* opaque  green */;
+    background-color: rgb(0, 255, 0, .8); /* opaque  green */;
     border-radius: 50%;
 
     /* make blob-size + 2*top-left-offsett = 100% */
     --blob-size: 40%;
     --top-left-offsett: calc((100% - var(--blob-size)) / 2);
     
-    position: relative;
+    position: absolute;
     height: var(--blob-size);
     width: var(--blob-size);
 
@@ -55,5 +55,4 @@
 
     height: 100%;
     width: 100%;
-
 }

@@ -51,6 +51,9 @@ export interface PiecePositionProps {
     bottom?: number;
 }
 
+function isNum(obj: number | undefined) {
+    return obj !== undefined;
+}
 // Return the positions where a piece _might_ be. (So it could refer
 // to an empty square.)
 export class PiecePosition {
@@ -66,9 +69,9 @@ export class PiecePosition {
     private _props: PiecePositionProps;
 
     get props() {return this._props;}
-    get onBoard() { return this.props.row !== undefined && this.props.col !== undefined; }
-    get onTop() { return this.props.top !== undefined; }
-    get onBottom() { return this.props.bottom !== undefined; }
+    get onBoard() { return isNum(this.props.row) && isNum(this.props.col); }
+    get onTop() { return isNum(this.props.top); }
+    get onBottom() { return isNum(this.props.bottom); }
     
     // Get values.  Throw an error if null
     get row() { return nonNull(this.props.row);}
