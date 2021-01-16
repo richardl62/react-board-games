@@ -62,6 +62,18 @@ export class PiecePosition {
     get onTop() { return this.props.top !== undefined; }
     get onBottom() { return this.props.bottom !== undefined; }
     
+    // Get values.  Throw an error if null
+    get row() { return nonNull(this.props.row);}
+    get col() { return nonNull(this.props.col);}
+    get top() { return nonNull(this.props.top);}
+    get bottom() { return nonNull(this.props.bottom);}
+
+    // Get values.  Can return null
+    getRow() { return this.props.row;}
+    getCol() { return this.props.col;}
+    getTop() { return this.props.top;}
+    getBottom() { return this.props.bottom;}
+    
     sanityCheck() {
         const {row, col, top, bottom} = this.props;
 
@@ -77,11 +89,6 @@ export class PiecePosition {
         }
     }
 
-    get row() { return nonNull(this.props.row);}
-    get col() { return nonNull(this.props.col);}
-    get top() { return nonNull(this.props.top);}
-    get bottom() { return nonNull(this.props.bottom);}
-    
     static same(p1 : PiecePosition , p2 : PiecePosition ) {
         return p1.props.row === p2.props.row
             && p1.props.col === p2.props.col

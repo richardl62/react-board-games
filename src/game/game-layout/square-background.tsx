@@ -10,7 +10,7 @@ import { SquareProperties} from '../game-control';
 import styles from './game-layout.module.css';
 
 
-function BoardSquare({background, gameStatus} : SquareProperties) {
+function Background({background, gameStatus} : SquareProperties) {
     const { selected, canMoveTo } = gameStatus;
     let className = nonNull(styles.square);
 
@@ -26,12 +26,19 @@ function BoardSquare({background, gameStatus} : SquareProperties) {
         className += " " + nonNull(styles.selectedSquare);
     }
 
-    if (canMoveTo) {
-        className += " " + nonNull(styles.canMoveTo);
-    }
+    return (
+        <div className={className} >
+            {canMoveTo? <div className={nonNull(styles.canMoveTo)} /> : null}    
+        </div>
+        );
+}
 
-    return (<div className={className} />);
+function CanMoveToMarker({gameStatus} : SquareProperties) {
+    const { canMoveTo } = gameStatus;
+
+    return canMoveTo? <div className={nonNull(styles.canMoveTo)} /> : null;   
 }
 
 
-export default BoardSquare;
+
+export {Background, CanMoveToMarker};

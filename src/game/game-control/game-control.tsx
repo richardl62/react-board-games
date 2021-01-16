@@ -90,6 +90,14 @@ class GameControl {
         const clickedPos = this._clickManager.selected;
         const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));  
 
+        const canMoveTo = Boolean(
+                (
+                    (pos.getRow() === 0 && pos.getCol() === 0) ||
+                    (clickedPos && clickedPos.getRow() === pos.getRow())
+                )
+                && !(clickedPos && PiecePosition.same(clickedPos, pos))
+        );
+
         const background = () => {
             if(!pos.onBoard) {
                 return null;
@@ -108,7 +116,7 @@ class GameControl {
 
             gameStatus: {
                 selected: selected,
-                canMoveTo: false, // For now,
+                canMoveTo: canMoveTo,
             },
         }
     }

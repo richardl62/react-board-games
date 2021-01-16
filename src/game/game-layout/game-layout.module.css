@@ -87,13 +87,28 @@
 }
 
 .canMoveTo {
-    border: green 5px solid;
+    background-color: rgb(0, 225, 0, .8); /* opaque  green */;
+    border-radius: 50%;
+
+    /* make blob-size + 2*border-offset = 100% */
+    --blob-size: 40%;
+    --border-offset: calc((100% - var(--blob-size)) / 2);
+    
+    position: relative;
+    height: var(--blob-size);
+    width: var(--blob-size);
+
+    top: var(--border-offset);
+    left: var(--border-offset);
+
+    z-index: 2;
 }
 
 .pieceContainer {
     /* Setting the z-index (which required non-static position) 'lifts' a piece
     and so prevent the background being dragged with it. */
     position: relative;
+
     z-index: 1;
 
     /* Making the container full size allows it to be clicked or dragged-to

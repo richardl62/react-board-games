@@ -2,7 +2,7 @@ import React from 'react';
 import { PiecePosition } from '../../interfaces';
 import GameControl, { useSquareControl, usePieceControl}
   from '../game-control';
-import Background from './square-background'
+import {Background, CanMoveToMarker} from './square-background'
 import Piece from '../../piece';
 
 import styles from "./game-layout.module.css";
@@ -13,7 +13,7 @@ interface Props {
   pos: PiecePosition,
 };
 
-function WrappedPiece({ gameControl, pos }: Props) {
+function ControlledPiece({ gameControl, pos }: Props) {
   const pieceControl = usePieceControl(gameControl, pos);
   const pieceName = gameControl.squareProperties(pos).pieceName
   if (!pieceControl.render || !pieceName) {
@@ -40,14 +40,16 @@ function Square(props : Props) {
   const squareProperties = gameControl.squareProperties(pos);
 
   return (
-    /* WrappedPiece sets z-index to 'lift' the piece and so prevents 
+    /* ControlledPiece sets z-index to 'lift' the piece and so prevents 
       the background being dragged. */
     <div
       className={nonNull(styles.pieceContainer)}
       {...squareControl.props }
     >
       <Background {...squareProperties} />
-      <WrappedPiece {...props} />
+      <CanMoveToMarker {...squareProperties} />
+
+      <ControlledPiece {...props} />
     </div>
   )
 }
