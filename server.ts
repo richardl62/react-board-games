@@ -4,7 +4,7 @@ import path from 'path';
 import serve from 'koa-static';
 
 const gameDefinitions = require('./src/game-definition').default;
-const makeBgioGame = require('./src/shared-utilities').makeBgioGame;
+const makeBgioGame = require('./src/bgio').makeGame;
 const bgioGames = gameDefinitions.map(makeBgioGame);
 
 // @ts-ignore
