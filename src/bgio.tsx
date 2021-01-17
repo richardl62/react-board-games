@@ -43,7 +43,7 @@ function setSelectedSquare(g: G, ctx: any, selected: PiecePosition | null,
     g.selectedSquare = selected;
     g.legalMoves = null;
 
-    console.log('bgio setSelectedSquare', selected && selected.props);
+    // console.log('bgio setSelectedSquare', selected && selected.props);
     if (selected && findLegalMoves) {
         // Make an array of the same size as g.pieces but with every element
         // 'false'.

@@ -27,8 +27,11 @@ interface SquareProperties {
     changeable: boolean;
     
     gameStatus: {
+        // At most one of the booleans below will be true.
+        // For games that specify legal moves exactly one will be true.
         selected: boolean;
         canMoveTo: boolean;
+        cannotMoveTo: boolean;
     }
 }
 
@@ -94,6 +97,9 @@ class GameControl {
         const canMoveTo = Boolean(clickedPos && legalMoves 
             && legalMoves[pos.row][pos.col]);
 
+        const cannotMoveTo = Boolean(clickedPos && legalMoves 
+            &&!selected && !legalMoves[pos.row][pos.col]);
+
         const background = () => {
             if(!pos.onBoard) {
                 return null;
@@ -113,6 +119,7 @@ class GameControl {
             gameStatus: {
                 selected: selected,
                 canMoveTo: canMoveTo,
+                cannotMoveTo: cannotMoveTo,
             },
         }
     }
@@ -141,30 +148,29 @@ class GameControl {
     // Process a user request - by drag or clicks - to move a piece.
     movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
         //console.log("Move request", from.props, to && to.props);
-        
-        const changeable = (pos : PiecePosition | null) => {
-            return pos && this.squareProperties(pos).changeable;
-        }
 
-        const pieceName = (pos : PiecePosition | null) => {
-            return pos && this.squareProperties(pos).pieceName;
-        }
-        
-        if(changeable(to)) {
-            if(changeable(from)) {
-                this._bgioProps.moves.movePiece(from, to);
+
+        const toProps = to && this.squareProperties(to);
+        const fromProps = this.squareProperties(from);
+
+
+        if (toProps && !toProps.gameStatus.cannotMoveTo) {
+            if (toProps && toProps.changeable) {
+                if (fromProps.changeable) {
+                    this._bgioProps.moves.movePiece(from, to);
+                } else {
+                    this._bgioProps.moves.setPiece(to, fromProps.pieceName);
+                }
             } else {
-                this._bgioProps.moves.setPiece(to, pieceName(from));
+                // A piece has been dragged or click-moved somewhere if won't go,
+                // i.e. off the board. Treat this as a request to clear the piece.
+                if (fromProps.changeable) {
+                    this._bgioProps.moves.setPiece(from, null);
+                }
             }
-        } else  {
-            // A piece has been dragged or click-moved somewhere if won't go,
-            // i.e. off the board. Treat this as a request to clear the piece.
-            if(changeable(from)) {
-                this._bgioProps.moves.setPiece(from, null);
-            }
-        }
 
-        this._clickManager.clear();
+            this._clickManager.clear();
+        }
     }
 }
 

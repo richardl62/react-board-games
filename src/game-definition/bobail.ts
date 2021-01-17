@@ -18,18 +18,14 @@ function piece( pieces: Pieces, row: number, col:number) {
 function legalMovesBobail({ selectedSquare, pieces, legalMoves }: LegalMovesArg) {
     const s = selectedSquare;
 
-    let nLegal = 0;
     for (let row = s.row - 1; row <= s.row + 1; ++row) {
         for (let col = s.col - 1; col <= s.col + 1; ++col) {
             if ((row || col) // Not strictly necessary
                 && piece(pieces,row,col) === null) {
                 legalMoves[row][col] = true;
-                nLegal += 1;
             }
         }
     }
-
-    console.log("legalMovesBobail", s.props, pieces, nLegal, legalMoves);
 };
 
 

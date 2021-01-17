@@ -44,6 +44,18 @@
     z-index: 2;
 }
 
+.cannotMoveTo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    
+    height: 100%;
+    width: 100%;
+
+    cursor: not-allowed;
+}
+
 .pieceWrapper {
     /* Setting the z-index (which required non-static position) 'lifts' a piece
     and so prevent the background being dragged with it. */

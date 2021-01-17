@@ -30,9 +30,17 @@ function Background({background, gameStatus} : SquareProperties) {
 }
 
 function CanMoveToMarker({gameStatus} : SquareProperties) {
-    const { canMoveTo } = gameStatus;
+    const { canMoveTo, cannotMoveTo } = gameStatus;
 
-    return canMoveTo? <div className={nonNull(styles.canMoveTo)} /> : null;   
+    let className = null;
+    if( canMoveTo ) {
+        className = nonNull(styles.canMoveTo);
+    }
+    if( cannotMoveTo ) {
+        className = nonNull(styles.cannotMoveTo);
+    }
+
+    return className ? <div className={className} /> : null;   
 }
 
 
