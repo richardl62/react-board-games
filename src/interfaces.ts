@@ -18,9 +18,17 @@ export interface BoardStyle {
 export interface GameState {
     pieces: Array<Array<PieceName | null>>;
     selectedSquare: PiecePosition | null;
+    legalMoves: Array<Array<boolean>> | null;
 };
 
-export type LegalMove = ((G: GameState, p1: PiecePosition, p2: PiecePosition) => boolean);
+export interface LegalMovesArg {
+    pieces: Array<Array<PieceName | null>>;
+    selectedSquare: PiecePosition;
+    legalMoves: Array<Array<boolean>>;
+} 
+
+export type LegalMoves = (arg: LegalMovesArg) => void;
+
 // The properties that define an individual game.
 // KLUDGE? Mixes display and functionality (so no clear distinction of what
 // needs to be sent to the server.)
@@ -40,7 +48,7 @@ export interface GameDefinition {
         bottom: Array<PieceName>;
     };
 
-    legalMove?: LegalMove;
+    legalMoves?: LegalMoves;
 };
 
 export interface PiecePositionProps {

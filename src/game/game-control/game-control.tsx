@@ -40,7 +40,7 @@ class GameControl {
 
         this._clickManager = new ClickManager({
             getSelectedSquare: () => bgioProps.G.selectedSquare,
-            setSelectedSquare: (p: PiecePosition | null) => {bgioProps.moves.setSelectedSquare(p)},
+            setSelectedSquare: (p: PiecePosition|null) => this._setSelectedSquare(p),
             doMove: (p1: PiecePosition, p2: PiecePosition | null) =>
                 this.movePieceRequest(p1, p2),
         });
@@ -90,9 +90,9 @@ class GameControl {
         const clickedPos = this._clickManager.selected;
         const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));  
 
-        const legalMove = this._localProps.gameDefinition.legalMove;
-        const canMoveTo = Boolean(clickedPos && legalMove && 
-            legalMove(this._bgioProps.G, clickedPos, pos));
+        const legalMoves = this._bgioProps.G.legalMoves;
+        const canMoveTo = Boolean(clickedPos && legalMoves 
+            && legalMoves[pos.row][pos.col]);
 
         const background = () => {
             if(!pos.onBoard) {
@@ -129,6 +129,12 @@ class GameControl {
     squareClicked(pos: PiecePosition) {
         this._clickManager.clicked(pos, this.squareProperties(pos));
     } 
+
+    private _setSelectedSquare (p: PiecePosition | null) {
+        this._bgioProps.moves.setSelectedSquare(p, 
+            this._localProps.gameDefinition.legalMoves
+            );
+    }
 
     clearAll() { this._bgioProps.moves.clearAll(); };
 
