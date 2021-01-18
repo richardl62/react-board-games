@@ -6,7 +6,7 @@ import styles from './app.module.css';
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
-const multiplayerMode='local'; // 'local', 'remote' or 'auto'  
+const multiplayerMode='auto'; // 'local', 'remote' or 'auto'  
 const nPlayersLocal =  1;
 const bgioDebugPanel = false;
 
