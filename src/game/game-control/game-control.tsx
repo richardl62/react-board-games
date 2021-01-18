@@ -35,6 +35,8 @@ interface SquareProperties {
     }
 }
 
+const rowAndCol = Bgio.rowAndCol;
+
 class GameControl {
 
     constructor(bgioProps: Bgio.BoardProps, localProps: GameControlProps) {
@@ -42,7 +44,10 @@ class GameControl {
         this._localProps = localProps;
 
         this._clickManager = new ClickManager({
-            getSelectedSquare: () => bgioProps.G.selectedSquare,
+            getSelectedSquare: () => {
+                const selected = bgioProps.G.selectedSquare;
+                return selected && new PiecePosition(Bgio.unmakePosition(selected));
+                },
             setSelectedSquare: (p: PiecePosition|null) => this._setSelectedSquare(p),
             doMove: (p1: PiecePosition, p2: PiecePosition | null) =>
                 this.movePieceRequest(p1, p2),
@@ -58,7 +63,9 @@ class GameControl {
     private get _boardPieces() {return this._bgioProps.G.pieces;}
     private get _offBoardPieces() {return this._localProps.gameDefinition.offBoardPieces;}
 
-    private get _bgioMoves() {return this._bgioProps.moves;}
+    private get _bgioMoves() {
+        return this._bgioProps.moves as any as Bgio.ClientMoves;
+    }
 
     get gameType() {return this._localProps.gameDefinition.gameType;}
     get boardStyle() { return this._localProps.gameDefinition.boardStyle;}
@@ -140,34 +147,56 @@ class GameControl {
     } 
 
     private _setSelectedSquare (p: PiecePosition | null) {
-        this._bgioMoves.setSelectedSquare(p,
-            this._localProps.gameDefinition.legalMoves
-            );
+        const pieces = this._boardPieces;
+        const findLegalMoves = this._localProps.gameDefinition.legalMoves;
+        
+        let legalMoves = null;
+        if(p && findLegalMoves) {
+
+            legalMoves = pieces.map(row => row.map(elem => false));
+
+            findLegalMoves({
+                selectedSquare: p,
+                pieces: pieces,
+                legalMoves: legalMoves,
+            });
+        }
+
+        this._bgioMoves.setSelectedSquare({    
+            selected: p && Bgio.makePosition(p.data), 
+            legalMoves: legalMoves,
+        });
     }
 
     clearAll() { this._bgioMoves.clearAll(); };
 
     // Process a user request - by drag or clicks - to move a piece.
     movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
-        //console.log("Move request", from.props, to && to.props);
-
-
         const toProps = to && this.squareProperties(to);
         const fromProps = this.squareProperties(from);
 
 
-        if (toProps && !toProps.gameStatus.cannotMoveTo) {
+        if (to && toProps && !toProps.gameStatus.cannotMoveTo) {
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
-                    this._bgioMoves.movePiece(from, to);
+                    this._bgioMoves.movePiece({
+                        from: rowAndCol(from), 
+                        to: rowAndCol(to),
+                    });
                 } else {
-                    this._bgioMoves.setPiece(to, fromProps.pieceName);
+                    this._bgioMoves.setPiece({
+                        pos: rowAndCol(to), 
+                        pieceName: fromProps.pieceName
+                    });
                 }
             } else {
                 // A piece has been dragged or click-moved somewhere if won't go,
                 // i.e. off the board. Treat this as a request to clear the piece.
                 if (fromProps.changeable) {
-                    this._bgioMoves.setPiece(from, null);
+                    this._bgioMoves.setPiece({
+                        pos: rowAndCol(from), 
+                        pieceName: null
+                    });
                 }
             }
 

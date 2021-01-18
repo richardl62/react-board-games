@@ -3,60 +3,120 @@ import {
     Client, // To do: (Somehow) set the template parameter before exporting
 } from 'boardgame.io/react';
 
-import {
-    GameDefinition, PiecePosition, PieceName, GameState,
-    LegalMoves,
-} from './interfaces';
+import { GameDefinition, PieceName } from './interfaces';
 
 
-type G = GameState;
+/*
+    KLUDGE?
+    
+    PiecePositions should not be directly passed to a Bgio. (Doing the past 
+    this caused problems, presumably because PiecePosition is a class and so
+    cannot be serialised as JSON.)
+    Using different name prevent them being passed in. And as we are doing this
+    it seems only polite to provide a conversion function.
+    (NOTE: Typescript requires only that the specified interface exist, so a 
+    PiecePosition can be compatible with a non-class interface.)
+*/ 
+interface RowAndCol {
+    r: number;
+    c: number;
+}
+
+function rowAndCol(pos: {row:number, col:number}) : RowAndCol {
+    return {r: pos.row, c: pos.col,}
+}
+
+interface Position {
+    r?: number;
+    c?: number;
+    top?: number;
+    bottom?: number;
+}
+
+function makePosition(pos: {
+    row?: number,
+    col?: number,
+    top?: number,
+    bottom?: number,
+}) : Position {
+    return {
+        r: pos.row, 
+        c: pos.col,
+        top: pos.top,
+        bottom: pos.bottom,
+    }
+}
+
+function unmakePosition(pos: Position) {
+    return {
+        row: pos.r, 
+        col: pos.c,
+        top: pos.top,
+        bottom: pos.bottom,
+    }
+}
+
+interface G {
+    pieces: Array<Array<PieceName | null>>;
+    selectedSquare: Position | null;
+    legalMoves: Array<Array<boolean>> | null;
+};
 
 type BoardProps = BoardPropsTemplate<G>;
 
-function checkPiecePosition(obj: any) {
-    if (!(obj instanceof PiecePosition)) {
-        throw new Error("Object is not a PiecePosition");
-    }
+interface MovePieceArg {
+    from: RowAndCol;
+    to: RowAndCol;
+};
+
+function movePiece(g: G, ctx: any, { from, to} : MovePieceArg) {
+    //console.log("movePiece", from, to);
+
+    g.pieces[to.r][to.c] = g.pieces[from.r][from.c];
+    g.pieces[from.r][from.c] = null;
 }
 
-function movePiece(g: G, ctx: any, from: PiecePosition, to: PiecePosition) {
-    checkPiecePosition(from);
-    checkPiecePosition(to);
-    //console.log("Bgio movePiece", from.props, to.props);
-    g.pieces[to.row][to.col] = g.pieces[from.row][from.col];
-    g.pieces[from.row][from.col] = null;
-}
-
+type ClearAllArg = void;
 function clearAll(g: G, ctx: any) {
+    //console.log("clearAll");
+    
     g.pieces.forEach(row => row.fill(null));
 }
 
-function setPiece(g: G, ctx: any, pos: PiecePosition, pieceName: PieceName | null) {
-    checkPiecePosition(pos);
-    //console.log("Bgio setPiece", pos.props, pieceName,);
-    g.pieces[pos.row][pos.col] = pieceName;
+interface SetPieceArg {
+    pos: RowAndCol;
+    pieceName: PieceName | null;
+};
+
+function setPiece(g: G, ctx: any,  {pos, pieceName} : SetPieceArg) {
+    g.pieces[pos.r][pos.c] = pieceName;
 }
 
-function setSelectedSquare(g: G, ctx: any, selected: PiecePosition | null,
-    findLegalMoves: LegalMoves | null) {
+
+interface SetSelectedSquareArg {
+    selected: Position | null;
+    legalMoves: Array<Array<boolean>> | null;
+};
+
+function setSelectedSquare(g: G, ctx: any, { selected, legalMoves } : SetSelectedSquareArg ) {
 
     g.selectedSquare = selected;
-    g.legalMoves = null;
+    g.legalMoves = legalMoves;
+};
 
-    // console.log('bgio setSelectedSquare', selected && selected.props);
-    if (selected && findLegalMoves) {
-        // Make an array of the same size as g.pieces but with every element
-        // 'false'.
-        let legalMoves = g.pieces.map(row => row.map(elem => false));
+const moves = {
+    movePiece: movePiece,
+    clearAll: clearAll,
+    setPiece: setPiece,
+    setSelectedSquare: setSelectedSquare,
+};
 
-        findLegalMoves({
-            selectedSquare: selected,
-            pieces: g.pieces,
-            legalMoves: legalMoves,
-        });
-
-        g.legalMoves = legalMoves;
-    }
+// Move functions as called by clients
+interface ClientMoves {
+    movePiece: (arg: MovePieceArg) => null;
+    clearAll: (arg: ClearAllArg) => null;
+    setPiece: (arg: SetPieceArg) => null;
+    setSelectedSquare: (arg: SetSelectedSquareArg) => null;
 };
 
 // Provide the 'game' object required for a boardgame.io client.
@@ -70,15 +130,10 @@ function makeGame(gameDefinition: GameDefinition) {
                 legalMoves: null,
             }
         },
-        moves: {
-            movePiece: movePiece,
-            clearAll: clearAll,
-            setPiece: setPiece,
-            setSelectedSquare: setSelectedSquare,
-        },
+        moves: moves,
     };
 }
 
-export type { BoardProps, G }
-export { makeGame, Client };
+export type { BoardProps, G, ClientMoves }
+export { makeGame, Client, rowAndCol, makePosition, unmakePosition };
 export { SocketIO, Local } from 'boardgame.io/multiplayer';

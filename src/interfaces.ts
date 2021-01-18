@@ -15,12 +15,6 @@ export interface BoardStyle {
     labels: boolean;
 }
 
-export interface GameState {
-    pieces: Array<Array<PieceName | null>>;
-    selectedSquare: PiecePosition | null;
-    legalMoves: Array<Array<boolean>> | null;
-};
-
 export interface LegalMovesArg {
     pieces: Array<Array<PieceName | null>>;
     selectedSquare: PiecePosition;
@@ -51,7 +45,7 @@ export interface GameDefinition {
     legalMoves?: LegalMoves;
 };
 
-export interface PiecePositionProps {
+export interface PiecePositionData {
     row?: number;
     col?: number;
     
@@ -62,63 +56,63 @@ export interface PiecePositionProps {
 function isNum(obj: number | undefined) {
     return obj !== undefined;
 }
+
+export function sanityCheckPieceData(data: PiecePositionData) {
+    const {row, col, top, bottom} = data;
+
+    const cn = (v : number| undefined) => (v === undefined) ? 0 : 1;
+
+    if(cn(row) !== cn(col)) {
+        throw new Error("Row and col are inconsitent");
+    } 
+
+    if(cn(row) + cn(top) + cn(bottom) !== 1)
+    {
+        console.log("Bad PiecePosition data", data);
+        throw new Error("Position properties are inconsitent");
+    }
+}
+
 // Return the positions where a piece _might_ be. (So it could refer
 // to an empty square.)
 export class PiecePosition {
-    constructor(props: PiecePositionProps)
+    constructor(data: PiecePositionData)
         {
-        this._props = props;
+        sanityCheckPieceData(data);
 
-        this.sanityCheck();
-
+        this.data = {...data};
         Object.freeze(this);
         }
     
-    private _props: PiecePositionProps;
+    data: PiecePositionData;
 
-    get props() {return this._props;}
-    get onBoard() { return isNum(this.props.row) && isNum(this.props.col); }
-    get onTop() { return isNum(this.props.top); }
-    get onBottom() { return isNum(this.props.bottom); }
+    get onBoard() { return isNum(this.data.row) && isNum(this.data.col); }
+    get onTop() { return isNum(this.data.top); }
+    get onBottom() { return isNum(this.data.bottom); }
     
     // Get values.  Throw an error if null
-    get row() { return nonNull(this.props.row);}
-    get col() { return nonNull(this.props.col);}
-    get top() { return nonNull(this.props.top);}
-    get bottom() { return nonNull(this.props.bottom);}
+    get row() { return nonNull(this.data.row);}
+    get col() { return nonNull(this.data.col);}
+    get top() { return nonNull(this.data.top);}
+    get bottom() { return nonNull(this.data.bottom);}
 
     // Get values.  Can return null
-    getRow() { return this.props.row;}
-    getCol() { return this.props.col;}
-    getTop() { return this.props.top;}
-    getBottom() { return this.props.bottom;}
-    
-    sanityCheck() {
-        const {row, col, top, bottom} = this.props;
-
-        const cn = (v : number| undefined) => (v === undefined) ? 0 : 1;
-
-        if(cn(row) !== cn(col)) {
-            throw new Error("Row and col are inconsitent");
-        } 
-
-        if(cn(row) + cn(top) + cn(bottom) !== 1)
-        {
-            throw new Error("Position properties are inconsitent");
-        }
-    }
+    getRow() { return this.data.row;}
+    getCol() { return this.data.col;}
+    getTop() { return this.data.top;}
+    getBottom() { return this.data.bottom;}
 
     static same(p1 : PiecePosition , p2 : PiecePosition ) {
-        return p1.props.row === p2.props.row
-            && p1.props.col === p2.props.col
-            && p1.props.top === p2.props.top
-            && p1.props.bottom === p2.props.bottom;
+        return p1.data.row === p2.data.row
+            && p1.data.col === p2.data.col
+            && p1.data.top === p2.data.top
+            && p1.data.bottom === p2.data.bottom;
     };
 }
 
 // Intend for use in debug output.
 export function pieceProps(p: PiecePosition | null) {
-    return p && p.props;
+    return p && p.data;
 }
 
 // Exports are done inline
