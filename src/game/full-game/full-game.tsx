@@ -25,10 +25,6 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
     let localMode;
     if(multiplayerMode === 'auto') {
         localMode = window.location.host === "localhost:3000";
-        // if(localMode) {
-        //     console.log("Setting local mode: Given mode is 'auto' and " +
-        //        "host is 'localhost:3000'");
-        // }
     } else {
         localMode = multiplayerMode === 'local';
     }
@@ -36,12 +32,11 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
     let multiplayer;
     let nPlayers;
     if (localMode) {
-        // console.log('Running locally');
         multiplayer = Bgio.Local();
         nPlayers = nPlayersLocal;
     } else {
         const server = `${protocol}//${hostname}:${port}`;
-        // console.log('server:', server);
+        console.log('Connecting to server:', server);
         multiplayer = Bgio.SocketIO({ server: server });
         nPlayers = 1;
     }

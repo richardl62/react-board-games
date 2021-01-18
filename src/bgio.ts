@@ -61,24 +61,24 @@ function setSelectedSquare(g: G, ctx: any, selected: PiecePosition | null,
 
 // Provide the 'game' object required for a boardgame.io client.
 function makeGame(gameDefinition: GameDefinition) {
-        return {
-            name: gameDefinition.name.replace(/\s/g, ''),
-            setup: (): G => {
-                return {
-                    pieces: gameDefinition.pieces,
-                    selectedSquare: null,
-                    legalMoves: null,
-                }
-            },
-            moves: {
-                movePiece: movePiece,
-                clearAll: clearAll,
-                setPiece: setPiece,
-                setSelectedSquare: setSelectedSquare,
-            },
-        };
-    }
+    return {
+        name: gameDefinition.name.replace(/\s/g, ''),
+        setup: (): G => {
+            return {
+                pieces: gameDefinition.pieces,
+                selectedSquare: null,
+                legalMoves: null,
+            }
+        },
+        moves: {
+            movePiece: movePiece,
+            clearAll: clearAll,
+            setPiece: setPiece,
+            setSelectedSquare: setSelectedSquare,
+        },
+    };
+}
 
-    export type { BoardProps, G }
-    export { makeGame, Client };
-    export { SocketIO, Local } from 'boardgame.io/multiplayer';
+export type { BoardProps, G }
+export { makeGame, Client };
+export { SocketIO, Local } from 'boardgame.io/multiplayer';

@@ -58,6 +58,8 @@ class GameControl {
     private get _boardPieces() {return this._bgioProps.G.pieces;}
     private get _offBoardPieces() {return this._localProps.gameDefinition.offBoardPieces;}
 
+    private get _bgioMoves() {return this._bgioProps.moves;}
+
     get gameType() {return this._localProps.gameDefinition.gameType;}
     get boardStyle() { return this._localProps.gameDefinition.boardStyle;}
 
@@ -138,12 +140,12 @@ class GameControl {
     } 
 
     private _setSelectedSquare (p: PiecePosition | null) {
-        this._bgioProps.moves.setSelectedSquare(p, 
+        this._bgioMoves.setSelectedSquare(p,
             this._localProps.gameDefinition.legalMoves
             );
     }
 
-    clearAll() { this._bgioProps.moves.clearAll(); };
+    clearAll() { this._bgioMoves.clearAll(); };
 
     // Process a user request - by drag or clicks - to move a piece.
     movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
@@ -157,15 +159,15 @@ class GameControl {
         if (toProps && !toProps.gameStatus.cannotMoveTo) {
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
-                    this._bgioProps.moves.movePiece(from, to);
+                    this._bgioMoves.movePiece(from, to);
                 } else {
-                    this._bgioProps.moves.setPiece(to, fromProps.pieceName);
+                    this._bgioMoves.setPiece(to, fromProps.pieceName);
                 }
             } else {
                 // A piece has been dragged or click-moved somewhere if won't go,
                 // i.e. off the board. Treat this as a request to clear the piece.
                 if (fromProps.changeable) {
-                    this._bgioProps.moves.setPiece(from, null);
+                    this._bgioMoves.setPiece(from, null);
                 }
             }
 
