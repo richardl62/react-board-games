@@ -5,7 +5,7 @@ import GameControl from './game-control';
 const PIECE = 'piece';
 
 function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
-  
+
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: PIECE,
@@ -37,7 +37,7 @@ function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
 }
 
 function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
-  
+
   const [, drop] = useDrop({
     accept: PIECE,
 
@@ -62,4 +62,4 @@ function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
   };
 }
 
-export {usePieceControl, useSquareControl};
+export { usePieceControl, useSquareControl };

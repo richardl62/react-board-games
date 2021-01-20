@@ -16,14 +16,14 @@ import { GameDefinition, PieceName } from './interfaces';
     it seems only polite to provide a conversion function.
     (NOTE: Typescript requires only that the specified interface exist, so a 
     PiecePosition can be compatible with a non-class interface.)
-*/ 
+*/
 interface RowAndCol {
     r: number;
     c: number;
 }
 
-function rowAndCol(pos: {row:number, col:number}) : RowAndCol {
-    return {r: pos.row, c: pos.col,}
+function rowAndCol(pos: { row: number, col: number }): RowAndCol {
+    return { r: pos.row, c: pos.col, }
 }
 
 interface Position {
@@ -38,9 +38,9 @@ function makePosition(pos: {
     col?: number,
     top?: number,
     bottom?: number,
-}) : Position {
+}): Position {
     return {
-        r: pos.row, 
+        r: pos.row,
         c: pos.col,
         top: pos.top,
         bottom: pos.bottom,
@@ -49,7 +49,7 @@ function makePosition(pos: {
 
 function unmakePosition(pos: Position) {
     return {
-        row: pos.r, 
+        row: pos.r,
         col: pos.c,
         top: pos.top,
         bottom: pos.bottom,
@@ -69,7 +69,7 @@ interface MovePieceArg {
     to: RowAndCol;
 };
 
-function movePiece(g: G, ctx: any, { from, to} : MovePieceArg) {
+function movePiece(g: G, ctx: any, { from, to }: MovePieceArg) {
     //console.log("movePiece", from, to);
 
     g.pieces[to.r][to.c] = g.pieces[from.r][from.c];
@@ -79,7 +79,7 @@ function movePiece(g: G, ctx: any, { from, to} : MovePieceArg) {
 type ClearAllArg = void;
 function clearAll(g: G, ctx: any) {
     //console.log("clearAll");
-    
+
     g.pieces.forEach(row => row.fill(null));
 }
 
@@ -88,7 +88,7 @@ interface SetPieceArg {
     pieceName: PieceName | null;
 };
 
-function setPiece(g: G, ctx: any,  {pos, pieceName} : SetPieceArg) {
+function setPiece(g: G, ctx: any, { pos, pieceName }: SetPieceArg) {
     g.pieces[pos.r][pos.c] = pieceName;
 }
 
@@ -98,7 +98,7 @@ interface SetSelectedSquareArg {
     legalMoves: Array<Array<boolean>> | null;
 };
 
-function setSelectedSquare(g: G, ctx: any, { selected, legalMoves } : SetSelectedSquareArg ) {
+function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelectedSquareArg) {
 
     g.selectedSquare = selected;
     g.legalMoves = legalMoves;

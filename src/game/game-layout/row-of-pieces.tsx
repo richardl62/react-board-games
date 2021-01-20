@@ -17,7 +17,7 @@ function RowOfPieces({ where, gameControl }: {
         // Kludge? Use outer div to control the size (via class 'square')
         <div className={nonNull(styles.rowOfPieces)}>
             {offBoard.map((_dummy, index) => {
-                const pos = new PiecePosition({[where]: index});
+                const pos = new PiecePosition({ [where]: index });
 
                 return (<ControlledSquare key={index} gameControl={gameControl} pos={pos} />);
             }

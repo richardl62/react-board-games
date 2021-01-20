@@ -4,7 +4,7 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import GameControl, {useGameControlProps} from '../game-control'
+import GameControl, { useGameControlProps } from '../game-control'
 
 import { GameDefinition } from '../../interfaces';
 import SimpleGame from '../game-layout/game-layout';
@@ -12,18 +12,18 @@ import SimpleGame from '../game-layout/game-layout';
 import * as Bgio from '../../bgio';
 
 interface Props {
-    gameDefinition: GameDefinition; 
-    multiplayerMode: "local" | "remote" | "auto";  
+    gameDefinition: GameDefinition;
+    multiplayerMode: "local" | "remote" | "auto";
     nPlayersLocal: number;
     bgioDebugPanel: boolean;
 }
 
-function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPanel} : Props) {
-    
+function FullGame({ gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPanel }: Props) {
+
     const { protocol, hostname, port } = window.location;
-    
+
     let localMode;
-    if(multiplayerMode === 'auto') {
+    if (multiplayerMode === 'auto') {
         localMode = window.location.host === "localhost:3000";
     } else {
         localMode = multiplayerMode === 'local';
@@ -43,7 +43,7 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
 
     let gameControlProps = useGameControlProps(gameDefinition);
     function renderGame(bgioProps: Bgio.BoardProps) {
-        let gameControl= new GameControl(bgioProps, gameControlProps);
+        let gameControl = new GameControl(bgioProps, gameControlProps);
         return <SimpleGame gameControl={gameControl} />;
     }
 
@@ -55,12 +55,12 @@ function FullGame( {gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
     });
 
     let games = [];
-    for(let count = 0; count < nPlayers; ++count) {
+    for (let count = 0; count < nPlayers; ++count) {
         games.push(
             <DndProvider key={count} backend={HTML5Backend}>
                 <BgClient playerID={count.toString()} />
             </DndProvider>
-            );
+        );
     }
 
     // Having DndProvider here, rather than in 'board' prevents error

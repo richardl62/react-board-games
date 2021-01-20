@@ -6,11 +6,11 @@
 import React from 'react';
 
 import { nonNull } from '../../tools';
-import { SquareProperties} from '../game-control';
+import { SquareProperties } from '../game-control';
 import styles from './square.module.css';
 
 
-function Background({background, gameStatus} : SquareProperties) {
+function Background({ background, gameStatus }: SquareProperties) {
     const { selected } = gameStatus;
     let className = nonNull(styles.squareBackground);
 
@@ -29,20 +29,20 @@ function Background({background, gameStatus} : SquareProperties) {
     return (<div className={className} />);
 }
 
-function CanMoveToMarker({gameStatus} : SquareProperties) {
+function CanMoveToMarker({ gameStatus }: SquareProperties) {
     const { canMoveTo, cannotMoveTo } = gameStatus;
 
     let className = null;
-    if( canMoveTo ) {
+    if (canMoveTo) {
         className = nonNull(styles.canMoveTo);
     }
-    if( cannotMoveTo ) {
+    if (cannotMoveTo) {
         className = nonNull(styles.cannotMoveTo);
     }
 
-    return className ? <div className={className} /> : null;   
+    return className ? <div className={className} /> : null;
 }
 
 
 
-export {Background, CanMoveToMarker};
+export { Background, CanMoveToMarker };

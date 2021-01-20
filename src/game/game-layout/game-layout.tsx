@@ -5,7 +5,7 @@ import RowOfPieces from './row-of-pieces';
 import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
 
-function UserOptions({ gameControl } : {gameControl: GameControl}) {
+function UserOptions({ gameControl }: { gameControl: GameControl }) {
 
     return (
         <div className={nonNull(styles.userOptions)}>
@@ -23,20 +23,19 @@ function UserOptions({ gameControl } : {gameControl: GameControl}) {
 
                 <button type='button'
                     onClick={() => gameControl.redo()}>
-                                   Redo
+                    Redo
                 </button>
 
                 <button type='button'
                     onClick={() => gameControl.restart()}>
-                             Restart
+                    Restart
                 </button>
             </div>
         </div>
     );
 }
 
-function Game({gameControl} : {gameControl: GameControl})
-{
+function Game({ gameControl }: { gameControl: GameControl }) {
     return (
         // sbg -> Simple Board Game
         <div className={nonNull(styles.playingArea)}>

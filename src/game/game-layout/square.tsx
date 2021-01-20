@@ -1,8 +1,8 @@
 import React from 'react';
 import { PiecePosition } from '../../interfaces';
-import GameControl, { useSquareControl, usePieceControl}
+import GameControl, { useSquareControl, usePieceControl }
   from '../game-control';
-import {Background, CanMoveToMarker} from './square-background'
+import { Background, CanMoveToMarker } from './square-background'
 import Piece from '../../piece';
 
 import styles from "./square.module.css";
@@ -32,7 +32,7 @@ function PieceWrapper({ gameControl, pos }: Props) {
   );
 }
 
-function Square(props : Props) {
+function Square(props: Props) {
   const { gameControl, pos } = props;
 
   const squareControl = useSquareControl(gameControl, pos);
@@ -44,7 +44,7 @@ function Square(props : Props) {
       the background being dragged. */
     <div
       className={nonNull(styles.square)}
-      {...squareControl.props }
+      {...squareControl.props}
     >
       <Background {...squareProperties} />
       <CanMoveToMarker {...squareProperties} />

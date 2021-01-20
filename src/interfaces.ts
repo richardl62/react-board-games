@@ -19,7 +19,7 @@ export interface LegalMovesArg {
     pieces: Array<Array<PieceName | null>>;
     selectedSquare: PiecePosition;
     legalMoves: Array<Array<boolean>>;
-} 
+}
 
 export type LegalMoves = (arg: LegalMovesArg) => void;
 
@@ -35,9 +35,9 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    pieces: Array<Array<PieceName|null>>;
+    pieces: Array<Array<PieceName | null>>;
 
-    offBoardPieces:  {
+    offBoardPieces: {
         top: Array<PieceName>;
         bottom: Array<PieceName>;
     };
@@ -48,7 +48,7 @@ export interface GameDefinition {
 export interface PiecePositionData {
     row?: number;
     col?: number;
-    
+
     top?: number;
     bottom?: number;
 }
@@ -58,16 +58,15 @@ function isNum(obj: number | undefined) {
 }
 
 export function sanityCheckPieceData(data: PiecePositionData) {
-    const {row, col, top, bottom} = data;
+    const { row, col, top, bottom } = data;
 
-    const cn = (v : number| undefined) => (v === undefined) ? 0 : 1;
+    const cn = (v: number | undefined) => (v === undefined) ? 0 : 1;
 
-    if(cn(row) !== cn(col)) {
+    if (cn(row) !== cn(col)) {
         throw new Error("Row and col are inconsitent");
-    } 
+    }
 
-    if(cn(row) + cn(top) + cn(bottom) !== 1)
-    {
+    if (cn(row) + cn(top) + cn(bottom) !== 1) {
         console.log("Bad PiecePosition data", data);
         throw new Error("Position properties are inconsitent");
     }
@@ -76,33 +75,32 @@ export function sanityCheckPieceData(data: PiecePositionData) {
 // Return the positions where a piece _might_ be. (So it could refer
 // to an empty square.)
 export class PiecePosition {
-    constructor(data: PiecePositionData)
-        {
+    constructor(data: PiecePositionData) {
         sanityCheckPieceData(data);
 
-        this.data = {...data};
+        this.data = { ...data };
         Object.freeze(this);
-        }
-    
+    }
+
     data: PiecePositionData;
 
     get onBoard() { return isNum(this.data.row) && isNum(this.data.col); }
     get onTop() { return isNum(this.data.top); }
     get onBottom() { return isNum(this.data.bottom); }
-    
+
     // Get values.  Throw an error if null
-    get row() { return nonNull(this.data.row);}
-    get col() { return nonNull(this.data.col);}
-    get top() { return nonNull(this.data.top);}
-    get bottom() { return nonNull(this.data.bottom);}
+    get row() { return nonNull(this.data.row); }
+    get col() { return nonNull(this.data.col); }
+    get top() { return nonNull(this.data.top); }
+    get bottom() { return nonNull(this.data.bottom); }
 
     // Get values.  Can return null
-    getRow() { return this.data.row;}
-    getCol() { return this.data.col;}
-    getTop() { return this.data.top;}
-    getBottom() { return this.data.bottom;}
+    getRow() { return this.data.row; }
+    getCol() { return this.data.col; }
+    getTop() { return this.data.top; }
+    getBottom() { return this.data.bottom; }
 
-    static same(p1 : PiecePosition , p2 : PiecePosition ) {
+    static same(p1: PiecePosition, p2: PiecePosition) {
         return p1.data.row === p2.data.row
             && p1.data.col === p2.data.col
             && p1.data.top === p2.data.top

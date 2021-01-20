@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { GameDefinition, PiecePosition, PieceName}
+import { GameDefinition, PiecePosition, PieceName }
     from '../../interfaces';
 
 import * as Bgio from '../../bgio';
@@ -25,7 +25,7 @@ interface SquareProperties {
 
     pieceName: PieceName | null;
     changeable: boolean;
-    
+
     gameStatus: {
         // At most one of the booleans below will be true.
         // For games that specify legal moves exactly one will be true.
@@ -47,8 +47,8 @@ class GameControl {
             getSelectedSquare: () => {
                 const selected = bgioProps.G.selectedSquare;
                 return selected && new PiecePosition(Bgio.unmakePosition(selected));
-                },
-            setSelectedSquare: (p: PiecePosition|null) => this._setSelectedSquare(p),
+            },
+            setSelectedSquare: (p: PiecePosition | null) => this._setSelectedSquare(p),
             doMove: (p1: PiecePosition, p2: PiecePosition | null) =>
                 this.movePieceRequest(p1, p2),
         });
@@ -60,23 +60,23 @@ class GameControl {
 
     // Public access to on-board or off-board pieces is though functions that
     // take account of flipping.
-    private get _boardPieces() {return this._bgioProps.G.pieces;}
-    private get _offBoardPieces() {return this._localProps.gameDefinition.offBoardPieces;}
+    private get _boardPieces() { return this._bgioProps.G.pieces; }
+    private get _offBoardPieces() { return this._localProps.gameDefinition.offBoardPieces; }
 
     private get _bgioMoves() {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
     }
 
-    get gameType() {return this._localProps.gameDefinition.gameType;}
-    get boardStyle() { return this._localProps.gameDefinition.boardStyle;}
+    get gameType() { return this._localProps.gameDefinition.gameType; }
+    get boardStyle() { return this._localProps.gameDefinition.boardStyle; }
 
-    undo() { this._bgioProps.undo();}
-    redo () { this._bgioProps.redo();}
-    restart () { this._bgioProps.reset();}
+    undo() { this._bgioProps.undo(); }
+    redo() { this._bgioProps.redo(); }
+    restart() { this._bgioProps.reset(); }
 
-    get reverseBoardRows() { return this._localProps.reverseBoard[0];}
+    get reverseBoardRows() { return this._localProps.reverseBoard[0]; }
 
-    flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows);}
+    flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows); }
 
     get nRows() {
         return this._boardPieces.length;
@@ -85,7 +85,7 @@ class GameControl {
     get nCols() {
         return this._boardPieces[0].length;
     }
-    
+
     squareProperties(pos: PiecePosition): SquareProperties {
 
         const pieceName = () => {
@@ -100,23 +100,23 @@ class GameControl {
         }
 
         const clickedPos = this._clickManager.selected;
-        const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));  
+        const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));
 
         const legalMoves = this._bgioProps.G.legalMoves;
-        const canMoveTo = Boolean(clickedPos && legalMoves 
+        const canMoveTo = Boolean(clickedPos && legalMoves
             && legalMoves[pos.row][pos.col]);
 
-        const cannotMoveTo = Boolean(clickedPos && legalMoves 
-            &&!selected && !legalMoves[pos.row][pos.col]);
+        const cannotMoveTo = Boolean(clickedPos && legalMoves
+            && !selected && !legalMoves[pos.row][pos.col]);
 
         const background = () => {
-            if(!pos.onBoard) {
+            if (!pos.onBoard) {
                 return null;
-            } else if(!this.boardStyle.checkered) {
+            } else if (!this.boardStyle.checkered) {
                 return 'plain';
             } else {
                 const asTopLeft = (pos.row + pos.col) % 2 === 0;
-                return(asTopLeft === topLeftBlack) ? 'checkered-black' : 'checkered-white';
+                return (asTopLeft === topLeftBlack) ? 'checkered-black' : 'checkered-white';
             }
         }
         return {
@@ -133,9 +133,9 @@ class GameControl {
         }
     }
 
-    offBoardPieces(which : 'top' | 'bottom') {
+    offBoardPieces(which: 'top' | 'bottom') {
         let top = which === 'top';
-        if(this.reverseBoardRows) {
+        if (this.reverseBoardRows) {
             top = !top;
         }
 
@@ -144,14 +144,14 @@ class GameControl {
 
     squareClicked(pos: PiecePosition) {
         this._clickManager.clicked(pos, this.squareProperties(pos));
-    } 
+    }
 
-    private _setSelectedSquare (p: PiecePosition | null) {
+    private _setSelectedSquare(p: PiecePosition | null) {
         const pieces = this._boardPieces;
         const findLegalMoves = this._localProps.gameDefinition.legalMoves;
-        
+
         let legalMoves = null;
-        if(p && findLegalMoves) {
+        if (p && findLegalMoves) {
 
             legalMoves = pieces.map(row => row.map(elem => false));
 
@@ -162,8 +162,8 @@ class GameControl {
             });
         }
 
-        this._bgioMoves.setSelectedSquare({    
-            selected: p && Bgio.makePosition(p.data), 
+        this._bgioMoves.setSelectedSquare({
+            selected: p && Bgio.makePosition(p.data),
             legalMoves: legalMoves,
         });
     }
@@ -180,12 +180,12 @@ class GameControl {
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
                     this._bgioMoves.movePiece({
-                        from: rowAndCol(from), 
+                        from: rowAndCol(from),
                         to: rowAndCol(to),
                     });
                 } else {
                     this._bgioMoves.setPiece({
-                        pos: rowAndCol(to), 
+                        pos: rowAndCol(to),
                         pieceName: fromProps.pieceName
                     });
                 }
@@ -194,7 +194,7 @@ class GameControl {
                 // i.e. off the board. Treat this as a request to clear the piece.
                 if (fromProps.changeable) {
                     this._bgioMoves.setPiece({
-                        pos: rowAndCol(from), 
+                        pos: rowAndCol(from),
                         pieceName: null
                     });
                 }
@@ -205,5 +205,5 @@ class GameControl {
     }
 }
 
-export {GameControl as default, useGameControlProps};
-export type {SquareProperties, SquareBackground}
+export { GameControl as default, useGameControlProps };
+export type { SquareProperties, SquareBackground }

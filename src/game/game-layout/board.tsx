@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import ControlledSquare  from './square';
+import ControlledSquare from './square';
 import GameControl from '../game-control/game-control';
 
 import { nonNull } from './../../tools';
@@ -21,7 +21,7 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
                 key={key(col)}
                 className={`${boardBorder} ${boarderLetter}`}
             >
-                {String.fromCharCode(65+col)}
+                {String.fromCharCode(65 + col)}
             </div>
         );
     }
@@ -34,7 +34,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     const nCols = gameControl.nCols;
     const borderLabels = gameControl.boardStyle.labels;
 
-    const key = (name: string | number) =>  'r' + row + '-' + name;
+    const key = (name: string | number) => 'r' + row + '-' + name;
 
     let makeBoarderElem = (name: string) => (
         <div
@@ -46,11 +46,11 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     );
 
     let makeSquare = (col: number) => {
-        const pos = new PiecePosition({row:row, col:col});
+        const pos = new PiecePosition({ row: row, col: col });
         return <ControlledSquare key={key(col)} gameControl={gameControl} pos={pos} />
     };
 
-    if(borderLabels) {
+    if (borderLabels) {
         elems.push(makeBoarderElem('start'));
     }
 
@@ -58,7 +58,7 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
         elems.push(makeSquare(col));
     }
 
-    if(borderLabels) {
+    if (borderLabels) {
         elems.push(makeBoarderElem('end'));
     }
 }
@@ -66,15 +66,14 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
 
 function Board({ gameControl }: {
     gameControl: GameControl
-    })
-    {
+}) {
     const nRows = gameControl.nRows;
     const nCols = gameControl.nCols;
     const borderLabels = gameControl.boardStyle.labels;
 
     let elems: Elems = [];
 
-    if(borderLabels) {
+    if (borderLabels) {
         addHeader(nCols, elems, 'top');
     }
     for (let row = 0; row < nRows; ++row) {
@@ -82,7 +81,7 @@ function Board({ gameControl }: {
         addRow(rowToAdd, gameControl, elems);
     }
 
-    if(borderLabels) {
+    if (borderLabels) {
         addHeader(nCols, elems, 'bottom');
     }
 
