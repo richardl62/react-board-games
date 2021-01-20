@@ -1,5 +1,5 @@
 import { nonNull } from './tools';
-// The types of the supported games. 
+// The types of the supported games.
 export type GameType = 'bobail' | 'chess' | 'draughts';
 
 // Brief name of the piece, e.g. 'p', 'P', 'n', 'N', etc. for Chess
@@ -30,8 +30,8 @@ export interface GameDefinition {
     gameType: GameType;
     boardStyle: BoardStyle;
 
-    // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for 
-    // display purposes, and also used internally to distinguish different 
+    // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
+    // display purposes, and also used internally to distinguish different
     // games.
     name: string;
 

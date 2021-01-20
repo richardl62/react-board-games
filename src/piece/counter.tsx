@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import { FC } from 'react';
 import styles from './piece.module.css';
 import { nonNull } from './../tools';
 
@@ -8,18 +8,18 @@ interface Props {
     textColor?: string | null;
 }
 
-const Counter:FC<Props> = ({color, text, textColor} : Props) => {
-    
+const Counter: FC<Props> = ({ color, text, textColor }: Props) => {
+
     const innerText = () => {
-        const style =  {color: textColor ? textColor: undefined};
+        const style = { color: textColor ? textColor : undefined };
 
         return <div style={style}>{text}</div>
     }
 
-    const style =  {backgroundColor: color};
+    const style = { backgroundColor: color };
     return (
         <div className={nonNull(styles.counter)} style={style}>
-            {text ? innerText() : null }
+            {text ? innerText() : null}
         </div>
     );
 }

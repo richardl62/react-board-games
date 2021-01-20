@@ -1,5 +1,5 @@
 // This file provides the infrastructure (as opposed to layout) for a 'full game'.
-// In particular, it sets React hooks and creates a boardgame.io (Bgio) client. 
+// In particular, it sets React hooks and creates a boardgame.io (Bgio) client.
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

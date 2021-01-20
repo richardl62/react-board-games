@@ -40,7 +40,7 @@ function Square(props: Props) {
   const squareProperties = gameControl.squareProperties(pos);
 
   return (
-    /* PieceWrapper sets z-index to 'lift' the piece and so prevents 
+    /* PieceWrapper sets z-index to 'lift' the piece and so prevents
       the background being dragged. */
     <div
       className={nonNull(styles.square)}

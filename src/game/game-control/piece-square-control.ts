@@ -41,7 +41,7 @@ function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
   const [, drop] = useDrop({
     accept: PIECE,
 
-    // The use of 'any' below is a kludge.  I am not sure how to type if 
+    // The use of 'any' below is a kludge.  I am not sure how to type if
     // properly, or even if proper typing is possible.
     drop: (dragParam: any /* KLUDGE */) => {
       const posProps: PiecePositionData = dragParam.id;

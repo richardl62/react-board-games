@@ -8,13 +8,13 @@ import { GameDefinition, PieceName } from './interfaces';
 
 /*
     KLUDGE?
-    
-    PiecePositions should not be directly passed to a Bgio. (Doing the past 
+   
+    PiecePositions should not be directly passed to a Bgio. (Doing the past
     this caused problems, presumably because PiecePosition is a class and so
     cannot be serialised as JSON.)
     Using different name prevent them being passed in. And as we are doing this
     it seems only polite to provide a conversion function.
-    (NOTE: Typescript requires only that the specified interface exist, so a 
+    (NOTE: Typescript requires only that the specified interface exist, so a
     PiecePosition can be compatible with a non-class interface.)
 */
 interface RowAndCol {

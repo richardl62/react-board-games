@@ -13,7 +13,7 @@ function piece( pieces: Pieces, row: number, col:number) {
         return pieces[row] && pieces[row][col];
     }
 
-// Record as legal the empty squares that are one step in any direction 
+// Record as legal the empty squares that are one step in any direction
 // (including diagonally) from the selected square.
 function legalMovesBobail({ selectedSquare, pieces, legalMoves }: LegalMovesArg) {
     const s = selectedSquare;
@@ -44,7 +44,7 @@ function legalMovesPieceDirected({ selectedSquare, pieces, legalMoves }: LegalMo
     }
 }
 
-// Record as legal the last empty square found when stepping in 
+// Record as legal the last empty square found when stepping in
 // each direction (including diagonal) from the selected square.
 function legalMovesPiece(args: LegalMovesArg) {
 

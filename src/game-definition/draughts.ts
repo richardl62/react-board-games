@@ -14,7 +14,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) : GameDef
 
     const startingPiece = (row: number, col: number) => {
         let name = null;
-        
+       
         const isBlackSquare = (row+col) % 2 === 1; //Kludge?
         if(isBlackSquare) {
             if(row < nRowsOfPieces) {
@@ -66,5 +66,5 @@ const games = [
         nRows: 10, nCols: 10, nRowsOfPieces: 3,
     }),
 ];
-  
+ 
 export default games;

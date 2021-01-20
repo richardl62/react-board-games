@@ -1,4 +1,4 @@
-// This file provides a 'dumb' board square that does not contain any pieces. 
+// This file provides a 'dumb' board square that does not contain any pieces.
 // The idea is that gives the background (including any hightlighting),
 // and any pieces 'sit on top of' it. (This can be achieved using CSS
 // 'position' and 'z-index'.)

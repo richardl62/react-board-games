@@ -11,7 +11,7 @@ function chess(name: string, pieces: GameDefinition['pieces']) : GameDefinition 
         checkered: true,
         labels: true,
     },
-  
+ 
       pieces: pieces,
 
       offBoardPieces: {
