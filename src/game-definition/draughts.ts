@@ -2,7 +2,6 @@
 // done in this file rather than at point of use.
 import { GameDefinition } from '../interfaces';
 
-
 interface DraughtProps {
     name: string,
     nRows: number;

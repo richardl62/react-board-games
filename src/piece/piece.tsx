@@ -4,12 +4,10 @@ import Bobail from './bobail';
 import Chess from './chess';
 import Draughts from './draughts';
 
-
 interface PieceProps {
     pieceName: PieceName;
     gameType: GameType;
 }
-
 
 function Piece({ pieceName, gameType }: PieceProps) {
 
@@ -27,6 +25,5 @@ function Piece({ pieceName, gameType }: PieceProps) {
 
     throw new Error('unrecognised game type');
 }
-
 
 export default Piece;

@@ -2,24 +2,24 @@
 // done in this file rather than at point of use.
 import { GameDefinition } from '../interfaces';
 
-function chess(name: string, pieces: GameDefinition['pieces']) : GameDefinition  {
-    return {
-      name: name,
-      gameType: 'chess',
+function chess(name: string, pieces: GameDefinition['pieces']): GameDefinition {
+  return {
+    name: name,
+    gameType: 'chess',
 
-      boardStyle: {
-        checkered: true,
-        labels: true,
+    boardStyle: {
+      checkered: true,
+      labels: true,
     },
- 
-      pieces: pieces,
 
-      offBoardPieces: {
-        top: ['p', 'n',  'b',  'r',  'q',  'k'],
-        bottom: ['P', 'N',  'B',  'R',  'Q',  'K' ],
-      },
-    };
-  }
+    pieces: pieces,
+
+    offBoardPieces: {
+      top: ['p', 'n', 'b', 'r', 'q', 'k'],
+      bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
+    },
+  };
+}
 
 const games = [
   chess(
@@ -47,7 +47,6 @@ const games = [
       ['R', 'N', 'B', 'Q', 'K'],
     ]
   ),
-  ]
-
+]
 
 export default games;

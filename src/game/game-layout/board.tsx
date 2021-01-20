@@ -63,7 +63,6 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     }
 }
 
-
 function Board({ gameControl }: {
     gameControl: GameControl
 }) {

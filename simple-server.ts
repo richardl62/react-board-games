@@ -7,7 +7,6 @@ const bgioGames = gameDefinitions.map(makeBgioGame);
 // @ts-ignore
 console.log("Games: ", bgioGames.map(g => g.name));
 
-
 // @ts-ignore
 const server = Server({ games: bgioGames });
 

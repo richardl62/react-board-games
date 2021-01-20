@@ -5,7 +5,6 @@ import {
 
 import { GameDefinition, PieceName } from './interfaces';
 
-
 /*
     KLUDGE?
    
@@ -91,7 +90,6 @@ interface SetPieceArg {
 function setPiece(g: G, ctx: any, { pos, pieceName }: SetPieceArg) {
     g.pieces[pos.r][pos.c] = pieceName;
 }
-
 
 interface SetSelectedSquareArg {
     selected: Position | null;

@@ -175,7 +175,6 @@ class GameControl {
         const toProps = to && this.squareProperties(to);
         const fromProps = this.squareProperties(from);
 
-
         if (to && toProps && !toProps.gameStatus.cannotMoveTo) {
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {

@@ -28,7 +28,6 @@ function legalMovesBobail({ selectedSquare, pieces, legalMoves }: LegalMovesArg)
     }
 };
 
-
 function legalMovesPieceDirected({ selectedSquare, pieces, legalMoves }: LegalMovesArg,
     rStep: number, cStep: number) {
 

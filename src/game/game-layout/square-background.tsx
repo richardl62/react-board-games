@@ -9,7 +9,6 @@ import { nonNull } from '../../tools';
 import { SquareProperties } from '../game-control';
 import styles from './square.module.css';
 
-
 function Background({ background, gameStatus }: SquareProperties) {
     const { selected } = gameStatus;
     let className = nonNull(styles.squareBackground);
@@ -42,7 +41,5 @@ function CanMoveToMarker({ gameStatus }: SquareProperties) {
 
     return className ? <div className={className} /> : null;
 }
-
-
 
 export { Background, CanMoveToMarker };

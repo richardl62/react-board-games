@@ -7,7 +7,6 @@ import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
 import { PiecePosition } from '../../interfaces';
 
-
 function RowOfPieces({ where, gameControl }: {
     where: 'top' | 'bottom',
     gameControl: GameControl,
