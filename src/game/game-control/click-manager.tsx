@@ -52,3 +52,4 @@ export class ClickManager {
         this._selected = null;
     }
 }
+
