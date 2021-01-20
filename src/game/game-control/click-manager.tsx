@@ -5,8 +5,7 @@ export interface ClickManagerProps {
     getSelectedSquare: () => PiecePosition | null;
     setSelectedSquare: (arg: PiecePosition | null) => void;
     doMove: (from: PiecePosition, to: PiecePosition | null) => void;
-}
-;
+};
 
 export class ClickManager {
     // A piece that has been selected by a first click and is available to
