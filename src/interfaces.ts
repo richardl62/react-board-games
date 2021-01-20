@@ -42,6 +42,8 @@ export interface GameDefinition {
         bottom: Array<PieceName>;
     };
 
+    renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
+
     legalMoves?: LegalMoves;
 };
 

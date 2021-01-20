@@ -1,12 +1,15 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { GameDefinition } from '../interfaces';
+import RenderPiece from '../piece/chess';
 
 function chess(name: string, pieces: GameDefinition['pieces']): GameDefinition {
   return {
     name: name,
     gameType: 'chess',
 
+    renderPiece: RenderPiece,
+  
     boardStyle: {
       checkered: true,
       labels: true,

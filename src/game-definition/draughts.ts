@@ -1,6 +1,7 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { GameDefinition } from '../interfaces';
+import RenderPiece from '../piece/draughts';
 
 interface DraughtProps {
     name: string,
@@ -39,6 +40,8 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) : GameDef
     return {
         name: name,
         gameType: "draughts",
+
+        renderPiece: RenderPiece,
 
         boardStyle: {
             checkered: true,

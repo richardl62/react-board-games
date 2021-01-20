@@ -3,7 +3,6 @@ import { PiecePosition } from '../../interfaces';
 import GameControl, { useSquareControl, usePieceControl }
   from '../game-control';
 import { Background, CanMoveToMarker } from './square-background'
-import Piece from '../../piece';
 
 import styles from "./square.module.css";
 import { nonNull } from "../../tools";
@@ -20,14 +19,13 @@ function PieceWrapper({ gameControl, pos }: Props) {
     return null;
   }
 
+  const Piece = gameControl.renderPiece;
+
   return (<div
     className={nonNull(styles.pieceWrapper)}
     {...pieceControl.props}
   >
-    <Piece
-      pieceName={pieceName}
-      gameType={gameControl.gameType}
-    />
+    <Piece pieceName={pieceName} />
   </div>
   );
 }

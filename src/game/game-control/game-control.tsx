@@ -202,6 +202,8 @@ class GameControl {
             this._clickManager.clear();
         }
     }
+
+    get renderPiece() {return this._localProps.gameDefinition.renderPiece;}
 }
 
 export { GameControl as default, useGameControlProps };
