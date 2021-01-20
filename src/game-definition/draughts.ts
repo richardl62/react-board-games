@@ -1,7 +1,7 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { GameDefinition } from '../interfaces';
-import RenderPiece from '../piece/draughts';
+import RenderPiece from './draughts-piece';
 
 interface DraughtProps {
     name: string,

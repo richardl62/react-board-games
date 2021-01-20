@@ -1,7 +1,7 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { GameDefinition, LegalMovesArg } from '../interfaces';
-import RenderPiece from '../piece/bobail';
+import RenderPiece from './bobail-piece';
 
 const bb = 'bb';
 const pl1 = 'p1';

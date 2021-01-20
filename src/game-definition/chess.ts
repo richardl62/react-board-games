@@ -1,7 +1,7 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { GameDefinition } from '../interfaces';
-import RenderPiece from '../piece/chess';
+import RenderPiece from './chess-piece';
 
 function chess(name: string, pieces: GameDefinition['pieces']): GameDefinition {
   return {

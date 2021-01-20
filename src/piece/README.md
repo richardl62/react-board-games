@@ -1,1 +1,0 @@
-Render a piece given the game type and piece type
