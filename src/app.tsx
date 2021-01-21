@@ -7,7 +7,7 @@ import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
 const multiplayerMode = 'auto'; // 'local', 'remote' or 'auto'
-const nPlayersLocal = 1;
+const nPlayersLocal = 2;
 const bgioDebugPanel = false;
 
 let games = gameDefinitions.map(gameDef => {

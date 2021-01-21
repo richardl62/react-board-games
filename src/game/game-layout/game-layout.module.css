@@ -29,8 +29,10 @@
 
 .userOptions button {
    font-size: 20px;
-   width: 3.5em;
+   width: 3.7em;
    margin-right: 5px;
+   padding-left: 0.1em;
+   text-align:left;
 }
 
 .userOptions button:last-of-type {
@@ -38,8 +40,6 @@
 }
 
 .board {
-    justify-items: center;
-    align-items: center;
     background-color: var(--board-background);
 }
 
