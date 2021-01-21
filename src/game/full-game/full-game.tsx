@@ -57,14 +57,15 @@ function FullGame({ gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
     let games = [];
     for (let count = 0; count < nPlayers; ++count) {
         games.push(
+
+            // Having DndProvider here, rather than in 'board' prevents error
+            // Cannot have two HTML5 backends at the same time
             <DndProvider key={count} backend={HTML5Backend}>
                 <BgClient playerID={count.toString()} />
             </DndProvider>
         );
     }
 
-    // Having DndProvider here, rather than in 'board' prevents error
-    // Cannot have two HTML5 backends at the same time
     return <> {games} </>;
 }
 

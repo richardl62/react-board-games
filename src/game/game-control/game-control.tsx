@@ -72,7 +72,9 @@ class GameControl {
 
     undo() { this._bgioProps.undo(); }
     redo() { this._bgioProps.redo(); }
-    restart() { this._bgioProps.reset(); }
+    restart() { 
+        this._bgioMoves.setPieces(this._localProps.gameDefinition.pieces);
+    }
 
     get reverseBoardRows() { return this._localProps.reverseBoard[0]; }
 
@@ -168,7 +170,10 @@ class GameControl {
         });
     }
 
-    clearAll() { this._bgioMoves.clearAll(); };
+    clearAll() { 
+        const emptyBoard = this._boardPieces.map(row => row.map(()=>null));
+        this._bgioMoves.setPieces(emptyBoard);
+     };
 
     // Process a user request - by drag or clicks - to move a piece.
     movePieceRequest(from: PiecePosition, to: PiecePosition | null) {

@@ -55,13 +55,16 @@ function unmakePosition(pos: Position) {
     }
 }
 
+type Pieces = Array<Array<PieceName | null>>;
 interface G {
-    pieces: Array<Array<PieceName | null>>;
+    pieces: Pieces;
     selectedSquare: Position | null;
     legalMoves: Array<Array<boolean>> | null;
 };
 
 type BoardProps = BoardPropsTemplate<G>;
+
+/* movePiece */ 
 
 interface MovePieceArg {
     from: RowAndCol;
@@ -75,12 +78,7 @@ function movePiece(g: G, ctx: any, { from, to }: MovePieceArg) {
     g.pieces[from.r][from.c] = null;
 }
 
-type ClearAllArg = void;
-function clearAll(g: G, ctx: any) {
-    //console.log("clearAll");
-
-    g.pieces.forEach(row => row.fill(null));
-}
+/* setPiece */ 
 
 interface SetPieceArg {
     pos: RowAndCol;
@@ -90,6 +88,20 @@ interface SetPieceArg {
 function setPiece(g: G, ctx: any, { pos, pieceName }: SetPieceArg) {
     g.pieces[pos.r][pos.c] = pieceName;
 }
+
+/* setPieces */ 
+
+type SetPiecesArg = Pieces;
+function setPieces(g: G, ctx: any, pieces: SetPiecesArg) {
+
+    // Kludge?: Clear everything other than pieces
+    g.selectedSquare = null;
+    g.legalMoves = null;
+
+    g.pieces = pieces;
+}
+
+/* setSelectedSquare */ 
 
 interface SetSelectedSquareArg {
     selected: Position | null;
@@ -104,17 +116,18 @@ function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelected
 
 const moves = {
     movePiece: movePiece,
-    clearAll: clearAll,
     setPiece: setPiece,
     setSelectedSquare: setSelectedSquare,
+    setPieces: setPieces,
 };
+
 
 // Move functions as called by clients
 interface ClientMoves {
     movePiece: (arg: MovePieceArg) => null;
-    clearAll: (arg: ClearAllArg) => null;
     setPiece: (arg: SetPieceArg) => null;
     setSelectedSquare: (arg: SetSelectedSquareArg) => null;
+    setPieces: (arg: SetPiecesArg) => null;
 };
 
 // Provide the 'game' object required for a boardgame.io client.
