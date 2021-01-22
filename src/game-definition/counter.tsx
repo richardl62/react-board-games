@@ -33,7 +33,7 @@ const Counter: FC<Props> = ({ color, text, textColor }: Props) => {
     }
 
     return (
-        <div className="piece__counter" style={style}>
+        <div style={style}>
             {text ? innerText() : null}
         </div>
     );
