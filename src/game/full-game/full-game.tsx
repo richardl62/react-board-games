@@ -13,32 +13,23 @@ import * as Bgio from '../../bgio';
 
 interface Props {
     gameDefinition: GameDefinition;
-    multiplayerMode: "local" | "remote" | "auto";
-    nPlayersLocal: number;
+    localServer: boolean;
+    playerPerBrowser: number;
     bgioDebugPanel: boolean;
 }
 
-function FullGame({ gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPanel }: Props) {
+function FullGame({ gameDefinition, localServer, playerPerBrowser, bgioDebugPanel }: Props) {
 
     const { protocol, hostname, port } = window.location;
 
-    let localMode;
-    if (multiplayerMode === 'auto') {
-        localMode = window.location.host === "localhost:3000";
-    } else {
-        localMode = multiplayerMode === 'local';
-    }
 
     let multiplayer;
-    let nPlayers;
-    if (localMode) {
+    if (localServer) {
         multiplayer = Bgio.Local();
-        nPlayers = nPlayersLocal;
     } else {
         const server = `${protocol}//${hostname}:${port}`;
         console.log('Connecting to server:', server);
         multiplayer = Bgio.SocketIO({ server: server });
-        nPlayers = 1;
     }
 
     let gameControlProps = useGameControlProps(gameDefinition);
@@ -55,7 +46,7 @@ function FullGame({ gameDefinition, multiplayerMode, nPlayersLocal, bgioDebugPan
     });
 
     let games = [];
-    for (let count = 0; count < nPlayers; ++count) {
+    for (let count = 0; count < playerPerBrowser; ++count) {
         games.push(
 
             // Having DndProvider here, rather than in 'board' prevents error

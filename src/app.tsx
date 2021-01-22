@@ -6,18 +6,88 @@ import styles from './app.module.css';
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
 
-const multiplayerMode = 'auto'; // 'local', 'remote' or 'auto'
-const nPlayersLocal = 2;
-const bgioDebugPanel = false;
+function getParamsFromURL() {
+
+  const searchParams = new URLSearchParams(window.location.search);
+
+  // Remove the search parameter with the given name and return it's value.
+  // Special return values:
+  //    null if parameter is not specified.
+  //    true if the parameter is not give a value.
+  //    true/false if the parameter is 'true'/'false'.
+  const removeParam = (name: string) => {
+    const val = searchParams.get(name);
+    searchParams.delete(name);
+
+    if(val === '' || val === 'true') {
+      return true;
+    } else if (val === 'false') {
+      return false;
+    } else {
+      return val;
+    }
+  }
+
+  function local() {
+    const l = removeParam('local');
+    if (l === null) {
+      // Kludge: Decide whether to run locally or not depending on the host
+      return window.location.host === "localhost:3000";
+    } else {
+      return Boolean(l);
+    }
+  }
+
+  function playersPerBrowser() {
+    const ppb = removeParam('ppb');
+    if(ppb === null)
+      return 1;
+    
+    if(typeof ppb === 'string') {
+      const val = parseInt(ppb);
+      if(!isNaN(val) && val >= 1) {
+        return val;
+      }
+    }
+  
+    console.log("Warning: Bad parameter for search parameter ppb (number expected)");
+    return 1;
+  }
+
+  function bgioDebug() {
+    const bgd = removeParam('bgio-debug');
+    if(bgd === null) {
+      return false;
+    }
+
+    if(typeof bgd === 'boolean') {
+      return bgd;
+    }
+  
+    console.log("Warning: Bad parameter for search parameter bgio-debug (boolean or nothing expected)");
+    return false;
+  }
+
+  const result = {
+    localServer: local(),
+    playerPerBrowser: playersPerBrowser(),
+    bgioDebugPanel: bgioDebug(),
+  }
+
+  if(searchParams.toString()) {
+    console.log("WARNING: Unprocessed URL search parameters", searchParams.toString());
+  }
+  return result;
+}
+
+const urlParam = getParamsFromURL();
 
 let games = gameDefinitions.map(gameDef => {
   const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
   return {
     component: () => (<BoardGame
       gameDefinition={gameDef}
-      multiplayerMode={multiplayerMode}
-      nPlayersLocal={nPlayersLocal}
-      bgioDebugPanel={bgioDebugPanel}
+      {...urlParam}
     />),
     name: gameDef.name,
     path: `/${gamePage}`,
