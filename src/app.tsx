@@ -5,6 +5,7 @@ import styles from './app.module.css';
 
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
+import Lobby from './lobby';
 
 function getParamsFromURL() {
 
@@ -112,6 +113,8 @@ function HomePage() {
     <div>
       <h2>Available games</h2>
       <GameLinks />
+      <br/>
+      <Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (experimental)</Link>
     </div>
   )
 }
@@ -133,6 +136,7 @@ function App() {
       {games.map(g =>
         <Route key={g.path} exact path={g.path} component={g.component} />,
       )}
+      <Route key="lobby" exact path="/lobby" component={Lobby} />
       <Route key="pageNotFound" component={PageNotFound} />
     </Switch>
   );
