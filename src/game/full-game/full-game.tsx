@@ -13,23 +13,20 @@ import * as Bgio from '../../bgio';
 
 interface Props {
     gameDefinition: GameDefinition;
-    localServer: boolean;
+    server: string | null;
     playerPerBrowser: number;
     bgioDebugPanel: boolean;
 }
 
-function FullGame({ gameDefinition, localServer, playerPerBrowser, bgioDebugPanel }: Props) {
-
-    const { protocol, hostname, port } = window.location;
-
+function FullGame({ gameDefinition, server, playerPerBrowser, bgioDebugPanel }: Props) {
 
     let multiplayer;
-    if (localServer) {
-        multiplayer = Bgio.Local();
-    } else {
-        const server = `${protocol}//${hostname}:${port}`;
+    if (server) {
         console.log('Connecting to server:', server);
         multiplayer = Bgio.SocketIO({ server: server });
+
+    } else {
+        multiplayer = Bgio.Local();
     }
 
     let gameControlProps = useGameControlProps(gameDefinition);

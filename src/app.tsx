@@ -5,9 +5,12 @@ import styles from './app.module.css';
 
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
-import Lobby from './lobby';
+import Lobby from './bgio-lobby';
 
-function getParamsFromURL() {
+// The host used by 'npm start'
+const npmStartHost = "localhost:3000";
+
+const urlParam = (function() {
 
   const searchParams = new URLSearchParams(window.location.search);
 
@@ -29,14 +32,13 @@ function getParamsFromURL() {
     }
   }
 
-  function local() {
-    const l = removeParam('local');
-    if (l === null) {
+  function localMode() {
+    let local = removeParam('local');
+    if (local === null) {
       // Kludge: Decide whether to run locally or not depending on the host
-      return window.location.host === "localhost:3000";
-    } else {
-      return Boolean(l);
+      return window.location.host === npmStartHost;
     }
+    return Boolean(local);
   }
 
   function playersPerBrowser() {
@@ -70,7 +72,7 @@ function getParamsFromURL() {
   }
 
   const result = {
-    localServer: local(),
+    localMode: localMode(),
     playerPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
   }
@@ -79,15 +81,27 @@ function getParamsFromURL() {
     console.log("WARNING: Unprocessed URL search parameters", searchParams.toString());
   }
   return result;
-}
+})();
 
-const urlParam = getParamsFromURL();
+function gameServer() {
+  let { protocol, hostname, port } = window.location;
+  if(urlParam.localMode) {
+    return null;
+  }
+  else if(window.location.host === npmStartHost) {
+    // KLUDGE? In general, the server should be running on the current port.
+    // But in this special case look for a separate server running on port 8000.
+    port = "8000";
+  }
+  return `${protocol}//${hostname}:${port}`;
+};
 
 let games = gameDefinitions.map(gameDef => {
   const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
   return {
     component: () => (<BoardGame
       gameDefinition={gameDef}
+      server={gameServer()}
       {...urlParam}
     />),
     name: gameDef.name,
@@ -114,7 +128,8 @@ function HomePage() {
       <h2>Available games</h2>
       <GameLinks />
       <br/>
-      <Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (experimental)</Link>
+      {urlParam.localMode ? null :
+        (<Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (experimental)</Link>) }
     </div>
   )
 }
@@ -130,13 +145,20 @@ function PageNotFound() {
 }
 
 function App() {
+
+
+  const server = gameServer();
   return (
     <Switch>
       <Route key="/" exact path="/" component={HomePage} />
       {games.map(g =>
         <Route key={g.path} exact path={g.path} component={g.component} />,
       )}
-      <Route key="lobby" exact path="/lobby" component={Lobby} />
+
+      {server ?
+      (<Route key="lobby" exact path="/lobby" 
+          component={()=><Lobby server={server}/>}
+      />): null}
       <Route key="pageNotFound" component={PageNotFound} />
     </Switch>
   );
