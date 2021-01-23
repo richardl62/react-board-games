@@ -205,6 +205,17 @@ class GameControl {
             }
 
             this._clickManager.clear();
+            
+            this.endTurn(); // Kludge - for now end the turn after each move
+        }
+    }
+
+    endTurn() {
+        const endTurn = this._bgioProps.events.endTurn;
+        if (endTurn) {
+            endTurn();
+        } else {
+            console.log("endTurn is not defined");
         }
     }
 
