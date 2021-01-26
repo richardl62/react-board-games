@@ -3,7 +3,7 @@ import {
     Client, // To do: (Somehow) set the template parameter before exporting
 } from 'boardgame.io/react';
 
-import { GameDefinition, PieceName } from './interfaces';
+import { GameDefinition, PieceName } from '../interfaces';
 
 /*
     KLUDGE?

@@ -5,7 +5,7 @@ import styles from './app.module.css';
 
 import BoardGame from './game';
 import gameDefinitions from './game-definition';
-import Lobby from './bgio-lobby';
+import {Lobby} from './bgio';
 
 // The host used by 'npm start'
 const npmStartHost = "localhost:3000";

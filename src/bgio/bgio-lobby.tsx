@@ -1,5 +1,5 @@
 import { Lobby } from 'boardgame.io/react';
-import gameDefinitions from './game-definition';
+import gameDefinitions from '../game-definition';
 import  { makeGame } from './bgio'
 interface Props {
     server: string;
