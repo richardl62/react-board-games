@@ -6,6 +6,40 @@ import { GameDefinition, PiecePosition, PieceName }
 import * as Bgio from '../../bgio';
 import { ClickManager } from './click-manager';
 
+function rowAndCol(pos: { row: number, col: number }) {
+    return { r: pos.row, c: pos.col, }
+}
+
+function makePosition(pos: {
+    row?: number,
+    col?: number,
+    top?: number,
+    bottom?: number,
+}) {
+    return {
+        r: pos.row,
+        c: pos.col,
+        top: pos.top,
+        bottom: pos.bottom,
+    }
+}
+
+interface Position {
+    r?: number;
+    c?: number;
+    top?: number;
+    bottom?: number;
+}
+
+function unmakePosition(pos: Position) {
+    return {
+        row: pos.r,
+        col: pos.c,
+        top: pos.top,
+        bottom: pos.bottom,
+    }
+}
+
 const topLeftBlack = false; // KLUDGE
 
 function useGameControlProps(gameDefinition: GameDefinition) {
@@ -35,8 +69,6 @@ interface SquareProperties {
     }
 }
 
-const rowAndCol = Bgio.rowAndCol;
-
 class GameControl {
 
     constructor(bgioProps: Bgio.BoardProps, localProps: GameControlProps) {
@@ -46,7 +78,7 @@ class GameControl {
         this._clickManager = new ClickManager({
             getSelectedSquare: () => {
                 const selected = bgioProps.G.selectedSquare;
-                return selected && new PiecePosition(Bgio.unmakePosition(selected));
+                return selected && new PiecePosition(unmakePosition(selected));
             },
             setSelectedSquare: (p: PiecePosition | null) => this._setSelectedSquare(p),
             doMove: (p1: PiecePosition, p2: PiecePosition | null) =>
@@ -165,7 +197,7 @@ class GameControl {
         }
 
         this._bgioMoves.setSelectedSquare({
-            selected: p && Bgio.makePosition(p.data),
+            selected: p && makePosition(p.data),
             legalMoves: legalMoves,
         });
     }

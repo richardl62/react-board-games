@@ -5,41 +5,31 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import GameControl, { useGameControlProps } from '../game-control'
-
 import { GameDefinition } from '../../interfaces';
 import SimpleGame from '../game-layout/game-layout';
 
-import * as Bgio from '../../bgio';
+import * as bgio from '../../bgio';
 
-interface Props {
+interface FullGameProps {
     gameDefinition: GameDefinition;
     server: string | null;
     playerPerBrowser: number;
     bgioDebugPanel: boolean;
 }
 
-function FullGame({ gameDefinition, server, playerPerBrowser, bgioDebugPanel }: Props) {
+function FullGame(props: FullGameProps) {
+    const { playerPerBrowser, gameDefinition } = props;
 
-    let multiplayer;
-    if (server) {
-        console.log('Connecting to server:', server);
-        multiplayer = Bgio.SocketIO({ server: server });
-
-    } else {
-        multiplayer = Bgio.Local();
-    }
 
     let gameControlProps = useGameControlProps(gameDefinition);
-    function renderGame(bgioProps: Bgio.BoardProps) {
+    function renderGame(bgioProps: bgio.BoardProps) {
         let gameControl = new GameControl(bgioProps, gameControlProps);
         return <SimpleGame gameControl={gameControl} />;
     }
 
-    const BgClient = Bgio.Client<Bgio.G>({
-        multiplayer: multiplayer,
-        game: Bgio.makeGame(gameDefinition),
-        board: renderGame,
-        debug: bgioDebugPanel,
+    const BgClient = bgio.makeClient({
+        ...props,
+        renderGame: renderGame,
     });
 
     let games = [];

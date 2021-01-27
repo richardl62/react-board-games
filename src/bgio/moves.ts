@@ -1,16 +1,11 @@
-import {
-    BoardProps as BoardPropsTemplate,
-    Client, // To do: (Somehow) set the template parameter before exporting
-} from 'boardgame.io/react';
-
-import { GameDefinition, PieceName } from '../interfaces';
+import { PieceName } from '../interfaces';
 
 /*
     KLUDGE?
    
-    PiecePositions should not be directly passed to a Bgio. (Doing the past
-    this caused problems, presumably because PiecePosition is a class and so
-    cannot be serialised as JSON.)
+    PiecePositions should not be directly passed to a Bgio move function.
+    (Doing the past this caused problems, presumably because PiecePosition
+    is a class and so cannot be serialised as JSON.)
     Using different name prevent them being passed in. And as we are doing this
     it seems only polite to provide a conversion function.
     (NOTE: Typescript requires only that the specified interface exist, so a
@@ -21,9 +16,6 @@ interface RowAndCol {
     c: number;
 }
 
-function rowAndCol(pos: { row: number, col: number }): RowAndCol {
-    return { r: pos.row, c: pos.col, }
-}
 
 interface Position {
     r?: number;
@@ -32,37 +24,12 @@ interface Position {
     bottom?: number;
 }
 
-function makePosition(pos: {
-    row?: number,
-    col?: number,
-    top?: number,
-    bottom?: number,
-}): Position {
-    return {
-        r: pos.row,
-        c: pos.col,
-        top: pos.top,
-        bottom: pos.bottom,
-    }
-}
-
-function unmakePosition(pos: Position) {
-    return {
-        row: pos.r,
-        col: pos.c,
-        top: pos.top,
-        bottom: pos.bottom,
-    }
-}
-
 type Pieces = Array<Array<PieceName | null>>;
 interface G {
     pieces: Pieces;
     selectedSquare: Position | null;
     legalMoves: Array<Array<boolean>> | null;
 };
-
-type BoardProps = BoardPropsTemplate<G>;
 
 /* movePiece */ 
 
@@ -114,7 +81,7 @@ function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelected
     g.legalMoves = legalMoves;
 };
 
-const moves = {
+export const moves = {
     movePiece: movePiece,
     setPiece: setPiece,
     setSelectedSquare: setSelectedSquare,
@@ -130,21 +97,4 @@ interface ClientMoves {
     setPieces: (arg: SetPiecesArg) => null;
 };
 
-// Provide the 'game' object required for a boardgame.io client.
-function makeGame(gameDefinition: GameDefinition) {
-    return {
-        name: gameDefinition.name.replace(/\s/g, ''),
-        setup: (): G => {
-            return {
-                pieces: gameDefinition.pieces,
-                selectedSquare: null,
-                legalMoves: null,
-            }
-        },
-        moves: moves,
-    };
-}
-
-export type { BoardProps, G, ClientMoves }
-export { makeGame, Client, rowAndCol, makePosition, unmakePosition };
-export { SocketIO, Local } from 'boardgame.io/multiplayer';
+export type { G, ClientMoves }
