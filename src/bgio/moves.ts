@@ -81,7 +81,7 @@ function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelected
     g.legalMoves = legalMoves;
 };
 
-export const moves = {
+const moves = {
     movePiece: movePiece,
     setPiece: setPiece,
     setSelectedSquare: setSelectedSquare,
@@ -97,4 +97,5 @@ interface ClientMoves {
     setPieces: (arg: SetPiecesArg) => null;
 };
 
+export default moves;
 export type { G, ClientMoves }
