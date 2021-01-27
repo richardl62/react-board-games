@@ -30,6 +30,7 @@ function FullGame(props: FullGameProps) {
     const BgClient = bgio.makeClient({
         ...props,
         renderGame: renderGame,
+        numPlayers: playerPerBrowser, // KLUDGE - valid only for single player game
     });
 
     let games = [];

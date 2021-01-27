@@ -10,9 +10,11 @@ interface FullGameProps {
     server: string | null;
     bgioDebugPanel: boolean;
     renderGame: (arg: any) => JSX.Element;
+    numPlayers: number;
 }
 
-function makeClient({ gameDefinition, server, bgioDebugPanel, renderGame }: FullGameProps) {
+function makeClient({ gameDefinition, server, bgioDebugPanel, 
+    renderGame, numPlayers }: FullGameProps) {
     let multiplayer;
     if (server) {
         console.log('Connecting to server:', server);
@@ -27,6 +29,7 @@ function makeClient({ gameDefinition, server, bgioDebugPanel, renderGame }: Full
         game: makeGame(gameDefinition),
         board: renderGame,
         debug: bgioDebugPanel,
+        numPlayers: numPlayers,
     });
 }
 
