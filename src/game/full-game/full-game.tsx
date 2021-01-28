@@ -8,15 +8,13 @@ import SimpleGame from '../game-layout';
 
 import * as bgio from '../../bgio';
 
-interface BgioFriendlyGameProps {
-    gameDefinition: GameDefinition;
-    bgioProps: bgio.BoardProps;
-}
-
-function BgioFriendlyGame({gameDefinition, bgioProps}: BgioFriendlyGameProps) {
+// Return a component that takes Bgio props and renders a game.
+function useRenderGame(gameDefinition: GameDefinition) {
     const gameControlProps = useGameControlProps(gameDefinition);
-    const gameControl = new GameControl(bgioProps, gameControlProps);
-    return (<SimpleGame gameControl={gameControl} />);
+    return (bgioProps: bgio.BoardProps) => {
+        const gameControl = new GameControl(bgioProps, gameControlProps);
+        return (<SimpleGame gameControl={gameControl} />);
+    };
 }
 
 interface FullGameProps {
@@ -26,24 +24,13 @@ interface FullGameProps {
     bgioDebugPanel: boolean;
 }
 
-
 function FullGame(props: FullGameProps) {
-    const { playerPerBrowser, gameDefinition } = props;
+    const {gameDefinition} = props;
+    const renderGame = useRenderGame(gameDefinition);
 
-    const renderGame = (bgioProps: bgio.BoardProps) => 
-        <BgioFriendlyGame bgioProps={bgioProps} gameDefinition={gameDefinition} />
+    let args = {...props, renderGame:renderGame };
 
-    const BgClient = bgio.makeClient({
-        ...props,
-        renderGame: renderGame,
-        numPlayers: playerPerBrowser, // KLUDGE - valid only for single player game
-    });
-
-    let games = [];
-    for (let count = 0; count < playerPerBrowser; ++count) {
-        games.push(<BgClient key={count} playerID={count.toString()} />)
-    }
-
+    const games = bgio.gamesWithClient(args);
     return <> {games} </>;
 }
 

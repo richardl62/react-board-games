@@ -1,9 +1,9 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
+import { BoardProps } from 'boardgame.io/react';
 import { Client } from 'boardgame.io/react';
 import { GameDefinition } from '../interfaces';
 import { G } from './moves';
 import makeGame from "./make-game";
-
 
 interface FullGameProps {
     gameDefinition: GameDefinition;
@@ -33,4 +33,29 @@ function makeClient({ gameDefinition, server, bgioDebugPanel,
     });
 }
 
-export default makeClient;
+interface gamesWithClientArgs {
+    renderGame: (props: BoardProps<G>) => JSX.Element;
+    server: string | null;
+    playerPerBrowser: number;
+    bgioDebugPanel: boolean;
+}
+
+// Return component(s) that render a game with all component(s) sharing
+// the same Bgio client
+function gamesWithClient(args : gamesWithClientArgs)
+{
+    const {playerPerBrowser} = args;
+
+    const BgClient = makeClient({
+        ...args,
+        numPlayers: playerPerBrowser,
+    } as any);
+
+    let games = [];
+    for (let count = 0; count < playerPerBrowser; ++count) {
+        games.push(<BgClient key={count} playerID={count.toString()} />)
+    }
+
+    return games;
+}
+export default gamesWithClient;
