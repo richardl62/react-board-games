@@ -1,14 +1,23 @@
 // This file provides the infrastructure (as opposed to layout) for a 'full game'.
 // In particular, it sets React hooks and creates a boardgame.io (Bgio) client.
 import React from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import GameControl, { useGameControlProps } from '../game-control'
 import { GameDefinition } from '../../interfaces';
-import SimpleGame from '../game-layout/game-layout';
+import SimpleGame from '../game-layout';
 
 import * as bgio from '../../bgio';
+
+interface BgioFriendlyGameProps {
+    gameDefinition: GameDefinition;
+    bgioProps: bgio.BoardProps;
+}
+
+function BgioFriendlyGame({gameDefinition, bgioProps}: BgioFriendlyGameProps) {
+    const gameControlProps = useGameControlProps(gameDefinition);
+    const gameControl = new GameControl(bgioProps, gameControlProps);
+    return (<SimpleGame gameControl={gameControl} />);
+}
 
 interface FullGameProps {
     gameDefinition: GameDefinition;
@@ -17,15 +26,12 @@ interface FullGameProps {
     bgioDebugPanel: boolean;
 }
 
+
 function FullGame(props: FullGameProps) {
     const { playerPerBrowser, gameDefinition } = props;
 
-
-    let gameControlProps = useGameControlProps(gameDefinition);
-    function renderGame(bgioProps: bgio.BoardProps) {
-        let gameControl = new GameControl(bgioProps, gameControlProps);
-        return <SimpleGame gameControl={gameControl} />;
-    }
+    const renderGame = (bgioProps: bgio.BoardProps) => 
+        <BgioFriendlyGame bgioProps={bgioProps} gameDefinition={gameDefinition} />
 
     const BgClient = bgio.makeClient({
         ...props,
@@ -35,14 +41,7 @@ function FullGame(props: FullGameProps) {
 
     let games = [];
     for (let count = 0; count < playerPerBrowser; ++count) {
-        games.push(
-
-            // Having DndProvider here, rather than in 'board' prevents error
-            // Cannot have two HTML5 backends at the same time
-            <DndProvider key={count} backend={HTML5Backend}>
-                <BgClient playerID={count.toString()} />
-            </DndProvider>
-        );
+        games.push(<BgClient key={count} playerID={count.toString()} />)
     }
 
     return <> {games} </>;

@@ -1,22 +1,25 @@
 import { Lobby } from 'boardgame.io/react';
-import gameDefinitions from '../game-definition';
+import { GameDefinition } from '../interfaces';
 import makeGame from "./make-game";
-interface Props {
+
+
+interface LobbyGame {
+    gameDefinition: GameDefinition;
+    component: (props: any) => JSX.Element;  // Render the game
+};
+
+interface LobbyProps {
     server: string;
+    games: Array<LobbyGame>;
 }
 
-
-function RenderGame(props: any) {
-    console.log("RenderGame props", props);
-    return (<p>Hello from RenderGame</p>);
-}
-const gameComponents = gameDefinitions.map(gameDef=> {
-    return {
-        game: makeGame(gameDef),
-        board: RenderGame,
-    }
-    })
-function GameLobby({server} : Props) {
+function GameLobby({server, games} : LobbyProps) {
+    const gameComponents = games.map(game => {
+            return {
+                game: makeGame(game.gameDefinition),
+                board: game.component,
+            }
+        });
     return (
         <>
         <Lobby

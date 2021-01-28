@@ -85,27 +85,28 @@ const urlParam = (function() {
 
 function gameServer() {
   let { protocol, hostname, port } = window.location;
-  if(urlParam.localMode) {
-    return null;
-  }
-  else if(window.location.host === npmStartHost) {
+  
+  if(window.location.host === npmStartHost) {
     // KLUDGE? In general, the server should be running on the current port.
     // But in this special case look for a separate server running on port 8000.
     port = "8000";
   }
+
   return `${protocol}//${hostname}:${port}`;
 };
 
-let games = gameDefinitions.map(gameDef => {
-  const gamePage = gameDef.name.replace(/\s/g, ''); // Remove any whitespace
+let games = gameDefinitions.map(gameDefinition => {
+  const gamePage = gameDefinition.name.replace(/\s/g, ''); // Remove any whitespace
   return {
+    name: gameDefinition.name,
+    path: `/${gamePage}`,
+    gameDefinition: gameDefinition,
+
     component: () => (<BoardGame
-      gameDefinition={gameDef}
-      server={gameServer()}
+      gameDefinition={gameDefinition}
+      server={urlParam.localMode ? null : gameServer()}
       {...urlParam}
     />),
-    name: gameDef.name,
-    path: `/${gamePage}`,
   };
 });
 
@@ -146,7 +147,6 @@ function PageNotFound() {
 
 function App() {
 
-
   const server = gameServer();
   return (
     <Switch>
@@ -155,10 +155,9 @@ function App() {
         <Route key={g.path} exact path={g.path} component={g.component} />,
       )}
 
-      {server ?
-      (<Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby server={server}/>}
-      />): null}
+      <Route key="lobby" exact path="/lobby" 
+          component={()=><Lobby server={server} games={games}/>}
+      />
       <Route key="pageNotFound" component={PageNotFound} />
     </Switch>
   );
