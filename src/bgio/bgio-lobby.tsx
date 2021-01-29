@@ -14,6 +14,8 @@ interface LobbyProps {
 }
 
 function GameLobby({server, games} : LobbyProps) {
+    console.log("Lobby running on ", server);
+    
     const gameComponents = games.map(game => {
             return {
                 game: makeGame(game.gameDefinition),
@@ -21,15 +23,11 @@ function GameLobby({server, games} : LobbyProps) {
             }
         });
     return (
-        <>
         <Lobby
             gameServer={server}
             lobbyServer={server}
             gameComponents={gameComponents}
          />
-        <h2> When I work i'll be a lobby </h2>
-        <p>I'll run on {server} </p>
-        </>
     );
 }
 

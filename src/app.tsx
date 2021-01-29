@@ -39,7 +39,7 @@ function HomePage() {
       <GameLinks />
       <br/>
       {urlParams.localMode ? null :
-        (<Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (experimental)</Link>) }
+        (<Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (under developmemnt)</Link>) }
     </div>
   )
 }
