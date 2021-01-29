@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { GameDefinition, PiecePosition, PieceName }
     from '../../interfaces';
 
@@ -42,15 +40,15 @@ function unmakePosition(pos: Position) {
 
 const topLeftBlack = false; // KLUDGE
 
-function useGameControlProps(gameDefinition: GameDefinition) {
+function makeGameControlProps(gameDefinition: GameDefinition) {
 
     return {
         gameDefinition: gameDefinition,
-        reverseBoard: useState(false),
+        //reverseBoard: useState(false),
     };
 }
 
-type GameControlProps = ReturnType<typeof useGameControlProps>;
+type GameControlProps = ReturnType<typeof makeGameControlProps>;
 
 type SquareBackground = null | 'plain' | 'checkered-white' | 'checkered-black';
 
@@ -108,9 +106,15 @@ class GameControl {
         this._bgioMoves.setPieces(this._localProps.gameDefinition.pieces);
     }
 
-    get reverseBoardRows() { return this._localProps.reverseBoard[0]; }
+    get reverseBoardRows() { 
+        //this._localProps.reverseBoard[0];
+        return false;
+    }
 
-    flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows); }
+    flipRowOrder() { 
+        console.log("flipping rows is not currently supported");
+        //this._localProps.reverseBoard[1](!this.reverseBoardRows);
+     }
 
     get nRows() {
         return this._boardPieces.length;
@@ -254,5 +258,5 @@ class GameControl {
     get renderPiece() {return this._localProps.gameDefinition.renderPiece;}
 }
 
-export { GameControl as default, useGameControlProps };
+export { GameControl as default, makeGameControlProps };
 export type { SquareProperties, SquareBackground }

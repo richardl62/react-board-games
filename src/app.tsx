@@ -3,7 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from './tools';
 import styles from './app.module.css';
 
-import { useGameRenderers , useGamesWithClient } from './game';
+import { makeGameRenderers , makeGamesWithClient } from './game';
 import { processLocation } from './url-tools';
 
 import { GameDefinition } from './interfaces';
@@ -55,7 +55,7 @@ function PageNotFound() {
 }
 
 function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
-  const games = useGamesWithClient({
+  const games = makeGamesWithClient({
     gameDefinition: gameDefinition,
     server: urlParams.localMode? null: urlParams.server,
     nGames: urlParams.playerPerBrowser,
@@ -69,7 +69,7 @@ function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
 function App() {
 
 
-  const lobbyGames = useGameRenderers(gameDefinitions);
+  const lobbyGames = makeGameRenderers(gameDefinitions);
 
 
   return (
