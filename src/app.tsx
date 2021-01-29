@@ -3,119 +3,28 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from './tools';
 import styles from './app.module.css';
 
-import BoardGame from './game';
+import { useGameRenderers , useGamesWithClient } from './game';
+import { processLocation } from './url-tools';
+
+import { GameDefinition } from './interfaces';
 import gameDefinitions from './game-definition';
 import {Lobby} from './bgio';
 
-// The host used by 'npm start'
-const npmStartHost = "localhost:3000";
+const urlParams = processLocation(window.location);
 
-const urlParam = (function() {
-
-  const searchParams = new URLSearchParams(window.location.search);
-
-  // Remove the search parameter with the given name and return it's value.
-  // Special return values:
-  //    null if parameter is not specified.
-  //    true if the parameter is not give a value.
-  //    true/false if the parameter is 'true'/'false'.
-  const removeParam = (name: string) => {
-    const val = searchParams.get(name);
-    searchParams.delete(name);
-
-    if(val === '' || val === 'true') {
-      return true;
-    } else if (val === 'false') {
-      return false;
-    } else {
-      return val;
-    }
-  }
-
-  function localMode() {
-    let local = removeParam('local');
-    if (local === null) {
-      // Kludge: Decide whether to run locally or not depending on the host
-      return window.location.host === npmStartHost;
-    }
-    return Boolean(local);
-  }
-
-  function playersPerBrowser() {
-    const ppb = removeParam('ppb');
-    if(ppb === null)
-      return 1;
-    
-    if(typeof ppb === 'string') {
-      const val = parseInt(ppb);
-      if(!isNaN(val) && val >= 1) {
-        return val;
-      }
-    }
-  
-    console.log("Warning: Bad parameter for search parameter ppb (number expected)");
-    return 1;
-  }
-
-  function bgioDebug() {
-    const bgd = removeParam('bgio-debug');
-    if(bgd === null) {
-      return false;
-    }
-
-    if(typeof bgd === 'boolean') {
-      return bgd;
-    }
-  
-    console.log("Warning: Bad parameter for search parameter bgio-debug (boolean or nothing expected)");
-    return false;
-  }
-
-  const result = {
-    localMode: localMode(),
-    playerPerBrowser: playersPerBrowser(),
-    bgioDebugPanel: bgioDebug(),
-  }
-
-  if(searchParams.toString()) {
-    console.log("WARNING: Unprocessed URL search parameters", searchParams.toString());
-  }
-  return result;
-})();
-
-function gameServer() {
-  let { protocol, hostname, port } = window.location;
-  
-  if(window.location.host === npmStartHost) {
-    // KLUDGE? In general, the server should be running on the current port.
-    // But in this special case look for a separate server running on port 8000.
-    port = "8000";
-  }
-
-  return `${protocol}//${hostname}:${port}`;
-};
-
-let games = gameDefinitions.map(gameDefinition => {
+function gamePath(gameDefinition: GameDefinition) {
   const gamePage = gameDefinition.name.replace(/\s/g, ''); // Remove any whitespace
-  return {
-    name: gameDefinition.name,
-    path: `/${gamePage}`,
-    gameDefinition: gameDefinition,
+  return `/${gamePage}`;
+}
 
-    component: () => (<BoardGame
-      gameDefinition={gameDefinition}
-      server={urlParam.localMode ? null : gameServer()}
-      {...urlParam}
-    />),
-  };
-});
 
 function GameLinks() {
   return (
     <ul>
-      {games.map(g => {
-        return (<li key={g.path}>
-          <Link className={nonNull(styles.gameLink)} to={g.path}>{g.name}</Link>
+      {gameDefinitions.map(gd => {
+        const path = gamePath(gd);
+        return (<li key={path}>
+          <Link className={nonNull(styles.gameLink)} to={path}>{gd.name}</Link>
         </li>);
       }
       )}
@@ -129,7 +38,7 @@ function HomePage() {
       <h2>Available games</h2>
       <GameLinks />
       <br/>
-      {urlParam.localMode ? null :
+      {urlParams.localMode ? null :
         (<Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (experimental)</Link>) }
     </div>
   )
@@ -145,18 +54,35 @@ function PageNotFound() {
   )
 }
 
+function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
+  const games = useGamesWithClient({
+    gameDefinition: gameDefinition,
+    server: urlParams.localMode? null: urlParams.server,
+    nGames: urlParams.playerPerBrowser,
+    bgioDebugPanel: urlParams.bgioDebugPanel,
+  });
+
+  return (<>{games}</>);
+}
+
+
 function App() {
 
-  const server = gameServer();
+
+  const lobbyGames = useGameRenderers(gameDefinitions);
+
+
   return (
     <Switch>
       <Route key="/" exact path="/" component={HomePage} />
-      {games.map(g =>
-        <Route key={g.path} exact path={g.path} component={g.component} />,
-      )}
+      {gameDefinitions.map(gd => {
+        const path = gamePath(gd);
+        const component = ()=><NonLobbyGame gameDefinition={gd}/>;
+        return (<Route key={path} exact path={path} component={component} />);
+      })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby server={server} games={games}/>}
+          component={()=><Lobby server={urlParams.server} games={lobbyGames}/>}
       />
       <Route key="pageNotFound" component={PageNotFound} />
     </Switch>

@@ -36,7 +36,7 @@ function makeClient({ gameDefinition, server, bgioDebugPanel,
 interface gamesWithClientArgs {
     renderGame: (props: BoardProps<G>) => JSX.Element;
     server: string | null;
-    playerPerBrowser: number;
+    nGames: number;
     bgioDebugPanel: boolean;
 }
 
@@ -44,15 +44,15 @@ interface gamesWithClientArgs {
 // the same Bgio client
 function gamesWithClient(args : gamesWithClientArgs)
 {
-    const {playerPerBrowser} = args;
+    const {nGames} = args;
 
     const BgClient = makeClient({
         ...args,
-        numPlayers: playerPerBrowser,
+        numPlayers: nGames,
     } as any);
 
     let games = [];
-    for (let count = 0; count < playerPerBrowser; ++count) {
+    for (let count = 0; count < nGames; ++count) {
         games.push(<BgClient key={count} playerID={count.toString()} />)
     }
 
