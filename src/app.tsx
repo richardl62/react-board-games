@@ -3,7 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from './tools';
 import styles from './app.module.css';
 
-import { makeGameRenderers , makeGamesWithClient } from './game';
+import { makeGameRenderer, makeGamesWithClient } from './game';
 import { processLocation } from './url-tools';
 
 import { GameDefinition } from './interfaces';
@@ -66,9 +66,15 @@ function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
 }
 
 
+
 function App() {
 
-  const lobbyGames = makeGameRenderers(gameDefinitions);
+  const lobbyGames = gameDefinitions.map(gd => {
+    return {
+        gameDefinition: gd,
+        component: makeGameRenderer(gd),
+    };
+  });
 
   return (
     <Switch>

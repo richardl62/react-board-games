@@ -2,32 +2,30 @@
 // In particular, it sets React hooks and creates a boardgame.io (Bgio) client.
 import React from 'react';
 
-import GameControl, { makeGameControlProps } from './game-control'
+import GameControl, { useGameControlProps } from './game-control'
 import { GameDefinition } from '../interfaces';
 import SimpleGame from './game-layout';
 
 import * as bgio from '../bgio';
 
+interface BgioFriendlyGameProps {
+    gameDefinition: GameDefinition;
+    bgioProps: bgio.BoardProps;
+}
+function BgioFriendlyGame({bgioProps, gameDefinition} : BgioFriendlyGameProps) {
+    const gameControlProps = useGameControlProps(gameDefinition);
+    const gameControl = new GameControl(bgioProps, gameControlProps);
+        
+    return (<SimpleGame gameControl={gameControl} />);
+}
 // Return a component that takes Bgio props and renders a game.
 function makeGameRenderer(gameDefinition: GameDefinition) {
-    const gameControlProps = makeGameControlProps(gameDefinition);
     return (bgioProps: bgio.BoardProps) => {
-        const gameControl = new GameControl(bgioProps, gameControlProps);
-        return (<SimpleGame gameControl={gameControl} />);
+        return (<BgioFriendlyGame 
+            gameDefinition={gameDefinition}
+            bgioProps={bgioProps}
+            />);
     };
-}
-function makeGameRenderers(gameDefinitions: Array<GameDefinition>) {
-    let renders: Array<any> = [];
-
-    for (let i = 0; i < gameDefinitions.length; ++i) {
-        const gd = gameDefinitions[i];
-        renders.push({
-            gameDefinition: gd,
-            component: makeGameRenderer(gd),
-        });
-    }
-
-    return renders;
 }
 
 interface makeGamesWithClientProps {
@@ -46,4 +44,4 @@ function makeGamesWithClient(props: makeGamesWithClientProps) {
     return bgio.gamesWithClient(args);
 }
 
-export { makeGameRenderers, makeGamesWithClient };
+export { makeGameRenderer, makeGamesWithClient };
