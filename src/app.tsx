@@ -38,8 +38,8 @@ function HomePage() {
       <h2>Available games</h2>
       <GameLinks />
       <br/>
-      {urlParams.localMode ? null :
-        (<Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby (under developmemnt)</Link>) }
+
+      <Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby</Link>
     </div>
   )
 }
@@ -57,7 +57,7 @@ function PageNotFound() {
 function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
   const games = makeGamesWithClient({
     gameDefinition: gameDefinition,
-    server: urlParams.localMode? null: urlParams.server,
+    server: urlParams.localMode? null : urlParams.servers.lobby,
     nGames: urlParams.playerPerBrowser,
     bgioDebugPanel: urlParams.bgioDebugPanel,
   });
@@ -68,9 +68,7 @@ function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
 
 function App() {
 
-
   const lobbyGames = makeGameRenderers(gameDefinitions);
-
 
   return (
     <Switch>
@@ -82,7 +80,7 @@ function App() {
       })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby server={urlParams.server} games={lobbyGames}/>}
+          component={()=><Lobby servers={urlParams.servers} games={lobbyGames}/>}
       />
       <Route key="pageNotFound" component={PageNotFound} />
     </Switch>

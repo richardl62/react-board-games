@@ -9,25 +9,28 @@ interface LobbyGame {
 };
 
 interface LobbyProps {
-    server: string;
+    servers: {
+        game: string;
+        lobby: string;
+    };
     games: Array<LobbyGame>;
 }
 
-function GameLobby({server, games} : LobbyProps) {
-    console.log("Lobby running on ", server);
-    
+function GameLobby({ servers, games }: LobbyProps) {
+    console.log("Lobby running on ", servers);
+
     const gameComponents = games.map(game => {
-            return {
-                game: makeGame(game.gameDefinition),
-                board: game.component,
-            }
-        });
+        return {
+            game: makeGame(game.gameDefinition),
+            board: game.component,
+        }
+    });
     return (
         <Lobby
-            gameServer={server}
-            lobbyServer={server}
+            gameServer={servers.game}
+            lobbyServer={servers.lobby}
             gameComponents={gameComponents}
-         />
+        />
     );
 }
 
