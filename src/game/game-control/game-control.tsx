@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { GameDefinition, PiecePosition, PieceName }
-    from '../../interfaces';
+import { PiecePosition, PieceName } from '../../interfaces';
+import { GameDefinition } from '../../game-definition';
 
 import * as Bgio from '../../bgio';
 import { ClickManager } from './click-manager';

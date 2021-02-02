@@ -1,7 +1,7 @@
 import { Lobby } from 'boardgame.io/react';
-import { GameDefinition } from '../interfaces';
 import makeGame from "./make-game";
 
+type GameDefinition = Parameters<typeof makeGame>[0];
 
 interface LobbyGame {
     gameDefinition: GameDefinition;

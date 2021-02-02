@@ -1,6 +1,7 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { GameDefinition, PieceNames } from '../interfaces';
+import { BoardPieces } from '../interfaces';
+import { GameDefinition } from './game-definition';
 import RenderPiece from './bobail-piece';
 
 const bb = 'bb';
@@ -12,7 +13,7 @@ type MakeMove = NonNullable<GameDefinition["makeMove"]>;
 
 // Get the connects of a square. Return undefined if the row and column
 // and not on the board.
-function piece( pieces: PieceNames, row: number, col:number) {
+function piece( pieces: BoardPieces, row: number, col:number) {
         return pieces[row] && pieces[row][col];
     }
 

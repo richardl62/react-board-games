@@ -6,9 +6,10 @@ import styles from './app.module.css';
 import { makeGameRenderer, makeGamesWithClient } from './game';
 import { processLocation } from './url-tools';
 
-import { GameDefinition } from './interfaces';
-import gameDefinitions from './game-definition';
+import gameDefinitions  from './game-definition';
 import {Lobby} from './bgio';
+
+type GameDefinition = (typeof gameDefinitions)[number];
 
 const urlParams = processLocation(window.location);
 

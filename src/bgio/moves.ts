@@ -1,4 +1,4 @@
-import { PieceName } from '../interfaces';
+import { PieceName,BoardPieces } from '../interfaces';
 
 /*
     KLUDGE?
@@ -24,9 +24,8 @@ interface Position {
     bottom?: number;
 }
 
-type Pieces = Array<Array<PieceName | null>>;
 interface G {
-    pieces: Pieces;
+    pieces: BoardPieces;
     selectedSquare: Position | null;
     legalMoves: Array<Array<boolean>> | null;
 };
@@ -58,7 +57,7 @@ function setPiece(g: G, ctx: any, { pos, pieceName }: SetPieceArg) {
 
 /* setPieces */ 
 
-type SetPiecesArg = Pieces;
+type SetPiecesArg = BoardPieces;
 function setPieces(g: G, ctx: any, pieces: SetPiecesArg) {
 
     // Kludge?: Clear everything other than pieces

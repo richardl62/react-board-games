@@ -1,9 +1,10 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { BoardProps } from 'boardgame.io/react';
 import { Client } from 'boardgame.io/react';
-import { GameDefinition } from '../interfaces';
 import { G } from './moves';
 import makeGame from "./make-game";
+
+type GameDefinition = Parameters<typeof makeGame>[0];
 
 interface FullGameProps {
     gameDefinition: GameDefinition;

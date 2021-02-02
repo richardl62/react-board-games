@@ -3,7 +3,7 @@
 import React from 'react';
 
 import GameControl, { useGameControlProps } from './game-control'
-import { GameDefinition } from '../interfaces';
+import { GameDefinition } from '../game-definition';
 import SimpleGame from './game-layout';
 
 import * as bgio from '../bgio';
