@@ -1,12 +1,12 @@
 // KLUDGE: Using 'require' rather than import of help with loading in the server.
 // Then reimpose the type before exporting.
-import { GameDefinition } from './game-definition';
+import { gameDefinition, GameDefinition } from './game-definition';
 
 const bobail = require('./bobail').default;
 const chess = require('./chess').default;
 const draughts = require('./draughts').default;
 
-const games : Array<GameDefinition> = [...bobail, ...chess, ...draughts];
+const games = [...bobail, ...chess, ...draughts].map(g => gameDefinition(g));
 
 export default games;
 export type { GameDefinition }

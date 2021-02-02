@@ -184,17 +184,10 @@ class GameControl {
         const pieces = this._boardPieces;
         const findLegalMoves = this._localProps.gameDefinition.legalMoves;
 
-        let legalMoves = null;
-        if (p && findLegalMoves) {
-
-            legalMoves = pieces.map(row => row.map(elem => false));
-
-            findLegalMoves({
-                selectedSquare: p,
-                pieces: pieces,
-                legalMoves: legalMoves,
-            });
-        }
+        let legalMoves = p && findLegalMoves({
+            selectedSquare: p,
+            pieces: pieces,
+        });
 
         this._bgioMoves.setSelectedSquare({
             selected: p && makePosition(p.data),

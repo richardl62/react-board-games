@@ -1,6 +1,6 @@
-// Use of GameDefinition is not strictly necessary, but it allows type checking to be
+// Use of gameDefinitionInput is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { GameDefinition } from './game-definition';
+import { GameDefinitionInput } from './game-definition';
 import RenderPiece from './draughts-piece';
 
 interface DraughtProps {
@@ -10,7 +10,7 @@ interface DraughtProps {
     nRowsOfPieces: number;
 }
 
-function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) : GameDefinition  {
+function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) : GameDefinitionInput  {
 
     const startingPiece = (row: number, col: number) => {
         let name = null;
