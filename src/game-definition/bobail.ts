@@ -1,22 +1,24 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { GameDefinition, LegalMovesArg } from '../interfaces';
+import { GameDefinition, PieceNames } from '../interfaces';
 import RenderPiece from './bobail-piece';
 
 const bb = 'bb';
 const pl1 = 'p1';
 const pl2 = 'p2';
 
-type Pieces = LegalMovesArg["pieces"];
+type LegalMoves = NonNullable<GameDefinition["legalMoves"]>;
+type MakeMove = NonNullable<GameDefinition["makeMove"]>;
+
 // Get the connects of a square. Return undefined if the row and column
 // and not on the board.
-function piece( pieces: Pieces, row: number, col:number) {
+function piece( pieces: PieceNames, row: number, col:number) {
         return pieces[row] && pieces[row][col];
     }
 
 // Record as legal the empty squares that are one step in any direction
 // (including diagonally) from the selected square.
-function legalMovesBobail({ selectedSquare, pieces, legalMoves }: LegalMovesArg) {
+const legalMovesBobail : LegalMoves = ({ selectedSquare, pieces, legalMoves }) => {
     const s = selectedSquare;
 
     for (let row = s.row - 1; row <= s.row + 1; ++row) {
@@ -29,7 +31,8 @@ function legalMovesBobail({ selectedSquare, pieces, legalMoves }: LegalMovesArg)
     }
 };
 
-function legalMovesPieceDirected({ selectedSquare, pieces, legalMoves }: LegalMovesArg,
+function legalMovesPieceDirected(
+    { selectedSquare, pieces, legalMoves }: Parameters<LegalMoves>[0],
     rStep: number, cStep: number) {
 
     let { row, col } = selectedSquare;
@@ -46,7 +49,7 @@ function legalMovesPieceDirected({ selectedSquare, pieces, legalMoves }: LegalMo
 
 // Record as legal the last empty square found when stepping in
 // each direction (including diagonal) from the selected square.
-function legalMovesPiece(args: LegalMovesArg) {
+const legalMovesPiece : LegalMoves = (args) => {
 
     for (let rStep = -1; rStep <= 1; rStep++) {
         for (let cStep = -1; cStep <= 1; cStep++) {
@@ -57,7 +60,7 @@ function legalMovesPiece(args: LegalMovesArg) {
     }
 };
 
-function legalMoves(args: LegalMovesArg) {
+const legalMoves: LegalMoves = (args) => {
     const s = args.selectedSquare;
 
     if (s.onBoard) {
@@ -71,6 +74,10 @@ function legalMoves(args: LegalMovesArg) {
             throw new Error("Unexpect name for bobail piece: " + p1Name);
         }
     }
+}
+
+const makeMove: MakeMove = (arg) => {
+    return 'end-turn';
 }
 
 const games: Array<GameDefinition> = [
@@ -97,6 +104,8 @@ const games: Array<GameDefinition> = [
         offBoardPieces: { top: [], bottom: [], },
 
         legalMoves: legalMoves,
+
+        makeMove: makeMove,
     }
 ];
 

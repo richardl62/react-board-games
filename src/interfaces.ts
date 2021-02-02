@@ -5,23 +5,32 @@ export type GameType = 'bobail' | 'chess' | 'draughts';
 // Brief name of the piece, e.g. 'p', 'P', 'n', 'N', etc. for Chess
 // This plus the GameType determines how pieces are displayed.
 export type PieceName = string;
+export type PieceNames = Array<Array<PieceName | null>>;
 
 // Determines how the board is displayed. Does not affect game play.
 // Is this needed give we have GameType?
-export interface BoardStyle {
+interface BoardStyle {
     checkered: boolean; // If true, square [0][0] is 'black'
 
     // If type rows and columns are labels with letters and numbers;
     labels: boolean;
 }
 
-export interface LegalMovesArg {
-    pieces: Array<Array<PieceName | null>>;
-    selectedSquare: PiecePosition;
-    legalMoves: Array<Array<boolean>>;
-}
+type LegalMoves = (
+    arg: {
+        pieces: PieceNames;
+        selectedSquare: PiecePosition;
+        legalMoves: Array<Array<boolean>>;
+    }
+    ) => void;
 
-export type LegalMoves = (arg: LegalMovesArg) => void;
+type MakeMove = (
+    arg: {
+        pieces: PieceNames;
+        selectedSquare: PiecePosition;
+        legalMoves: Array<Array<boolean>>;
+    }
+) => 'end-turn' | 'continue' | 'bad';
 
 // The properties that define an individual game.
 // KLUDGE? Mixes display and functionality (so no clear distinction of what
@@ -35,7 +44,7 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    pieces: Array<Array<PieceName | null>>;
+    pieces: PieceNames;
 
     offBoardPieces: {
         top: Array<PieceName>;
@@ -45,9 +54,10 @@ export interface GameDefinition {
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
     legalMoves?: LegalMoves;
+    makeMove?: MakeMove;
 };
 
-export interface PiecePositionData {
+interface PiecePositionData {
     row?: number;
     col?: number;
 
