@@ -1,5 +1,5 @@
 //import { PiecePosition, BoardPieces } from '../interfaces'
-import { GameDefinitionInput } from './game-definition'; 
+import { GameDefinitionInput, MakeMove, Board } from './game-definition'; 
 import RenderPiece from './draughts-piece';
 
 interface DraughtProps {
@@ -9,6 +9,25 @@ interface DraughtProps {
     nRowsOfPieces: number;
 }
 
+const makeMove : MakeMove = ({from, to, pieces}) => {
+
+    const rowDiff = to.row - from.row;
+    const colDiff = to.col - from.col;
+    if(Math.abs(rowDiff) === Math.abs(colDiff)) {
+        let board = new Board(pieces);
+        board.move(from, to);
+
+        let row = from.row;
+        let col = from.col;
+        while(row !== to.row) {
+            board.set({row:row, col:col}, null);
+            row += row > to.row ? -1 : 1;
+            col += col > to.col ? -1 : 1;
+        }
+        return 'end-turn'
+    }
+    return 'bad';
+}
 
 // Use of gameDefinitionInput is not necessary, but it allows type checking to be
 // done here rather than at point of use.
@@ -56,6 +75,8 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) : GameDef
             top: ['w', 'W'],
             bottom: ['b', 'B' ],
           },
+
+        makeMove: makeMove,
     };
 }
 

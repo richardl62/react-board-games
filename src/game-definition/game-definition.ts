@@ -3,21 +3,25 @@ import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
 // The types of the supported games.
 type GameType = 'bobail' | 'chess' | 'draughts';
 
+interface RowCol {
+    row: number;
+    col: number;
+}
 class Board {
     constructor(pieces: BoardPieces) {
         this._pieces = pieces;
     }
     private _pieces: BoardPieces;
 
-    get(pos: PiecePosition) {
+    get(pos: RowCol) {
         return this._pieces[pos.row][pos.col];
     }
 
-    set(pos: PiecePosition, to: PieceName|null) {
+    set(pos: RowCol, to: PieceName|null) {
         this._pieces[pos.row][pos.col] = to;
     }
 
-    move(from: PiecePosition, to: PiecePosition) {
+    move(from: RowCol, to: RowCol) {
         this.set(to, this.get(from));
         this.set(from, null);
     }
@@ -39,7 +43,7 @@ type LegalMoves = (
         readonly selectedSquare: PiecePosition;
         readonly gameState: GameState;
     }
-    ) => (Array<Array<boolean>> | null)
+    ) => Array<Array<boolean>> | null;
 
 type MakeMove = (
     arg: {

@@ -10,6 +10,19 @@ function rowAndCol(pos: { row: number, col: number }) {
     return { r: pos.row, c: pos.col, }
 }
 
+function allFalse(arr: Array<Array<boolean>>) {
+    for(let i in arr) {
+        const inner = arr[i];
+        for (let j in inner) {
+            if(inner[j]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 function makePosition(pos: {
     row?: number,
     col?: number,
@@ -110,7 +123,7 @@ class GameControl {
 
     undo() { this._bgioProps.undo(); }
     redo() { this._bgioProps.redo(); }
-    restart() { 
+    restart() {
         this._bgioMoves.setPieces(this._localProps.gameDefinition.pieces);
     }
 
@@ -187,24 +200,34 @@ class GameControl {
     }
 
     private _setSelectedSquare(p: PiecePosition | null) {
-        const findLegalMoves = this._localProps.gameDefinition.legalMoves;
 
-        let legalMoves = p && findLegalMoves({
-            selectedSquare: p,
-            pieces: this._boardPieces,
-            gameState: this._gameState,
-        });
+        if (p) {
+            const legalMoves = this._localProps.gameDefinition.legalMoves({
+                selectedSquare: p,
+                pieces: this._boardPieces,
+                gameState: this._gameState,
+            });
 
-        this._bgioMoves.setSelectedSquare({
-            selected: p && legalMoves && makePosition(p.data),
-            legalMoves: legalMoves,
-        });
+            if (legalMoves && allFalse(legalMoves)) {
+                // All moves are declated illegal.  Do nothing.
+            } else {
+                this._bgioMoves.setSelectedSquare({
+                    selected: makePosition(p.data),
+                    legalMoves: legalMoves,
+                });
+            }
+        } else {
+            this._bgioMoves.setSelectedSquare({
+                selected: null,
+                legalMoves: null,
+            });
+        }
     }
 
-    clearAll() { 
-        const emptyBoard = this._boardPieces.map(row => row.map(()=>null));
+    clearAll() {
+        const emptyBoard = this._boardPieces.map(row => row.map(() => null));
         this._bgioMoves.setPieces(emptyBoard);
-     };
+    };
 
     // Process a user request - by drag or clicks - to move a piece.
     movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
@@ -213,15 +236,19 @@ class GameControl {
 
         if (to && toProps && !toProps.gameStatus.cannotMoveTo) {
             let endTurn = true;
+            let badMove = false;
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
                     let pieces = copyPieces(this._boardPieces);
-                    let gameState = {...this._gameState};
+                    let gameState = { ...this._gameState };
 
                     const makeMove = this._localProps.gameDefinition.makeMove;
-                    const moveResult = makeMove({from:from, to:to, 
-                        pieces: pieces, gameState: gameState});
-                    if( moveResult === "bad") {
+                    const moveResult = makeMove({
+                        from: from, to: to,
+                        pieces: pieces, gameState: gameState
+                    });
+                    if (moveResult === "bad") {
+                        badMove = true;
                         console.log("Bad move reported")
                     } else {
                         this._bgioMoves.setGameState(gameState);
@@ -245,7 +272,9 @@ class GameControl {
                 }
             }
 
-            this._clickManager.clear();
+            if(!badMove) {
+                this._clickManager.clear();
+            }
             
             if (endTurn) {
                 this.endTurn();
@@ -262,7 +291,7 @@ class GameControl {
         }
     }
 
-    get renderPiece() {return this._localProps.gameDefinition.renderPiece;}
+    get renderPiece() { return this._localProps.gameDefinition.renderPiece; }
 }
 
 export { GameControl as default, useGameControlProps };
