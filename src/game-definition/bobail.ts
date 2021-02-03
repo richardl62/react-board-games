@@ -1,7 +1,7 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { BoardPieces } from '../interfaces';
-import { GameDefinitionInput } from './game-definition';
+import { GameDefinitionInput, Board } from './game-definition';
 import RenderPiece from './bobail-piece';
 
 const bb = 'bb';
@@ -9,6 +9,7 @@ const pl1 = 'p1';
 const pl2 = 'p2';
 
 type LegalMoves = NonNullable<GameDefinitionInput["legalMoves"]>;
+type MakeMove = NonNullable<GameDefinitionInput["makeMove"]>;
 
 // Get the connects of a square. Return undefined if the row and column
 // and not on the board.
@@ -86,6 +87,17 @@ const legalMoves: LegalMoves = (args) => {
     return null;
 }
 
+const makeMove: MakeMove = ({from, to, pieces}) => {
+    let board = new Board(pieces);
+    let movingBobail = board.get(from) === bb;
+
+    board.move(from, to);
+
+    // The turn ends when a piece other than the bobail is moved.
+    return movingBobail ? 'continue' : 'end-turn';
+
+}
+
 const games: Array<GameDefinitionInput> = [
     {
         name: 'bobail',
@@ -110,6 +122,8 @@ const games: Array<GameDefinitionInput> = [
         offBoardPieces: { top: [], bottom: [], },
 
         legalMoves: legalMoves,
+
+        makeMove: makeMove,
     }
 ];
 

@@ -210,14 +210,19 @@ class GameControl {
         const fromProps = this.squareProperties(from);
 
         if (to && toProps && !toProps.gameStatus.cannotMoveTo) {
+            let endTurn = true;
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
                     let pieces = copyPieces(this._boardPieces);
 
                     const makeMove = this._localProps.gameDefinition.makeMove;
-                    makeMove({from:from, to:to, pieces: pieces});
-
-                    this._bgioMoves.setPieces(pieces);
+                    const moveResult = makeMove({from:from, to:to, pieces: pieces});
+                    if( moveResult === "bad") {
+                        console.log("Bad move reported")
+                    } else {
+                        this._bgioMoves.setPieces(pieces);
+                    }
+                    endTurn = moveResult === "end-turn";
                 } else {
                     this._bgioMoves.setPiece({
                         pos: rowAndCol(to),
@@ -237,7 +242,9 @@ class GameControl {
 
             this._clickManager.clear();
             
-            this.endTurn(); // Kludge - for now end the turn after each move
+            if (endTurn) {
+                this.endTurn();
+            }
         }
     }
 

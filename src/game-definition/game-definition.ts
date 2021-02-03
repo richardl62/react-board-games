@@ -16,6 +16,11 @@ class Board {
     set(pos: PiecePosition, to: PieceName|null) {
         this._pieces[pos.row][pos.col] = to;
     }
+
+    move(from: PiecePosition, to: PiecePosition) {
+        this.set(to, this.get(from));
+        this.set(from, null);
+    }
 };
 
 // Determines how the board is displayed. Does not affect game play.
@@ -40,7 +45,6 @@ type MakeMove = (
         pieces: BoardPieces;
     }
 ) => 'end-turn' | 'continue' | 'bad';
-
 
 
 // The properties that define an individual game so of which are optional.
@@ -94,8 +98,7 @@ interface GameDefinitionInput {
 const defaultLegalMoves: LegalMoves = () => null;
 const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
     let board = new Board(pieces);
-    board.set(to, board.get(from));
-    board.set(from, null);
+    board.move(from, to);
 
     return 'end-turn';
 }
@@ -108,5 +111,5 @@ function gameDefinition(input: GameDefinitionInput) : GameDefinition {
     };
 }
 
-export { gameDefinition }
+export { gameDefinition, Board }
 export type { GameDefinition, GameDefinitionInput }
