@@ -39,8 +39,6 @@ function processLocation(location: Location) {
         lobby: runningLocally ? localModeLobbyServer : location.origin,
       };
     
-  console.log(runningLocally, localMode, servers.game, servers.lobby);
-    
   function playersPerBrowser() {
     const ppb = removeParam('ppb');
     if (ppb === null)

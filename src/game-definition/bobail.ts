@@ -107,8 +107,6 @@ const legalMoves: LegalMoves = (args) => {
 }
 
 const makeMove: MakeMove = ({from, to, pieces, gameState}) => {
-    console.log("gameState:", gameState);
-
     let board = new Board(pieces);
     let movingBobail = board.get(from) === bb;
 
