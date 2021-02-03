@@ -9,7 +9,6 @@ const pl1 = 'p1';
 const pl2 = 'p2';
 
 type LegalMoves = NonNullable<GameDefinitionInput["legalMoves"]>;
-type MakeMove = NonNullable<GameDefinitionInput["makeMove"]>;
 
 // Get the connects of a square. Return undefined if the row and column
 // and not on the board.
@@ -87,10 +86,6 @@ const legalMoves: LegalMoves = (args) => {
     return null;
 }
 
-const makeMove: MakeMove = (arg) => {
-    return 'end-turn';
-}
-
 const games: Array<GameDefinitionInput> = [
     {
         name: 'bobail',
@@ -115,8 +110,6 @@ const games: Array<GameDefinitionInput> = [
         offBoardPieces: { top: [], bottom: [], },
 
         legalMoves: legalMoves,
-
-        makeMove: makeMove,
     }
 ];
 

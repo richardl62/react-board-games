@@ -3,6 +3,21 @@ import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
 // The types of the supported games.
 type GameType = 'bobail' | 'chess' | 'draughts';
 
+class Board {
+    constructor(pieces: BoardPieces) {
+        this._pieces = pieces;
+    }
+    private _pieces: BoardPieces;
+
+    get(pos: PiecePosition) {
+        return this._pieces[pos.row][pos.col];
+    }
+
+    set(pos: PiecePosition, to: PieceName|null) {
+        this._pieces[pos.row][pos.col] = to;
+    }
+};
+
 // Determines how the board is displayed. Does not affect game play.
 interface BoardStyle {
     checkered: boolean; // If true, square [0][0] is 'black'
@@ -20,8 +35,9 @@ type LegalMoves = (
 
 type MakeMove = (
     arg: {
+        from: PiecePosition;
+        to: PiecePosition;
         pieces: BoardPieces;
-        selectedSquare: PiecePosition;
     }
 ) => 'end-turn' | 'continue' | 'bad';
 
@@ -48,7 +64,7 @@ interface GameDefinition {
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
     legalMoves: LegalMoves;
-    makeMove?: MakeMove;
+    makeMove: MakeMove;
 };
 
 // The properties that define an individual game so of which are optional.
@@ -76,11 +92,18 @@ interface GameDefinitionInput {
 };
 
 const defaultLegalMoves: LegalMoves = () => null;
+const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
+    let board = new Board(pieces);
+    board.set(to, board.get(from));
+    board.set(from, null);
 
+    return 'end-turn';
+}
 
 function gameDefinition(input: GameDefinitionInput) : GameDefinition {
     return {
         legalMoves: defaultLegalMoves, 
+        makeMove: defaultMakeMove,
         ...input
     };
 }

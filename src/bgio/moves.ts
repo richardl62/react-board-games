@@ -30,20 +30,6 @@ interface G {
     legalMoves: Array<Array<boolean>> | null;
 };
 
-/* movePiece */ 
-
-interface MovePieceArg {
-    from: RowAndCol;
-    to: RowAndCol;
-};
-
-function movePiece(g: G, ctx: any, { from, to }: MovePieceArg) {
-    //console.log("movePiece", from, to);
-
-    g.pieces[to.r][to.c] = g.pieces[from.r][from.c];
-    g.pieces[from.r][from.c] = null;
-}
-
 /* setPiece */ 
 
 interface SetPieceArg {
@@ -81,19 +67,17 @@ function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelected
 };
 
 const moves = {
-    movePiece: movePiece,
     setPiece: setPiece,
-    setSelectedSquare: setSelectedSquare,
     setPieces: setPieces,
+    setSelectedSquare: setSelectedSquare,
 };
 
 
 // Move functions as called by clients
 interface ClientMoves {
-    movePiece: (arg: MovePieceArg) => null;
     setPiece: (arg: SetPieceArg) => null;
-    setSelectedSquare: (arg: SetSelectedSquareArg) => null;
     setPieces: (arg: SetPiecesArg) => null;
+    setSelectedSquare: (arg: SetSelectedSquareArg) => null;
 };
 
 export default moves;

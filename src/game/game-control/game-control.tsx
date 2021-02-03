@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { PiecePosition, PieceName } from '../../interfaces';
+import { PiecePosition, PieceName, BoardPieces } from '../../interfaces';
 import { GameDefinition } from '../../game-definition';
 
 import * as Bgio from '../../bgio';
@@ -67,6 +67,10 @@ interface SquareProperties {
         canMoveTo: boolean;
         cannotMoveTo: boolean;
     }
+}
+
+function copyPieces(pieces: BoardPieces) {
+    return pieces.map(row => [...row]);
 }
 
 class GameControl {
@@ -208,10 +212,12 @@ class GameControl {
         if (to && toProps && !toProps.gameStatus.cannotMoveTo) {
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
-                    this._bgioMoves.movePiece({
-                        from: rowAndCol(from),
-                        to: rowAndCol(to),
-                    });
+                    let pieces = copyPieces(this._boardPieces);
+
+                    const makeMove = this._localProps.gameDefinition.makeMove;
+                    makeMove({from:from, to:to, pieces: pieces});
+
+                    this._bgioMoves.setPieces(pieces);
                 } else {
                     this._bgioMoves.setPiece({
                         pos: rowAndCol(to),
@@ -219,7 +225,7 @@ class GameControl {
                     });
                 }
             } else {
-                // A piece has been dragged or click-moved somewhere if won't go,
+                // A piece has been dragged or click-moved somewhere it won't go,
                 // i.e. off the board. Treat this as a request to clear the piece.
                 if (fromProps.changeable) {
                     this._bgioMoves.setPiece({
