@@ -1,15 +1,29 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { BoardPieces } from '../interfaces';
-import { GameDefinitionInput, Board } from './game-definition';
+import { GameDefinitionInput, Board, GameState, 
+      LegalMoves, MakeMove } from './game-definition';
 import RenderPiece from './bobail-piece';
 
 const bb = 'bb';
 const pl1 = 'p1';
 const pl2 = 'p2';
 
-type LegalMoves = NonNullable<GameDefinitionInput["legalMoves"]>;
-type MakeMove = NonNullable<GameDefinitionInput["makeMove"]>;
+interface BobailState {
+    nextMove: 'bobail' | 'piece';
+}
+
+function bobailState(gameState: GameState):  BobailState {
+    return gameState.shared;
+}
+
+function makeGameState(bobailState: BobailState): GameState {
+    return {shared: bobailState};
+}
+
+function setNextMove(gameState: GameState, nextMove: BobailState["nextMove"]) {
+    gameState.shared = {nextMove: nextMove};
+}
 
 // Get the connects of a square. Return undefined if the row and column
 // and not on the board.
@@ -71,31 +85,41 @@ const legalMovesPiece : LegalMoves = (args) => {
 
 const legalMoves: LegalMoves = (args) => {
     const s = args.selectedSquare;
+    const nextMove = bobailState(args.gameState).nextMove;
 
     if (s.onBoard) {
         const p1Name = args.pieces[s.row][s.col];
 
         if (p1Name === bb) {
-            return legalMovesBobail(args);
+            if(nextMove === 'bobail') {
+                return legalMovesBobail(args);
+            }
         } else if (p1Name === pl1 || p1Name === pl2) {
-            return legalMovesPiece(args);
+            if(nextMove === 'piece') {
+                return legalMovesPiece(args);
+            }
         } else if (p1Name) {
-            throw new Error("Unexpect name for bobail piece: " + p1Name);
+            throw new Error("Unexpected name for bobail piece: " + p1Name);
         }
     }
 
     return null;
 }
 
-const makeMove: MakeMove = ({from, to, pieces}) => {
+const makeMove: MakeMove = ({from, to, pieces, gameState}) => {
+    console.log("gameState:", gameState);
+
     let board = new Board(pieces);
     let movingBobail = board.get(from) === bb;
 
     board.move(from, to);
-
-    // The turn ends when a piece other than the bobail is moved.
-    return movingBobail ? 'continue' : 'end-turn';
-
+    if(movingBobail) {
+        setNextMove(gameState, 'piece');
+        return 'continue';
+    } else {
+        setNextMove(gameState, 'bobail');
+        return 'end-turn';
+    }
 }
 
 const games: Array<GameDefinitionInput> = [
@@ -120,6 +144,8 @@ const games: Array<GameDefinitionInput> = [
         ],
 
         offBoardPieces: { top: [], bottom: [], },
+
+        gameState: makeGameState({nextMove: 'piece'}),
 
         legalMoves: legalMoves,
 

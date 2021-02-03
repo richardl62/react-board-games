@@ -14,6 +14,7 @@ function makeGame(gameDefinition: GameDefinition) {
                 pieces: gameDefinition.pieces,
                 selectedSquare: null,
                 legalMoves: null,
+                gameState: gameDefinition.gameState,
             };
         },
         moves: moves,

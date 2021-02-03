@@ -99,6 +99,8 @@ class GameControl {
     private get _boardPieces() { return this._bgioProps.G.pieces; }
     private get _offBoardPieces() { return this._localProps.gameDefinition.offBoardPieces; }
 
+    private get _gameState() { return this._bgioProps.G.gameState; }
+
     private get _bgioMoves() {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
     }
@@ -185,16 +187,16 @@ class GameControl {
     }
 
     private _setSelectedSquare(p: PiecePosition | null) {
-        const pieces = this._boardPieces;
         const findLegalMoves = this._localProps.gameDefinition.legalMoves;
 
         let legalMoves = p && findLegalMoves({
             selectedSquare: p,
-            pieces: pieces,
+            pieces: this._boardPieces,
+            gameState: this._gameState,
         });
 
         this._bgioMoves.setSelectedSquare({
-            selected: p && makePosition(p.data),
+            selected: p && legalMoves && makePosition(p.data),
             legalMoves: legalMoves,
         });
     }
@@ -214,12 +216,15 @@ class GameControl {
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
                     let pieces = copyPieces(this._boardPieces);
+                    let gameState = {...this._gameState};
 
                     const makeMove = this._localProps.gameDefinition.makeMove;
-                    const moveResult = makeMove({from:from, to:to, pieces: pieces});
+                    const moveResult = makeMove({from:from, to:to, 
+                        pieces: pieces, gameState: gameState});
                     if( moveResult === "bad") {
                         console.log("Bad move reported")
                     } else {
+                        this._bgioMoves.setGameState(gameState);
                         this._bgioMoves.setPieces(pieces);
                     }
                     endTurn = moveResult === "end-turn";

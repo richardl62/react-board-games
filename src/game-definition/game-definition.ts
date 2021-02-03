@@ -31,21 +31,24 @@ interface BoardStyle {
     labels: boolean;
 }
 
+type GameState = {shared: any}; // For now
+
 type LegalMoves = (
     arg: {
-        pieces: BoardPieces;
-        selectedSquare: PiecePosition;
+        readonly pieces: BoardPieces;
+        readonly selectedSquare: PiecePosition;
+        readonly gameState: GameState;
     }
     ) => (Array<Array<boolean>> | null)
 
 type MakeMove = (
     arg: {
-        from: PiecePosition;
-        to: PiecePosition;
+        readonly from: PiecePosition;
+        readonly to: PiecePosition;
         pieces: BoardPieces;
+        gameState: GameState;
     }
 ) => 'end-turn' | 'continue' | 'bad';
-
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
@@ -64,6 +67,8 @@ interface GameDefinition {
         top: Array<PieceName>;
         bottom: Array<PieceName>;
     };
+
+    gameState: GameState;
 
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
@@ -89,6 +94,7 @@ interface GameDefinitionInput {
         bottom: Array<PieceName>;
     };
 
+    gameState?: GameState;
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
     legalMoves?: LegalMoves;
@@ -103,13 +109,15 @@ const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
     return 'end-turn';
 }
 
+const defaultGameState = {shared: {}}
 function gameDefinition(input: GameDefinitionInput) : GameDefinition {
     return {
         legalMoves: defaultLegalMoves, 
         makeMove: defaultMakeMove,
+        gameState: defaultGameState,
         ...input
     };
 }
 
 export { gameDefinition, Board }
-export type { GameDefinition, GameDefinitionInput }
+export type { GameDefinition, GameDefinitionInput, LegalMoves, MakeMove, GameState }

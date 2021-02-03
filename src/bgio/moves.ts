@@ -1,5 +1,5 @@
 import { PieceName,BoardPieces } from '../interfaces';
-
+import { GameState } from '../game-definition';
 /*
     KLUDGE?
    
@@ -28,6 +28,7 @@ interface G {
     pieces: BoardPieces;
     selectedSquare: Position | null;
     legalMoves: Array<Array<boolean>> | null;
+    gameState: GameState;
 };
 
 /* setPiece */ 
@@ -66,10 +67,16 @@ function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelected
     g.legalMoves = legalMoves;
 };
 
+type SetGameStateArg = GameState;
+function setGameState(g: G, ctx: any, gameState: SetGameStateArg) {
+    g.gameState = gameState;
+};
+
 const moves = {
     setPiece: setPiece,
     setPieces: setPieces,
     setSelectedSquare: setSelectedSquare,
+    setGameState: setGameState,
 };
 
 
@@ -78,6 +85,7 @@ interface ClientMoves {
     setPiece: (arg: SetPieceArg) => null;
     setPieces: (arg: SetPiecesArg) => null;
     setSelectedSquare: (arg: SetSelectedSquareArg) => null;
+    setGameState: (arg: SetGameStateArg) => null;
 };
 
 export default moves;
