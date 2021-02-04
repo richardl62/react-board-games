@@ -156,10 +156,10 @@ class GameControl {
         const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));
 
         const legalMoves = this._bgioProps.G.legalMoves;
-        const canMoveTo = Boolean(clickedPos && legalMoves
+        const canMoveTo = Boolean(clickedPos && legalMoves && pos.onBoard
             && legalMoves[pos.row][pos.col]);
 
-        const cannotMoveTo = Boolean(clickedPos && legalMoves
+        const cannotMoveTo = Boolean(clickedPos && legalMoves && pos.onBoard
             && !selected && !legalMoves[pos.row][pos.col]);
 
         const background = () => {
