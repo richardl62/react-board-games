@@ -13,6 +13,8 @@ class Board {
     }
     private _pieces: BoardPieces;
 
+    get nRows () { return this._pieces.length;}
+    get nCols () { return this._pieces[0].length;}
     get(pos: RowCol) {
         return this.get2(pos.row, pos.col);
     }
