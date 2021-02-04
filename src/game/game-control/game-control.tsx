@@ -203,7 +203,7 @@ class GameControl {
 
         if (p) {
             const legalMoves = this._localProps.gameDefinition.legalMoves({
-                selectedSquare: p,
+                from: p,
                 pieces: this._boardPieces,
                 gameState: this._gameState,
             });

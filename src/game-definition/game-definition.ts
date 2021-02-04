@@ -14,10 +14,19 @@ class Board {
     private _pieces: BoardPieces;
 
     get(pos: RowCol) {
-        return this._pieces[pos.row][pos.col];
+        return this.get2(pos.row, pos.col);
+    }
+
+    get2(row: number, col: number) {
+        const r = this._pieces[row];
+        return r ? r[col] : r;
     }
 
     set(pos: RowCol, to: PieceName|null) {
+        if(this.get(pos) === undefined) {
+            console.log("Bad position passed to Board.set", pos);
+            throw new Error("Bad position passed to Board.set");
+        }
         this._pieces[pos.row][pos.col] = to;
     }
 
@@ -40,7 +49,7 @@ type GameState = {shared: any}; // For now
 type LegalMoves = (
     arg: {
         readonly pieces: BoardPieces;
-        readonly selectedSquare: PiecePosition;
+        readonly from: PiecePosition;
         readonly gameState: GameState;
     }
     ) => Array<Array<boolean>> | null;

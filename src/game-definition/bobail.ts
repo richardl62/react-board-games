@@ -33,8 +33,8 @@ function piece( pieces: BoardPieces, row: number, col:number) {
 
 // Record as legal the empty squares that are one step in any direction
 // (including diagonally) from the selected square.
-const legalMovesBobail: LegalMoves = ({ selectedSquare, pieces }) => {
-    const s = selectedSquare;
+const legalMovesBobail: LegalMoves = ({ from, pieces }) => {
+    const s = from;
 
     let result = pieces.map(row => row.map(() => false));
     for (let row = s.row - 1; row <= s.row + 1; ++row) {
@@ -47,12 +47,12 @@ const legalMovesBobail: LegalMoves = ({ selectedSquare, pieces }) => {
 };
 
 function legalMovesPieceDirected(
-    { selectedSquare, pieces }: Parameters<LegalMoves>[0],
+    { from, pieces }: Parameters<LegalMoves>[0],
     legalMoves: Array<Array<boolean>>,
     rStep: number, cStep: number
     ) {
 
-    let { row, col } = selectedSquare;
+    let { row, col } = from;
 
     while (piece(pieces, row + rStep, col + cStep) === null) {
         row += rStep;
@@ -84,7 +84,7 @@ const legalMovesPiece : LegalMoves = (args) => {
 };
 
 const legalMoves: LegalMoves = (args) => {
-    const s = args.selectedSquare;
+    const s = args.from;
     const nextMove = bobailState(args.gameState).nextMove;
 
     if (s.onBoard) {
