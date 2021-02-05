@@ -5,6 +5,8 @@ import { GameDefinitionInput, Board, GameState,
       LegalMoves, MakeMove } from './game-definition';
 import RenderPiece from './bobail-piece';
 
+type LegalMovesArg = Parameters<LegalMoves>[0];
+
 const bb = 'bb';
 const pl1 = 'p1';
 const pl2 = 'p2';
@@ -33,21 +35,19 @@ function piece( pieces: BoardPieces, row: number, col:number) {
 
 // Record as legal the empty squares that are one step in any direction
 // (including diagonally) from the selected square.
-const legalMovesBobail: LegalMoves = ({ from, pieces }) => {
+const legalMovesBobail = ({ from, pieces } : LegalMovesArg,
+    legalMoves: Array<Array<boolean>>) => {
     const s = from;
 
-    let result = pieces.map(row => row.map(() => false));
     for (let row = s.row - 1; row <= s.row + 1; ++row) {
         for (let col = s.col - 1; col <= s.col + 1; ++col) {
-            result[row][col] = piece(pieces, row, col) === null;
+            legalMoves[row][col] = piece(pieces, row, col) === null;
         }
     }
-
-    return result;
 };
 
-function legalMovesPieceDirected(
-    { from, pieces }: Parameters<LegalMoves>[0],
+function legalMovesPieceDirected (
+    { from, pieces }: LegalMovesArg,
     legalMoves: Array<Array<boolean>>,
     rStep: number, cStep: number
     ) {
@@ -68,9 +68,7 @@ function legalMovesPieceDirected(
 
 // Record as legal the last empty square found when stepping in
 // each direction (including diagonal) from the selected square.
-const legalMovesPiece : LegalMoves = (args) => {
-
-    let legalMoves = args.pieces.map(row => row.map(() => false));
+const legalMovesPiece = (args: LegalMovesArg, legalMoves: Array<Array<boolean>>) => {
 
     for (let rStep = -1; rStep <= 1; rStep++) {
         for (let cStep = -1; cStep <= 1; cStep++) {
@@ -87,23 +85,25 @@ const legalMoves: LegalMoves = (args) => {
     const s = args.from;
     const nextMove = bobailState(args.gameState).nextMove;
 
+    let legalMoves = args.pieces.map(row => row.map(() => false));
+
     if (s.onBoard) {
         const p1Name = args.pieces[s.row][s.col];
 
         if (p1Name === bb) {
             if(nextMove === 'bobail') {
-                return legalMovesBobail(args);
+                legalMovesBobail(args, legalMoves);
             }
         } else if (p1Name === pl1 || p1Name === pl2) {
             if(nextMove === 'piece') {
-                return legalMovesPiece(args);
+                legalMovesPiece(args, legalMoves);
             }
         } else if (p1Name) {
             throw new Error("Unexpected name for bobail piece: " + p1Name);
         }
     }
 
-    return null;
+    return legalMoves;
 }
 
 const makeMove: MakeMove = ({from, to, pieces, gameState}) => {
