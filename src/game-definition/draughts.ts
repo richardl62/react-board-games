@@ -159,7 +159,7 @@ const games = [
     }),
 
     draughts({
-        name: "Draughts 4x3 - for testing",
+        name: "Draughts 3*4 (test)",
         nRows: 3, nCols: 4, nRowsOfPieces: 1,
     }),
 ];

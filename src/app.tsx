@@ -14,7 +14,7 @@ type GameDefinition = (typeof gameDefinitions)[number];
 const urlParams = processLocation(window.location);
 
 function gamePath(gameDefinition: GameDefinition) {
-  const gamePage = gameDefinition.name.replace(/\s/g, ''); // Remove any whitespace
+  const gamePage = gameDefinition.name.replace(/[^\w]/g, ''); // Remove non-alphanumeric characters
   return `/${gamePage}`;
 }
 
