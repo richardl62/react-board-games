@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { nonNull } from '../../tools';
-import { SquareProperties } from '../game-control';
+import { SquareProperties, LegalMoveStatus } from '../game-control';
 import styles from './square.module.css';
 
 function Background({ background, gameStatus }: SquareProperties) {
@@ -29,13 +29,14 @@ function Background({ background, gameStatus }: SquareProperties) {
 }
 
 function CanMoveToMarker({ gameStatus }: SquareProperties) {
-    const { canMoveTo, cannotMoveTo } = gameStatus;
-
+    const { legalMoveStatus } = gameStatus;
+    
     let className = null;
-    if (canMoveTo) {
+    if (legalMoveStatus === LegalMoveStatus.Legal) {
         className = nonNull(styles.canMoveTo);
     }
-    if (cannotMoveTo) {
+
+    if (legalMoveStatus === LegalMoveStatus.Illegal) {
         className = nonNull(styles.cannotMoveTo);
     }
 

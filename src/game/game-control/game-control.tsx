@@ -67,6 +67,12 @@ type GameControlProps = ReturnType<typeof useGameControlProps>;
 
 type SquareBackground = null | 'plain' | 'checkered-white' | 'checkered-black';
 
+enum LegalMoveStatus {
+    Legal,
+    Illegal,
+    Unknown,
+};
+
 interface SquareProperties {
     background: SquareBackground;
 
@@ -77,8 +83,7 @@ interface SquareProperties {
         // At most one of the booleans below will be true.
         // For games that specify legal moves exactly one will be true.
         selected: boolean;
-        canMoveTo: boolean;
-        cannotMoveTo: boolean;
+        legalMoveStatus: LegalMoveStatus;
     }
 }
 
@@ -151,16 +156,22 @@ class GameControl {
             }
             throw new Error("squareProperties cannot find square");
         }
-
         const clickedPos = this._clickManager.selected;
         const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));
 
-        const legalMoves = this._bgioProps.G.legalMoves;
-        const canMoveTo = Boolean(clickedPos && legalMoves && pos.onBoard
-            && legalMoves[pos.row][pos.col]);
+        const legalMoveStatus = ()  => {
 
-        const cannotMoveTo = Boolean(clickedPos && legalMoves && pos.onBoard
-            && !selected && !legalMoves[pos.row][pos.col]);
+            const legalMoves = this._bgioProps.G.legalMoves;
+            if(clickedPos && legalMoves && pos.onBoard && legalMoves[pos.row][pos.col]) {
+                return LegalMoveStatus.Legal;
+            }
+    
+            if(clickedPos && legalMoves && pos.onBoard && !selected && !legalMoves[pos.row][pos.col]) {
+                return LegalMoveStatus.Illegal;
+            }
+
+            return LegalMoveStatus.Unknown;
+        }
 
         const background = () => {
             if (!pos.onBoard) {
@@ -172,6 +183,7 @@ class GameControl {
                 return (asTopLeft === topLeftBlack) ? 'checkered-black' : 'checkered-white';
             }
         }
+
         return {
             background: background(),
 
@@ -180,8 +192,7 @@ class GameControl {
 
             gameStatus: {
                 selected: selected,
-                canMoveTo: canMoveTo,
-                cannotMoveTo: cannotMoveTo,
+                legalMoveStatus: legalMoveStatus(),
             },
         }
     }
@@ -234,7 +245,7 @@ class GameControl {
         const toProps = to && this.squareProperties(to);
         const fromProps = this.squareProperties(from);
 
-        if (to && toProps && !toProps.gameStatus.cannotMoveTo) {
+        if (to && toProps && toProps.gameStatus.legalMoveStatus !== LegalMoveStatus.Illegal) {
             let endTurn = true;
             let badMove = false;
             if (toProps && toProps.changeable) {
@@ -294,5 +305,5 @@ class GameControl {
     get renderPiece() { return this._localProps.gameDefinition.renderPiece; }
 }
 
-export { GameControl as default, useGameControlProps };
-export type { SquareProperties, SquareBackground }
+export { GameControl as default, useGameControlProps, LegalMoveStatus  };
+export type { SquareProperties, SquareBackground}
