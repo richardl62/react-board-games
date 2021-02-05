@@ -8,16 +8,32 @@ import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 
+function Names({ gameControl }: { gameControl: GameControl }) {
+    const {players, current } = gameControl.players;
+    return <div className={nonNull(styles.players)}>
+        {players.map((name, index) => {
+            let props : any = {};
+            if(index === current) {
+                props.className = nonNull(styles.currentPlayer);
+            }
+            return (<div {...props}>{name}</div>);
+        })}
+    </div>
+}
+
 function Game({ gameControl }: { gameControl: GameControl }) {
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className={nonNull(styles.playingArea)}>
-                <div>
-                    <RowOfPieces where='top' gameControl={gameControl} />
+            <div className={nonNull(styles.game)}>
+                <div className={nonNull(styles.playingArea)}>
+                    <Names gameControl={gameControl} />
+                    <div>
+                        <RowOfPieces where='top' gameControl={gameControl} />
 
-                    <Board gameControl={gameControl} />
+                        <Board gameControl={gameControl} />
 
-                    <RowOfPieces where='bottom' gameControl={gameControl} />
+                        <RowOfPieces where='bottom' gameControl={gameControl} />
+                    </div>
                 </div>
                 <UserOptions gameControl={gameControl} />
             </div>

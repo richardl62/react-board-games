@@ -87,7 +87,7 @@ function Board({ gameControl }: {
     const nGridCols = nCols + (borderLabels ? 2 : 0);
     const nGridRows = nRows + (borderLabels ? 2 : 0);
     const style = { // For now
-        display: 'grid',
+        display: 'inline-grid',
         gridTemplateColumns: `repeat(${nGridCols},auto)`,
         gridTemplateRows: `repeat(${nGridRows},auto)`,
     };
