@@ -9,14 +9,15 @@ import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 
 function Names({ gameControl }: { gameControl: GameControl }) {
-    const {players, current } = gameControl.players;
+    const {playerNames, active, caller } = gameControl.players;
     return <div className={nonNull(styles.players)}>
-        {players.map((name, index) => {
+        {playerNames.map((name, index) => {
             let props : any = {};
-            if(index === current) {
+            if(index === active) {
                 props.className = nonNull(styles.currentPlayer);
             }
-            return (<div {...props}>{name}</div>);
+            const dname = index === caller ? "You" : name;
+            return (<div key={index} {...props}>{dname}</div>);
         })}
     </div>
 }

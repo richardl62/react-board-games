@@ -89,14 +89,14 @@ interface SquareProperties {
 
 interface Players {
     // The names of all the players in player order.
-    players: Array<string>;
+    playerNames: Array<string>;
     
-    // The number player whose move it is. (Index into names)
-    current: number;
+    // The number player whose move it is. (Index into playerNames)
+    active: number;
 
     // The number of player who made the call (or, at least whose client did).
-    // (Index into names)
-    caller: number;
+    // (Index into playerNames)
+    caller: number,
 }
 
 function copyPieces(pieces: BoardPieces) {
@@ -316,11 +316,26 @@ class GameControl {
 
     get renderPiece() { return this._localProps.gameDefinition.renderPiece; }
 
-    get players() : Players { 
+    get isActive() { return this._bgioProps.isActive;}
+
+    get players() : Players {
+        if(!this._bgioProps.playerID) {
+            throw new Error("PlayerID is null");
+        }
+
+        const active = this._bgioProps.ctx.playOrderPos;
+        const caller = parseInt(this._bgioProps.playerID);
+        const players = this._bgioProps.ctx.playOrder;
+
+        if((caller === active) !== this.isActive)
+        {
+            throw new Error("Record of active player appears inconsistent");
+        }
+
         return {
-            players: ["player1", "really-long-named-player", "player3", "player4"],
-            current: 1,
-            caller: 2,
+            playerNames: players,
+            active: active,
+            caller: caller ,
         } 
     }
 }
