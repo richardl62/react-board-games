@@ -119,6 +119,8 @@ class GameControl {
                 this.movePieceRequest(p1, p2),
         });
     }
+    
+    message: string | null = null;
 
     private _bgioProps: Bgio.BoardProps;
     private _localProps: GameControlProps;

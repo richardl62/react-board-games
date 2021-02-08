@@ -8,18 +8,28 @@ import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 
-function Names({ gameControl }: { gameControl: GameControl }) {
+function Header({ gameControl }: { gameControl: GameControl }) {
     const {playerNames, active, caller } = gameControl.players;
-    return <div className={nonNull(styles.players)}>
-        {playerNames.map((name, index) => {
-            let props : any = {};
-            if(index === active) {
-                props.className = nonNull(styles.currentPlayer);
-            }
-            const dname = index === caller ? "You" : name;
-            return (<div key={index} {...props}>{dname}</div>);
-        })}
-    </div>
+
+    let message = gameControl.message;
+    if(!message && active === caller) {
+        message = "Your move";
+    }
+
+    const nameElements = playerNames.map((name: string, index: number) => {
+        let props : any = {};
+        if(index === active) {
+            props.className = nonNull(styles.currentPlayer);
+        }
+        return (<div key={index} {...props}>{name}</div>);
+    })
+
+    return (
+        <>
+            <div className={nonNull(styles.players)}>{nameElements}</div>
+            <div className={nonNull(styles.message)}>{message}</div>
+        </>
+    );
 }
 
 function Game({ gameControl }: { gameControl: GameControl }) {
@@ -27,7 +37,7 @@ function Game({ gameControl }: { gameControl: GameControl }) {
         <DndProvider backend={HTML5Backend}>
             <div className={nonNull(styles.game)}>
                 <div className={nonNull(styles.playingArea)}>
-                    <Names gameControl={gameControl} />
+                    <Header gameControl={gameControl} />
                     <div>
                         <RowOfPieces where='top' gameControl={gameControl} />
 
