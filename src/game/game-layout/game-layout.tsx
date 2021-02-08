@@ -8,28 +8,27 @@ import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 
+// const nameElements = playerNames.map((name: string, index: number) => {
+//     let props : any = {};
+//     if(index === active) {
+//         props.className = nonNull(styles.currentPlayer);
+//     }
+//     return (<div key={index} {...props}>{name}</div>);
+// })
+
+
 function Header({ gameControl }: { gameControl: GameControl }) {
     const {playerNames, active, caller } = gameControl.players;
 
-    let message = gameControl.message;
-    if(!message && active === caller) {
-        message = "Your move";
+    let message = (active === caller) ? "Your turn" :
+        `Waiting for ${playerNames[active]}`;
+
+    const description = gameControl.moveDescription;
+    if (description) {
+        message += ' to ' + description;
     }
 
-    const nameElements = playerNames.map((name: string, index: number) => {
-        let props : any = {};
-        if(index === active) {
-            props.className = nonNull(styles.currentPlayer);
-        }
-        return (<div key={index} {...props}>{name}</div>);
-    })
-
-    return (
-        <>
-            <div className={nonNull(styles.players)}>{nameElements}</div>
-            <div className={nonNull(styles.message)}>{message}</div>
-        </>
-    );
+    return (<div className={nonNull(styles.message)}>{message}</div>);
 }
 
 function Game({ gameControl }: { gameControl: GameControl }) {

@@ -148,6 +148,8 @@ const games: Array<GameDefinitionInput> = [
         legalMoves: legalMoves,
 
         makeMove: makeMove,
+
+        moveDescription: (gameState: GameState) => `move ${bobailState(gameState).nextMove}`,
     }
 ];
 

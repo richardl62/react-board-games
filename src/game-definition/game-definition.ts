@@ -88,8 +88,13 @@ interface GameDefinition {
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
     legalMoves: LegalMoves;
+    
     makeMove: MakeMove;
+
+    moveDescription: MoveDescription;
 };
+
+type MoveDescription = (gameState: GameState) => string | null;
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinition
@@ -114,9 +119,12 @@ interface GameDefinitionInput {
 
     legalMoves?: LegalMoves;
     makeMove?: MakeMove;
+
+    moveDescription?: MoveDescription;
 };
 
 const defaultLegalMoves: LegalMoves = () => null;
+
 const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
     let board = new Board(pieces);
     board.move(from, to);
@@ -124,15 +132,19 @@ const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
     return 'end-turn';
 }
 
+
+const defaultMoveDescription: MoveDescription = () => null;
+
 const defaultGameState = {shared: {}}
 function gameDefinition(input: GameDefinitionInput) : GameDefinition {
     return {
         legalMoves: defaultLegalMoves, 
         makeMove: defaultMakeMove,
         gameState: defaultGameState,
+        moveDescription: defaultMoveDescription,
         ...input
     };
 }
 
 export { gameDefinition, Board }
-export type { GameDefinition, GameDefinitionInput, LegalMoves, MakeMove, GameState }
+export type { GameDefinition, GameDefinitionInput, LegalMoves, MakeMove, MoveDescription, GameState }

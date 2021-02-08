@@ -119,8 +119,6 @@ class GameControl {
                 this.movePieceRequest(p1, p2),
         });
     }
-    
-    message: string | null = null;
 
     private _bgioProps: Bgio.BoardProps;
     private _localProps: GameControlProps;
@@ -129,7 +127,9 @@ class GameControl {
     // Public access to on-board or off-board pieces is though functions that
     // take account of flipping.
     private get _boardPieces() { return this._bgioProps.G.pieces; }
-    private get _offBoardPieces() { return this._localProps.gameDefinition.offBoardPieces; }
+    private get _offBoardPieces() { return this._gameDefinition.offBoardPieces; }
+
+    private get _gameDefinition () {  return this._localProps.gameDefinition; }
 
     private get _gameState() { return this._bgioProps.G.gameState; }
 
@@ -137,13 +137,13 @@ class GameControl {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
     }
 
-    get gameType() { return this._localProps.gameDefinition.gameType; }
-    get boardStyle() { return this._localProps.gameDefinition.boardStyle; }
+    get gameType() { return this._gameDefinition.gameType; }
+    get boardStyle() { return this._gameDefinition.boardStyle; }
 
     undo() { this._bgioProps.undo(); }
     redo() { this._bgioProps.redo(); }
     restart() {
-        this._bgioMoves.setPieces(this._localProps.gameDefinition.pieces);
+        this._bgioMoves.setPieces(this._gameDefinition.pieces);
     }
 
     get reverseBoardRows() { return this._localProps.reverseBoard[0]; }
@@ -227,7 +227,7 @@ class GameControl {
     private _setSelectedSquare(p: PiecePosition | null) {
 
         if (p) {
-            const legalMoves = this._localProps.gameDefinition.legalMoves({
+            const legalMoves = this._gameDefinition.legalMoves({
                 from: p,
                 pieces: this._boardPieces,
                 gameState: this._gameState,
@@ -267,7 +267,7 @@ class GameControl {
                     let pieces = copyPieces(this._boardPieces);
                     let gameState = { ...this._gameState };
 
-                    const makeMove = this._localProps.gameDefinition.makeMove;
+                    const makeMove = this._gameDefinition.makeMove;
                     const moveResult = makeMove({
                         from: from, to: to,
                         pieces: pieces, gameState: gameState
@@ -316,7 +316,7 @@ class GameControl {
         }
     }
 
-    get renderPiece() { return this._localProps.gameDefinition.renderPiece; }
+    get renderPiece() { return this._gameDefinition.renderPiece; }
 
     get isActive() { return this._bgioProps.isActive;}
 
@@ -327,12 +327,17 @@ class GameControl {
 
         const active = this._bgioProps.ctx.playOrderPos;
         const caller = parseInt(this._bgioProps.playerID);
-        const players = this._bgioProps.ctx.playOrder;
 
         if((caller === active) !== this.isActive)
         {
             throw new Error("Record of active player appears inconsistent");
         }
+
+        const players = this._bgioProps.ctx.playOrder.map(name => {
+            const playerNumber = Number(name);
+            return `Player ${playerNumber + 1}`
+        });
+
 
         return {
             playerNames: players,
@@ -340,6 +345,8 @@ class GameControl {
             caller: caller ,
         } 
     }
+
+    get moveDescription () {return this._gameDefinition.moveDescription(this._gameState);}
 }
 
 export { GameControl as default, useGameControlProps, LegalMoveStatus  };
