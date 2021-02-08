@@ -11,6 +11,10 @@ const bb = 'bb';
 const pl1 = 'p1';
 const pl2 = 'p2';
 
+function pieceBelongsTo(name: string, player: number) {
+    return name === `p${player+1}`;
+}
+
 interface BobailState {
     nextMove: 'bobail' | 'piece';
 }
@@ -83,12 +87,14 @@ const legalMovesPiece = (args: LegalMovesArg, legalMoves: Array<Array<boolean>>)
 
 const legalMoves: LegalMoves = (args) => {
     const s = args.from;
-    const nextMove = bobailState(args.gameState).nextMove;
+    const {gameState, pieces, currentPlayer} = args;
 
-    let legalMoves = args.pieces.map(row => row.map(() => false));
+    const nextMove = bobailState(gameState).nextMove;
+
+    let legalMoves = pieces.map(row => row.map(() => false));
 
     if (s.onBoard) {
-        const p1Name = args.pieces[s.row][s.col];
+        const p1Name = pieces[s.row][s.col];
 
         if (p1Name === bb) {
             if(nextMove === 'bobail') {
@@ -96,7 +102,11 @@ const legalMoves: LegalMoves = (args) => {
             }
         } else if (p1Name === pl1 || p1Name === pl2) {
             if(nextMove === 'piece') {
-                legalMovesPiece(args, legalMoves);
+                if(pieceBelongsTo(p1Name, currentPlayer)) {
+                    legalMovesPiece(args, legalMoves);
+                } else {
+                    console.log(p1Name, "Does not belong to player ", currentPlayer);
+                }
             }
         } else if (p1Name) {
             throw new Error("Unexpected name for bobail piece: " + p1Name);

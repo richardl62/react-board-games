@@ -53,6 +53,7 @@ type LegalMoves = (
         readonly pieces: BoardPieces;
         readonly from: PiecePosition;
         readonly gameState: GameState;
+        readonly currentPlayer: number;
     }
     ) => Array<Array<boolean>> | null;
 

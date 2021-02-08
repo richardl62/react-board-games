@@ -231,6 +231,7 @@ class GameControl {
                 from: p,
                 pieces: this._boardPieces,
                 gameState: this._gameState,
+                currentPlayer: this.players.caller,
             });
 
             if (legalMoves && allFalse(legalMoves)) {
