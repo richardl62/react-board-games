@@ -240,7 +240,7 @@ class GameControl {
                 from: p,
                 pieces: this._boardPieces,
                 gameState: this._gameState,
-                currentPlayer: this.players.caller,
+                activePlayer: this.players.caller,
             });
 
             if (legalMoves && allFalse(legalMoves)) {
@@ -279,9 +279,12 @@ class GameControl {
 
                     const moveResult = this.makeMove({
                         from: from, to: to,
-                        pieces: pieces, gameState: gameState
+                        pieces: pieces, gameState: gameState,
+                        activePlayer: this.players.active
                     });
-                    if (moveResult.illegal) {
+                    if(moveResult.winner !== null) {
+                      console.log("Player ", moveResult.winner, "won");  
+                    } else if (moveResult.illegal) {
                         badMove = true;
                         console.log("Bad move reported")
                     } else {
@@ -310,7 +313,7 @@ class GameControl {
                 this._clickManager.clear();
             }
             
-            if (endTurn) {
+            if (endTurn) {  
                 this.endTurn();
             }
         }

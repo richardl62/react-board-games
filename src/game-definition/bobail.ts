@@ -11,6 +11,8 @@ const bb = 'bb';
 const pl1 = 'p1';
 const pl2 = 'p2';
 
+
+
 function pieceBelongsTo(name: string, player: number) {
     return name === `p${player+1}`;
 }
@@ -39,9 +41,11 @@ function piece( pieces: BoardPieces, row: number, col:number) {
 
 // Record as legal the empty squares that are one step in any direction
 // (including diagonally) from the selected square.
-const legalMovesBobail = ({ from, pieces } : LegalMovesArg,
-    legalMoves: Array<Array<boolean>>) => {
-    const s = from;
+function legalMovesBobail(
+    s: {row: number, col:number},
+    pieces: BoardPieces,
+    legalMoves: Array<Array<boolean>>,
+    ) {
 
     for (let row = s.row - 1; row <= s.row + 1; ++row) {
         for (let col = s.col - 1; col <= s.col + 1; ++col) {
@@ -87,7 +91,7 @@ const legalMovesPiece = (args: LegalMovesArg, legalMoves: Array<Array<boolean>>)
 
 const legalMoves: LegalMoves = (args) => {
     const s = args.from;
-    const {gameState, pieces, currentPlayer} = args;
+    const {gameState, pieces, activePlayer} = args;
 
     const nextMove = bobailState(gameState).nextMove;
 
@@ -98,14 +102,14 @@ const legalMoves: LegalMoves = (args) => {
 
         if (p1Name === bb) {
             if(nextMove === 'bobail') {
-                legalMovesBobail(args, legalMoves);
+                legalMovesBobail(s, pieces, legalMoves);
             }
         } else if (p1Name === pl1 || p1Name === pl2) {
             if(nextMove === 'piece') {
-                if(pieceBelongsTo(p1Name, currentPlayer)) {
+                if(pieceBelongsTo(p1Name, activePlayer)) {
                     legalMovesPiece(args, legalMoves);
                 } else {
-                    console.log(p1Name, "Does not belong to player ", currentPlayer);
+                    console.log(p1Name, "Does not belong to player ", activePlayer);
                 }
             }
         } else if (p1Name) {
@@ -116,14 +120,46 @@ const legalMoves: LegalMoves = (args) => {
     return legalMoves;
 }
 
-const makeMove: MakeMove = ({from, to, pieces, gameState}) => {
+function checkForWinner(pieces: BoardPieces, activePlayer: number) : number | null {
+    const nRows = pieces.length;
+    const nCols = pieces[0].length;
+    for (let r = 0; r < nRows; ++r) {
+        for (let c = 0; c < nCols; ++c) {
+
+            if (pieces[r][c] === bb) {
+                if (r === 0) {
+                    return 0;
+                } else if (r === nRows - 1) {
+                    return 1;
+                } else {
+                    let legalMoves = pieces.map(row => row.map(() => false));
+                    legalMovesBobail({row:r, col: c}, pieces, legalMoves);
+                    const findTrue = legalMoves.find(row => row.includes(true));
+                    if(findTrue === undefined) {
+                        // The bobail cannot move so the player who make the last move wins.
+                        return activePlayer;
+                    }
+                    return null;
+                }
+            }
+
+        }
+    }
+
+    throw new Error("Bobail not found when checking for a winner");
+}
+
+const makeMove: MakeMove = ({from, to, pieces, gameState, activePlayer}) => {
     let board = new Board(pieces);
     let movingBobail = board.get(from) === bb;
 
-    let result = new MoveResult();
-
     board.move(from, to);
-    if(movingBobail) {
+    const winner = checkForWinner(pieces, activePlayer);
+
+    let result = new MoveResult();
+    if(winner !== null) {
+        result.winner = winner;
+    } else if(movingBobail) {
         setNextMove(gameState, 'piece');
         result.continue = true;
     } else {
@@ -148,11 +184,11 @@ const games: Array<GameDefinitionInput> = [
         renderPiece: RenderPiece,
 
         pieces: [
-            [pl1, pl1, pl1, pl1, pl1],
+            [pl1,  pl1,  pl1, pl1,   pl1 ],
             [null, null, null, null, null],
-            [null, null, bb, null, null],
+            [null, null, bb,   null, null],
             [null, null, null, null, null],
-            [pl2, pl2, pl2, pl2, pl2],
+            [pl2,  pl2,  pl2,  pl2,  pl2 ],
         ],
 
         offBoardPieces: { top: [], bottom: [], },
