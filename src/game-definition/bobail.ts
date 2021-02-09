@@ -2,7 +2,7 @@
 // done in this file rather than at point of use.
 import { BoardPieces } from '../interfaces';
 import { GameDefinitionInput, Board, GameState, 
-      LegalMoves, MakeMove } from './game-definition';
+      LegalMoves, MakeMove, MoveResult } from './game-definition';
 import RenderPiece from './bobail-piece';
 
 type LegalMovesArg = Parameters<LegalMoves>[0];
@@ -120,14 +120,18 @@ const makeMove: MakeMove = ({from, to, pieces, gameState}) => {
     let board = new Board(pieces);
     let movingBobail = board.get(from) === bb;
 
+    let result = new MoveResult();
+
     board.move(from, to);
     if(movingBobail) {
         setNextMove(gameState, 'piece');
-        return 'continue';
+        result.continue = true;
     } else {
         setNextMove(gameState, 'bobail');
-        return 'end-turn';
+        result.endOfTurn = true;;
     }
+
+    return result;
 }
 
 const games: Array<GameDefinitionInput> = [

@@ -57,6 +57,20 @@ type LegalMoves = (
     }
     ) => Array<Array<boolean>> | null;
 
+class MoveResult {
+    endOfTurn: boolean = false;
+    continue: boolean = false;
+    illegal: boolean = false;
+    winner: number| null = null;
+
+    valid() {
+        const c = (b:boolean) => b ? 1: 0;
+        let nSet = c(this.endOfTurn) + c(this.continue) + c(this.illegal) + c(this.winner !== null);
+
+        return nSet === 1;
+    }
+}
+
 type MakeMove = (
     arg: {
         readonly from: PiecePosition;
@@ -64,7 +78,7 @@ type MakeMove = (
         pieces: BoardPieces;
         gameState: GameState;
     }
-) => 'end-turn' | 'continue' | 'bad';
+) => MoveResult;
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
@@ -130,7 +144,9 @@ const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
     let board = new Board(pieces);
     board.move(from, to);
 
-    return 'end-turn';
+    let result = new MoveResult();
+    result.endOfTurn = true;
+    return result;
 }
 
 
@@ -147,5 +163,5 @@ function gameDefinition(input: GameDefinitionInput) : GameDefinition {
     };
 }
 
-export { gameDefinition, Board }
-export type { GameDefinition, GameDefinitionInput, LegalMoves, MakeMove, MoveDescription, GameState }
+export { gameDefinition, Board, MoveResult }
+export type { GameDefinition, GameDefinitionInput, LegalMoves, MakeMove,  MoveDescription, GameState }

@@ -1,5 +1,5 @@
 //import { PiecePosition, BoardPieces } from '../interfaces'
-import { GameDefinitionInput, MakeMove, LegalMoves, Board } from './game-definition';
+import { GameDefinitionInput, MakeMove, MoveResult, LegalMoves, Board } from './game-definition';
 import RenderPiece from './draughts-piece';import { PiecePosition } from '../interfaces';
 import { nonNull } from '../tools';
 
@@ -52,7 +52,10 @@ const makeMove: MakeMove = ({ from, to, pieces }) => {
         console.log("Warning non-diagonal move made");
         board.move(from, to);
     }
-    return 'end-turn'
+    
+    let result = new MoveResult();
+    result.endOfTurn = true;
+    return result;
 }
 
 function legalMovesDirected (

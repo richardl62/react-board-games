@@ -158,6 +158,15 @@ class GameControl {
         return this._boardPieces[0].length;
     }
 
+    makeMove(args: Parameters<GameDefinition["makeMove"]>[0]) {
+        const result = this._gameDefinition.makeMove(args);
+        if(!result.valid()) {
+            throw new Error("Invalid result from game move");
+        }
+
+        return result;
+    }
+
     squareProperties(pos: PiecePosition): SquareProperties {
 
         const pieceName = () => {
@@ -268,19 +277,18 @@ class GameControl {
                     let pieces = copyPieces(this._boardPieces);
                     let gameState = { ...this._gameState };
 
-                    const makeMove = this._gameDefinition.makeMove;
-                    const moveResult = makeMove({
+                    const moveResult = this.makeMove({
                         from: from, to: to,
                         pieces: pieces, gameState: gameState
                     });
-                    if (moveResult === "bad") {
+                    if (moveResult.illegal) {
                         badMove = true;
                         console.log("Bad move reported")
                     } else {
                         this._bgioMoves.setGameState(gameState);
                         this._bgioMoves.setPieces(pieces);
                     }
-                    endTurn = moveResult === "end-turn";
+                    endTurn = moveResult.endOfTurn;
                 } else {
                     this._bgioMoves.setPiece({
                         pos: rowAndCol(to),
