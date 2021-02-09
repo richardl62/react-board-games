@@ -8,7 +8,7 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
     return (
         <div className={nonNull(styles.userOptions)}>
 
-            <div className={nonNull(styles.userOptionsButtons)}>
+            {/* <div className={nonNull(styles.userOptionsButtons)}>
                 <button type='button' onClick={() => gameControl.restart()}>
                     Restart
                 </button>
@@ -25,7 +25,7 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
                 <button type='button' onClick={() => gameControl.redo()}>
                     Redo
                 </button>
-            </div>
+            </div> */}
 
             <div className={nonNull(styles.userOptionsButtons)}>
                 <button type='button' onClick={() => gameControl.flipRowOrder()}>
