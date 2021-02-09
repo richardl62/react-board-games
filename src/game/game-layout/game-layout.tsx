@@ -18,16 +18,26 @@ import UserOptions from './user-options';
 
 
 function Header({ gameControl }: { gameControl: GameControl }) {
-    const {playerNames, active, caller } = gameControl.players;
+    const {playerNames, caller } = gameControl.players;
+    let message;
+    if( gameControl.gameover ) {
+        const winner = gameControl.gameover.winner;
 
-    let message = (active === caller) ? "Your turn" :
-        `Waiting for ${playerNames[active]}`;
+        const name = (winner === caller) ? "You" : playerNames[winner];
+        message = `Game over: ${name} won`;
+    } else {
+        const active = gameControl.activePlayer;
+        if(active === caller) {
+            message = "Your turn";
+        } else {
+            message = `Waiting for ${playerNames[active]}`;
+        }
 
-    const description = gameControl.moveDescription;
-    if (description) {
-        message += ' to ' + description;
+        const description = gameControl.moveDescription;
+        if (description) {
+            message += ' to ' + description;
+        }
     }
-
     return (<div className={nonNull(styles.message)}>{message}</div>);
 }
 

@@ -90,9 +90,6 @@ interface SquareProperties {
 interface Players {
     // The names of all the players in player order.
     playerNames: Array<string>;
-    
-    // The number player whose move it is. (Index into playerNames)
-    active: number;
 
     // The number of player who made the call (or, at least whose client did).
     // (Index into playerNames)
@@ -272,25 +269,27 @@ class GameControl {
         if (to && toProps && toProps.gameStatus.legalMoveStatus !== LegalMoveStatus.Illegal) {
             let endTurn = true;
             let badMove = false;
+            let winner = null;
             if (toProps && toProps.changeable) {
                 if (fromProps.changeable) {
                     let pieces = copyPieces(this._boardPieces);
                     let gameState = { ...this._gameState };
 
+
                     const moveResult = this.makeMove({
                         from: from, to: to,
                         pieces: pieces, gameState: gameState,
-                        activePlayer: this.players.active
+                        activePlayer: this.activePlayer,
                     });
-                    if(moveResult.winner !== null) {
-                      console.log("Player ", moveResult.winner, "won");  
-                    } else if (moveResult.illegal) {
+
+                    if (moveResult.illegal) {
                         badMove = true;
                         console.log("Bad move reported")
                     } else {
                         this._bgioMoves.setGameState(gameState);
                         this._bgioMoves.setPieces(pieces);
                     }
+                    winner = moveResult.winner;
                     endTurn = moveResult.endOfTurn;
                 } else {
                     this._bgioMoves.setPiece({
@@ -313,6 +312,9 @@ class GameControl {
                 this._clickManager.clear();
             }
             
+            if( winner != null ) {
+                this.endGame(winner);
+            }
             if (endTurn) {  
                 this.endTurn();
             }
@@ -324,25 +326,36 @@ class GameControl {
         if (endTurn) {
             endTurn();
         } else {
-            console.log("endTurn is not defined");
+            throw new Error("endTurn is not defined");
+        }
+    }
+
+    endGame(winner: number) {
+        const endGame = this._bgioProps.events.endGame;
+        if (endGame) {
+            endGame({winner: winner});
+        } else {
+            throw new Error("endGame is not defined");
         }
     }
 
     get renderPiece() { return this._gameDefinition.renderPiece; }
 
-    get isActive() { return this._bgioProps.isActive;}
+
+    get activePlayer() { return this._bgioProps.ctx.playOrderPos;}
+    
+    get gameover() : undefined | {winner: number} {
+        const gameover = this._bgioProps.ctx.gameover;
+        if (gameover && typeof gameover.winner !== "number") {
+            throw new Error("unexpect gameover status");
+        }
+
+        return gameover;
+    }
 
     get players() : Players {
         if(!this._bgioProps.playerID) {
             throw new Error("PlayerID is null");
-        }
-
-        const active = this._bgioProps.ctx.playOrderPos;
-        const caller = parseInt(this._bgioProps.playerID);
-
-        if((caller === active) !== this.isActive)
-        {
-            throw new Error("Record of active player appears inconsistent");
         }
 
         const players = this._bgioProps.ctx.playOrder.map(name => {
@@ -350,11 +363,11 @@ class GameControl {
             return `Player ${playerNumber + 1}`
         });
 
+        const caller = parseInt(this._bgioProps.playerID);
 
         return {
             playerNames: players,
-            active: active,
-            caller: caller ,
+            caller: caller,
         } 
     }
 
