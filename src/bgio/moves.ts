@@ -1,4 +1,4 @@
-import { PieceName,BoardPieces } from '../interfaces';
+import { BoardPieces } from '../interfaces';
 import { GameState } from '../game-definition';
 /*
     KLUDGE?
@@ -11,10 +11,10 @@ import { GameState } from '../game-definition';
     (NOTE: Typescript requires only that the specified interface exist, so a
     PiecePosition can be compatible with a non-class interface.)
 */
-interface RowAndCol {
-    r: number;
-    c: number;
-}
+// interface RowAndCol {
+//     r: number;
+//     c: number;
+// }
 
 
 interface Position {
@@ -31,16 +31,16 @@ interface G {
     gameState: GameState;
 };
 
-/* setPiece */ 
+// /* setPiece */ 
 
-interface SetPieceArg {
-    pos: RowAndCol;
-    pieceName: PieceName | null;
-};
+// interface SetPieceArg {
+//     pos: RowAndCol;
+//     pieceName: PieceName | null;
+// };
 
-function setPiece(g: G, ctx: any, { pos, pieceName }: SetPieceArg) {
-    g.pieces[pos.r][pos.c] = pieceName;
-}
+// function setPiece(g: G, ctx: any, { pos, pieceName }: SetPieceArg) {
+//     g.pieces[pos.r][pos.c] = pieceName;
+// }
 
 /* setPieces */ 
 
@@ -54,18 +54,18 @@ function setPieces(g: G, ctx: any, pieces: SetPiecesArg) {
     g.pieces = pieces;
 }
 
-/* setSelectedSquare */ 
+// /* setSelectedSquare */ 
 
-interface SetSelectedSquareArg {
-    selected: Position | null;
-    legalMoves: Array<Array<boolean>> | null;
-};
+// interface SetSelectedSquareArg {
+//     selected: Position | null;
+//     legalMoves: Array<Array<boolean>> | null;
+// };
 
-function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelectedSquareArg) {
+// function setSelectedSquare(g: G, ctx: any, { selected, legalMoves }: SetSelectedSquareArg) {
 
-    g.selectedSquare = selected;
-    g.legalMoves = legalMoves;
-};
+//     g.selectedSquare = selected;
+//     g.legalMoves = legalMoves;
+// };
 
 type SetGameStateArg = GameState;
 function setGameState(g: G, ctx: any, gameState: SetGameStateArg) {
@@ -73,18 +73,18 @@ function setGameState(g: G, ctx: any, gameState: SetGameStateArg) {
 };
 
 const moves = {
-    setPiece: setPiece,
+    // setPiece: setPiece,
     setPieces: setPieces,
-    setSelectedSquare: setSelectedSquare,
+    // setSelectedSquare: setSelectedSquare,
     setGameState: setGameState,
 };
 
 
 // Move functions as called by clients
 interface ClientMoves {
-    setPiece: (arg: SetPieceArg) => null;
+    // setPiece: (arg: SetPieceArg) => null;
     setPieces: (arg: SetPiecesArg) => null;
-    setSelectedSquare: (arg: SetSelectedSquareArg) => null;
+    // setSelectedSquare: (arg: SetSelectedSquareArg) => null;
     setGameState: (arg: SetGameStateArg) => null;
 };
 

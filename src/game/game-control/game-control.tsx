@@ -226,7 +226,12 @@ class GameControl {
     }
 
     squareClicked(pos: PiecePosition) {
-        this._gameDefinition.onClick(pos, this._gameState);   
+        let newGameState = this._gameDefinition.onClick(
+            pos, 
+            this.squareProperties(pos),
+            this._gameState);
+        
+        this._bgioMoves.setGameState(newGameState);   
     }
 
     // private _setSelectedSquare(p: PiecePosition | null) {
@@ -255,10 +260,10 @@ class GameControl {
     //     }
     // }
 
-    clearAll() {
-        const emptyBoard = this._boardPieces.map(row => row.map(() => null));
-        this._bgioMoves.setPieces(emptyBoard);
-    };
+    // clearAll() {
+    //     const emptyBoard = this._boardPieces.map(row => row.map(() => null));
+    //     this._bgioMoves.setPieces(emptyBoard);
+    // };
 
     onDragEnd(from: PiecePosition, to: PiecePosition | null) {
         console.log("drag from", from.data, "to", to && to.data);

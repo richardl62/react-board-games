@@ -1,3 +1,4 @@
+import { SquareProperties } from '../game/game-control';
 import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
 
 // The types of the supported games.
@@ -83,8 +84,9 @@ type GameState = {shared: any}; // For now
 
 type OnClick = (
     pos: PiecePosition, 
+    squarePropeties: SquareProperties,
     state: GameState,
-    ) => void;
+    ) => GameState;
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
@@ -152,7 +154,10 @@ interface GameDefinitionInput {
 //     return result;
 // }
 
-const defaultOnClick: OnClick = (pos: PiecePosition, state: GameState) => null;
+const defaultOnClick: OnClick = (
+    pos: PiecePosition, 
+    squarePropeties: SquareProperties,
+    gamestate: GameState) => gamestate;
 
 const defaultMoveDescription: MoveDescription = () => null;
 

@@ -1,7 +1,9 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import { GameDefinitionInput, GameState, OnClick } from './game-definition';
+import ClickManager from './click-manager'
 import RenderPiece from './bobail-piece';
+import { PiecePosition } from '../interfaces';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
 
@@ -14,21 +16,22 @@ const pl2 = 'p2';
 
 interface BobailState {
     nextMove: 'bobail' | 'piece';
+    selectedSquare: PiecePosition | null;
 }
 
-function bobailState(gameState: GameState):  BobailState {
+function getBobailState(gameState: GameState):  BobailState {
     return gameState.shared;
 }
 
-function packageBobailState(bobailState: BobailState): GameState {
-    return {shared: bobailState};
+function packageBobailState(getBobailState: BobailState): GameState {
+    return {shared: getBobailState};
 }
 
 // function pieceBelongsTo(name: string, player: number) {
 //     return name === `p${player+1}`;
 // }
 
-// function setNextMove(gameState: GameState, nextMove: BobailState["nextMove"]) {
+// function setNextMove(gameState: GameState, nextMove: getBobailState["nextMove"]) {
 //     gameState.shared = {nextMove: nextMove};
 // }
 
@@ -92,7 +95,7 @@ function packageBobailState(bobailState: BobailState): GameState {
 //     const s = args.from;
 //     const {gameState, pieces, activePlayer} = args;
 
-//     const nextMove = bobailState(gameState).nextMove;
+//     const nextMove = getBobailState(gameState).nextMove;
 
 //     let legalMoves = pieces.map(row => row.map(() => false));
 
@@ -169,8 +172,18 @@ function packageBobailState(bobailState: BobailState): GameState {
 //     return result;
 // }
 
-const onClick: OnClick = (pos, gameState) => {
-    console.log(pos, gameState )
+const onClick: OnClick = (pos, squarePropeties, gameState) => {
+    let bobailState = {...getBobailState(gameState)};
+    let clickManager = new ClickManager({
+        getSelectedSquare: () => bobailState.selectedSquare,
+        setSelectedSquare: (pos: PiecePosition | null) => 
+            {bobailState.selectedSquare = pos},
+    });
+    const clickResult = clickManager.clicked(pos, squarePropeties);
+    console.log("onClick", pos.data, clickResult && clickResult.from.data, 
+        clickResult && clickResult.to.data);
+
+    return packageBobailState(bobailState);
 }
 
 const games: Array<GameDefinitionInput> = [
@@ -196,11 +209,14 @@ const games: Array<GameDefinitionInput> = [
 
         offBoardPieces: { top: [], bottom: [], },
 
-        gameState: packageBobailState({nextMove: 'piece'}),
+        gameState: packageBobailState({
+            nextMove: 'piece',
+            selectedSquare: null,
+        }),
 
         onClick: onClick,
 
-        moveDescription: (gameState: GameState) => `move ${bobailState(gameState).nextMove}`,
+        moveDescription: (gameState: GameState) => `move ${getBobailState(gameState).nextMove}`,
     }
 ];
 

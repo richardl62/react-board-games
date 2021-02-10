@@ -1,13 +1,14 @@
-import { PiecePosition } from '../../interfaces';
-import { SquareProperties } from './game-control';
+import { PiecePosition } from '../interfaces';
+import { SquareProperties } from '../game/game-control/game-control';
 
-export interface ClickManagerProps {
+interface ClickManagerProps {
     getSelectedSquare: () => PiecePosition | null;
     setSelectedSquare: (arg: PiecePosition | null) => void;
-    doMove: (from: PiecePosition, to: PiecePosition | null) => void;
 };
 
-export class ClickManager {
+type ClickResult = null | {from: PiecePosition, to: PiecePosition}; 
+
+class ClickManager {
     // A piece that has been selected by a first click and is available to
     // move on a second click.
     private _props: ClickManagerProps;
@@ -24,17 +25,21 @@ export class ClickManager {
 
     private set _selected(val: PiecePosition | null) {
         //console.log("CM set: old", props(this.selected) , "new", props(val));
-        this._props.setSelectedSquare(val);;
+        this._props.setSelectedSquare(val);
     }
 
-    clicked(pos: PiecePosition, squareProperties: SquareProperties) {
+    clicked(pos: PiecePosition, squareProperties: SquareProperties) : ClickResult {
         // console.log("CM clicked: selected", props(this.selected), "clicked", props(pos));
+        
+        let result : ClickResult = null;
+
         if (this.selected) {
             if (PiecePosition.same(this.selected, pos)) {
                 // This same square has been clicked twice. Cancel the first click.
                 this._selected = null;
             } else if (squareProperties.changeable) {
-                this._props.doMove(this.selected, pos);
+                result = {from:this.selected, to: pos};
+                this._selected = null;
             } else {
                 this._selected = pos;
             }
@@ -46,9 +51,12 @@ export class ClickManager {
                 this._selected = pos;
             }
         }
+        return result;
     }
 
     clear() {
         this._selected = null;
     }
 }
+
+export default ClickManager;
