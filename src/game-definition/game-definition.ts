@@ -48,38 +48,43 @@ interface BoardStyle {
 
 type GameState = {shared: any}; // For now
 
-type LegalMoves = (
-    arg: {
-        readonly pieces: BoardPieces;
-        readonly from: PiecePosition;
-        readonly gameState: GameState;
-        readonly activePlayer: number;
-    }
-    ) => Array<Array<boolean>> | null;
+// type LegalMoves = (
+//     arg: {
+//         readonly pieces: BoardPieces;
+//         readonly from: PiecePosition;
+//         readonly gameState: GameState;
+//         readonly activePlayer: number;
+//     }
+//     ) => Array<Array<boolean>> | null;
 
-class MoveResult {
-    endOfTurn: boolean = false;
-    continue: boolean = false;
-    illegal: boolean = false;
-    winner: number| null = null;
+// class MoveResult {
+//     endOfTurn: boolean = false;
+//     continue: boolean = false;
+//     illegal: boolean = false;
+//     winner: number| null = null;
 
-    valid() {
-        const c = (b:boolean) => b ? 1: 0;
-        let nSet = c(this.endOfTurn) + c(this.continue) + c(this.illegal) + c(this.winner !== null);
+//     valid() {
+//         const c = (b:boolean) => b ? 1: 0;
+//         let nSet = c(this.endOfTurn) + c(this.continue) + c(this.illegal) + c(this.winner !== null);
 
-        return nSet === 1;
-    }
-}
+//         return nSet === 1;
+//     }
+// }
 
-type MakeMove = (
-    arg: {
-        readonly from: PiecePosition;
-        readonly to: PiecePosition;
-        pieces: BoardPieces;
-        readonly gameState: GameState;
-        readonly activePlayer: number;
-    }
-) => MoveResult;
+// type MakeMove = (
+//     arg: {
+//         readonly from: PiecePosition;
+//         readonly to: PiecePosition;
+//         pieces: BoardPieces;
+//         readonly gameState: GameState;
+//         readonly activePlayer: number;
+//     }
+// ) => MoveResult;
+
+type OnClick = (
+    pos: PiecePosition, 
+    state: GameState,
+    ) => void;
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
@@ -103,9 +108,7 @@ interface GameDefinition {
 
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
-    legalMoves: LegalMoves;
-    
-    makeMove: MakeMove;
+    onClick: OnClick;
 
     moveDescription: MoveDescription;
 };
@@ -133,36 +136,35 @@ interface GameDefinitionInput {
     gameState?: GameState;
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
-    legalMoves?: LegalMoves;
-    makeMove?: MakeMove;
+    onClick?: OnClick;
 
     moveDescription?: MoveDescription;
 };
 
-const defaultLegalMoves: LegalMoves = () => null;
+// const defaultLegalMoves: LegalMoves = () => null;
 
-const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
-    let board = new Board(pieces);
-    board.move(from, to);
+// const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
+//     let board = new Board(pieces);
+//     board.move(from, to);
 
-    let result = new MoveResult();
-    result.endOfTurn = true;
-    return result;
-}
+//     let result = new MoveResult();
+//     result.endOfTurn = true;
+//     return result;
+// }
 
+const defaultOnClick: OnClick = (pos: PiecePosition, state: GameState) => null;
 
 const defaultMoveDescription: MoveDescription = () => null;
 
 const defaultGameState = {shared: {}}
 function gameDefinition(input: GameDefinitionInput) : GameDefinition {
     return {
-        legalMoves: defaultLegalMoves, 
-        makeMove: defaultMakeMove,
+        onClick: defaultOnClick, 
         gameState: defaultGameState,
         moveDescription: defaultMoveDescription,
         ...input
     };
 }
 
-export { gameDefinition, Board, MoveResult }
-export type { GameDefinition, GameDefinitionInput, LegalMoves, MakeMove,  MoveDescription, GameState }
+export { gameDefinition, Board }
+export type { GameDefinition, GameDefinitionInput, OnClick, MoveDescription, GameState }

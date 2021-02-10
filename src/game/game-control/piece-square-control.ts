@@ -17,7 +17,7 @@ function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
         // The piece was dragged off the board.
-        gameControl.movePieceRequest(pos, null);
+        gameControl.onDragEnd(pos, null);
       }
     }
   });
@@ -46,7 +46,7 @@ function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
     drop: (dragParam: any /* KLUDGE */) => {
       const from = new PiecePosition(dragParam.id);
 
-      gameControl.movePieceRequest(from, pos);
+      gameControl.onDragEnd(from, pos);
     },
     collect: monitor => ({
       isOver: !!monitor.isOver(),
