@@ -1,5 +1,6 @@
 import { SquareProperties } from '../game/game-control';
 import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
+import { G as GameState } from '../bgio';
 
 // The types of the supported games.
 type GameType = 'bobail' | 'chess' | 'draughts';
@@ -47,8 +48,6 @@ interface BoardStyle {
     labels: boolean;
 }
 
-type GameState = {shared: any}; // For now
-
 // type LegalMoves = (
 //     arg: {
 //         readonly pieces: BoardPieces;
@@ -58,19 +57,19 @@ type GameState = {shared: any}; // For now
 //     }
 //     ) => Array<Array<boolean>> | null;
 
-// class MoveResult {
-//     endOfTurn: boolean = false;
-//     continue: boolean = false;
-//     illegal: boolean = false;
-//     winner: number| null = null;
+class MoveResult {
+    noop: boolean = false;
+    continue: boolean = false;
+    endOfTurn: boolean = false;
+    winner: number| null = null;
 
-//     valid() {
-//         const c = (b:boolean) => b ? 1: 0;
-//         let nSet = c(this.endOfTurn) + c(this.continue) + c(this.illegal) + c(this.winner !== null);
+    valid() {
+        const c = (b:boolean) => b ? 1: 0;
+        let nSet = c(this.noop) + c(this.continue) + c(this.endOfTurn) + c(this.winner !== null);
 
-//         return nSet === 1;
-//     }
-// }
+        return nSet === 1;
+    }
+}
 
 // type MakeMove = (
 //     arg: {
@@ -86,7 +85,9 @@ type OnClick = (
     pos: PiecePosition, 
     squarePropeties: SquareProperties,
     state: GameState,
-    ) => GameState;
+    activePlayer: number
+    ) => MoveResult;
+
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
@@ -98,6 +99,7 @@ interface GameDefinition {
     // display purposes, and also used internally to distinguish different
     // games.
     name: string;
+    firstMove: string | null; // Kludge to help Bobail
 
     pieces: BoardPieces;
 
@@ -105,8 +107,6 @@ interface GameDefinition {
         top: Array<PieceName>;
         bottom: Array<PieceName>;
     };
-
-    gameState: GameState;
 
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
@@ -129,13 +129,14 @@ interface GameDefinitionInput {
     name: string;
 
     pieces: BoardPieces;
+    firstMove?: string | null; // Kludge to help Bobail
 
     offBoardPieces: {
         top: Array<PieceName>;
         bottom: Array<PieceName>;
     };
 
-    gameState?: GameState;
+    
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
     onClick?: OnClick;
@@ -157,19 +158,23 @@ interface GameDefinitionInput {
 const defaultOnClick: OnClick = (
     pos: PiecePosition, 
     squarePropeties: SquareProperties,
-    gamestate: GameState) => gamestate;
+    gamestate: GameState,
+    activePlayer: number) => {
+        let moveResult = new MoveResult();
+        moveResult.endOfTurn = true;
+        return moveResult;
+    }
 
 const defaultMoveDescription: MoveDescription = () => null;
 
-const defaultGameState = {shared: {}}
-function gameDefinition(input: GameDefinitionInput) : GameDefinition {
+function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
     return {
+        firstMove: null,
         onClick: defaultOnClick, 
-        gameState: defaultGameState,
         moveDescription: defaultMoveDescription,
         ...input
     };
 }
 
-export { gameDefinition, Board }
+export { makeGameDefinition, Board, MoveResult }
 export type { GameDefinition, GameDefinitionInput, OnClick, MoveDescription, GameState }

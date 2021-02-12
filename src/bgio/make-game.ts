@@ -12,9 +12,9 @@ function makeGame(gameDefinition: GameDefinition) {
         setup: (): G => {
             return {
                 pieces: gameDefinition.pieces,
+                nextMove: gameDefinition.firstMove,
                 selectedSquare: null,
                 legalMoves: null,
-                gameState: gameDefinition.gameState,
             };
         },
         moves: moves,

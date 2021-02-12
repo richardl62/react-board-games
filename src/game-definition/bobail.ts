@@ -175,22 +175,32 @@ const onClick = (
     gameState: GameState,
     activePlayer: number) => {
 
+    let moveResult;
+    
+    if(gameState.legalMoves && !gameState.legalMoves[pos.row][pos.col]) {
+        moveResult = new MoveResult();
+        moveResult.noop = true;
+        return moveResult;
+    }
+
     let clickManager = new ClickManager({
-        getSelectedSquare: () => gameState.selectedSquare,
-        setSelectedSquare: (pos: PiecePosition | null) => { gameState.selectedSquare = pos },
+        getSelectedSquare: () => gameState.selectedSquare && new PiecePosition(gameState.selectedSquare),
+        setSelectedSquare: (pos: PiecePosition | null) => { gameState.selectedSquare = pos && pos.data },
     });
 
     const clickResult = clickManager.clicked(pos, squarePropeties);
 
+
     if ( clickResult ) {
-        makeMove(clickResult.from, clickResult.to, gameState, activePlayer)
+        moveResult = makeMove(clickResult.from, clickResult.to, gameState, activePlayer)
         gameState.legalMoves = null;
     } else {
         legalMoves(pos, gameState, activePlayer);
+        moveResult = new MoveResult();
+        moveResult.continue = true;
     }
 
-    console.log("onClick", pos.data, clickResult && clickResult.from.data,
-        clickResult && clickResult.to.data);
+    return moveResult;
 }
 
 const games : Array<GameDefinitionInput>  = [
@@ -203,8 +213,6 @@ const games : Array<GameDefinitionInput>  = [
             checkered: false,
             labels: true,
         },
-
-        renderPiece: RenderPiece,
 
         pieces: [
             [pl1,  pl1,  pl1, pl1,   pl1 ],
@@ -220,6 +228,8 @@ const games : Array<GameDefinitionInput>  = [
         onClick: onClick,
 
         moveDescription: (gameState: GameState) => `move ${gameState.nextMove}`,
+
+        renderPiece: RenderPiece,
     }
 ];
 

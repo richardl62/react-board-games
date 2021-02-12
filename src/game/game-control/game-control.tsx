@@ -104,30 +104,18 @@ class GameControl {
     constructor(bgioProps: Bgio.BoardProps, localProps: GameControlProps) {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
-
-        // this._clickManager = new ClickManager({
-        //     getSelectedSquare: () => {
-        //         const selected = bgioProps.G.selectedSquare;
-        //         return selected && new PiecePosition(unmakePosition(selected));
-        //     },
-        //     setSelectedSquare: (p: PiecePosition | null) => this._setSelectedSquare(p),
-        //     doMove: (p1: PiecePosition, p2: PiecePosition | null) =>
-        //         this.movePieceRequest(p1, p2),
-        // });
     }
 
     private _bgioProps: Bgio.BoardProps;
     private _localProps: GameControlProps;
-    // private _clickManager: ClickManager;
 
     // Public access to on-board or off-board pieces is though functions that
     // take account of flipping.
-    private get _boardPieces() { return this._bgioProps.G.pieces; }
     private get _offBoardPieces() { return this._gameDefinition.offBoardPieces; }
 
     private get _gameDefinition () {  return this._localProps.gameDefinition; }
 
-    private get _gameState() { return this._bgioProps.G.gameState; }
+    private get _G() { return this._bgioProps.G; }
 
     private get _bgioMoves() {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
@@ -147,11 +135,11 @@ class GameControl {
     flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows); }
 
     get nRows() {
-        return this._boardPieces.length;
+        return this._G.pieces.length;
     }
 
     get nCols() {
-        return this._boardPieces[0].length;
+        return this._G.pieces[0].length;
     }
 
     // makeMove(args: Parameters<GameDefinition["makeMove"]>[0]) {
@@ -167,7 +155,7 @@ class GameControl {
 
         const pieceName = () => {
             if (pos.onBoard) {
-                return this._boardPieces[pos.row as number][pos.col as number];
+                return this._G.pieces[pos.row as number][pos.col as number];
             } else if (pos.onTop) {
                 return this._offBoardPieces.top[pos.top];
             } else if (pos.onBottom) {
@@ -175,22 +163,22 @@ class GameControl {
             }
             throw new Error("squareProperties cannot find square");
         }
-        // const clickedPos = this._clickManager.selected;
-        // const selected = Boolean(clickedPos && PiecePosition.same(pos, clickedPos));
+        const selectedSquare = this._G.selectedSquare;
+        const selected = Boolean(selectedSquare && PiecePosition.same(pos, new PiecePosition(selectedSquare)));
 
-        // const legalMoveStatus = ()  => {
+        const legalMoveStatus = ()  => {
 
-        //     const legalMoves = this._bgioProps.G.legalMoves;
-        //     if(clickedPos && legalMoves && pos.onBoard && legalMoves[pos.row][pos.col]) {
-        //         return LegalMoveStatus.Legal;
-        //     }
+            const legalMoves = this._bgioProps.G.legalMoves;
+            if(legalMoves && pos.onBoard && legalMoves[pos.row][pos.col]) {
+                return LegalMoveStatus.Legal;
+            }
     
-        //     if(clickedPos && legalMoves && pos.onBoard && !selected && !legalMoves[pos.row][pos.col]) {
-        //         return LegalMoveStatus.Illegal;
-        //     }
+            if( legalMoves && pos.onBoard && !legalMoves[pos.row][pos.col]) {
+                return LegalMoveStatus.Illegal;
+            }
 
-        //     return LegalMoveStatus.Unknown;
-        // }
+            return LegalMoveStatus.Unknown;
+        }
 
         const background = () => {
             if (!pos.onBoard) {
@@ -210,8 +198,8 @@ class GameControl {
             changeable: pos.onBoard,
 
             gameStatus: {
-                selected: false, //selected,
-                legalMoveStatus: LegalMoveStatus.Unknown, //legalMoveStatus(),
+                selected: selected,
+                legalMoveStatus: legalMoveStatus(),
             },
         }
     }
@@ -226,42 +214,24 @@ class GameControl {
     }
 
     squareClicked(pos: PiecePosition) {
-        let newGameState = this._gameDefinition.onClick(
-            pos, 
-            this.squareProperties(pos),
-            this._gameState);
-        
-        this._bgioMoves.setGameState(newGameState);   
+        let newGameState = JSON.parse(JSON.stringify(this._bgioProps.G));
+
+        const moveResult = this._gameDefinition.onClick(pos, this.squareProperties(pos),
+            newGameState, this.activePlayer);
+
+        if (!moveResult.noop) {
+            this._bgioMoves.setGameState(newGameState);
+        }
+
+        if (moveResult.endOfTurn) {
+            this.endTurn();
+        } if (moveResult.winner != null) {
+            this.endGame(moveResult.winner);
+        }
     }
 
-    // private _setSelectedSquare(p: PiecePosition | null) {
-
-    //     if (p) {
-    //         const legalMoves = this._gameDefinition.legalMoves({
-    //             from: p,
-    //             pieces: this._boardPieces,
-    //             gameState: this._gameState,
-    //             activePlayer: this.players.caller,
-    //         });
-
-    //         if (legalMoves && allFalse(legalMoves)) {
-    //             // All moves are declated illegal.  Do nothing.
-    //         } else {
-    //             this._bgioMoves.setSelectedSquare({
-    //                 selected: makePosition(p.data),
-    //                 legalMoves: legalMoves,
-    //             });
-    //         }
-    //     } else {
-    //         this._bgioMoves.setSelectedSquare({
-    //             selected: null,
-    //             legalMoves: null,
-    //         });
-    //     }
-    // }
-
     // clearAll() {
-    //     const emptyBoard = this._boardPieces.map(row => row.map(() => null));
+    //     const emptyBoard = this._G.pieces.map(row => row.map(() => null));
     //     this._bgioMoves.setPieces(emptyBoard);
     // };
 
@@ -280,7 +250,7 @@ class GameControl {
     //         let winner = null;
     //         if (toProps && toProps.changeable) {
     //             if (fromProps.changeable) {
-    //                 let pieces = copyPieces(this._boardPieces);
+    //                 let pieces = copyPieces(this._G.pieces);
     //                 let gameState = { ...this._gameState };
 
 
@@ -379,7 +349,7 @@ class GameControl {
         } 
     }
 
-    get moveDescription () {return this._gameDefinition.moveDescription(this._gameState);}
+    get moveDescription () {return this._gameDefinition.moveDescription(this._G);}
 }
 
 export { GameControl as default, useGameControlProps, LegalMoveStatus  };
