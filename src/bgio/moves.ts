@@ -27,7 +27,7 @@ interface Position {
 interface G {
     pieces: BoardPieces;
     selectedSquare: Position | null;
-    nextMove: string | null;
+    pieceTypeToMove: string | null;
     
     legalMoves: Array<Array<boolean>> | null;
 };
@@ -90,4 +90,4 @@ interface ClientMoves {
 };
 
 export default moves;
-export type { G, ClientMoves }
+export type { G, ClientMoves, Position }

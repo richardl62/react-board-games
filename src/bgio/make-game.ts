@@ -9,14 +9,7 @@ const moves = require('./moves').default;
 function makeGame(gameDefinition: GameDefinition) {
     return {
         name: gameDefinition.name.replace(/\s/g, ''),
-        setup: (): G => {
-            return {
-                pieces: gameDefinition.pieces,
-                nextMove: gameDefinition.firstMove,
-                selectedSquare: null,
-                legalMoves: null,
-            };
-        },
+        setup: (): G =>  gameDefinition.intialState,
         moves: moves,
     };
 }

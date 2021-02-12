@@ -1,6 +1,6 @@
 import { SquareProperties } from '../game/game-control';
 import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
-import { G as GameState } from '../bgio';
+import { G as GameState, Position } from '../bgio';
 
 // The types of the supported games.
 type GameType = 'bobail' | 'chess' | 'draughts';
@@ -99,9 +99,8 @@ interface GameDefinition {
     // display purposes, and also used internally to distinguish different
     // games.
     name: string;
-    firstMove: string | null; // Kludge to help Bobail
 
-    pieces: BoardPieces;
+    intialState : GameState;
 
     offBoardPieces: {
         top: Array<PieceName>;
@@ -128,8 +127,12 @@ interface GameDefinitionInput {
     // games.
     name: string;
 
-    pieces: BoardPieces;
-    firstMove?: string | null; // Kludge to help Bobail
+    initialState : {
+        pieces: BoardPieces;
+        legalMoves?: Array<Array<boolean>>;
+        selectedSqaure?: Position | null,
+        pieceTypeToMove?: string | null; // Kludge to help Bobail
+    };
 
     offBoardPieces: {
         top: Array<PieceName>;
@@ -169,10 +172,15 @@ const defaultMoveDescription: MoveDescription = () => null;
 
 function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
     return {
-        firstMove: null,
         onClick: defaultOnClick, 
         moveDescription: defaultMoveDescription,
-        ...input
+        ...input,
+        intialState: {
+            selectedSquare: null,
+            legalMoves: null,
+            pieceTypeToMove: null,
+            ...input.initialState,
+        }
     };
 }
 

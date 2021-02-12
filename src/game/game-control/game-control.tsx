@@ -127,7 +127,7 @@ class GameControl {
     undo() { this._bgioProps.undo(); }
     redo() { this._bgioProps.redo(); }
     restart() {
-        this._bgioMoves.setPieces(this._gameDefinition.pieces);
+        this._bgioMoves.setGameState(this._gameDefinition.intialState);
     }
 
     get reverseBoardRows() { return this._localProps.reverseBoard[0]; }

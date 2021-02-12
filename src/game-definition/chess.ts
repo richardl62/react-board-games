@@ -2,8 +2,9 @@
 // done in this file rather than at point of use.
 import { GameDefinitionInput } from './game-definition';
 import RenderPiece from './chess-piece';
+import { BoardPieces } from '../interfaces';
 
-function chess(name: string, pieces: GameDefinitionInput['pieces']): GameDefinitionInput {
+function chess(name: string, pieces: BoardPieces): GameDefinitionInput {
   return {
     name: name,
     gameType: 'chess',
@@ -15,7 +16,9 @@ function chess(name: string, pieces: GameDefinitionInput['pieces']): GameDefinit
       labels: true,
     },
 
-    pieces: pieces,
+    initialState: {
+      pieces: pieces,
+    },
 
     offBoardPieces: {
       top: ['p', 'n', 'b', 'r', 'q', 'k'],

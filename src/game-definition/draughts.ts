@@ -142,7 +142,9 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
             labels: true,
         },
 
-        pieces: pieces,
+        initialState: {
+            pieces: pieces,
+        },
 
         offBoardPieces: {
             top: ['w', 'W'],

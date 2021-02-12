@@ -17,8 +17,8 @@ function pieceBelongsTo(name: string, player: number) {
     return name === `p${player+1}`;
 }
 
-// function setNextMove(gameState: GameState, nextMove: getBobailState["nextMove"]) {
-//     gameState.nextMove = nextMove};
+// function setNextMove(gameState: GameState, typeToMove: getBobailState["typeToMove"]) {
+//     gameState.typeToMove = typeToMove};
 // }
 
 // Get the connects of a square. Return undefined if the row and column
@@ -86,7 +86,7 @@ const legalMoves = (
     gameState: GameState,
     activePlayer: number,
     ) => {
-    const nextMove = gameState.nextMove;
+    const typeToMove = gameState.pieceTypeToMove;
     const pieces = gameState.pieces;
 
     let legalMoves = pieces.map(row => row.map(() => false));
@@ -96,11 +96,11 @@ const legalMoves = (
         const p1Name = pieces[from.row][from.col];
 
         if (p1Name === bb) {
-            if(nextMove === 'bobail') {
+            if(typeToMove === 'bobail') {
                 legalMovesBobail(from, pieces, legalMoves);
             }
         } else if (p1Name === pl1 || p1Name === pl2) {
-            if(nextMove === 'piece') {
+            if(typeToMove === 'piece') {
                 if(pieceBelongsTo(p1Name, activePlayer)) {
                     legalMovesPiece(from, gameState.pieces, legalMoves);
                 } else {
@@ -158,10 +158,10 @@ const makeMove = (
     if(winner !== null) {
         result.winner = winner;
     } else if(movingBobail) {
-        gameState.nextMove = 'piece';
+        gameState.pieceTypeToMove = 'piece';
         result.continue = true;
     } else {
-        gameState.nextMove = 'bobail';
+        gameState.pieceTypeToMove = 'bobail';
         result.endOfTurn = true;
     }
 
@@ -214,20 +214,32 @@ const games : Array<GameDefinitionInput>  = [
             labels: true,
         },
 
-        pieces: [
-            [pl1,  pl1,  pl1, pl1,   pl1 ],
-            [null, null, null, null, null],
-            [null, null, bb,   null, null],
-            [null, null, null, null, null],
-            [pl2,  pl2,  pl2,  pl2,  pl2 ],
-        ],
-        firstMove: 'piece',
+        initialState: {
+            pieces: [
+                [pl1, pl1, pl1, pl1, pl1],
+                [null, null, null, null, null],
+                [null, null, bb, null, null],
+                [null, null, null, null, null],
+                [pl2, pl2, pl2, pl2, pl2],
+            ],
+
+            pieceTypeToMove: 'piece',
+            
+            legalMoves: [
+                [ true,  true, true,  true,  true],
+                [false, false, false, false, false],
+                [false, false, false, false, false],
+                [false, false, false, false, false],
+                [false, false, false, false, false],
+            ],
+            
+        },
 
         offBoardPieces: { top: [], bottom: [], },
 
         onClick: onClick,
 
-        moveDescription: (gameState: GameState) => `move ${gameState.nextMove}`,
+        moveDescription: (gameState: GameState) => `move ${gameState.pieceTypeToMove}`,
 
         renderPiece: RenderPiece,
     }
