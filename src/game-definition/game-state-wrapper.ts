@@ -45,6 +45,11 @@ class GameStateWrapper {
         return this._activePlayer;
     }
 
+    get nextActivePlayer() {
+        // KLUDGE: Assumes there are only two players
+        return this._activePlayer === 0 ? 1 : 0;
+    }
+
     get selectedSquare()  : RowCol | null { 
         const selected = this._state.selectedSquare;
         return selected && rowCol(selected); 
@@ -90,19 +95,21 @@ class GameStateWrapper {
     setAllLegalMoves(val: boolean) {
         let lm = this._state.legalMoves;
         if(lm) {
-            lm.forEach(row => row.fill(true));
+            lm.forEach(row => row.fill(val));
         }
     }
 
     movePiece(from: RowCol, to: RowCol) {
         if(!sameRowCol(to, from)) {
-            this.setPiece(to, this.piece(from));
+            this.setPiece(to, this.piece(from)!);
             this.setPiece(from, null);
         }
     }
 
-    piece(pos: RowCol) {
-        return this._state.pieces[pos.row][pos.col];
+    // Return undefined if the piece is off the board
+    piece(pos: RowCol): undefined | null | string {
+        const row = this._state.pieces[pos.row];
+        return row && row[pos.col];
     }
 
     setPiece(pos: RowCol, val : string | null) {

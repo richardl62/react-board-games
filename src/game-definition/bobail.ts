@@ -4,13 +4,28 @@ import { SquareProperties } from '../game/game-control/game-control';
 import RenderPiece from './bobail-piece';
 import { PiecePosition } from '../interfaces';
 import { moveResult, GameState, GameDefinitionInput } from './game-definition'
-import { GameStateWrapper,  sameRowCol } from './game-state-wrapper';
+import { GameStateWrapper, sameRowCol } from './game-state-wrapper';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
 
 const bb = 'bb';
 const pl1 = 'p1';
 const pl2 = 'p2';
+
+function playerPieceName(player: number): string {
+    if (player === 0) {
+        return pl1;
+    } else if (player === 1) {
+        return pl2;
+    } else {
+        throw new Error("Unexected piece number");
+    }
+}
+
+interface RowCol {
+    row: number;
+    col: number;
+};
 
 // function pieceBelongsTo(name: string, player: number) {
 //     return name === `p${player + 1}`;
@@ -26,102 +41,72 @@ const pl2 = 'p2';
 //     return pieces[row] && pieces[row][col];
 // }
 
-// // Record as legal the empty squares that are one step in any direction
-// // (including diagonally) from the selected square.
-// function legalMovesBobail(
-//     s: { row: number, col: number },
-//     pieces: BoardPieces,
-//     legalMoves: Array<Array<boolean>>,
-// ) {
-
-//     for (let row = s.row - 1; row <= s.row + 1; ++row) {
-//         for (let col = s.col - 1; col <= s.col + 1; ++col) {
-//             legalMoves[row][col] = piece(pieces, row, col) === null;
-//         }
-//     }
-// };
-
-// function legalMovesPieceDirected(
-//     from: PiecePosition,
-//     pieces: BoardPieces,
-//     legalMoves: Array<Array<boolean>>,
-//     rStep: number, cStep: number
-// ) {
-
-//     let { row, col } = from;
-
-//     while (piece(pieces, row + rStep, col + cStep) === null) {
-//         row += rStep;
-//         col += cStep;
-//     }
-
-//     if (pieces[row][col] === null) {
-//         legalMoves[row][col] = true;
-//     }
-
-//     return legalMoves;
-// }
-
-// // Record as legal the last empty square found when stepping in
-// // each direction (including diagonal) from the selected square.
-// const legalMovesPiece = (
-//     from: PiecePosition,
-//     pieces: BoardPieces,
-//     legalMoves: Array<Array<boolean>>) => {
-
-//     for (let rStep = -1; rStep <= 1; rStep++) {
-//         for (let cStep = -1; cStep <= 1; cStep++) {
-//             if (rStep || cStep) {
-//                 legalMovesPieceDirected(from, pieces, legalMoves, rStep, cStep);
-//             }
-//         }
-//     }
-
-//     return legalMoves;
-// };
-
-// const legalMoves = (    
-//     from: PiecePosition, 
-//     gameState: GameState,
-//     activePlayer: number,
-//     ) => {
-//     const typeToMove = gameState.pieceTypeToMove;
-//     const pieces = gameState.pieces;
-
-//     let legalMoves = pieces.map(row => row.map(() => false));
-//     gameState.legalMoves = legalMoves;
-
-//     if (from.onBoard) {
-//         const p1Name = pieces[from.row][from.col];
-
-//         if (p1Name === bb) {
-//             if(typeToMove === 'bobail') {
-//                 legalMovesBobail(from, pieces, legalMoves);
-//             }
-//         } else if (p1Name === pl1 || p1Name === pl2) {
-//             if(typeToMove === 'piece') {
-//                 if(pieceBelongsTo(p1Name, activePlayer)) {
-//                     legalMovesPiece(from, gameState.pieces, legalMoves);
-//                 } else {
-//                     console.log(p1Name, "Does not belong to player ", activePlayer);
-//                 }
-//             }
-//         } else if (p1Name) {
-//             throw new Error("Unexpected name for bobail piece: " + p1Name);
-//         }
-//     }
-// }
-
-function setLegalMoves(
-    from: PiecePosition,
+// Record as legal the empty squares that are one step in any direction
+// (including diagonally) from the selected square.
+function setLegalMovesBobail(
+    pos: RowCol,
     gameState: GameStateWrapper,
 ) {
-    gameState.setAllLegalMoves(false);
-    
-    // Temporary
-    for (let r = 0; r < 5; ++r) {
-        gameState.setLegalMove({ row: r, col: 0 }, true);
-        gameState.setLegalMove({ row: r, col: 4 }, true);
+    const { row, col } = pos;
+
+    for (let rDelta = -1; rDelta <= 1; ++rDelta) {
+        for (let cDelta = -1; cDelta <= 1; ++cDelta) {
+            const newPos = { row: row + rDelta, col: col + cDelta };
+            if (gameState.piece(newPos) === null) {
+                gameState.setLegalMove(newPos, true);
+            }
+        }
+    }
+};
+
+function setLegalMovesPieceDirected(
+    from: RowCol,
+    gameState: GameStateWrapper,
+    rStep: number, cStep: number
+) {
+    const step = (pos: RowCol) => {
+        return {
+            row: pos.row + rStep, 
+            col: pos.col + cStep
+        };
+    }
+
+    let lastNull;
+    let newPos = step(from);
+    while (gameState.piece(newPos) === null) {
+        lastNull = newPos;
+        newPos = step(newPos);
+    }
+
+    if (lastNull) {
+        gameState.setLegalMove(lastNull, true);
+    }
+}
+
+// Record as legal the last empty square found when stepping in
+// each direction (including diagonal) from the selected square.
+function setLegalMovesPiece(
+    from: RowCol,
+    gameState: GameStateWrapper,
+    ) {
+
+    for (let rStep = -1; rStep <= 1; rStep++) {
+        for (let cStep = -1; cStep <= 1; cStep++) {
+            if (rStep || cStep) {
+                setLegalMovesPieceDirected(from, gameState, rStep, cStep);
+            }
+        }
+    }
+}
+
+
+function setPlayerPiecesAsLegalMoves(
+    player: number,
+    gameState: GameStateWrapper,
+) {
+    const positions = gameState.findPieces(playerPieceName(player));
+    for (const pos of positions) {
+        gameState.setLegalMove(pos, true);
     }
 }
 
@@ -149,6 +134,16 @@ function checkForWinner(
     return null;
 }
 
+function updatePieceToMove(gameState: GameStateWrapper) {
+    if (gameState.pieceTypeToMove === 'bobail') {
+        gameState.pieceTypeToMove = 'piece';
+    } else if (gameState.pieceTypeToMove === 'piece') {
+        gameState.pieceTypeToMove = 'bobail';
+    } else {
+        throw new Error("Unrecognised move type");
+    }
+}
+
 function onClick(
     pos: PiecePosition,
     squarePropeties: SquareProperties,
@@ -172,18 +167,26 @@ function onClick(
         gameState.selectedSquare = pos;
     } else {
         gameState.movePiece(gameState.selectedSquare, pos);
+        gameState.selectedSquare = null;
 
-        if (gameState.pieceTypeToMove === 'bobail') {
-            gameState.pieceTypeToMove = 'piece';
-        } else if (gameState.pieceTypeToMove === 'piece') {
-            gameState.pieceTypeToMove = 'bobail';
-            turnOver = true;
-        } else {
-            throw new Error("Unrecognised move type");
-        }
+        updatePieceToMove(gameState);
+        turnOver = gameState.pieceTypeToMove === 'bobail';
     }
 
-    setLegalMoves(pos, gameState);
+    gameState.setAllLegalMoves(false);
+    if (gameState.pieceTypeToMove === 'bobail') {
+        // There is only one piece that can be moved, so select it.
+        const bbPos = gameState.findPieces(bb)[0];
+        gameState.selectedSquare = bbPos;
+
+        setLegalMovesBobail(bbPos, gameState);
+    } else {
+        if (gameState.selectedSquare) {
+            setLegalMovesPiece(gameState.selectedSquare, gameState);
+        } else {
+            setPlayerPiecesAsLegalMoves(gameState.nextActivePlayer, gameState);
+        }
+    }
 
     const winner = checkForWinner(gameState, turnOver);
     if (winner !== null) {
@@ -217,11 +220,11 @@ const games: Array<GameDefinitionInput> = [
             pieceTypeToMove: 'piece',
 
             legalMoves: [
+                [false, false, false, false, false],
+                [false, false, false, false, false],
+                [false, false, false, false, false],
+                [false, false, false, false, false],
                 [true, true, true, true, true],
-                [false, false, false, false, false],
-                [false, false, false, false, false],
-                [false, false, false, false, false],
-                [false, false, false, false, false],
             ],
 
         },
