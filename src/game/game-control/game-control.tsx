@@ -5,53 +5,6 @@ import { GameDefinition } from '../../game-definition';
 
 import * as Bgio from '../../bgio';
 
-// function rowAndCol(pos: { row: number, col: number }) {
-//     return { r: pos.row, c: pos.col, }
-// }
-
-// function allFalse(arr: Array<Array<boolean>>) {
-//     for(let i in arr) {
-//         const inner = arr[i];
-//         for (let j in inner) {
-//             if(inner[j]) {
-//                 return false;
-//             }
-//         }
-//     }
-
-//     return true;
-// }
-
-// function makePosition(pos: {
-//     row?: number,
-//     col?: number,
-//     top?: number,
-//     bottom?: number,
-// }) {
-//     return {
-//         r: pos.row,
-//         c: pos.col,
-//         top: pos.top,
-//         bottom: pos.bottom,
-//     }
-// }
-
-// interface Position {
-//     r?: number;
-//     c?: number;
-//     top?: number;
-//     bottom?: number;
-// }
-
-// function unmakePosition(pos: Position) {
-//     return {
-//         row: pos.r,
-//         col: pos.c,
-//         top: pos.top,
-//         bottom: pos.bottom,
-//     }
-// }
-
 const topLeftBlack = false; // KLUDGE
 
 function useGameControlProps(gameDefinition: GameDefinition) {
@@ -95,10 +48,6 @@ interface Players {
     caller: number,
 }
 
-// function copyPieces(pieces: BoardPieces) {
-//     return pieces.map(row => [...row]);
-// }
-
 class GameControl {
 
     constructor(bgioProps: Bgio.BoardProps, localProps: GameControlProps) {
@@ -141,16 +90,6 @@ class GameControl {
     get nCols() {
         return this._G.pieces[0].length;
     }
-
-    // makeMove(args: Parameters<GameDefinition["makeMove"]>[0]) {
-    //     const result = this._gameDefinition.makeMove(args);
-    //     if(!result.valid()) {
-    //         throw new Error("Invalid result from game move");
-    //     }
-
-    //     return result;
-    // }
-
     squareProperties(pos: PiecePosition): SquareProperties {
 
         const pieceName = () => {
@@ -230,74 +169,9 @@ class GameControl {
         }
     }
 
-    // clearAll() {
-    //     const emptyBoard = this._G.pieces.map(row => row.map(() => null));
-    //     this._bgioMoves.setPieces(emptyBoard);
-    // };
-
     onDragEnd(from: PiecePosition, to: PiecePosition | null) {
         console.log("drag from", from.data, "to", to && to.data);
     }
-
-    // // Process a user request - by drag or clicks - to move a piece.
-    // movePieceRequest(from: PiecePosition, to: PiecePosition | null) {
-    //     const toProps = to && this.squareProperties(to);
-    //     const fromProps = this.squareProperties(from);
-
-    //     if (to && toProps && toProps.gameStatus.legalMoveStatus !== LegalMoveStatus.Illegal) {
-    //         let endTurn = true;
-    //         let badMove = false;
-    //         let winner = null;
-    //         if (toProps && toProps.changeable) {
-    //             if (fromProps.changeable) {
-    //                 let pieces = copyPieces(this._G.pieces);
-    //                 let gameState = { ...this._gameState };
-
-
-    //                 const moveResult = this.makeMove({
-    //                     from: from, to: to,
-    //                     pieces: pieces, gameState: gameState,
-    //                     activePlayer: this.activePlayer,
-    //                 });
-
-    //                 if (moveResult.illegal) {
-    //                     badMove = true;
-    //                     console.log("Bad move reported")
-    //                 } else {
-    //                     this._bgioMoves.setGameState(gameState);
-    //                     this._bgioMoves.setPieces(pieces);
-    //                 }
-    //                 winner = moveResult.winner;
-    //                 endTurn = moveResult.endOfTurn;
-    //             } else {
-    //                 this._bgioMoves.setPiece({
-    //                     pos: rowAndCol(to),
-    //                     pieceName: fromProps.pieceName
-    //                 });
-    //             }
-    //         } else {
-    //             // A piece has been dragged or click-moved somewhere it won't go,
-    //             // i.e. off the board. Treat this as a request to clear the piece.
-    //             if (fromProps.changeable) {
-    //                 this._bgioMoves.setPiece({
-    //                     pos: rowAndCol(from),
-    //                     pieceName: null
-    //                 });
-    //             }
-    //         }
-
-    //         if(!badMove) {
-    //             this._clickManager.clear();
-    //         }
-            
-    //         if( winner != null ) {
-    //             this.endGame(winner);
-    //         }
-    //         if (endTurn) {  
-    //             this.endTurn();
-    //         }
-    //     }
-    // }
 
     endTurn() {
         const endTurn = this._bgioProps.events.endTurn;

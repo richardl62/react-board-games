@@ -27,22 +27,6 @@ interface RowCol {
     col: number;
 };
 
-// function pieceBelongsTo(name: string, player: number) {
-//     return name === `p${player + 1}`;
-// }
-
-// function setNextMove(gameState: GameState, typeToMove: getBobailState["typeToMove"]) {
-//     gameState.typeToMove = typeToMove};
-// }
-
-// Get the connects of a square. Return undefined if the row and column
-// and not on the board.
-// function piece(pieces: BoardPieces, row: number, col: number) {
-//     return pieces[row] && pieces[row][col];
-// }
-
-// Record as legal the empty squares that are one step in any direction
-// (including diagonally) from the selected square.
 function setLegalMovesBobail(
     pos: RowCol,
     gameState: GameStateWrapper,
@@ -98,7 +82,6 @@ function setLegalMovesPiece(
         }
     }
 }
-
 
 function setPlayerPiecesAsLegalMoves(
     player: number,

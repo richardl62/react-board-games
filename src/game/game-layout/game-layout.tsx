@@ -30,7 +30,7 @@ function Header({ gameControl }: { gameControl: GameControl }) {
         if(active === caller) {
             message = "Your turn";
         } else {
-            message = `Waiting for ${playerNames[active]}`;
+            message = "Waiting for your opponent";
         }
 
         const description = gameControl.moveDescription;
