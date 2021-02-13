@@ -57,6 +57,7 @@ interface BoardStyle {
 //     }
 //     ) => Array<Array<boolean>> | null;
 
+
 class MoveResult {
     noop: boolean = false;
     continue: boolean = false;
@@ -69,6 +70,21 @@ class MoveResult {
 
         return nSet === 1;
     }
+}
+
+function moveResult(arg: 'noop' | 'continue' | 'endOfTurn' | {winner: number}) {
+    let mr = new MoveResult();
+    if(arg === 'noop') {
+        mr.noop = true;
+    } else if (arg === 'continue') {
+        mr.continue = true;
+    } else if (arg === 'endOfTurn') {
+        mr.endOfTurn = true;
+    } else {
+        mr.winner = arg.winner;
+    }
+
+    return mr;
 }
 
 // type MakeMove = (
@@ -184,5 +200,5 @@ function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
     };
 }
 
-export { makeGameDefinition, Board, MoveResult }
+export { makeGameDefinition, Board, moveResult, MoveResult }
 export type { GameDefinition, GameDefinitionInput, OnClick, MoveDescription, GameState }

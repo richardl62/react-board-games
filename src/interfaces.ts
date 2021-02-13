@@ -5,6 +5,10 @@ import { nonNull } from './tools';
 export type PieceName = string;
 export type BoardPieces = Array<Array<PieceName | null>>;
 
+function isNum(obj: number | undefined) {
+    return obj !== undefined;
+}
+
 interface PiecePositionData {
     row?: number;
     col?: number;
@@ -13,20 +17,25 @@ interface PiecePositionData {
     bottom?: number;
 }
 
-function isNum(obj: number | undefined) {
-    return obj !== undefined;
+interface PiecePositionInput extends PiecePositionData {
+    r?: number;
+    c?: number;
 }
 
-export function sanityCheckPieceData(data: PiecePositionData) {
-    const { row, col, top, bottom } = data;
+export function sanityCheckPieceData(data: PiecePositionInput) {
+    const { r, c, row, col, top, bottom } = data;
 
     const cn = (v: number | undefined) => (v === undefined) ? 0 : 1;
 
-    if (cn(row) !== cn(col)) {
-        throw new Error("Row and col are inconsitent");
+    if (cn(r) !== cn(c)) {
+        throw new Error("r and c are inconsitent");
     }
 
-    if (cn(row) + cn(top) + cn(bottom) !== 1) {
+    if (cn(row) !== cn(col)) {
+        throw new Error("row and col are inconsitent");
+    }
+
+    if (cn(r) + cn(row) + cn(top) + cn(bottom) !== 1) {
         console.log("Bad PiecePosition data", data);
         throw new Error("Position properties are inconsitent");
     }
@@ -35,10 +44,17 @@ export function sanityCheckPieceData(data: PiecePositionData) {
 // Return the positions where a piece _might_ be. (So it could refer
 // to an empty square.)
 export class PiecePosition {
-    constructor(data: PiecePositionData) {
+    constructor(data: PiecePositionInput) {
         sanityCheckPieceData(data);
 
-        this.data = { ...data };
+        const { r, c, row, col, top, bottom } = data;
+
+        this.data = { 
+            row: r || row,
+            col: c || col,
+            top: top,
+            bottom: bottom,
+         };
         Object.freeze(this);
     }
 
