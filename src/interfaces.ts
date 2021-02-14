@@ -33,9 +33,6 @@ export type PiecePosition =
     BoardPosition | OffBoardPositionTop | OffBoardPositionBottom;
 
 interface MakePiecePositionInput {
-    r?: number,
-    c?: number,
-
     row?: number;
     col?: number;
 
@@ -44,11 +41,6 @@ interface MakePiecePositionInput {
 }
 
 export function makePiecePosition(data: MakePiecePositionInput): PiecePosition {
-
-    if (data.r !== undefined && data.c !== undefined) {
-        return { row: data.r, col: data.c };
-    }
-
     if (data.row !== undefined && data.col !== undefined) {
         return { row: data.row, col: data.col };
     }

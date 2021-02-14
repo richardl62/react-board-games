@@ -1,6 +1,6 @@
 import { SquareProperties } from '../game/game-control';
 import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
-import { G as GameState, Position } from '../bgio';
+import { G as GameState } from '../bgio';
 
 // The types of the supported games.
 type GameType = 'bobail' | 'chess' | 'draughts';
@@ -48,16 +48,6 @@ interface BoardStyle {
     labels: boolean;
 }
 
-// type LegalMoves = (
-//     arg: {
-//         readonly pieces: BoardPieces;
-//         readonly from: PiecePosition;
-//         readonly gameState: GameState;
-//         readonly activePlayer: number;
-//     }
-//     ) => Array<Array<boolean>> | null;
-
-
 class MoveResult {
     noop: boolean = false;
     continue: boolean = false;
@@ -86,16 +76,6 @@ function moveResult(arg: 'noop' | 'continue' | 'endOfTurn' | {winner: number}) {
 
     return mr;
 }
-
-// type MakeMove = (
-//     arg: {
-//         readonly from: PiecePosition;
-//         readonly to: PiecePosition;
-//         pieces: BoardPieces;
-//         readonly gameState: GameState;
-//         readonly activePlayer: number;
-//     }
-// ) => MoveResult;
 
 type OnClick = (
     pos: PiecePosition, 
@@ -146,7 +126,7 @@ interface GameDefinitionInput {
     initialState : {
         pieces: BoardPieces;
         legalMoves?: Array<Array<boolean>>;
-        selectedSqaure?: Position | null,
+        selectedSqaure?: PiecePosition | null,
         pieceTypeToMove?: string | null; // Kludge to help Bobail
     };
 
@@ -162,17 +142,6 @@ interface GameDefinitionInput {
 
     moveDescription?: MoveDescription;
 };
-
-// const defaultLegalMoves: LegalMoves = () => null;
-
-// const defaultMakeMove: MakeMove = ({from, to, pieces}) => {
-//     let board = new Board(pieces);
-//     board.move(from, to);
-
-//     let result = new MoveResult();
-//     result.endOfTurn = true;
-//     return result;
-// }
 
 const defaultOnClick: OnClick = (
     pos: PiecePosition, 

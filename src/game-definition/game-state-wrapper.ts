@@ -1,21 +1,5 @@
-import { RowCol, samePiecePosition } from '../interfaces';
+import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
 import { GameState } from './game-definition';
-import { nonNull } from '../tools';
-
-interface RowColArg {
-    row?: number, 
-    col?: number,
-
-    r?: number,
-    c?: number,
-};
-
-function rowCol (rc: RowColArg | null ) : RowCol | null {
-    return rc && {
-        row: (rc.row === undefined) ? nonNull(rc.r) : rc.row,
-        col: (rc.col === undefined) ? nonNull(rc.c) : rc.col,
-    }
-}
 
 class GameStateWrapper {
     constructor(state: GameState, activePlayer: number) {
@@ -42,13 +26,12 @@ class GameStateWrapper {
         return this._activePlayer === 0 ? 1 : 0;
     }
 
-    get selectedSquare()  : RowCol | null { 
-        const selected = this._state.selectedSquare;
-        return selected && rowCol(selected); 
+    get selectedSquare() { 
+        return this._state.selectedSquare;
     }
 
-    set selectedSquare(pos: RowCol | null) { 
-        this._state.selectedSquare = pos && {r: pos.row, c: pos.col}; 
+    set selectedSquare(pos: PiecePosition | null) { 
+        this._state.selectedSquare = pos; 
     }
 
     get pieceTypeToMove() : string | null {

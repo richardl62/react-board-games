@@ -144,11 +144,15 @@ function onClick(
         return moveResult('continue');
     }
 
+
     if (reclick) {
         gameState.selectedSquare = null;
     } else if (!gameState.selectedSquare) {
         gameState.selectedSquare = pos;
-    } else {
+    } else {        
+        if (gameState.selectedSquare.row === undefined) {
+            throw new Error("Offboard piece selected in Bobail");
+        }
         gameState.movePiece(gameState.selectedSquare, pos);
         gameState.selectedSquare = null;
 
