@@ -50,8 +50,8 @@ export class PiecePosition {
         const { r, c, row, col, top, bottom } = data;
 
         this.data = { 
-            row: r || row,
-            col: c || col,
+            row: r === undefined ? row : r,
+            col: c === undefined ? col : c,
             top: top,
             bottom: bottom,
          };
