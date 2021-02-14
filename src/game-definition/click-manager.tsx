@@ -1,4 +1,4 @@
-import { PiecePosition } from '../interfaces';
+import { PiecePosition, samePiecePosition } from '../interfaces';
 import { SquareProperties } from '../game/game-control/game-control';
 
 interface ClickManagerProps {
@@ -34,7 +34,7 @@ class ClickManager {
         let result : ClickResult = null;
 
         if (this.selected) {
-            if (PiecePosition.same(this.selected, pos)) {
+            if (samePiecePosition(this.selected, pos)) {
                 // This same square has been clicked twice. Cancel the first click.
                 this._selected = null;
             } else if (squareProperties.changeable) {

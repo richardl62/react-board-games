@@ -5,7 +5,7 @@ import GameControl from '../game-control/game-control';
 import ControlledSquare from './square'
 import { nonNull } from './../../tools';
 import styles from './game-layout.module.css';
-import { PiecePosition } from '../../interfaces';
+import { makePiecePosition } from '../../interfaces';
 
 function RowOfPieces({ where, gameControl }: {
     where: 'top' | 'bottom',
@@ -16,7 +16,7 @@ function RowOfPieces({ where, gameControl }: {
         // Kludge? Use outer div to control the size (via class 'square')
         <div className={nonNull(styles.rowOfPieces)}>
             {offBoard.map((_dummy, index) => {
-                const pos = new PiecePosition({ [where]: index });
+                const pos = makePiecePosition({ [where]: index });
 
                 return (<ControlledSquare key={index} gameControl={gameControl} pos={pos} />);
             }

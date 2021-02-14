@@ -1,10 +1,6 @@
+import { RowCol, samePiecePosition } from '../interfaces';
 import { GameState } from './game-definition';
 import { nonNull } from '../tools';
-
-interface RowCol {
-    row: number;
-    col: number;
-}
 
 interface RowColArg {
     row?: number, 
@@ -19,10 +15,6 @@ function rowCol (rc: RowColArg | null ) : RowCol | null {
         row: (rc.row === undefined) ? nonNull(rc.r) : rc.row,
         col: (rc.col === undefined) ? nonNull(rc.c) : rc.col,
     }
-}
-
-function sameRowCol(p1: RowCol, p2: RowCol) {
-    return p1.row === p2.row && p1.col === p2.col;
 }
 
 class GameStateWrapper {
@@ -100,7 +92,7 @@ class GameStateWrapper {
     }
 
     movePiece(from: RowCol, to: RowCol) {
-        if(!sameRowCol(to, from)) {
+        if(!samePiecePosition(to, from)) {
             this.setPiece(to, this.piece(from)!);
             this.setPiece(from, null);
         }
@@ -132,4 +124,4 @@ class GameStateWrapper {
     }
 }
 
-export { GameStateWrapper, rowCol, sameRowCol }
+export { GameStateWrapper }

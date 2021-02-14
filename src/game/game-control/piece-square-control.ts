@@ -1,5 +1,5 @@
 import { useDrop, useDrag } from 'react-dnd';
-import { PiecePosition } from '../../interfaces';
+import { PiecePosition, makePiecePosition } from '../../interfaces';
 import GameControl from './game-control';
 
 const PIECE = 'piece';
@@ -9,7 +9,7 @@ function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: PIECE,
-      id: pos.data,
+      id: pos,
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
@@ -44,7 +44,9 @@ function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
     // The use of 'any' below is a kludge.  I am not sure how to type if
     // properly, or even if proper typing is possible.
     drop: (dragParam: any /* KLUDGE */) => {
-      const from = new PiecePosition(dragParam.id);
+      // Call makePiecePosition as a sanity check.
+      // (It throws an error if given bad input.)
+      const from = makePiecePosition(dragParam.id);
 
       gameControl.onDragEnd(from, pos);
     },

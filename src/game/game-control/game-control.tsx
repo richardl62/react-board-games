@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { PiecePosition, PieceName } from '../../interfaces';
+import { PiecePosition, samePiecePosition, makePiecePosition, PieceName } from '../../interfaces';
 import { GameDefinition } from '../../game-definition';
 
 import * as Bgio from '../../bgio';
@@ -93,26 +93,25 @@ class GameControl {
     squareProperties(pos: PiecePosition): SquareProperties {
 
         const pieceName = () => {
-            if (pos.onBoard) {
-                return this._G.pieces[pos.row as number][pos.col as number];
-            } else if (pos.onTop) {
+            if (pos.row !== undefined) {
+                return this._G.pieces[pos.row][pos.col];
+            } else if (pos.top !== undefined) {
                 return this._offBoardPieces.top[pos.top];
-            } else if (pos.onBottom) {
+            } else {
                 return this._offBoardPieces.bottom[pos.bottom];
             }
-            throw new Error("squareProperties cannot find square");
         }
         const selectedSquare = this._G.selectedSquare;
-        const selected = Boolean(selectedSquare && PiecePosition.same(pos, new PiecePosition(selectedSquare)));
+        const selected = Boolean(selectedSquare && samePiecePosition(pos, makePiecePosition(selectedSquare)));
 
         const legalMoveStatus = ()  => {
 
             const legalMoves = this._bgioProps.G.legalMoves;
-            if(legalMoves && pos.onBoard && legalMoves[pos.row][pos.col]) {
+            if(legalMoves && pos.row !== undefined && legalMoves[pos.row][pos.col]) {
                 return LegalMoveStatus.Legal;
             }
     
-            if( legalMoves && pos.onBoard && !legalMoves[pos.row][pos.col]) {
+            if( legalMoves && pos.row !== undefined && !legalMoves[pos.row][pos.col]) {
                 return LegalMoveStatus.Illegal;
             }
 
@@ -120,7 +119,7 @@ class GameControl {
         }
 
         const background = () => {
-            if (!pos.onBoard) {
+            if (pos.row === undefined) {
                 return null;
             } else if (!this.boardStyle.checkered) {
                 return 'plain';
@@ -134,7 +133,7 @@ class GameControl {
             background: background(),
 
             pieceName: pieceName(),
-            changeable: pos.onBoard,
+            changeable: pos.row !== undefined,
 
             gameStatus: {
                 selected: selected,
@@ -170,7 +169,7 @@ class GameControl {
     }
 
     onDragEnd(from: PiecePosition, to: PiecePosition | null) {
-        console.log("drag from", from.data, "to", to && to.data);
+        console.log("drag from", from, "to", to && to);
     }
 
     endTurn() {

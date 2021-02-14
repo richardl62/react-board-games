@@ -2,9 +2,9 @@
 // done in this file rather than at point of use.
 import { SquareProperties } from '../game/game-control/game-control';
 import RenderPiece from './bobail-piece';
-import { PiecePosition } from '../interfaces';
+import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
 import { moveResult, GameState, GameDefinitionInput } from './game-definition'
-import { GameStateWrapper, sameRowCol } from './game-state-wrapper';
+import { GameStateWrapper  } from './game-state-wrapper';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
 
@@ -21,11 +21,6 @@ function playerPieceName(player: number): string {
         throw new Error("Unexected piece number");
     }
 }
-
-interface RowCol {
-    row: number;
-    col: number;
-};
 
 function setLegalMovesBobail(
     pos: RowCol,
@@ -128,15 +123,20 @@ function updatePieceToMove(gameState: GameStateWrapper) {
 }
 
 function onClick(
-    pos: PiecePosition,
+    pos_: PiecePosition,
     squarePropeties: SquareProperties,
     gameState_: GameState,
     activePlayer_: number) {
 
+    if(pos_.row === undefined) {
+        throw new Error("Offboard piece passed to onClick for bobail");
+    }
+    const pos: RowCol = pos_;
+
     let gameState = new GameStateWrapper(gameState_, activePlayer_);
     let turnOver = false;
 
-    const reclick = gameState.selectedSquare && sameRowCol(gameState.selectedSquare, pos);
+    const reclick = gameState.selectedSquare && samePiecePosition(gameState.selectedSquare, pos);
 
     // If a bad square has been clicked do nothing. 
     if (!gameState.legalMove(pos) && !reclick) {
