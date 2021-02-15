@@ -1,4 +1,4 @@
-export * from './games';
+export * from '../app/game-renderer';
 export * from './piece-position';
 export * from './piece-name';
 export * from './game-definition'

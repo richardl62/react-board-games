@@ -2,8 +2,8 @@
 // In particular, it sets React hooks and creates a boardgame.io (Bgio) client.
 import React from 'react';
 
-import GameControl, { useGameControlProps } from './game-control'
-import { GameDefinition } from './game-definition';
+import GameControl, { useGameControlProps } from '../game-creation/game-control'
+import { GameDefinition } from '../game-creation/game-definition';
 import SimpleGame from '../game-layout';
 
 import * as bgio from '../bgio-tools';

@@ -2,7 +2,6 @@
 import { Server } from 'boardgame.io/server';
 import path from 'path';
 import serve from 'koa-static';
-import 'ignore-styles'
 
 const games = require('./src/games').default;
 const makeBgioGame = require('./src/bgio-tools/make-game').default;
