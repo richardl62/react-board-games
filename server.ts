@@ -2,10 +2,11 @@
 import { Server } from 'boardgame.io/server';
 import path from 'path';
 import serve from 'koa-static';
+import 'ignore-styles'
 
-const gameDefinitions = require('./src/game-definition').default;
-const makeBgioGame = require('./src/bgio/make-game').default;
-const bgioGames = gameDefinitions.map(makeBgioGame);
+const games = require('./src/games').default;
+const makeBgioGame = require('./src/bgio-tools/make-game').default;
+const bgioGames = games.map(makeBgioGame);
 
 // @ts-ignore
 console.log("Games: ", bgioGames.map(g => g.name));

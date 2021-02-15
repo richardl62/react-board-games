@@ -1,11 +1,11 @@
 import React from 'react';
-import { PiecePosition } from '../piece-position';
+import { PiecePosition } from '../game-creation/piece-position';
 import GameControl, { useSquareControl, usePieceControl }
-  from '../game-control';
+  from '../game-creation/game-control';
 import { Background, CanMoveToMarker } from './square-background'
 
 import styles from "./square.module.css";
-import { nonNull } from "../../tools";
+import { nonNull } from "../tools";
 
 interface Props {
   gameControl: GameControl,

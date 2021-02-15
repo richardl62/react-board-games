@@ -1,6 +1,6 @@
 import React from 'react';
-import GameControl from '../game-control/game-control';
-import { nonNull } from '../../tools';
+import GameControl from '../game-creation/game-control/game-control';
+import { nonNull } from '../tools';
 import styles from './game-layout.module.css';
 
 function UserOptions({ gameControl }: { gameControl: GameControl; }) {
