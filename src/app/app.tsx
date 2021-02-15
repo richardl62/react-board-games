@@ -3,7 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import styles from './app.module.css';
 
-import { makeGameRenderer, makeGamesWithClient } from '../game-creation';
+import { makeGameRenderer, makeGamesWithClient } from './game-renderer';
 import { processLocation } from './url-tools';
 
 import gameDefinitions  from '../games';
