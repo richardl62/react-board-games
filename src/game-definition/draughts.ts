@@ -133,7 +133,6 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
 
     return {
         name: name,
-        gameType: "draughts",
 
         renderPiece: RenderPiece,
 

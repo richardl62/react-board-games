@@ -71,7 +71,6 @@ class GameControl {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
     }
 
-    get gameType() { return this._gameDefinition.gameType; }
     get boardStyle() { return this._gameDefinition.boardStyle; }
 
     undo() { this._bgioProps.undo(); }

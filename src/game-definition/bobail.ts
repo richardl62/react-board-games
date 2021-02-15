@@ -181,8 +181,6 @@ const games: Array<GameDefinitionInput> = [
     {
         name: 'bobail',
 
-        gameType: 'bobail',
-
         boardStyle: {
             checkered: false,
             labels: true,

@@ -7,7 +7,6 @@ import { BoardPieces } from '../interfaces';
 function chess(name: string, pieces: BoardPieces): GameDefinitionInput {
   return {
     name: name,
-    gameType: 'chess',
 
     renderPiece: RenderPiece,
   

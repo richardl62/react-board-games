@@ -2,44 +2,6 @@ import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
 import { G as GameState } from '../bgio';
 import MoveControl from './move-control';
 
-// The types of the supported games.
-type GameType = 'bobail' | 'chess' | 'draughts';
-
-interface RowCol {
-    row: number;
-    col: number;
-}
-class Board {
-    constructor(pieces: BoardPieces) {
-        this._pieces = pieces;
-    }
-    private _pieces: BoardPieces;
-
-    get nRows () { return this._pieces.length;}
-    get nCols () { return this._pieces[0].length;}
-    get(pos: RowCol) {
-        return this.get2(pos.row, pos.col);
-    }
-
-    get2(row: number, col: number) {
-        const r = this._pieces[row];
-        return r ? r[col] : r;
-    }
-
-    set(pos: RowCol, to: PieceName|null) {
-        if(this.get(pos) === undefined) {
-            console.log("Bad position passed to Board.set", pos);
-            throw new Error("Bad position passed to Board.set");
-        }
-        this._pieces[pos.row][pos.col] = to;
-    }
-
-    move(from: RowCol, to: RowCol) {
-        this.set(to, this.get(from));
-        this.set(from, null);
-    }
-};
-
 // Determines how the board is displayed. Does not affect game play.
 interface BoardStyle {
     checkered: boolean; // If true, square [0][0] is 'black'
@@ -86,7 +48,6 @@ type OnClick = (
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
 interface GameDefinition {
-    gameType: GameType;
     boardStyle: BoardStyle;
 
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -113,7 +74,6 @@ type MoveDescription = (gameState: GameState) => string | null;
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinition
 interface GameDefinitionInput {
-    gameType: GameType;
     boardStyle: BoardStyle;
 
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -159,9 +119,9 @@ function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
             legalMoves: null,
             pieceTypeToMove: null,
             ...input.initialState,
-        }
+        },
     };
 }
 
-export { makeGameDefinition, Board, moveResult, MoveResult }
+export { makeGameDefinition, moveResult, MoveResult }
 export type { GameDefinition, GameDefinitionInput, OnClick, MoveDescription, GameState }
