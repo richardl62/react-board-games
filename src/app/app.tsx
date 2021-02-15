@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import { nonNull } from './tools';
+import { nonNull } from '../tools';
 import styles from './app.module.css';
 
-import { makeGameRenderer, makeGamesWithClient } from './game';
+import { makeGameRenderer, makeGamesWithClient } from '../game-creation';
 import { processLocation } from './url-tools';
 
-import gameDefinitions  from './game-definition';
-import {Lobby} from './bgio';
+import gameDefinitions  from '../games';
+import {Lobby} from '../bgio-tools';
 
 type GameDefinition = (typeof gameDefinitions)[number];
 

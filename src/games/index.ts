@@ -1,7 +1,7 @@
 // KLUDGE: Using 'require' rather than import of help with loading in the server.
 // Then reimpose the type before exporting.
 //const makeGameDefinition = require('./game-control').makeGameDefinition;
-import { makeGameDefinition } from '../game/game-control/game-definition';
+import { makeGameDefinition } from '../game-creation/game-definition/game-definition';
 const bobail = require('./bobail').default;
 const chess = require('./chess').default;
 const draughts = require('./draughts').default;

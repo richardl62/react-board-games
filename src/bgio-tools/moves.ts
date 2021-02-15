@@ -1,4 +1,4 @@
-import { PiecePosition, BoardPieces } from '../interfaces';
+import { PiecePosition, BoardPieces } from '../game-creation';
 
 interface G {
     pieces: BoardPieces;

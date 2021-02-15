@@ -3,9 +3,9 @@ import React from 'react';
 //import Piece from '../full-game/controlled-piece';
 import GameControl from '../game-control/game-control';
 import ControlledSquare from './square'
-import { nonNull } from './../../tools';
+import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
-import { makePiecePosition } from '../../interfaces';
+import { makePiecePosition } from '../piece-position';
 
 function RowOfPieces({ where, gameControl }: {
     where: 'top' | 'bottom',

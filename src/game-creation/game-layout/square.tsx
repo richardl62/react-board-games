@@ -1,5 +1,5 @@
 import React from 'react';
-import { PiecePosition } from '../../interfaces';
+import { PiecePosition } from '../piece-position';
 import GameControl, { useSquareControl, usePieceControl }
   from '../game-control';
 import { Background, CanMoveToMarker } from './square-background'

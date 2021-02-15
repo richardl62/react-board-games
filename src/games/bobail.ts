@@ -1,10 +1,9 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import RenderPiece from './bobail-piece';
-import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
-import { MoveResult } from '../game/game-control'
-import { GameState, GameDefinitionInput } from '../game/game-control/game-definition' // KLUDGE
-import MoveControl from '../game/game-control/move-control';
+import { RowCol, PiecePosition, samePiecePosition,
+     GameState, GameDefinitionInput, MoveResult } from '../game-creation'
+import MoveControl from '../game-creation/game-definition/move-control';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
 

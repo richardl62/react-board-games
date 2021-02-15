@@ -1,5 +1,5 @@
-import { PieceName, BoardPieces, PiecePosition } from '../../interfaces'
-import { G as GameState } from '../../bgio';
+import { PieceName, BoardPieces, PiecePosition } from '../piece-position'
+import { G as GameState } from '../../bgio-tools';
 import MoveControl from './move-control';
 import { MoveResult } from './move-result';
 
