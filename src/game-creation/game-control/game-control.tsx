@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import { 
-    PiecePosition, samePiecePosition, makePiecePosition, PieceName 
-    } from '../piece-position';
+import { PiecePosition, samePiecePosition, makePiecePosition } from '../piece-position';
+import { PieceName } from "../piece-name";
 import  { GameDefinition, MoveControl } from '../game-definition';
 
 import * as Bgio from '../../bgio-tools';
