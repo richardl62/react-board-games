@@ -1,5 +1,5 @@
 //import { PiecePosition, BoardPieces } from '../interfaces'
-import { GameDefinitionInput } from './game-definition';
+import { GameDefinitionInput } from '../game/game-control/game-definition' // KLUDGE
 import RenderPiece from './draughts-piece';
 
 

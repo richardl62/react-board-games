@@ -2,8 +2,9 @@
 // done in this file rather than at point of use.
 import RenderPiece from './bobail-piece';
 import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
-import { MoveResult, GameState, GameDefinitionInput } from './game-definition'
-import MoveControl from './move-control';
+import { MoveResult } from '../game/game-control'
+import { GameState, GameDefinitionInput } from '../game/game-control/game-definition' // KLUDGE
+import MoveControl from '../game/game-control/move-control';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
 

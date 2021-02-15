@@ -1,5 +1,5 @@
 import { G } from './moves';
-import { GameDefinition } from '../game-definition'
+import { GameDefinition } from '../game'
 
 // Use require as this file is loading into the server and
 // that does not (fully) support import.

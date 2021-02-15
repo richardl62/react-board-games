@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import { PiecePosition, samePiecePosition, makePiecePosition, PieceName } from '../../interfaces';
-import { GameDefinition } from '../../game-definition';
+import  { GameDefinition } from './game-definition';
 
 import * as Bgio from '../../bgio';
-import MoveControl from '../../game-definition/move-control';
+import MoveControl from './move-control';
 
 const topLeftBlack = false; // KLUDGE
 

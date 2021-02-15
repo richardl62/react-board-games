@@ -1,6 +1,7 @@
-import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
-import { G as GameState } from '../bgio';
+import { PieceName, BoardPieces, PiecePosition } from '../../interfaces'
+import { G as GameState } from '../../bgio';
 import MoveControl from './move-control';
+import { MoveResult } from './move-result';
 
 // Determines how the board is displayed. Does not affect game play.
 interface BoardStyle {
@@ -8,24 +9,6 @@ interface BoardStyle {
 
     // If type rows and columns are labels with letters and numbers;
     labels: boolean;
-}
-
-type MoveResultWinner = {winner: number};
-type MoveResultArg = 'noop' | 'continue' | 'endOfTurn' | MoveResultWinner;
-
-class MoveResult {
-    constructor(result: MoveResultArg) {
-        this._result = result;
-    }
-    private _result: MoveResultArg;
-
-    get noop() {return this._result === "noop"}
-    get continue() {return this._result === "continue"}
-    get endOfTurn() {return this._result === "endOfTurn"}
-
-    get winner(): number | null { 
-        return (typeof this._result === "object") ?   this._result.winner : null
-    };
 }
 
 type OnClick = (
@@ -110,5 +93,5 @@ function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
     };
 }
 
-export { makeGameDefinition, MoveResult }
+export { makeGameDefinition };
 export type { GameDefinition, GameDefinitionInput, OnClick, MoveDescription, GameState }

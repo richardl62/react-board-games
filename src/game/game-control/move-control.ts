@@ -1,4 +1,4 @@
-import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
+import { RowCol, PiecePosition, samePiecePosition } from '../../interfaces';
 import { GameState } from './game-definition';
 
 class MoveControl {
