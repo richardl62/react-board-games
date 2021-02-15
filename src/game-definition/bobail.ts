@@ -2,7 +2,7 @@
 // done in this file rather than at point of use.
 import RenderPiece from './bobail-piece';
 import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
-import { moveResult, GameState, GameDefinitionInput } from './game-definition'
+import { MoveResult, GameState, GameDefinitionInput } from './game-definition'
 import MoveControl from './move-control';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
@@ -134,7 +134,7 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
     // If a bad square has been clicked do nothing. 
     if (!moveControl.legalMove(pos) && !reclick) {
         console.log("Bad square clicked - click ingored");
-        return moveResult('continue');
+        return new MoveResult('continue');
     }
 
 
@@ -171,10 +171,10 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
     const winner = checkForWinner(moveControl, turnOver);
     if (winner !== null) {
         moveControl.setAllLegalMoves(false);
-        return moveResult({ winner: winner });
+        return new MoveResult({ winner: winner });
     }
 
-    return moveResult(turnOver ? 'endOfTurn' : 'continue');
+    return new MoveResult(turnOver ? 'endOfTurn' : 'continue');
 }
 
 const games: Array<GameDefinitionInput> = [

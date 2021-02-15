@@ -10,33 +10,22 @@ interface BoardStyle {
     labels: boolean;
 }
 
+type MoveResultWinner = {winner: number};
+type MoveResultArg = 'noop' | 'continue' | 'endOfTurn' | MoveResultWinner;
+
 class MoveResult {
-    noop: boolean = false;
-    continue: boolean = false;
-    endOfTurn: boolean = false;
-    winner: number| null = null;
-
-    valid() {
-        const c = (b:boolean) => b ? 1: 0;
-        let nSet = c(this.noop) + c(this.continue) + c(this.endOfTurn) + c(this.winner !== null);
-
-        return nSet === 1;
+    constructor(result: MoveResultArg) {
+        this._result = result;
     }
-}
+    private _result: MoveResultArg;
 
-function moveResult(arg: 'noop' | 'continue' | 'endOfTurn' | {winner: number}) {
-    let mr = new MoveResult();
-    if(arg === 'noop') {
-        mr.noop = true;
-    } else if (arg === 'continue') {
-        mr.continue = true;
-    } else if (arg === 'endOfTurn') {
-        mr.endOfTurn = true;
-    } else {
-        mr.winner = arg.winner;
-    }
+    get noop() {return this._result === "noop"}
+    get continue() {return this._result === "continue"}
+    get endOfTurn() {return this._result === "endOfTurn"}
 
-    return mr;
+    get winner(): number | null { 
+        return (typeof this._result === "object") ?   this._result.winner : null
+    };
 }
 
 type OnClick = (
@@ -102,9 +91,7 @@ interface GameDefinitionInput {
 };
 
 const defaultOnClick: OnClick = () => {
-        let moveResult = new MoveResult();
-        moveResult.endOfTurn = true;
-        return moveResult;
+        return new MoveResult('endOfTurn');
     }
 
 const defaultMoveDescription: MoveDescription = () => null;
@@ -123,5 +110,5 @@ function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
     };
 }
 
-export { makeGameDefinition, moveResult, MoveResult }
+export { makeGameDefinition, MoveResult }
 export type { GameDefinition, GameDefinitionInput, OnClick, MoveDescription, GameState }
