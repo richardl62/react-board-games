@@ -1,6 +1,6 @@
-import { SquareProperties } from '../game/game-control';
 import { PieceName, BoardPieces, PiecePosition } from '../interfaces'
 import { G as GameState } from '../bgio';
+import MoveControl from './move-control';
 
 // The types of the supported games.
 type GameType = 'bobail' | 'chess' | 'draughts';
@@ -78,10 +78,8 @@ function moveResult(arg: 'noop' | 'continue' | 'endOfTurn' | {winner: number}) {
 }
 
 type OnClick = (
-    pos: PiecePosition, 
-    squarePropeties: SquareProperties,
-    state: GameState,
-    activePlayer: number
+    pos: PiecePosition,
+    moveControl: MoveControl, 
     ) => MoveResult;
 
 
@@ -143,11 +141,7 @@ interface GameDefinitionInput {
     moveDescription?: MoveDescription;
 };
 
-const defaultOnClick: OnClick = (
-    pos: PiecePosition, 
-    squarePropeties: SquareProperties,
-    gamestate: GameState,
-    activePlayer: number) => {
+const defaultOnClick: OnClick = () => {
         let moveResult = new MoveResult();
         moveResult.endOfTurn = true;
         return moveResult;

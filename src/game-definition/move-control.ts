@@ -1,7 +1,7 @@
 import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
 import { GameState } from './game-definition';
 
-class GameStateWrapper {
+class MoveControl {
     constructor(state: GameState, activePlayer: number) {
         this._state = state;
         this._activePlayer = activePlayer;
@@ -107,4 +107,4 @@ class GameStateWrapper {
     }
 }
 
-export { GameStateWrapper }
+export default MoveControl

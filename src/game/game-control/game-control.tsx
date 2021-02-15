@@ -4,6 +4,7 @@ import { PiecePosition, samePiecePosition, makePiecePosition, PieceName } from '
 import { GameDefinition } from '../../game-definition';
 
 import * as Bgio from '../../bgio';
+import MoveControl from '../../game-definition/move-control';
 
 const topLeftBlack = false; // KLUDGE
 
@@ -154,8 +155,8 @@ class GameControl {
     squareClicked(pos: PiecePosition) {
         let newGameState = JSON.parse(JSON.stringify(this._bgioProps.G));
 
-        const moveResult = this._gameDefinition.onClick(pos, this.squareProperties(pos),
-            newGameState, this.activePlayer);
+        let moveControl = new MoveControl(newGameState, this.activePlayer);
+        const moveResult = this._gameDefinition.onClick(pos, moveControl);
 
         if (!moveResult.noop) {
             this._bgioMoves.setGameState(newGameState);

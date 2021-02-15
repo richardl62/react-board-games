@@ -1,10 +1,9 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { SquareProperties } from '../game/game-control/game-control';
 import RenderPiece from './bobail-piece';
 import { RowCol, PiecePosition, samePiecePosition } from '../interfaces';
 import { moveResult, GameState, GameDefinitionInput } from './game-definition'
-import { GameStateWrapper  } from './game-state-wrapper';
+import MoveControl from './move-control';
 
 // type LegalMovesArg = Parameters<LegalMoves>[0];
 
@@ -24,15 +23,15 @@ function playerPieceName(player: number): string {
 
 function setLegalMovesBobail(
     pos: RowCol,
-    gameState: GameStateWrapper,
+    moveControl: MoveControl,
 ) {
     const { row, col } = pos;
 
     for (let rDelta = -1; rDelta <= 1; ++rDelta) {
         for (let cDelta = -1; cDelta <= 1; ++cDelta) {
             const newPos = { row: row + rDelta, col: col + cDelta };
-            if (gameState.piece(newPos) === null) {
-                gameState.setLegalMove(newPos, true);
+            if (moveControl.piece(newPos) === null) {
+                moveControl.setLegalMove(newPos, true);
             }
         }
     }
@@ -40,7 +39,7 @@ function setLegalMovesBobail(
 
 function setLegalMovesPieceDirected(
     from: RowCol,
-    gameState: GameStateWrapper,
+    moveControl: MoveControl,
     rStep: number, cStep: number
 ) {
     const step = (pos: RowCol) => {
@@ -52,13 +51,13 @@ function setLegalMovesPieceDirected(
 
     let lastNull;
     let newPos = step(from);
-    while (gameState.piece(newPos) === null) {
+    while (moveControl.piece(newPos) === null) {
         lastNull = newPos;
         newPos = step(newPos);
     }
 
     if (lastNull) {
-        gameState.setLegalMove(lastNull, true);
+        moveControl.setLegalMove(lastNull, true);
     }
 }
 
@@ -66,13 +65,13 @@ function setLegalMovesPieceDirected(
 // each direction (including diagonal) from the selected square.
 function setLegalMovesPiece(
     from: RowCol,
-    gameState: GameStateWrapper,
+    moveControl: MoveControl,
     ) {
 
     for (let rStep = -1; rStep <= 1; rStep++) {
         for (let cStep = -1; cStep <= 1; cStep++) {
             if (rStep || cStep) {
-                setLegalMovesPieceDirected(from, gameState, rStep, cStep);
+                setLegalMovesPieceDirected(from, moveControl, rStep, cStep);
             }
         }
     }
@@ -80,104 +79,98 @@ function setLegalMovesPiece(
 
 function setPlayerPiecesAsLegalMoves(
     player: number,
-    gameState: GameStateWrapper,
+    moveControl: MoveControl,
 ) {
-    const positions = gameState.findPieces(playerPieceName(player));
+    const positions = moveControl.findPieces(playerPieceName(player));
     for (const pos of positions) {
-        gameState.setLegalMove(pos, true);
+        moveControl.setLegalMove(pos, true);
     }
 }
 
 function checkForWinner(
-    gameState: GameStateWrapper,
+    moveControl: MoveControl,
     turnOver: boolean): null | number {
 
-    const bbPos = gameState.findPieces(bb)[0];
+    const bbPos = moveControl.findPieces(bb)[0];
     if (bbPos.row === 0) {
         return 0;
     }
 
-    if (bbPos.row === gameState.nRows - 1) {
+    if (bbPos.row === moveControl.nRows - 1) {
         return 1;
     }
 
-    if (gameState.allMovesIllegal) {
+    if (moveControl.allMovesIllegal) {
         if (turnOver) {
-            return gameState.activePlayer;
+            return moveControl.activePlayer;
         } else {
-            return gameState.activePlayer === 0 ? 1 : 0;
+            return moveControl.activePlayer === 0 ? 1 : 0;
         }
     }
 
     return null;
 }
 
-function updatePieceToMove(gameState: GameStateWrapper) {
-    if (gameState.pieceTypeToMove === 'bobail') {
-        gameState.pieceTypeToMove = 'piece';
-    } else if (gameState.pieceTypeToMove === 'piece') {
-        gameState.pieceTypeToMove = 'bobail';
+function updatePieceToMove(moveControl: MoveControl) {
+    if (moveControl.pieceTypeToMove === 'bobail') {
+        moveControl.pieceTypeToMove = 'piece';
+    } else if (moveControl.pieceTypeToMove === 'piece') {
+        moveControl.pieceTypeToMove = 'bobail';
     } else {
         throw new Error("Unrecognised move type");
     }
 }
 
-function onClick(
-    pos_: PiecePosition,
-    squarePropeties: SquareProperties,
-    gameState_: GameState,
-    activePlayer_: number) {
+function onClick(pos_: PiecePosition, moveControl: MoveControl) {
 
     if(pos_.row === undefined) {
         throw new Error("Offboard piece passed to onClick for bobail");
     }
     const pos: RowCol = pos_;
-
-    let gameState = new GameStateWrapper(gameState_, activePlayer_);
     let turnOver = false;
 
-    const reclick = gameState.selectedSquare && samePiecePosition(gameState.selectedSquare, pos);
+    const reclick = moveControl.selectedSquare && samePiecePosition(moveControl.selectedSquare, pos);
 
     // If a bad square has been clicked do nothing. 
-    if (!gameState.legalMove(pos) && !reclick) {
+    if (!moveControl.legalMove(pos) && !reclick) {
         console.log("Bad square clicked - click ingored");
         return moveResult('continue');
     }
 
 
     if (reclick) {
-        gameState.selectedSquare = null;
-    } else if (!gameState.selectedSquare) {
-        gameState.selectedSquare = pos;
+        moveControl.selectedSquare = null;
+    } else if (!moveControl.selectedSquare) {
+        moveControl.selectedSquare = pos;
     } else {        
-        if (gameState.selectedSquare.row === undefined) {
+        if (moveControl.selectedSquare.row === undefined) {
             throw new Error("Offboard piece selected in Bobail");
         }
-        gameState.movePiece(gameState.selectedSquare, pos);
-        gameState.selectedSquare = null;
+        moveControl.movePiece(moveControl.selectedSquare, pos);
+        moveControl.selectedSquare = null;
 
-        updatePieceToMove(gameState);
-        turnOver = gameState.pieceTypeToMove === 'bobail';
+        updatePieceToMove(moveControl);
+        turnOver = moveControl.pieceTypeToMove === 'bobail';
     }
 
-    gameState.setAllLegalMoves(false);
-    if (gameState.pieceTypeToMove === 'bobail') {
+    moveControl.setAllLegalMoves(false);
+    if (moveControl.pieceTypeToMove === 'bobail') {
         // There is only one piece that can be moved, so select it.
-        const bbPos = gameState.findPieces(bb)[0];
-        gameState.selectedSquare = bbPos;
+        const bbPos = moveControl.findPieces(bb)[0];
+        moveControl.selectedSquare = bbPos;
 
-        setLegalMovesBobail(bbPos, gameState);
+        setLegalMovesBobail(bbPos, moveControl);
     } else {
-        if (gameState.selectedSquare) {
-            setLegalMovesPiece(gameState.selectedSquare, gameState);
+        if (moveControl.selectedSquare) {
+            setLegalMovesPiece(moveControl.selectedSquare, moveControl);
         } else {
-            setPlayerPiecesAsLegalMoves(gameState.nextActivePlayer, gameState);
+            setPlayerPiecesAsLegalMoves(moveControl.nextActivePlayer, moveControl);
         }
     }
 
-    const winner = checkForWinner(gameState, turnOver);
+    const winner = checkForWinner(moveControl, turnOver);
     if (winner !== null) {
-        gameState.setAllLegalMoves(false);
+        moveControl.setAllLegalMoves(false);
         return moveResult({ winner: winner });
     }
 
@@ -220,7 +213,7 @@ const games: Array<GameDefinitionInput> = [
 
         onClick: onClick,
 
-        moveDescription: (gameState: GameState) => `move ${gameState.pieceTypeToMove}`,
+        moveDescription: (moveControl: GameState) => `move ${moveControl.pieceTypeToMove}`,
 
         renderPiece: RenderPiece,
     }
