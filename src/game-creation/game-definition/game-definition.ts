@@ -28,7 +28,7 @@ interface GameDefinition {
     // games.
     name: string;
 
-    intialState : GameState;
+    intialState : GameState<any|undefined>; // KLUGE?
 
     offBoardPieces: {
         top: Array<PieceName>;
@@ -46,7 +46,7 @@ type MoveDescription = (gameState: GameState) => string | null;
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinition
-interface GameDefinitionInput {
+interface GameDefinitionInput<GameSpecificState = never> {
     boardStyle: BoardStyle;
 
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -58,7 +58,7 @@ interface GameDefinitionInput {
         pieces: BoardPieces;
         legalMoves?: Array<Array<boolean>>;
         selectedSqaure?: PiecePosition | null,
-        gameSpecific?: any;
+        gameSpecific?: GameSpecificState,
     };
 
     offBoardPieces: {
@@ -80,7 +80,7 @@ const defaultOnClick: OnClick = () => {
 
 const defaultMoveDescription: MoveDescription = () => null;
 
-function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
+function makeGameDefinition<GameSpecificState = never>(input: GameDefinitionInput<GameSpecificState>) : GameDefinition {
     return {
         onClick: defaultOnClick, 
         moveDescription: defaultMoveDescription,
@@ -88,7 +88,6 @@ function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
         intialState: {
             selectedSquare: null,
             legalMoves: null,
-            gameSpecific: null,
             ...input.initialState,
         },
     };

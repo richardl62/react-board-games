@@ -5,8 +5,12 @@ import {
     RowCol, PiecePosition, samePiecePosition,
     GameDefinitionInput, MoveResult
 } from '../game-creation'
-import MoveControl from '../game-creation/game-definition/move-control';
-import { GameState } from '../bgio-tools';
+import { MoveControl as MoveControlTemplate } from '../game-creation';
+import { GameState as GameStateTemplate } from '../bgio-tools';
+
+type BobailState = {moveBobailNext: boolean};
+type GameState = GameStateTemplate<BobailState>;
+type MoveControl = MoveControlTemplate<BobailState>;
 
 const bb = 'bb';
 const pl1 = 'p1';
@@ -112,16 +116,6 @@ function checkForWinner(
     return null;
 }
 
-function updatePieceToMove(moveControl: MoveControl) {
-    if (moveControl.gameSpecificState === 'bobail') {
-        moveControl.gameSpecificState = 'piece';
-    } else if (moveControl.gameSpecificState === 'piece') {
-        moveControl.gameSpecificState = 'bobail';
-    } else {
-        throw new Error("Unrecognised move type");
-    }
-}
-
 function onClick(pos_: PiecePosition, moveControl: MoveControl) {
 
     if (pos_.row === undefined) {
@@ -150,12 +144,15 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
         moveControl.movePiece(moveControl.selectedSquare, pos);
         moveControl.selectedSquare = null;
 
-        updatePieceToMove(moveControl);
-        turnOver = moveControl.gameSpecificState === 'bobail';
+        let gameState  = moveControl.gameSpecificState;
+        gameState.moveBobailNext = !gameState.moveBobailNext;
+        moveControl.gameSpecificState = gameState;
+
+        turnOver = gameState.moveBobailNext;
     }
 
     moveControl.setAllLegalMoves(false);
-    if (moveControl.gameSpecificState === 'bobail') {
+    if (moveControl.gameSpecificState.moveBobailNext) {
         // There is only one piece that can be moved, so select it.
         const bbPos = moveControl.findPieces(bb)[0];
         moveControl.selectedSquare = bbPos;
@@ -178,7 +175,7 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
     return new MoveResult(turnOver ? 'endOfTurn' : 'continue');
 }
 
-const games: Array<GameDefinitionInput> = [
+const games: Array<GameDefinitionInput<BobailState>> = [
     {
         name: 'bobail',
 
@@ -204,7 +201,7 @@ const games: Array<GameDefinitionInput> = [
                 [true, true, true, true, true],
             ],
 
-            gameSpecific: 'piece',
+            gameSpecific: {moveBobailNext: false},
 
         },
 
@@ -212,7 +209,11 @@ const games: Array<GameDefinitionInput> = [
 
         onClick: onClick,
 
-        moveDescription: (gameState: GameState) => `move ${gameState.gameSpecific}`,
+        moveDescription: (gameState: GameState) => {
+            // The ! is a KLUDGE - Prehaps shows that GameState is not defined properly.
+            const toMove = gameState.gameSpecific!.moveBobailNext ? "bobail" : "piece";
+            return `move ${toMove}`
+        },
 
         renderPiece: RenderPiece,
     }

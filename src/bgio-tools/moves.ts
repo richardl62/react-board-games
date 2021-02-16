@@ -11,7 +11,7 @@ function setPieces(GameState: GameState, ctx: any, pieces: SetPiecesArg) {
     GameState.pieces = pieces;
 }
 
-type SetGameStateArg = GameState;
+type SetGameStateArg = GameState<any|undefined>;
 function setGameState(GameState: GameState, ctx: any, gameState: SetGameStateArg) {
     Object.assign(GameState, gameState);
 };

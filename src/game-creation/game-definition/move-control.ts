@@ -1,12 +1,12 @@
 import { RowCol, PiecePosition, samePiecePosition } from '../piece-position';
 import { GameState } from './game-definition';
 
-class MoveControl {
+class MoveControl<GameSpecificState = never> {
     constructor(state: GameState, activePlayer: number) {
         this._state = state;
         this._activePlayer = activePlayer;
     }
-    private _state: GameState;
+    private _state: GameState<GameSpecificState>;
     private _activePlayer: number;
 
     get nRows() { 
@@ -34,11 +34,20 @@ class MoveControl {
         this._state.selectedSquare = pos; 
     }
 
-    get gameSpecificState() {
+    get gameSpecificState(): GameSpecificState {
+        // Not sure if this is necessary other than to keep typescript happy.
+        if(this._state.gameSpecific === undefined) {
+            throw new Error("Game specific state is not available");
+        }
         return this._state.gameSpecific;
     }
 
-    set gameSpecificState(state: any) {
+
+    set gameSpecificState(state: GameSpecificState) {
+        // Not sure if this is necessary
+        if(this._state.gameSpecific === undefined) {
+            throw new Error("Game specific state is not available");
+        }
         this._state.gameSpecific = state;
     }
 
