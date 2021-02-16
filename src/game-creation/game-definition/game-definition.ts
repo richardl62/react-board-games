@@ -58,7 +58,7 @@ interface GameDefinitionInput {
         pieces: BoardPieces;
         legalMoves?: Array<Array<boolean>>;
         selectedSqaure?: PiecePosition | null,
-        pieceTypeToMove?: string | null; // Kludge to help Bobail
+        gameSpecific?: any;
     };
 
     offBoardPieces: {
@@ -88,7 +88,7 @@ function makeGameDefinition(input: GameDefinitionInput) : GameDefinition {
         intialState: {
             selectedSquare: null,
             legalMoves: null,
-            pieceTypeToMove: null,
+            gameSpecific: null,
             ...input.initialState,
         },
     };

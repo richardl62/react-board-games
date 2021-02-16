@@ -5,7 +5,10 @@ import { RowCol, PiecePosition, samePiecePosition,
      GameState, GameDefinitionInput, MoveResult } from '../game-creation'
 import MoveControl from '../game-creation/game-definition/move-control';
 
-// type LegalMovesArg = Parameters<LegalMoves>[0];
+
+//interface BobailState {
+//    gameSpecific: 'bobail' | 'piece';
+//};
 
 const bb = 'bb';
 const pl1 = 'p1';
@@ -112,10 +115,10 @@ function checkForWinner(
 }
 
 function updatePieceToMove(moveControl: MoveControl) {
-    if (moveControl.pieceTypeToMove === 'bobail') {
-        moveControl.pieceTypeToMove = 'piece';
-    } else if (moveControl.pieceTypeToMove === 'piece') {
-        moveControl.pieceTypeToMove = 'bobail';
+    if (moveControl.gameSpecificState === 'bobail') {
+        moveControl.gameSpecificState = 'piece';
+    } else if (moveControl.gameSpecificState === 'piece') {
+        moveControl.gameSpecificState = 'bobail';
     } else {
         throw new Error("Unrecognised move type");
     }
@@ -150,11 +153,11 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
         moveControl.selectedSquare = null;
 
         updatePieceToMove(moveControl);
-        turnOver = moveControl.pieceTypeToMove === 'bobail';
+        turnOver = moveControl.gameSpecificState === 'bobail';
     }
 
     moveControl.setAllLegalMoves(false);
-    if (moveControl.pieceTypeToMove === 'bobail') {
+    if (moveControl.gameSpecificState === 'bobail') {
         // There is only one piece that can be moved, so select it.
         const bbPos = moveControl.findPieces(bb)[0];
         moveControl.selectedSquare = bbPos;
@@ -195,8 +198,6 @@ const games: Array<GameDefinitionInput> = [
                 [pl2, pl2, pl2, pl2, pl2],
             ],
 
-            pieceTypeToMove: 'piece',
-
             legalMoves: [
                 [false, false, false, false, false],
                 [false, false, false, false, false],
@@ -204,6 +205,8 @@ const games: Array<GameDefinitionInput> = [
                 [false, false, false, false, false],
                 [true, true, true, true, true],
             ],
+            
+            gameSpecific: 'piece',
 
         },
 
@@ -211,7 +214,7 @@ const games: Array<GameDefinitionInput> = [
 
         onClick: onClick,
 
-        moveDescription: (moveControl: GameState) => `move ${moveControl.pieceTypeToMove}`,
+        moveDescription: (gameState: GameState) => `move ${gameState.gameSpecific}`,
 
         renderPiece: RenderPiece,
     }

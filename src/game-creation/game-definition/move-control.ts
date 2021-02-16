@@ -34,12 +34,12 @@ class MoveControl {
         this._state.selectedSquare = pos; 
     }
 
-    get pieceTypeToMove() : string | null {
-        return this._state.pieceTypeToMove;
+    get gameSpecificState() {
+        return this._state.gameSpecific;
     }
 
-    set pieceTypeToMove(type : string | null) {
-        this._state.pieceTypeToMove = type;
+    set gameSpecificState(state: any) {
+        this._state.gameSpecific = state;
     }
 
     legalMove(pos: RowCol): boolean | null {

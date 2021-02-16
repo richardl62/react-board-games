@@ -3,9 +3,8 @@ import { PiecePosition, BoardPieces } from '../game-creation';
 interface G {
     pieces: BoardPieces;
     selectedSquare: PiecePosition | null;
-    pieceTypeToMove: string | null;
-    
     legalMoves: Array<Array<boolean>> | null;
+    gameSpecific: any;
 };
 
 type SetPiecesArg = BoardPieces;
