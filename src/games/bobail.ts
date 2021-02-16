@@ -1,14 +1,12 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
 import RenderPiece from './bobail-piece';
-import { RowCol, PiecePosition, samePiecePosition,
-     GameState, GameDefinitionInput, MoveResult } from '../game-creation'
+import {
+    RowCol, PiecePosition, samePiecePosition,
+    GameDefinitionInput, MoveResult
+} from '../game-creation'
 import MoveControl from '../game-creation/game-definition/move-control';
-
-
-//interface BobailState {
-//    gameSpecific: 'bobail' | 'piece';
-//};
+import { GameState } from '../bgio-tools';
 
 const bb = 'bb';
 const pl1 = 'p1';
@@ -47,7 +45,7 @@ function setLegalMovesPieceDirected(
 ) {
     const step = (pos: RowCol) => {
         return {
-            row: pos.row + rStep, 
+            row: pos.row + rStep,
             col: pos.col + cStep
         };
     }
@@ -69,7 +67,7 @@ function setLegalMovesPieceDirected(
 function setLegalMovesPiece(
     from: RowCol,
     moveControl: MoveControl,
-    ) {
+) {
 
     for (let rStep = -1; rStep <= 1; rStep++) {
         for (let cStep = -1; cStep <= 1; cStep++) {
@@ -126,7 +124,7 @@ function updatePieceToMove(moveControl: MoveControl) {
 
 function onClick(pos_: PiecePosition, moveControl: MoveControl) {
 
-    if(pos_.row === undefined) {
+    if (pos_.row === undefined) {
         throw new Error("Offboard piece passed to onClick for bobail");
     }
     const pos: RowCol = pos_;
@@ -145,7 +143,7 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
         moveControl.selectedSquare = null;
     } else if (!moveControl.selectedSquare) {
         moveControl.selectedSquare = pos;
-    } else {        
+    } else {
         if (moveControl.selectedSquare.row === undefined) {
             throw new Error("Offboard piece selected in Bobail");
         }
@@ -205,7 +203,7 @@ const games: Array<GameDefinitionInput> = [
                 [false, false, false, false, false],
                 [true, true, true, true, true],
             ],
-            
+
             gameSpecific: 'piece',
 
         },

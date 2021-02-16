@@ -1,25 +1,19 @@
-import { PiecePosition, BoardPieces } from '../game-creation';
-
-interface G {
-    pieces: BoardPieces;
-    selectedSquare: PiecePosition | null;
-    legalMoves: Array<Array<boolean>> | null;
-    gameSpecific: any;
-};
+import { BoardPieces } from '../game-creation';
+import { GameState } from './game-state';
 
 type SetPiecesArg = BoardPieces;
-function setPieces(g: G, ctx: any, pieces: SetPiecesArg) {
+function setPieces(GameState: GameState, ctx: any, pieces: SetPiecesArg) {
 
     // Kludge?: Clear everything other than pieces
-    g.selectedSquare = null;
-    g.legalMoves = null;
+    GameState.selectedSquare = null;
+    GameState.legalMoves = null;
 
-    g.pieces = pieces;
+    GameState.pieces = pieces;
 }
 
-type SetGameStateArg = G;
-function setGameState(g: G, ctx: any, gameState: SetGameStateArg) {
-    Object.assign(g, gameState);
+type SetGameStateArg = GameState;
+function setGameState(GameState: GameState, ctx: any, gameState: SetGameStateArg) {
+    Object.assign(GameState, gameState);
 };
 
 const moves = {
@@ -39,4 +33,4 @@ interface ClientMoves {
 };
 
 export default moves;
-export type { G, ClientMoves }
+export type { GameState, ClientMoves }

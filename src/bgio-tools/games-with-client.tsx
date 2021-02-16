@@ -1,7 +1,7 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { BoardProps } from 'boardgame.io/react';
 import { Client } from 'boardgame.io/react';
-import { G } from './moves';
+import { GameState } from "./game-state";
 import makeGame from "./make-game";
 
 type GameDefinition = Parameters<typeof makeGame>[0];
@@ -25,7 +25,7 @@ function makeClient({ gameDefinition, server, bgioDebugPanel,
         multiplayer = Local();
     }
 
-    return Client<G>({
+    return Client<GameState>({
         multiplayer: multiplayer,
         game: makeGame(gameDefinition),
         board: renderGame,
@@ -35,7 +35,7 @@ function makeClient({ gameDefinition, server, bgioDebugPanel,
 }
 
 interface gamesWithClientArgs {
-    renderGame: (props: BoardProps<G>) => JSX.Element;
+    renderGame: (props: BoardProps<GameState>) => JSX.Element;
     server: string | null;
     nGames: number;
     bgioDebugPanel: boolean;

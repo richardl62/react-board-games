@@ -1,9 +1,10 @@
-import { G, ClientMoves } from './moves';
+import { ClientMoves } from './moves';
+import { GameState } from "./game-state";
 import { BoardProps } from 'boardgame.io/react';
 
-type BoardPropsG = BoardProps<G>; 
+type BoardPropsG = BoardProps<GameState>; 
 
-export type { G, ClientMoves, BoardPropsG as BoardProps } 
+export type { GameState, ClientMoves, BoardPropsG as BoardProps } 
 
 export {default as Lobby} from './bgio-lobby';
 export {default as gamesWithClient} from './games-with-client';

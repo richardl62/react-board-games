@@ -1,4 +1,4 @@
-import { G } from './moves';
+import { GameState } from "./game-state";
 import { GameDefinition } from '../game-creation'
 
 // Use require as this file is loading into the server and
@@ -9,7 +9,7 @@ const moves = require('./moves').default;
 function makeGame(gameDefinition: GameDefinition) {
     return {
         name: gameDefinition.name.replace(/\s/g, ''),
-        setup: (): G =>  gameDefinition.intialState,
+        setup: (): GameState =>  gameDefinition.intialState,
         moves: moves,
     };
 }

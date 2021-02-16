@@ -66,7 +66,7 @@ class GameControl {
 
     private get _gameDefinition () {  return this._localProps.gameDefinition; }
 
-    private get _G() { return this._bgioProps.G; }
+    private get _gameState() { return this._bgioProps.G; }
 
     private get _bgioMoves() {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
@@ -85,24 +85,24 @@ class GameControl {
     flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows); }
 
     get nRows() {
-        return this._G.pieces.length;
+        return this._gameState.pieces.length;
     }
 
     get nCols() {
-        return this._G.pieces[0].length;
+        return this._gameState.pieces[0].length;
     }
     squareProperties(pos: PiecePosition): SquareProperties {
 
         const pieceName = () => {
             if (pos.row !== undefined) {
-                return this._G.pieces[pos.row][pos.col];
+                return this._gameState.pieces[pos.row][pos.col];
             } else if (pos.top !== undefined) {
                 return this._offBoardPieces.top[pos.top];
             } else {
                 return this._offBoardPieces.bottom[pos.bottom];
             }
         }
-        const selectedSquare = this._G.selectedSquare;
+        const selectedSquare = this._gameState.selectedSquare;
         const selected = Boolean(selectedSquare && samePiecePosition(pos, makePiecePosition(selectedSquare)));
 
         const legalMoveStatus = ()  => {
@@ -223,7 +223,7 @@ class GameControl {
         } 
     }
 
-    get moveDescription () {return this._gameDefinition.moveDescription(this._G);}
+    get moveDescription () {return this._gameDefinition.moveDescription(this._gameState);}
 }
 
 export { GameControl as default, useGameControlProps, LegalMoveStatus  };
