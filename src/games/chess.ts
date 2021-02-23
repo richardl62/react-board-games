@@ -1,6 +1,6 @@
 // Use of GameDefinitionInput is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { GameDefinitionInput } from '../game-creation/game-definition/game-definition' // KLUDGE
+import { GameDefinitionInput } from '../game-creation/game-definition'
 import RenderPiece from './chess-piece';
 import { BoardPieces } from '../game-creation';
 

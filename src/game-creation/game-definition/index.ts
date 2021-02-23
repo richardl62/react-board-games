@@ -1,4 +1,5 @@
 export {default as MoveControl}  from './move-control';
 export {default as MoveResult}  from './move-result';
-export { makeGameDefinition } from './game-definition';
-export type { GameDefinition, GameDefinitionInput } from './game-definition';
+export type { GameDefinition } from './game-definition';
+export { makeGameDefinition } from './make-game-definition';
+export type { GameDefinitionInput } from './make-game-definition';

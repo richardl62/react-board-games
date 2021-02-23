@@ -1,5 +1,5 @@
 import { RowCol, PiecePosition, samePiecePosition } from '../piece-position';
-import { GameState } from './game-definition';
+import { GameState } from '../../bgio-tools';
 
 class MoveControl<GameSpecificState = never> {
     constructor(state: GameState, activePlayer: number) {
