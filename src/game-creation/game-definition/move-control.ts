@@ -1,11 +1,15 @@
-import { RowCol, PiecePosition, samePiecePosition } from '../piece-position';
+import { RowCol, makeRowCol, PiecePosition, samePiecePosition} from '../piece-position';
+import { OffBoardPieces } from './game-definition';
 import { GameState } from '../../bgio-tools';
 
 class MoveControl<GameSpecificState = never> {
-    constructor(state: GameState, activePlayer: number) {
+    constructor(offBoardPieces: OffBoardPieces, state: GameState, activePlayer: number) {
+        this._offBoardPieces = offBoardPieces;
         this._state = state;
         this._activePlayer = activePlayer;
+
     }
+    private _offBoardPieces: OffBoardPieces;
     private _state: GameState<GameSpecificState>;
     private _activePlayer: number;
 
@@ -90,13 +94,35 @@ class MoveControl<GameSpecificState = never> {
         }
     }
 
-    // Return undefined if the piece is off the board
-    piece(pos: RowCol): undefined | null | string {
-        const row = this._state.pieces[pos.row];
-        return row && row[pos.col];
+    // Return undefined if the position is invalid
+    pieceOrUndefined(pos: PiecePosition): undefined | null | string {
+        if (makeRowCol(pos)) {
+            const row = this._state.pieces[pos.row!];
+            return row && row[pos.col!];
+        } else if(pos.top !== undefined) {
+            return this._offBoardPieces.top[pos.top];
+        } else if(pos.bottom !== undefined) {
+            return this._offBoardPieces.bottom[pos.bottom];
+        }
+    }
+    
+    validPosition(pos: PiecePosition) {
+        return this.pieceOrUndefined(pos) !== undefined;
     }
 
+    piece(pos: PiecePosition): null | string {
+        const raw = this.pieceOrUndefined(pos);
+        if(raw === undefined) {
+            throw new Error("Invalid piece position");
+        }
+        return raw;
+    }
+
+    // For now at least off-board pieces cannot be changed.
     setPiece(pos: RowCol, val : string | null) {
+        if(!this.validPosition(pos)) {
+            throw Error("Invalid position passed to setPiece");
+        }
         this._state.pieces[pos.row][pos.col] = val;
     }
 

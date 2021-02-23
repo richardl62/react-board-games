@@ -51,16 +51,13 @@ export function makePiecePosition(data: MakePiecePositionInput): PiecePosition {
     throw new Error("Bad input data to makePiecePosition");
 }
 
-export function isRowCol(data: MakePiecePositionInput | null) {
-    return Boolean(data && data.row !== undefined && data.col !== undefined);
-}
-
-export function makeRowCol(data: MakePiecePositionInput | null): RowCol {
-    if (isRowCol(data)) {
+// Return null if the input is not suitable.
+export function makeRowCol(data: MakePiecePositionInput | null): RowCol | null {
+    if (data && data.row !== undefined && data.col !== undefined) {
         return { row: data!.row!, col: data!.col! };
     }
 
-    throw new Error("Bad input data to makeRowCol");
+    return null;
 }
 
 export function samePiecePosition(

@@ -20,8 +20,15 @@ export type OnClick = (
 
 export type MoveDescription = (gameState: GameState) => string | null;
 
+export interface OffBoardPieces {
+    top: Array<PieceName>;
+    bottom: Array<PieceName>;
+}
+
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinitionInput
+// NOTE: Should be suitable for use with JSON.stringify/JSON.parse (so no
+// classes.)
 export interface GameDefinition {
     boardStyle: BoardStyle;
 
@@ -32,10 +39,7 @@ export interface GameDefinition {
 
     intialState : GameState<any|undefined>; // KLUGE?
 
-    offBoardPieces: {
-        top: Array<PieceName>;
-        bottom: Array<PieceName>;
-    };
+    offBoardPieces: OffBoardPieces;
 
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 

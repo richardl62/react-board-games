@@ -155,7 +155,7 @@ class GameControl {
     squareClicked(pos: PiecePosition) {
         let newGameState = JSON.parse(JSON.stringify(this._bgioProps.G));
 
-        let moveControl = new MoveControl(newGameState, this.activePlayer);
+        let moveControl = new MoveControl(this._offBoardPieces, newGameState, this.activePlayer);
         const moveResult = this._gameDefinition.onClick(pos, moveControl);
 
         if (!moveResult.noop) {

@@ -1,7 +1,7 @@
-import { PiecePosition, makeRowCol } from '../piece-position'
+import { PiecePosition, samePiecePosition, makeRowCol } from '../piece-position'
 import { PieceName, BoardPieces } from "../piece-name";
 import MoveControl from './move-control';
-import { MoveResult } from './move-result';
+import { MoveResult, MoveResultArg } from './move-result';
 import { GameDefinition, BoardStyle, OnClick, MoveDescription } from './game-definition';
 
 // The properties that define an individual game so of which are optional.
@@ -34,41 +34,57 @@ interface GameDefinitionInput<GameSpecificState = never> {
     moveDescription?: MoveDescription;
 };
 
-type MakeMove = (from: PiecePosition, to: PiecePosition, moveControl: MoveControl) => void
 
-function simpleMove(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) {
-    moveControl.movePiece(
-        makeRowCol(from),
-        makeRowCol(to)
-    );
+function simpleMove(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) : MoveResultArg {
+    const toRowCol = makeRowCol(to);
+    if (toRowCol === null) {
+        // An off-board was selected when another piece was selected.
+        // select the off-board piece.
+        // KLUDGE? Is this the right place to do this?
+        moveControl.selectedSquare = to;
+    } else {
+        moveControl.setPiece(toRowCol, moveControl.piece(from));
+
+        const fromRowCol = makeRowCol(from);
+        if (fromRowCol) {
+            moveControl.setPiece(fromRowCol, null)
+        }
+    }
+
+    return 'endOfTurn';
 }
 
-function simpleClickToMove(
+type SimpleMakeMove = (from: PiecePosition, to: PiecePosition, moveControl: MoveControl) => MoveResultArg;
+
+function simpleClickMove(
     clickPos: PiecePosition,
     moveControl: MoveControl,
-    makeMove: MakeMove) {
+    makeMove: SimpleMakeMove) {
+
     const selected = moveControl.selectedSquare;
+    
     if (selected === null) {
         // Select the clicked square unless it is empty.
-        if (moveControl.piece(makeRowCol(clickPos))) {
+        if (moveControl.piece(clickPos)) {
             moveControl.selectedSquare = clickPos;
         }
-    } else {
-        // Clear the selected sqaure before (potentailly) calling makeMove.
-        // Duing it after would overwrite any value set by makeMove. 
+    } else if (samePiecePosition(selected,clickPos)) {
+        // if the square is selected twice 'cancel' the first click
         moveControl.selectedSquare = null;
-
-        if (selected !== clickPos) {
-            makeMove(makeRowCol(selected), clickPos, moveControl);
-            return new MoveResult('endOfTurn');
-        }
+    }  else  {
+        // Make a move.
+        // Clear the selected sqaure before (potentailly) calling makeMove.
+        // Doing it after would overwrite any value set by makeMove. 
+        moveControl.selectedSquare = null;
+        const moveResult = makeMove(selected, clickPos, moveControl);
+        return new MoveResult(moveResult);
     }
 
     return new MoveResult('continue');
 }
 
-function simpleOnClick(makeMove: MakeMove): OnClick {
-    return (pos, moveControl) => simpleClickToMove(pos, moveControl, makeMove);
+function simpleOnClick(makeMove: SimpleMakeMove): OnClick {
+    return (pos, moveControl) => simpleClickMove(pos, moveControl, makeMove);
 }
 
 function defaultMoveDescription() { return null; }
