@@ -1,5 +1,6 @@
 //import { PiecePosition, BoardPieces } from '../interfaces'
-import { GameDefinitionInput } from '../game-creation'
+import { GameDefinitionInput, makeOnClickFunction, defaultMoveFunction, 
+    PiecePosition, RowCol, makeRowCol, MoveControl, MoveResult } from '../game-creation'
 import RenderPiece from './draughts-piece';
 
 
@@ -103,6 +104,46 @@ interface DraughtProps {
 //     return legalMoves;
 // }
 
+// Find the steps in a diagonal path [from, to).
+function findDiagonalPath(from: RowCol, to: RowCol) {
+    const step = (num: number) => num > 0 ? 1 : -1;
+
+    const rowDiff = to.row - from.row;
+    const colDiff = to.col - from.col;
+    if(Math.abs(rowDiff) === Math.abs(colDiff)) {
+        let positions = [];
+
+        let {row, col} = from;
+        while(row !== to.row) {
+            positions.push({row:row, col: col})
+            row += step(rowDiff);
+            col += step(colDiff);
+        }
+        return positions;
+    } 
+
+    return null;
+}
+
+function moveFunction(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) {
+    const fromRowCol = makeRowCol(from);
+    const toRowCol = makeRowCol(to);
+    if(fromRowCol && toRowCol) {
+        const fromPiece = moveControl.piece(from);
+        const path = findDiagonalPath(fromRowCol, toRowCol);
+        if(path && !moveControl.piece(to)) {
+            path.forEach(pos => moveControl.setPiece(pos, null));
+            moveControl.setPiece(toRowCol, fromPiece);
+            return new MoveResult('endOfTurn');
+        }
+
+        return new MoveResult('noop');
+    } else {
+        return defaultMoveFunction(from, to, moveControl);
+    }
+}
+
+const onClick = makeOnClickFunction(moveFunction);
 // Use of gameDefinitionInput is not necessary, but it allows type checking to be
 // done here rather than at point of use.
 function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefinitionInput {
@@ -150,8 +191,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
             bottom: ['b', 'B'],
         },
 
-        // legalMoves: legalMoves,
-        //makeMove: makeMove,
+        onClick: onClick,
     };
 }
 
@@ -162,8 +202,8 @@ const games = [
     }),
 
     draughts({
-        name: "Draughts 3*4 (test)",
-        nRows: 3, nCols: 4, nRowsOfPieces: 1,
+        name: "Thump (Ghanian draughts)",
+        nRows: 10, nCols: 10, nRowsOfPieces: 4,
     }),
 ];
 

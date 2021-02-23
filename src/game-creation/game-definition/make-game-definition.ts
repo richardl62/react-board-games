@@ -1,7 +1,7 @@
 import { PiecePosition, samePiecePosition, makeRowCol } from '../piece-position'
 import { PieceName, BoardPieces } from "../piece-name";
 import MoveControl from './move-control';
-import { MoveResult, MoveResultArg } from './move-result';
+import { MoveResult } from './move-result';
 import { GameDefinition, BoardStyle, OnClick, MoveDescription } from './game-definition';
 
 // The properties that define an individual game so of which are optional.
@@ -34,8 +34,9 @@ interface GameDefinitionInput<GameSpecificState = never> {
     moveDescription?: MoveDescription;
 };
 
+type MoveFunction = (from: PiecePosition, to: PiecePosition, moveControl: MoveControl) => MoveResult;
 
-function simpleMove(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) : MoveResultArg {
+function defaultMoveFunction(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) {
     const toRowCol = makeRowCol(to);
     if (toRowCol === null) {
         // An off-board was selected when another piece was selected.
@@ -51,49 +52,42 @@ function simpleMove(from: PiecePosition, to: PiecePosition, moveControl: MoveCon
         }
     }
 
-    return 'endOfTurn';
+    return new MoveResult('endOfTurn');
 }
 
-type SimpleMakeMove = (from: PiecePosition, to: PiecePosition, moveControl: MoveControl) => MoveResultArg;
+function makeOnClickFunction(makeMove: MoveFunction) {
 
-function simpleClickMove(
-    clickPos: PiecePosition,
-    moveControl: MoveControl,
-    makeMove: SimpleMakeMove) {
+    return (clickPos: PiecePosition, moveControl: MoveControl) => {
+        const selected = moveControl.selectedSquare;
 
-    const selected = moveControl.selectedSquare;
-    
-    if (selected === null) {
-        // Select the clicked square unless it is empty.
-        if (moveControl.piece(clickPos)) {
-            moveControl.selectedSquare = clickPos;
+        if (selected === null) {
+            // Select the clicked square unless it is empty.
+            if (moveControl.piece(clickPos)) {
+                moveControl.selectedSquare = clickPos;
+            }
+        } else if (samePiecePosition(selected, clickPos)) {
+            // if the square is selected twice 'cancel' the first click
+            moveControl.selectedSquare = null;
+        } else {
+            // Make a move.
+            // Clear the selected sqaure before (potentailly) calling makeMove.
+            // Doing it after would overwrite any value set by makeMove. 
+            moveControl.selectedSquare = null;
+            return makeMove(selected, clickPos, moveControl);
         }
-    } else if (samePiecePosition(selected,clickPos)) {
-        // if the square is selected twice 'cancel' the first click
-        moveControl.selectedSquare = null;
-    }  else  {
-        // Make a move.
-        // Clear the selected sqaure before (potentailly) calling makeMove.
-        // Doing it after would overwrite any value set by makeMove. 
-        moveControl.selectedSquare = null;
-        const moveResult = makeMove(selected, clickPos, moveControl);
-        return new MoveResult(moveResult);
+
+        return new MoveResult('continue');
     }
-
-    return new MoveResult('continue');
 }
-
-function simpleOnClick(makeMove: SimpleMakeMove): OnClick {
-    return (pos, moveControl) => simpleClickMove(pos, moveControl, makeMove);
-}
-
-function defaultMoveDescription() { return null; }
 
 function makeGameDefinition<GameSpecificState = never>(input: GameDefinitionInput<GameSpecificState>): GameDefinition {
     return {
-        onClick: simpleOnClick(simpleMove),
-        moveDescription: defaultMoveDescription,
+        // Default.  Can be overwritten by input.
+        onClick: makeOnClickFunction(defaultMoveFunction),
+        moveDescription: () => { return null; },
+
         ...input,
+
         intialState: {
             selectedSquare: null,
             legalMoves: null,
@@ -102,5 +96,5 @@ function makeGameDefinition<GameSpecificState = never>(input: GameDefinitionInpu
     };
 }
 
-export { makeGameDefinition };
+export { makeGameDefinition, makeOnClickFunction, defaultMoveFunction };
 export type { GameDefinitionInput }
