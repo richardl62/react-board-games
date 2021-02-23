@@ -1,4 +1,4 @@
-import { PiecePosition } from '../piece-position'
+import { PiecePosition, makeRowCol } from '../piece-position'
 import { PieceName, BoardPieces } from "../piece-name";
 import { GameState } from '../../bgio-tools';
 import MoveControl from './move-control';
@@ -74,15 +74,44 @@ interface GameDefinitionInput<GameSpecificState = never> {
     moveDescription?: MoveDescription;
 };
 
-const defaultOnClick: OnClick = () => {
-        return new MoveResult('endOfTurn');
-    }
+type MakeMove = (from: PiecePosition, to: PiecePosition, moveControl: MoveControl) => void
+ 
+function simpleMove(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) {
+    moveControl.movePiece(
+        makeRowCol(from), 
+        makeRowCol(to)
+    );
+}
 
-const defaultMoveDescription: MoveDescription = () => null;
+function clickToMove(
+    pos: PiecePosition,
+    moveControl: MoveControl,
+    makeMove: MakeMove) 
+    {
+    const selected = moveControl.selectedSquare;
+    if (selected === null) {
+        moveControl.selectedSquare = pos;
+        return new MoveResult('continue');
+    } else if(pos === selected) {
+        moveControl.selectedSquare = null;
+        return new MoveResult('continue');
+    } else {
+        moveControl.selectedSquare = null;
+        makeMove(selected, pos, moveControl);
+        return new MoveResult('endOfTurn')
+    }   
+}
+
+function simpleOnClick(makeMove: MakeMove) : OnClick {
+    return (pos, moveControl) => clickToMove(pos, moveControl, makeMove);
+}
+
+function defaultMoveDescription() { return null; }
+
 
 function makeGameDefinition<GameSpecificState = never>(input: GameDefinitionInput<GameSpecificState>) : GameDefinition {
     return {
-        onClick: defaultOnClick, 
+        onClick: simpleOnClick(simpleMove), 
         moveDescription: defaultMoveDescription,
         ...input,
         intialState: {
