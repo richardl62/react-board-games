@@ -202,7 +202,7 @@ const games = [
     }),
 
     draughts({
-        name: "Thump (Ghanian draughts)",
+        name: "Thump (Ghanaian draughts)",
         nRows: 10, nCols: 10, nRowsOfPieces: 4,
     }),
 ];
