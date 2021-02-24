@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+// Passing in text is KLUDGE
 interface Props {
     color: string;
     text?: string | null;
@@ -29,7 +30,8 @@ const Counter: FC<Props> = ({ color, text, textColor }: Props) => {
         justifyContent: "center",
         alignItems: "center",
 
-        fontSize: "150%",
+        fontSize: "200%",
+        fontWeight: 900,
     }
 
     return (
