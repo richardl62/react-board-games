@@ -37,11 +37,17 @@ function Square(props: Props) {
 
   const squareProperties = gameControl.squareProperties(pos);
 
+  let className = nonNull(styles.square);
+  if(!squareProperties.gameStatus.selected) {
+    // KLUDGE? Used only to contol hover effect is CSS 
+    className += ' ' + nonNull(styles.unselectedSquare) 
+  }
+
   return (
     /* PieceWrapper sets z-index to 'lift' the piece and so prevents
       the background being dragged. */
     <div
-      className={nonNull(styles.square)}
+      className={className}
       {...squareControl.props}
     >
       <Background {...squareProperties} />
