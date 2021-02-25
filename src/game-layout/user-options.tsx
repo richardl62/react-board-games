@@ -15,11 +15,17 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
             </div>
 
             <div className={nonNull(styles.userOptionsButtons)}>
-                <button type='button' onClick={() => gameControl.undo()}>
+                <button type='button' 
+                    disabled={!gameControl.canUndo} 
+                    onClick={() => gameControl.undo()}
+                >
                     Undo
                 </button>
 
-                <button type='button' onClick={() => gameControl.redo()}>
+                <button type='button'
+                    disabled={!gameControl.canRedo} 
+                    onClick={() => gameControl.redo()}
+                >
                     Redo
                 </button>
             </div>

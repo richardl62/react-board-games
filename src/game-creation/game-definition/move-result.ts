@@ -1,19 +1,23 @@
+type Winner = { winner: number };
+type Result = 'noop' | 'continue' | 'endOfTurn' | Winner;
 
-type MoveResultWinner = {winner: number};
-export type MoveResultArg = 'noop' | 'continue' | 'endOfTurn' | MoveResultWinner;
+type HistoryMarker = 'history marker' | 'not history marker';
 
 export class MoveResult {
-    constructor(result: MoveResultArg) {
-        this._result = result;
+    constructor(result: Result, historMarker?: HistoryMarker) {
+        this.result = result;
+        this.historyMarker = historMarker ? historMarker === "history marker" :
+            result === 'endOfTurn';
     }
-    private _result: MoveResultArg;
+    readonly result: Result;
+    readonly historyMarker: boolean;
 
-    get noop() { return this._result === "noop"; }
-    get continue() { return this._result === "continue"; }
-    get endOfTurn() { return this._result === "endOfTurn"; }
+    get noop() { return this.result === "noop"; }
+    get continue() { return this.result === "continue"; }
+    get endOfTurn() { return this.result === "endOfTurn"; }
 
     get winner(): number | null {
-        return (typeof this._result === "object") ? this._result.winner : null;
+        return (typeof this.result === "object") ? this.result.winner : null;
     };
 }
 

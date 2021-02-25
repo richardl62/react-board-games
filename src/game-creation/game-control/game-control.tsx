@@ -73,24 +73,54 @@ class GameControl {
 
     private get _gameState() { return this._bgioProps.G; }
 
-    private get _bgioMoves() {
-        return this._bgioProps.moves as any as Bgio.ClientMoves;
-    }
+    private get _bgioMoves() { return this._bgioProps.moves as any as Bgio.ClientMoves; }
 
     private get _historyManager() {
         return this._localProps.historyManager;
     }
 
+    private _setGameState(state: GenericGameState) {
+        this._bgioMoves.setGameState(state);
+    }
+
+    private _(state: GenericGameState) {
+        this._bgioMoves.setGameState(state);
+    }
+
     get boardStyle() { return this._gameDefinition.boardStyle; }
 
-    undo() { 
-        console.log("undo call");
-        this._bgioProps.undo();
-     }
-    redo() { this._bgioProps.redo(); }
     
+    private _recordGameStateInHistory(state: GenericGameState) {
+        this._historyManager.setState(state);
+    }
+    private _restoreHistoryState() {
+        const state = this._historyManager.state;
+        this._bgioMoves.setGameState(state);
+    }
+
+    get canUndo() : boolean {
+        return this._historyManager.canUndo;
+    }
+
+    get canRedo() : boolean {
+        return this._historyManager.canRedo;
+    }
+
+    undo() { 
+        if(this._historyManager.undo()) {
+            this._restoreHistoryState();
+        }
+     }
+    redo() {
+        if(this._historyManager.redo()) {
+            this._restoreHistoryState();
+        }
+    }
+
     restart() {
-        this._bgioMoves.setGameState(this._historyManager.restart());
+        if(this._historyManager.restart()) {
+            this._restoreHistoryState();
+        }
     }
 
     get reverseBoardRows() { return this._localProps.reverseBoard[0]; }
@@ -172,13 +202,17 @@ class GameControl {
         const moveResult = this._gameDefinition.onClick(pos, moveControl);
 
         if (!moveResult.noop) {
-            this._bgioMoves.setGameState(newGameState);
+            this._setGameState(newGameState);
         }
 
         if (moveResult.endOfTurn) {
             this.endTurn();
         } if (moveResult.winner != null) {
             this.endGame(moveResult.winner);
+        }
+
+        if (moveResult.historyMarker) {
+            this._recordGameStateInHistory(newGameState);
         }
     }
 

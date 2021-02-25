@@ -12,25 +12,28 @@ class HistoryManager<State> {
 
     get state() :State {return this._states[this._stateIndex];}
 
-    undo(): State {
-        if(!this.canUndo) {
-            throw new Error("HistoryManager Cannot undo")
+    undo() {
+        if(this.canUndo) {
+            --this._stateIndex;
+            return this.state;
         }
-        --this._stateIndex;
-        return this.state;
+
+        return null;
     }
 
-    redo() : State {
-        if(!this.canRedo) {
-            throw new Error("HistoryManager Cannot redo")
+    redo() {
+        if(this.canRedo) {
+            ++this._stateIndex;
+            return this.state;
         }
-        ++this._stateIndex;
-        return this.state;
+        return null;
     }
 
     restart() : State {
         this._stateIndex = 0;
-        return this.state;
+        const initialState = this._states[0];
+        this._states = [initialState];
+        return initialState
     }
 
     setState(changeState: Partial<State>) : void {
