@@ -1,3 +1,15 @@
+function boolFromParam(param: string | null) {
+  if (param === '' || param === 'true') {
+    return true;
+  } 
+  
+  if (param === 'false') {
+    return false;
+  }
+
+  return null;
+}
+
 function processLocation(location: Location) {
 
   const searchParams = new URLSearchParams(location.search);
@@ -10,14 +22,7 @@ function processLocation(location: Location) {
   const removeParam = (name: string) => {
     const val = searchParams.get(name);
     searchParams.delete(name);
-
-    if (val === '' || val === 'true') {
-      return true;
-    } else if (val === 'false') {
-      return false;
-    } else {
-      return val;
-    }
+    return val;
   }
 
   /* servers */
@@ -28,11 +33,9 @@ function processLocation(location: Location) {
     if (ppb === null)
       return 1;
 
-    if (typeof ppb === 'string') {
-      const val = parseInt(ppb);
-      if (!isNaN(val) && val >= 1) {
-        return val;
-      }
+    const val = parseInt(ppb);
+    if (!isNaN(val) && val >= 1) {
+      return val;
     }
 
     console.log("Warning: Bad parameter for search parameter ppb (number expected)");
@@ -40,13 +43,14 @@ function processLocation(location: Location) {
   }
 
   function bgioDebug() {
-    const bgd = removeParam('bgio-debug');
-    if (bgd === null) {
+    const bgdParam = removeParam('bgio-debug');
+    if (bgdParam === null) {
       return false;
     }
 
-    if (typeof bgd === 'boolean') {
-      return bgd;
+    const bgdBool = boolFromParam(bgdParam);
+    if (bgdBool !== null) {
+      return bgdBool;
     }
 
     console.log("Warning: Bad parameter for search parameter bgio-debug (boolean or nothing expected)");
