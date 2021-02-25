@@ -30,7 +30,6 @@ function makeGameRenderer(gameDefinition: GameDefinition) {
 
 interface makeGamesWithClientProps {
     gameDefinition: GameDefinition;
-    server: string | null;
     nGames: number;
     bgioDebugPanel: boolean;
 }

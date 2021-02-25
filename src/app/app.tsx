@@ -58,7 +58,6 @@ function PageNotFound() {
 function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
   const games = makeGamesWithClient({
     gameDefinition: gameDefinition,
-    server: urlParams.localMode? null : urlParams.servers.lobby,
     nGames: urlParams.playerPerBrowser,
     bgioDebugPanel: urlParams.bgioDebugPanel,
   });

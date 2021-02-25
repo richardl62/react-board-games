@@ -36,7 +36,6 @@ function makeClient({ gameDefinition, server, bgioDebugPanel,
 
 interface gamesWithClientArgs {
     renderGame: (props: BoardProps<GameState>) => JSX.Element;
-    server: string | null;
     nGames: number;
     bgioDebugPanel: boolean;
 }
