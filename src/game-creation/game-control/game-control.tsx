@@ -1,18 +1,24 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { PiecePosition, samePiecePosition, makePiecePosition } from '../piece-position';
 import { PieceName } from "../piece-name";
 import  { GameDefinition, MoveControl } from '../game-definition';
 
 import * as Bgio from '../../bgio-tools';
-
+import HistoryManager from './history-manager';
 const topLeftBlack = false; // KLUDGE
+
+
+type GenericGameState = Bgio.GameState<any>;
 
 function useGameControlProps(gameDefinition: GameDefinition) {
 
     return {
         gameDefinition: gameDefinition,
         reverseBoard: useState(false),
+        historyManager: useRef(
+            new HistoryManager<GenericGameState>(gameDefinition.intialState)
+            ).current,
     };
 }
 
@@ -71,15 +77,20 @@ class GameControl {
         return this._bgioProps.moves as any as Bgio.ClientMoves;
     }
 
+    private get _historyManager() {
+        return this._localProps.historyManager;
+    }
+
     get boardStyle() { return this._gameDefinition.boardStyle; }
 
     undo() { 
-        console.log("undo called");
+        console.log("undo call");
         this._bgioProps.undo();
      }
     redo() { this._bgioProps.redo(); }
+    
     restart() {
-        this._bgioMoves.setGameState(this._gameDefinition.intialState);
+        this._bgioMoves.setGameState(this._historyManager.restart());
     }
 
     get reverseBoardRows() { return this._localProps.reverseBoard[0]; }
