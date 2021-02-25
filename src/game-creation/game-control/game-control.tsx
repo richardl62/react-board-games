@@ -6,7 +6,6 @@ import  { GameDefinition, MoveControl } from '../game-definition';
 
 import * as Bgio from '../../bgio-tools';
 
-
 const topLeftBlack = false; // KLUDGE
 
 function useGameControlProps(gameDefinition: GameDefinition) {
@@ -74,7 +73,10 @@ class GameControl {
 
     get boardStyle() { return this._gameDefinition.boardStyle; }
 
-    undo() { this._bgioProps.undo(); }
+    undo() { 
+        console.log("undo called");
+        this._bgioProps.undo();
+     }
     redo() { this._bgioProps.redo(); }
     restart() {
         this._bgioMoves.setGameState(this._gameDefinition.intialState);

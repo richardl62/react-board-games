@@ -12,10 +12,7 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
                 <button type='button' onClick={() => gameControl.restart()}>
                     Restart
                 </button>
-                <button type='button' onClick={() => gameControl.clearAll()}> 
-                    Clear
-                </button>
-            </div>
+            </div> */}
 
             <div className={nonNull(styles.userOptionsButtons)}>
                 <button type='button' onClick={() => gameControl.undo()}>
@@ -25,7 +22,7 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
                 <button type='button' onClick={() => gameControl.redo()}>
                     Redo
                 </button>
-            </div> */}
+            </div>
 
             <div className={nonNull(styles.userOptionsButtons)}>
                 <button type='button' onClick={() => gameControl.flipRowOrder()}>
