@@ -1,12 +1,5 @@
-// The game server use in local mode. (The addres used by npm start)
-const localModeGameServer = "http://localhost:3000";
-
-// Lobby server optionally used in local mode. (The address used by npm run simple-server)
-const localModeLobbyServer = "http://localhost:8000"
-
 function processLocation(location: Location) {
 
-  const runningLocally = location.origin === localModeGameServer;
   const searchParams = new URLSearchParams(location.search);
 
   // Remove the search parameter with the given name and return it's value.
@@ -27,17 +20,8 @@ function processLocation(location: Location) {
     }
   }
 
-  /* localMode */
-  const localParam = removeParam('local');
-
-  // Kludge?: The default for local mode depends on the host
-  const localMode = (localParam === null) ? runningLocally : Boolean(localParam);
-
   /* servers */
-  const servers = {
-        game: location.origin,
-        lobby: runningLocally ? localModeLobbyServer : location.origin,
-      };
+  const server = location.origin;
     
   function playersPerBrowser() {
     const ppb = removeParam('ppb');
@@ -70,11 +54,9 @@ function processLocation(location: Location) {
   }
 
   const result = {
-    localMode: localMode,
-    servers: servers,
+    server: server,
     playerPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
-
   }
 
   if (searchParams.toString()) {

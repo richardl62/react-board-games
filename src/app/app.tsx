@@ -65,8 +65,6 @@ function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
   return (<>{games}</>);
 }
 
-
-
 function App() {
 
   const lobbyGames = gameDefinitions.map(gd => {
@@ -76,6 +74,10 @@ function App() {
     };
   });
 
+  const servers = {
+    game: urlParams.server,
+    lobby: urlParams.server,
+  }
   return (
     <Switch>
       <Route key="/" exact path="/" component={HomePage} />
@@ -86,7 +88,7 @@ function App() {
       })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby servers={urlParams.servers} games={lobbyGames}/>}
+          component={()=><Lobby servers={servers} games={lobbyGames}/>}
       />
       <Route key="pageNotFound" component={PageNotFound} />
     </Switch>
