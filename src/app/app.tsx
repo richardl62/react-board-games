@@ -6,11 +6,11 @@ import styles from './app.module.css';
 import { makeGameRenderer, makeGamesWithClient } from './game-renderer';
 import { processLocation } from './url-tools';
 
-import gameDefinitions  from '../games';
+
 import {Lobby} from '../bgio-tools';
 
-type GameDefinition = (typeof gameDefinitions)[number];
-
+import gameDefinitionsXXX  from '../games'
+type GameDefinition = (typeof gameDefinitionsXXX)[number];
 const urlParams = processLocation(window.location);
 
 function gamePath(gameDefinition: GameDefinition) {
@@ -18,8 +18,11 @@ function gamePath(gameDefinition: GameDefinition) {
   return `/${gamePage}`;
 }
 
+interface GameDefinitionProps {
+  gameDefinitions: Array<GameDefinition>;
+} 
 
-function GameLinks() {
+function GameLinks({gameDefinitions} : GameDefinitionProps) {
   return (
     <ul>
       {gameDefinitions.map(gd => {
@@ -33,11 +36,11 @@ function GameLinks() {
   );
 }
 
-function HomePage() {
+function HomePage(props : GameDefinitionProps) {
   return (
     <div>
       <h2>Available games</h2>
-      <GameLinks />
+      <GameLinks {...props}/>
       <br/>
 
       <Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby</Link>
@@ -45,12 +48,12 @@ function HomePage() {
   )
 }
 
-function PageNotFound() {
+function PageNotFound(props : GameDefinitionProps) {
   return (
     <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
       <div>You could try one of these links:</div>
-      <GameLinks />
+      <GameLinks {...props}/>
     </div>
   )
 }
@@ -65,8 +68,8 @@ function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
   return (<>{games}</>);
 }
 
-function App() {
 
+function App({gameDefinitions} : GameDefinitionProps) {
   const lobbyGames = gameDefinitions.map(gd => {
     return {
         gameDefinition: gd,
@@ -78,9 +81,12 @@ function App() {
     game: urlParams.server,
     lobby: urlParams.server,
   }
+
+  const renderHomePage = ()=><HomePage gameDefinitions={gameDefinitions}/>;
+  const renderPageNotFound = ()=><PageNotFound gameDefinitions={gameDefinitions}/>;
   return (
     <Switch>
-      <Route key="/" exact path="/" component={HomePage} />
+      <Route key="/" exact path="/" component={renderHomePage} />
       {gameDefinitions.map(gd => {
         const path = gamePath(gd);
         const component = ()=><NonLobbyGame gameDefinition={gd}/>;
@@ -90,7 +96,7 @@ function App() {
       <Route key="lobby" exact path="/lobby" 
           component={()=><Lobby servers={servers} games={lobbyGames}/>}
       />
-      <Route key="pageNotFound" component={PageNotFound} />
+      <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>
   );
 }
