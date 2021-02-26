@@ -143,7 +143,6 @@ function moveFunction(from: PiecePosition, to: PiecePosition, moveControl: MoveC
     }
 }
 
-const onClick = makeOnClickFunction(moveFunction);
 // Use of gameDefinitionInput is not necessary, but it allows type checking to be
 // done here rather than at point of use.
 function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefinitionInput {
@@ -191,7 +190,8 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
             bottom: ['b', 'B'],
         },
 
-        onClick: onClick,
+        onClick: makeOnClickFunction(moveFunction),
+        onDrag: moveFunction,
     };
 }
 

@@ -2,7 +2,7 @@ import { PiecePosition, samePiecePosition, makeRowCol } from '../piece-position'
 import { PieceName, BoardPieces } from "../piece-name";
 import MoveControl from './move-control';
 import { MoveResult } from './move-result';
-import { GameDefinition, BoardStyle, OnClick, MoveDescription } from './game-definition';
+import { GameDefinition, BoardStyle, OnClick, OnDrag, MoveDescription } from './game-definition';
 
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinition
@@ -30,6 +30,7 @@ interface GameDefinitionInput<GameSpecificState = never> {
     renderPiece: (props: { pieceName: PieceName }) => JSX.Element;
 
     onClick?: OnClick;
+    onDrag?: OnDrag;
 
     moveDescription?: MoveDescription;
 };
@@ -84,6 +85,7 @@ function makeGameDefinition<GameSpecificState = never>(input: GameDefinitionInpu
     return {
         // Default.  Can be overwritten by input.
         onClick: makeOnClickFunction(defaultMoveFunction),
+        onDrag: defaultMoveFunction,
         moveDescription: () => { return null; },
 
         ...input,
