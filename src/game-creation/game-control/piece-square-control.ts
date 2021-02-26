@@ -57,7 +57,7 @@ function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
 
   return {
     props: {
-      ref: drop,
+      ref: gameControl.dragAllowed(pos) ? drop : null,
       onClick: () => gameControl.squareClicked(pos),
     },
   };

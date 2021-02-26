@@ -17,13 +17,20 @@ export type OnClick = (
     moveControl: MoveControl, 
     ) => MoveResult;
 
-export type OnDragFunction = (
+// Return true if dragging is permitted from this square.
+export type DragStartAllowed = (pos: PiecePosition) => boolean;
+
+export type OnDragEnd = (
     from: PiecePosition,
-    to: PiecePosition,
+    to: PiecePosition  | null, // null -> off-board drag
     moveControl: MoveControl, 
     ) => MoveResult;
 
-export type OnDrag = OnDragFunction | false;
+
+export type OnDrag = {
+    startAllowed: DragStartAllowed;
+    end: OnDragEnd;
+} | null;
 
 export type MoveDescription = (gameState: GameState) => string | null;
 
