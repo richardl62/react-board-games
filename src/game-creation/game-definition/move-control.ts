@@ -95,7 +95,7 @@ class MoveControl<GameSpecificState = never> {
     }
 
     // Return undefined if the position is invalid
-    pieceOrUndefined(pos: PiecePosition): undefined | null | string {
+    pieceUnchecked(pos: PiecePosition): undefined | null | string {
         if (makeRowCol(pos)) {
             const row = this._state.pieces[pos.row!];
             return row && row[pos.col!];
@@ -107,11 +107,12 @@ class MoveControl<GameSpecificState = never> {
     }
     
     validPosition(pos: PiecePosition) {
-        return this.pieceOrUndefined(pos) !== undefined;
+        return this.pieceUnchecked(pos) !== undefined;
     }
 
+    // Throw an exception if the position is invalid.
     piece(pos: PiecePosition): null | string {
-        const raw = this.pieceOrUndefined(pos);
+        const raw = this.pieceUnchecked(pos);
         if(raw === undefined) {
             throw new Error("Invalid piece position");
         }

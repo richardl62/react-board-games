@@ -56,7 +56,7 @@ function setLegalMovesPieceDirected(
 
     let lastNull;
     let newPos = step(from);
-    while (moveControl.piece(newPos) === null) {
+    while (moveControl.pieceUnchecked(newPos) === null) {
         lastNull = newPos;
         newPos = step(newPos);
     }
