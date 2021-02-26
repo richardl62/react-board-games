@@ -17,6 +17,13 @@ export type OnClick = (
     moveControl: MoveControl, 
     ) => MoveResult;
 
+export type OnDragFunction = (
+    from: PiecePosition,
+    to: PiecePosition,
+    moveControl: MoveControl, 
+    ) => MoveResult;
+
+export type OnDrag = OnDragFunction | false;
 
 export type MoveDescription = (gameState: GameState) => string | null;
 
@@ -44,6 +51,7 @@ export interface GameDefinition {
     renderPiece: (props: {pieceName: PieceName}) => JSX.Element;
 
     onClick: OnClick;
+    onDrag: OnDrag;
 
     moveDescription: MoveDescription;
 };
