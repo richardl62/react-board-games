@@ -208,7 +208,7 @@ const games: Array<GameDefinitionInput<BobailState>> = [
         offBoardPieces: { top: [], bottom: [], },
 
         onClick: onClick,
-        onDrag: false,
+        onDrag: null,
 
         moveDescription: (gameState: GameState) => {
             // The ! is a KLUDGE - Prehaps shows that GameState is not defined properly.

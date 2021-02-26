@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { PiecePosition, samePiecePosition, makePiecePosition } from '../piece-position';
 import { PieceName } from "../piece-name";
-import  { GameDefinition, MoveControl } from '../game-definition';
+import  { GameDefinition, MoveControl, MoveResult } from '../game-definition';
 
 import * as Bgio from '../../bgio-tools';
 import HistoryManager from './history-manager';
@@ -195,12 +195,12 @@ class GameControl {
         return top ? this._offBoardPieces.top : this._offBoardPieces.bottom;
     }
 
-    squareClicked(pos: PiecePosition) {
+    private _makeMoveControl() {
         let newGameState = JSON.parse(JSON.stringify(this._bgioProps.G));
-
-        let moveControl = new MoveControl(this._offBoardPieces, newGameState, this.activePlayer);
-        const moveResult = this._gameDefinition.onClick(pos, moveControl);
-
+        return new MoveControl(this._offBoardPieces, newGameState, this.activePlayer);
+    }
+    
+    private _applyMoveResult(moveResult: MoveResult, newGameState: GenericGameState) {
         if (!moveResult.noop) {
             this._setGameState(newGameState);
         }
@@ -216,8 +216,26 @@ class GameControl {
         }
     }
 
+    squareClicked(pos: PiecePosition) {
+        let moveControl = this._makeMoveControl();
+        const moveResult = this._gameDefinition.onClick(pos, moveControl);
+        this._applyMoveResult(moveResult, moveControl.state);
+    }
+
+    dragAllowed(pos: PiecePosition)  {
+        const onDrag = this._gameDefinition.onDrag;
+        return Boolean(onDrag && onDrag.startAllowed(pos));
+    }
+
     onDragEnd(from: PiecePosition, to: PiecePosition | null) {
-        console.log("drag from", from, "to", to && to);
+        const onDrag = this._gameDefinition.onDrag;
+        if(!onDrag) {
+            throw new Error("Unsupported drag");
+        }
+
+        let moveControl = this._makeMoveControl();
+        const moveResult = onDrag.end(from, to, moveControl);
+        this._applyMoveResult(moveResult, moveControl.state);
     }
 
     endTurn() {

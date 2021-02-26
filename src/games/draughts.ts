@@ -1,6 +1,7 @@
 //import { PiecePosition, BoardPieces } from '../interfaces'
-import { GameDefinitionInput, makeOnClickFunction, defaultMoveFunction, 
-    PiecePosition, RowCol, makeRowCol, MoveControl, MoveResult } from '../game-creation'
+import { GameDefinitionInput, defaultMoveFunction, 
+    PiecePosition, RowCol, makeRowCol,
+    MoveControl, MoveResult } from '../game-creation'
 import RenderPiece from './draughts-piece';
 
 
@@ -32,13 +33,13 @@ function findDiagonalPath(from: RowCol, to: RowCol) {
     return null;
 }
 
-function moveFunction(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) {
+function moveFunction(from: PiecePosition, to: PiecePosition | null, moveControl: MoveControl) {
     const fromRowCol = makeRowCol(from);
     const toRowCol = makeRowCol(to);
     if(fromRowCol && toRowCol) {
         const fromPiece = moveControl.piece(from);
         const path = findDiagonalPath(fromRowCol, toRowCol);
-        if(path && !moveControl.piece(to)) {
+        if(path && !moveControl.piece(to!)) {
             path.forEach(pos => moveControl.setPiece(pos, null));
             moveControl.setPiece(toRowCol, fromPiece);
             return new MoveResult('endOfTurn');
@@ -97,8 +98,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
             bottom: ['b', 'B'],
         },
 
-        onClick: makeOnClickFunction(moveFunction),
-        onDrag: moveFunction
+        onMove: moveFunction,
     };
 }
 

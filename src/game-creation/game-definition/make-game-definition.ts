@@ -4,6 +4,13 @@ import MoveControl from './move-control';
 import { MoveResult } from './move-result';
 import { GameDefinition, BoardStyle, OnClick, OnDrag, MoveDescription } from './game-definition';
 
+type MoveFunction = (
+    from: PiecePosition,
+    to: PiecePosition  | null, // null -> moved off board
+    moveControl: MoveControl, 
+    ) => MoveResult;
+
+
 // The properties that define an individual game so of which are optional.
 // KLUDGE: Editted copy of GameDefinition
 interface GameDefinitionInput<GameSpecificState = never> {
@@ -29,15 +36,24 @@ interface GameDefinitionInput<GameSpecificState = never> {
 
     renderPiece: (props: { pieceName: PieceName }) => JSX.Element;
 
+    moveDescription?: MoveDescription;
+
+    // The 'on' options are:
+    // - None of the three. This give default behaviour.
+    // - onMove only. This gives customised move default, but other behaviour as defaults.
+    //   (So all pieces are draggable, and default click-to-move default);
+    // - onClick and OnDrag but not onMove.  This gives the full available control.
+    // Kludge? With a bit of with it would be possible to build these rules into this type.
     onClick?: OnClick;
     onDrag?: OnDrag;
-
-    moveDescription?: MoveDescription;
+    onMove?: MoveFunction;
 };
 
-type MoveFunction = (from: PiecePosition, to: PiecePosition, moveControl: MoveControl) => MoveResult;
-
-function defaultMoveFunction(from: PiecePosition, to: PiecePosition, moveControl: MoveControl) {
+function defaultMoveFunction(
+    from: PiecePosition, 
+    to: PiecePosition|null, 
+    moveControl: MoveControl
+    ) {
     const toRowCol = makeRowCol(to);
     if (toRowCol === null) {
         // An off-board was selected when another piece was selected.
@@ -56,7 +72,7 @@ function defaultMoveFunction(from: PiecePosition, to: PiecePosition, moveControl
     return new MoveResult('endOfTurn');
 }
 
-function makeOnClickFunction(makeMove: MoveFunction) {
+function makeOnClick(makeMove: MoveFunction) {
 
     return (clickPos: PiecePosition, moveControl: MoveControl) => {
         const selected = moveControl.selectedSquare;
@@ -81,22 +97,58 @@ function makeOnClickFunction(makeMove: MoveFunction) {
     }
 }
 
-function makeGameDefinition<GameSpecificState = never>(input: GameDefinitionInput<GameSpecificState>): GameDefinition {
-    return {
-        // Default.  Can be overwritten by input.
-        onClick: makeOnClickFunction(defaultMoveFunction),
-        onDrag: defaultMoveFunction,
-        moveDescription: () => { return null; },
 
-        ...input,
+function makeOnDrag(moveFunction: MoveFunction) : OnDrag {
+    return {
+        startAllowed: () => true,
+        end: moveFunction,
+    }
+}
+
+function onFunction({onClick, onDrag, onMove} : GameDefinitionInput<any>) {
+    
+    if(onClick === undefined && onDrag === undefined ) {
+        const onMove_ = (onMove === undefined) ? defaultMoveFunction : onMove;
+        return {
+            onClick: makeOnClick(onMove_),
+            onDrag: makeOnDrag(onMove_),
+        }
+    }
+
+    if(onClick !== undefined && onDrag !== undefined  && onMove === undefined) {
+        return {
+            onClick: onClick,
+            onDrag: onDrag,
+        }
+    }
+
+    throw new Error("Incorrect combination of 'on' functions");
+}
+
+function makeGameDefinition<GameSpecificState = never>(
+    input: GameDefinitionInput<GameSpecificState>): GameDefinition 
+    {
+    const result = {
+        ...onFunction(input),
+
+        boardStyle: input.boardStyle,
+        name: input.name,
+        offBoardPieces: input.offBoardPieces,
+        renderPiece: input.renderPiece,
+        moveDescription: input.moveDescription || (() => { return null; }),
 
         intialState: {
+            // Defaults;
             selectedSquare: null,
             legalMoves: null,
+
+            // input value
             ...input.initialState,
         },
     };
+
+    return result;
 }
 
-export { makeGameDefinition, makeOnClickFunction, defaultMoveFunction };
+export { makeGameDefinition, makeOnClick, defaultMoveFunction };
 export type { GameDefinitionInput }

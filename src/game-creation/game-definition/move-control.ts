@@ -13,6 +13,10 @@ class MoveControl<GameSpecificState = never> {
     private _state: GameState<GameSpecificState>;
     private _activePlayer: number;
 
+    get state() {
+        return this._state;
+    }
+    
     get nRows() { 
         return this._state.pieces.length;
     }
