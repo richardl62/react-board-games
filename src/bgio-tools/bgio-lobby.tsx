@@ -4,7 +4,7 @@ import makeGame from "./make-game";
 type GameDefinition = Parameters<typeof makeGame>[0];
 
 interface LobbyGame {
-    gameDefinition: GameDefinition;
+    game: GameDefinition;
     component: (props: any) => JSX.Element;  // Render the game
 };
 
@@ -21,7 +21,7 @@ function GameLobby({ servers, games }: LobbyProps) {
 
     const gameComponents = games.map(game => {
         return {
-            game: makeGame(game.gameDefinition),
+            game: makeGame(game.game),
             board: game.component,
         }
     });

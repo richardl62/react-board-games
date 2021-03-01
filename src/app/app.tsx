@@ -6,26 +6,24 @@ import styles from './app.module.css';
 import { makeGameRenderer, makeGameWithClient } from './game-renderer';
 import { processLocation } from './url-tools';
 
+import { Game } from './game'
 
 import {Lobby} from '../bgio-tools';
-
-import gameDefinitionsXXX  from '../games'
-type GameDefinition = (typeof gameDefinitionsXXX)[number];
 const urlParams = processLocation(window.location);
 
-function gamePath(gameDefinition: GameDefinition) {
-  const gamePage = gameDefinition.name.replace(/[^\w]/g, ''); // Remove non-alphanumeric characters
+function gamePath(game: Game) {
+  const gamePage = game.name.replace(/[^\w]/g, ''); // Remove non-alphanumeric characters
   return `/${gamePage}`;
 }
 
-interface GameDefinitionProps {
-  gameDefinitions: Array<GameDefinition>;
+interface GameProps {
+  games: Array<Game>;
 } 
 
-function GameLinks({gameDefinitions} : GameDefinitionProps) {
+function GameLinks({games} : GameProps) {
   return (
     <ul>
-      {gameDefinitions.map(gd => {
+      {games.map(gd => {
         const path = gamePath(gd);
         return (<li key={path}>
           <Link className={nonNull(styles.gameLink)} to={path}>{gd.name}</Link>
@@ -36,7 +34,7 @@ function GameLinks({gameDefinitions} : GameDefinitionProps) {
   );
 }
 
-function HomePage(props : GameDefinitionProps) {
+function HomePage(props : GameProps) {
   return (
     <div>
       <h2>Available games</h2>
@@ -48,7 +46,7 @@ function HomePage(props : GameDefinitionProps) {
   )
 }
 
-function PageNotFound(props : GameDefinitionProps) {
+function PageNotFound(props : GameProps) {
   return (
     <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
@@ -58,9 +56,9 @@ function PageNotFound(props : GameDefinitionProps) {
   )
 }
 
-function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
+function NonLobbyGame({game} : {game: Game}) {
   const games = makeGameWithClient({
-    gameDefinition: gameDefinition,
+    game: game,
     nGames: urlParams.playerPerBrowser,
     bgioDebugPanel: urlParams.bgioDebugPanel,
   });
@@ -69,10 +67,10 @@ function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
 }
 
 
-function App({gameDefinitions} : GameDefinitionProps) {
-  const lobbyGames = gameDefinitions.map(gd => {
+function App({games} : GameProps) {
+  const lobbyGames = games.map(gd => {
     return {
-        gameDefinition: gd,
+        game: gd,
         component: makeGameRenderer(gd),
     };
   });
@@ -82,14 +80,14 @@ function App({gameDefinitions} : GameDefinitionProps) {
     lobby: urlParams.server,
   }
 
-  const renderHomePage = ()=><HomePage gameDefinitions={gameDefinitions}/>;
-  const renderPageNotFound = ()=><PageNotFound gameDefinitions={gameDefinitions}/>;
+  const renderHomePage = ()=><HomePage games={games}/>;
+  const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
-      {gameDefinitions.map(gd => {
+      {games.map(gd => {
         const path = gamePath(gd);
-        const component = ()=><NonLobbyGame gameDefinition={gd}/>;
+        const component = ()=><NonLobbyGame game={gd}/>;
         return (<Route key={path} exact path={path} component={component} />);
       })}
 

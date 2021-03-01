@@ -7,14 +7,14 @@ import makeGame from "./make-game";
 type GameDefinition = Parameters<typeof makeGame>[0];
 
 interface FullGameProps {
-    gameDefinition: GameDefinition;
+    game: GameDefinition;
     server: string | null;
     bgioDebugPanel: boolean;
     renderGame: (arg: any) => JSX.Element;
     numPlayers: number;
 }
 
-function makeClient({ gameDefinition, server, bgioDebugPanel, 
+function makeClient({ game, server, bgioDebugPanel, 
     renderGame, numPlayers }: FullGameProps) {
     let multiplayer;
     if (server) {
@@ -27,7 +27,7 @@ function makeClient({ gameDefinition, server, bgioDebugPanel,
 
     return Client<GameState>({
         multiplayer: multiplayer,
-        game: makeGame(gameDefinition),
+        game: makeGame(game),
         board: renderGame,
         debug: bgioDebugPanel,
         numPlayers: numPlayers,

@@ -7,7 +7,7 @@ import App from './app';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App gameDefinitions={games} />
+      <App games={games} />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

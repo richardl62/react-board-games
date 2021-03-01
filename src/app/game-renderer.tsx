@@ -29,14 +29,14 @@ function makeGameRenderer(gameDefinition: GameDefinition) {
 }
 
 interface makeGameWithClientProps {
-    gameDefinition: GameDefinition;
+    game: GameDefinition;
     nGames: number;
     bgioDebugPanel: boolean;
 }
 
 function makeGameWithClient(props: makeGameWithClientProps) {
-    const {gameDefinition} = props;
-    const renderGame = makeGameRenderer(gameDefinition);
+    const {game} = props;
+    const renderGame = makeGameRenderer(game);
 
     let args = {...props, renderGame:renderGame };
 
