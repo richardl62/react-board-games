@@ -3,7 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import styles from './app.module.css';
 
-import { makeGameRenderer, makeGamesWithClient } from './game-renderer';
+import { makeGameRenderer, makeGameWithClient } from './game-renderer';
 import { processLocation } from './url-tools';
 
 
@@ -59,7 +59,7 @@ function PageNotFound(props : GameDefinitionProps) {
 }
 
 function NonLobbyGame({gameDefinition} : {gameDefinition: GameDefinition}) {
-  const games = makeGamesWithClient({
+  const games = makeGameWithClient({
     gameDefinition: gameDefinition,
     nGames: urlParams.playerPerBrowser,
     bgioDebugPanel: urlParams.bgioDebugPanel,

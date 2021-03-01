@@ -28,13 +28,13 @@ function makeGameRenderer(gameDefinition: GameDefinition) {
     };
 }
 
-interface makeGamesWithClientProps {
+interface makeGameWithClientProps {
     gameDefinition: GameDefinition;
     nGames: number;
     bgioDebugPanel: boolean;
 }
 
-function makeGamesWithClient(props: makeGamesWithClientProps) {
+function makeGameWithClient(props: makeGameWithClientProps) {
     const {gameDefinition} = props;
     const renderGame = makeGameRenderer(gameDefinition);
 
@@ -43,4 +43,4 @@ function makeGamesWithClient(props: makeGamesWithClientProps) {
     return bgio.gamesWithClient(args);
 }
 
-export { makeGameRenderer, makeGamesWithClient };
+export { makeGameRenderer, makeGameWithClient };
