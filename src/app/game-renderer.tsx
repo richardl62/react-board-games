@@ -28,17 +28,25 @@ function makeGameRenderer(gameDefinition: GameDefinition) {
     };
 }
 
+
 interface makeGameWithClientProps {
     game: GameDefinition;
-    nGames: number;
+    server: string | null;
     bgioDebugPanel: boolean;
-}
+    nGames: number;
+};
 
-function makeGameWithClient(props: makeGameWithClientProps) {
-    const {game} = props;
+function makeGameWithClient({game, server, bgioDebugPanel, nGames}: makeGameWithClientProps) {
     const renderGame = makeGameRenderer(game);
 
-    let args = {...props, renderGame:renderGame };
+    let args = {
+        game: game,
+        renderGame:renderGame, 
+        server: server,
+        bgioDebugPanel: bgioDebugPanel,
+        nGames: nGames,
+        numPlayers: nGames,
+    };
 
     return bgio.gamesWithClient(args);
 }

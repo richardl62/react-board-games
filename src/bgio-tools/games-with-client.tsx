@@ -1,12 +1,11 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
-import { BoardProps } from 'boardgame.io/react';
 import { Client } from 'boardgame.io/react';
 import { GameState } from "./game-state";
 import makeGame from "./make-game";
 
 type GameDefinition = Parameters<typeof makeGame>[0];
 
-interface makeClientArg {
+interface MakeClientParam {
     game: GameDefinition;
     server: string | null;
     bgioDebugPanel: boolean;
@@ -15,7 +14,8 @@ interface makeClientArg {
 }
 
 function makeClient({ game, server, bgioDebugPanel, 
-    renderGame, numPlayers }: makeClientArg) {
+    renderGame, numPlayers }: MakeClientParam) {
+    console.log("makeCient",arguments[0]);
     let multiplayer;
     if (server) {
         console.log('Connecting to server:', server);
@@ -34,22 +34,26 @@ function makeClient({ game, server, bgioDebugPanel,
     });
 }
 
-interface gamesWithClientArg extends makeClientArg {
-    renderGame: (props: BoardProps<GameState>) => JSX.Element;
-    nGames: number;
+interface gamesWithClientArg extends MakeClientParam {
+    game: GameDefinition;
+    server: string | null;
     bgioDebugPanel: boolean;
+    renderGame: (arg: any) => JSX.Element;
+    nGames: number;
 }
 
 // Return component(s) that render a game with all component(s) sharing
 // the same Bgio client
-function gamesWithClient(arg : gamesWithClientArg)
+function gamesWithClient(
+    {game, server, bgioDebugPanel, renderGame, nGames}: gamesWithClientArg)
 {
-    const {nGames} = arg;
-
     const BgClient = makeClient({
-        ...arg,
+        game: game,
+        server: server,
+        bgioDebugPanel: bgioDebugPanel,
+        renderGame: renderGame,
         numPlayers: nGames,
-    } as any);
+    });
 
     let games = [];
     for (let count = 0; count < nGames; ++count) {

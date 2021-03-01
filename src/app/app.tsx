@@ -57,13 +57,17 @@ function PageNotFound(props : GameProps) {
 }
 
 function NonLobbyGame({game} : {game: Game}) {
-  const games = makeGameWithClient({
+  const makeGameArgs = {
     game: game,
     nGames: urlParams.playerPerBrowser,
+    numPlayers: 1,
     bgioDebugPanel: urlParams.bgioDebugPanel,
-  });
+    server: null,
+  };
+  console.log("NonLobbyGame");
+  const nonLobbyGame = makeGameWithClient(makeGameArgs);
 
-  return (<>{games}</>);
+  return (<>{nonLobbyGame}</>);
 }
 
 
