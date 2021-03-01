@@ -3,26 +3,26 @@
 import React from 'react';
 
 import GameControl, { useGameControlProps } from '../game-creation/game-control'
-import { GameDefinition } from '../game-creation/game-definition';
+import { Game } from './game';
 import SimpleGame from '../game-layout';
 
 import * as bgio from '../bgio-tools';
 
 interface BgioFriendlyGameProps {
-    gameDefinition: GameDefinition;
+    game: Game;
     bgioProps: bgio.BoardProps;
 }
-function BgioFriendlyGame({bgioProps, gameDefinition} : BgioFriendlyGameProps) {
-    const gameControlProps = useGameControlProps(gameDefinition);
+function BgioFriendlyGame({bgioProps, game} : BgioFriendlyGameProps) {
+    const gameControlProps = useGameControlProps(game);
     const gameControl = new GameControl(bgioProps, gameControlProps);
         
     return (<SimpleGame gameControl={gameControl} />);
 }
 // Return a component that takes Bgio props and renders a game.
-function makeGameRenderer(gameDefinition: GameDefinition) {
+function makeGameRenderer(game: Game) {
     return (bgioProps: bgio.BoardProps) => {
         return (<BgioFriendlyGame 
-            gameDefinition={gameDefinition}
+            game={game}
             bgioProps={bgioProps}
             />);
     };
@@ -30,7 +30,7 @@ function makeGameRenderer(gameDefinition: GameDefinition) {
 
 
 interface makeGameWithClientProps {
-    game: GameDefinition;
+    game: Game;
     server: string | null;
     bgioDebugPanel: boolean;
     nGames: number;
