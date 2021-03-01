@@ -33,4 +33,4 @@ interface ClientMoves {
 };
 
 export default moves;
-export type { GameState, ClientMoves }
+export type { ClientMoves }

@@ -12,8 +12,7 @@ import {Lobby} from '../bgio-tools';
 const urlParams = processLocation(window.location);
 
 function gamePath(game: Game) {
-  const gamePage = game.name.replace(/[^\w]/g, ''); // Remove non-alphanumeric characters
-  return `/${gamePage}`;
+  return `/${game.name}`;
 }
 
 interface GameProps {
@@ -26,7 +25,7 @@ function GameLinks({games} : GameProps) {
       {games.map(gd => {
         const path = gamePath(gd);
         return (<li key={path}>
-          <Link className={nonNull(styles.gameLink)} to={path}>{gd.name}</Link>
+          <Link className={nonNull(styles.gameLink)} to={path}>{gd.displayName}</Link>
         </li>);
       }
       )}
