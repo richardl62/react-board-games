@@ -1,12 +1,18 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
 import { GameState } from "./game-state";
-import makeGame from "./make-game";
 
-type GameDefinition = Parameters<typeof makeGame>[0];
+interface Game {
+    // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
+    // display purposes, and also used internally to distinguish different
+    // games.
+    name: string;
+    setup: () => any, // KLUDGE
+    moves: any, // KLUDGE
+}
 
 interface MakeClientParam {
-    game: GameDefinition;
+    game: Game;
     server: string | null;
     bgioDebugPanel: boolean;
     renderGame: (arg: any) => JSX.Element;
@@ -27,7 +33,7 @@ function makeClient({ game, server, bgioDebugPanel,
 
     return Client<GameState>({
         multiplayer: multiplayer,
-        game: makeGame(game),
+        game: game,
         board: renderGame,
         debug: bgioDebugPanel,
         numPlayers: numPlayers,
@@ -35,7 +41,7 @@ function makeClient({ game, server, bgioDebugPanel,
 }
 
 interface gamesWithClientArg extends MakeClientParam {
-    game: GameDefinition;
+    game: Game;
     server: string | null;
     bgioDebugPanel: boolean;
     renderGame: (arg: any) => JSX.Element;

@@ -1,4 +1,4 @@
-import { GameState } from "./game-state";
+//import { GameState } from "./game-state";
 import { GameDefinition } from '../game-creation'
 
 // Use require as this file is loading into the server and
@@ -9,7 +9,8 @@ const moves = require('./moves').default;
 function makeGame(gameDefinition: GameDefinition) {
     return {
         name: gameDefinition.name.replace(/\s/g, ''),
-        setup: (): GameState<any|undefined> =>  gameDefinition.intialState,
+        //setup: (): GameState<any|undefined> =>  gameDefinition.setup,
+        setup: () =>  gameDefinition.initialState, // KLUDGE
         moves: moves,
     };
 }

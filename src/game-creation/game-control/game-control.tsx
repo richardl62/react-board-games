@@ -17,7 +17,7 @@ function useGameControlProps(gameDefinition: GameDefinition) {
         gameDefinition: gameDefinition,
         reverseBoard: useState(false),
         historyManager: useRef(
-            new HistoryManager<GenericGameState>(gameDefinition.intialState)
+            new HistoryManager<GenericGameState>(gameDefinition.initialState)
             ).current,
     };
 }

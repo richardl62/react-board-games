@@ -51,7 +51,7 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    intialState : GameState<any|undefined>; // KLUGE?
+    initialState : GameState<any|undefined>; // KLUGE?
 
     offBoardPieces: OffBoardPieces;
 
@@ -62,5 +62,12 @@ export interface GameDefinition {
 
     moveDescription: MoveDescription;
 };
+
+export interface AppFriendlyGame {
+    name: string,
+    setup: () => any, // KLUDGE?
+    moves: {}, // KLUDGE
+    renderGame: (arg0: any) => JSX.Element,
+}
 
 // Exports are done inline
