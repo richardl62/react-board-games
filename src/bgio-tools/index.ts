@@ -6,6 +6,7 @@ type BoardPropsG = BoardProps<GameState>;
 
 export type { GameState, ClientMoves, BoardPropsG as BoardProps } 
 
+export {default as moves} from './moves';
 export {default as Lobby} from './bgio-lobby';
 export {default as gamesWithClient} from './games-with-client';
 

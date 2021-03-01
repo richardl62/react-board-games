@@ -3,7 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import styles from './app.module.css';
 
-import { makeGameRenderer, makeGameWithClient } from './game-renderer';
+import { makeGameWithClient } from './game-renderer';
 import { processLocation } from './url-tools';
 
 import { Game } from './game'
@@ -12,8 +12,7 @@ import {Lobby} from '../bgio-tools';
 const urlParams = processLocation(window.location);
 
 function gamePath(game: Game) {
-  const gamePage = game.name.replace(/[^\w]/g, ''); // Remove non-alphanumeric characters
-  return `/${gamePage}`;
+  return `/${game.name}`;
 }
 
 interface GameProps {
@@ -26,7 +25,7 @@ function GameLinks({games} : GameProps) {
       {games.map(gd => {
         const path = gamePath(gd);
         return (<li key={path}>
-          <Link className={nonNull(styles.gameLink)} to={path}>{gd.name}</Link>
+          <Link className={nonNull(styles.gameLink)} to={path}>{gd.displayName}</Link>
         </li>);
       }
       )}
@@ -72,12 +71,12 @@ function NonLobbyGame({game} : {game: Game}) {
 
 
 function App({games} : GameProps) {
-  const lobbyGames = games.map(gd => {
-    return {
-        game: gd,
-        component: makeGameRenderer(gd),
-    };
-  });
+  // const lobbyGames = games.map(gd => {
+  //   return {
+  //       game: gd,
+  //       component: makeGameRenderer(gd),
+  //   };
+  // });
 
   const servers = {
     game: urlParams.server,
@@ -96,7 +95,7 @@ function App({games} : GameProps) {
       })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby servers={servers} games={lobbyGames}/>}
+          component={()=><Lobby servers={servers} games={games}/>}
       />
       <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>

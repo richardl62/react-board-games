@@ -137,7 +137,7 @@ function makeGameDefinition<GameSpecificState = never>(
         renderPiece: input.renderPiece,
         moveDescription: input.moveDescription || (() => { return null; }),
 
-        intialState: {
+        initialState: {
             // Defaults;
             selectedSquare: null,
             legalMoves: null,

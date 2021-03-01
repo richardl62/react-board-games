@@ -51,7 +51,7 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    intialState : GameState<any|undefined>; // KLUGE?
+    initialState : GameState<any|undefined>; // KLUGE?
 
     offBoardPieces: OffBoardPieces;
 
