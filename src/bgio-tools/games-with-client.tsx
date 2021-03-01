@@ -6,7 +6,7 @@ import makeGame from "./make-game";
 
 type GameDefinition = Parameters<typeof makeGame>[0];
 
-interface FullGameProps {
+interface makeClientArg {
     game: GameDefinition;
     server: string | null;
     bgioDebugPanel: boolean;
@@ -15,7 +15,7 @@ interface FullGameProps {
 }
 
 function makeClient({ game, server, bgioDebugPanel, 
-    renderGame, numPlayers }: FullGameProps) {
+    renderGame, numPlayers }: makeClientArg) {
     let multiplayer;
     if (server) {
         console.log('Connecting to server:', server);
@@ -34,7 +34,7 @@ function makeClient({ game, server, bgioDebugPanel,
     });
 }
 
-interface gamesWithClientArgs {
+interface gamesWithClientArg extends makeClientArg {
     renderGame: (props: BoardProps<GameState>) => JSX.Element;
     nGames: number;
     bgioDebugPanel: boolean;
@@ -42,12 +42,12 @@ interface gamesWithClientArgs {
 
 // Return component(s) that render a game with all component(s) sharing
 // the same Bgio client
-function gamesWithClient(args : gamesWithClientArgs)
+function gamesWithClient(arg : gamesWithClientArg)
 {
-    const {nGames} = args;
+    const {nGames} = arg;
 
     const BgClient = makeClient({
-        ...args,
+        ...arg,
         numPlayers: nGames,
     } as any);
 
