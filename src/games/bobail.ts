@@ -3,8 +3,7 @@
 import { PiecePosition, RowCol, samePiecePosition } from './piece-position';
 import RenderPiece from './bobail-piece';
 import { GameDefinitionInput, MoveResult } from './control'
-import { MoveControl as MoveControlTemplate } from './control';
-import { GameState as GameStateTemplate } from '../bgio-tools';
+import { MoveControl as MoveControlTemplate, GameState as GameStateTemplate } from './control';
 
 type BobailState = {moveBobailNext: boolean};
 type GameState = GameStateTemplate<BobailState>;

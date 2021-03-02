@@ -1,6 +1,6 @@
-import { PiecePosition } from '../games/piece-position'; // KLUDGE
+import { PiecePosition } from '../piece-position'; // KLUDGE
 
-interface GameState<GameSpecific = never> {
+interface GameState<GameSpecific = any> {
     pieces: Array<Array<string|null>>;
     selectedSquare: PiecePosition | null;
     legalMoves: Array<Array<boolean>> | null;

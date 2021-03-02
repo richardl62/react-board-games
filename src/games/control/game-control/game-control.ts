@@ -1,15 +1,16 @@
 import { useRef, useState } from 'react';
-
+import { BoardProps as BgioBoardPropsTemplate } from 'boardgame.io/react'
 import { PiecePosition, samePiecePosition, makePiecePosition } from '../../piece-position';
 import { PieceName } from "../piece-name";
 import  { GameDefinition, MoveControl, MoveResult } from '../definition';
-
-import * as Bgio from '../../../bgio-tools';
+import { GameState } from '../game-state';
+import { ClientMoves } from '../moves';
 import HistoryManager from './history-manager';
 const topLeftBlack = false; // KLUDGE
 
 
-type GenericGameState = Bgio.GameState<any>;
+type GenericGameState = GameState<any>;
+type BgioProps = BgioBoardPropsTemplate<GenericGameState>;
 
 function useGameControlProps(gameDefinition: GameDefinition) {
 
@@ -57,12 +58,12 @@ interface Players {
 
 class GameControl {
 
-    constructor(bgioProps: Bgio.BoardProps, localProps: GameControlProps) {
+    constructor(bgioProps:BgioProps, localProps: GameControlProps) {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
     }
 
-    private _bgioProps: Bgio.BoardProps;
+    private _bgioProps:BgioProps;
     private _localProps: GameControlProps;
 
     // Public access to on-board or off-board pieces is though functions that
@@ -73,7 +74,7 @@ class GameControl {
 
     private get _gameState() { return this._bgioProps.G; }
 
-    private get _bgioMoves() { return this._bgioProps.moves as any as Bgio.ClientMoves; }
+    private get _bgioMoves() { return this._bgioProps.moves as any as ClientMoves; }
 
     private get _historyManager() {
         return this._localProps.historyManager;

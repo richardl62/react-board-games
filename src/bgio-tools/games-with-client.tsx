@@ -1,6 +1,5 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
-import { GameState } from "./game-state";
 
 interface Game {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -31,7 +30,7 @@ function makeClient({ game, server, bgioDebugPanel,
         multiplayer = Local();
     }
 
-    return Client<GameState>({
+    return Client({
         multiplayer: multiplayer,
         game: game,
         board: renderGame,
