@@ -1,4 +1,4 @@
-import { BoardPieces } from '../games/creation';
+import { BoardPieces } from '../games/control';
 import { GameState } from './game-state';
 
 type SetPiecesArg = BoardPieces;

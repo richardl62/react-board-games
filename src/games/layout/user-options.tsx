@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameControl } from '../creation';
+import { GameControl } from '../control';
 import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
 

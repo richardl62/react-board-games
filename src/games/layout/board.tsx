@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import ControlledSquare from './square';
-import GameControl from '../creation/game-control/game-control';
+import GameControl from '../control/game-control/game-control';
 
 import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';

@@ -4,8 +4,8 @@ import RenderPiece from './bobail-piece';
 import {
     RowCol, PiecePosition, samePiecePosition,
     GameDefinitionInput, MoveResult
-} from './creation'
-import { MoveControl as MoveControlTemplate } from './creation';
+} from './control'
+import { MoveControl as MoveControlTemplate } from './control';
 import { GameState as GameStateTemplate } from '../bgio-tools';
 
 type BobailState = {moveBobailNext: boolean};

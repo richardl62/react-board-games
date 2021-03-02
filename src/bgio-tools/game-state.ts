@@ -1,4 +1,4 @@
-import { PiecePosition, BoardPieces } from '../games/creation'; // KLUDGE
+import { PiecePosition, BoardPieces } from '../games/control'; // KLUDGE
 
 interface GameState<GameSpecific = never> {
     pieces: BoardPieces;

@@ -1,7 +1,7 @@
 import React from 'react';
-import { PiecePosition } from '../creation/piece-position';
+import { PiecePosition } from '../control/piece-position';
 import GameControl, { useSquareControl, usePieceControl }
-  from '../creation/game-control';
+  from '../control/game-control';
 import { Background, CanMoveToMarker } from './square-background'
 
 import styles from "./square.module.css";

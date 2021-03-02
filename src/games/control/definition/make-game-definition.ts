@@ -1,5 +1,5 @@
-import { PiecePosition, samePiecePosition, makeRowCol } from '../creation/piece-position'
-import { PieceName, BoardPieces } from "../creation/piece-name";
+import { PiecePosition, samePiecePosition, makeRowCol } from '../piece-position'
+import { PieceName, BoardPieces } from "../piece-name";
 import MoveControl from './move-control';
 import { MoveResult } from './move-result';
 import { GameDefinition, BoardStyle, OnClick, OnDrag, MoveDescription } from './game-definition';

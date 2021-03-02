@@ -1,8 +1,8 @@
 // Use of GameDefinitionInput is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { GameDefinitionInput } from './definition'
+import { GameDefinitionInput } from './control/definition'
 import RenderPiece from './chess-piece';
-import { BoardPieces } from './creation';
+import { BoardPieces } from './control';
 
 function chess(name: string, pieces: BoardPieces): GameDefinitionInput {
   return {
