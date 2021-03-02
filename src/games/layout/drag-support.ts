@@ -1,10 +1,10 @@
 import { useDrop, useDrag } from 'react-dnd';
-import { PiecePosition, makePiecePosition } from '../../piece-position';
-import GameControl from './game-control';
+import { PiecePosition, makePiecePosition } from '../piece-position';
+import GameControl from '../control/game-control/game-control';
 
 const PIECE = 'piece';
 
-function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
+function usePieceDrag(gameControl: GameControl, pos: PiecePosition) {
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -36,7 +36,7 @@ function usePieceControl(gameControl: GameControl, pos: PiecePosition) {
   };
 }
 
-function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
+function useSquareDrag(gameControl: GameControl, pos: PiecePosition) {
 
   const [, drop] = useDrop({
     accept: PIECE,
@@ -63,4 +63,4 @@ function useSquareControl(gameControl: GameControl, pos: PiecePosition) {
   };
 }
 
-export { usePieceControl, useSquareControl };
+export { usePieceDrag as usePieceControl, useSquareDrag as useSquareControl };
