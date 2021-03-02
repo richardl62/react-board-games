@@ -32,7 +32,7 @@ export type OnDrag = {
     end: OnDragEnd;
 } | null;
 
-export type MoveDescription = (gameState: GameState) => string | null;
+export type MoveDescription = (gameState: GameState<any>) => string | null;
 
 export interface OffBoardPieces {
     top: Array<PieceName>;
@@ -51,7 +51,7 @@ export interface GameDefinition {
     // games.
     name: string;
 
-    initialState : GameState<any|undefined>; // KLUGE?
+    initialState : GameState<any>;
 
     offBoardPieces: OffBoardPieces;
 

@@ -1,7 +1,7 @@
 import { GameState } from './game-state';
 
 type SetPiecesArg = Array<Array<string|null>>;
-function setPieces(GameState: GameState, ctx: any, pieces: SetPiecesArg) {
+function setPieces(GameState: GameState<never>, ctx: any, pieces: SetPiecesArg) {
 
     // Kludge?: Clear everything other than pieces
     GameState.selectedSquare = null;
@@ -11,7 +11,7 @@ function setPieces(GameState: GameState, ctx: any, pieces: SetPiecesArg) {
 }
 
 type SetGameStateArg = GameState<any|undefined>;
-function setGameState(GameState: GameState, ctx: any, gameState: SetGameStateArg) {
+function setGameState(GameState: GameState<never>, ctx: any, gameState: SetGameStateArg) {
     Object.assign(GameState, gameState);
 };
 

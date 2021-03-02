@@ -3,7 +3,7 @@ import { OffBoardPieces } from './game-definition';
 import { GameState } from '../game-state';
 
 class MoveControl<GameSpecificState = never> {
-    constructor(offBoardPieces: OffBoardPieces, state: GameState, activePlayer: number) {
+    constructor(offBoardPieces: OffBoardPieces, state: GameState<GameSpecificState>, activePlayer: number) {
         this._offBoardPieces = offBoardPieces;
         this._state = state;
         this._activePlayer = activePlayer;
