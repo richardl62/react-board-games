@@ -1,5 +1,4 @@
 // import { Lobby } from 'boardgame.io/react';
-// import makeGame from "./make-game";
 
 interface Game {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
