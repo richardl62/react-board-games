@@ -1,7 +1,7 @@
 // This file provides the infrastructure (as opposed to layout) for a 'full game'.
 // In particular, it sets React hooks and creates a boardgame.io (Bgio) client.
 import { Game } from './game';
-import * as bgio from '../bgio-tools';
+import * as bgio from './bgio-tools';
 
 
 interface makeGameWithClientProps {

@@ -8,7 +8,7 @@ import { processLocation } from './url-tools';
 
 import { Game } from './game'
 
-import {Lobby} from '../bgio-tools';
+import {Lobby} from './bgio-tools';
 const urlParams = processLocation(window.location);
 
 function gamePath(game: Game) {
