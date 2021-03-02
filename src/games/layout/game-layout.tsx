@@ -1,10 +1,10 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import GameControl from '../game-creation/game-control/game-control';
+import GameControl from '../creation/game-control/game-control';
 import Board from './board';
 import RowOfPieces from './row-of-pieces';
-import { nonNull } from '../tools';
+import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 

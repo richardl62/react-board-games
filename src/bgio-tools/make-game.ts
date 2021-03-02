@@ -1,5 +1,5 @@
 //import { GameState } from "./game-state";
-import { GameDefinition } from '../game-creation'
+import { GameDefinition } from '../games/creation' // KLUDGE
 
 // Use require as this file is loading into the server and
 // that does not (fully) support import.

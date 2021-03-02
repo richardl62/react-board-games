@@ -1,5 +1,5 @@
-import { PiecePosition } from '../piece-position'
-import { PieceName } from "../piece-name";
+import { PiecePosition } from '../creation/piece-position'
+import { PieceName } from "../creation/piece-name";
 import { GameState } from '../../bgio-tools';
 import MoveControl from './move-control';
 import { MoveResult } from './move-result';

@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 
 import { PiecePosition, samePiecePosition, makePiecePosition } from '../piece-position';
 import { PieceName } from "../piece-name";
-import  { GameDefinition, MoveControl, MoveResult } from '../game-definition';
+import  { GameDefinition, MoveControl, MoveResult } from '../../definition';
 
-import * as Bgio from '../../bgio-tools';
+import * as Bgio from '../../../bgio-tools';
 import HistoryManager from './history-manager';
 const topLeftBlack = false; // KLUDGE
 

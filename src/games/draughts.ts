@@ -1,7 +1,7 @@
 //import { PiecePosition, BoardPieces } from '../interfaces'
 import { GameDefinitionInput, defaultMoveFunction, 
     PiecePosition, RowCol, makeRowCol,
-    MoveControl, MoveResult } from '../game-creation'
+    MoveControl, MoveResult } from './creation'
 import RenderPiece from './draughts-piece';
 
 

@@ -5,8 +5,8 @@
 // const chess = require('./chess').default;
 // const draughts = require('./draughts').default;
 
-import { GameDefinition } from '../game-creation';
-import { makeGameDefinition, appFriendlyGame } from '../game-creation';
+import { GameDefinition } from './creation';
+import { makeGameDefinition, appFriendlyGame } from './creation';
 import bobail from './bobail';
 import chess from './chess';
 import draughts from './draughts';

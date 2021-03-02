@@ -1,5 +1,5 @@
-import { PiecePosition, samePiecePosition } from '../game-creation';
-import { SquareProperties } from '../game-creation/game-control/game-control';
+import { PiecePosition, samePiecePosition } from './creation';
+import { SquareProperties } from './creation/game-control/game-control';
 
 interface ClickManagerProps {
     getSelectedSquare: () => PiecePosition | null;

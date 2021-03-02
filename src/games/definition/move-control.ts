@@ -1,4 +1,4 @@
-import { RowCol, makeRowCol, PiecePosition, samePiecePosition} from '../piece-position';
+import { RowCol, makeRowCol, PiecePosition, samePiecePosition} from '../creation/piece-position';
 import { OffBoardPieces } from './game-definition';
 import { GameState } from '../../bgio-tools';
 
