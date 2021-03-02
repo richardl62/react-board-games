@@ -13,5 +13,5 @@ import { makeGameDefinition } from './control';
 import appFriendlyGame from './app-friendly-game'
 
 const gameDefinitions = [...bobail, ...chess, ...draughts].map(g => makeGameDefinition(g));
-const bgioGames = gameDefinitions.map(appFriendlyGame);
-export default bgioGames;
+const games = gameDefinitions.map(appFriendlyGame);
+export default games;

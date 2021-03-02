@@ -1,3 +1,4 @@
-In theory at lease this module is about the infracture, e.g. setting react 
-hooks and interacting with ReactDnD and boardgame.io. It is not meant to be
-about how things are rendering.
+Game control.  No rendering.
+
+The idea to help make an app/bgio friendly game defintion from a game
+definition that is focused on the game logic.
