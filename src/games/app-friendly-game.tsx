@@ -18,11 +18,9 @@ function appFriendlyGame(gameDefintion: GameDefinition) {
     return {
         // 'displayName' rather than 'name' to avoid confusion with BGIO names, which
         // must be space free.
-        displayName: gameDefintion.name,
+        displayName: gameDefintion.displayName,
 
-        // Space-free name suitable for use with BGIO. (Is this better set here or
-        // in the App?)
-        name: gameDefintion.name.replace(/[^\w]/g, '').toLowerCase(),
+        name: gameDefintion.name,
 
         setup: () => gameDefintion.initialState,
         moves: moves,

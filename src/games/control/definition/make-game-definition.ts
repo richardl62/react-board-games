@@ -17,9 +17,9 @@ interface GameDefinitionInput<GameSpecificState = never> {
     boardStyle: BoardStyle;
 
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
-    // display purposes, and also used internally to distinguish different
-    // games.
-    name: string;
+    // display purposes. A simplied version is used internally to distinguish
+    // different games.
+    displayName: string;
 
     initialState: {
         pieces: BoardPieces;
@@ -97,7 +97,6 @@ function makeOnClick(makeMove: MoveFunction) {
     }
 }
 
-
 function makeOnDrag(moveFunction: MoveFunction) : OnDrag {
     return {
         startAllowed: () => true,
@@ -105,7 +104,7 @@ function makeOnDrag(moveFunction: MoveFunction) : OnDrag {
     }
 }
 
-function onFunction({onClick, onDrag, onMove} : GameDefinitionInput<any>) {
+function onFunctions({onClick, onDrag, onMove} : GameDefinitionInput<any>) {
     
     if(onClick === undefined && onDrag === undefined ) {
         const onMove_ = (onMove === undefined) ? defaultMoveFunction : onMove;
@@ -125,14 +124,19 @@ function onFunction({onClick, onDrag, onMove} : GameDefinitionInput<any>) {
     throw new Error("Incorrect combination of 'on' functions");
 }
 
+function makeSimplifiedName(name: string) {
+    return name.replace(/[^\w]/g, '').toLowerCase();
+}
+
 function makeGameDefinition<GameSpecificState = never>(
     input: GameDefinitionInput<GameSpecificState>): GameDefinition 
     {
     const result = {
-        ...onFunction(input),
-
+        displayName: input.displayName,
+        name: makeSimplifiedName(input.displayName),
+        
         boardStyle: input.boardStyle,
-        name: input.name,
+
         offBoardPieces: input.offBoardPieces,
         renderPiece: input.renderPiece,
         moveDescription: input.moveDescription || (() => { return null; }),
@@ -145,6 +149,8 @@ function makeGameDefinition<GameSpecificState = never>(
             // input value
             ...input.initialState,
         },
+
+        ...onFunctions(input),
     };
 
     return result;

@@ -47,8 +47,11 @@ export interface GameDefinition {
     boardStyle: BoardStyle;
 
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
-    // display purposes, and also used internally to distinguish different
-    // games.
+    // display purposes.
+    displayName: string;
+
+    // A simplied version of displayName, with spaces removed and some other
+    /// change.  This is for page names and is passed to Bgio. 
     name: string;
 
     initialState : GameState<any>;

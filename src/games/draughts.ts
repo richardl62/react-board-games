@@ -78,7 +78,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
     }
 
     return {
-        name: name,
+        displayName: name,
 
         renderPiece: RenderPiece,
 

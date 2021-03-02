@@ -5,7 +5,7 @@ import RenderPiece from './chess-piece';
 
 function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionInput {
   return {
-    name: name,
+    displayName: name,
 
     renderPiece: RenderPiece,
   
