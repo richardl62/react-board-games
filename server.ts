@@ -3,15 +3,13 @@ import { Server } from 'boardgame.io/server';
 import path from 'path';
 import serve from 'koa-static';
 
-const games = require('./src/games').default;
-const makeBgioGame = require('./src/bgio-tools/make-game').default;
-const bgioGames = games.map(makeBgioGame);
+const games = require('./src/games/server-support').games;
 
 // @ts-ignore
-console.log("Games: ", bgioGames.map(g => g.name));
+console.log("Games: ", games.map(g => g.name));
 
 // @ts-ignore
-const server = Server({ games: bgioGames });
+const server = Server({ games: games });
 const PORT = process.env.PORT || 8000;
 
 // Build path relative to the server.js file
