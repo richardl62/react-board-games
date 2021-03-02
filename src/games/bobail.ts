@@ -1,10 +1,8 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
+import { PiecePosition, RowCol, samePiecePosition } from './piece-position';
 import RenderPiece from './bobail-piece';
-import {
-    RowCol, PiecePosition, samePiecePosition,
-    GameDefinitionInput, MoveResult
-} from './control'
+import { GameDefinitionInput, MoveResult } from './control'
 import { MoveControl as MoveControlTemplate } from './control';
 import { GameState as GameStateTemplate } from '../bgio-tools';
 

@@ -2,9 +2,8 @@
 // done in this file rather than at point of use.
 import { GameDefinitionInput } from './control/definition'
 import RenderPiece from './chess-piece';
-import { BoardPieces } from './control';
 
-function chess(name: string, pieces: BoardPieces): GameDefinitionInput {
+function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionInput {
   return {
     name: name,
 

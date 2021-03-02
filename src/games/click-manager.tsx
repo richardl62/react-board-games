@@ -1,4 +1,4 @@
-import { PiecePosition, samePiecePosition } from './control';
+import { PiecePosition, samePiecePosition } from './piece-position';
 import { SquareProperties } from './control/game-control/game-control';
 
 interface ClickManagerProps {

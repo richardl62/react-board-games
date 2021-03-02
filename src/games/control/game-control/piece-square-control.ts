@@ -1,5 +1,5 @@
 import { useDrop, useDrag } from 'react-dnd';
-import { PiecePosition, makePiecePosition } from '../piece-position';
+import { PiecePosition, makePiecePosition } from '../../piece-position';
 import GameControl from './game-control';
 
 const PIECE = 'piece';

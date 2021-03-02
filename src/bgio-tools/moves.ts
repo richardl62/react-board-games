@@ -1,7 +1,6 @@
-import { BoardPieces } from '../games/control';
 import { GameState } from './game-state';
 
-type SetPiecesArg = BoardPieces;
+type SetPiecesArg = Array<Array<string|null>>;
 function setPieces(GameState: GameState, ctx: any, pieces: SetPiecesArg) {
 
     // Kludge?: Clear everything other than pieces

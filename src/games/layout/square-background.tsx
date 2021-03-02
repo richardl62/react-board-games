@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { nonNull } from '../../tools';
-import { SquareProperties, LegalMoveStatus } from '../control/game-control';
+import { SquareProperties, LegalMoveStatus } from '../control';
 import styles from './square.module.css';
 
 function Background({ background, gameStatus }: SquareProperties) {

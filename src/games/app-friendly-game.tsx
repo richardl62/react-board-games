@@ -1,9 +1,7 @@
 import React from 'react'; // KLUDGE
-import { GameDefinition } from './game-definition';
-
-import GameControl, { useGameControlProps } from '../game-control'
-import SimpleGame from '../../layout';
-import {moves, BoardProps as BgioBoardProps} from '../../../bgio-tools'
+import { GameDefinition, GameControl, useGameControlProps } from './control'
+import SimpleGame from './layout';
+import {moves, BoardProps as BgioBoardProps} from '../bgio-tools'
 
 interface AppFriendlyGameProps {
     gameDefinition: GameDefinition;

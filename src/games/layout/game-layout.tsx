@@ -1,7 +1,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import GameControl from '../control/game-control/game-control';
+import { GameControl } from '../control';
 import Board from './board';
 import RowOfPieces from './row-of-pieces';
 import { nonNull } from '../../tools';

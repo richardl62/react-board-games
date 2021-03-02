@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { PiecePosition, samePiecePosition, makePiecePosition } from '../piece-position';
+import { PiecePosition, samePiecePosition, makePiecePosition } from '../../piece-position';
 import { PieceName } from "../piece-name";
 import  { GameDefinition, MoveControl, MoveResult } from '../definition';
 

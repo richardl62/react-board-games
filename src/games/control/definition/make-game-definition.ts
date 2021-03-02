@@ -1,4 +1,4 @@
-import { PiecePosition, samePiecePosition, makeRowCol } from '../piece-position'
+import { PiecePosition, samePiecePosition, makeRowCol } from '../../piece-position'
 import { PieceName, BoardPieces } from "../piece-name";
 import MoveControl from './move-control';
 import { MoveResult } from './move-result';
