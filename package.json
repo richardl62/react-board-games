@@ -1,5 +1,4 @@
 {
-  "homepage": "react-board-games",
   "name": "react-board-games",
   "version": "0.1.0",
   "private": true,
@@ -35,9 +34,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "ts-node -r esm server.ts",
-    "simple-serve": "ts-node -r esm simple-server.ts",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "simple-serve": "ts-node -r esm simple-server.ts"
   },
   "engines": {
     "node": "14.5"
