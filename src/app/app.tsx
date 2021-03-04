@@ -24,11 +24,20 @@ function GameLinks({games} : GameProps) {
     <ul>
       {games.map(gd => {
         const path = gamePath(gd);
-        return (<li key={path}>
+        return (
+        <li key={path}>
           <Link className={nonNull(styles.gameLink)} to={path}>{gd.displayName}</Link>
         </li>);
       }
       )}
+      
+      <li key={'lobby'}>
+        <Link className={nonNull(styles.gameLink)} to="/lobby">Lobby</Link>
+      </li>
+
+      <li key={'lobby-old-style'}>
+        <Link className={nonNull(styles.gameLink)} to="/lobby-old-style">Lobby (old style)</Link>
+      </li>
     </ul>
   );
 }
@@ -36,13 +45,7 @@ function GameLinks({games} : GameProps) {
 function HomePage(props : GameProps) {
   return (
     <div>
-      <h2>Available games</h2>
       <GameLinks {...props}/>
-      <br/>
-
-      <Link className={nonNull(styles.gameLink)} to="/lobby">Lobby</Link>
-      <br/>
-      <Link className={nonNull(styles.gameLink)} to="/lobby-old-style">Lobby (old style)</Link>
     </div>
   )
 }
