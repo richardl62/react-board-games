@@ -4,20 +4,30 @@ import { nonNull } from '../tools';
 import styles from './app.module.css';
 
 import { makeGameWithClient } from './game-renderer';
-import { processLocation } from './url-tools';
 
 import { Game } from './game'
 
 import {Lobby, LobbyOldStyle} from './bgio-tools';
-const urlParams = processLocation(window.location);
 
 function gamePath(game: Game) {
   return `/${game.name}`;
 }
 
+interface Servers {
+  game: string;
+  lobby: string;
+}
+
+interface AppOptions {
+  playersPerBrowser: number,
+  bgioDebugPanel: boolean,
+  servers: Servers,
+}
+
 interface GameProps {
   games: Array<Game>;
 } 
+
 
 function AvailableLinks({games} : GameProps) {
   function singleLink(path: string, displayName: string) {
@@ -57,12 +67,16 @@ function PageNotFound(props : GameProps) {
   )
 }
 
-function NonLobbyGame({game} : {game: Game}) {
+interface NonLobbyGameProps {
+  game: Game;
+  options: AppOptions;
+}
+function NonLobbyGame({game, options} : NonLobbyGameProps) {
   const makeGameArgs = {
     game: game,
-    nGames: urlParams.playerPerBrowser,
+    nGames: options.playersPerBrowser,
     numPlayers: 1,
-    bgioDebugPanel: urlParams.bgioDebugPanel,
+    bgioDebugPanel: options.bgioDebugPanel,
     server: null,
   };
   console.log("NonLobbyGame");
@@ -71,9 +85,13 @@ function NonLobbyGame({game} : {game: Game}) {
   return (<>{nonLobbyGame}</>);
 }
 
-
-function App({games} : GameProps) {
-
+interface AppProps {
+  games: Array<Game>;
+  options: AppOptions;
+}
+function App({games, options} : AppProps) {
+  const { servers } = options;
+   
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
@@ -81,16 +99,16 @@ function App({games} : GameProps) {
       <Route key="/" exact path="/" component={renderHomePage} />
       {games.map(gd => {
         const path = gamePath(gd);
-        const component = ()=><NonLobbyGame game={gd}/>;
-        return (<Route key={path} exact path={path} component={component} />);
+        const component = ()=><NonLobbyGame game={gd} options={options}/>;
+        return (<Route key={path} exact path={path} component={component}/>);
       })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby servers={urlParams.servers} games={games}/>}
+          component={()=><Lobby servers={servers} games={games}/>}
       />
 
       <Route key="lobby-old-style" exact path="/lobby-old-style" 
-          component={()=><LobbyOldStyle servers={urlParams.servers} games={games}/>}
+          component={()=><LobbyOldStyle servers={servers} games={games}/>}
       />
 
       <Route key="pageNotFound" component={renderPageNotFound} />

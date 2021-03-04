@@ -10,7 +10,7 @@ function boolFromParam(param: string | null) {
   return null;
 }
 
-function processLocation(location: Location) {
+function getOptionsFromLocation(location: Location) {
 
   const searchParams = new URLSearchParams(location.search);
 
@@ -66,7 +66,7 @@ function processLocation(location: Location) {
 
   const result = {
     servers: servers(),
-    playerPerBrowser: playersPerBrowser(),
+    playersPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
   }
 
@@ -76,4 +76,4 @@ function processLocation(location: Location) {
   return result;
 }
 
-export { processLocation }
+export { getOptionsFromLocation }
