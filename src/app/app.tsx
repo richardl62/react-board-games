@@ -19,25 +19,21 @@ interface GameProps {
   games: Array<Game>;
 } 
 
-function GameLinks({games} : GameProps) {
+function AvailableLinks({games} : GameProps) {
+  function singleLink(path: string, displayName: string) {
+    return (
+      <li key={path}>
+        <Link className={nonNull(styles.gameLink)} to={path}>{displayName}</Link>
+      </li>
+    );
+  }
   return (
     <ul>
-      {games.map(gd => {
-        const path = gamePath(gd);
-        return (
-        <li key={path}>
-          <Link className={nonNull(styles.gameLink)} to={path}>{gd.displayName}</Link>
-        </li>);
-      }
-      )}
-      
-      <li key={'lobby'}>
-        <Link className={nonNull(styles.gameLink)} to="/lobby">Lobby</Link>
-      </li>
+      {games.map(gd => singleLink(gamePath(gd), gd.displayName))}
 
-      <li key={'lobby-old-style'}>
-        <Link className={nonNull(styles.gameLink)} to="/lobby-old-style">Lobby (old style)</Link>
-      </li>
+      <br/>
+      {singleLink("/lobby", "Lobby (For online play)")}
+      {singleLink("/lobby-old-style", "Old Style lobby")}
     </ul>
   );
 }
@@ -45,7 +41,8 @@ function GameLinks({games} : GameProps) {
 function HomePage(props : GameProps) {
   return (
     <div>
-      <GameLinks {...props}/>
+      <h2>Available links</h2>
+      <AvailableLinks {...props}/>
     </div>
   )
 }
@@ -55,7 +52,7 @@ function PageNotFound(props : GameProps) {
     <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
       <div>You could try one of these links:</div>
-      <GameLinks {...props}/>
+      <AvailableLinks {...props}/>
     </div>
   )
 }
