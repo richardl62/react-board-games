@@ -8,7 +8,7 @@ import { processLocation } from './url-tools';
 
 import { Game } from './game'
 
-import {Lobby} from './bgio-tools';
+import {Lobby, LobbyOldStyle} from './bgio-tools';
 const urlParams = processLocation(window.location);
 
 function gamePath(game: Game) {
@@ -40,7 +40,9 @@ function HomePage(props : GameProps) {
       <GameLinks {...props}/>
       <br/>
 
-      <Link className={nonNull(styles.gameLink)} to="/Lobby">Lobby</Link>
+      <Link className={nonNull(styles.gameLink)} to="/lobby">Lobby</Link>
+      <br/>
+      <Link className={nonNull(styles.gameLink)} to="/lobby-old-style">Lobby (old style)</Link>
     </div>
   )
 }
@@ -97,6 +99,11 @@ function App({games} : GameProps) {
       <Route key="lobby" exact path="/lobby" 
           component={()=><Lobby servers={servers} games={games}/>}
       />
+
+      <Route key="lobby-old-style" exact path="/lobby-old-style" 
+          component={()=><LobbyOldStyle servers={servers} games={games}/>}
+      />
+
       <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>
   );
