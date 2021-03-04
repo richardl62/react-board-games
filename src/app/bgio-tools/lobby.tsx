@@ -19,8 +19,6 @@ interface LobbyProps {
 }
 
 function GameLobby({ servers, games }: LobbyProps) {
-    console.log("TEMPORARY HACK: explicity setting lobby server");
-    servers.lobby = "http://localhost:3000/"; // TEMPORARY
     console.log("Lobby running on ", servers);
 
     const gameComponents = games.map(game => {

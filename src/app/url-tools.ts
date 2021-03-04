@@ -25,9 +25,16 @@ function processLocation(location: Location) {
     return val;
   }
 
-  /* servers */
-  const server = location.origin;
-    
+  function servers() {
+    const local = location.origin;
+    let remote = local;
+    if (remote === "http://localhost:3000") {
+      console.log("HACK: Artificially setting server for local host");
+      remote = "http://localhost:8000";
+    }
+    return { game: local, lobby: remote };
+  }
+
   function playersPerBrowser() {
     const ppb = removeParam('ppb');
     if (ppb === null)
@@ -58,7 +65,7 @@ function processLocation(location: Location) {
   }
 
   const result = {
-    server: server,
+    servers: servers(),
     playerPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
   }

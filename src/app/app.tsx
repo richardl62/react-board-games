@@ -73,17 +73,6 @@ function NonLobbyGame({game} : {game: Game}) {
 
 
 function App({games} : GameProps) {
-  // const lobbyGames = games.map(gd => {
-  //   return {
-  //       game: gd,
-  //       component: makeGameRenderer(gd),
-  //   };
-  // });
-
-  const servers = {
-    game: urlParams.server,
-    lobby: urlParams.server,
-  }
 
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
@@ -97,11 +86,11 @@ function App({games} : GameProps) {
       })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby servers={servers} games={games}/>}
+          component={()=><Lobby servers={urlParams.servers} games={games}/>}
       />
 
       <Route key="lobby-old-style" exact path="/lobby-old-style" 
-          component={()=><LobbyOldStyle servers={servers} games={games}/>}
+          component={()=><LobbyOldStyle servers={urlParams.servers} games={games}/>}
       />
 
       <Route key="pageNotFound" component={renderPageNotFound} />
