@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 export interface Servers {
   game: string;
@@ -19,5 +19,10 @@ const defaultOptions : Options = {
   lobbyGame: null,
 }
 
-export const OptionsContext = React.createContext(defaultOptions);
+export const OptionsContext = React.createContext<Options>(defaultOptions);
+
+
+export function useOptionsContext() {
+  return useContext(OptionsContext);
+}
 // Exports are done inline

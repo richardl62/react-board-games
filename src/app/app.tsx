@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import { gamePath } from '../url-tools';
@@ -10,7 +10,7 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 import Lobby from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
-import { Options, OptionsContext } from './options';
+import { Options, OptionsContext, useOptionsContext } from './options';
 
 interface GameProps {
   games: Array<Game>;
@@ -60,12 +60,12 @@ interface NonLobbyGameProps {
 }
 function NonLobbyGame({game} : NonLobbyGameProps) {
 
-  const Options = useContext(OptionsContext);
+  const Lobby = useOptionsContext();
   const makeGameArgs = {
     game: game,
-    nGames: Options.playersPerBrowser,
+    nGames: Lobby.playersPerBrowser,
     numPlayers: 1,
-    bgioDebugPanel: Options.bgioDebugPanel,
+    bgioDebugPanel: Lobby.bgioDebugPanel,
     server: null,
   };
   console.log("NonLobbyGame");

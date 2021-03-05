@@ -1,6 +1,5 @@
 import { OnlineGame, onlineGames } from './bgio-tools';
-import { useContext } from 'react';
-import { OptionsContext } from './options';
+import { useOptionsContext } from './options';
 import {Game} from './game';
 
 import {nonNull} from '../tools';
@@ -15,8 +14,8 @@ function lobbyItems(game: OnlineGame) {
 }
 
 function Lobby({ games }: {games: Array<Game>}) {
-    const {servers} = useContext(OptionsContext);
-    
+    const {servers} = useOptionsContext();
+
     return (
         <div className={nonNull(styles.lobby)}>
             <h2>I'm prentending to be a lobby</h2>
