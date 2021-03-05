@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import { Lobby } from 'boardgame.io/react';
+import { OptionsContext } from '../options';
 
 interface Game {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -11,14 +13,11 @@ interface Game {
 };
 
 interface LobbyProps {
-    servers: {
-        game: string;
-        lobby: string;
-    };
     games: Array<Game>;
 }
 
-function GameLobby({ servers, games }: LobbyProps) {
+function GameLobby({ games }: LobbyProps) {
+    const { servers } = useContext(OptionsContext);
     console.log("Lobby running on ", servers);
 
     const gameComponents = games.map(game => {

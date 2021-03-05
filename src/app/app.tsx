@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import { gamePath } from '../url-tools';
@@ -10,18 +10,7 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 
 import {Lobby, LobbyOldStyle} from './bgio-tools';
-
-interface Servers {
-  game: string;
-  lobby: string;
-}
-
-interface AppOptions {
-  playersPerBrowser: number,
-  bgioDebugPanel: boolean,
-  servers: Servers,
-  lobbyGame: string | null,
-}
+import { Options, OptionsContext } from './options';
 
 interface GameProps {
   games: Array<Game>;
@@ -68,14 +57,15 @@ function PageNotFound(props : GameProps) {
 
 interface NonLobbyGameProps {
   game: Game;
-  options: AppOptions;
 }
-function NonLobbyGame({game, options} : NonLobbyGameProps) {
+function NonLobbyGame({game} : NonLobbyGameProps) {
+
+  const Options = useContext(OptionsContext);
   const makeGameArgs = {
     game: game,
-    nGames: options.playersPerBrowser,
+    nGames: Options.playersPerBrowser,
     numPlayers: 1,
-    bgioDebugPanel: options.bgioDebugPanel,
+    bgioDebugPanel: Options.bgioDebugPanel,
     server: null,
   };
   console.log("NonLobbyGame");
@@ -86,32 +76,33 @@ function NonLobbyGame({game, options} : NonLobbyGameProps) {
 
 interface AppProps {
   games: Array<Game>;
-  options: AppOptions;
+  options: Options;
 }
 function App({games, options} : AppProps) {
-  const { servers } = options;
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <Switch>
-      <Route key="/" exact path="/" component={renderHomePage} />
-      {games.map(gd => {
-        const path = gamePath(gd.name);
-        const component = ()=><NonLobbyGame game={gd} options={options}/>;
-        return (<Route key={path} exact path={path} component={component}/>);
-      })}
+    <OptionsContext.Provider value={options}>
+      <Switch>
+        <Route key="/" exact path="/" component={renderHomePage} />
+        {games.map(gd => {
+          const path = gamePath(gd.name);
+          const component = () => <NonLobbyGame game={gd} />;
+          return (<Route key={path} exact path={path} component={component} />);
+        })}
 
-      <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby servers={servers} games={games} options={options}/>}
-      />
+        <Route key="lobby" exact path="/lobby"
+          component={() => <Lobby games={games} />}
+        />
 
-      <Route key="lobby-old-style" exact path="/lobby-old-style" 
-          component={()=><LobbyOldStyle servers={servers} games={games}/>}
-      />
+        <Route key="lobby-old-style" exact path="/lobby-old-style"
+          component={() => <LobbyOldStyle games={games} />}
+        />
 
-      <Route key="pageNotFound" component={renderPageNotFound} />
-    </Switch>
+        <Route key="pageNotFound" component={renderPageNotFound} />
+      </Switch>
+    </OptionsContext.Provider>
   );
 }
 

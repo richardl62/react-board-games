@@ -1,4 +1,6 @@
 import { LobbyClient } from 'boardgame.io/client';
+import { useContext } from 'react';
+import { OptionsContext } from '../options';
 
 interface Game {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -10,20 +12,13 @@ interface Game {
     renderGame: (arg0: any) => JSX.Element;
 };
 
-interface LobbyProps {
-    servers: {
-        game: string;
-        lobby: string;
-    };
+interface GamesLobbyProps {
     games: Array<Game>;
-    options: {
-        lobbyGame: string | null,
-    };
 }
 
-function GameLobby({ servers, options }: LobbyProps) {
+function GameLobby({ games }: GamesLobbyProps) {
+    const {servers, lobbyGame} = useContext(OptionsContext);
     console.log("Lobby running on ", servers);
-    const game = options.lobbyGame;
 
 
     const lobbyClient = new LobbyClient({ server: servers.lobby});
@@ -35,7 +30,7 @@ function GameLobby({ servers, options }: LobbyProps) {
     return (
         <div>
             <p>When I grow up, I want to be a lobby</p>
-            <p>I'll play {game || "all the games"}</p>
+            <p>I'll play {lobbyGame || "all the games"}</p>
         </div>
     );
 }
