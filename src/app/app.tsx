@@ -8,8 +8,8 @@ import styles from './app.module.css';
 import { makeGameWithClient } from './game-renderer';
 
 import { Game } from './game'
-
-import {Lobby, LobbyOldStyle} from './bgio-tools';
+import Lobby from './lobby';
+import {LobbyOldStyle} from './bgio-tools';
 import { Options, OptionsContext } from './options';
 
 interface GameProps {
