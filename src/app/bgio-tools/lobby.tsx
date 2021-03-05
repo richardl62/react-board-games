@@ -1,4 +1,4 @@
-import { Lobby } from 'boardgame.io/react';
+import { LobbyClient } from 'boardgame.io/client';
 
 interface Game {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
@@ -16,23 +16,27 @@ interface LobbyProps {
         lobby: string;
     };
     games: Array<Game>;
+    options: {
+        lobbyGame: string | null,
+    };
 }
 
-function GameLobby({ servers, games }: LobbyProps) {
+function GameLobby({ servers, options }: LobbyProps) {
     console.log("Lobby running on ", servers);
+    const game = options.lobbyGame;
 
-    const gameComponents = games.map(game => {
-        return {
-            game: game,
-            board: game.renderGame,
-        }
-    });
+
+    const lobbyClient = new LobbyClient({ server: servers.lobby});
+    
+    lobbyClient.listGames()
+      .then(console.log) // => ['chess', 'tic-tac-toe']
+      .catch(console.error);
+
     return (
-        <Lobby
-            gameServer={servers.game}
-            lobbyServer={servers.lobby}
-            gameComponents={gameComponents}
-        />
+        <div>
+            <p>When I grow up, I want to be a lobby</p>
+            <p>I'll play {game || "all the games"}</p>
+        </div>
     );
 }
 

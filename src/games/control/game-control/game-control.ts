@@ -88,6 +88,8 @@ class GameControl {
         this._bgioMoves.setGameState(state);
     }
 
+    get name() { return this._gameDefinition.name;}
+
     get boardStyle() { return this._gameDefinition.boardStyle; }
 
     

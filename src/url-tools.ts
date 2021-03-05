@@ -64,10 +64,15 @@ function getOptionsFromLocation(location: Location) {
     return false;
   }
 
+  function lobbyGame() {
+    return removeParam('game');
+  }
+
   const result = {
     servers: servers(),
     playersPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
+    lobbyGame: lobbyGame(),
   }
 
   if (searchParams.toString()) {
@@ -76,4 +81,11 @@ function getOptionsFromLocation(location: Location) {
   return result;
 }
 
-export { getOptionsFromLocation }
+function gamePath(game: string) {
+  return `/${game}`;
+}
+
+function lobbyPath(game: string) {
+  return "/lobby?game=" + game;
+}
+export { getOptionsFromLocation, gamePath, lobbyPath }

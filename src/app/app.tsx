@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
+import { gamePath } from '../url-tools';
+
 import styles from './app.module.css';
 
 import { makeGameWithClient } from './game-renderer';
@@ -8,10 +10,6 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 
 import {Lobby, LobbyOldStyle} from './bgio-tools';
-
-function gamePath(game: Game) {
-  return `/${game.name}`;
-}
 
 interface Servers {
   game: string;
@@ -22,6 +20,7 @@ interface AppOptions {
   playersPerBrowser: number,
   bgioDebugPanel: boolean,
   servers: Servers,
+  lobbyGame: string | null,
 }
 
 interface GameProps {
@@ -39,7 +38,7 @@ function AvailableLinks({games} : GameProps) {
   }
   return (
     <ul>
-      {games.map(gd => singleLink(gamePath(gd), gd.displayName))}
+      {games.map(gd => singleLink(gamePath(gd.name), gd.displayName))}
 
       <br/>
       {singleLink("/lobby", "Lobby (For online play)")}
@@ -98,13 +97,13 @@ function App({games, options} : AppProps) {
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
       {games.map(gd => {
-        const path = gamePath(gd);
+        const path = gamePath(gd.name);
         const component = ()=><NonLobbyGame game={gd} options={options}/>;
         return (<Route key={path} exact path={path} component={component}/>);
       })}
 
       <Route key="lobby" exact path="/lobby" 
-          component={()=><Lobby servers={servers} games={games}/>}
+          component={()=><Lobby servers={servers} games={games} options={options}/>}
       />
 
       <Route key="lobby-old-style" exact path="/lobby-old-style" 
