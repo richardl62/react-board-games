@@ -2,7 +2,6 @@ import React from 'react';
 import { GameControl } from '../control';
 import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
-import { lobbyPath } from '../../url-tools';
 
 function UserOptions({ gameControl }: { gameControl: GameControl; }) {
 
@@ -37,9 +36,6 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
                 </button>
             </div>
             
-            <div>
-                <a href={lobbyPath(gameControl.name)}>Lobby (for online play)</a>
-            </div>
         </div>
     );
 }

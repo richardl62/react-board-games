@@ -33,3 +33,19 @@ body {
     grid-template-columns: auto auto auto;
     grid-gap: 5px 3px;
     }
+
+.gamePage {
+    display: inline-block;
+    margin-left: 5%;
+}
+
+.gamePage h1 {
+    font-size: inherit;
+}
+
+
+.gameLobby {
+    display: block;
+    padding: 0px 10;
+}
+

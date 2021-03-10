@@ -68,11 +68,16 @@ function getOptionsFromLocation(location: Location) {
     return removeParam('game');
   }
 
+  function gameId() {
+    return removeParam('id');
+  }
+
   const result = {
     servers: servers(),
     playersPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
     lobbyGame: lobbyGame(),
+    gameId: gameId(),
   }
 
   if (searchParams.toString()) {

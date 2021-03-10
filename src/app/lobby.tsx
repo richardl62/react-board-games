@@ -1,30 +1,43 @@
-import { OnlineGame, onlineGames } from './bgio-tools';
+import { OnlineGame, onlineGames, startNewGame } from './bgio-tools';
 import { useOptionsContext } from './options';
-import {Game} from './game';
+import { Game } from './game';
 
-import {nonNull} from '../tools';
+import { nonNull } from '../tools';
 import styles from './app.module.css';
 
+// When includeNames is false, the games are returned as empty spans.
+function makeGridItems(onlineGames: Array<OnlineGame>, includeNames: boolean) {
+    let items : Array<JSX.Element> = [];
+    const key = () => items.length;
 
-function makeGridItems(onlineGame: OnlineGame) {
-    return [
-        <a href={onlineGame.address}>{onlineGame.id}</a>,
-        <span>({onlineGame.name})</span>,
-        <span>{onlineGame.status}</span>,
-    ];
+    for(const index in onlineGames) {
+        const onlineGame = onlineGames[index];
+        items.push(<a href={onlineGame.address} key={key()}>{onlineGame.id}</a>);
+        items.push(<span key={key()}>{includeNames ? '(' + onlineGame.name + ')' : null}</span>);
+        items.push(<span key={key()}>{onlineGame.status}</span>);
+    };
+
+    return items;
 }
 
-function Lobby({ games }: {games: Array<Game>}) {
+interface LobbyProps {
+    games: Array<Game>;
+    showNames?: boolean; // Defaults to true;
+}
+function Lobby(props: LobbyProps) {
+    const games = props.games;
+    const showNames = props.showNames !== false;
+
     const names = games.map(g => g.name);
 
-    const {servers} = useOptionsContext();
-    const onlineGames_= onlineGames(servers).filter(g => names.includes(g.name)); 
+    const { servers } = useOptionsContext();
+    const allGames = onlineGames(servers);
+    const selectedGames = allGames.filter(g => names.includes(g.name));
 
-    const gridItems = onlineGames_.map(makeGridItems);
+    const gridItems = makeGridItems(selectedGames, showNames);
 
     return (
         <div className={nonNull(styles.lobby)}>
-            <h2>I'm prentending to be a lobby</h2>
             <div className={nonNull(styles.lobbyGrid)}>
                 {gridItems.flat()}
             </div>
@@ -32,5 +45,20 @@ function Lobby({ games }: {games: Array<Game>}) {
     );
 }
 
+function GameLobby({ game }: { game: Game }) {
+    const onClick = () => {
+        const newGame = startNewGame(game.name);
+        window.location.href = newGame.address;
+    }
 
-export default Lobby;
+    return (
+        <div className={nonNull(styles.gameLobby)}>
+            <h1>Online Games</h1>
+            <Lobby games={[game]} showNames={false} />
+            <button type='button' onClick={onClick}>New</button>
+        </div>
+    );
+}
+
+
+export { Lobby, GameLobby };

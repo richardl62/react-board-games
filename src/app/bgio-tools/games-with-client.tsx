@@ -20,7 +20,7 @@ interface MakeClientParam {
 
 function makeClient({ game, server, bgioDebugPanel, 
     renderGame, numPlayers }: MakeClientParam) {
-    console.log("makeCient",arguments[0]);
+    // console.log("makeCient",arguments[0]);
     let multiplayer;
     if (server) {
         console.log('Connecting to server:', server);

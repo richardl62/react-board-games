@@ -8,7 +8,7 @@ import styles from './app.module.css';
 import { makeGameWithClient } from './game-renderer';
 
 import { Game } from './game'
-import Lobby from './lobby';
+import {Lobby, GameLobby } from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
 import { Options, OptionsContext, useOptionsContext } from './options';
 
@@ -58,20 +58,21 @@ function PageNotFound(props : GameProps) {
 interface NonLobbyGameProps {
   game: Game;
 }
-function NonLobbyGame({game} : NonLobbyGameProps) {
+function GamePage({game} : NonLobbyGameProps) {
 
-  const Lobby = useOptionsContext();
+  const options = useOptionsContext();
   const makeGameArgs = {
     game: game,
-    nGames: Lobby.playersPerBrowser,
+    nGames: options.playersPerBrowser,
     numPlayers: 1,
-    bgioDebugPanel: Lobby.bgioDebugPanel,
+    bgioDebugPanel: options.bgioDebugPanel,
     server: null,
   };
-  console.log("NonLobbyGame");
-  const nonLobbyGame = makeGameWithClient(makeGameArgs);
 
-  return (<>{nonLobbyGame}</>);
+  return (<div className={nonNull(styles.gamePage)}>
+    {makeGameWithClient(makeGameArgs)}
+    <GameLobby game={game}/>
+  </div>);
 }
 
 interface AppProps {
@@ -88,7 +89,7 @@ function App({games, options} : AppProps) {
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
           const path = gamePath(gd.name);
-          const component = () => <NonLobbyGame game={gd} />;
+          const component = () => <GamePage game={gd} />;
           return (<Route key={path} exact path={path} component={component} />);
         })}
 
