@@ -3,7 +3,7 @@ import {Servers} from '../options';
 export type GameStatus = 'open' | 'started' | 'finished';
 
 export interface OnlineGame {
-    name: string; // Name of the game, e.g. 'chess'.
+    name: string; // Name of the game, e.g. 'chessaside'.
     id: string;   // ID of an individual game.
     address: string; // Link address from the individual game.
     status: GameStatus;
