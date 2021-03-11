@@ -10,7 +10,7 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 import {Lobby, GameLobby } from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
-import { OptionsContext, useOptionsContext } from './context';
+import { OptionsContextt } from './lobby-context';
 import { Options } from "./types";
 
 interface GameProps {
@@ -58,10 +58,10 @@ function PageNotFound(props : GameProps) {
 
 interface NonLobbyGameProps {
   game: Game;
+  options: Options;
 }
-function GamePage({game} : NonLobbyGameProps) {
+function GamePage({game, options} : NonLobbyGameProps) {
 
-  const options = useOptionsContext();
   const makeGameArgs = {
     game: game,
     nGames: options.playersPerBrowser,
@@ -85,12 +85,12 @@ function App({games, options} : AppProps) {
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <OptionsContext.Provider value={options}>
+    <OptionsContextt.Provider value={options}>
       <Switch>
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
           const path = gamePath(gd.name);
-          const component = () => <GamePage game={gd} />;
+          const component = () => <GamePage game={gd} options={options} />;
           return (<Route key={path} exact path={path} component={component} />);
         })}
 
@@ -104,7 +104,7 @@ function App({games, options} : AppProps) {
 
         <Route key="pageNotFound" component={renderPageNotFound} />
       </Switch>
-    </OptionsContext.Provider>
+    </OptionsContextt.Provider>
   );
 }
 

@@ -1,5 +1,5 @@
 import { OnlineGame, onlineGames, startNewGame } from './bgio-tools';
-import { useOptionsContext } from './context';
+import { useOptionsContextt } from './lobby-context';
 import { Game } from './game';
 
 import { nonNull } from '../tools';
@@ -30,7 +30,7 @@ function Lobby(props: LobbyProps) {
 
     const names = games.map(g => g.name);
 
-    const { servers } = useOptionsContext();
+    const { servers } = useOptionsContextt();
     const allGames = onlineGames(servers);
     const selectedGames = allGames.filter(g => names.includes(g.name));
 
