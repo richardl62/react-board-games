@@ -6,8 +6,8 @@ import { gamePath } from '../url-tools';
 import styles from './app.module.css';
 
 import { Game } from './game'
-import {Lobby, GameLobby } from './lobby';
-import {LobbyOldStyle, makeClient as makeBgioClient} from './bgio-tools';
+import { Lobby, GameLobby } from './lobby';
+import { LegacyLobby, makeClient as makeBgioClient} from './bgio-tools';
 import { LobbyContext } from './lobby-context';
 import { LobbyAccess } from "./bgio-tools/lobby-access";
 import { Servers } from "./types";
@@ -31,7 +31,7 @@ function AvailableLinks({games} : GameProps) {
 
       <br/>
       {singleLink("/lobby", "Lobby (For online play)")}
-      {singleLink("/lobby-old-style", "Old Style lobby")}
+      {singleLink("/legacy-lobby", "Legacy lobby (temporary)")}
     </ul>
   );
 }
@@ -106,8 +106,8 @@ function App(props : AppProps) {
           component={() => <Lobby games={games} />}
         />
 
-        <Route key="lobby-old-style" exact path="/lobby-old-style"
-          component={() => <LobbyOldStyle games={games} />}
+        <Route key="legacy-lobby" exact path="/legacy-lobby"
+          component={() => <LegacyLobby games={games} servers={servers} />}
         />
 
         <Route key="pageNotFound" component={renderPageNotFound} />
