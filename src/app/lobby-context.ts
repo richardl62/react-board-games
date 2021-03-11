@@ -1,14 +1,6 @@
 import React, {useContext} from 'react';
-import { Servers } from './types';
+import { LobbyAccess } from './bgio-tools/lobby-access';
 
-export class LobbyAccess {
-  constructor(servers: Servers, activeGame: string | null) {
-    this.servers = servers;
-    this.activeGame = activeGame;
-  }
-  readonly servers : Servers;
-  readonly activeGame: string | null;
-}
 
 export const LobbyContext = React.createContext<LobbyAccess | null>(null);
 

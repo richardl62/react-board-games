@@ -10,7 +10,8 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 import {Lobby, GameLobby } from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
-import { LobbyContext, LobbyAccess } from './lobby-context';
+import { LobbyContext } from './lobby-context';
+import { LobbyAccess } from "./bgio-tools/lobby-access";
 import { Servers } from "./types";
 
 interface GameProps {
