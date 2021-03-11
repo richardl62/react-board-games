@@ -1,6 +1,6 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
-import { Game } from '../game';
+import { Game } from '../game'
 
 interface MakeClientParam {
     game: Game;
@@ -29,4 +29,19 @@ function makeClient({ game, server, bgioDebugPanel, numPlayers }: MakeClientPara
     });
 }
 
-export { makeClient };
+interface gamesWithClientArg extends MakeClientParam {
+    game: Game;
+    server: string | null;
+    bgioDebugPanel: boolean;
+    numPlayers: number;
+}
+
+// Return component(s) that render a game with all component(s) sharing
+// the same Bgio client
+function gamesWithClient(args:  gamesWithClientArg)
+{
+    const BgClient = makeClient(args);
+
+    return (<BgClient playerID={"1"} />);
+}
+export {gamesWithClient as makeClient};
