@@ -11,7 +11,7 @@ import { Game } from './game'
 import {Lobby, GameLobby } from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
 import { LobbyContext, LobbyAccess } from './lobby-context';
-import { Options } from "./types";
+import { Servers } from "./types";
 
 interface GameProps {
   games: Array<Game>;
@@ -56,17 +56,19 @@ function PageNotFound(props : GameProps) {
   )
 }
 
-interface NonLobbyGameProps {
+interface GamePageProps {
   game: Game;
-  options: Options;
+  playersPerBrowser: number;
+  bgioDebugPanel: boolean;
 }
-function GamePage({game, options} : NonLobbyGameProps) {
+
+function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
 
   const makeGameArgs = {
     game: game,
-    nGames: options.playersPerBrowser,
+    nGames: playersPerBrowser,
     numPlayers: 1,
-    bgioDebugPanel: options.bgioDebugPanel,
+    bgioDebugPanel: bgioDebugPanel,
     server: null,
   };
 
@@ -78,19 +80,23 @@ function GamePage({game, options} : NonLobbyGameProps) {
 
 interface AppProps {
   games: Array<Game>;
-  options: Options;
+  playersPerBrowser: number;
+  bgioDebugPanel: boolean;
+  servers: Servers;
+  activeGameId: string | null;
 }
-function App({games, options} : AppProps) {
+function App(props : AppProps) {
+  const {games, servers, activeGameId, } = props;
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <LobbyContext.Provider value={new LobbyAccess(options.servers, options.lobbyGame)}>
+    <LobbyContext.Provider value={new LobbyAccess(servers, activeGameId)}>
       <Switch>
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
           const path = gamePath(gd.name);
-          const component = () => <GamePage game={gd} options={options} />;
+          const component = () => <GamePage game={gd} {...props} />;
           return (<Route key={path} exact path={path} component={component} />);
         })}
 

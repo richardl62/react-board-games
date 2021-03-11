@@ -8,7 +8,7 @@ const options = getOptionsFromLocation(window.location);
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App games={games} options={options} />
+      <App games={games} {...options} />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
