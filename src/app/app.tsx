@@ -63,7 +63,7 @@ interface GamePageProps {
 
 function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
 
-  const bgioClient = makeBgioClient({
+  const BgioClient = makeBgioClient({
     game: game,
     numPlayers: 1,
     bgioDebugPanel: bgioDebugPanel,
@@ -72,7 +72,7 @@ function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
 
   let boards=[];
   for(let i = 0; i < playersPerBrowser; ++i) {
-    boards.push(<div key={i}>{bgioClient}</div>)
+    boards.push(<BgioClient key={i} playerID={i.toString()} />)
   }
   return (<div className={nonNull(styles.gamePage)}>
     {boards}
