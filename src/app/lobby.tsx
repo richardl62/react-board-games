@@ -48,7 +48,8 @@ function Lobby(props: LobbyProps) {
 function GameLobby({ game }: { game: Game }) {
     const onClick = () => {
         const newGame = startNewGame(game.name);
-        window.location.href = newGame.address;
+        console.log("New Game:", newGame)
+        //window.location.href = newGame.address;
     }
 
     return (

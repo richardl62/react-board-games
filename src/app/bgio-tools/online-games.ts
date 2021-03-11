@@ -1,8 +1,9 @@
-//import { LobbyClient } from 'boardgame.io/client'
+import { LobbyClient } from 'boardgame.io/client'
 import {Servers} from '../options';
 import { gamePath } from '../../url-tools'
 export type GameStatus = 'open' | 'started' | 'finished';
 
+const serverHack = " http://localhost:8000/"
 export interface OnlineGame {
     name: string; // Name of the game, e.g. 'chessaside'.
     id: string;   // ID of an individual game.
@@ -20,24 +21,34 @@ games = [
 
 export function onlineGames(servers: Servers) : Array<OnlineGame>  { 
 
-    // console.log("Lobby running on ", servers);
+    console.log("Lobby running on ", servers);
 
 
-    // const lobbyClient = new LobbyClient({ server: servers.lobby});
+    const lobbyClient = new LobbyClient({ server: servers.lobby});
     
-    // lobbyClient.listGames()
-    //   .then(console.log) // => ['chess', 'tic-tac-toe']
-    //   .catch(console.error);
+    lobbyClient.listGames()
+      .then(console.log)
+      .catch(console.error);
       
     return games;
 }
 
-export function startNewGame(name: string) {
-  const id = name[0] + games.length;
+function createMatch(lobbyClient: LobbyClient) : string {
+  lobbyClient.createMatch('bobail', {
+    numPlayers: 2
+  }).then(console.log)
+  .catch(console.error);
+
+  return "dummy";
+}
+
+export function startNewGame(name: string) : OnlineGame {
+  const lobbyClient = new LobbyClient({ server: serverHack});
+  const matchID  = createMatch(lobbyClient);
   const game : OnlineGame = {
     name:name,
-    id: id,
-    address:gamePath(name) + "?id=" + id,
+    id: matchID,
+    address:gamePath(name) + "?id=" + matchID,
     status: 'open',
   }
 console.log(games);
