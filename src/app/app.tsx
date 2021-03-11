@@ -10,7 +10,7 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 import {Lobby, GameLobby } from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
-import { OptionsContextt } from './lobby-context';
+import { LobbyContext, LobbyAccess } from './lobby-context';
 import { Options } from "./types";
 
 interface GameProps {
@@ -85,7 +85,7 @@ function App({games, options} : AppProps) {
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <OptionsContextt.Provider value={options}>
+    <LobbyContext.Provider value={new LobbyAccess(options.servers, options.lobbyGame)}>
       <Switch>
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
@@ -104,7 +104,7 @@ function App({games, options} : AppProps) {
 
         <Route key="pageNotFound" component={renderPageNotFound} />
       </Switch>
-    </OptionsContextt.Provider>
+    </LobbyContext.Provider>
   );
 }
 

@@ -1,19 +1,22 @@
 import React, {useContext} from 'react';
 import { Servers } from './types';
 
-const defaultOptions = {
-  servers: {game: "", lobby: "",},
-  lobbyGame: null,
+export class LobbyAccess {
+  constructor(servers: Servers, activeGame: string | null) {
+    this.servers = servers;
+    this.activeGame = activeGame;
+  }
+  readonly servers : Servers;
+  readonly activeGame: string | null;
 }
 
-interface OptionsContexttType {
-  servers: Servers;
-  lobbyGame: string | null;
-};
+export const LobbyContext = React.createContext<LobbyAccess | null>(null);
 
-export const OptionsContextt = React.createContext<OptionsContexttType>(defaultOptions);
-
-export function useOptionsContextt() {
-  return useContext(OptionsContextt);
+export function useLobbyContext() : LobbyAccess {
+  const context = useContext(LobbyContext);
+  if(!context) {
+    throw new Error("Lobby Context is not set");
+  }
+  return context;
 }
 // Exports are done inline
