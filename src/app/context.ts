@@ -1,16 +1,5 @@
 import React, {useContext} from 'react';
-
-export interface Servers {
-  game: string;
-  lobby: string;
-}
-
-export interface Options {
-  playersPerBrowser: number;
-  bgioDebugPanel: boolean;
-  servers: Servers;
-  lobbyGame: string | null;
-}
+import { Options } from './types';
 
 const defaultOptions : Options = {
   playersPerBrowser: 1,

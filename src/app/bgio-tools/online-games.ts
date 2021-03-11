@@ -1,5 +1,5 @@
 import { LobbyClient } from 'boardgame.io/client'
-import {Servers} from '../options';
+import { Servers } from "../types";
 import { gamePath } from '../../url-tools'
 export type GameStatus = 'open' | 'started' | 'finished';
 

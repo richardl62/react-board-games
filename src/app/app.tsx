@@ -10,7 +10,8 @@ import { makeGameWithClient } from './game-renderer';
 import { Game } from './game'
 import {Lobby, GameLobby } from './lobby';
 import {LobbyOldStyle} from './bgio-tools';
-import { Options, OptionsContext, useOptionsContext } from './options';
+import { OptionsContext, useOptionsContext } from './context';
+import { Options } from "./types";
 
 interface GameProps {
   games: Array<Game>;

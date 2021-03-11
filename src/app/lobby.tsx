@@ -1,5 +1,5 @@
 import { OnlineGame, onlineGames, startNewGame } from './bgio-tools';
-import { useOptionsContext } from './options';
+import { useOptionsContext } from './context';
 import { Game } from './game';
 
 import { nonNull } from '../tools';

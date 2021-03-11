@@ -1,5 +1,5 @@
 import { Lobby } from 'boardgame.io/react';
-import { useOptionsContext } from '../options';
+import { useOptionsContext } from '../context';
 
 interface Game {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
