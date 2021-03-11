@@ -5,11 +5,9 @@ import { gamePath } from '../url-tools';
 
 import styles from './app.module.css';
 
-import { makeGameWithClient } from './game-renderer';
-
 import { Game } from './game'
 import {Lobby, GameLobby } from './lobby';
-import {LobbyOldStyle} from './bgio-tools';
+import {LobbyOldStyle, makeClient as makeBgioClient} from './bgio-tools';
 import { LobbyContext } from './lobby-context';
 import { LobbyAccess } from "./bgio-tools/lobby-access";
 import { Servers } from "./types";
@@ -65,16 +63,15 @@ interface GamePageProps {
 
 function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
 
-  const makeGameArgs = {
+  const BgioClient = makeBgioClient({
     game: game,
-    nGames: playersPerBrowser,
     numPlayers: 1,
     bgioDebugPanel: bgioDebugPanel,
     server: null,
-  };
+  });
 
   return (<div className={nonNull(styles.gamePage)}>
-    {makeGameWithClient(makeGameArgs)}
+    <BgioClient/>
     <GameLobby game={game}/>
   </div>);
 }

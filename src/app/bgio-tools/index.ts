@@ -1,5 +1,5 @@
 export {default as LobbyOldStyle} from './lobby-old-style';
-export {default as gamesWithClient} from './games-with-client';
+export { makeClient } from './make-client';
 export * from './online-games';
 
 
