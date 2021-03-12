@@ -7,9 +7,8 @@ import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
 import { Lobby, GameLobby } from './lobby';
-import { LegacyLobby, makeClient as makeBgioClient} from './bgio-tools';
+import { LegacyLobby, LobbyClient, GameClient} from './bgio-tools';
 import { LobbyContext } from './lobby-context';
-import { LobbyClient } from "./bgio-tools/lobby-client";
 interface GameProps {
   games: Array<Game>;
 } 
@@ -61,7 +60,7 @@ interface GamePageProps {
 
 function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
 
-  const BgioClient = makeBgioClient({
+  const Client = GameClient({
     game: game,
     numPlayers: 1,
     bgioDebugPanel: bgioDebugPanel,
@@ -70,7 +69,7 @@ function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
 
   let boards=[];
   for(let i = 0; i < playersPerBrowser; ++i) {
-    boards.push(<BgioClient key={i} playerID={i.toString()} />)
+    boards.push(<Client key={i} playerID={i.toString()} />)
   }
   return (<div className={nonNull(styles.gamePage)}>
     {boards}

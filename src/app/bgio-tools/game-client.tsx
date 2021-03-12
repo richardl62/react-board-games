@@ -2,15 +2,14 @@ import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
 import { Game } from '../types'
 
-interface MakeClientParam {
+interface GameClientParam {
     game: Game;
     server: string | null;
     bgioDebugPanel: boolean;
     numPlayers: number;
 }
 
-function makeClient({ game, server, bgioDebugPanel, numPlayers }: MakeClientParam) {
-    // console.log("makeCient",arguments[0]);
+function GameClient({ game, server, bgioDebugPanel, numPlayers }: GameClientParam) {
     let multiplayer;
     if (server) {
         console.log('Connecting to server:', server);
@@ -28,4 +27,4 @@ function makeClient({ game, server, bgioDebugPanel, numPlayers }: MakeClientPara
         numPlayers: numPlayers,
     });
 }
-export { makeClient };
+export { GameClient };
