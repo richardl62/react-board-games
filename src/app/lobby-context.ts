@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import { LobbyAccess } from './bgio-tools/lobby-access';
+import { LobbyClient } from './bgio-tools/lobby-client';
 
 
-export const LobbyContext = React.createContext<LobbyAccess | null>(null);
+export const LobbyContext = React.createContext<LobbyClient | null>(null);
 
-export function useLobbyContext() : LobbyAccess {
+export function useLobbyContext() : LobbyClient {
   const context = useContext(LobbyContext);
   if(!context) {
     throw new Error("Lobby Context is not set");

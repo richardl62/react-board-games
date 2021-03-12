@@ -1,18 +1,18 @@
 import { Servers } from '../types';
-import { LobbyClient } from 'boardgame.io/client';
+import { LobbyClient as BgioLobbyClient} from 'boardgame.io/client';
 import { gamePath } from '../../url-tools';
 import { OnlineGame, Game } from '../types';
 
 
-export class LobbyAccess {
+class LobbyClient {
   constructor(servers: Servers, activeGame: string | null) {
     this.servers = servers;
     this.activeGame = activeGame;
-    this._lobbyClient = new LobbyClient({ server: servers.lobby});
+    this._lobbyClient = new BgioLobbyClient({ server: servers.lobby});
   }
   readonly servers: Servers;
   readonly activeGame: string | null;
-  readonly _lobbyClient: LobbyClient;
+  readonly _lobbyClient: BgioLobbyClient;
 
   createMatch(game: Game, numPlayers: number): OnlineGame {
     const { name } = game;
@@ -43,3 +43,5 @@ export class LobbyAccess {
     return [];
   }
 }
+
+export { LobbyClient };

@@ -9,7 +9,7 @@ import { Game, Servers } from "./types";
 import { Lobby, GameLobby } from './lobby';
 import { LegacyLobby, makeClient as makeBgioClient} from './bgio-tools';
 import { LobbyContext } from './lobby-context';
-import { LobbyAccess } from "./bgio-tools/lobby-access";
+import { LobbyClient } from "./bgio-tools/lobby-client";
 interface GameProps {
   games: Array<Game>;
 } 
@@ -91,7 +91,7 @@ function App(props : AppProps) {
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <LobbyContext.Provider value={new LobbyAccess(servers, activeGameId)}>
+    <LobbyContext.Provider value={new LobbyClient(servers, activeGameId)}>
       <Switch>
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
