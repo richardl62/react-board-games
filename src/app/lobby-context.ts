@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { LobbyClient } from './bgio-tools';
+import { LobbyClient } from './bgio-wrapper';
 
 
 export const LobbyContext = React.createContext<LobbyClient | null>(null);

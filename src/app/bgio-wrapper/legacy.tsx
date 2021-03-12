@@ -1,4 +1,4 @@
-import { Lobby } from 'boardgame.io/react';
+import { Lobby as BgioLobby } from 'boardgame.io/react';
 import { Servers, Game } from '../types';
 
 interface LegacyLobbyProps {
@@ -6,7 +6,7 @@ interface LegacyLobbyProps {
     servers: Servers;
 }
 
-function LegacyLobby({ games, servers }: LegacyLobbyProps) {
+function Lobby({ games, servers }: LegacyLobbyProps) {
 
     console.log("Lobby running on ", servers);
 
@@ -17,7 +17,7 @@ function LegacyLobby({ games, servers }: LegacyLobbyProps) {
         }
     });
     return (
-        <Lobby
+        <BgioLobby
             gameServer={servers.game}
             lobbyServer={servers.lobby}
             gameComponents={gameComponents}
@@ -25,4 +25,4 @@ function LegacyLobby({ games, servers }: LegacyLobbyProps) {
     );
 }
 
-export { LegacyLobby };
+export { Lobby };

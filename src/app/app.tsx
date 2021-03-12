@@ -7,7 +7,7 @@ import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
 import { Lobby, GameLobby } from './lobby';
-import { LegacyLobby, LobbyClient, GameClient} from './bgio-tools';
+import { Lobby as LegacyLobby, LobbyClient, GameClient} from './bgio-wrapper';
 import { LobbyContext } from './lobby-context';
 interface GameProps {
   games: Array<Game>;
