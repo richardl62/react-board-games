@@ -1,6 +1,6 @@
-import { OnlineGame, onlineGames, startNewGame } from './bgio-tools';
+import { OnlineGame } from './types'
 import { useLobbyContext } from './lobby-context';
-import { Game } from './game';
+import { Game } from './types';
 
 import { nonNull } from '../tools';
 import styles from './app.module.css';
@@ -30,8 +30,8 @@ function Lobby(props: LobbyProps) {
 
     const names = games.map(g => g.name);
 
-    const { servers } = useLobbyContext();
-    const allGames = onlineGames(servers);
+    const lobbyAccess = useLobbyContext();
+    const allGames = lobbyAccess.listMatches(games);
     const selectedGames = allGames.filter(g => names.includes(g.name));
 
     const gridItems = makeGridItems(selectedGames, showNames);
@@ -46,9 +46,10 @@ function Lobby(props: LobbyProps) {
 }
 
 function GameLobby({ game }: { game: Game }) {
+    const lobbyContext = useLobbyContext();
     const onClick = () => {
-        const newGame = startNewGame(game.name);
-        console.log("New Game:", newGame)
+        const newGame = lobbyContext.createMatch(game, 1);
+        if(!newGame) {} // Suppress unused variable warning
         //window.location.href = newGame.address;
     }
 

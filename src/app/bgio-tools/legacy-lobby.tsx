@@ -1,6 +1,5 @@
 import { Lobby } from 'boardgame.io/react';
-import { Servers } from '../types';
-import { Game } from '../game';
+import { Servers, Game } from '../types';
 
 interface LegacyLobbyProps {
     games: Array<Game>;

@@ -5,13 +5,11 @@ import { gamePath } from '../url-tools';
 
 import styles from './app.module.css';
 
-import { Game } from './game'
+import { Game, Servers } from "./types";
 import { Lobby, GameLobby } from './lobby';
 import { LegacyLobby, makeClient as makeBgioClient} from './bgio-tools';
 import { LobbyContext } from './lobby-context';
 import { LobbyAccess } from "./bgio-tools/lobby-access";
-import { Servers } from "./types";
-
 interface GameProps {
   games: Array<Game>;
 } 
