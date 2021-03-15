@@ -1,66 +1,89 @@
-import { OnlineGame } from './types'
+import { useState } from 'react';
 import { useLobbyContext } from './lobby-context';
 import { Game } from './types';
-
+import { Match, MatchList, CreatedMatch } from './bgio-wrapper'
+// import { matchPath } from '../url-tools'
 import { nonNull } from '../tools';
 import styles from './app.module.css';
+//import { fileURLToPath } from 'url';
 
-// When includeNames is false, the games are returned as empty spans.
-function makeGridItems(onlineGames: Array<OnlineGame>, includeNames: boolean) {
-    let items : Array<JSX.Element> = [];
-    const key = () => items.length;
 
-    for(const index in onlineGames) {
-        const onlineGame = onlineGames[index];
-        items.push(<a href={onlineGame.address} key={key()}>{onlineGame.id}</a>);
-        items.push(<span key={key()}>{includeNames ? '(' + onlineGame.name + ')' : null}</span>);
-        items.push(<span key={key()}>{onlineGame.status}</span>);
-    };
 
-    return items;
-}
+// // When includeNames is false, the games are returned as empty spans.
+// function makeGridItems(game: Game, matches: Array<Match>) {
+//     let items : Array<JSX.Element> = [];
+//     const key = () => items.length;
+
+//     for(const index in matches) {
+//         const match = matches[index];
+//         const address = matchPath(game.name, match.matchID);
+//         items.push(<a href={address} key={key()}>{match.matchID}</a>);;
+//     };
+
+//     return items;
+// }
+
+interface OnlineMatches {
+    unset?: true;
+    waiting?: true;
+    error?: Error;
+    matches?: Array<Match>;
+ }; 
 
 interface LobbyProps {
-    games: Array<Game>;
-    showNames?: boolean; // Defaults to true;
+    game: Game;
+    onlineMatches: OnlineMatches;
 }
-function Lobby(props: LobbyProps) {
-    const games = props.games;
-    const showNames = props.showNames !== false;
 
-    const names = games.map(g => g.name);
-
-    const lobbyAccess = useLobbyContext();
-    const allGames = lobbyAccess.listMatches(games);
-    const selectedGames = allGames.filter(g => names.includes(g.name));
-
-    const gridItems = makeGridItems(selectedGames, showNames);
-
-    return (
-        <div className={nonNull(styles.lobby)}>
-            <div className={nonNull(styles.lobbyGrid)}>
-                {gridItems.flat()}
-            </div>
-        </div>
-    );
+function Lobby({onlineMatches}: LobbyProps) {
+    if(onlineMatches.unset) {
+        return <div>[Unset]</div>;
+    } else if(onlineMatches.waiting) {
+        return <div>...</div>;
+    } else if(onlineMatches.error) {
+        return <div>{"Error: " + onlineMatches.error.message}</div>;
+    } else {
+        const matchesDivs = onlineMatches.matches!.map((match, index) =>
+            <div key={index}>{match.matchID}</div>
+        );
+        return <div>{matchesDivs}</div>
+    }
 }
 
 function GameLobby({ game }: { game: Game }) {
+    const numPlayers = 1; // KLUDGE
     const lobbyContext = useLobbyContext();
-    const onClick = () => {
-        const newGame = lobbyContext.createMatch(game, 1);
-        if(!newGame) {} // Suppress unused variable warning
-        //window.location.href = newGame.address;
+    const [ onlineMatches, setOnlineMatches ] = useState<OnlineMatches>({unset:true});
+
+    const refresh = () => {
+        setOnlineMatches({waiting:true});
+        lobbyContext.listMatches(game).then(
+            (matchList: MatchList) => setOnlineMatches(matchList)
+        ).catch((error: Error) => setOnlineMatches({error: error}));
+    }
+
+    const recordCreatedMatch = (createdMatch: CreatedMatch) => {
+        let matches = onlineMatches.matches || [];
+        //matches.push(createdMatch);
+        setOnlineMatches({matches: matches});
+    };
+
+    const newGame = () => {
+        setOnlineMatches({waiting:true});
+        lobbyContext.createMatch(game, numPlayers).then(
+            createdMatch => recordCreatedMatch(createdMatch)
+        ).catch((error: Error) => setOnlineMatches({error: error}));
     }
 
     return (
         <div className={nonNull(styles.gameLobby)}>
             <h1>Online Games</h1>
-            <Lobby games={[game]} showNames={false} />
-            <button type='button' onClick={onClick}>New</button>
+            <Lobby game={game} onlineMatches={onlineMatches} />
+            <button type='button' onClick={newGame}>New Game</button>
+            <button type='button' onClick={refresh}>Refresh</button>
         </div>
     );
 }
 
 
-export { Lobby, GameLobby };
+export { GameLobby };

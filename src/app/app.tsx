@@ -6,8 +6,9 @@ import { gamePath } from '../url-tools';
 import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
-import { Lobby, GameLobby } from './lobby';
-import { Lobby as LegacyLobby, LobbyClient, GameClient} from './bgio-wrapper';
+import { GameLobby } from './lobby';
+import { LobbyClient, GameClient} from './bgio-wrapper';
+import { Lobby as LegacyLobby } from './bgio-wrapper/legacy';
 import { LobbyContext } from './lobby-context';
 interface GameProps {
   games: Array<Game>;
@@ -98,11 +99,7 @@ function App(props : AppProps) {
           const component = () => <GamePage game={gd} {...props} />;
           return (<Route key={path} exact path={path} component={component} />);
         })}
-
-        <Route key="lobby" exact path="/lobby"
-          component={() => <Lobby games={games} />}
-        />
-
+aaa
         <Route key="legacy-lobby" exact path="/legacy-lobby"
           component={() => <LegacyLobby games={games} servers={servers} />}
         />

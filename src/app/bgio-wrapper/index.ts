@@ -1,6 +1,6 @@
-export { GameClient } from './game-client';
-export { LobbyClient } from './lobby-client';
-export { Lobby } from './lobby';
+export * from './game-client';
+export * from './lobby-client';
+
 
 
 

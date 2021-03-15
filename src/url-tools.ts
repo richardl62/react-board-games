@@ -81,7 +81,13 @@ function gamePath(game: string) {
   return `/${game}`;
 }
 
+function matchPath(game: string, matchID: string) {
+  return gamePath(game) + '?id=' + matchID;
+}
+
 function lobbyPath(game: string) {
   return "/lobby?game=" + game;
 }
-export { getOptionsFromLocation, gamePath, lobbyPath }
+
+
+export { getOptionsFromLocation, gamePath, matchPath, lobbyPath }
