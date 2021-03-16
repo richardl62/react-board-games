@@ -22,7 +22,10 @@ class LobbyClient {
     return this._lobbyClient.createMatch(game.name, {
       numPlayers: 2
     });
+  }
 
+  getMatch(game: Game, matchID: string) {
+    return this._lobbyClient.getMatch(game.name, matchID);
   }
 
   listMatches(game: Game) : Promise<MatchList> {
