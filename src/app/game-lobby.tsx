@@ -13,22 +13,21 @@ interface OnlineMatches {
 };
 
 interface MatchLinkProps {
-    game: Game;
     match: Match;
 }
-function MatchLink({ game, match }: MatchLinkProps) {
-    const path = matchPath(game.name, match.matchID);
+function MatchLink({ match }: MatchLinkProps) {
+    const lobbyClient = useLobbyClient();
+    const path = matchPath(lobbyClient.game.name, match.matchID);
     return (<div>
         <a href={path}>{match.matchID}</a>
     </div>
     );
 };
 interface GameListProps {
-    game: Game;
     onlineMatches: OnlineMatches;
 }
 
-function GameList({ game, onlineMatches }: GameListProps) {
+function GameList({ onlineMatches }: GameListProps) {
     if (onlineMatches.unset) {
         return null;
     }
@@ -49,23 +48,23 @@ function GameList({ game, onlineMatches }: GameListProps) {
             <div>
                 {(matches.length === 0) ? 'No matches found' : null}
                 {matches.map((match, index) => 
-                    <MatchLink game={game} match={match} key={index} />
+                    <MatchLink match={match} key={index} />
                 )}
             </div>
         </>
     );
 }
 
-function Players({ game }: { game: Game }) {
+function Players() {
     const lobbyClient = useLobbyClient();
     const activeMatch = lobbyClient.activeMatch;
     if(activeMatch) {
         (async () => {
             console.log("Getting match info");
-            await lobbyClient.getMatch(game, activeMatch)
+            await lobbyClient.getMatch(activeMatch)
                 .then(match => {
                     console.log("match", match);
-                    lobbyClient.joinActiveMatch(game, '1' /* kludge */);
+                    lobbyClient.joinActiveMatch('1' /* kludge */);
                 })
                 .catch(error => console.log("error", error))
             console.log("Got match info");
@@ -80,14 +79,14 @@ function GameLobby({ game }: { game: Game }) {
 
     const listMatches = () => {
         setOnlineMatches({ waiting: true });
-        lobbyClient.listMatches(game).then(
+        lobbyClient.listMatches().then(
             (matchList: MatchList) => setOnlineMatches(matchList)
         ).catch((error: Error) => setOnlineMatches({ error: error }));
     }
 
     const addCreatedMatch = (createdMatch: CreatedMatch) => {
         // KLUDGE: Use getMatch to get the default propeties for a newly created match.
-        lobbyClient.getMatch(game, createdMatch.matchID).then(
+        lobbyClient.getMatch(createdMatch.matchID).then(
             (match: Match) => {
                 let matches = [match];
                 if (onlineMatches.matches) {
@@ -100,7 +99,7 @@ function GameLobby({ game }: { game: Game }) {
 
     const newMatch = () => {
         setOnlineMatches({ waiting: true });
-        lobbyClient.createMatch(game, numPlayers).then(
+        lobbyClient.createMatch(numPlayers).then(
             (createdMatch: CreatedMatch) => addCreatedMatch(createdMatch)
         ).catch((error: Error) => setOnlineMatches({ error: error }));
     }
@@ -111,8 +110,8 @@ function GameLobby({ game }: { game: Game }) {
                 <button type='button' onClick={newMatch}>New Match</button>
                 <button type='button' onClick={listMatches}>List Matches</button>
             </div>
-            <GameList game={game} onlineMatches={onlineMatches} />
-            <Players game={game}/>
+            <GameList onlineMatches={onlineMatches} />
+            <Players />
         </div>
     );
 }

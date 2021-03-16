@@ -72,10 +72,13 @@ function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
   for(let i = 0; i < playersPerBrowser; ++i) {
     boards.push(<Client key={i} playerID={i.toString()} />)
   }
-  return (<div className={nonNull(styles.gamePage)}>
-    {boards}
-    <GameLobby game={game}/>
-  </div>);
+  return (
+      <div className={nonNull(styles.gamePage)}>
+        {boards}
+        
+        <GameLobby game={game} />
+      </div>
+    );
 }
 
 interface AppProps {
@@ -86,27 +89,30 @@ interface AppProps {
   activeMatch: string | null;
 }
 function App(props : AppProps) {
-  const {games, servers, activeMatch, } = props;
+  const {games, servers, activeMatch } = props;
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <LobbyClientContext.Provider value={new LobbyClient(servers, activeMatch)}>
-      <Switch>
-        <Route key="/" exact path="/" component={renderHomePage} />
-        {games.map(gd => {
-          const path = gamePath(gd.name);
-          const component = () => <GamePage game={gd} {...props} />;
-          return (<Route key={path} exact path={path} component={component} />);
-        })}
-        
-        <Route key="legacy-lobby" exact path="/legacy-lobby"
-          component={() => <LegacyLobby games={games} servers={servers} />}
-        />
+    <Switch>
+      <Route key="/" exact path="/" component={renderHomePage} />
+      {games.map(gd => {
+        const path = gamePath(gd.name);
+        const component = () => (<GamePage game={gd} {...props} />);
 
-        <Route key="pageNotFound" component={renderPageNotFound} />
-      </Switch>
-    </LobbyClientContext.Provider>
+        return (
+          <LobbyClientContext.Provider  key={path} value={new LobbyClient(gd, servers, activeMatch)}>
+            <Route exact path={path} component={component} />
+          </LobbyClientContext.Provider>
+        );
+      })}
+
+      <Route key="legacy-lobby" exact path="/legacy-lobby"
+        component={() => <LegacyLobby games={games} servers={servers} />}
+      />
+
+      <Route key="pageNotFound" component={renderPageNotFound} />
+    </Switch>
   );
 }
 
