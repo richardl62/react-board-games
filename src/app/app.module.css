@@ -49,3 +49,6 @@ body {
     padding: 0px 10;
 }
 
+.gameLobbyButtons > button {
+    margin-right: 2em;
+}
