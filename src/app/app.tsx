@@ -29,7 +29,6 @@ function AvailableLinks({games} : GameProps) {
       {games.map(gd => singleLink(gamePath(gd.name), gd.displayName))}
 
       <br/>
-      {singleLink("/lobby", "Lobby (For online play)")}
       {singleLink("/legacy-lobby", "Legacy lobby (temporary)")}
     </ul>
   );
