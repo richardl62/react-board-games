@@ -58,11 +58,11 @@ function GameList({ game, onlineMatches }: GameListProps) {
 
 function Players({ game }: { game: Game }) {
     const lobbyClient = useLobbyClient();
-    const activeGame = lobbyClient.activeGame;
-    if(activeGame) {
+    const activeMatch = lobbyClient.activeMatch;
+    if(activeMatch) {
         (async () => {
             console.log("Getting match info");
-            await lobbyClient.getMatch(game, activeGame)
+            await lobbyClient.getMatch(game, activeMatch)
                 .then(match => {
                     console.log("match", match);
                     lobbyClient.joinActiveMatch(game, '1' /* kludge */);

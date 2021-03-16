@@ -83,15 +83,15 @@ interface AppProps {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
   servers: Servers;
-  activeGameId: string | null;
+  activeMatch: string | null;
 }
 function App(props : AppProps) {
-  const {games, servers, activeGameId, } = props;
+  const {games, servers, activeMatch, } = props;
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <LobbyClientContext.Provider value={new LobbyClient(servers, activeGameId)}>
+    <LobbyClientContext.Provider value={new LobbyClient(servers, activeMatch)}>
       <Switch>
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
@@ -99,7 +99,7 @@ function App(props : AppProps) {
           const component = () => <GamePage game={gd} {...props} />;
           return (<Route key={path} exact path={path} component={component} />);
         })}
-aaa
+        
         <Route key="legacy-lobby" exact path="/legacy-lobby"
           component={() => <LegacyLobby games={games} servers={servers} />}
         />

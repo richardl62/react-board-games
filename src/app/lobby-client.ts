@@ -8,13 +8,13 @@ export type Match = LobbyAPI.Match;
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 class LobbyClient {
-  constructor(servers: Servers, activeGame: string | null) {
+  constructor(servers: Servers, activeMatch: string | null) {
     this.servers = servers;
-    this.activeGame = activeGame;
+    this.activeMatch = activeMatch;
     this._lobbyClient = new BgioLobbyClient({ server: servers.lobby});
   }
   readonly servers: Servers;
-  readonly activeGame: string | null;
+  readonly activeMatch: string | null;
   readonly _lobbyClient: BgioLobbyClient;
 
   createMatch(game: Game, numPlayers: number): Promise<CreatedMatch> {
@@ -32,10 +32,10 @@ class LobbyClient {
   }
 
   joinActiveMatch(game: Game, playerID: string) {
-    if(!this.activeGame) {
+    if(!this.activeMatch) {
       throw new Error("Active match not specificied");
     }
-    return this._lobbyClient.joinMatch(game.name, this.activeGame, {
+    return this._lobbyClient.joinMatch(game.name, this.activeMatch, {
       playerID: playerID,
       playerName: 'Player ' + playerID,
     })

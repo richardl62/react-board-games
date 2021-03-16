@@ -68,7 +68,7 @@ function getOptionsFromLocation(location: Location) {
     servers: servers(),
     playersPerBrowser: playersPerBrowser(),
     bgioDebugPanel: bgioDebug(),
-    activeGameId: removeParam('id'),
+    activeMatch: removeParam('id'),
   }
 
   if (searchParams.toString()) {
