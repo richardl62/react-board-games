@@ -29,7 +29,7 @@ function AvailableLinks({games} : GameProps) {
       {games.map(gd => singleLink(gamePath(gd.name), gd.displayName))}
 
       <br/>
-      {singleLink("/legacy-lobby", "Legacy lobby (temporary)")}
+      {singleLink("/lobby", "Lobby (to aid with testing)")}
     </ul>
   );
 }
@@ -98,16 +98,16 @@ function App(props : AppProps) {
       <Route key="/" exact path="/" component={renderHomePage} />
       {games.map(gd => {
         const path = gamePath(gd.name);
-        const component = () => (<GamePage game={gd} {...props} />);
-
-        return (
-          <LobbyClientContext.Provider  key={path} value={new LobbyClient(gd, servers, activeMatch)}>
-            <Route exact path={path} component={component} />
-          </LobbyClientContext.Provider>
+        const component = () => (
+            <LobbyClientContext.Provider value={new LobbyClient(gd, servers, activeMatch)}>
+             <GamePage game={gd} {...props} />
+             </LobbyClientContext.Provider>
         );
+
+        return (<Route key={path} exact path={path} component={component} />);
       })}
 
-      <Route key="legacy-lobby" exact path="/legacy-lobby"
+      <Route key="lobby" exact path="/lobby"
         component={() => <LegacyLobby games={games} servers={servers} />}
       />
 
