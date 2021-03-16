@@ -1,5 +1,5 @@
 import { Lobby as BgioLobby } from 'boardgame.io/react';
-import { Servers, Game } from '../types';
+import { Servers, Game } from './types';
 
 interface LegacyLobbyProps {
     games: Array<Game>;
@@ -25,4 +25,4 @@ function Lobby({ games, servers }: LegacyLobbyProps) {
     );
 }
 
-export { Lobby };
+export default Lobby;

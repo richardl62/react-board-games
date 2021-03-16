@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useLobbyContext } from './lobby-context';
 import { Game } from './types';
-import { Match, MatchList, CreatedMatch } from './bgio-wrapper'
+import { Match, MatchList, CreatedMatch, useLobbyClient } from './lobby-client'
 // import { matchPath } from '../url-tools'
 import { nonNull } from '../tools';
 import styles from './app.module.css';
@@ -52,7 +51,7 @@ function Lobby({onlineMatches}: LobbyProps) {
 
 function GameLobby({ game }: { game: Game }) {
     const numPlayers = 1; // KLUDGE
-    const lobbyContext = useLobbyContext();
+    const lobbyContext = useLobbyClient();
     const [ onlineMatches, setOnlineMatches ] = useState<OnlineMatches>({unset:true});
 
     const refresh = () => {
@@ -71,7 +70,7 @@ function GameLobby({ game }: { game: Game }) {
     const newGame = () => {
         setOnlineMatches({waiting:true});
         lobbyContext.createMatch(game, numPlayers).then(
-            createdMatch => recordCreatedMatch(createdMatch)
+            (createdMatch: CreatedMatch) => recordCreatedMatch(createdMatch)
         ).catch((error: Error) => setOnlineMatches({error: error}));
     }
 

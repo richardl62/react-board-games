@@ -1,6 +1,6 @@
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
-import { Game } from '../types'
+import { Game } from './types'
 
 interface GameClientParam {
     game: Game;

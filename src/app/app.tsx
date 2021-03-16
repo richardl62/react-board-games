@@ -6,10 +6,11 @@ import { gamePath } from '../url-tools';
 import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
-import { GameLobby } from './lobby';
-import { LobbyClient, GameClient} from './bgio-wrapper';
-import { Lobby as LegacyLobby } from './bgio-wrapper/legacy';
-import { LobbyContext } from './lobby-context';
+import { GameLobby } from './game-lobby';
+import { LobbyClient } from './lobby-client';
+import { GameClient } from './game-client';
+import LegacyLobby from './legacy-lobby';
+import { LobbyClientContext } from './lobby-client';
 interface GameProps {
   games: Array<Game>;
 } 
@@ -91,7 +92,7 @@ function App(props : AppProps) {
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
-    <LobbyContext.Provider value={new LobbyClient(servers, activeGameId)}>
+    <LobbyClientContext.Provider value={new LobbyClient(servers, activeGameId)}>
       <Switch>
         <Route key="/" exact path="/" component={renderHomePage} />
         {games.map(gd => {
@@ -106,7 +107,7 @@ aaa
 
         <Route key="pageNotFound" component={renderPageNotFound} />
       </Switch>
-    </LobbyContext.Provider>
+    </LobbyClientContext.Provider>
   );
 }
 

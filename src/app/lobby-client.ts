@@ -1,6 +1,7 @@
-import { Servers } from '../types';
+import React, { useContext } from 'react';
+import { Servers } from './types';
 import { LobbyClient as BgioLobbyClient} from 'boardgame.io/client';
-import { Game } from '../types';
+import { Game } from './types';
 import { LobbyAPI } from 'boardgame.io';
 
 export type Match = LobbyAPI.Match;
@@ -29,5 +30,14 @@ class LobbyClient {
   }
 }
 
+const LobbyClientContext = React.createContext<LobbyClient | null>(null);
+
+function useLobbyClient() : LobbyClient {
+  const context = useContext(LobbyClientContext);
+  if(!context) {
+    throw new Error("Lobby Context is not set");
+  }
+  return context;
+}
 // Type exports are done inline
-export { LobbyClient };
+export { LobbyClient, LobbyClientContext, useLobbyClient };
