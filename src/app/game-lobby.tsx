@@ -56,9 +56,26 @@ function GameList({ game, onlineMatches }: GameListProps) {
     );
 }
 
-function GameLobby({ game }: { game: Game }) {
-    const numPlayers = 1; // KLUDGE
+function Players({ game }: { game: Game }) {
     const lobbyClient = useLobbyClient();
+    const activeGame = lobbyClient.activeGame;
+    if(activeGame) {
+        (async () => {
+            console.log("Getting match info");
+            await lobbyClient.getMatch(game, activeGame)
+                .then(match => {
+                    console.log("match", match);
+                    lobbyClient.joinActiveMatch(game, '1' /* kludge */);
+                })
+                .catch(error => console.log("error", error))
+            console.log("Got match info");
+        })();
+    }
+    return <div>Players</div>;
+}
+function GameLobby({ game }: { game: Game }) {
+    const lobbyClient = useLobbyClient();
+    const numPlayers = 2; // KLUDGE
     const [onlineMatches, setOnlineMatches] = useState<OnlineMatches>({ unset: true });
 
     const listMatches = () => {
@@ -95,6 +112,7 @@ function GameLobby({ game }: { game: Game }) {
                 <button type='button' onClick={listMatches}>List Matches</button>
             </div>
             <GameList game={game} onlineMatches={onlineMatches} />
+            <Players game={game}/>
         </div>
     );
 }

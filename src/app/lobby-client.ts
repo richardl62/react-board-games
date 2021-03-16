@@ -7,7 +7,6 @@ import { LobbyAPI } from 'boardgame.io';
 export type Match = LobbyAPI.Match;
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
-
 class LobbyClient {
   constructor(servers: Servers, activeGame: string | null) {
     this.servers = servers;
@@ -30,6 +29,16 @@ class LobbyClient {
 
   listMatches(game: Game) : Promise<MatchList> {
     return this._lobbyClient.listMatches(game.name);
+  }
+
+  joinActiveMatch(game: Game, playerID: string) {
+    if(!this.activeGame) {
+      throw new Error("Active match not specificied");
+    }
+    return this._lobbyClient.joinMatch(game.name, this.activeGame, {
+      playerID: playerID,
+      playerName: 'Player ' + playerID,
+    })
   }
 }
 
