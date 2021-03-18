@@ -274,8 +274,12 @@ class GameControl {
     }
 
     get players() : Players {
+        let caller;
         if(!this._bgioProps.playerID) {
-            throw new Error("PlayerID is null");
+            //     throw new Error("PlayerID is null");
+            caller = -1;
+        } else {
+            caller = parseInt(this._bgioProps.playerID);
         }
 
         const players = this._bgioProps.ctx.playOrder.map(name => {
@@ -283,7 +287,7 @@ class GameControl {
             return `Player ${playerNumber + 1}`
         });
 
-        const caller = parseInt(this._bgioProps.playerID);
+        
 
         return {
             playerNames: players,

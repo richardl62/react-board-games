@@ -6,11 +6,10 @@ import { gamePath } from '../url-tools';
 import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
-import { GameLobby } from './game-lobby';
 import { LobbyClient } from './lobby-client';
-import { GameClient } from './game-client';
 import LegacyLobby from './legacy-lobby';
 import { LobbyClientContext } from './lobby-client';
+import { GamePage } from './game-page';
 interface GameProps {
   games: Array<Game>;
 } 
@@ -51,34 +50,6 @@ function PageNotFound(props : GameProps) {
       <AvailableLinks {...props}/>
     </div>
   )
-}
-
-interface GamePageProps {
-  game: Game;
-  playersPerBrowser: number;
-  bgioDebugPanel: boolean;
-}
-
-function GamePage({game, playersPerBrowser, bgioDebugPanel} : GamePageProps) {
-
-  const Client = GameClient({
-    game: game,
-    numPlayers: 1,
-    bgioDebugPanel: bgioDebugPanel,
-    server: null,
-  });
-
-  let boards=[];
-  for(let i = 0; i < playersPerBrowser; ++i) {
-    boards.push(<Client key={i} playerID={i.toString()} />)
-  }
-  return (
-      <div className={nonNull(styles.gamePage)}>
-        {boards}
-        
-        <GameLobby game={game} />
-      </div>
-    );
 }
 
 interface AppProps {
