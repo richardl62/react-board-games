@@ -27,40 +27,16 @@ async function getActivePlayerID(lobbyClient: LobbyClient) {
   return 1;
 }
 
-interface GamePageProps {
+interface GamePlayProps {
   game: Game;
-  playersPerBrowser: number;
   bgioDebugPanel: boolean;
+  matchID: string;
+  playerID: number;
+  server: string;
 }
+function GamePlay({ game, bgioDebugPanel,  playerID, matchID, server }: GamePlayProps) {
 
-type GamePageStatus = 'working' | {activePlayerID: number | null} | Error;
-
-export function GamePage({ game, playersPerBrowser, bgioDebugPanel }: GamePageProps) {
-  const lobbyClient = useLobbyClient();
-  const [ status, setStatus ] = useState<GamePageStatus>('working');
-
-  useEffect(() => {
-    if(lobbyClient.activeMatch) {
-      getActivePlayerID(lobbyClient).then(pid => {
-        setStatus({ activePlayerID: pid })
-      }).catch(setStatus);
-    } else {
-      setStatus({activePlayerID: null});
-    }
-  }, [lobbyClient])
-
-  if(status === 'working') {
-    return (<div>Working ...</div>);
-  } 
-  
-  if (status instanceof Error) {
-    return (<div>{"Error: " + status.message}</div>)
-  }
-  
   const numPlayers = 2; //KLUDGE
-  const server = lobbyClient.activeMatch && lobbyClient.servers.lobby;
-  const playerID = status.activePlayerID || 1;
-  const matchID = lobbyClient.activeMatch || undefined;
 
   const Client = GameClient({
     game: game,
@@ -71,12 +47,51 @@ export function GamePage({ game, playersPerBrowser, bgioDebugPanel }: GamePagePr
 
   return (
     <div className={nonNull(styles.gamePage)}>
-      <Client 
+      <Client
         matchID={matchID}
-        layerID={playerID.toString()}
+        playerID={playerID.toString()}
       />
-    
-      <GameLobby game={game}/>
     </div>
   );
+}
+
+interface GamePageProps {
+  game: Game;
+  playersPerBrowser: number;
+  bgioDebugPanel: boolean;
+}
+
+export function GamePage({game, bgioDebugPanel}: GamePageProps) {
+  type GamePageStatus = 'working' | { playerID: number } | Error;
+
+  const lobbyClient = useLobbyClient();
+  const [status, setStatus] = useState<GamePageStatus>('working');
+
+  useEffect(() => {
+    getActivePlayerID(lobbyClient).then(pid => {
+      setStatus({ playerID: pid })
+    }).catch(err => setStatus(err));
+  }, [lobbyClient])
+
+  const matchID = lobbyClient.activeMatch;
+  if(!matchID) {
+    return <GameLobby game={game} />;
+  }
+
+  if (status === 'working') {
+    return (<div>Working ...</div>);
+  }
+
+  if (status instanceof Error) {
+    return (<div>{"Error: " + status.message}</div>)
+  }
+
+  return (<GamePlay 
+    game={game}
+    bgioDebugPanel={bgioDebugPanel}
+    matchID={matchID}
+    playerID={status.playerID}
+    server={lobbyClient.servers.lobby}
+  />);
+
 }
