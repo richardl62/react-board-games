@@ -47,6 +47,8 @@ body {
 .gameLobby {
     display: block;
     padding: 0px 10;
+
+    border: 1px purple solid;
 }
 
 .gameLobbyButtons > button {

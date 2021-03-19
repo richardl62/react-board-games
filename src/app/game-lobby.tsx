@@ -55,10 +55,7 @@ function GameList({ onlineMatches }: GameListProps) {
     );
 }
 
-function Players({setPlayerID }: 
-    {  
-      setPlayerID: (arg:string) => void;
-    }) {
+function Players() {
     const lobbyClient = useLobbyClient();
     const [playerInfo, setPlayerInfo] = useState<string|null>(null);
     const activeMatch = lobbyClient.activeMatch;
@@ -82,7 +79,6 @@ function Players({setPlayerID }:
         lobbyClient.joinActiveMatch(p.toString()).then(data=>{
             //console.log("joinMatch", data);
             setPlayerInfo(null);
-            setPlayerID(p.toString());
         }).catch(err => {
             console.log("joinMatch", err);
             setPlayerInfo(playerInfo + '\njoinMatch error: ' + err.message);
@@ -96,10 +92,7 @@ function Players({setPlayerID }:
           </>);
 }
 
-function GameLobby({ game, setPlayerID }: 
-    { game: Game;  
-      setPlayerID: (arg:string) => void;
-    }) {
+function GameLobby({ game }: { game: Game; }) {
     const lobbyClient = useLobbyClient();
     const numPlayers = 2; // KLUDGE
     const [onlineMatches, setOnlineMatches] = useState<OnlineMatches>({ unset: true });
@@ -138,7 +131,7 @@ function GameLobby({ game, setPlayerID }:
                 <button type='button' onClick={listMatches}>List Matches</button>
             </div>
             <GameList onlineMatches={onlineMatches} />
-            <Players setPlayerID={setPlayerID} />
+            <Players/>
         </div>
     );
 }

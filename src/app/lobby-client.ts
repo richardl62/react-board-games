@@ -25,7 +25,16 @@ class LobbyClient {
     });
   }
 
-  getMatch(matchID: string) {
+  getActiveMatch() : Promise<Match> {
+    if(!this.activeMatch) {
+      // Throw rather than failed promise as this is a usage error
+      // rather than a network/server issue.
+      throw new Error("active match not set");
+    }
+    return this._lobbyClient.getMatch(this.game.name, this.activeMatch);
+  }
+
+  getMatch(matchID: string) : Promise<Match> {
     return this._lobbyClient.getMatch(this.game.name, matchID);
   }
 
