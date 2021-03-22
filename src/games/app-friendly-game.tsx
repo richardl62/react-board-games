@@ -22,8 +22,12 @@ function appFriendlyGame(gameDefintion: GameDefinition) {
 
         name: gameDefintion.name,
 
-        setup: () => gameDefintion.initialState,
+        setup: () => {
+            return gameDefintion.initialState;
+        },
+
         moves: moves,
+        
         renderGame: (bgioProps: BgioBoardProps) => (
             <GameWrapper bgioProps={bgioProps} gameDefinition={gameDefintion} />
         ),

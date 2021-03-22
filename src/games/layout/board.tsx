@@ -65,6 +65,10 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
 function Board({ gameControl }: {
     gameControl: GameControl
 }) {
+    if(gameControl.nRows === 0) {
+        return <div>Empty board (game may not have started)</div>;
+    }
+
     const nRows = gameControl.nRows;
     const nCols = gameControl.nCols;
     const borderLabels = gameControl.boardStyle.labels;

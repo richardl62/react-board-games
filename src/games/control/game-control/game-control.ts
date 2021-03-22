@@ -131,14 +131,14 @@ class GameControl {
     flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows); }
 
     get nRows() {
-        return this._gameState.pieces.length;
+        return this._gameState.pieces? this._gameState.pieces[0].length : 0;
     }
 
     get nCols() {
-        return this._gameState.pieces[0].length;
+        return this.nRows > 0 ? this._gameState.pieces[0].length : 0;
     }
+    
     squareProperties(pos: PiecePosition): SquareProperties {
-
         const pieceName = () => {
             if (pos.row !== undefined) {
                 return this._gameState.pieces[pos.row][pos.col];
