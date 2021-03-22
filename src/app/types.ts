@@ -16,4 +16,5 @@ export interface Servers {
   lobby: string;
 }
 
+export const numPlayers = 1;
 // Exports are done inline

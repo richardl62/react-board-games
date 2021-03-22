@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Game } from './types';
+import { Game, numPlayers } from './types';
 import { Match, MatchList, CreatedMatch, useLobbyClient } from './lobby-client'
 import { nonNull } from '../tools';
 import styles from './app.module.css';
@@ -94,7 +94,6 @@ function Players() {
 
 function GameLobby({ game }: { game: Game; }) {
     const lobbyClient = useLobbyClient();
-    const numPlayers = 2; // KLUDGE
     const [onlineMatches, setOnlineMatches] = useState<OnlineMatches>({ unset: true });
 
     const listMatches = () => {

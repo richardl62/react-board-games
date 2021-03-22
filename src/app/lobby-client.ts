@@ -21,7 +21,7 @@ class LobbyClient {
 
   createMatch(numPlayers: number): Promise<CreatedMatch> {
     return this._lobbyClient.createMatch(this.game.name, {
-      numPlayers: 2
+      numPlayers: numPlayers
     });
   }
 

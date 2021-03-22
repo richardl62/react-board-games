@@ -1,25 +1,33 @@
 import { useEffect, useState } from 'react';
+import { Game } from './types'
 import { GameLobby } from './game-lobby';
+
 import { LobbyClient, useLobbyClient } from './lobby-client';
-import { GamePageProps, GamePlay } from './game-play';
+import { GamePlay, Player } from './game-play';
 
 
-async function joinMatch(lobbyClient: LobbyClient) : Promise<number> {
+async function joinMatch(lobbyClient: LobbyClient) : Promise<Player> {
   const match = await lobbyClient.getActiveMatch();
   console.log(match.players);
   for(let ii = 0; ii < match.players.length; ++ii) {
+    const id = match.players[ii].id.toString();
     if(!match.players[ii].name) {
-      await lobbyClient.joinActiveMatch(match.players[ii].id.toString());
-      return match.players[ii].id;
+      const { playerCredentials } = await lobbyClient.joinActiveMatch(id);
+      return {id: id, credentials: playerCredentials};
     }
   }
   throw new Error(`Player cannot join match`);
 }
 
+export interface GamePageProps {
+  game: Game;
+  bgioDebugPanel: boolean;
+}
+
 export function GamePage({game, bgioDebugPanel}: GamePageProps) {
   const lobbyClient = useLobbyClient();
   
-  type GamePageStatus = 'working' | { playerID: number } | Error;
+  type GamePageStatus = 'working' | { player: Player } | Error;
 
 
   const [status, setStatus] = useState<GamePageStatus>('working');
@@ -27,8 +35,8 @@ export function GamePage({game, bgioDebugPanel}: GamePageProps) {
   useEffect(() => {
     if (lobbyClient.activeMatch) {
       console.log("Attempt to join match");
-      joinMatch(lobbyClient).then(pid => {
-        setStatus({ playerID: pid })
+      joinMatch(lobbyClient).then(player => {
+        setStatus({player: player})
       }).catch(err => setStatus(err));
     } 
   }, [lobbyClient])
@@ -50,7 +58,7 @@ export function GamePage({game, bgioDebugPanel}: GamePageProps) {
     game={game}
     bgioDebugPanel={bgioDebugPanel}
     matchID={matchID}
-    playerID={status.playerID}
+    player={status.player}
     server={lobbyClient.servers.lobby}
   />);
 
