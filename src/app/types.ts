@@ -16,5 +16,17 @@ export interface Servers {
   lobby: string;
 }
 
+export interface PlayerID {
+  id: string, 
+  credentials: string
+};
+
+export interface JoinedMatch {
+  game: Game;
+  matchID: string;
+  playerID: string;
+  playerCredentials: string;
+}
+
 export const numPlayers = 1;
 // Exports are done inline

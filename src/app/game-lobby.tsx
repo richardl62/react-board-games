@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Game, numPlayers } from './types';
-import { Match, MatchList, CreatedMatch, useLobbyClient } from './lobby-client'
+import { Game, numPlayers, Servers } from './types';
+import { Match, MatchList, CreatedMatch } from './lobby-client'
 import { nonNull } from '../tools';
 import styles from './app.module.css';
 import { matchPath } from '../url-tools';
+import { LobbyClient } from './lobby-client';
 
 interface OnlineMatches {
     unset?: true;
@@ -14,20 +15,22 @@ interface OnlineMatches {
 
 interface MatchLinkProps {
     match: Match;
+    game: Game;
 }
-function MatchLink({ match }: MatchLinkProps) {
-    const lobbyClient = useLobbyClient();
-    const path = matchPath(lobbyClient.game.name, match.matchID);
+function MatchLink({ match, game }: MatchLinkProps) {
+    const path = matchPath(game.name, match.matchID);
     return (<div>
         <a href={path}>{match.matchID}</a>
     </div>
     );
 };
+
 interface GameListProps {
+    game: Game;
     onlineMatches: OnlineMatches;
 }
 
-function GameList({ onlineMatches }: GameListProps) {
+function GameList({ game, onlineMatches }: GameListProps) {
     if (onlineMatches.unset) {
         return null;
     }
@@ -48,54 +51,17 @@ function GameList({ onlineMatches }: GameListProps) {
             <div>
                 {(matches.length === 0) ? 'No matches found' : null}
                 {matches.map((match, index) => 
-                    <MatchLink match={match} key={index} />
+                    <MatchLink game={game} match={match} key={index} />
                 )}
             </div>
         </>
     );
 }
 
-function Players() {
-    const lobbyClient = useLobbyClient();
-    const [playerInfo, setPlayerInfo] = useState<string|null>(null);
-    const activeMatch = lobbyClient.activeMatch;
-    if(activeMatch && !playerInfo) {
-        setPlayerInfo('...');
-        (async () => {
-            await lobbyClient.getMatch(activeMatch)
-                .then(match => {
-                    //console.log("match", match);
-                    setPlayerInfo(JSON.stringify(match.players));
-                })
-                .catch(error => {
-                    console.log("error", error);
-                    setPlayerInfo(JSON.stringify('Error' + error.message));
-                });
-
-        })();
-    }
-
-    const joinMatch = (p: number) => {
-        lobbyClient.joinActiveMatch(p.toString()).then(data=>{
-            //console.log("joinMatch", data);
-            setPlayerInfo(null);
-        }).catch(err => {
-            console.log("joinMatch", err);
-            setPlayerInfo(playerInfo + '\njoinMatch error: ' + err.message);
-        });
-    }
-    return (<>
-            <h1>Player info</h1>
-            <button type='button' onClick={()=>joinMatch(0)}>Join (0)</button>
-            <button type='button' onClick={()=>joinMatch(1)}>Join (1)</button>
-            <div>{playerInfo}</div>
-          </>);
-}
-
-function GameLobby({ game }: { game: Game; }) {
-    const lobbyClient = useLobbyClient();
+function GameLobby({ game, servers}: { game: Game; servers: Servers }) {
     const [onlineMatches, setOnlineMatches] = useState<OnlineMatches>({ unset: true });
 
+    const lobbyClient = new LobbyClient(game, servers, null);
     const listMatches = () => {
         setOnlineMatches({ waiting: true });
         lobbyClient.listMatches().then(
@@ -129,8 +95,7 @@ function GameLobby({ game }: { game: Game; }) {
                 <button type='button' onClick={newMatch}>New Match</button>
                 <button type='button' onClick={listMatches}>List Matches</button>
             </div>
-            <GameList onlineMatches={onlineMatches} />
-            <Players/>
+            <GameList game={game} onlineMatches={onlineMatches} />
         </div>
     );
 }

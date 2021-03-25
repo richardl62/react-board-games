@@ -6,9 +6,7 @@ import { gamePath } from '../url-tools';
 import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
-import { LobbyClient } from './lobby-client';
 import LegacyLobby from './legacy-lobby';
-import { LobbyClientContext } from './lobby-client';
 import { GamePage } from './game-page';
 interface GameProps {
   games: Array<Game>;
@@ -57,10 +55,10 @@ interface AppProps {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
   servers: Servers;
-  activeMatch: string | null;
+  matchID: string | null;
 }
 function App(props : AppProps) {
-  const {games, servers, activeMatch } = props;
+  const {games, servers } = props;
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
@@ -70,9 +68,7 @@ function App(props : AppProps) {
       {games.map(gd => {
         const path = gamePath(gd.name);
         const component = () => (
-            <LobbyClientContext.Provider value={new LobbyClient(gd, servers, activeMatch)}>
              <GamePage game={gd} {...props} />
-             </LobbyClientContext.Provider>
         );
 
         return (<Route key={path} exact path={path} component={component} />);

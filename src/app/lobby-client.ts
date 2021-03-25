@@ -1,22 +1,21 @@
-import React, { useContext } from 'react';
 import { Servers } from './types';
 import { LobbyClient as BgioLobbyClient} from 'boardgame.io/client';
-import { Game } from './types';
+import { Game, PlayerID } from './types';
 import { LobbyAPI } from 'boardgame.io';
 
 export type Match = LobbyAPI.Match;
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
-class LobbyClient {
-  constructor(game: Game, servers: Servers, activeMatch: string | null) {
+export class LobbyClient {
+  constructor(game: Game, servers: Servers, matchID: string | null) {
     this.game = game;
     this.servers = servers;
-    this.activeMatch = activeMatch;
+    this.matchID = matchID;
     this._lobbyClient = new BgioLobbyClient({ server: servers.lobby});
   }
   readonly game: Game;
   readonly servers: Servers;
-  readonly activeMatch: string | null;
+  readonly matchID: string | null;
   readonly _lobbyClient: BgioLobbyClient;
 
   createMatch(numPlayers: number): Promise<CreatedMatch> {
@@ -26,12 +25,12 @@ class LobbyClient {
   }
 
   getActiveMatch() : Promise<Match> {
-    if(!this.activeMatch) {
+    if(!this.matchID) {
       // Throw rather than failed promise as this is a usage error
       // rather than a network/server issue.
       throw new Error("active match not set");
     }
-    return this._lobbyClient.getMatch(this.game.name, this.activeMatch);
+    return this._lobbyClient.getMatch(this.game.name, this.matchID);
   }
 
   getMatch(matchID: string) : Promise<Match> {
@@ -42,25 +41,27 @@ class LobbyClient {
     return this._lobbyClient.listMatches(this.game.name);
   }
 
-  joinActiveMatch(playerID: string) {
-    if(!this.activeMatch) {
+  async joinMatch() : Promise<PlayerID> {
+    if(!this.matchID) {
       throw new Error("Active match not specificied");
     }
-    return this._lobbyClient.joinMatch(this.game.name, this.activeMatch, {
-      playerID: playerID,
-      playerName: 'Player ' + playerID,
-    })
-  }
+    const match = await this.getActiveMatch();
+    console.log("Active match", match);
+
+    const playerID = match.players[0].id.toString();  //TEMPORARY KLUDGE
+ 
+    const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID, 
+      {
+        playerID: playerID,
+        playerName: 'Player ' + playerID,
+      });
+
+    console.log("joinMatchResult", joinMatchResult);
+
+    return {
+      id: playerID,
+      credentials: joinMatchResult.playerCredentials,
+    }
+  } 
 }
 
-const LobbyClientContext = React.createContext<LobbyClient | null>(null);
-
-function useLobbyClient() : LobbyClient {
-  const context = useContext(LobbyClientContext);
-  if(!context) {
-    throw new Error("Lobby Context is not set");
-  }
-  return context;
-}
-// Type exports are done inline
-export { LobbyClient, LobbyClientContext, useLobbyClient };

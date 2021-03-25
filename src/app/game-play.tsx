@@ -1,23 +1,18 @@
 import { nonNull } from '../tools';
-import { Game, numPlayers } from "./types";
+import { JoinedMatch, numPlayers } from "./types";
 import { Client } from 'boardgame.io/react';
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import styles from './app.module.css';
 
-export interface Player {
-  id: string, 
-  credentials: string
-};
-
 interface GamePlayProps {
-  game: Game;
+  joinedMatch: JoinedMatch ;
   bgioDebugPanel: boolean;
-  matchID: string;
-  player: Player;
   server: string;
 }
-export function GamePlay({ game, bgioDebugPanel, player, matchID, server }: GamePlayProps) {
-  console.log('Connecting', player, 'to', server);
+export function GamePlay({ joinedMatch, bgioDebugPanel, server }: GamePlayProps) {
+  const {game, playerID, playerCredentials, matchID} = joinedMatch;
+  console.log('Connecting', playerID, '-', playerCredentials,
+   'to match', matchID, " on ", server);
 
   const multiplayer = server ? SocketIO({ server: server }) : Local();
   const GameClient = Client({
@@ -32,8 +27,8 @@ export function GamePlay({ game, bgioDebugPanel, player, matchID, server }: Game
     <div className={nonNull(styles.gamePage)}>
       <GameClient
         matchID={matchID}
-        playerID={player.id}
-        credentials={player.credentials}
+        playerID={playerID}
+        credentials={playerCredentials}
       />
     </div>
   );
