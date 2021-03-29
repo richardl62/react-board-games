@@ -131,6 +131,16 @@ function makeSimplifiedName(name: string) {
 function makeGameDefinition<GameSpecificState = never>(
     input: GameDefinitionInput<GameSpecificState>): GameDefinition 
     {
+
+    const initialState = {
+        // Defaults;
+        selectedSquare: null,
+        legalMoves: null,
+
+        // input value
+        ...input.initialState,
+    };
+
     const result = {
         displayName: input.displayName,
         name: makeSimplifiedName(input.displayName),
@@ -141,14 +151,8 @@ function makeGameDefinition<GameSpecificState = never>(
         renderPiece: input.renderPiece,
         moveDescription: input.moveDescription || (() => { return null; }),
 
-        initialState: {
-            // Defaults;
-            selectedSquare: null,
-            legalMoves: null,
-
-            // input value
-            ...input.initialState,
-        },
+        initialState: initialState,
+        setup: () => initialState,
 
         ...onFunctions(input),
     };

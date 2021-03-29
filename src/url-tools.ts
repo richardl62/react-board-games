@@ -71,9 +71,9 @@ function getOptionsFromLocation(location: Location) {
     matchID: removeParam('id'),
   }
 
-  if (searchParams.toString()) {
-    console.log("WARNING: Unprocessed URL search parameters", searchParams.toString());
-  }
+//   if (searchParams.toString()) {
+//     console.log("WARNING: Unprocessed URL search parameters", searchParams.toString());
+//   }
   return result;
 }
 

@@ -1,20 +1,19 @@
+import { AppFriendlyGame } from '../types';
+
 interface G {
   value: number;
 };
 
-const game = {
+const game : AppFriendlyGame = {
   // The name of the game.
   name: 'simple',
   displayName: 'simple',
 
-  // Function that returns the initial value of G.
-  // setupData is an optional custom object that is
-  // passed through the Game Creation API.
   setup: (): G => { return { value: 0 }; },
 
-  turn: {
-    moveLimit: 1,
-  },
+  // turn: {
+  //   moveLimit: 1,
+  // },
 
   moves: {
     // short-form move.

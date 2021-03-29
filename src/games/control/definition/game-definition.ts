@@ -3,6 +3,7 @@ import { PieceName } from "../piece-name";
 import { GameState } from '../game-state';
 import MoveControl from './move-control';
 import { MoveResult } from './move-result';
+import { Game } from 'boardgame.io/core';
 
 // Determines how the board is displayed. Does not affect game play.
 export interface BoardStyle {
@@ -54,7 +55,10 @@ export interface GameDefinition {
     /// change.  This is for page names and is passed to Bgio. 
     name: string;
 
-    initialState : GameState<any>;
+    
+    initialState : GameState<any>
+
+    setup: () => GameState<any>;
 
     offBoardPieces: OffBoardPieces;
 

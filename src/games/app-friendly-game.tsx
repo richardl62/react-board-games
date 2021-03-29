@@ -23,9 +23,7 @@ function appFriendlyGame(gameDefintion: GameDefinition) : AppFriendlyGame {
 
         name: gameDefintion.name,
 
-        setup: () => {
-            return gameDefintion.initialState;
-        },
+        setup: gameDefintion.setup,
 
         moves: moves,
         
