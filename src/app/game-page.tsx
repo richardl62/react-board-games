@@ -4,7 +4,6 @@ import { SocketIO } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
 import { PlayerAndMatchID } from './url-tools';
 import { Servers, Game } from './types'
-import game from '../games/simple-game'
 
 interface GamePageProps {
   bgioDebugPanel: boolean;
@@ -12,7 +11,7 @@ interface GamePageProps {
   servers: Servers;
 }
 
-function GamePage({ servers } : GamePageProps) {
+function GamePage({ game, servers } : GamePageProps) {
   const playerAndMatchID = new PlayerAndMatchID(window.location);
   const {matchID, player} = playerAndMatchID;
   const callback = (matchID: string, player?:Player) => {

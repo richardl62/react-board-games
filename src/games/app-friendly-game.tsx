@@ -2,6 +2,7 @@ import React from 'react'; // KLUDGE
 import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
 import { GameDefinition, GameControl, useGameControlProps, moves } from './control'
 import SimpleGame from './layout';
+import { AppFriendlyGame } from '../types';
 
 interface AppFriendlyGameProps {
     gameDefinition: GameDefinition;
@@ -14,7 +15,7 @@ function GameWrapper({bgioProps, gameDefinition} : AppFriendlyGameProps) {
     return (<SimpleGame gameControl={gameControl} />);
 }
 
-function appFriendlyGame(gameDefintion: GameDefinition) {
+function appFriendlyGame(gameDefintion: GameDefinition) : AppFriendlyGame {
     return {
         // 'displayName' rather than 'name' to avoid confusion with BGIO names, which
         // must be space free.

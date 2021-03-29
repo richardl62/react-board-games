@@ -1,4 +1,4 @@
-export interface Game {
+export interface AppFriendlyGame {
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
     // display purposes.
     displayName: string;
