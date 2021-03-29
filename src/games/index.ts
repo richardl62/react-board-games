@@ -6,12 +6,16 @@
 // const draughts = require('./draughts').default;
 
 
-import bobail from './bobail';
-import chess from './chess';
-import draughts from './draughts';
-import { makeGameDefinition } from './control';
-import appFriendlyGame from './app-friendly-game'
+// import bobail from './bobail';
+// import chess from './chess';
+// import draughts from './draughts';
 
-const gameDefinitions = [...bobail, ...chess, ...draughts].map(g => makeGameDefinition(g));
-const games = gameDefinitions.map(appFriendlyGame);
+// import { makeGameDefinition } from './control';
+// import appFriendlyGame from './app-friendly-game'
+import { Game } from '../types';
+import simpleGame from './simple-game'
+
+//const gameDefinitions : Array<Game> = [...bobail, ...chess, ...draughts].map(g => makeGameDefinition(g));
+const games : Array<Game> = []; //gameDefinitions.map(appFriendlyGame);
+games.push(simpleGame)
 export default games;

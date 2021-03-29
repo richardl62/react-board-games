@@ -5,6 +5,7 @@ interface G {
 const game = {
   // The name of the game.
   name: 'simple',
+  displayName: 'simple',
 
   // Function that returns the initial value of G.
   // setupData is an optional custom object that is
