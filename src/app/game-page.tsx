@@ -1,100 +1,45 @@
-import {  useState } from 'react';
-import { LobbyClient } from 'boardgame.io/client';
-
-import { Game, Servers, JoinedMatch, numPlayers } from './types'
-import { GameLobby } from './game-lobby';
-import { GamePlay } from './game-play';
-
-
-const gameName = 'chess5aside';
-
-
-
-async function joinMatch(game: Game) : Promise<JoinedMatch> {
-  const playerID = '0'; // KLUDGE
-  const lobbyClient = new LobbyClient({ server: 'http://localhost:8000' });
-  const { matchID } = await lobbyClient.createMatch(gameName, {
-    numPlayers: numPlayers
-  });
-
-  const { playerCredentials } = await lobbyClient.joinMatch(
-    game.name,
-    matchID,
-    {
-      playerID: playerID,
-      playerName: 'Alice',
-    }
-  );
-
-  return {
-    game: game,
-    matchID: matchID,
-    playerID: playerID,
-    playerCredentials: playerCredentials,
-  }; 
-}
+import React from 'react';
+import { Lobby, Player } from './lobby';
+import { SocketIO } from 'boardgame.io/multiplayer'
+import { Client } from 'boardgame.io/react';
+import { PlayerAndMatchID } from './url-tools';
+import { Game, Servers } from './types'
 
 interface GamePageProps {
   game: Game;
   bgioDebugPanel: boolean;
-  matchID: string | null;
   servers: Servers;
 }
 
-interface ActiveMatchProps {
-  game: Game;
-  bgioDebugPanel: boolean;
-  matchID: string;
-  servers: Servers;
+function GamePage({game, servers}: GamePageProps) {
+  const playerAndMatchID = new PlayerAndMatchID(window.location);
+  const {matchID, player} = playerAndMatchID;
+  const callback = (matchID: string, player?:Player) => {
+    playerAndMatchID.set(matchID, player);
+    window.location.href = playerAndMatchID.href();
+  }
+
+  if (!(matchID && player)) {
+    return <Lobby 
+      server={servers.lobby}
+      game={game} 
+      matchID={playerAndMatchID.matchID}
+      player={playerAndMatchID.player}
+      callback={callback}
+    />
+  }
+
+  const GameClient = Client({
+    game: game,
+    board: game.renderGame,
+    multiplayer: SocketIO({ server: servers.lobby }),
+  });
+
+  return (<div>
+    <div>{`Match: ${matchID}  Player: ${player.id} (${player.credentials})`}</div>
+    <GameClient matchID={matchID} playerID={player.id} credentials={player.credentials} />
+  </div>);
+
 }
 
-function ActiveMatch(props: ActiveMatchProps ) {
-  const {game, bgioDebugPanel, servers} = props;
-
-  const [joinedMatch, setJoinedMatch] = useState<null | 'waiting' | JoinedMatch | Error>(null);
-  console.log("ActiveMatch player:", joinedMatch);
-
-  if (joinedMatch === null) {
-    setJoinedMatch('waiting');
-    console.log("About to call joinMatch");
- 
-    joinMatch(game).then(joined => {
-      console.log("Join match returned", joined);
-      setJoinedMatch(joined);
-    }).catch(err => {
-      console.error(err);
-      setJoinedMatch(err);
-    });
-    return null;
-  }
-
-  if (joinedMatch instanceof Error) {
-    return (<div>{"Error: " + joinedMatch.message}</div>)
-  }
-
-  if (joinedMatch === 'waiting') {
-    return (<div>Waiting ...</div>);
-  }
-
-  return (
-    <div>
-      <div>{`You are player: ${joinedMatch.playerID}`}</div>
-
-      <GamePlay
-        joinedMatch={joinedMatch}
-        bgioDebugPanel={bgioDebugPanel}
-        server={servers.lobby}
-      />
-    </div>
-  );
-}
-
-
-export function GamePage(props: GamePageProps) {
-  if(props.matchID) {
-    return <ActiveMatch {...props} matchID={props.matchID} />;
-  } else {
-    return <GameLobby {...props} />;
-  }
-}
-
+export { GamePage };
