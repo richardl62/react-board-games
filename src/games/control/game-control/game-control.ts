@@ -139,6 +139,7 @@ class GameControl {
     }
     
     squareProperties(pos: PiecePosition): SquareProperties {
+
         const pieceName = () => {
             if (pos.row !== undefined) {
                 return this._gameState.pieces[pos.row][pos.col];

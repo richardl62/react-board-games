@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import ControlledSquare from './square';
 import { GameControl } from '../control';
 
@@ -65,18 +65,6 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
 function Board({ gameControl }: {
     gameControl: GameControl
 }) {
-    const [count, setCount] = useState(1);
-    if(gameControl.nRows === 0) {
-
-        return (
-            <div>
-                <div>Empty board (game may not have started)</div>
-                <div>{"Count="+count}</div>
-                <button type='button' onClick={()=>setCount(count+1)}>+1</button>
-            </div>
-        )
-        }
-
     const nRows = gameControl.nRows;
     const nCols = gameControl.nCols;
     const borderLabels = gameControl.boardStyle.labels;
