@@ -10,9 +10,9 @@ import draughts from './draughts';
 import { makeGameDefinition } from './control';
 import appFriendlyGame from './app-friendly-game'
 import { AppFriendlyGame } from '../types';
-import simpleGame from './simple-game'
+import plusminus from './plus-minus'
 
 const gameDefinitions = [...bobail, ...chess, ...draughts].map(g => makeGameDefinition(g));
 const games : Array<AppFriendlyGame> = gameDefinitions.map(appFriendlyGame);
-games.push(simpleGame)
+games.push(plusminus)
 export default games;

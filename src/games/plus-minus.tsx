@@ -6,8 +6,8 @@ interface G {
 
 const game : AppFriendlyGame = {
   // The name of the game.
-  name: 'simple',
-  displayName: 'simple',
+  name: 'plusminus',
+  displayName: 'plus minus (for testing)',
 
   setup: (): G => { return { value: 0 }; },
 
