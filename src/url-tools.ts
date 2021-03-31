@@ -1,93 +1,134 @@
-function boolFromParam(param: string | null) {
-  if (param === '' || param === 'true') {
-    return true;
-  } 
-  
-  if (param === 'false') {
-    return false;
-  }
+import { Player } from './app/lobby'; //KLUDGE
 
-  return null;
+interface Parser<type> {
+  parse: (param: string) => type;
+  stringify: (param: type) => string;
 }
 
-function getOptionsFromLocation(location: Location) {
+const stringParser: Parser<string> = {
+  parse: (s: string) => s,
+  stringify: (s: string) => s,
+}
 
-  const searchParams = new URLSearchParams(location.search);
+const numberParser: Parser<number> = {
+  parse: (s: string) => Number(s),
+  stringify: (n: number) => n.toString(),
+}
 
-  // Remove the search parameter with the given name and return it's value.
-  // Special return values:
-  //    null if parameter is not specified.
-  //    true if the parameter is not give a value.
-  //    true/false if the parameter is 'true'/'false'.
-  const removeParam = (name: string) => {
-    const val = searchParams.get(name);
-    searchParams.delete(name);
-    return val;
-  }
 
-  function servers() {
-    const local = location.origin;
-    let remote = local;
-    if (remote === "http://localhost:3000") {
-      console.log("HACK: Artificially setting server for local host");
-      remote = "http://localhost:8000";
-    }
-    return { game: local, lobby: remote };
-  }
-
-  function playersPerBrowser() {
-    const ppb = removeParam('ppb');
-    if (ppb === null)
-      return 1;
-
-    const val = parseInt(ppb);
-    if (!isNaN(val) && val >= 1) {
-      return val;
+const booleanParser : Parser<boolean> = {
+  parse: (s: string) => {
+    if (s === '' || s === 'true') {
+      return true;
     }
 
-    console.log("Warning: Bad parameter for search parameter ppb (number expected)");
-    return 1;
-  }
-
-  function bgioDebug() {
-    const bgdParam = removeParam('bgio-debug');
-    if (bgdParam === null) {
+    if (s === 'false') {
       return false;
     }
 
-    const bgdBool = boolFromParam(bgdParam);
-    if (bgdBool !== null) {
-      return bgdBool;
-    }
+    throw new Error("Bad boolean");
+  },
 
-    console.log("Warning: Bad parameter for search parameter bgio-debug (boolean or nothing expected)");
-    return false;
-  }
-
-  const result = {
-    servers: servers(),
-    playersPerBrowser: playersPerBrowser(),
-    bgioDebugPanel: bgioDebug(),
-    matchID: removeParam('id'),
-  }
-
-//   if (searchParams.toString()) {
-//     console.log("WARNING: Unprocessed URL search parameters", searchParams.toString());
-//   }
-  return result;
+  stringify: (b: boolean) => b ? 'true' : 'false',
 }
 
-function gamePath(game: string) {
+const playerParser: Parser<Player> = {
+  parse: (s: string): Player => {
+    const obj = JSON.parse(s);
+    if (obj instanceof Array && obj.length === 2) {
+      const [id, credentials] = obj;
+      return { id: id, credentials: credentials };
+    }
+
+    throw new Error("Bad player parameter");
+  },
+
+  stringify: (p: Player) => 
+    JSON.stringify([p.id, p.credentials])
+}
+
+class Opt<OptType> {
+  constructor(name: string, parser: Parser<OptType>, default_: OptType | null = null) {
+      this.name = name;
+      this.parser = parser;
+      this.default_ = default_;
+  }
+  private name: string;
+  private parser: Parser<OptType>;
+  private default_?: OptType | null;
+
+  // Remove the search parameter with the given name and return it's value,
+  // or the default if parameter not given
+  get(searchParams: URLSearchParams) {
+    if(searchParams.has(this.name)) {
+      const val = searchParams.get(this.name);
+      searchParams.delete(this.name);
+      return this.parser.parse(val!);
+    }
+
+    return this.default_; 
+  }
+
+  set(searchParams: URLSearchParams, value: OptType | null) {
+    if(value && value !== this.default_) {
+      const str = this.parser.stringify(value);
+      searchParams.set(this.name, str);
+    }
+  }
+};
+
+interface Options {
+  playersPerBrowser: number;
+  bgioDebugPanel: boolean;
+  matchID: string | null;
+  player: Player | null;
+}
+
+const options = {
+  playersPerBrowser: new Opt('ppb', numberParser, 1),
+  bgioDebugPanel: new Opt('debug-panel', booleanParser, false),
+  matchID: new Opt('matchID', stringParser),
+  player: new Opt('player', playerParser),
+}
+
+
+
+export function getUrlParams(searchParams: URLSearchParams) : Options {
+  
+  let obj : any = {}; // KLUDGE - but what is the alternative?
+
+  let key : keyof Options; // Use of this key gives some type checking.
+  for(key in options) {
+    const val = options[key].get(searchParams);
+    obj[key] = val;
+  }
+
+  return obj;
+}
+
+export function setUrlParams(searchParams: URLSearchParams, opts: Options) {
+  
+  let key : keyof Options; // Use of this key gives some type checking.
+  for(key in options) {
+    const val = opts[key];
+    options[key].set(searchParams, val as any); // KLUDGE - but what is the alternative to 'any'?
+  }
+}
+
+export function gamePath(game: string) {
   return `/${game}`;
 }
 
-function matchPath(game: string, matchID: string) {
-  return gamePath(game) + '?id=' + matchID;
+export function matchPath(game: string, matchID: string, player?: Player) {
+  let path = gamePath(game) + '?id=' + matchID;
+  if(player) {
+    path += ' ?player=' + JSON.stringify([player.id, player.credentials]);
+  }
+  return path;
 }
 
-function lobbyPath(game: string) {
+export function lobbyPath(game: string) {
   return "/lobby?game=" + game;
 }
 
-
-export { getOptionsFromLocation, gamePath, matchPath, lobbyPath }
+// Exports are done inline
