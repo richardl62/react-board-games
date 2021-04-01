@@ -1,30 +1,28 @@
 import React from 'react';
-import { Lobby, Player } from './lobby';
+import Lobby from './lobby';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { PlayerAndMatchID } from './url-tools';
 import { Servers, Game } from './types'
-
+import { Player } from '../types';
+import { Options, matchPath } from '../url-tools';
 interface GamePageProps {
-  bgioDebugPanel: boolean;
+  options: Options;
   game: Game;
   servers: Servers;
 }
 
-function GamePage({ game, servers } : GamePageProps) {
-  const playerAndMatchID = new PlayerAndMatchID(window.location);
-  const {matchID, player} = playerAndMatchID;
+function GamePage({ game, servers, options } : GamePageProps) {
+  const {matchID, player} = options;
   const callback = (matchID: string, player?:Player) => {
-    playerAndMatchID.set(matchID, player);
-    window.location.href = playerAndMatchID.href();
+    window.location.href = matchPath(game.name, matchID, player);
   }
 
   if (!(matchID && player)) {
     return <Lobby 
       server={servers.lobby}
       game={game} 
-      matchID={playerAndMatchID.matchID}
-      player={playerAndMatchID.player}
+      matchID={matchID}
+      player={player}
       callback={callback}
     />
   }

@@ -1,4 +1,4 @@
-import { Player } from './app/lobby'; //KLUDGE
+import { Player } from './types'; //KLUDGE
 
 interface Parser<type> {
   parse: (param: string) => type;
@@ -77,7 +77,7 @@ class Opt<OptType> {
   }
 };
 
-interface Options {
+export interface Options {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
   matchID: string | null;
@@ -93,8 +93,8 @@ const options = {
 
 
 
-export function getUrlParams(searchParams: URLSearchParams) : Options {
-  
+export function getOptions(searchParams_: URLSearchParams) : Options {
+  let searchParams = new URLSearchParams(searchParams_);
   let obj : any = {}; // KLUDGE - but what is the alternative?
 
   let key : keyof Options; // Use of this key gives some type checking.
@@ -106,7 +106,7 @@ export function getUrlParams(searchParams: URLSearchParams) : Options {
   return obj;
 }
 
-export function setUrlParams(searchParams: URLSearchParams, opts: Options) {
+export function setOptions(searchParams: URLSearchParams, opts: Options) {
   
   let key : keyof Options; // Use of this key gives some type checking.
   for(key in options) {

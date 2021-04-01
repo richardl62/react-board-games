@@ -8,12 +8,14 @@ import styles from './app.module.css';
 import { Game, Servers } from "./types";
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-interface GameProps {
+import { Options } from '../url-tools';
+
+
+interface HomePageProps {
   games: Array<Game>;
 } 
 
-
-function AvailableLinks({games} : GameProps) {
+function AvailableLinks({games} : HomePageProps) {
   function singleLink(path: string, displayName: string) {
     return (
       <li key={path}>
@@ -31,7 +33,7 @@ function AvailableLinks({games} : GameProps) {
   );
 }
 
-function HomePage(props : GameProps) {
+function HomePage(props : HomePageProps) {
   return (
     <div>
       <h2>Available links</h2>
@@ -40,7 +42,7 @@ function HomePage(props : GameProps) {
   )
 }
 
-function PageNotFound(props : GameProps) {
+function PageNotFound(props : HomePageProps) {
   return (
     <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
@@ -52,10 +54,8 @@ function PageNotFound(props : GameProps) {
 
 interface AppProps {
   games: Array<Game>;
-  playersPerBrowser: number;
-  bgioDebugPanel: boolean;
+  options: Options;
   servers: Servers;
-  matchID: string | null;
 }
 function App(props : AppProps) {
   const {games, servers } = props;

@@ -1,14 +1,8 @@
 import React, {useState} from 'react';
 import { LobbyClient } from 'boardgame.io/client';
+import { Game } from './types';
+import { Player } from '../types';
 
-export interface Player {
-  id: string;
-  credentials: string;
-}
-
-export interface Game {
-  name: string;
-}
 
 interface LobbyProps {
   server: string;
@@ -55,7 +49,7 @@ async function joinMatch(server: string, game: Game, matchID: string) : Promise<
 } 
 
 // Edited copy of JoinMatch
-export function CreateMatch({server, game, callback} : LobbyProps) {
+function CreateMatch({server, game, callback} : LobbyProps) {
   const [progress, setProgress] = useState<null|'waiting'|Error>(null);
 
   if(progress === 'waiting') {
@@ -75,7 +69,7 @@ export function CreateMatch({server, game, callback} : LobbyProps) {
   return <button type='button' onClick={onClick}>Start New Match</button>;
 }
 
-export function JoinMatch({server, game, matchID, callback} : LobbyProps) {
+function JoinMatch({server, game, matchID, callback} : LobbyProps) {
   const [progress, setProgress] = useState<null|'waiting'|Error>(null);
 
   if (!matchID) {
@@ -99,10 +93,12 @@ export function JoinMatch({server, game, matchID, callback} : LobbyProps) {
   return <button type='button' onClick={onClick}>Join Game</button>;
 }
 
-export function Lobby(props : LobbyProps ) {
+function Lobby(props : LobbyProps ) {
     if(props.matchID) {
       return <JoinMatch {...props} />;
     } else {
       return <CreateMatch {...props}/>
     }
 }
+
+export default Lobby;
