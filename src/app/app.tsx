@@ -1,18 +1,21 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
-import { gamePath } from './app-options';
 
 import styles from './app.module.css';
 
-import { Game, Servers } from "./types";
+import { AppGame } from '../app-game'
+import { Servers } from "./types";
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-import { AppOptions } from './app-options';
+import AppOptions from './app-options';
 
+function gameURL(game: AppGame) {
+  return `/${game.name}`;
+}
 
 interface HomePageProps {
-  games: Array<Game>;
+  games: Array<AppGame>;
 } 
 
 function AvailableLinks({games} : HomePageProps) {
@@ -25,7 +28,7 @@ function AvailableLinks({games} : HomePageProps) {
   }
   return (
     <ul>
-      {games.map(gd => singleLink(gamePath(gd.name), gd.displayName))}
+      {games.map(gd => singleLink(gameURL(gd), gd.displayName))}
 
       <br/>
       {singleLink("/lobby", "Lobby (to aid with testing)")}
@@ -53,7 +56,7 @@ function PageNotFound(props : HomePageProps) {
 }
 
 interface AppProps {
-  games: Array<Game>;
+  games: Array<AppGame>;
   options: AppOptions;
   servers: Servers;
 }
@@ -66,7 +69,7 @@ function App(props : AppProps) {
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
       {games.map(gd => {
-        const path = gamePath(gd.name);
+        const path = gameURL(gd);
         const component = () => (
              <GamePage game={gd} {...props} />
         );

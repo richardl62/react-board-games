@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import games from './games';
 import App from './app';
-import { getOptions } from './app/app-options';
-const options = getOptions(new URLSearchParams(window.location.search));
+import AppOptions from './app/app-options';
+const options = new AppOptions(window.location);
 
 const servers = { // KLUDGE
   game: 'http://localhost:3000',

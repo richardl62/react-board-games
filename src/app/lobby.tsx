@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
 import { LobbyClient } from 'boardgame.io/client';
-import { Game, Player } from './types';
+import { AppGame } from '../app-game';
+import { Player } from './types';
+import AppOptions from './app-options';
 
 interface LobbyProps {
   server: string;
-  game: Game;
-  matchID: string | null;
-  player: Player | null;
-  callback: (matchID: string, player?:Player) => void;
+  game: AppGame;
+  options: AppOptions;
 }
 
-function createMatch(server : string, game: Game) {
+function createMatch(server : string, game: AppGame) {
   const lobbyClient = new LobbyClient({server: server});
   return lobbyClient.createMatch(game.name, { numPlayers: 2 });
 }
 
-async function joinMatch(server: string, game: Game, matchID: string) : Promise<Player> {
+async function joinMatch(server: string, game: AppGame, matchID: string) : Promise<Player> {
   const lobbyClient = new LobbyClient({server: server});
 
   const match = await lobbyClient.getMatch(game.name, matchID);
@@ -47,7 +47,7 @@ async function joinMatch(server: string, game: Game, matchID: string) : Promise<
 } 
 
 // Edited copy of JoinMatch
-function CreateMatch({server, game, callback} : LobbyProps) {
+function CreateMatch({server, game, options} : LobbyProps) {
   const [progress, setProgress] = useState<null|'waiting'|Error>(null);
 
   if(progress === 'waiting') {
@@ -61,14 +61,16 @@ function CreateMatch({server, game, callback} : LobbyProps) {
 
   const onClick = () => {
     setProgress('waiting');
-    createMatch(server, game).then(match => callback(match.matchID)).catch(setProgress);
+    createMatch(server, game).then(match => options.matchID = match.matchID).catch(setProgress);
   }
 
   return <button type='button' onClick={onClick}>Start New Match</button>;
 }
 
-function JoinMatch({server, game, matchID, callback} : LobbyProps) {
+function JoinMatch({server, game, options} : LobbyProps) {
   const [progress, setProgress] = useState<null|'waiting'|Error>(null);
+
+  const matchID = options.matchID;
 
   if (!matchID) {
     throw new Error("Attempt to join match without specifying match ID");
@@ -85,14 +87,14 @@ function JoinMatch({server, game, matchID, callback} : LobbyProps) {
 
   const onClick = () => {
     setProgress('waiting');
-    joinMatch(server, game, matchID).then(player => callback(matchID, player)).catch(setProgress);
+    joinMatch(server, game, matchID).then(player => options.player = player).catch(setProgress);
   }
 
   return <button type='button' onClick={onClick}>Join Game</button>;
 }
 
 function Lobby(props : LobbyProps ) {
-    if(props.matchID) {
+    if(props.options.matchID) {
       return <JoinMatch {...props} />;
     } else {
       return <CreateMatch {...props}/>

@@ -1,15 +1,4 @@
-export interface Game {
-  // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
-  // display purposes.
-  displayName: string;
-
-  // Space-free name suitable for passing to bgio.
-  name:string;
-
-  setup: () => any;
-  moves: any; // KLUDGE
-  renderGame: (arg0: any) => JSX.Element;
-}
+import { AppGame } from '../app-game';
 
 export interface Servers {
   game: string;
@@ -22,11 +11,13 @@ export interface Player {
 }
 
 export interface JoinedMatch {
-  game: Game;
+  game: AppGame;
   matchID: string;
   playerID: string;
   playerCredentials: string;
 }
 
 export const numPlayers = 1;
+
+export type { AppGame } from '../app-game';
 // Exports are done inline

@@ -1,28 +1,24 @@
 import React from 'react';
-import { Player, Servers, Game } from './types'
+import { AppGame } from '../app-game';
+import { Servers } from './types'
 import Lobby from './lobby';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { AppOptions, matchPath } from './app-options';
+import { AppOptions } from './app-options';
 interface GamePageProps {
   options: AppOptions;
-  game: Game;
+  game: AppGame;
   servers: Servers;
 }
 
 function GamePage({ game, servers, options } : GamePageProps) {
   const {matchID, player} = options;
-  const callback = (matchID: string, player?:Player) => {
-    window.location.href = matchPath(game.name, matchID, player);
-  }
 
   if (!(matchID && player)) {
     return <Lobby 
       server={servers.lobby}
       game={game} 
-      matchID={matchID}
-      player={player}
-      callback={callback}
+      options={options}
     />
   }
 

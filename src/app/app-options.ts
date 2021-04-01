@@ -55,11 +55,11 @@ class Opt<OptType> {
   }
   private name: string;
   private parser: Parser<OptType>;
-  private default_?: OptType | null;
+  private default_: OptType | null;
 
   // Remove the search parameter with the given name and return it's value,
   // or the default if parameter not given
-  get(searchParams: URLSearchParams) {
+  get(searchParams: URLSearchParams): OptType | null {
     if(searchParams.has(this.name)) {
       const val = searchParams.get(this.name);
       searchParams.delete(this.name);
@@ -77,54 +77,63 @@ class Opt<OptType> {
   }
 };
 
-export interface AppOptions {
-  playersPerBrowser: number;
-  bgioDebugPanel: boolean;
-  matchID: string | null;
-  player: Player | null;
-}
-
-const options = {
-  playersPerBrowser: new Opt('ppb', numberParser, 1),
+const urlOptions = {
+  playersPerBrowser: new Opt<number>('ppb', numberParser, 1),
   bgioDebugPanel: new Opt('debug-panel', booleanParser, false),
   matchID: new Opt('matchID', stringParser),
   player: new Opt('player', playerParser),
 }
 
+export class AppOptions {
+  constructor(location: Location) {
+    this.location = location;
 
+    let sp = new URLSearchParams(location.search);
 
-export function getOptions(searchParams_: URLSearchParams) : AppOptions {
-  let searchParams = new URLSearchParams(searchParams_);
-  let obj : any = {}; // KLUDGE - but what is the alternative?
+    this.playersPerBrowser = urlOptions.playersPerBrowser.get(sp)!;
+    this.bgioDebugPanel = urlOptions.bgioDebugPanel.get(sp)!;
 
-  let key : keyof AppOptions; // Use of this key gives some type checking.
-  for(key in options) {
-    const val = options[key].get(searchParams);
-    obj[key] = val;
+    this._matchID = urlOptions.matchID.get(sp);
+    this._player = urlOptions.player.get(sp);
+
+    if(sp.toString()) {
+      console.log("Unrecongised url parameters", sp.toString())
+    }
   }
 
-  return obj;
-}
+  setURL() {
+    let url = new URL(this.location.href);
 
-export function setOptions(searchParams: URLSearchParams, opts: AppOptions) {
-  
-  let key : keyof AppOptions; // Use of this key gives some type checking.
-  for(key in options) {
-    const val = opts[key];
-    options[key].set(searchParams, val as any); // KLUDGE - but what is the alternative to 'any'?
+    let sp = new URLSearchParams();
+
+    urlOptions.playersPerBrowser.set(sp, this.playersPerBrowser);
+    urlOptions.bgioDebugPanel.set(sp, this.bgioDebugPanel)
+    urlOptions.matchID.set(sp, this._matchID);
+    urlOptions.player.set(sp, this._player);
+
+    url.search = sp.toString();
+    window.location.href = url.href;
   }
-}
 
-export function gamePath(game: string) {
-  return `/${game}`;
-}
+  readonly location: Location;
+  readonly playersPerBrowser: number;
+  readonly bgioDebugPanel: boolean;
 
-export function matchPath(game: string, matchID: string, player?: Player) {
-  let path = gamePath(game) + '?id=' + matchID;
-  if(player) {
-    path += ' ?player=' + JSON.stringify([player.id, player.credentials]);
-  }
-  return path;
-}
+  private _matchID: string | null;
+  private _player: Player | null;
 
-// Exports are done inline
+  get matchID() {return this._matchID;}
+  set matchID(id: string | null) {
+    this._matchID = id;
+    this.setURL();
+  } 
+
+  get player() {return this._player;}
+
+  set player(p: Player | null) {
+    this._player = p;
+    this.setURL();
+  } 
+};
+
+export default AppOptions;

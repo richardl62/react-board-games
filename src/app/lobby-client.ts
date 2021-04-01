@@ -1,19 +1,19 @@
 import { Servers } from './types';
 import { LobbyClient as BgioLobbyClient} from 'boardgame.io/client';
-import { Game, Player } from './types';
+import { AppGame, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
 
 export type Match = LobbyAPI.Match;
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 export class LobbyClient {
-  constructor(game: Game, servers: Servers, matchID: string | null) {
+  constructor(game: AppGame, servers: Servers, matchID: string | null) {
     this.game = game;
     this.servers = servers;
     this.matchID = matchID;
     this._lobbyClient = new BgioLobbyClient({ server: servers.lobby});
   }
-  readonly game: Game;
+  readonly game: AppGame;
   readonly servers: Servers;
   readonly matchID: string | null;
   readonly _lobbyClient: BgioLobbyClient;
