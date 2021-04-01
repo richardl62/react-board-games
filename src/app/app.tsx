@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
-import { gamePath } from '../url-tools';
+import { gamePath } from './url-tools';
 
 import styles from './app.module.css';
 
 import { Game, Servers } from "./types";
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-import { Options } from '../url-tools';
+import { Options } from './url-tools';
 
 
 interface HomePageProps {

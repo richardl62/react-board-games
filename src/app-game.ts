@@ -1,4 +1,4 @@
-export interface AppFriendlyGame {
+export interface AppGame {
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
   // display purposes.
   displayName: string;
@@ -9,9 +9,4 @@ export interface AppFriendlyGame {
   setup: () => any;
   moves: any; // KLUDGE
   renderGame: (arg0: any) => JSX.Element;
-}
-
-export interface Player {
-  id: string;
-  credentials: string;
 }

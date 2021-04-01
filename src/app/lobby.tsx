@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import { LobbyClient } from 'boardgame.io/client';
-import { Game } from './types';
-import { Player } from '../types';
-
+import { Game, Player } from './types';
 
 interface LobbyProps {
   server: string;

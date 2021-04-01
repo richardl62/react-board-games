@@ -1,10 +1,9 @@
 import React from 'react';
+import { Player, Servers, Game } from './types'
 import Lobby from './lobby';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { Servers, Game } from './types'
-import { Player } from '../types';
-import { Options, matchPath } from '../url-tools';
+import { Options, matchPath } from './url-tools';
 interface GamePageProps {
   options: Options;
   game: Game;

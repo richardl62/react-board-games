@@ -1,6 +1,6 @@
 import { Servers } from './types';
 import { LobbyClient as BgioLobbyClient} from 'boardgame.io/client';
-import { Game, PlayerID } from './types';
+import { Game, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
 
 export type Match = LobbyAPI.Match;
@@ -41,7 +41,7 @@ export class LobbyClient {
     return this._lobbyClient.listMatches(this.game.name);
   }
 
-  async joinMatch() : Promise<PlayerID> {
+  async joinMatch() : Promise<Player> {
     if(!this.matchID) {
       throw new Error("Active match not specificied");
     }

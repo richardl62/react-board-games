@@ -16,10 +16,10 @@ export interface Servers {
   lobby: string;
 }
 
-export interface PlayerID {
-  id: string, 
-  credentials: string
-};
+export interface Player {
+  id: string;
+  credentials: string;
+}
 
 export interface JoinedMatch {
   game: Game;

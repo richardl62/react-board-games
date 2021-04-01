@@ -1,10 +1,10 @@
-import { AppFriendlyGame } from '../types';
+import { AppGame } from '../app-game';
 
 interface G {
   value: number;
 };
 
-const game : AppFriendlyGame = {
+const game : AppGame = {
   // The name of the game.
   name: 'plusminus',
   displayName: 'plus minus (for testing)',
