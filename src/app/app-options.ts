@@ -77,7 +77,7 @@ class Opt<OptType> {
   }
 };
 
-export interface Options {
+export interface AppOptions {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
   matchID: string | null;
@@ -93,11 +93,11 @@ const options = {
 
 
 
-export function getOptions(searchParams_: URLSearchParams) : Options {
+export function getOptions(searchParams_: URLSearchParams) : AppOptions {
   let searchParams = new URLSearchParams(searchParams_);
   let obj : any = {}; // KLUDGE - but what is the alternative?
 
-  let key : keyof Options; // Use of this key gives some type checking.
+  let key : keyof AppOptions; // Use of this key gives some type checking.
   for(key in options) {
     const val = options[key].get(searchParams);
     obj[key] = val;
@@ -106,9 +106,9 @@ export function getOptions(searchParams_: URLSearchParams) : Options {
   return obj;
 }
 
-export function setOptions(searchParams: URLSearchParams, opts: Options) {
+export function setOptions(searchParams: URLSearchParams, opts: AppOptions) {
   
-  let key : keyof Options; // Use of this key gives some type checking.
+  let key : keyof AppOptions; // Use of this key gives some type checking.
   for(key in options) {
     const val = opts[key];
     options[key].set(searchParams, val as any); // KLUDGE - but what is the alternative to 'any'?
@@ -125,10 +125,6 @@ export function matchPath(game: string, matchID: string, player?: Player) {
     path += ' ?player=' + JSON.stringify([player.id, player.credentials]);
   }
   return path;
-}
-
-export function lobbyPath(game: string) {
-  return "/lobby?game=" + game;
 }
 
 // Exports are done inline

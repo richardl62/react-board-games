@@ -3,9 +3,9 @@ import { Player, Servers, Game } from './types'
 import Lobby from './lobby';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { Options, matchPath } from './url-tools';
+import { AppOptions, matchPath } from './app-options';
 interface GamePageProps {
-  options: Options;
+  options: AppOptions;
   game: Game;
   servers: Servers;
 }

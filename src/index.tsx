@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import games from './games';
 import App from './app';
-import { getOptions } from './app/url-tools';
+import { getOptions } from './app/app-options';
 const options = getOptions(new URLSearchParams(window.location.search));
 
 const servers = { // KLUDGE
