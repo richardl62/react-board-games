@@ -15,7 +15,7 @@ function gameURL(game: AppGame) {
 }
 
 function onlineGameURL(game: AppGame) {
-  return gameURL(game) + '?online';
+  return gameURL(game) + '/online';
 }
 
 interface HomePageProps {
@@ -64,6 +64,7 @@ interface AppProps {
 }
 function App(props : AppProps) {
   const {games, servers } = props;
+  console.log("App:", props.options);
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
@@ -75,8 +76,15 @@ function App(props : AppProps) {
         const component = () => (
              <GamePage game={gd} {...props} />
         );
+        const onlineComponent = () => (
+          <GamePage game={gd} {...props} online />
+      );
 
-        return (<Route key={path} exact path={path} component={component} />);
+        const onlinePath = onlineGameURL(gd);
+        return ([
+          <Route key={path} exact path={path} component={component} />,
+          <Route key={onlinePath} exact path={onlinePath} component={onlineComponent} />
+          ]);
       })}
 
       <Route key="lobby" exact path="/lobby"

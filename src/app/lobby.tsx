@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { LobbyClient } from 'boardgame.io/client';
 import { AppGame } from '../app-game';
-import { Player } from './types';
+import { Player, Servers } from './types';
 import AppOptions from './app-options';
 
 interface LobbyProps {
-  server: string;
+  servers: Servers;
   game: AppGame;
   options: AppOptions;
 }
@@ -47,7 +47,7 @@ async function joinMatch(server: string, game: AppGame, matchID: string) : Promi
 } 
 
 // Edited copy of JoinMatch
-function CreateMatch({server, game, options} : LobbyProps) {
+function CreateMatch({servers, game, options} : LobbyProps) {
   const [progress, setProgress] = useState<null|'waiting'|Error>(null);
 
   if(progress === 'waiting') {
@@ -61,13 +61,13 @@ function CreateMatch({server, game, options} : LobbyProps) {
 
   const onClick = () => {
     setProgress('waiting');
-    createMatch(server, game).then(match => options.matchID = match.matchID).catch(setProgress);
+    createMatch(servers.lobby, game).then(match => options.matchID = match.matchID).catch(setProgress);
   }
 
   return <button type='button' onClick={onClick}>Start New Match</button>;
 }
 
-function JoinMatch({server, game, options} : LobbyProps) {
+function JoinMatch({servers, game, options} : LobbyProps) {
   const [progress, setProgress] = useState<null|'waiting'|Error>(null);
 
   const matchID = options.matchID;
@@ -87,7 +87,7 @@ function JoinMatch({server, game, options} : LobbyProps) {
 
   const onClick = () => {
     setProgress('waiting');
-    joinMatch(server, game, matchID).then(player => options.player = player).catch(setProgress);
+    joinMatch(servers.lobby, game, matchID).then(player => options.player = player).catch(setProgress);
   }
 
   return <button type='button' onClick={onClick}>Join Game</button>;

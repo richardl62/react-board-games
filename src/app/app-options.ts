@@ -85,6 +85,12 @@ const urlOptions = {
 }
 
 export class AppOptions {
+  readonly location: Location;
+  readonly playersPerBrowser: number;
+  readonly bgioDebugPanel: boolean;
+  private _matchID: string | null;
+  private _player: Player | null;
+
   constructor(location: Location) {
     this.location = location;
 
@@ -96,10 +102,12 @@ export class AppOptions {
     this._matchID = urlOptions.matchID.get(sp);
     this._player = urlOptions.player.get(sp);
 
+
     if(sp.toString()) {
       console.log("Unrecongised url parameters", sp.toString())
     }
   }
+
 
   setURL() {
     let url = new URL(this.location.href);
@@ -115,12 +123,7 @@ export class AppOptions {
     window.location.href = url.href;
   }
 
-  readonly location: Location;
-  readonly playersPerBrowser: number;
-  readonly bgioDebugPanel: boolean;
 
-  private _matchID: string | null;
-  private _player: Player | null;
 
   get matchID() {return this._matchID;}
   set matchID(id: string | null) {
