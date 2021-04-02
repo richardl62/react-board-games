@@ -14,26 +14,28 @@ function gameURL(game: AppGame) {
   return `/${game.name}`;
 }
 
+function onlineGameURL(game: AppGame) {
+  return gameURL(game) + '?online';
+}
+
 interface HomePageProps {
   games: Array<AppGame>;
 } 
 
-function AvailableLinks({games} : HomePageProps) {
-  function singleLink(path: string, displayName: string) {
-    return (
-      <li key={path}>
-        <Link className={nonNull(styles.gameLink)} to={path}>{displayName}</Link>
-      </li>
-    );
-  }
-  return (
-    <ul>
-      {games.map(gd => singleLink(gameURL(gd), gd.displayName))}
+function gameLinks(game: AppGame, index:number) {
+  return [
+      <div key={index*3}>{game.displayName}</div>,
+      <Link key={index*3+1} to={gameURL(game)}>local</Link>,
+      <Link key={index*3+2} to={onlineGameURL(game)}>online</Link>,
+  ]
+}
 
-      <br/>
-      {singleLink("/lobby", "Lobby (to aid with testing)")}
-    </ul>
-  );
+function AvailableLinks({games} : HomePageProps) {
+  return (
+    <div className={nonNull(styles.gameLinks)}>
+      {games.map(gameLinks)}
+    </div>
+  )
 }
 
 function HomePage(props : HomePageProps) {

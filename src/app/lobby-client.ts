@@ -24,23 +24,6 @@ export class LobbyClient {
     });
   }
 
-  getActiveMatch() : Promise<Match> {
-    if(!this.matchID) {
-      // Throw rather than failed promise as this is a usage error
-      // rather than a network/server issue.
-      throw new Error("active match not set");
-    }
-    return this._lobbyClient.getMatch(this.game.name, this.matchID);
-  }
-
-  getMatch(matchID: string) : Promise<Match> {
-    return this._lobbyClient.getMatch(this.game.name, matchID);
-  }
-
-  listMatches() : Promise<MatchList> {
-    return this._lobbyClient.listMatches(this.game.name);
-  }
-
   async joinMatch() : Promise<Player> {
     if(!this.matchID) {
       throw new Error("Active match not specificied");
@@ -62,6 +45,29 @@ export class LobbyClient {
       id: playerID,
       credentials: joinMatchResult.playerCredentials,
     }
-  } 
+  }
+  
+  createAndJoinMatch(numPlayers: number): Promise<CreatedMatch> {
+    return this._lobbyClient.createMatch(this.game.name, {
+      numPlayers: numPlayers
+    });
+  }
+
+  getActiveMatch() : Promise<Match> {
+    if(!this.matchID) {
+      // Throw rather than failed promise as this is a usage error
+      // rather than a network/server issue.
+      throw new Error("active match not set");
+    }
+    return this._lobbyClient.getMatch(this.game.name, this.matchID);
+  }
+
+  getMatch(matchID: string) : Promise<Match> {
+    return this._lobbyClient.getMatch(this.game.name, matchID);
+  }
+
+  listMatches() : Promise<MatchList> {
+    return this._lobbyClient.listMatches(this.game.name);
+  }
 }
 

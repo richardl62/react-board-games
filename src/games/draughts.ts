@@ -102,12 +102,12 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
 
 const games = [
     draughts({
-        name: "Draughts (British)",
+        name: "draughts (british)",
         nRows: 8, nCols: 8, nRowsOfPieces: 3,
     }),
 
     draughts({
-        name: "Draughts (International)",
+        name: "draughts (international)",
         nRows: 10, nCols: 10, nRowsOfPieces: 4,
     }),
 ];

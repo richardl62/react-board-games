@@ -13,7 +13,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.gameLink {
+.gameLinks {
+    display:grid;
+    grid-template-columns: max-content max-content max-content;
+    column-gap: 1em;
+}
+
+.gameLinks div {
     text-transform: capitalize;
 }
 
