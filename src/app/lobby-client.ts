@@ -41,18 +41,22 @@ export class LobbyClient {
   constructor(game: AppGame, servers: Servers, matchID: string | null) {
     this.game = game;
     this.servers = servers;
-    this.matchID = matchID;
+    this._matchID = matchID;
     this._lobbyClient = new BgioLobbyClient({ server: servers.lobby });
   }
   readonly game: AppGame;
   readonly servers: Servers;
-  readonly matchID: string | null;
-  readonly _lobbyClient: BgioLobbyClient;
+  private _matchID: string | null;
+  private _lobbyClient: BgioLobbyClient;
 
-  createMatch(numPlayers: number): Promise<CreatedMatch> {
-    return this._lobbyClient.createMatch(this.game.name, {
+  get matchID() {return this._matchID};
+
+  async createMatch(numPlayers: number): Promise<string> {
+    const createdMatch = await this._lobbyClient.createMatch(this.game.name, {
       numPlayers: numPlayers
     });
+    this._matchID = createdMatch.matchID;
+    return createdMatch.matchID
   }
 
   async joinMatch(): Promise<Player> {
