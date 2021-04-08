@@ -1,4 +1,4 @@
-import { Player } from './types'; //KLUDGE
+import { AppGame, Player } from './types'; //KLUDGE
 
 interface Parser<type> {
   parse: (param: string) => type;
@@ -85,22 +85,22 @@ const urlOptions = {
 }
 
 export class AppOptions {
-  readonly location: Location;
+  readonly url: URL;
   readonly playersPerBrowser: number;
   readonly bgioDebugPanel: boolean;
-  private _matchID: string | null;
-  private _player: Player | null;
+  readonly matchID: string | null;
+  readonly player: Player | null;
 
-  constructor(location: Location) {
-    this.location = location;
+  constructor(url: URL) {
+    this.url = url;
 
-    let sp = new URLSearchParams(location.search);
+    let sp = new URLSearchParams(url.search);
 
     this.playersPerBrowser = urlOptions.playersPerBrowser.get(sp)!;
     this.bgioDebugPanel = urlOptions.bgioDebugPanel.get(sp)!;
 
-    this._matchID = urlOptions.matchID.get(sp);
-    this._player = urlOptions.player.get(sp);
+    this.matchID = urlOptions.matchID.get(sp);
+    this.player = urlOptions.player.get(sp);
 
 
     if(sp.toString()) {
@@ -108,35 +108,22 @@ export class AppOptions {
     }
   }
 
-
-  setURL() {
-    let url = new URL(this.location.href);
-
+  // Golly, this is messy.
+  getURL(game: AppGame, matchID_: string | null, player_: Player | null) {
+    let url = new URL(game.name + '/online', this.url.origin);
     let sp = new URLSearchParams();
+
+    let matchID = matchID_ || this.matchID;
+    let player = player_ || this.player;
 
     urlOptions.playersPerBrowser.set(sp, this.playersPerBrowser);
     urlOptions.bgioDebugPanel.set(sp, this.bgioDebugPanel)
-    urlOptions.matchID.set(sp, this._matchID);
-    urlOptions.player.set(sp, this._player);
+    urlOptions.matchID.set(sp, matchID);
+    urlOptions.player.set(sp, player);
 
     url.search = sp.toString();
-    window.location.href = url.href;
+    return url;
   }
-
-
-
-  get matchID() {return this._matchID;}
-  set matchID(id: string | null) {
-    this._matchID = id;
-    this.setURL();
-  } 
-
-  get player() {return this._player;}
-
-  set player(p: Player | null) {
-    this._player = p;
-    this.setURL();
-  } 
 };
 
 export default AppOptions;

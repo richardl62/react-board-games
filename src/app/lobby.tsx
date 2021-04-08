@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import { LobbyClient } from './lobby-client';
-import { AppGame } from '../app-game';
-import { Servers } from './types';
-import AppOptions from './app-options';
+import { Player } from './types';
 
 const numPlayersKludged = 2;
 
-interface LobbyProps {
-  servers: Servers;
-  game: AppGame;
-  options: AppOptions;
-}
 
 // Edited copy of JoinMatch
-interface CreateMatchProps {
+interface LobbyProps {
   lobbyClient: LobbyClient;
-  options: AppOptions;
+  setMatchAndPlayer: (matchID: string | null, player: Player |  null ) => void;
 }
-function CreateMatch({ lobbyClient, options }: CreateMatchProps) {
+function CreateMatch({ lobbyClient, setMatchAndPlayer }: LobbyProps) {
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
 
   if (progress === 'waiting') {
@@ -31,20 +24,14 @@ function CreateMatch({ lobbyClient, options }: CreateMatchProps) {
 
   const onClick = () => {
     setProgress('waiting');
-    lobbyClient.createMatch(numPlayersKludged).then(match => options.matchID = match.matchID).catch(setProgress);
+    lobbyClient.createMatch(numPlayersKludged).then(match => setMatchAndPlayer(match.matchID, null)).catch(setProgress);
   }
 
   return <button type='button' onClick={onClick}>Start New Match</button>;
 }
 
-function JoinMatch({ lobbyClient, options }: CreateMatchProps) {
+function JoinMatch({ lobbyClient, setMatchAndPlayer }: LobbyProps) {
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
-
-  const matchID = options.matchID;
-
-  if (!matchID) {
-    throw new Error("Attempt to join match without specifying match ID");
-  }
 
   if (progress === 'waiting') {
     return <div>waiting ...</div>
@@ -57,20 +44,18 @@ function JoinMatch({ lobbyClient, options }: CreateMatchProps) {
 
   const onClick = () => {
     setProgress('waiting');
-    lobbyClient.joinMatch().then(player => options.player = player).catch(setProgress);
+    lobbyClient.joinMatch().then(player => setMatchAndPlayer(null, player)).catch(setProgress);
   }
 
   return <button type='button' onClick={onClick}>Join Game</button>;
 }
 
-function Lobby({game, servers, options }: LobbyProps) {
-  const { matchID } = options;
+function Lobby({ lobbyClient, setMatchAndPlayer }: LobbyProps) {
 
-  const lobbyClient = new LobbyClient(game, servers, matchID);
-  if (matchID) {
-    return <JoinMatch lobbyClient={lobbyClient} options={options}/>;
+  if (lobbyClient.matchID) {
+    return <JoinMatch lobbyClient={lobbyClient} setMatchAndPlayer={setMatchAndPlayer}/>;
   } else {
-    return <CreateMatch lobbyClient={lobbyClient} options={options}/>;
+    return <CreateMatch lobbyClient={lobbyClient} setMatchAndPlayer={setMatchAndPlayer}/>;
   }
 }
 

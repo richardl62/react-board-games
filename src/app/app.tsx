@@ -64,7 +64,6 @@ interface AppProps {
 }
 function App(props : AppProps) {
   const {games, servers } = props;
-  console.log("App:", props.options);
    
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
@@ -74,10 +73,10 @@ function App(props : AppProps) {
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-             <GamePage game={gd} {...props} />
+             <GamePage game={gd} {...props} online={false}/>
         );
         const onlineComponent = () => (
-          <GamePage game={gd} {...props} online />
+          <GamePage game={gd} {...props} online={true}/>
       );
 
         const onlinePath = onlineGameURL(gd);

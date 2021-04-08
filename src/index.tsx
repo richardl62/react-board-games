@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import games from './games';
 import App from './app';
 import AppOptions from './app/app-options';
-const options = new AppOptions(window.location);
+const options = new AppOptions(new URL(window.location.href));
 
 const servers = { // KLUDGE
   game: 'http://localhost:3000',
