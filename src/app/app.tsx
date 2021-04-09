@@ -25,17 +25,17 @@ function onlineGameURL(game: AppGame) {
 
 interface HomePageProps {
   games: Array<AppGame>;
-} 
+}
 
-function gameLinks(game: AppGame, index:number) {
+function gameLinks(game: AppGame, index: number) {
   return [
-      <div key={index*3}>{game.displayName}</div>,
-      <Link key={index*3+1} to={gameURL(game)}>local</Link>,
-      <Link key={index*3+2} to={onlineGameURL(game)}>online</Link>,
+    <div key={index * 3}>{game.displayName}</div>,
+    <Link key={index * 3 + 1} to={gameURL(game)}>local</Link>,
+    <Link key={index * 3 + 2} to={onlineGameURL(game)}>online</Link>,
   ]
 }
 
-function AvailableLinks({games} : HomePageProps) {
+function AvailableLinks({ games }: HomePageProps) {
   return (
     <div className={nonNull(styles.gameLinks)}>
       {games.map(gameLinks)}
@@ -43,46 +43,46 @@ function AvailableLinks({games} : HomePageProps) {
   )
 }
 
-function HomePage(props : HomePageProps) {
+function HomePage(props: HomePageProps) {
   return (
     <div>
       <h2>Available links</h2>
-      <AvailableLinks {...props}/>
+      <AvailableLinks {...props} />
     </div>
   )
 }
 
-function PageNotFound(props : HomePageProps) {
+function PageNotFound(props: HomePageProps) {
   return (
     <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
       <div>You could try one of these links:</div>
-      <AvailableLinks {...props}/>
+      <AvailableLinks {...props} />
     </div>
   )
 }
 
 function App() {
   const [appOptions, setAppOptions] = useAppOptions();
-  const renderHomePage = ()=><HomePage games={games}/>;
-  const renderPageNotFound = ()=><PageNotFound games={games}/>;
+  const renderHomePage = () => <HomePage games={games} />;
+  const renderPageNotFound = () => <PageNotFound games={games} />;
   return (
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-             <GamePage game={gd} appOptions={appOptions} setAppOptions={setAppOptions} servers={servers} online={false}/>
+          <GamePage game={gd} appOptions={appOptions} setAppOptions={setAppOptions} servers={servers} online={false} />
         );
         const onlineComponent = () => (
-          <GamePage game={gd} appOptions={appOptions} setAppOptions={setAppOptions} servers={servers} online={true}/>
-      );
+          <GamePage game={gd} appOptions={appOptions} setAppOptions={setAppOptions} servers={servers} online={true} />
+        );
 
         const onlinePath = onlineGameURL(gd);
         return ([
           <Route key={path} exact path={path} component={component} />,
           <Route key={onlinePath} exact path={onlinePath} component={onlineComponent} />
-          ]);
+        ]);
       })}
 
       <Route key="lobby" exact path="/lobby"
