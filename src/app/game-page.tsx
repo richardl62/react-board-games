@@ -3,19 +3,21 @@ import { AppGame } from '../app-game';
 import Lobby from './lobby';
 import { SocketIO, Local } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { LobbyClient } from './lobby-client';
-import { AppOptions } from './app-options';
-import { Servers } from './types';
+import { Player, Servers } from './types';
 
 interface GamePageProps {
-  appOptions: AppOptions;
-  setAppOptions: (opt: AppOptions) => void;
   game: AppGame;
+
+  matchID: string | null;
+  setMatchID: (arg: string) => void;
+  player: Player | null;
+  setPlayer: (arg: Player) => void
+
   servers: Servers;
   online: boolean;
 }
 
-function LocalGame({ game, appOptions } : GamePageProps) {
+function LocalGame({ game } : GamePageProps) {
   const GameClient = Client({
     game: game,
     board: game.renderGame,
@@ -27,8 +29,8 @@ function LocalGame({ game, appOptions } : GamePageProps) {
   </div>);
 }
 
-function OnlineGame({ game, servers, appOptions } : GamePageProps) {
-  const {matchID, player} = appOptions;
+function OnlineGame({ game, matchID, player, servers } : GamePageProps) {
+
   if(!player || !matchID) {
     throw new Error("player and match are not both defined");
   }
@@ -47,15 +49,14 @@ function OnlineGame({ game, servers, appOptions } : GamePageProps) {
 
 
 function GamePage(props: GamePageProps) {
-  const { appOptions, setAppOptions, game, servers, online } = props;
+  const { matchID, player, online } = props;
 
   if(!online) {
     return <LocalGame {...props} />;
-  } else if (appOptions.matchID && appOptions.player) {
+  } else if (matchID && player) {
     return <OnlineGame {...props} />;
   } else {
-    const lobbyClient = new LobbyClient(game, servers, appOptions.matchID);
-    return <Lobby lobbyClient={lobbyClient} appOptions={appOptions} setAppOptions={setAppOptions}/>
+    return <Lobby {...props}/>
   }
 }
 
