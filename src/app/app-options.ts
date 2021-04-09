@@ -111,16 +111,36 @@ function getURLOptions(): URLOptions {
   return result;
 }
 
-const setURLOptions = (appOptions: AppOptions) => {
+const setWindowHref = (options: AppOptions) => {
   const sp = new URLSearchParams();
-  urlParsers.playersPerBrowser.set(sp, appOptions.playersPerBrowser);
-  urlParsers.bgioDebugPanel.set(sp, appOptions.bgioDebugPanel)
-  urlParsers.matchID.set(sp, appOptions.matchID);
+  urlParsers.playersPerBrowser.set(sp, options.playersPerBrowser);
+  urlParsers.bgioDebugPanel.set(sp, options.bgioDebugPanel)
+  urlParsers.matchID.set(sp, options.matchID);
 
   const url = new URL(window.location.href);
   url.search = sp.toString();
 
   window.location.href = url.href;
+}
+
+const setURLOptions = (options: AppOptions) => {
+  const oldOptions = getURLOptions();
+
+  if(oldOptions.playersPerBrowser !== options.playersPerBrowser ||
+    oldOptions.bgioDebugPanel !== options.bgioDebugPanel
+    ) {
+      throw new Error("Illegal change of url parameters");
+    }
+
+  if(oldOptions.matchID !== options.matchID) {
+    if(!oldOptions.matchID && options.matchID) {
+      alert("About to change href");
+      setWindowHref(options);
+    }
+    else {
+      throw new Error("Illegal change of match ID");
+    }
+  }
 }
 
 interface AppOptions extends URLOptions {
