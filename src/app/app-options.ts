@@ -1,4 +1,4 @@
-import { AppGame, Player } from './types'; //KLUDGE
+import { Player } from './types'; //KLUDGE
 
 interface Parser<type> {
   parse: (param: string) => type;
@@ -84,50 +84,49 @@ const urlOptions = {
   player: new Opt('player', playerParser),
 }
 
-class AppOptions {
-  readonly url: URL;
+interface AppOptions {
   readonly playersPerBrowser: number;
   readonly bgioDebugPanel: boolean;
   readonly matchID: string | null;
   readonly player: Player | null;
+};
 
-  constructor(url: URL) {
-    this.url = url;
+type SetAppOptions = (opts: AppOptions) => void;
 
-    let sp = new URLSearchParams(url.search);
+function getAppOptions() : AppOptions {
+    let sp = new URLSearchParams(window.location.href);
 
-    this.playersPerBrowser = urlOptions.playersPerBrowser.get(sp)!;
-    this.bgioDebugPanel = urlOptions.bgioDebugPanel.get(sp)!;
-
-    this.matchID = urlOptions.matchID.get(sp);
-    this.player = urlOptions.player.get(sp);
-
+    const result = {
+      playersPerBrowser: urlOptions.playersPerBrowser.get(sp)!,
+      bgioDebugPanel: urlOptions.bgioDebugPanel.get(sp)!,
+      matchID: urlOptions.matchID.get(sp),
+      player: urlOptions.player.get(sp),
+    }
 
     if(sp.toString()) {
       console.log("Unrecongised url parameters", sp.toString())
     }
-  }
 
-  // Golly, this is messy.
-  getURL(game: AppGame, matchID_: string | null, player_: Player | null) {
-    let url = new URL(game.name + '/online', this.url.origin);
-    let sp = new URLSearchParams();
+    return result;
+}  
 
-    let matchID = matchID_ || this.matchID;
-    let player = player_ || this.player;
+const setAppOptions = (appOptions: AppOptions) => {
+  const sp = new URLSearchParams();
+  urlOptions.playersPerBrowser.set(sp, appOptions.playersPerBrowser);
+  urlOptions.bgioDebugPanel.set(sp, appOptions.bgioDebugPanel)
+  urlOptions.matchID.set(sp, appOptions.matchID);
+  urlOptions.player.set(sp, appOptions.player);
 
-    urlOptions.playersPerBrowser.set(sp, this.playersPerBrowser);
-    urlOptions.bgioDebugPanel.set(sp, this.bgioDebugPanel)
-    urlOptions.matchID.set(sp, matchID);
-    urlOptions.player.set(sp, player);
+  const url = new URL(window.location.href);
+  url.search = sp.toString();
 
-    url.search = sp.toString();
-    return url;
-  }
-};
-
-function useAppOptions () {
-  return new AppOptions(new URL(window.location.href));
-
+  window.location.href = url.href;
 }
-export {AppOptions, useAppOptions };
+
+function useAppOptions () : [AppOptions, SetAppOptions]{
+  const appOptions = getAppOptions();
+  return [appOptions, setAppOptions];
+}
+
+export { useAppOptions };
+export type { AppOptions, SetAppOptions };

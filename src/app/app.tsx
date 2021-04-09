@@ -63,7 +63,7 @@ function PageNotFound(props : HomePageProps) {
 }
 
 function App() {
-  const appOptions = useAppOptions();
+  const [appOptions, setAppOptions] = useAppOptions();
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
@@ -72,10 +72,10 @@ function App() {
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-             <GamePage game={gd} options={appOptions} servers={servers} online={false}/>
+             <GamePage game={gd} appOptions={appOptions} setAppOptions={setAppOptions} servers={servers} online={false}/>
         );
         const onlineComponent = () => (
-          <GamePage game={gd} options={appOptions} servers={servers}  online={true}/>
+          <GamePage game={gd} appOptions={appOptions} setAppOptions={setAppOptions} servers={servers} online={true}/>
       );
 
         const onlinePath = onlineGameURL(gd);

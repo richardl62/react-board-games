@@ -1,19 +1,21 @@
 import React from 'react';
 import { AppGame } from '../app-game';
-import { Player, Servers } from './types'
 import Lobby from './lobby';
 import { SocketIO, Local } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { AppOptions } from './app-options';
 import { LobbyClient } from './lobby-client';
+import { AppOptions } from './app-options';
+import { Servers } from './types';
+
 interface GamePageProps {
-  options: AppOptions;
+  appOptions: AppOptions;
+  setAppOptions: (opt: AppOptions) => void;
   game: AppGame;
   servers: Servers;
   online: boolean;
 }
 
-function LocalGame({ game, options } : GamePageProps) {
+function LocalGame({ game, appOptions } : GamePageProps) {
   const GameClient = Client({
     game: game,
     board: game.renderGame,
@@ -25,8 +27,8 @@ function LocalGame({ game, options } : GamePageProps) {
   </div>);
 }
 
-function OnlineGame({ game, servers, options } : GamePageProps) {
-  const {matchID, player} = options;
+function OnlineGame({ game, servers, appOptions } : GamePageProps) {
+  const {matchID, player} = appOptions;
   if(!player || !matchID) {
     throw new Error("player and match are not both defined");
   }
@@ -45,19 +47,15 @@ function OnlineGame({ game, servers, options } : GamePageProps) {
 
 
 function GamePage(props: GamePageProps) {
-  const { options, game, servers, online } = props;
+  const { appOptions, setAppOptions, game, servers, online } = props;
 
   if(!online) {
     return <LocalGame {...props} />;
-  } else if (options.matchID && options.player) {
+  } else if (appOptions.matchID && appOptions.player) {
     return <OnlineGame {...props} />;
   } else {
-    const lobbyClient = new LobbyClient(game, servers, options.matchID);
-    const setMatchAndPlayer = (match: string | null, player: Player | null) => {
-      const href = options.getURL(game, match, player).href;
-      window.location.href = href;
-    }
-    return <Lobby lobbyClient={lobbyClient} setMatchAndPlayer={setMatchAndPlayer}/>
+    const lobbyClient = new LobbyClient(game, servers, appOptions.matchID);
+    return <Lobby lobbyClient={lobbyClient} appOptions={appOptions} setAppOptions={setAppOptions}/>
   }
 }
 

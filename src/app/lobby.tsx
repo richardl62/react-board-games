@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { AppOptions } from './app-options';
 import { LobbyClient } from './lobby-client';
-import { Player } from './types';
 
 const numPlayersKludged = 2;
 
@@ -8,10 +8,11 @@ const numPlayersKludged = 2;
 // Edited copy of JoinMatch
 interface LobbyProps {
   lobbyClient: LobbyClient;
-  setMatchAndPlayer: (matchID: string | null, player: Player |  null ) => void;
+  appOptions: AppOptions;
+  setAppOptions: (opts: AppOptions) => void;
 }
 
-function Lobby({ lobbyClient, setMatchAndPlayer }: LobbyProps) {
+function Lobby({ lobbyClient, appOptions, setAppOptions }: LobbyProps) {
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
 
   if (progress === 'waiting') {
@@ -26,13 +27,14 @@ function Lobby({ lobbyClient, setMatchAndPlayer }: LobbyProps) {
   const hasMatchID = Boolean(lobbyClient.matchID);
 
   const doJoin = async () => {
-    let matchID = null;
-    if(!hasMatchID) {
-      matchID = await lobbyClient.createMatch(numPlayersKludged);
-    }
-    const player = await lobbyClient.joinMatch();
+    const newAppOptions = {...appOptions};
     
-    setMatchAndPlayer(matchID, player);
+    if(!hasMatchID) {
+      newAppOptions.matchID = await lobbyClient.createMatch(numPlayersKludged);
+    }
+    newAppOptions.player = await lobbyClient.joinMatch();
+    
+    setAppOptions(newAppOptions);
   }
   const onClick = () => {
     setProgress('waiting');
