@@ -1,14 +1,19 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
+import games from '../games';
 
 import styles from './app.module.css';
 
 import { AppGame } from '../app-game'
-import { Servers } from "./types";
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-import AppOptions from './app-options';
+import { useAppOptions } from './app-options';
+
+const servers = { // KLUDGE
+  game: 'http://localhost:3000',
+  lobby: 'http://localhost:8000',
+}
 
 function gameURL(game: AppGame) {
   return `/${game.name}`;
@@ -57,14 +62,8 @@ function PageNotFound(props : HomePageProps) {
   )
 }
 
-interface AppProps {
-  games: Array<AppGame>;
-  options: AppOptions;
-  servers: Servers;
-}
-function App(props : AppProps) {
-  const {games, servers } = props;
-   
+function App() {
+  const appOptions = useAppOptions();
   const renderHomePage = ()=><HomePage games={games}/>;
   const renderPageNotFound = ()=><PageNotFound games={games}/>;
   return (
@@ -73,10 +72,10 @@ function App(props : AppProps) {
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-             <GamePage game={gd} {...props} online={false}/>
+             <GamePage game={gd} options={appOptions} servers={servers} online={false}/>
         );
         const onlineComponent = () => (
-          <GamePage game={gd} {...props} online={true}/>
+          <GamePage game={gd} options={appOptions} servers={servers}  online={true}/>
       );
 
         const onlinePath = onlineGameURL(gd);

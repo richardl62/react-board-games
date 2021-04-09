@@ -84,7 +84,7 @@ const urlOptions = {
   player: new Opt('player', playerParser),
 }
 
-export class AppOptions {
+class AppOptions {
   readonly url: URL;
   readonly playersPerBrowser: number;
   readonly bgioDebugPanel: boolean;
@@ -126,4 +126,8 @@ export class AppOptions {
   }
 };
 
-export default AppOptions;
+function useAppOptions () {
+  return new AppOptions(new URL(window.location.href));
+
+}
+export {AppOptions, useAppOptions };
