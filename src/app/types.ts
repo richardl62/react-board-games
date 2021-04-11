@@ -17,6 +17,22 @@ export interface JoinedMatch {
   playerCredentials: string;
 }
 
+export interface AppOptions {
+  playersPerBrowser: number;
+  bgioDebugPanel: boolean;
+  online: boolean;
+  matchID: string | null;
+  player: Player | null;
+}
+
+export const appOptionsDefault : AppOptions = {
+  playersPerBrowser: 1,
+  bgioDebugPanel: false,
+  online: false,
+  matchID: null,
+  player: null,
+};
+
 export const numPlayers = 1;
 
 export type { AppGame } from '../app-game';

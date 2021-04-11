@@ -1,3 +1,5 @@
+import { AppOptions } from "./types";
+
 function getPlayersPerBrowser(usp: URLSearchParams) {
   const key = 'ppb';
   if(usp.has(key)) {
@@ -43,17 +45,22 @@ function getMatchID(usp: URLSearchParams) {
   return str;
 }
 
-const sp = new URLSearchParams(window.location.search);
-export const playersPerBrowser: number =  getPlayersPerBrowser(sp);
-export const bgioDebugPanel: boolean = getBgioDebugPanel(sp);
-export const matchIDFromURL: string|null = getMatchID(sp);
- 
+function getURLOptions() : Partial<AppOptions> {
+  const sp = new URLSearchParams(window.location.search);
+  const result = {
+    playersPerBrowser: getPlayersPerBrowser(sp),
+    bgioDebugPanel: getBgioDebugPanel(sp),
+    matchID: getMatchID(sp),
+  }
 
-if (sp.toString()) {
-  console.log("Unrecongised url parameters", sp.toString())
+  if (sp.toString()) {
+    console.log("Unrecongised url parameters", sp.toString())
+  }
+
+  return result;
 }
 
-export function setMatchID(matchID: string) {
+function setMatchID(matchID: string) {
   let url = new URL(window.location.href);
   let seachParams = new URLSearchParams(url.search);
   if(seachParams.has('matchID')) {
@@ -61,6 +68,8 @@ export function setMatchID(matchID: string) {
   }
   seachParams.set('matchID', matchID);
   url.search = seachParams.toString();
-  
+
   window.location.href = url.href;
 }
+
+export { getURLOptions, setMatchID }
