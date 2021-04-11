@@ -14,6 +14,7 @@ import { getURLOptions } from './url-options';
 const appOptionsDefault : AppOptions = {
   playersPerBrowser: 1,
   bgioDebugPanel: false,
+  playStatus: null,
   matchID: null,
   player: null,
 };
@@ -69,7 +70,11 @@ function App() {
   const [appState, setAppState] = useState<AppOptions>(initialAppOptions);
 
   const setAppOptions: SetAppOptions = (options: Partial<AppOptions>) => {
-    setAppState({...appState, ...options});
+    let newState = {...appState, ...options};
+    if(newState.player && newState.matchID) {
+      newState.playStatus = 'online';
+    }
+    setAppState(newState);
   } 
 
   const renderHomePage = () => <HomePage games={games} />;

@@ -11,18 +11,19 @@ export interface Player {
 }
 
 export interface JoinedMatch {
+
   game: AppGame;
   matchID: string;
   playerID: string;
   playerCredentials: string;
 }
 
-export const LocalMatch = 'local match';
-
 export interface AppOptions {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
-  matchID: string | typeof LocalMatch | null;
+
+  playStatus: 'local' | 'online' | null; // non-null when ready to play.
+  matchID: string | null;
   player: Player | null;
 }
 

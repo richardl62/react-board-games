@@ -3,7 +3,7 @@ import { AppGame } from '../app-game';
 import Lobby from './lobby';
 import { SocketIO, Local } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { AppOptions, LocalMatch, Servers, SetAppOptions } from './types';
+import { AppOptions, Servers, SetAppOptions } from './types';
 
 interface GamePageProps {
   game: AppGame;
@@ -46,11 +46,11 @@ function PlayOnline({ game, appOptions, servers } : GamePageProps) {
 
 
 function GamePage(props: GamePageProps) {
-  const { player, matchID } = props.appOptions;
+  const { playStatus } = props.appOptions;
 
-  if (matchID === LocalMatch) {
+  if (playStatus === 'local') {
     return <PlayLocal {...props} />;
-  } else if (matchID && player) {
+  } else if (playStatus === 'online') {
     return <PlayOnline  {...props}/>
   } else {
     return <Lobby {...props}/>

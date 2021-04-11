@@ -13,10 +13,12 @@ interface LobbyProps {
   setAppOptions: SetAppOptions;
 }
 
-function Lobby({ game, servers, appOptions, setAppOptions} : LobbyProps) {
-  const lobbyClient = new LobbyClient(game, servers, appOptions.matchID);
-  
+function Lobby({ game, servers, appOptions, setAppOptions }: LobbyProps) {
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
+
+  if(appOptions.playStatus !== null) {
+    throw new Error("Bad play status in lobby");
+  }
 
   if (progress === 'waiting') {
     return <div>waiting ...</div>
@@ -27,29 +29,36 @@ function Lobby({ game, servers, appOptions, setAppOptions} : LobbyProps) {
     return <div>{`Error: ${progress.message}`}</div>
   }
 
-  const hasMatchID = Boolean(lobbyClient.matchID);
+  const { matchID } = appOptions;
+  const lobbyClient = new LobbyClient(game, servers, matchID);
+  const hasMatchID = Boolean(matchID);
 
-  const doJoin = async () => {    
-    if(hasMatchID) {
+
+  const doJoin = async () => {
+    if (hasMatchID) {
       setAppOptions({
-        ...appOptions,
         player: await lobbyClient.joinMatch(),
       })
     } else {
       setAppOptions({
-        ...appOptions,
         matchID: await lobbyClient.createMatch(numPlayersKludged)
       });
     }
   }
-  const onClick = () => {
+
+  const onJoin = (args: any) => {
+    console.log("In onJoin: matchID", matchID, "player", appOptions.player);
     setProgress('waiting');
     doJoin().catch(setProgress);
   }
 
-  return <button type='button' onClick={onClick}>
-      {hasMatchID ? 'Join Match' : 'Create Match'}
-    </button>;
+  return (<>
+    <div>
+      <label htmlFor="online">Online</label>
+      <input type="checkbox" id="online" name="online"/>
+    </div>
+    <button type="button" onClick={onJoin}>Join</button>
+  </>);
 }
 
 export default Lobby;
