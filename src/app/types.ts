@@ -17,21 +17,14 @@ export interface JoinedMatch {
   playerCredentials: string;
 }
 
+export const LocalMatch = 'local match';
+
 export interface AppOptions {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
-  online: boolean;
-  matchID: string | null;
+  matchID: string | typeof LocalMatch | null;
   player: Player | null;
 }
-
-export const appOptionsDefault : AppOptions = {
-  playersPerBrowser: 1,
-  bgioDebugPanel: false,
-  online: false,
-  matchID: null,
-  player: null,
-};
 
 export type SetAppOptions = (options: Partial<AppOptions>) => void;
 

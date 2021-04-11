@@ -8,8 +8,15 @@ import styles from './app.module.css';
 import { AppGame } from '../app-game'
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-import { AppOptions, appOptionsDefault, SetAppOptions } from './types';
+import { AppOptions, SetAppOptions } from './types';
 import { getURLOptions } from './url-options';
+
+const appOptionsDefault : AppOptions = {
+  playersPerBrowser: 1,
+  bgioDebugPanel: false,
+  matchID: null,
+  player: null,
+};
 
 const servers = { // KLUDGE
   game: 'http://localhost:3000',
@@ -20,26 +27,20 @@ function gameURL(game: AppGame) {
   return `/${game.name}`;
 }
 
-function onlineGameURL(game: AppGame) {
-  return gameURL(game) + '/online';
-}
-
 interface HomePageProps {
   games: Array<AppGame>;
 }
 
-function gameLinks(game: AppGame, index: number) {
-  return [
-    <div key={index * 3}>{game.displayName}</div>,
-    <Link key={index * 3 + 1} to={gameURL(game)}>local</Link>,
-    <Link key={index * 3 + 2} to={onlineGameURL(game)}>online</Link>,
-  ]
+function gameLink(game: AppGame, index: number) {
+  return (
+    <Link key={game.displayName} to={gameURL(game)}>{game.displayName}</Link>
+  );
 }
 
 function AvailableLinks({ games }: HomePageProps) {
   return (
     <div className={nonNull(styles.gameLinks)}>
-      {games.map(gameLinks)}
+      {games.map(gameLink)}
     </div>
   )
 }
@@ -70,11 +71,6 @@ function App() {
   const setAppOptions: SetAppOptions = (options: Partial<AppOptions>) => {
     setAppState({...appState, ...options});
   } 
-  const sharedAppOptions = {
-    appOptions: appState,
-    setAppOptions: setAppOptions,
-    servers: servers,
-  }
 
   const renderHomePage = () => <HomePage games={games} />;
   const renderPageNotFound = () => <PageNotFound games={games} />;
@@ -84,17 +80,15 @@ function App() {
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-          <GamePage game={gd} {...sharedAppOptions} online={false} />
+          <GamePage
+            game={gd}
+            appOptions={appState}
+            setAppOptions={setAppOptions}
+            servers={servers}
+          />
         );
-        const onlineComponent = () => (
-          <GamePage game={gd} {...sharedAppOptions} online={true} />
+        return (<Route key={path} exact path={path} component={component}/>
         );
-
-        const onlinePath = onlineGameURL(gd);
-        return ([
-          <Route key={path} exact path={path} component={component} />,
-          <Route key={onlinePath} exact path={onlinePath} component={onlineComponent} />
-        ]);
       })}
 
       <Route key="lobby" exact path="/lobby"

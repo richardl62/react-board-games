@@ -3,7 +3,7 @@ import { AppGame } from '../app-game';
 import Lobby from './lobby';
 import { SocketIO, Local } from 'boardgame.io/multiplayer'
 import { Client } from 'boardgame.io/react';
-import { AppOptions, Servers, SetAppOptions } from './types';
+import { AppOptions, LocalMatch, Servers, SetAppOptions } from './types';
 
 interface GamePageProps {
   game: AppGame;
@@ -12,10 +12,9 @@ interface GamePageProps {
   setAppOptions: SetAppOptions;
 
   servers: Servers;
-  online: boolean;
 }
 
-function LocalGame({ game } : GamePageProps) {
+function PlayLocal({ game } : GamePageProps) {
   const GameClient = Client({
     game: game,
     board: game.renderGame,
@@ -27,7 +26,7 @@ function LocalGame({ game } : GamePageProps) {
   </div>);
 }
 
-function OnlineGame({ game, appOptions, servers } : GamePageProps) {
+function PlayOnline({ game, appOptions, servers } : GamePageProps) {
   const {player, matchID} = appOptions;
   if(!player || !matchID) {
     throw new Error("player and match are not both defined");
@@ -47,13 +46,12 @@ function OnlineGame({ game, appOptions, servers } : GamePageProps) {
 
 
 function GamePage(props: GamePageProps) {
-  const { appOptions, online } = props;
-  const { player, matchID } = appOptions;
+  const { player, matchID } = props.appOptions;
 
-  if(!online) {
-    return <LocalGame {...props} />;
+  if (matchID === LocalMatch) {
+    return <PlayLocal {...props} />;
   } else if (matchID && player) {
-    return <OnlineGame {...props} />;
+    return <PlayOnline  {...props}/>
   } else {
     return <Lobby {...props}/>
   }
