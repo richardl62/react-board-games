@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AppGame } from '../app-game';
 import { LobbyClient } from './lobby-client';
-import { Player, Servers } from './types';
+import { AppOptions, Servers, SetAppOptions } from './types';
 
 const numPlayersKludged = 2;
 
@@ -9,14 +9,12 @@ interface LobbyProps {
   game: AppGame;
   servers: Servers;
 
-  matchID: string | null;
-  setMatchID: (arg: string) => void;
-  player: Player | null;
-  setPlayer: (arg: Player) => void
+  appOptions: AppOptions;
+  setAppOptions: SetAppOptions;
 }
 
-function Lobby({ game, servers, matchID, setMatchID, player, setPlayer} : LobbyProps) {
-  const lobbyClient = new LobbyClient(game, servers, matchID);
+function Lobby({ game, servers, appOptions, setAppOptions} : LobbyProps) {
+  const lobbyClient = new LobbyClient(game, servers, appOptions.matchID);
   
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
 
@@ -33,9 +31,15 @@ function Lobby({ game, servers, matchID, setMatchID, player, setPlayer} : LobbyP
 
   const doJoin = async () => {    
     if(hasMatchID) {
-      setPlayer(await lobbyClient.joinMatch())
+      setAppOptions({
+        ...appOptions,
+        player: await lobbyClient.joinMatch(),
+      })
     } else {
-      setMatchID(await lobbyClient.createMatch(numPlayersKludged));
+      setAppOptions({
+        ...appOptions,
+        matchID: await lobbyClient.createMatch(numPlayersKludged)
+      });
     }
   }
   const onClick = () => {

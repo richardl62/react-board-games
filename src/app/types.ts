@@ -33,7 +33,7 @@ export const appOptionsDefault : AppOptions = {
   player: null,
 };
 
-export const numPlayers = 1;
+export type SetAppOptions = (options: Partial<AppOptions>) => void;
 
 export type { AppGame } from '../app-game';
 // Exports are done inline

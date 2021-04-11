@@ -8,8 +8,8 @@ import styles from './app.module.css';
 import { AppGame } from '../app-game'
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-import { appOptionsDefault, Player } from './types';
-import { getURLOptions, setMatchID } from './url-options';
+import { AppOptions, appOptionsDefault, SetAppOptions } from './types';
+import { getURLOptions } from './url-options';
 
 const servers = { // KLUDGE
   game: 'http://localhost:3000',
@@ -64,18 +64,18 @@ function PageNotFound(props: HomePageProps) {
 }
 
 function App() {
-  const [player, setPlayer] = useState<Player|null>(null);
+  const initialAppOptions = {...appOptionsDefault, ...getURLOptions()};
+  const [appState, setAppState] = useState<AppOptions>(initialAppOptions);
 
-  const urlParams = {...appOptionsDefault, ...getURLOptions()};
-
+  const setAppOptions: SetAppOptions = (options: Partial<AppOptions>) => {
+    setAppState({...appState, ...options});
+  } 
   const sharedAppOptions = {
-    player: player,
-    setPlayer: setPlayer,
-    matchID: urlParams.matchID,
-    setMatchID: setMatchID,
-
+    appOptions: appState,
+    setAppOptions: setAppOptions,
     servers: servers,
   }
+
   const renderHomePage = () => <HomePage games={games} />;
   const renderPageNotFound = () => <PageNotFound games={games} />;
   return (

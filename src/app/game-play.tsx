@@ -1,5 +1,5 @@
 import { nonNull } from '../tools';
-import { JoinedMatch, numPlayers } from "./types";
+import { JoinedMatch } from "./types";
 import { Client } from 'boardgame.io/react';
 import { SocketIO, Local } from 'boardgame.io/multiplayer';
 import styles from './app.module.css';
@@ -7,9 +7,10 @@ import styles from './app.module.css';
 interface GamePlayProps {
   joinedMatch: JoinedMatch ;
   bgioDebugPanel: boolean;
+  numPlayers: number;
   server: string;
 }
-export function GamePlay({ joinedMatch, bgioDebugPanel, server }: GamePlayProps) {
+export function GamePlay({ joinedMatch, bgioDebugPanel, numPlayers, server }: GamePlayProps) {
   const {game, playerID, playerCredentials, matchID} = joinedMatch;
   console.log('Connecting', playerID, '-', playerCredentials,
    'to match', matchID, " on ", server);
