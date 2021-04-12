@@ -1,33 +1,49 @@
-import React from 'react';
-import { AppOptions, Servers, SetAppOptions } from './types';
+import React, { useState } from 'react';
+import { AppOptions, Servers, Match, Player } from './types';
 import { AppGame } from '../app-game';
-import Lobby from './lobby';
+import { JoinMatch, StartMatch } from './lobby';
 import { GamePlayLocal, GamePlayOnline } from './game-play';
+import { getURLOptions } from './url-options';
+
+const appOptionsDefault: AppOptions = {
+  playersPerBrowser: 1,
+  bgioDebugPanel: false,
+  match: {},
+  player: null,
+};
+
+const initialAppOptions = { ...appOptionsDefault, ...getURLOptions() };
 
 const numPlayers = 2; //KLUDGE
+
 interface GamePageProps {
   game: AppGame;
-
-  appOptions: AppOptions;
-  setAppOptions: SetAppOptions;
-
   servers: Servers;
 }
 
 function GamePage(props: GamePageProps) {
-  const {game, appOptions, servers } = props;
-  const { playStatus, matchID, player } = appOptions;
+  const [appOptions, setAppOptions] = useState<AppOptions>(initialAppOptions);
+  const { game, servers } = props
+  const { match, player } = appOptions;
 
-  if (playStatus === 'local') {
-    return <GamePlayLocal game={game} numPlayers={numPlayers}/>
-  } else if (playStatus === 'online') {
-    if(!(matchID && player)) {
-      throw new Error("matchID and player are not both set");
-    }
+  const setMatch = (match: Match) => {
+    setAppOptions({...appOptions, match: match});
+  }
+
+  const setPlayer = (player: Player) => {
+    setAppOptions({...appOptions, player: player});
+  }
+
+  if (match.local) {
+    return <GamePlayLocal game={game} numPlayers={numPlayers} />
+  } else if (match.id && player) {
     return <GamePlayOnline game={game} servers={servers} numPlayers={numPlayers}
-      matchID={matchID} player={player} />;
+      matchID={match.id} player={player} />;
+  } else if (match.id) {
+    return <JoinMatch game={game} servers={servers} matchID={match.id} 
+      setPlayer={setPlayer} />
   } else {
-    return <Lobby {...props}/>
+    return <StartMatch game={game} servers={servers} setMatch={setMatch}/>
   }
 }
 

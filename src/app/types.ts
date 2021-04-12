@@ -10,6 +10,8 @@ export interface Player {
   credentials: string;
 }
 
+export type Match = {local?: true, id?: string} // local and id should not both be set. 
+
 export interface JoinedMatch {
 
   game: AppGame;
@@ -22,12 +24,8 @@ export interface AppOptions {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
 
-  playStatus: 'local' | 'online' | null; // non-null when ready to play.
-  matchID: string | null;
+  match: Match;
   player: Player | null;
 }
 
-export type SetAppOptions = (options: Partial<AppOptions>) => void;
-
 export type { AppGame } from '../app-game';
-// Exports are done inline

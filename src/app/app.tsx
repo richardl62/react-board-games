@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import games from '../games';
@@ -8,16 +7,6 @@ import styles from './app.module.css';
 import { AppGame } from '../app-game'
 import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
-import { AppOptions, SetAppOptions } from './types';
-import { getURLOptions } from './url-options';
-
-const appOptionsDefault : AppOptions = {
-  playersPerBrowser: 1,
-  bgioDebugPanel: false,
-  playStatus: null,
-  matchID: null,
-  player: null,
-};
 
 const servers = { // KLUDGE
   game: 'http://localhost:3000',
@@ -66,16 +55,6 @@ function PageNotFound(props: HomePageProps) {
 }
 
 function App() {
-  const initialAppOptions = {...appOptionsDefault, ...getURLOptions()};
-  const [appState, setAppState] = useState<AppOptions>(initialAppOptions);
-
-  const setAppOptions: SetAppOptions = (options: Partial<AppOptions>) => {
-    let newState = {...appState, ...options};
-    if(newState.player && newState.matchID) {
-      newState.playStatus = 'online';
-    }
-    setAppState(newState);
-  } 
 
   const renderHomePage = () => <HomePage games={games} />;
   const renderPageNotFound = () => <PageNotFound games={games} />;
@@ -85,12 +64,7 @@ function App() {
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-          <GamePage
-            game={gd}
-            appOptions={appState}
-            setAppOptions={setAppOptions}
-            servers={servers}
-          />
+          <GamePage game={gd} servers={servers} />
         );
         return (<Route key={path} exact path={path} component={component}/>
         );
