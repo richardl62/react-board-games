@@ -1,10 +1,10 @@
 import React from 'react';
+import { AppOptions, Servers, SetAppOptions } from './types';
 import { AppGame } from '../app-game';
 import Lobby from './lobby';
-import { SocketIO, Local } from 'boardgame.io/multiplayer'
-import { Client } from 'boardgame.io/react';
-import { AppOptions, Servers, SetAppOptions } from './types';
+import { GamePlayLocal, GamePlayOnline } from './game-play';
 
+const numPlayers = 2; //KLUDGE
 interface GamePageProps {
   game: AppGame;
 
@@ -14,44 +14,18 @@ interface GamePageProps {
   servers: Servers;
 }
 
-function PlayLocal({ game } : GamePageProps) {
-  const GameClient = Client({
-    game: game,
-    board: game.renderGame,
-    multiplayer: Local(),
-  });
-
-  return (<div>
-    <GameClient />
-  </div>);
-}
-
-function PlayOnline({ game, appOptions, servers } : GamePageProps) {
-  const {player, matchID} = appOptions;
-  if(!player || !matchID) {
-    throw new Error("player and match are not both defined");
-  }
-
-  const GameClient = Client({
-    game: game,
-    board: game.renderGame,
-    multiplayer: SocketIO({server: servers.lobby}),
-  });
-  
-    return (<div>
-      <div>{`Match: ${matchID}  Player: ${player.id} (${player.credentials})`}</div>
-      <GameClient matchID={matchID} playerID={player.id} credentials={player.credentials} />
-    </div>);
-}
-
-
 function GamePage(props: GamePageProps) {
-  const { playStatus } = props.appOptions;
+  const {game, appOptions, servers } = props;
+  const { playStatus, matchID, player } = appOptions;
 
   if (playStatus === 'local') {
-    return <PlayLocal {...props} />;
+    return <GamePlayLocal game={game} numPlayers={numPlayers}/>
   } else if (playStatus === 'online') {
-    return <PlayOnline  {...props}/>
+    if(!(matchID && player)) {
+      throw new Error("matchID and player are not both set");
+    }
+    return <GamePlayOnline game={game} servers={servers} numPlayers={numPlayers}
+      matchID={matchID} player={player} />;
   } else {
     return <Lobby {...props}/>
   }

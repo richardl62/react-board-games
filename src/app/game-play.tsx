@@ -1,37 +1,46 @@
-import { nonNull } from '../tools';
-import { JoinedMatch } from "./types";
-import { Client } from 'boardgame.io/react';
-import { SocketIO, Local } from 'boardgame.io/multiplayer';
-import styles from './app.module.css';
+import { Client } from "boardgame.io/react";
+import { Local, SocketIO } from 'boardgame.io/multiplayer';
+import { AppGame } from "../app-game";
+import { Player, Servers } from "./types";
 
-interface GamePlayProps {
-  joinedMatch: JoinedMatch ;
-  bgioDebugPanel: boolean;
+interface GamePlayLocalProps {
+  game: AppGame;
   numPlayers: number;
-  server: string;
 }
-export function GamePlay({ joinedMatch, bgioDebugPanel, numPlayers, server }: GamePlayProps) {
-  const {game, playerID, playerCredentials, matchID} = joinedMatch;
-  console.log('Connecting', playerID, '-', playerCredentials,
-   'to match', matchID, " on ", server);
 
-  const multiplayer = server ? SocketIO({ server: server }) : Local();
+export function GamePlayLocal({ game, numPlayers }: GamePlayLocalProps) {
   const GameClient = Client({
-      multiplayer: multiplayer,
-      game: game,
-      board: game.renderGame,
-      debug: bgioDebugPanel,
-      numPlayers: numPlayers,
+    game: game,
+    numPlayers: numPlayers,
+    board: game.renderGame,
+    multiplayer: Local(),
   });
 
-  return (
-    <div className={nonNull(styles.gamePage)}>
-      <GameClient
-        matchID={matchID}
-        playerID={playerID}
-        credentials={playerCredentials}
-      />
-    </div>
-  );
+  return (<div>
+    <GameClient />
+  </div>);
 }
 
+interface GamePlayOnlineProps {
+  game: AppGame;
+  numPlayers: number;
+
+  matchID: string;
+  player: Player;
+  servers: Servers;
+}
+
+export function GamePlayOnline({ game, matchID, numPlayers, player, servers }: GamePlayOnlineProps) {
+
+  const GameClient = Client({
+    game: game,
+    numPlayers: numPlayers,
+    board: game.renderGame,
+    multiplayer: SocketIO({ server: servers.lobby }),
+  });
+
+  return (<div>
+    <div>{`Match: ${matchID}  Player: ${player.id} (${player.credentials})`}</div>
+    <GameClient matchID={matchID} playerID={player.id} credentials={player.credentials} />
+  </div>);
+}
