@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { AppOptions, MatchID, Player, GameOptions } from './types';
 import { AppGame } from '../app-game';
-import { JoinMatch, StartMatch } from './lobby';
-import { GamePlayLocal, GamePlayOnline } from './game-play';
+import { JoinMatch, ShowPlayers, StartMatch } from './lobby';
+import { GamePlayLocal } from './game-play';
 import { getURLOptions, setURLMatchParams } from './url-options';
 
 const appOptionsDefault: AppOptions = {
@@ -16,35 +16,39 @@ const initialAppOptions = { ...appOptionsDefault, ...getURLOptions() };
 
 const numPlayers = 2; //KLUDGE
 
+const localStorageKey = (id: string) => `bgio-match-${id}`;
+
+const localStorage = {
+  setPlayer: (matchID: MatchID, player:Player) => { 
+    if(!matchID.id) {
+      throw new Error("Attempt to set player when match is not known");
+    }
+    const key = localStorageKey(matchID.id);  
+    const json = JSON.stringify(player);
+
+    window.localStorage.setItem(key, json);
+  },
+
+  getPlayer: (matchID: MatchID): Player | null => {
+    if(matchID.id) {
+      const key = localStorageKey(matchID.id);
+      const json = window.localStorage.getItem(key);
+    
+      return json && JSON.parse(json);
+    }
+
+    return null;
+  }
+};
+
 interface GamePageProps {
   game: AppGame;
 }
 
-class LocalStorage {
-  constructor(matchID: string) {
-    this.key = `bgio-match-${matchID}`;
-  }
-  private key : string; 
-
-  set player(p: Player | null) {
-    const json = JSON.stringify(p)
-    window.localStorage.setItem(this.key, json);
-  }
-
-  get player(): Player | null {
-    const json = window.localStorage.getItem(this.key);
-    
-    const p = json && JSON.parse(json)
-    console.log("player from local storage:", p);
-    
-    return p;
-  }
-};
-
 function GamePage(props: GamePageProps) {
   const { matchID } = initialAppOptions;
-  const localStorage = matchID.id && new LocalStorage(matchID.id);
-  const [ player, setPlayerState ] = useState<Player|null>(localStorage ? localStorage.player : null);
+
+  const [ player, setPlayerState ] = useState<Player|null>(localStorage.getPlayer(matchID));
   const { game } = props
 
 
@@ -57,23 +61,30 @@ function GamePage(props: GamePageProps) {
   }
 
   const setPlayer = (player: Player) => {
-    if(localStorage) {
-      localStorage.player = player;
-    }
-
+    localStorage.setPlayer(matchID, player);
     setPlayerState(player);
   }
 
-  if (matchID.local) {
-    return <GamePlayLocal game={game} gameOptions={gameOptions} />
-  } else if (matchID.id && player) {
-    return <GamePlayOnline game={game} gameOptions={gameOptions} 
-      matchID={matchID.id} player={player} />;
-  } else if (matchID.id) {
-    return <JoinMatch game={game} matchID={matchID.id} 
-      setPlayer={setPlayer} />
-  } else {
+  const matchStarted = Boolean(matchID.local || matchID.id);
+
+  if (!matchStarted) {
     return <StartMatch game={game} gameOptions={gameOptions} setMatch={setMatch}/>
+  } else if (matchID.local) {
+    return <GamePlayLocal game={game} gameOptions={gameOptions} />
+  } else if (!player) {
+    return (
+      <div>
+        <JoinMatch game={game} matchID={matchID} setPlayer={setPlayer} />
+        <h2>Current Players</h2>
+        <ShowPlayers game={game} matchID={matchID} />
+      </div>);
+  } else {
+    return (
+      <div>
+        <h2>Waiting for other players</h2>
+        <ShowPlayers game={game} matchID={matchID} />
+      </div>
+    )
   }
 }
 

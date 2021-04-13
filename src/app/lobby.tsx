@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppGame } from '../app-game';
-import { LobbyClient } from './lobby-client';
+import { LobbyClient, MatchInfo } from './lobby-client';
 import { Player, MatchID, GameOptions } from './types';
 
 interface StartMatchProps {
@@ -35,9 +35,56 @@ export function StartMatch({game,  gameOptions, setMatch} : StartMatchProps) {
   </div>;
 } 
 
+interface ShowPlayerProps {
+  game: AppGame;
+  matchID: MatchID;
+}
+
+export function ShowPlayers({game, matchID} : ShowPlayerProps) {
+  const [state, setState] = useState<MatchInfo|Error|'waiting'|null>(null);
+  
+  const lobbyClient = new LobbyClient(game, matchID);
+
+  const refresh = () => {
+    setState('waiting');
+    lobbyClient.getActiveMatch().then(setState).catch(setState);
+  }
+
+  if (state === null) {  
+    refresh();
+    return null;
+  }
+
+  if(state === 'waiting') {
+    return <div>waiting ...</div>;
+  }
+
+  if (state instanceof Error) {
+    return <div>{`Error: ${state.message}`}</div>
+  }  
+  
+  let players = [];
+  let numWaiting = 0;
+  for(const {name, id} of state.players) {
+    if(name) {
+      players.push(<div key={id}>{name}</div>);
+    } else {
+      ++numWaiting;
+    }
+  }
+    
+  return <div>
+    {players}
+    {numWaiting === 0 ? null :
+      <div>{`waiting for ${numWaiting} player(s)`}</div>
+    }
+    <button type='button' onClick={refresh}>Refresh</button>
+  </div>
+}
+
 interface JoinMatchProps {
   game: AppGame;
-  matchID: string;
+  matchID: MatchID;
   setPlayer: (arg: Player) => void;
 }
 
@@ -53,17 +100,19 @@ export function JoinMatch({game, matchID, setPlayer} : JoinMatchProps) {
     return <div>{`Error: ${progress.message}`}</div>
   }
 
+  const lobbyClient = new LobbyClient(game, matchID);
   const join = () => {
     setProgress('waiting');
-
-    const lobbyClient = new LobbyClient(game, matchID);
     lobbyClient.joinMatch(name).then(setPlayer).catch(setProgress);
   };
 
-  return (<div>
-    <label>Name</label>
-    <input value={name} placeholder='Player name' onInput={e => setName(e.currentTarget.value)}/>
-    <button type="button" onClick={join}>Join Game</button>
-  </div>);
+  return (
+    <div>
+      <div>
+        <label>Name</label>
+        <input value={name} placeholder='Player name' onInput={e => setName(e.currentTarget.value)} />
+        <button type="button" onClick={join}>Join Game</button>
+      </div>
+    </div>);
 } 
 

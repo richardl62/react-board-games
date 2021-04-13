@@ -1,20 +1,22 @@
 import { LobbyClient as BgioLobbyClient } from 'boardgame.io/client';
-import { AppGame, Player } from './types';
+import { AppGame, MatchID, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
 import { lobbyServer } from './url-options';
 
 export type MatchInfo = LobbyAPI.Match;
+export type PublicPlayerInfo = MatchInfo['players'][0];
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 
 export class LobbyClient {
-  constructor(game: AppGame, matchID: string | null) {
+  constructor(game: AppGame, matchID: MatchID | null) {
+  
     this.game = game;
     this._matchID = matchID;
     this._lobbyClient = new BgioLobbyClient({ server: lobbyServer() });
   }
   readonly game: AppGame;
-  private _matchID: string | null;
+  private _matchID: MatchID | null;
   private _lobbyClient: BgioLobbyClient;
 
   get matchID() {return this._matchID};
@@ -23,13 +25,13 @@ export class LobbyClient {
     const createdMatch = await this._lobbyClient.createMatch(this.game.name, {
       numPlayers: numPlayers
     });
-    this._matchID = createdMatch.matchID;
+    this._matchID = {id: createdMatch.matchID};
     return createdMatch.matchID
   }
 
   async joinMatch(name: string | null): Promise<Player> {
-    if (!this.matchID) {
-      throw new Error("Active match not specificied");
+    if (!this.matchID || !this.matchID.id) {
+      throw new Error("Active online match not known");
     }
     const match = await this.getActiveMatch();
     console.log("Active match", match);
@@ -46,7 +48,7 @@ export class LobbyClient {
     const playerID = players[index].id.toString();
     const playerName = name || 'Player ' + playerID;
 
-    const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID,
+    const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID.id,
       {playerID: playerID, playerName: playerName});
 
     console.log("joinMatchResult", joinMatchResult, ' for ', playerName);
@@ -58,12 +60,12 @@ export class LobbyClient {
   }
 
   getActiveMatch(): Promise<MatchInfo> {
-    if (!this.matchID) {
+    if (!this.matchID || !this.matchID.id) {
       // Throw rather than failed promise as this is a usage error
       // rather than a network/server issue.
       throw new Error("active match not set");
     }
-    return this._lobbyClient.getMatch(this.game.name, this.matchID);
+    return this._lobbyClient.getMatch(this.game.name, this.matchID.id);
   }
 
   getMatch(matchID: string): Promise<MatchInfo> {
