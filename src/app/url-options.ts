@@ -1,4 +1,4 @@
-import { AppOptions } from "./types";
+import { AppOptions, Match } from "./types";
 
 function getPlayersPerBrowser(usp: URLSearchParams) {
   const key = 'ppb';
@@ -37,20 +37,32 @@ function getBgioDebugPanel(usp: URLSearchParams) {
   return false;
 }
 
-function getMatchID(usp: URLSearchParams) {
-  const key = 'matchID';
+const matchKeys = {
+  id: 'matchID',
+  local: 'local',
+};
 
-  const str = usp.get(key);
-  usp.delete(key);
-  return str;
+function getMatch(usp: URLSearchParams) {
+  let match : Match = {};
+  if (usp.has(matchKeys.id)) {
+    match.id = usp.get(matchKeys.id)!;
+    usp.delete(matchKeys.id);
+  }
+
+  if (usp.has(matchKeys.local)) {
+    match.local = true;
+  }
+
+  return match;
 }
 
 function getURLOptions() : Partial<AppOptions> {
   const sp = new URLSearchParams(window.location.search);
-  const result = {
+
+  const result : Partial<AppOptions> = {
     playersPerBrowser: getPlayersPerBrowser(sp),
     bgioDebugPanel: getBgioDebugPanel(sp),
-    matchID: getMatchID(sp),
+    match: getMatch(sp),
   }
 
   if (sp.toString()) {
@@ -60,15 +72,21 @@ function getURLOptions() : Partial<AppOptions> {
   return result;
 }
 
-function setMatchID(matchID: string) {
+function setURLMatchParams(match: Match) {
   let url = new URL(window.location.href);
-  let seachParams = new URLSearchParams(url.search);
-  if(seachParams.has('matchID')) {
-    throw new Error("matchID is already set");
-  }
-  seachParams.set('matchID', matchID);
-  url.search = seachParams.toString();
+  let searchParams = new URLSearchParams(url.search);
 
+  searchParams.delete(matchKeys.id);
+  if(match.id) {
+    searchParams.set(matchKeys.id, match.id);
+  }
+
+  searchParams.delete(matchKeys.local);
+  if(match.local) {
+    searchParams.set(matchKeys.local,'');
+  }
+
+  url.search = searchParams.toString();
   window.location.href = url.href;
 }
 
@@ -76,4 +94,4 @@ function lobbyServer() {
   return 'http://localhost:8000'; // KLUDGE
 }
 
-export { getURLOptions, lobbyServer, setMatchID }
+export { getURLOptions, lobbyServer, setURLMatchParams }

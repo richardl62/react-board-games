@@ -3,7 +3,7 @@ import { AppOptions, Match, Player, GameOptions } from './types';
 import { AppGame } from '../app-game';
 import { JoinMatch, StartMatch } from './lobby';
 import { GamePlayLocal, GamePlayOnline } from './game-play';
-import { getURLOptions } from './url-options';
+import { getURLOptions, setURLMatchParams } from './url-options';
 
 const appOptionsDefault: AppOptions = {
   playersPerBrowser: 1,
@@ -21,20 +21,16 @@ interface GamePageProps {
 }
 
 function GamePage(props: GamePageProps) {
-  const [ appOptions, setAppOptions] = useState<AppOptions>(initialAppOptions);
+  const [ player, setPlayer ] = useState<Player|null>(null);
   const { game } = props
-  const { match, player } = appOptions;
+  const { match } = initialAppOptions;
 
   const gameOptions : GameOptions = {
     numPlayers: numPlayers,
     bgioDebugPanel: initialAppOptions.bgioDebugPanel,
   }
   const setMatch = (match: Match) => {
-    setAppOptions({...appOptions, match: match});
-  }
-
-  const setPlayer = (player: Player) => {
-    setAppOptions({...appOptions, player: player});
+    setURLMatchParams(match);
   }
 
   if (match.local) {
