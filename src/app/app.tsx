@@ -5,7 +5,6 @@ import games from '../games';
 import styles from './app.module.css';
 
 import { AppGame } from '../app-game'
-import LegacyLobby from './legacy-lobby';
 import { GamePage } from './game-page';
 
 const servers = { // KLUDGE
@@ -69,11 +68,7 @@ function App() {
         return (<Route key={path} exact path={path} component={component}/>
         );
       })}
-
-      <Route key="lobby" exact path="/lobby"
-        component={() => <LegacyLobby games={games} servers={servers} />}
-      />
-
+      
       <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>
   );
