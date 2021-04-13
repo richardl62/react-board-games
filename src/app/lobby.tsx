@@ -68,8 +68,24 @@ interface StartMatchProps {
   setMatch: (match: Match) => void;
 }
 export function StartMatch({game, servers, setMatch} : StartMatchProps) {
+  const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
+
+  if (progress === 'waiting') {
+    return <div>waiting ...</div>
+  }
+
+  if (progress instanceof Error) {
+    return <div>{`Error: ${progress.message}`}</div>
+  }
+
   const startLocal = () => {setMatch({local: true})};
-  const startOnline = () => {setMatch({id: 'dummy ID'})};
+  const startOnline = () => {
+    setProgress('waiting');
+    const recordMatchID = (id: string) => {setMatch({id: id})};
+
+    const lobbyClient = new LobbyClient(game, servers, null);
+    lobbyClient.createMatch(numPlayersKludged).then(recordMatchID).catch(setProgress);
+  };
 
   return <div>
       <span>Start Match: </span>
@@ -86,6 +102,28 @@ interface JoinMatchProps {
 }
 
 export function JoinMatch({game, servers, matchID, setPlayer} : JoinMatchProps) {
-  return <div>JoinMatch</div>;
+  const [name, setName ] = useState<string>('');
+  const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
+
+  if (progress === 'waiting') {
+    return <div>waiting ...</div>
+  }
+
+  if (progress instanceof Error) {
+    return <div>{`Error: ${progress.message}`}</div>
+  }
+
+  const join = () => {
+    setProgress('waiting');
+
+    const lobbyClient = new LobbyClient(game, servers, matchID);
+    lobbyClient.joinMatch(name).then(setPlayer).catch(setProgress);
+  };
+
+  return (<div>
+    <label>Name</label>
+    <input value={name} placeholder='Player name' onInput={e => setName(e.currentTarget.value)}/>
+    <button type="button" onClick={join}>Join Game</button>
+  </div>);
 } 
 

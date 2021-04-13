@@ -59,7 +59,7 @@ export class LobbyClient {
     return createdMatch.matchID
   }
 
-  async joinMatch(): Promise<Player> {
+  async joinMatch(name: string | null): Promise<Player> {
     if (!this.matchID) {
       throw new Error("Active match not specificied");
     }
@@ -76,14 +76,12 @@ export class LobbyClient {
     }
 
     const playerID = players[index].id.toString();
+    const playerName = name || 'Player ' + playerID;
 
     const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID,
-      {
-        playerID: playerID,
-        playerName: 'Player ' + playerID,
-      });
+      {playerID: playerID, playerName: playerName});
 
-    console.log("joinMatchResult", joinMatchResult);
+    console.log("joinMatchResult", joinMatchResult, ' for ', playerName);
 
     return {
       id: playerID,
