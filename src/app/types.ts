@@ -10,7 +10,16 @@ export interface Player {
   credentials: string;
 }
 
-export type Match = {local?: true, id?: string} // local and id should not both be set. 
+export interface GameOptions {
+  numPlayers: number;
+  bgioDebugPanel: boolean;
+}
+
+export interface Match {
+  // local and id should not both be set. 
+  local?: true, 
+  id?: string
+} 
 
 export interface JoinedMatch {
 

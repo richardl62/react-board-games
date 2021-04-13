@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppOptions, Servers, Match, Player } from './types';
+import { AppOptions, Servers, Match, Player, GameOptions } from './types';
 import { AppGame } from '../app-game';
 import { JoinMatch, StartMatch } from './lobby';
 import { GamePlayLocal, GamePlayOnline } from './game-play';
@@ -22,10 +22,14 @@ interface GamePageProps {
 }
 
 function GamePage(props: GamePageProps) {
-  const [appOptions, setAppOptions] = useState<AppOptions>(initialAppOptions);
+  const [ appOptions, setAppOptions] = useState<AppOptions>(initialAppOptions);
   const { game, servers } = props
   const { match, player } = appOptions;
 
+  const gameOptions : GameOptions = {
+    numPlayers: numPlayers,
+    bgioDebugPanel: initialAppOptions.bgioDebugPanel,
+  }
   const setMatch = (match: Match) => {
     setAppOptions({...appOptions, match: match});
   }
@@ -35,15 +39,15 @@ function GamePage(props: GamePageProps) {
   }
 
   if (match.local) {
-    return <GamePlayLocal game={game} numPlayers={numPlayers} />
+    return <GamePlayLocal game={game} gameOptions={gameOptions} />
   } else if (match.id && player) {
-    return <GamePlayOnline game={game} servers={servers} numPlayers={numPlayers}
-      matchID={match.id} player={player} />;
+    return <GamePlayOnline game={game} servers={servers}
+      gameOptions={gameOptions} matchID={match.id} player={player} />;
   } else if (match.id) {
     return <JoinMatch game={game} servers={servers} matchID={match.id} 
       setPlayer={setPlayer} />
   } else {
-    return <StartMatch game={game} servers={servers} setMatch={setMatch}/>
+    return <StartMatch game={game} servers={servers} gameOptions={gameOptions} setMatch={setMatch}/>
   }
 }
 

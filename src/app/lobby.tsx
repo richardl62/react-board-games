@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { AppGame } from '../app-game';
 import { LobbyClient } from './lobby-client';
-import { Servers, Player, Match } from './types';
+import { Servers, Player, Match, GameOptions } from './types';
 
-
-const numPlayersKludged = 2;
 
 // interface LobbyProps {
 //   game: AppGame;
@@ -64,10 +62,11 @@ const numPlayersKludged = 2;
 
 interface StartMatchProps {
   game: AppGame;
+  gameOptions: GameOptions;
   servers: Servers;
   setMatch: (match: Match) => void;
 }
-export function StartMatch({game, servers, setMatch} : StartMatchProps) {
+export function StartMatch({game, servers, gameOptions, setMatch} : StartMatchProps) {
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
 
   if (progress === 'waiting') {
@@ -84,7 +83,7 @@ export function StartMatch({game, servers, setMatch} : StartMatchProps) {
     const recordMatchID = (id: string) => {setMatch({id: id})};
 
     const lobbyClient = new LobbyClient(game, servers, null);
-    lobbyClient.createMatch(numPlayersKludged).then(recordMatchID).catch(setProgress);
+    lobbyClient.createMatch(gameOptions.numPlayers).then(recordMatchID).catch(setProgress);
   };
 
   return <div>
