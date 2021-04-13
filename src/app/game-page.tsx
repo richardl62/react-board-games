@@ -20,10 +20,32 @@ interface GamePageProps {
   game: AppGame;
 }
 
+class LocalStorage {
+  constructor(matchID: string) {
+    this.key = `bgio-match-${matchID}`;
+  }
+  private key : string; 
+
+  set player(p: Player | null) {
+    const json = JSON.stringify(p)
+    window.localStorage.setItem(this.key, json);
+  }
+
+  get player(): Player | null {
+    const json = window.localStorage.getItem(this.key);
+    
+    const p = json && JSON.parse(json)
+    console.log("player from local storage:", p);
+    
+    return p;
+  }
+};
 function GamePage(props: GamePageProps) {
-  const [ player, setPlayer ] = useState<Player|null>(null);
-  const { game } = props
   const { match } = initialAppOptions;
+  const localStorage = match.id && new LocalStorage(match.id);
+  const [ player, setPlayerState ] = useState<Player|null>(localStorage ? localStorage.player : null);
+  const { game } = props
+
 
   const gameOptions : GameOptions = {
     numPlayers: numPlayers,
@@ -31,6 +53,14 @@ function GamePage(props: GamePageProps) {
   }
   const setMatch = (match: Match) => {
     setURLMatchParams(match);
+  }
+
+  const setPlayer = (player: Player) => {
+    if(localStorage) {
+      localStorage.player = player;
+    }
+
+    setPlayerState(player);
   }
 
   if (match.local) {
