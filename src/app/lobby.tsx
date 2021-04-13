@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { AppGame } from '../app-game';
 import { LobbyClient } from './lobby-client';
-import { Player, Match, GameOptions } from './types';
+import { Player, MatchID, GameOptions } from './types';
 
 interface StartMatchProps {
   game: AppGame;
   gameOptions: GameOptions;
-  setMatch: (match: Match) => void;
+  setMatch: (matchID: MatchID) => void;
 }
 export function StartMatch({game,  gameOptions, setMatch} : StartMatchProps) {
   const [progress, setProgress] = useState<null | 'waiting' | Error>(null);

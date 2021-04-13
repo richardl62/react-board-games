@@ -3,9 +3,10 @@ import { AppGame, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
 import { lobbyServer } from './url-options';
 
-export type Match = LobbyAPI.Match;
+export type MatchInfo = LobbyAPI.Match;
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
+
 export class LobbyClient {
   constructor(game: AppGame, matchID: string | null) {
     this.game = game;
@@ -56,7 +57,7 @@ export class LobbyClient {
     }
   }
 
-  getActiveMatch(): Promise<Match> {
+  getActiveMatch(): Promise<MatchInfo> {
     if (!this.matchID) {
       // Throw rather than failed promise as this is a usage error
       // rather than a network/server issue.
@@ -65,7 +66,7 @@ export class LobbyClient {
     return this._lobbyClient.getMatch(this.game.name, this.matchID);
   }
 
-  getMatch(matchID: string): Promise<Match> {
+  getMatch(matchID: string): Promise<MatchInfo> {
     return this._lobbyClient.getMatch(this.game.name, matchID);
   }
 

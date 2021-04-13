@@ -10,7 +10,7 @@ export interface GameOptions {
   bgioDebugPanel: boolean;
 }
 
-export interface Match {
+export interface MatchID {
   // local and id should not both be set. 
   local?: true, 
   id?: string
@@ -28,7 +28,7 @@ export interface AppOptions {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
 
-  match: Match;
+  matchID: MatchID;
   player: Player | null;
 }
 

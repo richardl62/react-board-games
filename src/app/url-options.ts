@@ -1,4 +1,4 @@
-import { AppOptions, Match } from "./types";
+import { AppOptions, MatchID } from "./types";
 
 function getPlayersPerBrowser(usp: URLSearchParams) {
   const key = 'ppb';
@@ -43,17 +43,17 @@ const matchKeys = {
 };
 
 function getMatch(usp: URLSearchParams) {
-  let match : Match = {};
+  let matchID : MatchID = {};
   if (usp.has(matchKeys.id)) {
-    match.id = usp.get(matchKeys.id)!;
+    matchID.id = usp.get(matchKeys.id)!;
     usp.delete(matchKeys.id);
   }
 
   if (usp.has(matchKeys.local)) {
-    match.local = true;
+    matchID.local = true;
   }
 
-  return match;
+  return matchID;
 }
 
 function getURLOptions() : Partial<AppOptions> {
@@ -62,7 +62,7 @@ function getURLOptions() : Partial<AppOptions> {
   const result : Partial<AppOptions> = {
     playersPerBrowser: getPlayersPerBrowser(sp),
     bgioDebugPanel: getBgioDebugPanel(sp),
-    match: getMatch(sp),
+    matchID: getMatch(sp),
   }
 
   if (sp.toString()) {
@@ -72,17 +72,17 @@ function getURLOptions() : Partial<AppOptions> {
   return result;
 }
 
-function setURLMatchParams(match: Match) {
+function setURLMatchParams(matchID: MatchID) {
   let url = new URL(window.location.href);
   let searchParams = new URLSearchParams(url.search);
 
   searchParams.delete(matchKeys.id);
-  if(match.id) {
-    searchParams.set(matchKeys.id, match.id);
+  if(matchID.id) {
+    searchParams.set(matchKeys.id, matchID.id);
   }
 
   searchParams.delete(matchKeys.local);
-  if(match.local) {
+  if(matchID.local) {
     searchParams.set(matchKeys.local,'');
   }
 
