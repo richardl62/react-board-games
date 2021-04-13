@@ -1,51 +1,18 @@
-import { Servers } from './types';
 import { LobbyClient as BgioLobbyClient } from 'boardgame.io/client';
 import { AppGame, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
-
-// async function joinMatch(server: string, game: AppGame, matchID: string) : Promise<Player> {
-//   const lobbyClient = new LobbyClient({server: server});
-
-//   const match = await lobbyClient.getMatch(game.name, matchID);
-//   console.log(match);
-
-//   const players = match.players;
-//   let index = 0; 
-//   while(index < players.length && players[index].name) {
-//     ++index;
-//   } 
-
-//   if(index === players.length) {
-//     throw new Error("Match full - cannot join");
-//   }
-
-//   const playerID = players[index].id.toString();
-//   const joinMatchResult = await lobbyClient.joinMatch(game.name, matchID, 
-//     {
-//       playerID: playerID,
-//       playerName: 'Player ' + playerID,
-//     });
-
-//   console.log("joinMatchResult", joinMatchResult);
-
-//   return {
-//     id: playerID,
-//     credentials: joinMatchResult.playerCredentials,
-//   }
-// } 
+import { lobbyServer } from './url-options';
 
 export type Match = LobbyAPI.Match;
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 export class LobbyClient {
-  constructor(game: AppGame, servers: Servers, matchID: string | null) {
+  constructor(game: AppGame, matchID: string | null) {
     this.game = game;
-    this.servers = servers;
     this._matchID = matchID;
-    this._lobbyClient = new BgioLobbyClient({ server: servers.lobby });
+    this._lobbyClient = new BgioLobbyClient({ server: lobbyServer() });
   }
   readonly game: AppGame;
-  readonly servers: Servers;
   private _matchID: string | null;
   private _lobbyClient: BgioLobbyClient;
 

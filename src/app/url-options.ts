@@ -72,4 +72,8 @@ function setMatchID(matchID: string) {
   window.location.href = url.href;
 }
 
-export { getURLOptions, setMatchID }
+function lobbyServer() { 
+  return 'http://localhost:8000'; // KLUDGE
+}
+
+export { getURLOptions, lobbyServer, setMatchID }

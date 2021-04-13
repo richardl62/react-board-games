@@ -1,10 +1,5 @@
 import { AppGame } from '../app-game';
 
-export interface Servers {
-  game: string;
-  lobby: string;
-}
-
 export interface Player {
   id: string;
   credentials: string;

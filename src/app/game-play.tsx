@@ -1,7 +1,8 @@
 import { Client } from "boardgame.io/react";
 import { Local, SocketIO } from 'boardgame.io/multiplayer';
 import { AppGame } from "../app-game";
-import { GameOptions, Player, Servers } from "./types";
+import { GameOptions, Player } from "./types";
+import { lobbyServer } from "./url-options";
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -30,15 +31,14 @@ interface GamePlayOnlineProps {
 
   matchID: string;
   player: Player;
-  servers: Servers;
 }
 
-export function GamePlayOnline({ game, matchID, gameOptions, player, servers }: GamePlayOnlineProps) {
+export function GamePlayOnline({ game, matchID, gameOptions, player }: GamePlayOnlineProps) {
 
   const GameClient = Client({
     game: game,
     board: game.renderGame,
-    multiplayer: SocketIO({ server: servers.lobby }),
+    multiplayer: SocketIO({ server: lobbyServer() }),
 
     numPlayers: gameOptions.numPlayers,
     debug:  gameOptions.bgioDebugPanel,

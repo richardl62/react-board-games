@@ -7,11 +7,6 @@ import styles from './app.module.css';
 import { AppGame } from '../app-game'
 import { GamePage } from './game-page';
 
-const servers = { // KLUDGE
-  game: 'http://localhost:3000',
-  lobby: 'http://localhost:8000',
-}
-
 function gameURL(game: AppGame) {
   return `/${game.name}`;
 }
@@ -63,7 +58,7 @@ function App() {
       {games.map(gd => {
         const path = gameURL(gd);
         const component = () => (
-          <GamePage game={gd} servers={servers} />
+          <GamePage game={gd} />
         );
         return (<Route key={path} exact path={path} component={component}/>
         );
