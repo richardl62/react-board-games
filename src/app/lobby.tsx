@@ -35,53 +35,6 @@ export function StartMatch({game,  gameOptions, setMatch} : StartMatchProps) {
   </div>;
 } 
 
-interface ShowPlayerProps {
-  game: AppGame;
-  matchID: MatchID;
-}
-
-export function ShowPlayers({game, matchID} : ShowPlayerProps) {
-  const [state, setState] = useState<MatchInfo|Error|'waiting'|null>(null);
-  
-  const lobbyClient = new LobbyClient(game, matchID);
-
-  const refresh = () => {
-    setState('waiting');
-    lobbyClient.getActiveMatch().then(setState).catch(setState);
-  }
-
-  if (state === null) {  
-    refresh();
-    return null;
-  }
-
-  if(state === 'waiting') {
-    return <div>waiting ...</div>;
-  }
-
-  if (state instanceof Error) {
-    return <div>{`Error: ${state.message}`}</div>
-  }  
-  
-  let players = [];
-  let numWaiting = 0;
-  for(const {name, id} of state.players) {
-    if(name) {
-      players.push(<div key={id}>{name}</div>);
-    } else {
-      ++numWaiting;
-    }
-  }
-    
-  return <div>
-    {players}
-    {numWaiting === 0 ? null :
-      <div>{`waiting for ${numWaiting} player(s)`}</div>
-    }
-    <button type='button' onClick={refresh}>Refresh</button>
-  </div>
-}
-
 interface JoinMatchProps {
   game: AppGame;
   matchID: MatchID;
@@ -90,12 +43,15 @@ interface JoinMatchProps {
 
 export function JoinMatch({game, matchID, setPlayer} : JoinMatchProps) {
   const [name, setName ] = useState<string>('');
-  const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
+  const [progress, setProgress] = useState<null | 'waiting' | 'joined' | Error>(null);
 
   if (progress === 'waiting') {
     return <div>waiting ...</div>
   }
 
+  if (progress === 'joined') {
+    return <div>Joined</div>
+  }
   if (progress instanceof Error) {
     return <div>{`Error: ${progress.message}`}</div>
   }
@@ -103,7 +59,9 @@ export function JoinMatch({game, matchID, setPlayer} : JoinMatchProps) {
   const lobbyClient = new LobbyClient(game, matchID);
   const join = () => {
     setProgress('waiting');
-    lobbyClient.joinMatch(name).then(setPlayer).catch(setProgress);
+    lobbyClient.joinMatch(name).then(
+        p => {setPlayer(p); setProgress('joined')}
+      ).catch(setProgress);
   };
 
   return (
@@ -116,3 +74,26 @@ export function JoinMatch({game, matchID, setPlayer} : JoinMatchProps) {
     </div>);
 } 
 
+
+interface ShowMatchInfoProps {
+  matchInfo: MatchInfo | null;
+}
+
+export function ShowMatchInfo({matchInfo} : ShowMatchInfoProps) {
+  if(!matchInfo) {
+    return (<div>Match information not currently available</div>);
+  }
+
+  const players = matchInfo.players;
+  let playerElems = [];
+  for(const {name, id} of players) {
+    if(name) {
+      playerElems.push(<div key={id}>{name}</div>);
+    }
+  }
+    
+  return (<div>
+    <h2>{`Current Players (${players.length} required)`}</h2>
+    {playerElems}
+  </div>);
+}
