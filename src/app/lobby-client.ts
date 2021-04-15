@@ -8,6 +8,10 @@ export type PublicPlayerInfo = MatchInfo['players'][0];
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 
+// function samePlayers(m1: MatchInfo, m2: MatchInfo) {
+//  return JSON.stringify(m1.players) === JSON.stringify(m2.players); 
+// }
+
 export class LobbyClient {
   constructor(game: AppGame, matchID: MatchID | null) {
   
@@ -67,6 +71,30 @@ export class LobbyClient {
     }
     return this._lobbyClient.getMatch(this.game.name, this.matchID.id);
   }
+
+  // Unsucessful attempt
+  //
+  // // Return a promise that is forfilled the set of players is different from
+  // // those recorded in knownPlayers. (Typically, this occurs when a player joins
+  // // or leaves. 
+  // getPlayerChange(knownPlayers: MatchInfo | null): Promise<MatchInfo> {
+
+  //   return new Promise<MatchInfo>((resolve, reject) => {
+  //     const conditionalResolve = (mi: MatchInfo) => {
+  //         const same = knownPlayers && samePlayers(knownPlayers, mi);
+  //         console.log((same? "Same: " : "Different: "), knownPlayers, mi)
+
+  //         if(!same) {
+  //           resolve(mi);
+  //         }
+  //     }
+      
+  //     const doit = () => {
+  //       this.getActiveMatch().then(conditionalResolve, reject);
+  //     }
+  //     setInterval(doit, 2000);
+  //   })
+  // }
 
   getMatch(matchID: string): Promise<MatchInfo> {
     return this._lobbyClient.getMatch(this.game.name, matchID);
