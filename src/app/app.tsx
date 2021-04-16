@@ -7,24 +7,32 @@ import styles from './app.module.css';
 import { AppGame } from '../app-game'
 import { GamePage } from './game-page';
 
-function gameURL(game: AppGame) {
-  return `/${game.name}`;
+type GameStatus = {online: boolean};
+function gameURL(game: AppGame, {online}: GameStatus) {
+  let base =`/${game.name}`;
+  if(online) {
+    base += '/lobby';
+  }
+  return base;
 }
 
 interface HomePageProps {
   games: Array<AppGame>;
 }
 
-function gameLink(game: AppGame, index: number) {
-  return (
-    <Link key={game.displayName} to={gameURL(game)}>{game.displayName}</Link>
-  );
+function gameLinkElements(game: AppGame, index: number) {
+  const key = (n: number) => game.name + n;
+  return [
+      <span key={key(1)}>{game.displayName}</span>,
+      <Link key={key(2)} to={gameURL(game, {online:true})}>Local</Link>,
+      <Link key={key(3)} to={gameURL(game, {online:true})}>Online</Link>
+  ];
 }
 
-function AvailableLinks({ games }: HomePageProps) {
+function GameLinks({ games }: HomePageProps) {
   return (
-    <div className={nonNull(styles.gameLinks)}>
-      {games.map(gameLink)}
+    <div className={nonNull(styles.gameLinks)}> 
+      {games.map(gameLinkElements)}
     </div>
   )
 }
@@ -32,8 +40,8 @@ function AvailableLinks({ games }: HomePageProps) {
 function HomePage(props: HomePageProps) {
   return (
     <div>
-      <h2>Available links</h2>
-      <AvailableLinks {...props} />
+      <h2>Available Games</h2>
+      <GameLinks {...props} />
     </div>
   )
 }
@@ -43,10 +51,23 @@ function PageNotFound(props: HomePageProps) {
     <div className={nonNull(styles.pageNotFound)}>
       <div>404: Page Not Found</div>
       <div>You could try one of these links:</div>
-      <AvailableLinks {...props} />
+      <GameLinks {...props} />
     </div>
   )
 }
+
+function gameRoute(game: AppGame, status : GameStatus) {
+  const path = gameURL(game, status);
+
+  const component= () => <GamePage game={game} online={status.online}/>;
+
+  return (<Route key={path} exact path={path} component={component} />); 
+}
+
+function gameRoutes(game: AppGame) {
+  return [ gameRoute(game, {online:true}), gameRoute(game, {online:false})];
+}
+
 
 function App() {
 
@@ -55,15 +76,7 @@ function App() {
   return (
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
-      {games.map(gd => {
-        const path = gameURL(gd);
-        const component = () => (
-          <GamePage game={gd} />
-        );
-        return (<Route key={path} exact path={path} component={component}/>
-        );
-      })}
-      
+      {games.map(gameRoutes)}
       <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>
   );

@@ -174,7 +174,7 @@ function onClick(pos_: PiecePosition, moveControl: MoveControl) {
 
 const games: Array<GameDefinitionInput<BobailState>> = [
     {
-        displayName: 'bobail',
+        displayName: 'Bobail',
 
         boardStyle: {
             checkered: false,

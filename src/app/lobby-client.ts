@@ -8,9 +8,6 @@ export type PublicPlayerInfo = MatchInfo['players'][0];
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 
-// function samePlayers(m1: MatchInfo, m2: MatchInfo) {
-//  return JSON.stringify(m1.players) === JSON.stringify(m2.players); 
-// }
 
 export class LobbyClient {
   constructor(game: AppGame, matchID: MatchID | null) {

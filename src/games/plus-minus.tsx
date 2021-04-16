@@ -7,7 +7,7 @@ interface G {
 const game : AppGame = {
   // The name of the game.
   name: 'plusminus',
-  displayName: 'plus minus (for testing)',
+  displayName: 'Plus Minus (for testing)',
 
   setup: (): G => { return { value: 0 }; },
 

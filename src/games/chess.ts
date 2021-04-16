@@ -27,7 +27,7 @@ function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionI
 
 const games = [
   chess(
-    "chess",
+    "Chess",
     [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
       ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -41,7 +41,7 @@ const games = [
   ),
 
   chess(
-    "chess 5-a-side",
+    "Chess 5-a-Side",
     [
       ['r', 'n', 'b', 'q', 'k'],
       ['p', 'p', 'p', 'p', 'p'],

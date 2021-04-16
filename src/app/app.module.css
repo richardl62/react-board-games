@@ -14,14 +14,13 @@ body {
 }
 
 .gameLinks {
-    display: flex;
-    flex-direction: column;
-
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
 }
 
-.gameLinks >:first-letter {
-    text-transform: capitalize;
-};
+.gameLinks a {
+    margin-left: 1em;
+}
 
 .pageNotFound div:first-of-type {
     color: red;

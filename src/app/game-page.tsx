@@ -42,18 +42,17 @@ const localStorage = {
   }
 };
 
-interface GamePageProps {
+interface GameLobbyProps {
   game: AppGame;
 }
 
-function GamePage(props: GamePageProps) {
+function GameLobby({game}: GameLobbyProps) {
   const { matchID } = initialAppOptions;
 
   const [ player, setState ] = useState<Player|null>(localStorage.getPlayer(matchID));
   const [ matchInfo, setMatchInfo] = useState<MatchInfo|null>(null);
   const [ error, setError ] = useState<Error|null>(null);
   const [ onlineGameStarted, setOnlineGameStarted ] = useState(false);
-  const { game } = props
 
   const gameOptions : GameOptions = {
     numPlayers: numPlayers,
@@ -75,6 +74,7 @@ function GamePage(props: GamePageProps) {
 
   const refreshMatchInfo = () => {
     const lobbyClient = new LobbyClient(game, matchID);
+
     lobbyClient.getActiveMatch().then(setMatchInfo).catch(setError);
   }
 
@@ -90,8 +90,6 @@ function GamePage(props: GamePageProps) {
     return <div>`Error: ${error.message}`</div>
   } else if (!matchStarted) {
     return <StartMatch game={game} gameOptions={gameOptions} setMatch={doStartMatch}/>
-  } else if (matchID.local) {
-    return <GamePlayLocal game={game} gameOptions={gameOptions} />
   } else if (onlineGameStarted) {
     return <GamePlayOnline game={game} gameOptions={gameOptions} matchID={matchID} player={player!}/>
   } else if (!player) {
@@ -108,6 +106,17 @@ function GamePage(props: GamePageProps) {
         }
     </div>);
   }
+}
+
+interface GamePageProps {
+  game: AppGame;
+  online: boolean;
+}
+
+function GamePage({game, online}: GamePageProps) {
+  return online ?
+    <GamePlayLocal game={game} /> :
+    <GameLobby game={game} />
 }
 
 export { GamePage };
