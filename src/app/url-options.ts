@@ -43,17 +43,13 @@ const matchKeys = {
 };
 
 function getMatch(usp: URLSearchParams) {
-  let matchID : MatchID = {};
   if (usp.has(matchKeys.id)) {
-    matchID.id = usp.get(matchKeys.id)!;
+    const id=usp.get(matchKeys.id);
     usp.delete(matchKeys.id);
+    return {mid: id!};
   }
 
-  if (usp.has(matchKeys.local)) {
-    matchID.local = true;
-  }
-
-  return matchID;
+  return null;
 }
 
 function getURLOptions() : Partial<AppOptions> {
@@ -72,18 +68,13 @@ function getURLOptions() : Partial<AppOptions> {
   return result;
 }
 
-function setURLMatchParams(matchID: MatchID) {
+function setURLMatchParams(matchID: MatchID | null) {
   let url = new URL(window.location.href);
   let searchParams = new URLSearchParams(url.search);
 
   searchParams.delete(matchKeys.id);
-  if(matchID.id) {
-    searchParams.set(matchKeys.id, matchID.id);
-  }
-
-  searchParams.delete(matchKeys.local);
-  if(matchID.local) {
-    searchParams.set(matchKeys.local,'');
+  if(matchID) {
+    searchParams.set(matchKeys.id, matchID.mid);
   }
 
   url.search = searchParams.toString();

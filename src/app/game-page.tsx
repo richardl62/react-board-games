@@ -9,7 +9,7 @@ import { LobbyClient, MatchInfo } from './lobby-client';
 const appOptionsDefault: AppOptions = {
   playersPerBrowser: 1,
   bgioDebugPanel: false,
-  matchID: {},
+  matchID: null,
   player: null,
 };
 
@@ -21,18 +21,15 @@ const localStorageKey = (id: string) => `bgio-match-${id}`;
 
 const localStorage = {
   setPlayer: (matchID: MatchID, player:Player) => { 
-    if(!matchID.id) {
-      throw new Error("Attempt to set player when match is not known");
-    }
-    const key = localStorageKey(matchID.id);  
+    const key = localStorageKey(matchID.mid);  
     const json = JSON.stringify(player);
 
     window.localStorage.setItem(key, json);
   },
 
-  getPlayer: (matchID: MatchID): Player | null => {
-    if(matchID.id) {
-      const key = localStorageKey(matchID.id);
+  getPlayer: (matchID: MatchID | null): Player | null => {
+    if(matchID) {
+      const key = localStorageKey(matchID.mid);
       const json = window.localStorage.getItem(key);
     
       return json && JSON.parse(json);
@@ -63,6 +60,9 @@ function GameLobby({game}: GameLobbyProps) {
   }
 
   const doSetPlayer = (p: Player) => {
+    if(!matchID) {
+      throw new Error("Setting player when match is unknown");
+    }
     localStorage.setPlayer(matchID, p);
     setState(p);
     refreshMatchInfo();
@@ -78,17 +78,16 @@ function GameLobby({game}: GameLobbyProps) {
     lobbyClient.getActiveMatch().then(setMatchInfo).catch(setError);
   }
 
-  if(!matchInfo && matchID.id) {
+  if(!matchInfo && matchID) {
     refreshMatchInfo();
   }
 
-  const matchStarted = Boolean(matchID.local || matchID.id);
   const waitingForPlayers = !matchInfo || matchInfo.players.find(p => !p.name);
 
   if (error) {
     console.log(error);
     return <div>`Error: ${error.message}`</div>
-  } else if (!matchStarted) {
+  } else if (!matchID) {
     return <StartMatch game={game} gameOptions={gameOptions} setMatch={doStartMatch}/>
   } else if (onlineGameStarted) {
     return <GamePlayOnline game={game} gameOptions={gameOptions} matchID={matchID} player={player!}/>

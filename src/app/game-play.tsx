@@ -41,7 +41,7 @@ export function GamePlayOnline({ game, matchID, gameOptions, player }: GamePlayO
   });
 
   return (<div>
-    <div>{`Match: ${matchID.id}  Player: ${player.id} (${player.credentials})`}</div>
-    <GameClient matchID={matchID.id!} playerID={player.id} credentials={player.credentials} />
+    <div>{`Match: ${matchID.mid}  Player: ${player.id} (${player.credentials})`}</div>
+    <GameClient matchID={matchID.mid} playerID={player.id} credentials={player.credentials} />
   </div>);
 }

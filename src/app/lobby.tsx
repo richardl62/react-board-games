@@ -19,19 +19,16 @@ export function StartMatch({game,  gameOptions, setMatch} : StartMatchProps) {
     return <div>{`Error: ${progress.message}`}</div>
   }
 
-  const startLocal = () => {setMatch({local: true})};
-  const startOnline = () => {
+  const onClick = () => {
     setProgress('waiting');
-    const recordMatchID = (id: string) => {setMatch({id: id})};
+    const recordMatchID = (id: string) => {setMatch({mid: id})};
 
     const lobbyClient = new LobbyClient(game, null);
     lobbyClient.createMatch(gameOptions.numPlayers).then(recordMatchID).catch(setProgress);
   };
 
   return <div>
-      <span>Start Match: </span>
-      <button type="button" onClick={startLocal}>Local</button>
-      <button type="button" onClick={startOnline}>Online</button>
+      <button type="button" onClick={onClick}>Start</button>
   </div>;
 } 
 

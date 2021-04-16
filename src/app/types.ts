@@ -11,9 +11,7 @@ export interface GameOptions {
 }
 
 export interface MatchID {
-  // local and id should not both be set. 
-  local?: true, 
-  id?: string
+  mid: string
 } 
 
 export interface JoinedMatch {
@@ -28,7 +26,7 @@ export interface AppOptions {
   playersPerBrowser: number;
   bgioDebugPanel: boolean;
 
-  matchID: MatchID;
+  matchID: MatchID | null;
   player: Player | null;
 }
 

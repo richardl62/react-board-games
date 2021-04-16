@@ -26,12 +26,12 @@ export class LobbyClient {
     const createdMatch = await this._lobbyClient.createMatch(this.game.name, {
       numPlayers: numPlayers
     });
-    this._matchID = {id: createdMatch.matchID};
+    this._matchID = {mid: createdMatch.matchID};
     return createdMatch.matchID
   }
 
   async joinMatch(name: string | null): Promise<Player> {
-    if (!this.matchID || !this.matchID.id) {
+    if (!this.matchID || !this.matchID.mid) {
       throw new Error("Active online match not known");
     }
     const match = await this.getActiveMatch();
@@ -49,7 +49,7 @@ export class LobbyClient {
     const playerID = players[index].id.toString();
     const playerName = name || 'Player ' + playerID;
 
-    const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID.id,
+    const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID.mid,
       {playerID: playerID, playerName: playerName});
 
     console.log("joinMatchResult", joinMatchResult, ' for ', playerName);
@@ -61,12 +61,12 @@ export class LobbyClient {
   }
 
   getActiveMatch(): Promise<MatchInfo> {
-    if (!this.matchID || !this.matchID.id) {
+    if (!this.matchID || !this.matchID.mid) {
       // Throw rather than failed promise as this is a usage error
       // rather than a network/server issue.
       throw new Error("active match not set");
     }
-    return this._lobbyClient.getMatch(this.game.name, this.matchID.id);
+    return this._lobbyClient.getMatch(this.game.name, this.matchID.mid);
   }
 
   // Unsucessful attempt
