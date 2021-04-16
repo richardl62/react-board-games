@@ -24,7 +24,7 @@ function gameLinkElements(game: AppGame, index: number) {
   const key = (n: number) => game.name + n;
   return [
       <span key={key(1)}>{game.displayName}</span>,
-      <Link key={key(2)} to={gameURL(game, {online:true})}>Local</Link>,
+      <Link key={key(2)} to={gameURL(game, {online:false})}>Local</Link>,
       <Link key={key(3)} to={gameURL(game, {online:true})}>Online</Link>
   ];
 }

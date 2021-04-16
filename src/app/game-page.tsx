@@ -27,15 +27,11 @@ const localStorage = {
     window.localStorage.setItem(key, json);
   },
 
-  getPlayer: (matchID: MatchID | null): Player | null => {
-    if(matchID) {
+  getPlayer: (matchID: MatchID): Player | null => {
       const key = localStorageKey(matchID.mid);
       const json = window.localStorage.getItem(key);
     
       return json && JSON.parse(json);
-    }
-
-    return null;
   }
 };
 
@@ -46,7 +42,9 @@ interface GameLobbyProps {
 function GameLobby({game}: GameLobbyProps) {
   const { matchID } = initialAppOptions;
 
-  const [ player, setState ] = useState<Player|null>(localStorage.getPlayer(matchID));
+  const [ player, setState ] = useState<Player|null>( 
+    matchID && localStorage.getPlayer(matchID)
+  );
   const [ matchInfo, setMatchInfo] = useState<MatchInfo|null>(null);
   const [ error, setError ] = useState<Error|null>(null);
   const [ onlineGameStarted, setOnlineGameStarted ] = useState(false);
@@ -114,8 +112,8 @@ interface GamePageProps {
 
 function GamePage({game, online}: GamePageProps) {
   return online ?
-    <GamePlayLocal game={game} /> :
-    <GameLobby game={game} />
+    <GameLobby game={game} /> :
+    <GamePlayLocal game={game} />
 }
 
 export { GamePage };
