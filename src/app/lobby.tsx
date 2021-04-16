@@ -1,36 +1,9 @@
 import React, { useState } from 'react';
 import { AppGame } from '../app-game';
 import { LobbyClient, MatchInfo } from './lobby-client';
-import { Player, MatchID, GameOptions } from './types';
+import { Player, MatchID } from './types';
 
-interface StartMatchProps {
-  game: AppGame;
-  gameOptions: GameOptions;
-  setMatch: (matchID: MatchID) => void;
-}
-export function StartMatch({game,  gameOptions, setMatch} : StartMatchProps) {
-  const [progress, setProgress] = useState<null | 'waiting' | Error>(null);
 
-  if (progress === 'waiting') {
-    return <div>waiting ...</div>
-  }
-
-  if (progress instanceof Error) {
-    return <div>{`Error: ${progress.message}`}</div>
-  }
-
-  const onClick = () => {
-    setProgress('waiting');
-    const recordMatchID = (id: string) => {setMatch({mid: id})};
-
-    const lobbyClient = new LobbyClient(game, null);
-    lobbyClient.createMatch(gameOptions.numPlayers).then(recordMatchID).catch(setProgress);
-  };
-
-  return <div>
-      <button type="button" onClick={onClick}>Start</button>
-  </div>;
-} 
 
 interface JoinMatchProps {
   game: AppGame;

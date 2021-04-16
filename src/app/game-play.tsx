@@ -1,8 +1,8 @@
 import { Client } from "boardgame.io/react";
-import { Local, SocketIO } from 'boardgame.io/multiplayer';
+import { Local } from 'boardgame.io/multiplayer';
 import { AppGame } from "../app-game";
-import { GameOptions, MatchID, Player } from "./types";
-import { getURLOptions, lobbyServer } from "./url-options";
+import { MatchID } from "./types";
+import * as UrlParams from './url-params';
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -16,7 +16,7 @@ export function GamePlayLocal({ game }: GamePlayLocalProps) {
     multiplayer: Local(),
 
     numPlayers: 1,
-    debug:  getURLOptions().bgioDebugPanel,
+    debug: UrlParams.bgioDebugPanel,
   });
 
   return (<div> <GameClient /> </div>);
@@ -24,24 +24,21 @@ export function GamePlayLocal({ game }: GamePlayLocalProps) {
 
 interface GamePlayOnlineProps {
   game: AppGame;
-  gameOptions: GameOptions;
   matchID: MatchID;
-  player: Player;
-}
+};
+export function GamePlayOnline({ game, matchID }: GamePlayOnlineProps) {
 
-export function GamePlayOnline({ game, matchID, gameOptions, player }: GamePlayOnlineProps) {
+  // const GameClient = Client({
+  //   game: game,
+  //   board: game.renderGame,
+  //   multiplayer: SocketIO({ server: lobbyServer() }),
 
-  const GameClient = Client({
-    game: game,
-    board: game.renderGame,
-    multiplayer: SocketIO({ server: lobbyServer() }),
-
-    numPlayers: gameOptions.numPlayers,
-    debug:  gameOptions.bgioDebugPanel,
-  });
+  //   numPlayers: 2,// KLUDGE
+  // });
 
   return (<div>
-    <div>{`Match: ${matchID.mid}  Player: ${player.id} (${player.credentials})`}</div>
-    <GameClient matchID={matchID.mid} playerID={player.id} credentials={player.credentials} />
+        <div>{`Match: ${matchID.mid}`}</div>
+    {/* <div>{`Match: ${matchID.mid}  Player: ${player.id} (${player.credentials})`}</div>
+    <GameClient matchID={matchID.mid} playerID={player.id} credentials={player.credentials} /> */}
   </div>);
 }

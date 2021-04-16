@@ -1,7 +1,7 @@
 import { LobbyClient as BgioLobbyClient } from 'boardgame.io/client';
 import { AppGame, MatchID, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
-import { lobbyServer } from './url-options';
+import { lobbyServer } from './url-params';
 
 export type MatchInfo = LobbyAPI.Match;
 export type PublicPlayerInfo = MatchInfo['players'][0];
@@ -22,12 +22,12 @@ export class LobbyClient {
 
   get matchID() {return this._matchID};
 
-  async createMatch(numPlayers: number): Promise<string> {
+  async createMatch(numPlayers: number): Promise<MatchID> {
     const createdMatch = await this._lobbyClient.createMatch(this.game.name, {
       numPlayers: numPlayers
     });
     this._matchID = {mid: createdMatch.matchID};
-    return createdMatch.matchID
+    return this._matchID;
   }
 
   async joinMatch(name: string | null): Promise<Player> {

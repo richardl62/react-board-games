@@ -22,12 +22,4 @@ export interface JoinedMatch {
   playerCredentials: string;
 }
 
-export interface AppOptions {
-  playersPerBrowser: number;
-  bgioDebugPanel: boolean;
-
-  matchID: MatchID | null;
-  player: Player | null;
-}
-
 export type { AppGame } from '../app-game';

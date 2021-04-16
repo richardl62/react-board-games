@@ -1,17 +1,17 @@
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../tools';
 import games from '../games';
+import { AppGame } from '../app-game'
+import { GamePage } from './game-page';
+import * as UrlParams from './url-params';
 
 import styles from './app.module.css';
 
-import { AppGame } from '../app-game'
-import { GamePage } from './game-page';
-
-type GameStatus = {online: boolean};
-function gameURL(game: AppGame, {online}: GameStatus) {
+type GameStatus = {local: boolean};
+function gameURL(game: AppGame, {local}: GameStatus) {
   let base =`/${game.name}`;
-  if(online) {
-    base += '/lobby';
+  if(!local) {
+    base += '/start';
   }
   return base;
 }
@@ -24,8 +24,8 @@ function gameLinkElements(game: AppGame, index: number) {
   const key = (n: number) => game.name + n;
   return [
       <span key={key(1)}>{game.displayName}</span>,
-      <Link key={key(2)} to={gameURL(game, {online:false})}>Local</Link>,
-      <Link key={key(3)} to={gameURL(game, {online:true})}>Online</Link>
+      <Link key={key(2)} to={gameURL(game, {local:true})}>Local</Link>,
+      <Link key={key(3)} to={gameURL(game, {local:false})}>Online</Link>
   ];
 }
 
@@ -59,13 +59,14 @@ function PageNotFound(props: HomePageProps) {
 function gameRoute(game: AppGame, status : GameStatus) {
   const path = gameURL(game, status);
 
-  const component= () => <GamePage game={game} online={status.online}/>;
+  const component= () => <GamePage game={game} local={status.local} 
+    matchID={UrlParams.matchID}/>;
 
   return (<Route key={path} exact path={path} component={component} />); 
 }
 
 function gameRoutes(game: AppGame) {
-  return [ gameRoute(game, {online:true}), gameRoute(game, {online:false})];
+  return [ gameRoute(game, {local:true}), gameRoute(game, {local:false})];
 }
 
 
