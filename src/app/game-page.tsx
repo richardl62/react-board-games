@@ -95,7 +95,10 @@ function GamePage(props: GamePageProps) {
     return <JoinMatch joinMatch={joinMatch}/>;
   }
   if (matchID && player) {
-    return <GamePlayOnline game={game} matchID={matchID} player={player} />
+    return <GamePlayOnline 
+      game={game} matchID={matchID} player={player} 
+      numPlayers={numPlayersKludged}
+      />
   }
 
   return <div>Waiting ...</div>

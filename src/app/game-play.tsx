@@ -25,6 +25,7 @@ export function GamePlayLocal({ game }: GamePlayLocalProps) {
 interface GamePlayOnlineProps {
   game: AppGame;
   matchID: MatchID;
+  numPlayers: number; //KLUDGE? Could be obtained from matchID
   player: Player;
 };
 
@@ -38,14 +39,14 @@ function ShowPlayers(props: any) {
   );
 }
 
-export function GamePlayOnline({ game, matchID, player }: GamePlayOnlineProps) {
+export function GamePlayOnline({ game, matchID, numPlayers, player }: GamePlayOnlineProps) {
 
   const GameClient = Client({
     game: game,
     board: ShowPlayers, //game.renderGame,
     multiplayer: SocketIO({ server: UrlParams.lobbyServer() }),
 
-    numPlayers: 2,// KLUDGE
+    numPlayers: numPlayers,
     debug: UrlParams.bgioDebugPanel,
   });
 
