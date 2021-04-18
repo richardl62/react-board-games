@@ -35,8 +35,7 @@ export class LobbyClient {
       throw new Error("Active online match not known");
     }
     const match = await this.getActiveMatch();
-    console.log("Active match", match);
-
+  
     const players = match.players;
     let index = 0;
     while (players[index].name) {
@@ -51,8 +50,6 @@ export class LobbyClient {
 
     const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID.mid,
       {playerID: playerID, playerName: playerName});
-
-    console.log("joinMatchResult", joinMatchResult, ' for ', playerName);
 
     return {
       id: playerID,

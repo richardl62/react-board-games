@@ -29,21 +29,58 @@ interface GamePlayOnlineProps {
   player: Player;
 };
 
-function ShowPlayers(props: any) {
-  console.log("ShowPlayers:", props);
+
+function Players(props: any /*KLUDGE*/) {
+  const ctx = props.ctx;
+  const matchData = props.matchData;
+
+  const validIndex = (str: string) => {
+    const index = parseInt(str);
+    if(isNaN(index) || index < 0 || index >= matchData.length) {
+      throw new Error("Bad player index");
+    }
+    return index;
+  }
+
+  const playerID  = validIndex(props.playerID);
+  const currentPlayer = validIndex(ctx.currentPlayer);
+  console.log("player info", playerID, currentPlayer);
+
+  const optionalText = (cond: boolean, str: string) => {
+    return <span>{cond ? ' '+str : null}</span>;
+  }
+
+
+  const playerElem = (p: any, index: number) => {
+
+    return (<div key={p.id}>
+      <span>{p.name ? p.name : '<waiting>'}</span>
+      {optionalText(index === playerID, '(you)')}
+      {optionalText(index === currentPlayer, '<= to play')}
+      {optionalText(p.name && !p.isConnected, '*not connected*')}
+    </div>);
+  }
+
   return (
     <div>
-      <div>{`PlayerID: ${props.playerID}`}</div>
-      <div>{JSON.stringify(props.matchData)}</div>
+      {matchData.map(playerElem)}
     </div>
   );
 }
 
 export function GamePlayOnline({ game, matchID, numPlayers, player }: GamePlayOnlineProps) {
 
+  const renderGame = (props: any /*kludge*/) => {
+    console.log('renderGame', props);
+    return <div>
+      <Players {...props}/>
+      {game.renderGame(props)}
+    </div>
+  }
+
   const GameClient = Client({
     game: game,
-    board: ShowPlayers, //game.renderGame,
+    board: renderGame,
     multiplayer: SocketIO({ server: UrlParams.lobbyServer() }),
 
     numPlayers: numPlayers,
@@ -52,8 +89,7 @@ export function GamePlayOnline({ game, matchID, numPlayers, player }: GamePlayOn
 
   return (
     <div>
-      {/* <div>{`Match: ${matchID.mid} Player: ${JSON.stringify(player)}`}</div> */}
-      <GameClient matchID={matchID.mid}
+      <GameClient matchID={matchID.mid} 
         playerID={player.id} credentials={player.credentials}
       />
     </div>

@@ -32,19 +32,21 @@ interface JoinMatchProps {
   joinMatch: (arg: string) => void;
 }
 
-function JoinMatch({joinMatch} : JoinMatchProps) {
-  const [name, setName ] = useState<string>('');
+function JoinMatch({ joinMatch }: JoinMatchProps) {
+  const [name, setName] = useState<string>('');
   return (
     <div>
       <div>
         <label>Name</label>
         <input value={name} placeholder='Player name' onInput={e => setName(e.currentTarget.value)} />
-        <button type="button" onClick={()=>joinMatch(name)}>
+
+        <button type="button" onClick={() => joinMatch(name)}>
           Join Game
-        </button>
+          </button>
+
       </div>
     </div>);
-} 
+}
 
 interface GamePageProps {
   game: AppGame;
@@ -58,22 +60,22 @@ function GamePage(props: GamePageProps) {
   const [player, setPlayer] = useState<Player | null>(null);
 
   useEffect(() => {
-    if(local) {
+    if (local) {
       return;
     }
-    if(!matchID) {
+    if (!matchID) {
       const lobbyClient = new LobbyClient(game, null);
       lobbyClient.createMatch(numPlayersKludged).then(openMatchPage).catch(setError);
     } else if (!player) {
       const p = localStorage.getPlayer(matchID);
-      if(p) {
+      if (p) {
         setPlayer(p);
       }
     }
   }, [game, local, matchID, player]);
 
   const joinMatch = (name: string) => {
-    const doit = async() => {
+    const doit = async () => {
       const lobbyClient = new LobbyClient(game, matchID);
       const p = await lobbyClient.joinMatch(name);
       localStorage.setPlayer(matchID!, p);
@@ -92,13 +94,13 @@ function GamePage(props: GamePageProps) {
   }
 
   if (matchID && !player) {
-    return <JoinMatch joinMatch={joinMatch}/>;
+    return <JoinMatch joinMatch={joinMatch} />;
   }
   if (matchID && player) {
-    return <GamePlayOnline 
-      game={game} matchID={matchID} player={player} 
+    return <GamePlayOnline
+      game={game} matchID={matchID} player={player}
       numPlayers={numPlayersKludged}
-      />
+    />
   }
 
   return <div>Waiting ...</div>
