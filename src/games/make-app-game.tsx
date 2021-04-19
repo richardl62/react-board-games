@@ -23,6 +23,10 @@ function makeAppGame(gameDefintion: GameDefinition) : AppGame {
 
         name: gameDefintion.name,
 
+        minPlayers: gameDefintion.minPlayers,
+        maxPlayers: gameDefintion.maxPlayers,
+
+
         setup: gameDefintion.setup,
 
         moves: moves,

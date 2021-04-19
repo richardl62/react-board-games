@@ -12,6 +12,9 @@ const game : AppGame<G> = {
 
   setup: (): G => { return { value: 0 }; },
 
+  minPlayers: 1,
+  maxPlayers: 100,
+
   // turn: {
   //   moveLimit: 1,
   // },

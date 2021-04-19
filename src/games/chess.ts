@@ -7,6 +7,9 @@ function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionI
   return {
     displayName: name,
 
+    minPlayers: 2,
+    maxPlayers: 2,
+
     renderPiece: RenderPiece,
   
     boardStyle: {

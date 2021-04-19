@@ -80,6 +80,9 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
     return {
         displayName: name,
 
+        minPlayers: 2,
+        maxPlayers: 2,
+        
         renderPiece: RenderPiece,
 
         boardStyle: {
@@ -97,6 +100,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
         },
 
         onMove: moveFunction,
+
     };
 }
 

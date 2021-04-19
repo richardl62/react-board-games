@@ -33,6 +33,8 @@ interface GameDefinitionInput<GameSpecificState = never> {
         bottom: Array<PieceName>;
     };
 
+    minPlayers: number;
+    maxPlayers: number;
 
     renderPiece: (props: { pieceName: PieceName }) => JSX.Element;
 
@@ -145,6 +147,8 @@ function makeGameDefinition<GameSpecificState = never>(
         displayName: input.displayName,
         name: makeSimplifiedName(input.displayName),
         
+        minPlayers: input.minPlayers,
+        maxPlayers: input.maxPlayers,
         boardStyle: input.boardStyle,
 
         offBoardPieces: input.offBoardPieces,

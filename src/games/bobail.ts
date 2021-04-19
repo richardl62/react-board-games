@@ -176,6 +176,9 @@ const games: Array<GameDefinitionInput<BobailState>> = [
     {
         displayName: 'Bobail',
 
+        minPlayers: 2,
+        maxPlayers: 2,
+
         boardStyle: {
             checkered: false,
             labels: true,

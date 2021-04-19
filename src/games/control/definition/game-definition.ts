@@ -54,6 +54,9 @@ export interface GameDefinition {
     /// change.  This is for page names and is passed to Bgio. 
     name: string;
 
+    minPlayers: number;
+    maxPlayers: number;
+
     
     initialState : GameState<any>
 
