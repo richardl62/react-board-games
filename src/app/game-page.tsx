@@ -1,32 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MatchID, Player } from './types';
 import { AppGame } from '../app-game';
 import { GamePlayLocal, GamePlayOnline } from './game-play';
 import { LobbyClient } from './lobby-client';
 import { openMatchPage } from './url-params';
-const numPlayersKludged = 2;
+import { getStoredPlayer, setStoredPlayer } from './local-storage';
+import { useStatePromise } from '../tools';
 
-const localStorageKey = (id: string) => `bgio-match-${id}`;
+interface StartMatchProps {
+  game: AppGame;
+  startMatch: (numPlayers: number) => void;
+}
 
-const localStorage = {
-  setPlayer: (matchID: MatchID, player: Player) => {
-    const key = localStorageKey(matchID.mid);
-    const json = JSON.stringify(player);
+function StartMatch({game, startMatch} : StartMatchProps) {
+  const [ numPlayers, setNumPlayers ] = useState<number>(game.minPlayers);
+  const { minPlayers, maxPlayers } = game;
 
-    window.localStorage.setItem(key, json);
-  },
-
-  getPlayer: (matchID: MatchID): Player | null => {
-    if (matchID) {
-      const key = localStorageKey(matchID.mid);
-      const json = window.localStorage.getItem(key);
-
-      return json && JSON.parse(json);
-    }
-
+  if (minPlayers === maxPlayers) {
+    startMatch(minPlayers);
     return null;
   }
-};
+
+  return (<div>
+    <label htmlFor='numPlayers'>
+      {`Number of players (${minPlayers}-${maxPlayers}):`}
+    </label>
+    <input type="number" name='numPlayers'
+      min={minPlayers} max={maxPlayers} value={numPlayers}
+      onChange={(event) => setNumPlayers(Number(event.target.value))}
+    />
+    <button type="button" onClick={()=>startMatch(numPlayers)}>Start Game</button>
+
+  </div>);
+}
 
 interface JoinMatchProps {
   joinMatch: (arg: string) => void;
@@ -55,55 +61,61 @@ interface GamePageProps {
 }
 
 function GamePage(props: GamePageProps) {
-  const { game, local, matchID } = props;
   const [error, setError] = useState<Error | null>(null);
-  const [player, setPlayer] = useState<Player | null>(null);
+  const player = useStatePromise<Player>();
+  const numPlayers = useStatePromise<number>();
+  const matchID = useStatePromise<MatchID>(props.matchID);
+  
+  const { game, local } = props;
 
-  useEffect(() => {
-    if (local) {
-      return;
-    }
-    if (!matchID) {
-      const lobbyClient = new LobbyClient(game, null);
-      lobbyClient.createMatch(numPlayersKludged).then(openMatchPage).catch(setError);
-    } else if (!player) {
-      const p = localStorage.getPlayer(matchID);
-      if (p) {
-        setPlayer(p);
-      }
-    }
-  }, [game, local, matchID, player]);
-
-  const joinMatch = (name: string) => {
-    const doit = async () => {
-      const lobbyClient = new LobbyClient(game, matchID);
-      const p = await lobbyClient.joinMatch(name);
-      localStorage.setPlayer(matchID!, p);
-      setPlayer(p);
-    }
-
-    doit().catch(setError);
+  const storedPlayer = matchID.fulfilled && getStoredPlayer(matchID.value);
+  
+  if(storedPlayer && player.unset) {
+    player.value = storedPlayer;
   }
 
-  if (local) {
-    return <GamePlayLocal game={game} />;
+  if(matchID.fulfilled && numPlayers.unset) {
+    const p = new LobbyClient(game, matchID.value).numPlayers();
+    numPlayers.setPromise(p).catch(setError);
+  }
+
+  const startMatch = (numPlayers: number) => {
+    const p = new LobbyClient(game, null).createMatch(numPlayers);
+    matchID.setPromise(p).then(openMatchPage).catch(setError);
+  }
+
+  const joinMatch = (name: string) => {
+    const p = new LobbyClient(game, matchID.value).joinMatch(name);
+    player.setPromise(p)
+      .then(p => setStoredPlayer(matchID.value, p))
+      .catch(setError);
   }
 
   if (error) {
     return <div>{`ERROR: ${error.message}`}</div>
   }
 
-  if (matchID && !player) {
-    return <JoinMatch joinMatch={joinMatch} />;
-  }
-  if (matchID && player) {
-    return <GamePlayOnline
-      game={game} matchID={matchID} player={player}
-      numPlayers={numPlayersKludged}
-    />
+  if (local) {
+    return <GamePlayLocal game={game} />;
   }
 
-  return <div>Waiting ...</div>
-}
+  if(matchID.unset) {
+    return <StartMatch game={game} startMatch={startMatch} />
+  }
+
+  if (matchID.fulfilled && player.unset) {
+    return <JoinMatch joinMatch={joinMatch} />;
+  }
+
+  if (matchID.fulfilled && player.fulfilled && numPlayers.fulfilled) {
+    return <GamePlayOnline game={game} matchID={matchID.value} player={player.value} numPlayers={numPlayers.value}/>
+  }
+
+  if (matchID.unset && player.unset && numPlayers.unset) {
+    throw new Error("Unexpected unset value");
+  }
+
+  return <div>Waiting ...</div>;
+  }
 
 export { GamePage };

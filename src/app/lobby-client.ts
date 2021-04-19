@@ -66,29 +66,9 @@ export class LobbyClient {
     return this._lobbyClient.getMatch(this.game.name, this.matchID.mid);
   }
 
-  // Unsucessful attempt
-  //
-  // // Return a promise that is forfilled the set of players is different from
-  // // those recorded in knownPlayers. (Typically, this occurs when a player joins
-  // // or leaves. 
-  // getPlayerChange(knownPlayers: MatchInfo | null): Promise<MatchInfo> {
-
-  //   return new Promise<MatchInfo>((resolve, reject) => {
-  //     const conditionalResolve = (mi: MatchInfo) => {
-  //         const same = knownPlayers && samePlayers(knownPlayers, mi);
-  //         console.log((same? "Same: " : "Different: "), knownPlayers, mi)
-
-  //         if(!same) {
-  //           resolve(mi);
-  //         }
-  //     }
-      
-  //     const doit = () => {
-  //       this.getActiveMatch().then(conditionalResolve, reject);
-  //     }
-  //     setInterval(doit, 2000);
-  //   })
-  // }
+  numPlayers() : Promise<number> {
+    return this.getActiveMatch().then(mi => mi.players.length);
+  }
 
   getMatch(matchID: string): Promise<MatchInfo> {
     return this._lobbyClient.getMatch(this.game.name, matchID);

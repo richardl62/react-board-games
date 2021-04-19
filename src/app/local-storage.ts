@@ -1,0 +1,21 @@
+import { MatchID, Player } from './types';
+
+const localStorageKey = (id: string) => `bgio-match-${id}`;
+export function setStoredPlayer(matchID: MatchID, player: Player) {
+  if (matchID) {
+    const key = localStorageKey(matchID.mid);
+    const json = JSON.stringify(player);
+
+    window.localStorage.setItem(key, json);
+  }
+}
+export function getStoredPlayer(matchID: MatchID): Player | null {
+  if (matchID) {
+    const key = localStorageKey(matchID.mid);
+    const json = window.localStorage.getItem(key);
+
+    return json && JSON.parse(json);
+  }
+
+  return null;
+}

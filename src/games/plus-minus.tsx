@@ -27,7 +27,6 @@ const game : AppGame<G> = {
   },
 
   renderGame: ({ G, moves, events }: BoardProps<G> ) => {
-    console.log(events);
     return (
       <div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>

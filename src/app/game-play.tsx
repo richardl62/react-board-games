@@ -22,13 +22,6 @@ export function GamePlayLocal({ game }: GamePlayLocalProps) {
   return (<div> <GameClient /> </div>);
 }
 
-interface GamePlayOnlineProps {
-  game: AppGame;
-  matchID: MatchID;
-  numPlayers: number; //KLUDGE? Could be obtained from matchID
-  player: Player;
-};
-
 
 function Players(props: any /*KLUDGE*/) {
   const ctx = props.ctx;
@@ -68,10 +61,17 @@ function Players(props: any /*KLUDGE*/) {
   );
 }
 
+interface GamePlayOnlineProps {
+  game: AppGame;
+  matchID: MatchID;
+  numPlayers: number;
+  player: Player;
+};
+
+
 export function GamePlayOnline({ game, matchID, numPlayers, player }: GamePlayOnlineProps) {
 
   const renderGame = (props: any /*kludge*/) => {
-    console.log('renderGame', props);
     return <div>
       <Players {...props}/>
       {game.renderGame(props)}
