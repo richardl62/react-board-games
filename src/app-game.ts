@@ -1,4 +1,6 @@
-export interface AppGame {
+import { BoardProps } from "boardgame.io/react";
+
+interface AppGame<G = unknown> {
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
   // display purposes.
   displayName: string;
@@ -6,7 +8,10 @@ export interface AppGame {
   // Space-free name suitable for passing to bgio.
   name: string;
 
-  setup: () => any;
+  setup: () => G;
   moves: any; // KLUDGE
-  renderGame: (arg0: any) => JSX.Element;
+  renderGame: (props: BoardProps<G>) => JSX.Element;
 }
+
+export type { AppGame, BoardProps };
+
