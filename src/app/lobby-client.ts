@@ -1,4 +1,4 @@
-import { LobbyClient as BgioLobbyClient } from 'boardgame.io/client';
+import { LobbyClient } from 'boardgame.io/client';
 import { AppGame, MatchID, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
 import { lobbyServer } from './url-params';
@@ -8,74 +8,44 @@ export type PublicPlayerInfo = MatchInfo['players'][0];
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 
+function lobbyClient() {
+  return new LobbyClient({ server: lobbyServer() });
+}
 
-export class LobbyClient {
-  constructor(game: AppGame, matchID: MatchID | null) {
-  
-    this.game = game;
-    this._matchID = matchID;
-    this._lobbyClient = new BgioLobbyClient({ server: lobbyServer() });
-  }
-  readonly game: AppGame;
-  private _matchID: MatchID | null;
-  private _lobbyClient: BgioLobbyClient;
+export async function createMatch(game: AppGame, numPlayers: number): Promise<MatchID> {
+  const p = lobbyClient().createMatch(game.name, { numPlayers: numPlayers })
+  const m = await p;
+  return { mid: m.matchID };
+}
 
-  get matchID() {return this._matchID};
+export function getActiveMatch(game: AppGame, matchID: MatchID): Promise<MatchInfo> {
+  return lobbyClient().getMatch(game.name, matchID.mid);
+}
 
-  async createMatch(numPlayers: number): Promise<MatchID> {
-    const createdMatch = await this._lobbyClient.createMatch(this.game.name, {
-      numPlayers: numPlayers
-    });
-    this._matchID = {mid: createdMatch.matchID};
-    return this._matchID;
-  }
+export async function joinMatch(game: AppGame, matchID: MatchID, name: string | null): Promise<Player> {
+  const match = await lobbyClient().getMatch(game.name, matchID.mid);
 
-  async joinMatch(name: string | null): Promise<Player> {
-    if (!this.matchID || !this.matchID.mid) {
-      throw new Error("Active online match not known");
-    }
-    const match = await this.getActiveMatch();
-  
-    const players = match.players;
-    let index = 0;
-    while (players[index].name) {
-      ++index;
-      if (index === players.length) {
-        throw new Error("Match full - cannot join");
-      }
-    }
-
-    const playerID = players[index].id.toString();
-    const playerName = name || 'Player ' + playerID;
-
-    const joinMatchResult = await this._lobbyClient.joinMatch(this.game.name, this.matchID.mid,
-      {playerID: playerID, playerName: playerName});
-
-    return {
-      id: playerID,
-      credentials: joinMatchResult.playerCredentials,
+  const players = match.players;
+  let index = 0;
+  while (players[index].name) {
+    ++index;
+    if (index === players.length) {
+      throw new Error("Match full - cannot join");
     }
   }
 
-  getActiveMatch(): Promise<MatchInfo> {
-    if (!this.matchID || !this.matchID.mid) {
-      // Throw rather than failed promise as this is a usage error
-      // rather than a network/server issue.
-      throw new Error("active match not set");
-    }
-    return this._lobbyClient.getMatch(this.game.name, this.matchID.mid);
-  }
+  const playerID = players[index].id.toString();
+  const playerName = name || 'Player ' + playerID;
 
-  numPlayers() : Promise<number> {
-    return this.getActiveMatch().then(mi => mi.players.length);
-  }
+  const joinMatchResult = await lobbyClient().joinMatch(game.name, matchID.mid,
+    { playerID: playerID, playerName: playerName });
 
-  getMatch(matchID: string): Promise<MatchInfo> {
-    return this._lobbyClient.getMatch(this.game.name, matchID);
-  }
-
-  listMatches(): Promise<MatchList> {
-    return this._lobbyClient.listMatches(this.game.name);
+  return {
+    id: playerID,
+    credentials: joinMatchResult.playerCredentials,
   }
 }
 
+export function numPlayers(game: AppGame, matchID: MatchID): Promise<number> {
+  return lobbyClient().getMatch(game.name, matchID.mid).then(mi => mi.players.length);
+}

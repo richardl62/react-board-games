@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MatchID, Player } from './types';
 import { AppGame } from '../app-game';
 import { GamePlayLocal, GamePlayOnline } from './game-play';
-import { LobbyClient } from './lobby-client';
+import * as LobbyClient  from './lobby-client';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
 import { useStatePromise } from '../tools';
@@ -75,17 +75,17 @@ function GamePage(props: GamePageProps) {
   }
 
   if(matchID.fulfilled && numPlayers.unset) {
-    const p = new LobbyClient(game, matchID.value).numPlayers();
+    const p = LobbyClient.numPlayers(game, matchID.value);
     numPlayers.setPromise(p).catch(setError);
   }
 
   const startMatch = (numPlayers: number) => {
-    const p = new LobbyClient(game, null).createMatch(numPlayers);
+    const p = LobbyClient.createMatch(game, numPlayers);
     matchID.setPromise(p).then(openMatchPage).catch(setError);
   }
 
   const joinMatch = (name: string) => {
-    const p = new LobbyClient(game, matchID.value).joinMatch(name);
+    const p = LobbyClient.joinMatch(game, matchID.value, name);
     player.setPromise(p)
       .then(p => setStoredPlayer(matchID.value, p))
       .catch(setError);
