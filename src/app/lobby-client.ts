@@ -8,6 +8,8 @@ export type PublicPlayerInfo = MatchInfo['players'][0];
 export type CreatedMatch = LobbyAPI.CreatedMatch;
 export type MatchList = LobbyAPI.MatchList;
 
+export const unnamedPlayer = '_Unnamed Player_';
+
 function lobbyClient() {
   return new LobbyClient({ server: lobbyServer() });
 }
@@ -22,7 +24,7 @@ export function getActiveMatch(game: AppGame, matchID: MatchID): Promise<MatchIn
   return lobbyClient().getMatch(game.name, matchID.mid);
 }
 
-export async function joinMatch(game: AppGame, matchID: MatchID, name: string | null): Promise<Player> {
+export async function joinMatch(game: AppGame, matchID: MatchID, name: string | null = null): Promise<Player> {
   const match = await lobbyClient().getMatch(game.name, matchID.mid);
 
   const players = match.players;
@@ -35,10 +37,9 @@ export async function joinMatch(game: AppGame, matchID: MatchID, name: string | 
   }
 
   const playerID = players[index].id.toString();
-  const playerName = name || 'Player ' + playerID;
 
   const joinMatchResult = await lobbyClient().joinMatch(game.name, matchID.mid,
-    { playerID: playerID, playerName: playerName });
+    { playerID: playerID, playerName: name || unnamedPlayer});
 
   return {
     id: playerID,

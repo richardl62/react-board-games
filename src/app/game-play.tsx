@@ -3,6 +3,9 @@ import { Local, SocketIO } from 'boardgame.io/multiplayer';
 import { AppGame } from "../app-game";
 import { MatchID, Player } from "./types";
 import * as UrlParams from './url-params';
+import styles from './app.module.css';
+import { nonNull } from "../tools";
+import { unnamedPlayer } from "./lobby-client";
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -36,26 +39,35 @@ function Players(props: any /*KLUDGE*/) {
   }
 
   const playerID  = validIndex(props.playerID);
-  const currentPlayer = validIndex(ctx.currentPlayer);
-  console.log("player info", playerID, currentPlayer);
-
-  const optionalText = (cond: boolean, str: string) => {
-    return <span>{cond ? ' '+str : null}</span>;
-  }
-
 
   const playerElem = (p: any, index: number) => {
 
-    return (<div key={p.id}>
-      <span>{p.name ? p.name : '<waiting>'}</span>
-      {optionalText(index === playerID, '(you)')}
-      {optionalText(index === currentPlayer, '<= to play')}
-      {optionalText(p.name && !p.isConnected, '*not connected*')}
-    </div>);
+    let text: string;
+    if (!p.name) {
+      text = '<waiting>';
+    } else if (p.name === unnamedPlayer) {
+      text = (index === playerID) ? 'You' : `Player ${p.id}`;
+    } else {
+      text = p.name;
+    }
+    
+    if(p.name && !p.isConnected) {
+     text += ' (Offline)';
+    }
+    const isCurrentPlayer = index === validIndex(ctx.currentPlayer);
+
+
+    return (
+      <div key={p.id}
+        className={isCurrentPlayer? nonNull(styles.currentPlayer) : undefined}
+        >
+        {text}
+      </div>
+    );
   }
 
   return (
-    <div>
+    <div className={nonNull(styles.playerNames)}>
       {matchData.map(playerElem)}
     </div>
   );

@@ -29,6 +29,20 @@ body {
     margin-bottom: 0.5em;
 }
 
+.playerNames {
+    display: flex;
+}
+
+.playerNames > * {
+    margin-right: 1em;
+    font-weight: bold;
+}
+
+.currentPlayer {
+    text-decoration: underline;
+}
+
+
 .lobby {
     font-size:100%; /* place holder */
 }
