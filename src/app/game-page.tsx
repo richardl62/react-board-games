@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { MatchID, Player } from './types';
 import { AppGame } from '../app-game';
-import { GamePlayLocal, GamePlayOnline } from './game-play';
+import { GamePlayOnline } from './game-play';
 import * as LobbyClient  from './lobby-client';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
@@ -56,7 +56,6 @@ function JoinMatch({ joinMatch }: JoinMatchProps) {
 
 interface GamePageProps {
   game: AppGame;
-  local: boolean;
   matchID: MatchID | null;
 }
 
@@ -66,7 +65,7 @@ function GamePage(props: GamePageProps) {
   const numPlayers = useStatePromise<number>();
   const matchID = useStatePromise<MatchID>(props.matchID);
   
-  const { game, local } = props;
+  const { game } = props;
 
   const storedPlayer = matchID.fulfilled && getStoredPlayer(matchID.value);
   
@@ -93,10 +92,6 @@ function GamePage(props: GamePageProps) {
 
   if (error) {
     return <div>{`ERROR: ${error.message}`}</div>
-  }
-
-  if (local) {
-    return <GamePlayLocal game={game} />;
   }
 
   if(matchID.unset) {

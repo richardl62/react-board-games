@@ -13,12 +13,8 @@ body {
 }
 
 .gameLinks {
-    display: inline-grid;
-    grid-template-columns: auto auto auto;
-}
-
-.gameLinks a {
-    margin-left: 1em;
+    display: flex;
+    flex-direction: column;
 }
 
 .pageNotFound div:first-of-type {

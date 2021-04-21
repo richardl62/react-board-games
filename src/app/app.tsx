@@ -7,13 +7,8 @@ import * as UrlParams from './url-params';
 
 import styles from './app.module.css';
 
-type GameStatus = {local: boolean};
-function gameURL(game: AppGame, {local}: GameStatus) {
-  let base =`/${game.name}`;
-  if(!local) {
-    base += '/start';
-  }
-  return base;
+function gameURL(game: AppGame) {
+  return `/${game.name}`;
 }
 
 interface HomePageProps {
@@ -23,9 +18,7 @@ interface HomePageProps {
 function gameLinkElements(game: AppGame, index: number) {
   const key = (n: number) => game.name + n;
   return [
-      <span key={key(1)}>{game.displayName}</span>,
-      <Link key={key(2)} to={gameURL(game, {local:true})}>Local</Link>,
-      <Link key={key(3)} to={gameURL(game, {local:false})}>Online</Link>
+      <Link key={key(3)} to={gameURL(game)}>{game.displayName}</Link>
   ];
 }
 
@@ -56,17 +49,12 @@ function PageNotFound(props: HomePageProps) {
   )
 }
 
-function gameRoute(game: AppGame, status : GameStatus) {
-  const path = gameURL(game, status);
+function gameRoute(game: AppGame) {
+  const path = gameURL(game);
 
-  const component= () => <GamePage game={game} local={status.local} 
-    matchID={UrlParams.matchID}/>;
+  const component= () => <GamePage game={game} matchID={UrlParams.matchID}/>;
 
   return (<Route key={path} exact path={path} component={component} />); 
-}
-
-function gameRoutes(game: AppGame) {
-  return [ gameRoute(game, {local:true}), gameRoute(game, {local:false})];
 }
 
 
@@ -77,7 +65,7 @@ function App() {
   return (
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
-      {games.map(gameRoutes)}
+      {games.map(gameRoute)}
       <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>
   );
