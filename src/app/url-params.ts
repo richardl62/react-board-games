@@ -32,6 +32,8 @@ export const bgioDebugPanel = debugPanel ? parseBool(debugPanel) : false;
 
 const matchID_ = getAndDelete('match-id');
 export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
+
+const server = getAndDelete('server');
   
 if (usp.toString()) {
   console.log("Unrecongised url parameters", usp.toString())
@@ -46,6 +48,17 @@ export function openMatchPage(matchID: MatchID) {
   window.location.href = url.href;
 }
 export function lobbyServer() { 
-  return 'http://localhost:8000'; // KLUDGE
+  const url = new URL(window.location.href);
+  let result;
+  if(server) {
+    result = server;
+  } else if(url.hostname === 'localhost') {
+    result = 'http://localhost:8000'; // KLUDGE
+  } else {
+    result = window.location.href;
+  }
+  
+  console.log("lobbyServer:", result);
+  return result;
 }
 
