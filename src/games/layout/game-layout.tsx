@@ -8,15 +8,6 @@ import { nonNull } from '../../tools';
 import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 
-// const nameElements = playerNames.map((name: string, index: number) => {
-//     let props : any = {};
-//     if(index === active) {
-//         props.className = nonNull(styles.currentPlayer);
-//     }
-//     return (<div key={index} {...props}>{name}</div>);
-// })
-
-
 function Header({ gameControl }: { gameControl: GameControl }) {
     const {playerNames, caller } = gameControl.players;
     let message;
