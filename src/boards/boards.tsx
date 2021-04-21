@@ -1,6 +1,6 @@
-import styles from './app.module.css';
+import styles from './boards.module.css';
 import { nonNull } from "../tools";
-import { unnamedPlayer } from "./lobby-client";
+export const unnamedPlayer = '_Unnamed Player_';
 
 export function BoardAndPlayers(props: any /*kludge*/) {
   const game = props.game;

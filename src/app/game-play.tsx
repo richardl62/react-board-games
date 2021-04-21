@@ -4,7 +4,7 @@ import { AppGame } from "../app-game";
 import { MatchID, Player } from "./types";
 import * as UrlParams from './url-params';
 
-import { BoardAndPlayers } from "./boards";
+import { BoardAndPlayers } from "../boards";
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -23,7 +23,6 @@ export function GamePlayLocal({ game }: GamePlayLocalProps) {
 
   return (<div> <GameClient /> </div>);
 }
-
 
 interface GamePlayOnlineProps {
   game: AppGame;
