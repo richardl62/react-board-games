@@ -13,7 +13,7 @@ export function GamePlayLocal({ game }: GamePlayLocalProps) {
   const GameClient = Client({
     game: game,
 
-    board: game.renderGame,
+    board: game.board,
     multiplayer: Local(),
 
     numPlayers: 1,

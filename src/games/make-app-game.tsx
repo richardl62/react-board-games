@@ -31,7 +31,7 @@ function makeAppGame(gameDefintion: GameDefinition) : AppGame {
 
         moves: moves,
         
-        renderGame: (bgioProps: BgioBoardProps) => (
+        board: (bgioProps: BgioBoardProps) => (
             <GameWrapper bgioProps={bgioProps} gameDefinition={gameDefintion} />
         ),
     }

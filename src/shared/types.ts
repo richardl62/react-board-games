@@ -20,7 +20,7 @@ export interface AppGame<G = any> {
 
   setup: () => G;
   moves: any; // KLUDGE
-  renderGame: (props: BoardProps<G>) => JSX.Element;
+  board: (props: BoardProps<G>) => JSX.Element;
 
   minPlayers: number,
   maxPlayers: number,

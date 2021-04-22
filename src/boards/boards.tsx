@@ -42,7 +42,7 @@ export function BoardAndPlayers(props: any /*kludge*/) {
         {playerElems}
       </div>
       {numToJoin === 0 ?
-        game.renderGame(props) :
+        game.board(props) :
         <div>{`Waiting for ${numToJoin} more player(s) to join`}</div>
       }
     </div>);
