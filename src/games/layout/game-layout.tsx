@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { GameControl } from '../control';
 import Board from './board';
 import RowOfPieces from './row-of-pieces';
-import { nonNull } from '../../general/tools';
+import { nonNull } from '../../shared/tools';
 import styles from './game-layout.module.css';
 import UserOptions from './user-options';
 

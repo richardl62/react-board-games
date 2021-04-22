@@ -1,5 +1,5 @@
 import styles from './boards.module.css';
-import { nonNull } from "../general/tools";
+import { nonNull } from "../shared/tools";
 export const unnamedPlayer = '_Unnamed Player_';
 
 export function BoardAndPlayers(props: any /*kludge*/) {

@@ -1,4 +1,4 @@
-import { MatchID, Player } from '../general/types';
+import { MatchID, Player } from '../shared/types';
 
 const localStorageKey = (id: string) => `bgio-match-${id}`;
 export function setStoredPlayer(matchID: MatchID, player: Player) {

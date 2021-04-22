@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import { nonNull } from '../../general/tools';
+import { nonNull } from '../../shared/tools';
 import { SquareProperties, LegalMoveStatus } from '../control';
 import styles from './square.module.css';
 

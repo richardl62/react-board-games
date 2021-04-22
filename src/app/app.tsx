@@ -1,7 +1,7 @@
 import { Route, Switch, Link } from 'react-router-dom';
-import { nonNull } from '../general/tools';
+import { nonNull } from '../shared/tools';
+import { AppGame } from '../shared/types'
 import games from '../games';
-import { AppGame } from '../app-game'
 import { GamePage } from './game-page';
 import * as UrlParams from './url-params';
 

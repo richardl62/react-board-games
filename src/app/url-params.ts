@@ -1,6 +1,6 @@
 // Get values that can be set in the url.
 // If not set, give default value.
-import { AppGame, MatchID } from "../general/types";
+import { AppGame, MatchID } from "../shared/types";
 
 function parseBool(str: string) {
     if (str === '' || str=== 'true') {

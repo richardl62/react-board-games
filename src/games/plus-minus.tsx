@@ -1,4 +1,4 @@
-import { AppGame, BoardProps } from '../app-game';
+import { AppGame, BoardProps } from '../shared/types';
 
 
 interface G {

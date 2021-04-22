@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { MatchID, Player } from '../general/types';
-import { AppGame } from '../app-game';
+import { MatchID, Player, AppGame } from '../shared/types';
 import { GamePlayOnline } from './game-play';
-import * as LobbyClient  from '../general/bgio';
+import * as LobbyClient  from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
-import { useStatePromise } from '../general/tools';
+import { useStatePromise } from '../shared/tools';
 
 interface StartMatchProps {
   game: AppGame;

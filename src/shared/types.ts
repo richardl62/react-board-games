@@ -1,6 +1,16 @@
 import { BoardProps } from "boardgame.io/react";
+export type { BoardProps }
 
-interface AppGame<G = any> {
+export interface Player {
+  id: string;
+  credentials: string;
+}
+
+export interface MatchID {
+  mid: string
+} 
+
+export interface AppGame<G = any> {
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
   // display purposes.
   displayName: string;
@@ -14,8 +24,4 @@ interface AppGame<G = any> {
 
   minPlayers: number,
   maxPlayers: number,
-
 }
-
-export type { AppGame, BoardProps };
-

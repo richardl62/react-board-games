@@ -1,7 +1,6 @@
 import { Client } from "boardgame.io/react";
 import { Local, SocketIO } from 'boardgame.io/multiplayer';
-import { AppGame } from "../app-game";
-import { MatchID, Player } from "../general/types";
+import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 
 import { BoardAndPlayers } from "../boards";

@@ -1,5 +1,5 @@
 import { LobbyClient } from 'boardgame.io/client';
-import { AppGame, MatchID, Player } from '../general/types';
+import { AppGame, MatchID, Player } from './types';
 import { LobbyAPI } from 'boardgame.io';
 import { lobbyServer } from '../app/url-params';
 import { unnamedPlayer } from '../boards';
