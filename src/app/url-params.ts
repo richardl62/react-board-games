@@ -1,6 +1,6 @@
 // Get values that can be set in the url.
 // If not set, give default value.
-import { MatchID } from "./types";
+import { AppGame, MatchID } from "./types";
 
 function parseBool(str: string) {
     if (str === '' || str=== 'true') {
@@ -39,6 +39,10 @@ if (usp.toString()) {
   console.log("Unrecongised url parameters", usp.toString())
 }
 
+export function gamePath(game: AppGame) {
+  return '/' + game.name;
+}
+
 export function openMatchPage(matchID: MatchID) {
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
@@ -52,10 +56,11 @@ export function lobbyServer() {
   let result;
   if(server) {
     result = server;
-  } else if(url.hostname === 'localhost') {
-    result = 'http://localhost:8000'; // KLUDGE
   } else {
-    result = window.location.href;
+    if(url.hostname === 'localhost' && url.port === '3000') {
+      url.port = '8000'; // kludge
+    };
+    result = url.origin;
   }
   
   console.log("lobbyServer:", result);

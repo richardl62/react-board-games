@@ -7,25 +7,23 @@ import * as UrlParams from './url-params';
 
 import styles from './app.module.css';
 
-function gameURL(game: AppGame) {
-  return `/${game.name}`;
-}
-
 interface HomePageProps {
   games: Array<AppGame>;
 }
 
-function gameLinkElements(game: AppGame, index: number) {
+function gameLinkElement(game: AppGame, index: number) {
   const key = (n: number) => game.name + n;
-  return [
-      <Link key={key(3)} to={gameURL(game)}>{game.displayName}</Link>
-  ];
+  const to={
+    pathname: UrlParams.gamePath(game),
+    search: window.location.search,
+  }
+  return  <Link key={key(3)} to={to}>{game.displayName}</Link>
 }
 
 function GameLinks({ games }: HomePageProps) {
   return (
     <div className={nonNull(styles.gameLinks)}> 
-      {games.map(gameLinkElements)}
+      {games.map(gameLinkElement)}
     </div>
   )
 }
@@ -50,7 +48,7 @@ function PageNotFound(props: HomePageProps) {
 }
 
 function gameRoute(game: AppGame) {
-  const path = gameURL(game);
+  const path = UrlParams.gamePath(game);
 
   const component= () => <GamePage game={game} matchID={UrlParams.matchID}/>;
 
