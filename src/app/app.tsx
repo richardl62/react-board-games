@@ -1,5 +1,5 @@
 import { Route, Switch, Link } from 'react-router-dom';
-import { nonNull } from '../tools';
+import { nonNull } from '../general/tools';
 import games from '../games';
 import { AppGame } from '../app-game'
 import { GamePage } from './game-page';

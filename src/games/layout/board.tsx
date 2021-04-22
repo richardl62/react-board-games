@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import ControlledSquare from './square';
 import { GameControl } from '../control';
 
-import { nonNull } from '../../tools';
+import { nonNull } from '../../general/tools';
 import styles from './game-layout.module.css';
 
 const boardBorder = nonNull(styles.boardBorder);
