@@ -4,12 +4,7 @@ import { LobbyAPI } from 'boardgame.io';
 import { lobbyServer } from '../app/url-params';
 import { unnamedPlayer } from '../boards';
 
-export type MatchInfo = LobbyAPI.Match;
-export type PublicPlayerInfo = MatchInfo['players'][0];
-export type CreatedMatch = LobbyAPI.CreatedMatch;
-export type MatchList = LobbyAPI.MatchList;
-
-
+type MatchInfo = LobbyAPI.Match;
 
 function lobbyClient() {
   return new LobbyClient({ server: lobbyServer() });

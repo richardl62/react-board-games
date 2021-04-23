@@ -1,4 +1,4 @@
-import { BoardProps } from "boardgame.io/react";
+import { BoardProps } from "./bgio-types";
 export type { BoardProps }
 
 export interface Player {
