@@ -3,6 +3,7 @@ import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
 import { GameDefinition, GameControl, useGameControlProps, moves } from './control'
 import SimpleGame from './layout';
 import { AppGame } from '../shared/types';
+import { BoardAndPlayers } from '../boards';
 
 interface AppFriendlyGameProps {
     gameDefinition: GameDefinition;
@@ -32,8 +33,9 @@ function makeAppGame(gameDefintion: GameDefinition) : AppGame {
         moves: moves,
         
         board: (bgioProps: BgioBoardProps) => (
-            <GameWrapper bgioProps={bgioProps} gameDefinition={gameDefintion} />
-        ),
+            <BoardAndPlayers {...bgioProps} >
+                <GameWrapper bgioProps={bgioProps} gameDefinition={gameDefintion} />
+            </BoardAndPlayers>),
     }
 }
 

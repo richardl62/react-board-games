@@ -1,10 +1,9 @@
 import styles from './boards.module.css';
 import { nonNull } from "../shared/tools";
-import { AppGame, BoardProps } from '../shared/types';
+import { BoardProps } from '../shared/types';
 export const unnamedPlayer = '_Unnamed Player_';
 
 interface BoardAndPlayerProps extends BoardProps {
-  game: AppGame;
   children: React.ReactNode;
 }
 export function BoardAndPlayers(props: BoardAndPlayerProps) {

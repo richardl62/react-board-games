@@ -3,8 +3,6 @@ import { Local, SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 
-import { BoardAndPlayers } from "../boards";
-
 interface GamePlayLocalProps {
   game: AppGame;
 }
@@ -34,11 +32,7 @@ export function GamePlayOnline({ game, matchID, numPlayers, player }: GamePlayOn
 
   const GameClient = Client({
     game: game,
-    board: (props: any) => (
-        <BoardAndPlayers {...props} game={game}>
-          {game.board}
-        </BoardAndPlayers>
-        ),
+    board: game.board,
     multiplayer: SocketIO({ server: UrlParams.lobbyServer() }),
 
     numPlayers: numPlayers,
