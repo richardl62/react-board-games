@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MatchID, Player, AppGame } from '../shared/types';
-import { GamePlayOnline } from './game-play';
+import { GamePlay } from './game-play';
 import * as LobbyClient  from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
@@ -102,7 +102,7 @@ function GamePage(props: GamePageProps) {
   }
 
   if (matchID.fulfilled && player.fulfilled && numPlayers.fulfilled) {
-    return <GamePlayOnline game={game} matchID={matchID.value} player={player.value} numPlayers={numPlayers.value}/>
+    return <GamePlay game={game} matchID={matchID.value} player={player.value} numPlayers={numPlayers.value}/>
   }
 
   if (matchID.unset && player.unset && numPlayers.unset) {
