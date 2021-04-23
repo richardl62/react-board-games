@@ -34,7 +34,11 @@ export function GamePlayOnline({ game, matchID, numPlayers, player }: GamePlayOn
 
   const GameClient = Client({
     game: game,
-    board: (props: any) => <BoardAndPlayers {...props} game={game} />,
+    board: (props: any) => (
+        <BoardAndPlayers {...props} game={game}>
+          {game.board}
+        </BoardAndPlayers>
+        ),
     multiplayer: SocketIO({ server: UrlParams.lobbyServer() }),
 
     numPlayers: numPlayers,

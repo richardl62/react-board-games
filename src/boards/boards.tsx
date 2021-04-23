@@ -1,11 +1,18 @@
 import styles from './boards.module.css';
 import { nonNull } from "../shared/tools";
+import { AppGame, BoardProps } from '../shared/types';
 export const unnamedPlayer = '_Unnamed Player_';
 
-export function BoardAndPlayers(props: any /*kludge*/) {
-  const game = props.game;
-  const ctx = props.ctx;
-  const matchData: Array<any> = props.matchData;
+interface BoardAndPlayerProps extends BoardProps {
+  game: AppGame;
+  children: React.ReactNode;
+}
+export function BoardAndPlayers(props: BoardAndPlayerProps) {
+  const {ctx, matchData, children } = props;
+
+  if(!matchData) {
+    return <div>No player information found</div>;
+  }
 
   const playerID = Number(props.playerID);
   const currentPlayer = Number(ctx.currentPlayer)
@@ -24,6 +31,7 @@ export function BoardAndPlayers(props: any /*kludge*/) {
         text = p.name;
       }
 
+      // @ts-ignore
       if (!p.isConnected) {
         text += ' (Offline)';
       }
@@ -42,7 +50,7 @@ export function BoardAndPlayers(props: any /*kludge*/) {
         {playerElems}
       </div>
       {numToJoin === 0 ?
-        game.board(props) :
+        <div>{children}</div> :
         <div>{`Waiting for ${numToJoin} more player(s) to join`}</div>
       }
     </div>);
