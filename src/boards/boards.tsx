@@ -30,8 +30,7 @@ export function BoardAndPlayers(props: BoardAndPlayerProps) {
       } else {
         text = p.name;
       }
-
-      // @ts-ignore
+      
       if (!p.isConnected) {
         text += ' (Offline)';
       }

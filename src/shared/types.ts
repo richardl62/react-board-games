@@ -1,6 +1,8 @@
 import { BoardProps } from "./bgio-types";
 export type { BoardProps }
 
+export type MatchData = BoardProps["matchData"];
+
 export interface Player {
   id: string;
   credentials: string;
