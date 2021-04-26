@@ -1,5 +1,5 @@
 import React from 'react';
-// Use 'require' as 'react-chess-pieces' does not type info
+// Use 'require' as 'react-chess-pieces' does not contian type info
 const ReactChessPieces: any = require('react-chess-pieces');
 const ChessPiece = ReactChessPieces.default;
 
