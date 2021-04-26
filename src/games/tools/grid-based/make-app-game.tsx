@@ -1,6 +1,6 @@
 import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
 import React from 'react'; // KLUDGE
-import { BoardAndPlayers } from '../../../boards';
+import { BoardAndPlayers } from '../../../layout';
 import { AppGame } from '../../../shared/types';
 import { GameControl, GameDefinition, moves, useGameControlProps } from './control';
 import SimpleGame from './layout';
