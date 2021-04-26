@@ -1,27 +1,24 @@
-import { BasicGame } from '../../shared/types';
-import moves, {GameState} from '../tools/grid-based/control/moves';
-type G = Array<Array<string|null>>;
-function chess(name: string, pieces: G) : BasicGame<GameState> {
-  return {
-    name: name.replaceAll(/[ -]/g, ''),
-    displayName: name,
+import { GridGameInput, StartingPieces } from "../tools/grid-based/make-basic-grid-game";
+
+function chess(name: string, displayName: string, pieces: StartingPieces) : GridGameInput {
+  return ({
+    name: name,
+    displayName: displayName,
 
     minPlayers: 1,
     maxPlayers: 2,
-
-    setup: () => {
-      return {
-        pieces: pieces,
-        selectedSquare: null,
-        legalMoves: null,
-      }
+    startingPieces: pieces,
+   
+    offBoardPieces: {
+      top: ['p', 'n', 'b', 'r', 'q', 'k'],
+      bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
     },
-    moves: moves,
-  };
+  });
 }
 
-const games = [
+const gamesInput = [
   chess(
+    "chess",
     "Chess",
     [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
@@ -36,6 +33,7 @@ const games = [
   ),
 
   chess(
+    "chess5aside",
     "Chess 5-a-Side",
     [
       ['r', 'n', 'b', 'q', 'k'],
@@ -48,4 +46,4 @@ const games = [
   ),
 ]
 
-export default games;
+export  { gamesInput };

@@ -39,4 +39,4 @@ function makeAppGame(gameDefintion: GameDefinition) : AppGame {
     }
 }
 
-export default makeAppGame;
+export { makeAppGame };
