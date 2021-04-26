@@ -3,8 +3,8 @@
 import {
     GameDefinitionInput, GameState as GameStateTemplate,
     MoveControl as MoveControlTemplate, MoveResult
-} from '../tools/control';
-import { PiecePosition, RowCol, samePiecePosition } from '../tools/piece-position';
+} from '../tools/grid-based/control';
+import { RowCol, PiecePosition, samePiecePosition } from '../tools/grid-based/piece-position';
 import RenderPiece from './bobail-piece';
 
 type BobailState = {moveBobailNext: boolean};

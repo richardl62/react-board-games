@@ -1,5 +1,5 @@
 import React from 'react';
-import { Counter } from '../tools/counter';
+import { Counter } from './counter';
 
 function pieceColor(black: boolean) {
     return black ? 'black' :
@@ -22,7 +22,7 @@ interface DraughtsProps {
     pieceName: string;
 }
 
-function Draughts({ pieceName }: DraughtsProps) {
+function DraughtsPiece({ pieceName }: DraughtsProps) {
 
     const isBlack = pieceName.toLowerCase() === 'b';
     const isKing = pieceName === pieceName.toUpperCase();;
@@ -33,4 +33,4 @@ function Draughts({ pieceName }: DraughtsProps) {
     );
 }
 
-export default Draughts;
+export { DraughtsPiece };

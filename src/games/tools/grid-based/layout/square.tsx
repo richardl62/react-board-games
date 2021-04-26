@@ -5,7 +5,7 @@ import { GameControl } from '../control';
 import { Background, CanMoveToMarker } from './square-background'
 
 import styles from "./square.module.css";
-import { nonNull } from "../../../shared/tools";
+import { nonNull } from "../../../../shared/tools";
 
 interface Props {
   gameControl: GameControl,

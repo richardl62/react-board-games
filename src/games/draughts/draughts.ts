@@ -1,7 +1,7 @@
-import { PiecePosition, RowCol, makeRowCol } from '../tools/piece-position';
+import { PiecePosition, RowCol, makeRowCol } from '../tools/grid-based/piece-position';
 import { GameDefinitionInput, defaultMoveFunction, MoveControl, MoveResult } 
-    from '../tools/control'
-import RenderPiece from './draughts-piece';
+    from '../tools/grid-based/control'
+import { DraughtsPiece } from '../tools/draughts-piece';
 
 
 interface DraughtProps {
@@ -84,7 +84,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GameDefi
         minPlayers: 2,
         maxPlayers: 2,
         
-        renderPiece: RenderPiece,
+        renderPiece: DraughtsPiece,
 
         boardStyle: {
             checkered: true,

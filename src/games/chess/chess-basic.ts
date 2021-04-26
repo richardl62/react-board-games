@@ -1,5 +1,5 @@
 import { BasicGame } from '../../shared/types';
-import moves, {GameState} from '../tools/control/moves';
+import moves, {GameState} from '../tools/grid-based/control/moves';
 type G = Array<Array<string|null>>;
 function chess(name: string, pieces: G) : BasicGame<GameState> {
   return {

@@ -1,7 +1,7 @@
 // Use of GameDefinitionInput is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { GameDefinitionInput } from '../tools/control/definition'
-import RenderPiece from './chess-piece';
+import { GameDefinitionInput } from '../tools/grid-based/control/definition'
+import { ChessPiece } from '../tools/chess-piece';
 
 function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionInput {
   return {
@@ -10,7 +10,7 @@ function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionI
     minPlayers: 2,
     maxPlayers: 2,
 
-    renderPiece: RenderPiece,
+    renderPiece: ChessPiece,
   
     boardStyle: {
       checkered: true,
