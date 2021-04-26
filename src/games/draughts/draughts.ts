@@ -1,5 +1,6 @@
-import { PiecePosition, RowCol, makeRowCol } from './piece-position';
-import { GameDefinitionInput, defaultMoveFunction, MoveControl, MoveResult } from './control'
+import { PiecePosition, RowCol, makeRowCol } from '../tools/piece-position';
+import { GameDefinitionInput, defaultMoveFunction, MoveControl, MoveResult } 
+    from '../tools/control'
 import RenderPiece from './draughts-piece';
 
 

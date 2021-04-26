@@ -1,9 +1,11 @@
 // Use of GameDefinition is not strictly necessary, but it allows type checking to be
 // done in this file rather than at point of use.
-import { PiecePosition, RowCol, samePiecePosition } from './piece-position';
+import {
+    GameDefinitionInput, GameState as GameStateTemplate,
+    MoveControl as MoveControlTemplate, MoveResult
+} from '../tools/control';
+import { PiecePosition, RowCol, samePiecePosition } from '../tools/piece-position';
 import RenderPiece from './bobail-piece';
-import { GameDefinitionInput, MoveResult } from './control'
-import { MoveControl as MoveControlTemplate, GameState as GameStateTemplate } from './control';
 
 type BobailState = {moveBobailNext: boolean};
 type GameState = GameStateTemplate<BobailState>;

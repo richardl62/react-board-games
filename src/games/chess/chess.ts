@@ -1,22 +1,29 @@
-import { BasicGame } from '../shared/types';
-import moves, {GameState} from './control/moves';
-type G = Array<Array<string|null>>;
-function chess(name: string, pieces: G) : BasicGame<GameState> {
+// Use of GameDefinitionInput is not strictly necessary, but it allows type checking to be
+// done in this file rather than at point of use.
+import { GameDefinitionInput } from '../tools/control/definition'
+import RenderPiece from './chess-piece';
+
+function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionInput {
   return {
-    name: name.replaceAll(/[ -]/g, ''),
     displayName: name,
 
-    minPlayers: 1,
+    minPlayers: 2,
     maxPlayers: 2,
 
-    setup: () => {
-      return {
-        pieces: pieces,
-        selectedSquare: null,
-        legalMoves: null,
-      }
+    renderPiece: RenderPiece,
+  
+    boardStyle: {
+      checkered: true,
+      labels: true,
     },
-    moves: moves,
+    initialState: {
+      pieces: pieces,
+    },
+
+    offBoardPieces: {
+      top: ['p', 'n', 'b', 'r', 'q', 'k'],
+      bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
+    },
   };
 }
 

@@ -1,30 +1,22 @@
-// Use of GameDefinitionInput is not strictly necessary, but it allows type checking to be
-// done in this file rather than at point of use.
-import { GameDefinitionInput } from './control/definition'
-import RenderPiece from './chess-piece';
-
-function chess(name: string, pieces: Array<Array<string|null>>): GameDefinitionInput {
+import { BasicGame } from '../../shared/types';
+import moves, {GameState} from '../tools/control/moves';
+type G = Array<Array<string|null>>;
+function chess(name: string, pieces: G) : BasicGame<GameState> {
   return {
+    name: name.replaceAll(/[ -]/g, ''),
     displayName: name,
 
-    minPlayers: 2,
+    minPlayers: 1,
     maxPlayers: 2,
 
-    renderPiece: RenderPiece,
-  
-    boardStyle: {
-      checkered: true,
-      labels: true,
+    setup: () => {
+      return {
+        pieces: pieces,
+        selectedSquare: null,
+        legalMoves: null,
+      }
     },
-
-    initialState: {
-      pieces: pieces,
-    },
-
-    offBoardPieces: {
-      top: ['p', 'n', 'b', 'r', 'q', 'k'],
-      bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
-    },
+    moves: moves,
   };
 }
 
