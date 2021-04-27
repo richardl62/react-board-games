@@ -3,7 +3,7 @@ import { Counter } from './counter';
 
 function pieceColor(black: boolean) {
     return black ? 'black' :
-        'rgb(230 220 200)'  // kludge? Depemds (sort of) on color of squares on board
+        'rgb(230 220 200)'  // kludge? Depends (sort of) on color of squares on board
         ;
 }
 interface KingProps {
