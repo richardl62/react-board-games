@@ -8,12 +8,15 @@ type MoveFunction = (
   to: PiecePosition  | null, // null -> moved off board
   moveControl: MoveControl, 
   ) => MoveResult;
+
+export function makeSimpleName(displayName: string) {
+  return displayName.toLowerCase().replace(/\(.*\)/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+console.log(makeSimpleName('Aa - (bbb) 1c - 2c'));
   
 export type StartingPieces = Array<Array<string|null>>;
 export interface GridGameInput<GameSpecific = unknown> {
-  // Supplying both name and displayName is a KLUDGE.
-  // (Computing name from displayName caused problems in the server).
-  name: string;
   displayName: string;
 
   startingPieces: StartingPieces,
@@ -55,7 +58,7 @@ export function makeBasicGridGame<GameSpecific = void>(input: GridGameInput<Game
     }
     
     return {
-      name: input.name,
+      name: makeSimpleName(input.displayName),
       displayName: input.displayName,
 
       minPlayers: input.minPlayers,

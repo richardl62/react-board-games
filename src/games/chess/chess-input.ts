@@ -1,8 +1,7 @@
 import { StartingPieces, GridGameInput } from "../../layout/grid-based-board/make-basic-grid-game";
 
-function chess(name: string, displayName: string, pieces: StartingPieces) : GridGameInput {
+function chess(displayName: string, pieces: StartingPieces) : GridGameInput {
   return ({
-    name: name,
     displayName: displayName,
 
     minPlayers: 1,
@@ -18,7 +17,6 @@ function chess(name: string, displayName: string, pieces: StartingPieces) : Grid
 
 const gamesInput = [
   chess(
-    "chess",
     "Chess",
     [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
@@ -33,7 +31,6 @@ const gamesInput = [
   ),
 
   chess(
-    "chess5aside",
     "Chess 5-a-Side",
     [
       ['r', 'n', 'b', 'q', 'k'],
