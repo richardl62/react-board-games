@@ -1,4 +1,4 @@
-import { MoveControl, MoveResult } from "../../layout/grid-based-board/control";
+import { MoveControl, MoveResult } from "../../layout/grid-based-board/control/definition";
 import { defaultMoveFunction } from "../../layout/grid-based-board/control/definition/on-functions";
 import { RowCol, PiecePosition, makeRowCol } from "../../layout/grid-based-board/piece-position";
 

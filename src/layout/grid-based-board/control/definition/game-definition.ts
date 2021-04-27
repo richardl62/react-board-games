@@ -40,7 +40,6 @@ export interface OffBoardPieces {
 }
 
 // The properties that define an individual game some of which are optional.
-// KLUDGE: Editted copy of GameDefinitionInput
 // NOTE: Should be suitable for use with JSON.stringify/JSON.parse (so no
 // classes.)
 export interface GameDefinition {

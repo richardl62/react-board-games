@@ -1,9 +1,10 @@
 import { BasicGame } from "../../shared/types";
-import { MoveControl, MoveResult, moves } from "./control";
+import { moves } from "./control";
+import { MoveControl, MoveResult } from "./control/definition";
 import { OnClick, OnDrag } from "./control/definition/game-definition";
 import { PiecePosition } from "./piece-position";
 
-type MoveFunction = (
+export type MoveFunction = (
   from: PiecePosition,
   to: PiecePosition  | null, // null -> moved off board
   moveControl: MoveControl, 
