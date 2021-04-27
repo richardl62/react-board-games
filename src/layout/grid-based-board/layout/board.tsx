@@ -1,9 +1,8 @@
 import React, { ReactElement } from 'react';
 import ControlledSquare from './square';
 import { GameControl } from '../control';
-
-import { nonNull } from '../../../../shared/tools';
 import styles from './game-layout.module.css';
+import { nonNull } from '../../../shared/tools';
 
 const boardBorder = nonNull(styles.boardBorder);
 const boarderLetter = nonNull(styles.boarderLetter);

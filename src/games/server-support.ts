@@ -6,8 +6,8 @@ import { BasicGame } from '../shared/types';
 
 const chess = require('./chess/chess-input').gamesInput;
 const plusminus = require('./plus-minus/plus-minus').default;
-const { makeBasicGridGame } = require('./tools/grid-based/make-basic-grid-game');
-// console.log(makeBasicGridGame );
+const { makeBasicGridGame } = require('../layout/grid-based-board/make-basic-grid-game');
+
 console.log(chess && makeBasicGridGame && chess.map(makeBasicGridGame));
 const games : Array<BasicGame> = [plusminus, ...chess.map(makeBasicGridGame)];
 

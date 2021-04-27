@@ -1,6 +1,6 @@
+import { makeAppGridGame } from '../../layout/grid-based-board/make-app-grid-game';
+import { GridGameInput } from '../../layout/grid-based-board/make-basic-grid-game';
 import { gamesInput } from './chess-input';
-import { GridGameInput } from '../tools/grid-based/make-basic-grid-game';
-import { makeAppGridGame } from '../tools/grid-based/make-app-grid-game';
 
 // Use 'require' as 'react-chess-pieces' does not contian type info
 const ChessPieceImported = require('react-chess-pieces').default;

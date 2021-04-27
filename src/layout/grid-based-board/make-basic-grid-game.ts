@@ -1,4 +1,4 @@
-import { BasicGame } from "../../../shared/types";
+import { BasicGame } from "../../shared/types";
 import { MoveControl, MoveResult, moves } from "./control";
 import { OnClick, OnDrag } from "./control/definition/game-definition";
 import { PiecePosition } from "./piece-position";

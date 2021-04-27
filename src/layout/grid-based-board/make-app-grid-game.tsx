@@ -1,14 +1,12 @@
-import React from "react";
 import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
-import { AppGame } from "../../../shared/types";
-import { GridGameInput, makeBasicGridGame } from "./make-basic-grid-game";
-
-import { BoardAndPlayers } from '../../../layout';
+import React from "react";
+import { BoardAndPlayers } from "..";
+import { AppGame } from "../../shared/types";
 import { GameControl, GameDefinition, useGameControlProps } from './control';
-import SimpleGame from './layout';
 import { BoardStyle } from "./control/definition/game-definition";
 import { onFunctions } from "./control/definition/on-functions";
-
+import SimpleGame from './layout';
+import { GridGameInput, makeBasicGridGame } from "./make-basic-grid-game";
 
 interface AppFriendlyGameProps {
     gameDefinition: GameDefinition;

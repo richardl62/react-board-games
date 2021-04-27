@@ -1,11 +1,11 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { nonNull } from '../../../shared/tools';
 import { GameControl } from '../control';
 import Board from './board';
-import RowOfPieces from './row-of-pieces';
-import { nonNull } from '../../../../shared/tools';
 import styles from './game-layout.module.css';
+import RowOfPieces from './row-of-pieces';
 import UserOptions from './user-options';
 
 function Header({ gameControl }: { gameControl: GameControl }) {
