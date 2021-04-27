@@ -8,17 +8,31 @@ type MoveFunction = (
   to: PiecePosition  | null, // null -> moved off board
   moveControl: MoveControl, 
   ) => MoveResult;
-
-export function makeSimpleName(displayName: string) {
-  return displayName.toLowerCase().replace(/[^a-z0-9]/g,'');
-}
   
+export function makeSimpleName(displayName: string) {
+    return displayName.toLowerCase().replace(/[^a-z0-9]/g,'');
+  }
+    
+export interface GridGameState<GameSpecific = unknown> {
+    pieces: Array<Array<string|null>>;
+    selectedSquare: PiecePosition | null;
+    legalMoves: Array<Array<boolean>> | null;
+    gameSpecific?: GameSpecific;
+}
+
+export function makeGridGameState(pieces: Array<Array<string|null>>) : GridGameState {
+  return {
+    pieces: pieces,
+    selectedSquare: null,
+    legalMoves: null,
+  }
+}
+
 export type StartingPieces = Array<Array<string|null>>;
 export interface GridGameInput<GameSpecific = unknown> {
   displayName: string;
 
-  startingPieces: StartingPieces,
-  gameSpecific?: GameSpecific;
+  setup: () => GridGameState<GameSpecific>,
 
   offBoardPieces: {
     top: Array<string>,
@@ -39,21 +53,8 @@ export interface GridGameInput<GameSpecific = unknown> {
   onMove?: MoveFunction;
 };
 
-interface GridGameState<GameSpecific = unknown> {
-    pieces: Array<Array<string|null>>;
-    selectedSquare: PiecePosition | null;
-    legalMoves: Array<Array<boolean>> | null;
-    gameSpecific?: GameSpecific;
-}
-
 export function makeBasicGridGame<GameSpecific = void>(input: GridGameInput<GameSpecific>) 
   : BasicGame<GridGameState<GameSpecific>> {
-    const startingState = {
-      pieces: input.startingPieces,
-      selectedSquare: null,
-      legalMoves: null,
-      gameSpecific: input.gameSpecific,
-    }
     
     return {
       name: makeSimpleName(input.displayName),
@@ -62,7 +63,7 @@ export function makeBasicGridGame<GameSpecific = void>(input: GridGameInput<Game
       minPlayers: input.minPlayers,
       maxPlayers: input.maxPlayers,
 
-      setup: () => startingState,
+      setup: input.setup,
 
       moves: moves,
     };

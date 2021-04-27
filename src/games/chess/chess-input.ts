@@ -1,4 +1,4 @@
-import { StartingPieces, GridGameInput } from "../../layout/grid-based-board/make-basic-grid-game";
+import { StartingPieces, GridGameInput, makeGridGameState } from "../../layout/grid-based-board/make-basic-grid-game";
 
 function chess(displayName: string, pieces: StartingPieces) : GridGameInput {
   return ({
@@ -6,7 +6,7 @@ function chess(displayName: string, pieces: StartingPieces) : GridGameInput {
 
     minPlayers: 1,
     maxPlayers: 2,
-    startingPieces: pieces,
+    setup: () => makeGridGameState(pieces),
    
     offBoardPieces: {
       top: ['p', 'n', 'b', 'r', 'q', 'k'],

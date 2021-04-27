@@ -1,5 +1,5 @@
 
-import { GridGameInput } from "../../layout/grid-based-board/make-basic-grid-game";
+import { GridGameInput, makeGridGameState } from "../../layout/grid-based-board/make-basic-grid-game";
 import { moveFunction } from "./draughts-move";
 
 interface DraughtProps {
@@ -42,7 +42,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GridGame
         minPlayers: 1,
         maxPlayers: 2,
 
-        startingPieces: pieces,
+        setup: () => makeGridGameState(pieces),
 
         offBoardPieces: {
             top: ['w', 'W'],
