@@ -21,8 +21,8 @@ function GameWrapper({bgioProps, gameDefinition} : AppFriendlyGameProps) {
 
 export function makeAppGridGame<GameSpecific = void>(
         input: GridGameInput<GameSpecific>,
-        renderPiece: (props: {pieceName: string}) => JSX.Element,
         boardStyle: BoardStyle,
+        renderPiece: (props: {pieceName: string}) => JSX.Element,
         ) : AppGame {
 
     const basicGame = makeBasicGridGame(input);

@@ -10,7 +10,7 @@ export type MoveFunction = (
     ) => MoveResult;
 
 
-function defaultMoveFunction(
+export function defaultMoveFunction(
     from: PiecePosition,
     to: PiecePosition | null,
     moveControl: MoveControl

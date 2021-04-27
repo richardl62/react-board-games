@@ -43,10 +43,12 @@ export function BoardAndPlayers(props: BoardAndPlayerProps) {
   const numToJoin = matchData.length - playerElems.length;
   return (
     <div>
-      <div className={nonNull(styles.playerNames)}>
-        <span>Players:</span>
-        {playerElems}
-      </div>
+      {playerElems.length === 1 ? null :
+        <div className={nonNull(styles.playerNames)}>
+          <span>Players:</span>
+          {playerElems}
+        </div>
+      }
       {numToJoin === 0 ?
         <div>{children}</div> :
         <div>{`Waiting for ${numToJoin} more player(s) to join`}</div>

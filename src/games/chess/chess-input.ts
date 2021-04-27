@@ -15,7 +15,7 @@ function chess(displayName: string, pieces: StartingPieces) : GridGameInput {
   });
 }
 
-const gamesInput = [
+const chessInput = [
   chess(
     "Chess",
     [
@@ -43,4 +43,4 @@ const gamesInput = [
   ),
 ]
 
-export  { gamesInput };
+export  { chessInput };

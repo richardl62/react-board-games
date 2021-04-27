@@ -10,10 +10,8 @@ type MoveFunction = (
   ) => MoveResult;
 
 export function makeSimpleName(displayName: string) {
-  return displayName.toLowerCase().replace(/\(.*\)/g,'').replace(/[^a-z0-9]/g,'');
+  return displayName.toLowerCase().replace(/[^a-z0-9]/g,'');
 }
-
-console.log(makeSimpleName('Aa - (bbb) 1c - 2c'));
   
 export type StartingPieces = Array<Array<string|null>>;
 export interface GridGameInput<GameSpecific = unknown> {

@@ -6,8 +6,7 @@
 // } from '../tools/grid-based/control';
 // import { RowCol, PiecePosition, samePiecePosition } from '../tools/grid-based/piece-position';
 // import RenderPiece from './bobail-piece';
-
-import { GameDefinitionInput } from "../../layout/grid-based-board/control";
+import { AppGame } from "../../shared/types";
 
 // type BobailState = {moveBobailNext: boolean};
 // type GameState = GameStateTemplate<BobailState>;
@@ -227,5 +226,5 @@ import { GameDefinitionInput } from "../../layout/grid-based-board/control";
 // export default games;
 
 
-const games : Array<GameDefinitionInput> = [];
+const games : Array<AppGame> = [];
 export default games;
