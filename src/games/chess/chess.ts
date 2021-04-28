@@ -1,4 +1,4 @@
-import { makeAppGridGame } from '../../layout/grid-based-board/make-app-grid-game';
+import { makeAppGridGame } from '../../layout/grid-based-board';
 import { chessInput } from './chess-input';
 
 // Use 'require' as 'react-chess-pieces' does not contian type info

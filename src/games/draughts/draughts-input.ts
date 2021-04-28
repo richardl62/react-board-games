@@ -1,5 +1,4 @@
-
-import { GridGameInput, makeGridGameState } from "../../layout/grid-based-board/make-basic-grid-game";
+import { GridGameInput, makeGridGameState } from "../../layout/grid-based-board";
 import { moveFunction } from "./draughts-move";
 
 interface DraughtProps {

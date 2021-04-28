@@ -1,6 +1,6 @@
-import { DraughtsPiece } from "./draughts-piece";
-import { makeAppGridGame } from "../../layout/grid-based-board/make-app-grid-game";
+import { makeAppGridGame } from "../../layout/grid-based-board";
 import { draughtsInput } from "./draughts-input";
+import { DraughtsPiece } from "./draughts-piece";
 
 const games = draughtsInput.map(input => {
     const boardStyle = {

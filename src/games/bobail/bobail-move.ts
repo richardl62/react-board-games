@@ -1,5 +1,6 @@
-import { RowCol, PiecePosition, samePiecePosition } from '../../layout/grid-based-board/piece-position';
-import { MoveControl, MoveResult } from '../../layout/grid-based-board/control/definition';
+import {
+    MoveControl, MoveResult, PiecePosition, RowCol, samePiecePosition
+} from '../../layout/grid-based-board';
 
 export type BobailState = { moveBobailNext: boolean; };
 export const bb = 'bb';

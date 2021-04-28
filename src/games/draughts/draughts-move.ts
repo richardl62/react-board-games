@@ -1,6 +1,8 @@
-import { MoveControl, MoveResult } from "../../layout/grid-based-board/control/definition";
-import { defaultMoveFunction } from "../../layout/grid-based-board/control/definition/on-functions";
-import { RowCol, PiecePosition, makeRowCol } from "../../layout/grid-based-board/piece-position";
+import {
+    defaultMoveFunction, makeRowCol, MoveControl, MoveResult, PiecePosition, 
+    RowCol
+} from "../../layout/grid-based-board";
+
 
 // Find the steps in a diagonal path [from, to).
 function findDiagonalPath(from: RowCol, to: RowCol) {

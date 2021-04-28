@@ -1,4 +1,4 @@
-import { makeAppGridGame } from '../../layout/grid-based-board/make-app-grid-game';
+import { makeAppGridGame } from '../../layout/grid-based-board';
 import { bobailInput } from './bobail-input';
 import bobailPiece from './bobail-piece';
 
