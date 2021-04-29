@@ -4,13 +4,13 @@ import { BasicGame } from '../shared/types';
 const bobail = require('./bobail/bobail-input').bobailInput;
 const chess = require('./chess/chess-input').chessInput;
 const draughts = require('./draughts/draughts-input').draughtsInput;
-const plusminus = require('./plus-minus/plus-minus').default;
+const plusminus = require('./plus-minus/plus-minus-input').plusminusInput;
 const { makeBasicGridGame } = require('../layout/grid-based-board/make-basic-grid-game');
 
 export const games : Array<BasicGame> = [
     ...bobail.map(makeBasicGridGame),
     ...chess.map(makeBasicGridGame),
     ...draughts.map(makeBasicGridGame),
-    plusminus, 
+    ...plusminus, 
 ];
 

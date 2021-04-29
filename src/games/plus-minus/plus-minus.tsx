@@ -1,31 +1,13 @@
 import { AppGame, BoardProps } from '../../shared/types';
+import { G, plusminusInput } from './plus-minus-input';
 
+if(plusminusInput.length !== 1) {
+  throw new Error("Expected exactly one plus-minus game");
+}
 
-interface G {
-  value: number;
-};
-
-const game : AppGame<G> = {
-  // The name of the game.
-  name: 'plusminus',
-  displayName: 'Plus Minus (for testing)',
-
-  setup: (): G => { return { value: 0 }; },
-
-  minPlayers: 1,
-  maxPlayers: 100,
-
-  // turn: {
-  //   moveLimit: 1,
-  // },
-
-  moves: {
-    // short-form move.
-    add: (G: G, ctx: any, value: number) => {
-      G.value += value;
-    },
-  },
-
+const plusminus : AppGame = {
+  ...plusminusInput[0],
+  
   board: ({ G, moves, events }: BoardProps<G> ) => {
     return (
       <div>
@@ -35,7 +17,9 @@ const game : AppGame<G> = {
         <div>{G.value}</div>
       </div>
     )
-  }
+  },
 }
 
-export default game;
+const games = [ plusminus ];
+
+export default games;

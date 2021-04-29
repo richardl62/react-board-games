@@ -7,6 +7,6 @@ import chess from './chess/chess';
 import draughts from './draughts/draughts';
 import plusminus from './plus-minus/plus-minus';
 
-const games : Array<AppGame> = [...bobail, ...chess, ...draughts];
-games.push(plusminus)
+const games : Array<AppGame> = [...bobail, ...chess, ...draughts, ...plusminus];
+
 export default games;
