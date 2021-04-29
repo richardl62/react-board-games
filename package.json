@@ -33,8 +33,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "ts-node -r esm server.ts",
-    "simple-serve": "ts-node -r esm simple-server.ts"
+    "serve": "ts-node -r esm server.ts"
   },
   "engines": {
     "node": "14.5"
