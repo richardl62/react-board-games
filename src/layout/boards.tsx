@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './boards.module.css';
 import { nonNull } from "../shared/tools";
 import { BoardProps } from '../shared/types';

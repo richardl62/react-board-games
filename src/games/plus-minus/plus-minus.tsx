@@ -1,3 +1,4 @@
+import React from 'react';
 import { AppGame, BoardProps } from '../../shared/types';
 import { G, plusminusInput } from './plus-minus-input';
 

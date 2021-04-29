@@ -1,3 +1,4 @@
+import React from 'react';
 import { Client } from "boardgame.io/react";
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";

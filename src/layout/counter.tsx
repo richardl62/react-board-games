@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 
 // Passing in text is KLUDGE
 interface Props {
@@ -42,3 +42,4 @@ const Counter: FC<Props> = ({ color, text, textColor }: Props) => {
 }
 
 export { Counter };
+

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../shared/tools';
 import { AppGame } from '../shared/types'
