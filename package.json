@@ -33,7 +33,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "ts-node -r esm server.ts"
+    "serve": "tsc --jsx react && node dist/server.js",
+    "serve-quick": "node dist/server.js"
   },
   "engines": {
     "node": "14.5"
