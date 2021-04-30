@@ -31,28 +31,8 @@
     font-size: large;
 }
 
-/* Options to control the game including redo, undo etc. */
-.userOptions {
-    margin-top: calc(var(--square-size) + 8px /* kludge */ );
-    margin-left: 8px;
-}
 
-/* A row of buttons */
-.userOptionsButtons {
-    margin-top: 6px;
-}
 
-.userOptions button {
-   font-size: 20px;
-   width: 3.7em;
-   margin-right: 5px;
-   padding-left: 0.1em;
-   text-align:left;
-}
-
-.userOptions button:last-of-type {
-       margin-right: 0px;
-}
 
 .rowOfPieces {
     display: flex;

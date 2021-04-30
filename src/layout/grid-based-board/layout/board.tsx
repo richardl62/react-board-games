@@ -1,12 +1,31 @@
 import React, { ReactElement } from 'react';
 import ControlledSquare from './square';
 import { GameControl } from '../control';
-import styles from './game-layout.module.css';
-import { nonNull } from '../../../shared/tools';
+import styled from 'styled-components';
 
-const boardBorder = nonNull(styles.boardBorder);
-const boarderLetter = nonNull(styles.boarderLetter);
-const boarderNumber = nonNull(styles.boarderNumber);
+interface BoardStyledProps {
+    nGridCols: number;
+    nGridRows: number;
+}
+
+const BoardStyled = styled.div<BoardStyledProps>`        
+    display: inline-grid;
+    background-color: var(--board-background);
+    grid-template-columns: ${props => `repeat(${props.nGridCols},auto)`};
+    grid-template-rows: ${props => `repeat(${props.nGridRows},auto)`};
+`; 
+
+const BoardBorder = styled.div`
+    color:white;
+`
+const BorderLetter = styled(BoardBorder)`
+    font-size: 20px;
+    padding: 3px 0;
+`
+const BorderNumber = styled(BoardBorder)`
+    font-size: 25px;
+    padding: 0 7px;
+`
 
 type Elems = Array<ReactElement>;
 
@@ -15,12 +34,9 @@ function addHeader(nCols: number, elems: Elems, rowName: string) {
     elems.push(<div key={key('start')} />);
     for (let col = 0; col < nCols; ++col) {
         elems.push(
-            <div
-                key={key(col)}
-                className={`${boardBorder} ${boarderLetter}`}
-            >
+            <BorderLetter key={key(col)}>
                 {String.fromCharCode(65 + col)}
-            </div>
+            </BorderLetter>
         );
     }
     elems.push(<div key={key('end')} />);
@@ -35,12 +51,9 @@ function addRow(row: number, gameControl: GameControl, elems: Elems) {
     const key = (name: string | number) => 'r' + row + '-' + name;
 
     let makeBoarderElem = (name: string) => (
-        <div
-            key={key(name)}
-            className={`${boardBorder} ${boarderNumber}`}
-        >
+        <BorderNumber key={key(name)}>
             {nRows - row}
-        </div>
+        </BorderNumber>
     );
 
     let makeSquare = (col: number) => {
@@ -84,18 +97,7 @@ function Board({ gameControl }: {
 
     const nGridCols = nCols + (borderLabels ? 2 : 0);
     const nGridRows = nRows + (borderLabels ? 2 : 0);
-    const style = { // For now
-        display: 'inline-grid',
-        gridTemplateColumns: `repeat(${nGridCols},auto)`,
-        gridTemplateRows: `repeat(${nGridRows},auto)`,
-    };
-
-    return (
-        <div className={nonNull(styles.board)} style={style}>
-            {elems}
-        </div>
-    )
-
+    return <BoardStyled nGridRows={nGridRows} nGridCols={nGridCols}> {elems} </BoardStyled>;
 }
 
 export default Board;

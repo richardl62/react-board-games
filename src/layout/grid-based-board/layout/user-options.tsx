@@ -1,42 +1,63 @@
 import React from 'react';
 import { GameControl } from '../control';
-import { nonNull } from '../../../shared/tools';
-import styles from './game-layout.module.css';
+import styled from 'styled-components';
+
+/* Options to control the game including redo, undo etc. */
+const UserOptionsStyled = styled.div`
+    margin-top: calc(var(--square-size) + 8px /* kludge */ );
+    margin-left: 8px;
+`;
+
+/* A row of buttons */
+const UserOptionsButtons = styled.div `
+    margin-top: 6px;
+`
+
+const Button = styled.button`
+   font-size: 20px;
+   width: 3.7em;
+   margin-right: 5px;
+   padding-left: 0.1em;
+   text-align:left;
+   &last-of-type {
+       margin-right: 0px;
+    }
+`;
 
 function UserOptions({ gameControl }: { gameControl: GameControl; }) {
 
     return (
-        <div className={nonNull(styles.userOptions)}>
+        <UserOptionsStyled>
 
-            <div className={nonNull(styles.userOptionsButtons)}>
-                <button type='button' onClick={() => gameControl.restart()}>
+            <UserOptionsButtons>
+                <Button type='button' onClick={() => gameControl.restart()}>
                     Restart
-                </button>
-            </div>
+                </Button>
+            </UserOptionsButtons>
 
-            <div className={nonNull(styles.userOptionsButtons)}>
-                <button type='button' 
+            <UserOptionsButtons>
+                <Button type='button' 
                     disabled={!gameControl.canUndo} 
                     onClick={() => gameControl.undo()}
                 >
                     Undo
-                </button>
+                </Button>
 
-                <button type='button'
+                <Button type='button'
                     disabled={!gameControl.canRedo} 
                     onClick={() => gameControl.redo()}
                 >
                     Redo
-                </button>
-            </div>
+                </Button>
+            </UserOptionsButtons>
 
-            <div className={nonNull(styles.userOptionsButtons)}>
-                <button type='button' onClick={() => gameControl.flipRowOrder()}>
+            <UserOptionsButtons>
+                <Button type='button' onClick={() => gameControl.flipRowOrder()}>
                     Flip
-                </button>
-            </div>
+                </Button>
+            </UserOptionsButtons>
             
-        </div>
+        </UserOptionsStyled>
     );
 }
 
