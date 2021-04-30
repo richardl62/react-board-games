@@ -2,19 +2,7 @@
 import { Server } from 'boardgame.io/server';
 import path from 'path';
 import serve from 'koa-static';
-import { BasicGame } from './shared/types';
-import { bobailInput } from './games/bobail/bobail-input';
-import { chessInput } from './games/chess/chess-input';
-import { draughtsInput } from './games/draughts/draughts-input';
-import { makeBasicGridGame } from './layout/grid-based-board/make-basic-grid-game';
-import { plusminusInput } from './games/plus-minus/plus-minus-input';
-
-export const games : Array<BasicGame> = [
-    ...bobailInput.map(makeBasicGridGame),
-    ...chessInput.map(makeBasicGridGame),
-    ...draughtsInput.map(makeBasicGridGame),
-    ...plusminusInput, 
-];
+import { games } from './games/basic-games';
 
 console.log("Games: ", games.map(g => g.name));
 

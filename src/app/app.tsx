@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { nonNull } from '../shared/tools';
 import { AppGame } from '../shared/types'
-import games from '../games';
+import { appGames } from '../games';
 import { GamePage } from './game-page';
 import * as UrlParams from './url-params';
 
@@ -59,12 +59,12 @@ function gameRoute(game: AppGame) {
 
 function App() {
 
-  const renderHomePage = () => <HomePage games={games} />;
-  const renderPageNotFound = () => <PageNotFound games={games} />;
+  const renderHomePage = () => <HomePage games={appGames} />;
+  const renderPageNotFound = () => <PageNotFound games={appGames} />;
   return (
     <Switch>
       <Route key="/" exact path="/" component={renderHomePage} />
-      {games.map(gameRoute)}
+      {appGames.map(gameRoute)}
       <Route key="pageNotFound" component={renderPageNotFound} />
     </Switch>
   );
