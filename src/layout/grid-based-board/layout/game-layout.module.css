@@ -54,24 +54,6 @@
        margin-right: 0px;
 }
 
-.board {
-    background-color: var(--board-background);
-}
-
-.boardBorder {
-    color:white;
-}
-
-.boarderLetter {
-    font-size: 20px;
-    padding: 3px 0;
-}
-
-.boarderNumber {
-    font-size: 25px;
-    padding: 0 7px;
-}
-
 .rowOfPieces {
     display: flex;
     justify-content: center;
