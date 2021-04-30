@@ -5,7 +5,20 @@ import { PiecePosition } from '../piece-position';
 import { usePieceControl, useSquareControl } from './drag-support';
 import { Background, CanMoveToMarker } from './square-background';
 import styles from "./square.module.css";
+import styled from 'styled-components';
 
+const PieceWrapperStyled = styled.div`
+  /* Setting the z-index (which required non-static position) 'lifts' a piece
+  and so prevent the background being dragged with it. */
+  position: absolute;
+  top: 0;
+  left: 0;
+ 
+  z-index: 1;
+
+  height: 100%;
+  width: 100%;
+`;
 
 interface Props {
   gameControl: GameControl,
@@ -21,12 +34,11 @@ function PieceWrapper({ gameControl, pos }: Props) {
 
   const Piece = gameControl.renderPiece;
 
-  return (<div
-    className={nonNull(styles.pieceWrapper)}
+  return (<PieceWrapperStyled
     {...pieceControl.props}
   >
     <Piece pieceName={pieceName} />
-  </div>
+  </PieceWrapperStyled>
   );
 }
 
