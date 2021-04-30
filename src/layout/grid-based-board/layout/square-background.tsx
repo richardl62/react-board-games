@@ -5,11 +5,8 @@
 
 import React from 'react';
 
-import { nonNull } from '../../../shared/tools';
 import { SquareProperties, LegalMoveStatus } from '../control';
-import styles from './square.module.css';
 import styled from 'styled-components'
-
 
 interface BackgroundProps {
     selected: boolean;
@@ -32,6 +29,36 @@ const WhiteSquare = styled(SquareBackground)`
     background-color: var(--board-white-square, white);
 `
 
+const CanMoveTo = styled.div`
+    background-color: rgb(0, 255, 0, .8); /* opaque  green */;
+    border-radius: 50%;
+
+    /* make blob-size + 2*top-left-offsett = 100% */
+    --blob-size: 40%;
+    --top-left-offsett: calc((100% - var(--blob-size)) / 2);
+   
+    position: absolute;
+    height: var(--blob-size);
+    width: var(--blob-size);
+
+    top: var(--top-left-offsett);
+    left: var(--top-left-offsett);
+
+    z-index: 2;
+`;
+
+const CannotMoveTo = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+   
+    height: 100%;
+    width: 100%;
+
+    cursor: not-allowed;
+`
+
 function Background({ background, gameStatus }: SquareProperties) {
     const { selected } = gameStatus;
 
@@ -49,16 +76,15 @@ function Background({ background, gameStatus }: SquareProperties) {
 function CanMoveToMarker({ gameStatus }: SquareProperties) {
     const { legalMoveStatus } = gameStatus;
     
-    let className = null;
     if (legalMoveStatus === LegalMoveStatus.Legal) {
-        className = nonNull(styles.canMoveTo);
+        return <CanMoveTo />;
     }
 
     if (legalMoveStatus === LegalMoveStatus.Illegal) {
-        className = nonNull(styles.cannotMoveTo);
+        return <CannotMoveTo />;
     }
 
-    return className ? <div className={className} /> : null;
+    return null;
 }
 
 export { Background, CanMoveToMarker };
