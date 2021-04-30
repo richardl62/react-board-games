@@ -5,8 +5,20 @@ import { AppGame } from '../shared/types'
 import { appGames } from '../games';
 import { GamePage } from './game-page';
 import * as UrlParams from './url-params';
+import styled from 'styled-components';
 
-import styles from './app.module.css';
+import './app.css';
+
+const GameLinksStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 200%;
+  margin-bottom: 0.5em;
+`;
 
 interface HomePageProps {
   games: Array<AppGame>;
@@ -23,9 +35,9 @@ function gameLinkElement(game: AppGame, index: number) {
 
 function GameLinks({ games }: HomePageProps) {
   return (
-    <div className={nonNull(styles.gameLinks)}> 
+    <GameLinksStyled> 
       {games.map(gameLinkElement)}
-    </div>
+    </GameLinksStyled>
   )
 }
 
@@ -40,8 +52,8 @@ function HomePage(props: HomePageProps) {
 
 function PageNotFound(props: HomePageProps) {
   return (
-    <div className={nonNull(styles.pageNotFound)}>
-      <div>404: Page Not Found</div>
+    <div>
+      <ErrorMessage>404: Page Not Found</ErrorMessage>
       <div>You could try one of these links:</div>
       <GameLinks {...props} />
     </div>
