@@ -1,10 +1,8 @@
 import React from 'react';
-import { nonNull } from '../../../shared/tools';
 import { GameControl } from '../control';
 import { PiecePosition } from '../piece-position';
 import { usePieceControl, useSquareControl } from './drag-support';
 import { Background, CanMoveToMarker } from './square-background';
-import styles from "./square.module.css";
 import styled from 'styled-components';
 
 const PieceWrapperStyled = styled.div`
@@ -19,6 +17,20 @@ const PieceWrapperStyled = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const SquareStyled = styled.div`
+  position: relative;
+  width: var(--square-size);
+  height: var(--square-size);
+`
+
+const SquareStyledUnselected = styled(SquareStyled)`
+  &:hover {
+    border: 4px solid var(--active-square-highlight, purple);
+  }
+`;
+
+
 
 interface Props {
   gameControl: GameControl,
@@ -46,27 +58,18 @@ function Square(props: Props) {
   const { gameControl, pos } = props;
 
   const squareControl = useSquareControl(gameControl, pos);
-
   const squareProperties = gameControl.squareProperties(pos);
-
-  let className = nonNull(styles.square);
-  if(!squareProperties.gameStatus.selected) {
-    // KLUDGE? Used only to contol hover effect is CSS 
-    className += ' ' + nonNull(styles.unselectedSquare) 
-  }
+  const Component = squareProperties.gameStatus.selected ? SquareStyled : SquareStyledUnselected; 
 
   return (
-    /* PieceWrapper sets z-index to 'lift' the piece and so prevents
-      the background being dragged. */
-    <div
-      className={className}
+    <Component
       {...squareControl.props}
     >
       <Background {...squareProperties} />
       <CanMoveToMarker {...squareProperties} />
 
       <PieceWrapper {...props} />
-    </div>
+    </Component>
   )
 }
 
