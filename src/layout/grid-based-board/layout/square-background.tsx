@@ -8,24 +8,42 @@ import React from 'react';
 import { nonNull } from '../../../shared/tools';
 import { SquareProperties, LegalMoveStatus } from '../control';
 import styles from './square.module.css';
+import styled from 'styled-components'
+
+
+interface BackgroundProps {
+    selected: boolean;
+}
+
+const SquareBackground = styled.div<BackgroundProps>`
+    width: 100%;
+    height: 100%;
+    border: ${props => props.selected ? "yellow 8px solid" : "none"};
+`;
+
+const PlainSquare = styled(SquareBackground)`
+    border: 2px solid var(--board-background, brown);
+    background-color: var(--board-white-square, white);
+`
+const BlackSquare = styled(SquareBackground)`
+    background-color: var(--board-black-square, black);
+`
+const WhiteSquare = styled(SquareBackground)`
+    background-color: var(--board-white-square, white);
+`
 
 function Background({ background, gameStatus }: SquareProperties) {
     const { selected } = gameStatus;
-    let className = nonNull(styles.squareBackground);
 
     if (background === 'plain') {
-        className += " " + nonNull(styles.plainSquare);
+        return <PlainSquare selected={selected}/>;
     } else if (background === 'checkered-black') {
-        className += " " + nonNull(styles.blackSquare);
+        return <BlackSquare selected={selected}/>
     } else if (background === 'checkered-white') {
-        className += " " + nonNull(styles.whiteSquare);
+        return <WhiteSquare selected={selected}/>
     }
 
-    if (selected) {
-        className += " " + nonNull(styles.selectedSquare);
-    }
-
-    return (<div className={className} />);
+    return <SquareBackground selected={selected}/>;
 }
 
 function CanMoveToMarker({ gameStatus }: SquareProperties) {
