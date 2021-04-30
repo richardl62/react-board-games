@@ -31,11 +31,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && tsc --jsx react --project tsconfig.server.json",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "tsc --jsx react --project tsconfig.server.json && node dist/server.js",
-    "serve-quick": "node dist/server.js"
+    "serve": "node dist/server.js"
   },
   "engines": {
     "node": "14.5"
