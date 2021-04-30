@@ -1,16 +1,30 @@
 import React from 'react';
-import styles from './boards.module.css';
-import { nonNull } from "../shared/tools";
 import { BoardProps } from '../shared/types';
+import styled from 'styled-components'
+
 export const unnamedPlayer = '_Unnamed Player_';
+
+
+const PlayerNames = styled.div`
+  display: flex;
+`;
+
+interface PlayerNameProps {
+  isCurrent: boolean;
+}
+const PlayerName = styled.div<PlayerNameProps>`
+  margin-left: 1em;
+  font-weight: bold;
+  text-decoration: ${props => props.isCurrent ? "underline" : "default"};
+`;
 
 interface BoardAndPlayerProps extends BoardProps {
   children: React.ReactNode;
 }
 export function BoardAndPlayers(props: BoardAndPlayerProps) {
-  const {ctx, matchData, children } = props;
+  const { ctx, matchData, children } = props;
 
-  if(!matchData) {
+  if (!matchData) {
     return <div>No player information found</div>;
   }
 
@@ -30,14 +44,16 @@ export function BoardAndPlayers(props: BoardAndPlayerProps) {
       } else {
         text = p.name;
       }
-      
+
       if (!p.isConnected) {
         text += ' (Offline)';
       }
 
-      const className = index === currentPlayer ? nonNull(styles.currentPlayer) : undefined;
-
-      playerElems.push(<div key={p.id} className={className}> {text} </div>);
+      playerElems.push(
+        <PlayerName isCurrent={index === currentPlayer}>
+          {text}
+        </PlayerName>
+      );
     }
   }
 
@@ -45,10 +61,10 @@ export function BoardAndPlayers(props: BoardAndPlayerProps) {
   return (
     <div>
       {playerElems.length === 1 ? null :
-        <div className={nonNull(styles.playerNames)}>
+        <PlayerNames>
           <span>Players:</span>
           {playerElems}
-        </div>
+        </PlayerNames>
       }
       {numToJoin === 0 ?
         <div>{children}</div> :
