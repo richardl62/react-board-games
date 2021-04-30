@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import { nonNull } from '../shared/tools';
 import { AppGame } from '../shared/types'
 import { appGames } from '../games';
 import { GamePage } from './game-page';

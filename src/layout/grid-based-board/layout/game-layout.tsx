@@ -1,12 +1,30 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { nonNull } from '../../../shared/tools';
 import { GameControl } from '../control';
 import Board from './board';
-import styles from './game-layout.module.css';
+import styled from 'styled-components';
 import RowOfPieces from './row-of-pieces';
 import UserOptions from './user-options';
+
+/* The 'game proper'.  Everything that is not in userOptions */
+const GameStyled = styled.div`
+    display: flex;
+    box-sizing: border-box;
+    padding: 0;
+`
+const PlayingArea = styled.div`
+    --square-size: 50px;
+
+    --board-background: rgb(100,0,0); /* Dark brown*/
+    --board-black-square: rgb(165 42 42); /* brown */
+    --board-white-square:  rgb(255 248 220); /* cornsilk */
+    --active-square-highlight: rgb(200 200 100); /* dark yellow */
+`
+
+const Message = styled.div`
+    font-size: large;
+`
 
 function Header({ gameControl }: { gameControl: GameControl }) {
     const {playerNames, caller } = gameControl.players;
@@ -22,14 +40,14 @@ function Header({ gameControl }: { gameControl: GameControl }) {
     } else if(gameControl.moveDescription) {
         message = gameControl.moveDescription;
     }
-    return (<div className={nonNull(styles.message)}>{message}</div>);
+    return (<Message>{message}</Message>);
 }
 
 function Game({ gameControl }: { gameControl: GameControl }) {
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className={nonNull(styles.game)}>
-                <div className={nonNull(styles.playingArea)}>
+            <GameStyled>
+                <PlayingArea>
                     <Header gameControl={gameControl} />
                     <div>
                         <RowOfPieces where='top' gameControl={gameControl} />
@@ -38,9 +56,9 @@ function Game({ gameControl }: { gameControl: GameControl }) {
 
                         <RowOfPieces where='bottom' gameControl={gameControl} />
                     </div>
-                </div>
+                </PlayingArea>
                 <UserOptions gameControl={gameControl} />
-            </div>
+            </GameStyled>
         </DndProvider>
     );
 }

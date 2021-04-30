@@ -1,11 +1,15 @@
 import React from 'react';
-
-//import Piece from '../full-game/controlled-piece';
+import styled from 'styled-components';
 import { GameControl } from '../control';
-import ControlledSquare from './square'
-import { nonNull } from '../../../shared/tools';
-import styles from './game-layout.module.css';
 import { makePiecePosition } from '../piece-position';
+import ControlledSquare from './square';
+
+
+const RowOfPiecesStyled = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+`
 
 function RowOfPieces({ where, gameControl }: {
     where: 'top' | 'bottom',
@@ -14,14 +18,14 @@ function RowOfPieces({ where, gameControl }: {
     const offBoard = gameControl.offBoardPieces(where);
     return (
         // Kludge? Use outer div to control the size (via class 'square')
-        <div className={nonNull(styles.rowOfPieces)}>
+        <RowOfPiecesStyled>
             {offBoard.map((_dummy, index) => {
                 const pos = makePiecePosition({ [where]: index });
 
                 return (<ControlledSquare key={index} gameControl={gameControl} pos={pos} />);
             }
             )}
-        </div>
+        </RowOfPiecesStyled>
     );
 }
 
