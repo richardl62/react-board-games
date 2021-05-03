@@ -2,18 +2,6 @@
 // If not set, give default value.
 import { AppGame, MatchID } from "../shared/types";
 
-function parseBool(str: string) {
-    if (str === '' || str=== 'true') {
-      return true;
-    }
-
-    if (str === 'false') {
-      return false;
-    }
-
-    console.log(`Bad value for URL boolean ${str}`);
-    return false;
-}
 
 
 const usp = new URLSearchParams(window.location.search);
@@ -24,11 +12,28 @@ const getAndDelete = (key: string) => {
   return val;
 }
 
+function getAndDeleteFlag(key: string) : boolean {
+  const falsey = [null, '0','false'];
+  const truthy  = ['', '1','true'];
+
+  const str = getAndDelete(key);
+
+  if (falsey.includes(str)) {
+    return false;
+  }
+
+  if (truthy.includes(str!)) {
+    console.log(`Bad value for URL boolean ${str}`);
+  }
+
+  return true;
+}
+
+
 const ppb = getAndDelete('ppb')
 export const playersPerBrowser = ppb ? parseInt(ppb) : 1;
 
-const debugPanel = getAndDelete('debug-panel')
-export const bgioDebugPanel = debugPanel ? parseBool(debugPanel) : false;
+export const bgioDebugPanel = getAndDeleteFlag('debug-panel')
 
 const matchID_ = getAndDelete('match-id');
 export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;

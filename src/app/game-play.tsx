@@ -12,14 +12,16 @@ interface GamePlayProps {
 };
 
 export function GamePlay({ game, matchID, numPlayers, player }: GamePlayProps) {
+  const lobbyServer = UrlParams.lobbyServer();
+  let debugPanel = UrlParams.bgioDebugPanel;
 
   const GameClient = Client({
     game: game,
     board: game.board,
-    multiplayer: SocketIO({ server: UrlParams.lobbyServer() }),
+    multiplayer: SocketIO({ server: lobbyServer}),
 
     numPlayers: numPlayers,
-    debug: UrlParams.bgioDebugPanel,
+    debug: debugPanel,
   });
 
   return (
