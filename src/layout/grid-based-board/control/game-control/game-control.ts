@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { BoardProps as BgioBoardPropsTemplate } from 'boardgame.io/react'
 import { PiecePosition, samePiecePosition, makePiecePosition } from '../../piece-position';
 import { PieceName } from "../piece-name";
-import  { GameDefinition, MoveControl, MoveResult } from '../definition';
+import { GameDefinition, MoveControl, MoveResult } from '../definition';
 import { GameState } from '../game-state';
 import { ClientMoves } from '../moves';
 import HistoryManager from './history-manager';
@@ -19,7 +19,7 @@ function useGameControlProps(gameDefinition: GameDefinition) {
         reverseBoard: useState(false),
         historyManager: useRef(
             new HistoryManager<GenericGameState>(gameDefinition.initialState)
-            ).current,
+        ).current,
     };
 }
 
@@ -58,23 +58,31 @@ interface Players {
 
 class GameControl {
 
-    constructor(bgioProps:BgioProps, localProps: GameControlProps) {
+    constructor(bgioProps: BgioProps, localProps: GameControlProps) {
         this._bgioProps = bgioProps;
         this._localProps = localProps;
     }
 
-    private _bgioProps:BgioProps;
+    private _bgioProps: BgioProps;
     private _localProps: GameControlProps;
 
     // Public access to on-board or off-board pieces is though functions that
     // take account of flipping.
-    private get _offBoardPieces() { return this._gameDefinition.offBoardPieces; }
+    private get _offBoardPieces() {
+        return this._gameDefinition.offBoardPieces;
+    }
 
-    private get _gameDefinition () {  return this._localProps.gameDefinition; }
+    private get _gameDefinition() {
+        return this._localProps.gameDefinition;
+    }
 
-    private get _gameState() { return this._bgioProps.G; }
+    private get _gameState() {
+        return this._bgioProps.G;
+    }
 
-    private get _bgioMoves() { return this._bgioProps.moves as any as ClientMoves; }
+    private get _bgioMoves() {
+        return this._bgioProps.moves as any as ClientMoves;
+    }
 
     private get _historyManager() {
         return this._localProps.historyManager;
@@ -88,11 +96,11 @@ class GameControl {
         this._bgioMoves.setGameState(state);
     }
 
-    get name() { return this._gameDefinition.name;}
+    get name() { return this._gameDefinition.name; }
 
     get boardStyle() { return this._gameDefinition.boardStyle; }
 
-    
+
     private _recordGameStateInHistory(state: GenericGameState) {
         this._historyManager.setState(state);
     }
@@ -101,27 +109,27 @@ class GameControl {
         this._bgioMoves.setGameState(state);
     }
 
-    get canUndo() : boolean {
+    get canUndo(): boolean {
         return this._historyManager.canUndo;
     }
 
-    get canRedo() : boolean {
+    get canRedo(): boolean {
         return this._historyManager.canRedo;
     }
 
-    undo() { 
-        if(this._historyManager.undo()) {
+    undo() {
+        if (this._historyManager.undo()) {
             this._restoreHistoryState();
         }
-     }
+    }
     redo() {
-        if(this._historyManager.redo()) {
+        if (this._historyManager.redo()) {
             this._restoreHistoryState();
         }
     }
 
     restart() {
-        if(this._historyManager.restart()) {
+        if (this._historyManager.restart()) {
             this._restoreHistoryState();
         }
     }
@@ -131,13 +139,13 @@ class GameControl {
     flipRowOrder() { this._localProps.reverseBoard[1](!this.reverseBoardRows); }
 
     get nRows() {
-        return this._gameState.pieces? this._gameState.pieces[0].length : 0;
+        return this._gameState.pieces ? this._gameState.pieces.length : 0;
     }
 
     get nCols() {
         return this.nRows > 0 ? this._gameState.pieces[0].length : 0;
     }
-    
+
     squareProperties(pos: PiecePosition): SquareProperties {
 
         const pieceName = () => {
@@ -152,14 +160,14 @@ class GameControl {
         const selectedSquare = this._gameState.selectedSquare;
         const selected = Boolean(selectedSquare && samePiecePosition(pos, makePiecePosition(selectedSquare)));
 
-        const legalMoveStatus = ()  => {
+        const legalMoveStatus = () => {
 
             const legalMoves = this._bgioProps.G.legalMoves;
-            if(legalMoves && pos.row !== undefined && legalMoves[pos.row][pos.col]) {
+            if (legalMoves && pos.row !== undefined && legalMoves[pos.row][pos.col]) {
                 return LegalMoveStatus.Legal;
             }
-    
-            if( legalMoves && pos.row !== undefined && !legalMoves[pos.row][pos.col]) {
+
+            if (legalMoves && pos.row !== undefined && !legalMoves[pos.row][pos.col]) {
                 return LegalMoveStatus.Illegal;
             }
 
@@ -203,7 +211,7 @@ class GameControl {
         let newGameState = JSON.parse(JSON.stringify(this._bgioProps.G));
         return new MoveControl(this._offBoardPieces, newGameState, this.activePlayer);
     }
-    
+
     private _applyMoveResult(moveResult: MoveResult, newGameState: GenericGameState) {
         if (!moveResult.noop) {
             this._setGameState(newGameState);
@@ -226,14 +234,14 @@ class GameControl {
         this._applyMoveResult(moveResult, moveControl.state);
     }
 
-    dragAllowed(pos: PiecePosition)  {
+    dragAllowed(pos: PiecePosition) {
         const onDrag = this._gameDefinition.onDrag;
         return Boolean(onDrag && onDrag.startAllowed(pos));
     }
 
     onDragEnd(from: PiecePosition, to: PiecePosition | null) {
         const onDrag = this._gameDefinition.onDrag;
-        if(!onDrag) {
+        if (!onDrag) {
             throw new Error("Unsupported drag");
         }
 
@@ -254,7 +262,7 @@ class GameControl {
     endGame(winner: number) {
         const endGame = this._bgioProps.events.endGame;
         if (endGame) {
-            endGame({winner: winner});
+            endGame({ winner: winner });
         } else {
             throw new Error("endGame is not defined");
         }
@@ -263,9 +271,9 @@ class GameControl {
     get renderPiece() { return this._gameDefinition.renderPiece; }
 
 
-    get activePlayer() { return this._bgioProps.ctx.playOrderPos;}
-    
-    get gameover() : undefined | {winner: number} {
+    get activePlayer() { return this._bgioProps.ctx.playOrderPos; }
+
+    get gameover(): undefined | { winner: number } {
         const gameover = this._bgioProps.ctx.gameover;
         if (gameover && typeof gameover.winner !== "number") {
             throw new Error("unexpect gameover status");
@@ -274,9 +282,9 @@ class GameControl {
         return gameover;
     }
 
-    get players() : Players {
+    get players(): Players {
         let caller;
-        if(!this._bgioProps.playerID) {
+        if (!this._bgioProps.playerID) {
             //     throw new Error("PlayerID is null");
             caller = -1;
         } else {
@@ -288,16 +296,14 @@ class GameControl {
             return `Player ${playerNumber + 1}`
         });
 
-        
-
         return {
             playerNames: players,
             caller: caller,
-        } 
+        }
     }
 
-    get moveDescription () {return this._gameDefinition.moveDescription(this._gameState);}
+    get moveDescription() { return this._gameDefinition.moveDescription(this._gameState); }
 }
 
-export { GameControl as default, useGameControlProps, LegalMoveStatus  };
-export type { SquareProperties, SquareBackground}
+export { GameControl as default, useGameControlProps, LegalMoveStatus };
+export type { SquareProperties, SquareBackground }
