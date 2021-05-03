@@ -250,6 +250,9 @@ class GameControl {
         this._applyMoveResult(moveResult, moveControl.state);
     }
 
+    get provideEndTurnOption() {
+        return true;
+    }
     endTurn() {
         const endTurn = this._bgioProps.events.endTurn;
         if (endTurn) {

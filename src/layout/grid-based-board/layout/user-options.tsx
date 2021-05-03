@@ -15,10 +15,11 @@ const UserOptionsButtons = styled.div `
 
 const Button = styled.button`
    font-size: 20px;
-   width: 3.7em;
+   min-width: 3.7em;
    margin-right: 5px;
-   padding-left: 0.1em;
+   padding: 0 .2em;
    text-align:left;
+   white-space: nowrap;
    &last-of-type {
        margin-right: 0px;
     }
@@ -30,6 +31,10 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
         <UserOptionsStyled>
 
             <UserOptionsButtons>
+                <Button type='button' onClick={() => gameControl.flipRowOrder()}>
+                    Flip
+                </Button>
+
                 <Button type='button' onClick={() => gameControl.restart()}>
                     Restart
                 </Button>
@@ -51,11 +56,15 @@ function UserOptions({ gameControl }: { gameControl: GameControl; }) {
                 </Button>
             </UserOptionsButtons>
 
-            <UserOptionsButtons>
-                <Button type='button' onClick={() => gameControl.flipRowOrder()}>
-                    Flip
+            {gameControl.provideEndTurnOption ?
+                (
+                    <UserOptionsButtons>
+                        <Button type='button' onClick={() => gameControl.endTurn()}>
+                            End Turn
                 </Button>
-            </UserOptionsButtons>
+                    </UserOptionsButtons>
+                ) : null
+            }
             
         </UserOptionsStyled>
     );
