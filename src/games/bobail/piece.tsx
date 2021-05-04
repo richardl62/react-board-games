@@ -3,17 +3,21 @@ import { Counter } from '../../layout/counter';
 
 interface StringMap { [key: string]: string; }
 
+export const bb = 'bb';
+export const pl1 = 'p1';
+export const pl2 = 'p2';
+
 const colors: StringMap = {
-    p1: 'red',
-    p2: 'green',
-    bb: '#e0e000',
+    [pl1]: 'red',
+    [pl2]: 'green',
+    [bb]: '#e0e000',
 };
 
 interface Props {
     pieceName: string;
 }
 
-function Bobail({ pieceName }: Props) {
+export function Piece({ pieceName }: Props) {
 
     const color = colors[pieceName];
 
@@ -23,5 +27,3 @@ function Bobail({ pieceName }: Props) {
 
     return <Counter color={color} />;
 }
-
-export default Bobail;

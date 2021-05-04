@@ -1,11 +1,10 @@
 import {
     MoveControl, MoveResult, PiecePosition, RowCol, samePiecePosition
 } from '../../layout/grid-based-board';
+import { pl1, pl2, bb } from './piece';
 
 export type BobailState = { moveBobailNext: boolean; };
-export const bb = 'bb';
-export const pl1 = 'p1';
-export const pl2 = 'p2';
+
 function playerPieceName(player: number): string {
     if (player === 0) {
         return pl1;

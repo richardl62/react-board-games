@@ -22,7 +22,7 @@ interface DraughtsProps {
     pieceName: string;
 }
 
-function DraughtsPiece({ pieceName }: DraughtsProps) {
+function Piece({ pieceName }: DraughtsProps) {
 
     const isBlack = pieceName.toLowerCase() === 'b';
     const isKing = pieceName === pieceName.toUpperCase();;
@@ -33,4 +33,4 @@ function DraughtsPiece({ pieceName }: DraughtsProps) {
     );
 }
 
-export { DraughtsPiece };
+export { Piece };

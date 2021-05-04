@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { AppGame } from '../shared/types'
-import { appGames } from '../games';
+import { games as appGames } from '../games';
 import { GamePage } from './game-page';
 import * as UrlParams from './url-params';
 import styled from 'styled-components';

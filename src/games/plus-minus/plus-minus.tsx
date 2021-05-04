@@ -1,14 +1,25 @@
 import React from 'react';
 import { AppGame, BoardProps } from '../../shared/types';
-import { G, plusminusInput } from './plus-minus-input';
 
-if(plusminusInput.length !== 1) {
-  throw new Error("Expected exactly one plus-minus game");
-}
+interface G {
+  value: number;
+};
 
 const plusminus : AppGame = {
-  ...plusminusInput[0],
-  
+  name: 'plusminus',
+  displayName: 'Plus Minus (for testing)',
+
+  setup: (): G => { return { value: 0 }; },
+
+  minPlayers: 1,
+  maxPlayers: 100,
+
+  moves: {
+    add: (G: G, ctx: any, value: number) => {
+      G.value += value;
+    },
+  },
+
   board: ({ G, moves, events }: BoardProps<G> ) => {
     return (
       <div>

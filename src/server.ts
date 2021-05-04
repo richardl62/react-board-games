@@ -2,7 +2,7 @@
 import { Server } from 'boardgame.io/server';
 import path from 'path';
 import serve from 'koa-static';
-import { games } from './games/basic-games';
+import { games } from './games';
 
 console.log("Games: ", games.map(g => g.name));
 
