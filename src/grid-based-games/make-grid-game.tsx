@@ -1,40 +1,14 @@
 import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
 import React from "react";
-import { BoardAndPlayers } from '../boards';
-import { AppGame, BasicGame } from '../shared/types';
+import { BoardAndPlayers } from '../game-support';
+import { AppGame } from '../shared/types';
 import { GameControl, GameDefinition, moves, useGameControlProps } from './control';
-import { MoveControl, MoveResult } from "./control/definition";
 import { BoardStyle, OnClick, OnDrag } from "./control/definition/game-definition";
 import { onFunctions } from "./control/definition/on-functions";
 import SimpleGame from './layout';
-import { PiecePosition } from "./piece-position";
+import { makeSimpleName } from '../game-support/tools';
+import { GridGameState, MoveFunction } from './types';
 
-export type MoveFunction = (
-  from: PiecePosition,
-  to: PiecePosition  | null, // null -> moved off board
-  moveControl: MoveControl, 
-  ) => MoveResult;
-  
-export function makeSimpleName(displayName: string) {
-    return displayName.toLowerCase().replace(/[^a-z0-9]/g,'');
-  }
-    
-export interface GridGameState<GameSpecific = unknown> {
-    pieces: Array<Array<string|null>>;
-    selectedSquare: PiecePosition | null;
-    legalMoves: Array<Array<boolean>> | null;
-    gameSpecific?: GameSpecific;
-}
-
-export function makeGridGameState(pieces: Array<Array<string|null>>) : GridGameState {
-  return {
-    pieces: pieces,
-    selectedSquare: null,
-    legalMoves: null,
-  }
-}
-
-export type StartingPieces = Array<Array<string|null>>;
 export interface GridGameInput<GameSpecific = unknown> {
   displayName: string;
 
@@ -57,60 +31,47 @@ export interface GridGameInput<GameSpecific = unknown> {
   onClick?: OnClick;
   onDrag?: OnDrag;
   onMove?: MoveFunction;
+
+  boardStyle: BoardStyle,
+  renderPiece: (props: { pieceName: string }) => JSX.Element,
 };
 
-export function makeBasicGridGame<GameSpecific = void>(input: GridGameInput<GameSpecific>) 
-  : BasicGame<GridGameState<GameSpecific>> {
-    
-    return {
-      name: makeSimpleName(input.displayName),
-      displayName: input.displayName,
-
-      minPlayers: input.minPlayers,
-      maxPlayers: input.maxPlayers,
-
-      setup: input.setup,
-
-      moves: moves,
-    };
-  }
-
 interface AppFriendlyGameProps {
-    gameDefinition: GameDefinition;
-    bgioProps: BgioBoardProps;
-}
-function GameWrapper({bgioProps, gameDefinition} : AppFriendlyGameProps) {
-    const gameControlProps = useGameControlProps(gameDefinition);
-    const gameControl = new GameControl(bgioProps, gameControlProps);
-        
-    return (<SimpleGame gameControl={gameControl} />);
+  gameDefinition: GameDefinition;
+  bgioProps: BgioBoardProps;
 }
 
-export function makeAppGridGame<GameSpecific = void>(
-        input: GridGameInput<GameSpecific>,
-        boardStyle: BoardStyle,
-        renderPiece: (props: {pieceName: string}) => JSX.Element,
-        ) : AppGame {
+function GameWrapper({ bgioProps, gameDefinition }: AppFriendlyGameProps) {
+  const gameControlProps = useGameControlProps(gameDefinition);
+  const gameControl = new GameControl(bgioProps, gameControlProps);
 
-    const basicGame = makeBasicGridGame(input);
+  return (
+    <BoardAndPlayers {...bgioProps} >
+      <SimpleGame gameControl={gameControl} />
+    </BoardAndPlayers>
+  );
+}
 
-    const gameDefinition : GameDefinition = {
-        ...basicGame,
-        initialState: basicGame.setup(), //Hmm. Why is this needed?
+export function makeGridGame<GameSpecific = void>(
+  input: GridGameInput<GameSpecific>,
+): AppGame {
 
-        ...onFunctions(input),
-        moveDescription: () => { return null; }, // Hmm. Can I get rid of this?
+  const gameDefinition = {
+    ...input,
+    name: makeSimpleName(input.displayName),
+    moves: moves,
 
-        boardStyle: boardStyle,
-        offBoardPieces: input.offBoardPieces,
-        renderPiece: renderPiece,
-    };
+    ...onFunctions(input),
 
-    const board = (bgioProps: BgioBoardProps) => (
-        <BoardAndPlayers {...bgioProps} >
-            <GameWrapper bgioProps={bgioProps} gameDefinition={gameDefinition} />
-        </BoardAndPlayers>);
+    moveDescription: () => { return null; }, // Hmm. Can I get rid of this?
+    initialState: input.setup(), //Hmm. Why is this needed?
+  };
 
+  const board = (bgioProps: BgioBoardProps) =>
+    <GameWrapper bgioProps={bgioProps} gameDefinition={gameDefinition} />
 
-    return {...basicGame, board: board,};
+  return {
+    ...gameDefinition,
+    board: board,
   }
+}

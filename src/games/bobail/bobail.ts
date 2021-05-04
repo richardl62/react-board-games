@@ -1,6 +1,6 @@
-import { GridGameInput, makeAppGridGame } from '../../grid-based-games';
-import { BobailState, onClick } from './actions';
-import  { Piece, bb, pl1, pl2 } from './piece';
+import { makeGridGame } from '../../grid-based-games';
+import { onClick } from './actions';
+import { Piece, bb, pl1, pl2 } from './piece';
 
 const initialState = {
     pieces: [
@@ -24,7 +24,7 @@ const initialState = {
     gameSpecific: { moveBobailNext: false },
 };
 
-const input: GridGameInput<BobailState> =
+const bobail =
 {
     displayName: 'Bobail',
 
@@ -37,15 +37,16 @@ const input: GridGameInput<BobailState> =
 
     onClick: onClick,
     onDrag: null,
+
+    boardStyle: {
+        checkered: false,
+        labels: false,
+    },
+
+    renderPiece: Piece,
 };
 
-const boardStyle = {
-    checkered: false,
-    labels: false,
-};
-
-const bobail = makeAppGridGame(input, boardStyle, Piece);
-const games = [bobail];
+const games = [makeGridGame(bobail)];
 
 export default games;
 

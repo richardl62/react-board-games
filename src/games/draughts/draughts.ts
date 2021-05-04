@@ -1,4 +1,4 @@
-import { GridGameInput, makeAppGridGame, makeGridGameState } from "../../grid-based-games";
+import { makeGridGame, makeGridGameState } from "../../grid-based-games";
 import { moveFunction } from "./move-function";
 import { Piece } from "./piece";
 
@@ -9,7 +9,7 @@ interface DraughtProps {
     nRowsOfPieces: number;
 }
 
-function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GridGameInput  {
+function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
 
     const startingPiece = (row: number, col: number) => {
         let name = null;
@@ -35,7 +35,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GridGame
         }
     }
 
-    return {
+    return makeGridGame ({
         displayName: name,
 
         minPlayers: 1,
@@ -50,10 +50,16 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): GridGame
 
         onMove: moveFunction,
 
-    };
+        boardStyle: {
+            checkered: true,
+            labels: true,
+        },
+
+        renderPiece: Piece,
+    });
 }
 
-export const draughtsInput = [
+const games = [
     draughts({
         name: "Draughts (British)",
         nRows: 8, nCols: 8, nRowsOfPieces: 3,
@@ -64,14 +70,4 @@ export const draughtsInput = [
         nRows: 10, nCols: 10, nRowsOfPieces: 4,
     }),
 ];
-
-const games = draughtsInput.map(input => {
-    const boardStyle = {
-        checkered: true,
-        labels: true,
-    };
-
-    return makeAppGridGame(input, boardStyle, Piece);
-});
-
 export default games;

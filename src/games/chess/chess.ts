@@ -1,8 +1,8 @@
-import { StartingPieces, GridGameInput, makeGridGameState, makeAppGridGame } from "../../grid-based-games";
+import { StartingPieces, makeGridGameState, makeGridGame } from "../../grid-based-games";
 import { Piece } from "./piece";
 
-function chess(displayName: string, pieces: StartingPieces) : GridGameInput {
-  return ({
+function chess(displayName: string, pieces: StartingPieces) {
+  return makeGridGame({
     displayName: displayName,
 
     minPlayers: 1,
@@ -13,10 +13,17 @@ function chess(displayName: string, pieces: StartingPieces) : GridGameInput {
       top: ['p', 'n', 'b', 'r', 'q', 'k'],
       bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
     },
+
+    boardStyle: {
+      checkered: true,
+      labels: true,
+    },
+    
+    renderPiece: Piece,
   });
 }
 
-const chessInput = [
+const games = [
   chess(
     "Chess",
     [
@@ -43,15 +50,5 @@ const chessInput = [
     ]
   ),
 ]
-
-const boardStyle = {
-  checkered: true,
-  labels: true,
-};
-
-
-const games = chessInput.map(input => {
-  return makeAppGridGame(input, boardStyle, Piece);
-});
 
 export default games;
