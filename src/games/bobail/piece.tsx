@@ -1,5 +1,5 @@
 import React from 'react';
-import { Counter } from '../../layout/counter';
+import { Counter } from '../../boards';
 
 interface StringMap { [key: string]: string; }
 

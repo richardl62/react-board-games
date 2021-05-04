@@ -1,7 +1,7 @@
 import {
     defaultMoveFunction, makeRowCol, MoveControl, MoveResult, PiecePosition, 
     RowCol
-} from "../../layout/grid-based-board";
+} from "../../grid-based-games";
 
 
 // Find the steps in a diagonal path [from, to).

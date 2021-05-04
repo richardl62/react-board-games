@@ -1,4 +1,4 @@
-import { GridGameInput, makeAppGridGame } from '../../layout/grid-based-board';
+import { GridGameInput, makeAppGridGame } from '../../grid-based-games';
 import { BobailState, onClick } from './actions';
 import  { Piece, bb, pl1, pl2 } from './piece';
 

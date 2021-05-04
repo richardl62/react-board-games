@@ -1,7 +1,6 @@
-import { makeAppGridGame } from "../../layout/grid-based-board";
-import { Piece } from "./piece";
-import { GridGameInput, makeGridGameState } from "../../layout/grid-based-board";
+import { GridGameInput, makeAppGridGame, makeGridGameState } from "../../grid-based-games";
 import { moveFunction } from "./move-function";
+import { Piece } from "./piece";
 
 interface DraughtProps {
     name: string,

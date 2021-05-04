@@ -1,4 +1,4 @@
-import { StartingPieces, GridGameInput, makeGridGameState, makeAppGridGame } from "../../layout/grid-based-board";
+import { StartingPieces, GridGameInput, makeGridGameState, makeAppGridGame } from "../../grid-based-games";
 import { Piece } from "./piece";
 
 function chess(displayName: string, pieces: StartingPieces) : GridGameInput {

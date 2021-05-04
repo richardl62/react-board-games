@@ -1,6 +1,6 @@
 import {
     MoveControl, MoveResult, PiecePosition, RowCol, samePiecePosition
-} from '../../layout/grid-based-board';
+} from '../../grid-based-games';
 import { pl1, pl2, bb } from './piece';
 
 export type BobailState = { moveBobailNext: boolean; };

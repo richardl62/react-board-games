@@ -1,5 +1,5 @@
 import React from 'react';
-import { Counter } from '../../layout/counter';
+import { Counter } from '../../boards';
 
 function pieceColor(black: boolean) {
     return black ? 'black' :
