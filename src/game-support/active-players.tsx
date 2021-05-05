@@ -1,7 +1,6 @@
 import React from 'react';
 import { BoardProps } from '../shared/types';
 import styled from 'styled-components'
-
 export const unnamedPlayer = '_Unnamed Player_';
 
 
@@ -18,14 +17,15 @@ const PlayerName = styled.div<PlayerNameProps>`
   text-decoration: ${props => props.isCurrent ? "underline" : "default"};
 `;
 
-interface BoardAndPlayerProps extends BoardProps {
-  children: React.ReactNode;
+interface ActivePlayerProps extends BoardProps {
+  setPlayersReady?: (arg: boolean) => void;
 }
-export function BoardAndPlayers(props: BoardAndPlayerProps) {
-  const { ctx, matchData, children } = props;
+
+export function ActivePlayers(props: ActivePlayerProps) {
+  const { ctx, matchData, setPlayersReady } = props;
 
   if (!matchData) {
-    return <div>No player information found</div>;
+     return <div>No player information found</div>;
   }
 
   const playerID = Number(props.playerID);
@@ -58,6 +58,8 @@ export function BoardAndPlayers(props: BoardAndPlayerProps) {
   }
 
   const numToJoin = matchData.length - playerElems.length;
+  setPlayersReady && setPlayersReady(numToJoin === 0);
+  
   return (
     <div>
       {playerElems.length === 1 ? null :
@@ -66,8 +68,7 @@ export function BoardAndPlayers(props: BoardAndPlayerProps) {
           {playerElems}
         </PlayerNames>
       }
-      {numToJoin === 0 ?
-        <div>{children}</div> :
+      {numToJoin === 0 ?  null :
         <div>{`Waiting for ${numToJoin} more player(s) to join`}</div>
       }
     </div>);

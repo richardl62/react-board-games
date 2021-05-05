@@ -1,6 +1,6 @@
 import { BoardProps as BgioBoardProps } from 'boardgame.io/react';
-import React from "react";
-import { BoardAndPlayers } from '../game-support';
+import React, { useState } from "react";
+import { ActivePlayers } from '../game-support';
 import { AppGame } from '../shared/types';
 import { GameControl, GameDefinition, moves, useGameControlProps } from './control';
 import { BoardStyle, OnClick, OnDrag } from "./control/definition/game-definition";
@@ -42,13 +42,16 @@ interface AppFriendlyGameProps {
 }
 
 function GameWrapper({ bgioProps, gameDefinition }: AppFriendlyGameProps) {
+  const [ playersReady, setPlayersReady] = useState<boolean>(false);
   const gameControlProps = useGameControlProps(gameDefinition);
   const gameControl = new GameControl(bgioProps, gameControlProps);
 
+
   return (
-    <BoardAndPlayers {...bgioProps} >
-      <SimpleGame gameControl={gameControl} />
-    </BoardAndPlayers>
+    <div>
+      <ActivePlayers {...bgioProps} setPlayersReady={setPlayersReady} />
+      {playersReady ? <SimpleGame gameControl={gameControl} /> : null}
+    </div>
   );
 }
 
