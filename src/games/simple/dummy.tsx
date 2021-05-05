@@ -8,7 +8,6 @@ interface G {
 
 const initialValues = [
   [1,2,3],
-  [4,5,6],
   [7,8,9],
 ];
 console.log("initialValues", initialValues);
@@ -20,7 +19,7 @@ export const dummy : AppGame = {
   setup: (): G => { return { values: initialValues }; },
 
   minPlayers: 1,
-  maxPlayers: 10,
+  maxPlayers: 1,
 
   moves: {
     add1: (G: G, ctx: any, row: number, col: number) => {
@@ -51,6 +50,6 @@ export const dummy : AppGame = {
     }
     console.log("squares", squares);
   
-    return <BoardGrid squares={squares}/>
+    return <BoardGrid squares={squares} borderLabels={true}/>
   },
 }
