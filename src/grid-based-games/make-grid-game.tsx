@@ -6,7 +6,7 @@ import { GameControl, GameDefinition, moves, useGameControlProps } from './contr
 import { BoardStyle, OnClick, OnDrag } from "./control/definition/game-definition";
 import { onFunctions } from "./control/definition/on-functions";
 import SimpleGame from './layout';
-import { makeSimpleName } from '../game-support/tools';
+import { makeSimpleName } from '../game-support/misc';
 import { GridGameState, MoveFunction } from './types';
 
 export interface GridGameInput<GameSpecific = unknown> {

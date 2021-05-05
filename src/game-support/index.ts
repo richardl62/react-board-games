@@ -1,3 +1,3 @@
-export * from './boards'
-export * from './counter'
-export * from './tools'
+export { BoardAndPlayers, unnamedPlayer } from './board-and-players'
+export { Counter } from './counter'
+export { makeSimpleName } from './misc'
