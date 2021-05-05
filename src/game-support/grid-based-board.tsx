@@ -1,13 +1,11 @@
 import React from 'react';
 
-export namespace Boards {
+interface BoardGridProps {
+    squares: Array<Array<JSX.Element>>;
+    //To do: Add display properties (e.g. 'checkered');
+}
 
-    interface GridProps {
-        squares: Array<Array<JSX.Element>>;
-        //To do: Add display properties (e.g. 'checkered');
-    }
+export function BoardGrid({ squares }: BoardGridProps) {
 
-    export function Grid ( { squares }: GridProps) {
-        return <div> {squares} </div>;
-    }
+    return <div> {squares} </div>;
 }
