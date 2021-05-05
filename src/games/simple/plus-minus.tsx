@@ -5,7 +5,7 @@ interface G {
   value: number;
 };
 
-const plusminus : AppGame = {
+export const plusminus : AppGame = {
   name: 'plusminus',
   displayName: 'Plus Minus (for testing)',
 
@@ -31,7 +31,3 @@ const plusminus : AppGame = {
     )
   },
 }
-
-const games = [ plusminus ];
-
-export default games;

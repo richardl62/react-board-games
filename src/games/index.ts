@@ -1,7 +1,7 @@
 import { AppGame } from '../shared/types';
-import bobail from './bobail/bobail';
-import chess from './chess/chess';
-import draughts from './draughts/draughts';
-import plusminus from './plus-minus/plus-minus';
+import bobail from './bobail';
+import chess from './chess';
+import draughts from './draughts';
+import plusminus from './simple';
 
 export const games : Array<AppGame> = [...bobail, ...chess, ...draughts, ...plusminus];

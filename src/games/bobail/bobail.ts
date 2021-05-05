@@ -24,7 +24,7 @@ const initialState = {
     gameSpecific: { moveBobailNext: false },
 };
 
-const bobail =
+export const bobail = makeGridGame(
 {
     displayName: 'Bobail',
 
@@ -44,9 +44,5 @@ const bobail =
     },
 
     renderPiece: Piece,
-};
-
-const games = [makeGridGame(bobail)];
-
-export default games;
+});
 
