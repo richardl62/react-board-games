@@ -1,5 +1,5 @@
 import React from 'react';
-import { BoardGrid } from '../../game-support/grid-based-board';
+import { BoardGrid } from '../../game-support/grid-based-board/grid-based-board';
 import { AppGame, BoardProps } from '../../shared/types';
 
 interface G {
@@ -50,6 +50,6 @@ export const dummy : AppGame = {
     }
     console.log("squares", squares);
   
-    return <BoardGrid squares={squares} borderLabels={true}/>
+    return <BoardGrid squares={squares} borderLabels={false} checkered={false} flip={false}/>
   },
 }
