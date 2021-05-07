@@ -1,5 +1,7 @@
 import React from 'react';
-import { BoardGrid } from '../../game-support/grid-based-board/grid-based-board';
+import styled from 'styled-components';
+import { GridBased } from '../../game-support';
+import { colors } from '../../game-support/colors';
 import { AppGame, BoardProps } from '../../shared/types';
 
 interface G {
@@ -10,7 +12,24 @@ const initialValues = [
   [1,2,3],
   [7,8,9],
 ];
-console.log("initialValues", initialValues);
+
+const Piece = styled.div`
+  width: 100%;
+  height: 100%;
+  font-size: 40px; // KLUDGE
+
+  text-align: center;
+  margin: auto;
+`
+
+function squareColor(row: number, col: number, checkered: boolean) {
+  if (!checkered) {
+      return colors.whiteSquare;
+  }
+
+  const asTopLeft = (row + col) % 2 === 0;
+  return asTopLeft ? colors.whiteSquare : colors.blackSquare;
+}
 
 export const dummy : AppGame = {
   name: 'dummy',
@@ -32,7 +51,8 @@ export const dummy : AppGame = {
   board: ({ G, moves, events }: BoardProps<G> ) => {
     const nRows = G.values.length;
     const nCols = G.values[0].length;
-    console.log("G.values", G.values, G.values[0][0]);
+    const checkered = true;
+
 
     const squares = [];
     for(let rn = 0; rn < nRows; ++rn) {
@@ -43,13 +63,16 @@ export const dummy : AppGame = {
         const onClick = ()=>alert(message);
         const val = G.values[rn][cn];
 
-        row.push(<div onClick={onClick}>{val}</div>);
+        row.push(
+          <GridBased.Square onClick={onClick} color={squareColor(rn,cn, checkered)}>
+            <Piece>{val}</Piece>
+          </GridBased.Square>);
       }
 
       squares.push(row);
     }
-    console.log("squares", squares);
   
-    return <BoardGrid squares={squares} borderLabels={false} checkered={false} flip={false}/>
+    return <GridBased.Board squares={squares} borderLabels={true} reverseRows={false}
+     internalBorders={!checkered}/>
   },
 }

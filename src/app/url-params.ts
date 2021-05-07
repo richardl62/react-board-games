@@ -2,8 +2,6 @@
 // If not set, give default value.
 import { AppGame, MatchID } from "../shared/types";
 
-
-
 const usp = new URLSearchParams(window.location.search);
 
 const getAndDelete = (key: string) => {
@@ -68,7 +66,6 @@ export function lobbyServer() {
     result = url.origin;
   }
   
-  console.log("lobbyServer:", result);
   return result;
 }
 

@@ -1,5 +1,31 @@
 import React from 'react';
-import { BorderLetter, BorderNumber, RectangularBoard, colors, GridSquareBackground, GridSquareElement } from './styles';
+import { colors } from "../colors";
+import styled from 'styled-components';
+
+const RectangularBoard = styled.div<{nCols: number, internalBorders: boolean}>`        
+    display: inline-grid;
+    background-color: ${colors.boardBackground};
+    grid-template-columns: ${props => `repeat(${props.nCols},auto)`};
+    
+    grid-gap: ${props => props.internalBorders ? "2px" : "none"};
+    border: ${props => props.internalBorders ? 
+        `10px solid ${colors.boardBackground}` : "none"};
+`; 
+
+
+const BorderLetter = styled.div`
+    font-size: 20px;
+    padding: 3px 0;
+    color: ${colors.BoarderText};
+    text-align: center;
+`;
+
+const BorderNumber = styled.div`
+    font-size: 25px;
+    padding: 0 7px;
+    color: ${colors.BoarderText};
+    margin: auto;
+`;
 
 function rowCol(array: Array<Array<any>>) {
     return {
@@ -8,24 +34,14 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-function squareColor(row: number, col: number, checkered: boolean) {
-    if (!checkered) {
-        return colors.whiteSquare;
-    }
-
-    const asTopLeft = (row + col) % 2 === 0;
-    return asTopLeft ? colors.whiteSquare : colors.blackSquare;
-}
-
-interface BoardGridProps {
+interface BoardProps {
     squares: Array<Array<JSX.Element>>;
     borderLabels: boolean;
-    checkered: boolean;
-    /** Reverse the order of the rows */
-    flip: boolean;
+    reverseRows: boolean;
+    internalBorders: boolean;
 }
 
-export function BoardGrid({ squares, borderLabels, checkered, flip }: BoardGridProps) {
+export function Board({ squares, borderLabels, reverseRows: reserveRows, internalBorders }: BoardProps) {
     const { nRows, nCols } = rowCol(squares);
 
     let elemRows: Array<Array<JSX.Element>> = [];
@@ -34,11 +50,7 @@ export function BoardGrid({ squares, borderLabels, checkered, flip }: BoardGridP
 
         let elems = [];
         for (let col = 0; col < nCols; ++col) {
-            elems.push(
-                <GridSquareBackground key={`${row}:${col}`} color={squareColor(row, col, checkered)} >
-                    <GridSquareElement> {squares[row][col]} </GridSquareElement>
-                </GridSquareBackground>
-            );
+            elems.push(<div key={`${row}:${col}`}>{squares[row][col]}</div>);
         }
 
         if (borderLabels) {
@@ -49,7 +61,7 @@ export function BoardGrid({ squares, borderLabels, checkered, flip }: BoardGridP
         elemRows.push(elems);
     }
 
-    if (flip) {
+    if (reserveRows) {
         elemRows.reverse();
     }
 
@@ -73,7 +85,7 @@ export function BoardGrid({ squares, borderLabels, checkered, flip }: BoardGridP
     return (
         <RectangularBoard
             nCols={elemRows[0].length}
-            internalBorders={!checkered}
+            internalBorders={internalBorders}
         >
             {elemRows}
         </RectangularBoard>
