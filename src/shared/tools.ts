@@ -40,3 +40,42 @@ export function useStatePromise<T>(inputVal: T | null = null) {
     },
   }
 }
+
+function doDeepMap(
+  item: any, 
+  currentIndices: Array<number>,
+  // itemAction is applied to leaf (non-array) elements
+  itemAction: (e:any, indices: Array<number>) => any
+) : any {
+
+  if(!(item instanceof Array)) {
+    return itemAction(item, currentIndices);
+  }
+
+  return item.map((nestedItem: any, index: number) =>
+    doDeepMap(nestedItem, [...currentIndices, index], itemAction)
+  );
+}
+
+export function deepArrayMap(
+  item: any,
+  itemAction: (e:any, indices: Array<number>) => any
+  ) {
+  return doDeepMap(item, [], itemAction);
+}
+
+export function deepCopyArray<T>(arr: T) : T {
+  return deepArrayMap(arr, (item:any) => item);  
+}
+
+
+// const arr = [
+//   0,
+//   [1,2,3],
+//   [4,5,
+//     [6],
+//   ],
+// ];
+
+// const mapFunc = (x:number, indices: Array<number>) => [x, indices];
+// console.log(JSON.stringify(deepArrayMap(arr, mapFunc)));
