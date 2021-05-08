@@ -1,7 +1,7 @@
 import React from 'react';
-import { colors } from "../colors";
+import { colors as defaultColors } from "../colors";
 import styled from 'styled-components';
-import { deepArrayMap, deepCopyArray } from '../../shared/tools';
+import { deepCopyArray } from '../../shared/tools';
 
 
 const Corner = styled.div<{width: string}>`
@@ -9,27 +9,27 @@ const Corner = styled.div<{width: string}>`
     height: ${props => props.width};
 `
 
-const BorderElement = styled.div<{borderWidth: string}>`
-    color: white;
+const BorderElement = styled.div<{color: string}>`
+    color: ${props => props.color};
     font-family: 'Helvetica'; // No special reason
-    font-size: borderWidth;
-    font-weight: bold;
-
-    text-justify: center;
-    margin: auto;
 `;
+
 
 const RectangularBoard = styled.div<{
     nCols: number, 
     gridGap: string,
     borderWidth: string,
+    backgroundColor: string,
     }>`        
     display: inline-grid;
-    background-color: ${colors.boardBackground};
+    align-items: center;
+    justify-items: center;
+
+    background-color: ${props => props.backgroundColor};
     grid-template-columns: ${props => `repeat(${props.nCols},auto)`};
     
     grid-gap: ${props => props.gridGap};
-    border: ${props => props.borderWidth} solid ${colors.boardBackground};
+    border: ${props => props.borderWidth} solid ${props => props.backgroundColor};
 `; 
 
 
@@ -41,29 +41,56 @@ function rowCol(array: Array<Array<any>>) {
 }
 
 interface BoardProps {
+    /** The elements that form the squares of the board.
+     * Should be given keys
+    */
     squares: Array<Array<JSX.Element>>;
-    borderLabels: boolean;
-    reverseRows: boolean;
+    
+    borderLabels?: boolean;
+    reverseRows?: boolean;
 
-    gridGap: string;
-    borderWidth: string;
+    gridGap?: string;
+    borderWidth?: string;
+
+    colors?: {
+        background: string;
+        labels: string;
+    } 
 }
 
-export function Board({ squares, borderLabels, reverseRows, gridGap, borderWidth }: BoardProps) {
+function setDefault<T>(value: T | undefined, def: T) {
+    return value === undefined ? def : value;
+}
+
+export function Board(props: BoardProps) {  
+    const squares = props.squares;
+    const borderLabels = setDefault(props.borderLabels, false);
+    const reverseRows = setDefault(props.reverseRows, false);
+
+    const gridGap = setDefault(props.gridGap, 'none');
+    const borderWidth = setDefault(props.borderWidth, "4%"); // arbitray
+    const colors = setDefault(props.colors, {
+        background: defaultColors.boardBackground,
+        labels: defaultColors.boardBorderLabels,
+    });
+
     const { nRows, nCols } = rowCol(squares);
 
     // elems will include border elements and squares.
     let elems: Array<Array<JSX.Element>> = deepCopyArray(squares);
     
-    const borderElement = (label:string|number) => {
-        return <BorderElement borderWidth={borderWidth}>{label}</BorderElement>;
+    const borderElement = (label:string|number, keyStart: string) => {
+
+        return <BorderElement color={colors.labels} 
+            key={keyStart + label}
+        >{label}</BorderElement>;
     }
 
     if(borderLabels) {
         // Add side labels.
         for (let row = 0; row < nRows; ++row) {
-            elems[row].unshift(borderElement(row));
-            elems[row].push(borderElement(row));
+            elems[row].unshift(borderElement(row, "leftMargin"));
+            elems[row].push(borderElement(row, "rightMargin"));
         }
     }
 
@@ -73,36 +100,28 @@ export function Board({ squares, borderLabels, reverseRows, gridGap, borderWidth
 
     if (borderLabels) {
         // Add top/bottom rows
-        const topBottom = () => {
+        const makeRow = (keyStart: string) => {
             let elems = [];
             for (let col = 0; col < nCols; ++col) {
                 const label = String.fromCharCode(65 + col);
-                elems[col] = borderElement(label);
-            }
-            elems.unshift(<Corner width={borderWidth}></Corner>)
-            elems.push(<Corner width={borderWidth}></Corner>)
-
+                elems[col] = borderElement(label, keyStart);
+            }            
+            elems.unshift(<Corner width={borderWidth} key={keyStart+'left'}/>)
+            elems.push(<Corner width={borderWidth} key={keyStart+'Right'}/>)
             return elems;
         }
-        elems.unshift(topBottom())
-        elems.push(topBottom())
+        elems.unshift(makeRow("topMargin"))
+        elems.push(makeRow("bottonMargin"))
     }
-
-    //KLUDGE
-    const elemsWithKeys = deepArrayMap(elems, 
-        (elem: JSX.Element, indices: Array<number>) => {
-            const key = JSON.stringify(indices);
-            return <div key={key}>{elem}</div>;
-        }
-    );
 
     return (
         <RectangularBoard
             nCols={elems[0].length}
             gridGap={gridGap}
             borderWidth={borderLabels ? '0' : borderWidth}
+            backgroundColor={colors.background}
         >
-            {elemsWithKeys}
+            {elems}
         </RectangularBoard>
     );
 }

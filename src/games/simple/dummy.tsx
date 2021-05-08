@@ -16,6 +16,7 @@ const initialValues = [
 const GridHolder=styled.div`
   display: inline-block;
   border: 5px purple solid;
+  margin: 3px;
 `;
 
 const Piece = styled.div`
@@ -68,7 +69,8 @@ export const dummy: AppGame = {
           const val = G.values[rn][cn];
 
           row.push(
-            <GridBased.Square onClick={onClick} color={squareColor(rn, cn, checkered)}>
+            <GridBased.Square  key={JSON.stringify([rn,cn])} 
+              onClick={onClick} color={squareColor(rn, cn, checkered)}>
               <Piece>{val}</Piece>
             </GridBased.Square>);
         }
@@ -81,15 +83,15 @@ export const dummy: AppGame = {
     }
     return (<div>
       <GridHolder>
-        <GridBased.Board squares={squares({checkered:true})} reverseRows={false}
-          borderLabels={true}
-          gridGap={'0'} borderWidth={'20px'}/>
+        <GridBased.Board squares={squares({checkered:true})}/>
       </GridHolder>
 
       <GridHolder>
-        <GridBased.Board squares={squares({checkered:false})} reverseRows={false}
-          borderLabels={false}
-          gridGap={'1%'} borderWidth={'20px'}/>
+        <GridBased.Board squares={squares({checkered:false})} 
+          reverseRows={true} borderLabels={true}
+          gridGap={'2px'} borderWidth={'20px'}
+          colors={{background:'green', labels:'yellow'}}
+          />
       </GridHolder>
 
 
