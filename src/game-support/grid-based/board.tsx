@@ -1,31 +1,37 @@
 import React from 'react';
 import { colors } from "../colors";
 import styled from 'styled-components';
+import { deepArrayMap, deepCopyArray } from '../../shared/tools';
 
-const RectangularBoard = styled.div<{nCols: number, internalBorders: boolean}>`        
+
+const Corner = styled.div<{width: string}>`
+    width: ${props => props.width};
+    height: ${props => props.width};
+`
+
+const BorderElement = styled.div<{borderWidth: string}>`
+    color: white;
+    font-family: 'Helvetica'; // No special reason
+    font-size: borderWidth;
+    font-weight: bold;
+
+    text-justify: center;
+    margin: auto;
+`;
+
+const RectangularBoard = styled.div<{
+    nCols: number, 
+    gridGap: string,
+    borderWidth: string,
+    }>`        
     display: inline-grid;
     background-color: ${colors.boardBackground};
     grid-template-columns: ${props => `repeat(${props.nCols},auto)`};
     
-    grid-gap: ${props => props.internalBorders ? "2px" : "none"};
-    border: ${props => props.internalBorders ? 
-        `10px solid ${colors.boardBackground}` : "none"};
+    grid-gap: ${props => props.gridGap};
+    border: ${props => props.borderWidth} solid ${colors.boardBackground};
 `; 
 
-
-const BorderLetter = styled.div`
-    font-size: 20px;
-    padding: 3px 0;
-    color: ${colors.BoarderText};
-    text-align: center;
-`;
-
-const BorderNumber = styled.div`
-    font-size: 25px;
-    padding: 0 7px;
-    color: ${colors.BoarderText};
-    margin: auto;
-`;
 
 function rowCol(array: Array<Array<any>>) {
     return {
@@ -38,56 +44,65 @@ interface BoardProps {
     squares: Array<Array<JSX.Element>>;
     borderLabels: boolean;
     reverseRows: boolean;
-    internalBorders: boolean;
+
+    gridGap: string;
+    borderWidth: string;
 }
 
-export function Board({ squares, borderLabels, reverseRows: reserveRows, internalBorders }: BoardProps) {
+export function Board({ squares, borderLabels, reverseRows, gridGap, borderWidth }: BoardProps) {
     const { nRows, nCols } = rowCol(squares);
 
-    let elemRows: Array<Array<JSX.Element>> = [];
-
-    for (let row = 0; row < nRows; ++row) {
-
-        let elems = [];
-        for (let col = 0; col < nCols; ++col) {
-            elems.push(<div key={`${row}:${col}`}>{squares[row][col]}</div>);
-        }
-
-        if (borderLabels) {
-            const labelValue = nRows - row;
-            elems.unshift(<BorderNumber key={`${row}start`}> {labelValue} </BorderNumber>);
-            elems.push(<BorderNumber key={`${row}end`}> {labelValue} </BorderNumber>);
-        }
-        elemRows.push(elems);
+    // elems will include border elements and squares.
+    let elems: Array<Array<JSX.Element>> = deepCopyArray(squares);
+    
+    const borderElement = (label:string|number) => {
+        return <BorderElement borderWidth={borderWidth}>{label}</BorderElement>;
     }
 
-    if (reserveRows) {
-        elemRows.reverse();
+    if(borderLabels) {
+        // Add side labels.
+        for (let row = 0; row < nRows; ++row) {
+            elems[row].unshift(borderElement(row));
+            elems[row].push(borderElement(row));
+        }
+    }
+
+    if(reverseRows) {
+        elems.reverse();
     }
 
     if (borderLabels) {
-        const letters = (tag: string) => {
-
-            let elems = [<div key={tag + 'start'} />];
+        // Add top/bottom rows
+        const topBottom = () => {
+            let elems = [];
             for (let col = 0; col < nCols; ++col) {
                 const label = String.fromCharCode(65 + col);
-                elems.push(<BorderLetter key={col + label}> {label} </BorderLetter>);
+                elems[col] = borderElement(label);
             }
-            elems.push(<div key={tag + 'end'} />);
+            elems.unshift(<Corner width={borderWidth}></Corner>)
+            elems.push(<Corner width={borderWidth}></Corner>)
 
             return elems;
         }
-
-        elemRows.unshift(letters('top'));
-        elemRows.push(letters('bottom'));
+        elems.unshift(topBottom())
+        elems.push(topBottom())
     }
+
+    //KLUDGE
+    const elemsWithKeys = deepArrayMap(elems, 
+        (elem: JSX.Element, indices: Array<number>) => {
+            const key = JSON.stringify(indices);
+            return <div key={key}>{elem}</div>;
+        }
+    );
 
     return (
         <RectangularBoard
-            nCols={elemRows[0].length}
-            internalBorders={internalBorders}
+            nCols={elems[0].length}
+            gridGap={gridGap}
+            borderWidth={borderLabels ? '0' : borderWidth}
         >
-            {elemRows}
+            {elemsWithKeys}
         </RectangularBoard>
     );
 }

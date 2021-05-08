@@ -9,9 +9,14 @@ interface G {
 };
 
 const initialValues = [
-  [1,2,3],
-  [7,8,9],
+  [1, 2, 3],
+  [7, 8, 9],
 ];
+
+const GridHolder=styled.div`
+  display: inline-block;
+  border: 5px purple solid;
+`;
 
 const Piece = styled.div`
   width: 100%;
@@ -24,14 +29,14 @@ const Piece = styled.div`
 
 function squareColor(row: number, col: number, checkered: boolean) {
   if (!checkered) {
-      return colors.whiteSquare;
+    return colors.whiteSquare;
   }
 
   const asTopLeft = (row + col) % 2 === 0;
   return asTopLeft ? colors.whiteSquare : colors.blackSquare;
 }
 
-export const dummy : AppGame = {
+export const dummy: AppGame = {
   name: 'dummy',
   displayName: 'Dummy',
 
@@ -48,31 +53,46 @@ export const dummy : AppGame = {
     },
   },
 
-  board: ({ G, moves, events }: BoardProps<G> ) => {
+  board: ({ G, moves, events }: BoardProps<G>) => {
     const nRows = G.values.length;
     const nCols = G.values[0].length;
-    const checkered = true;
 
+    const squares = ({ checkered }: { checkered: boolean }) => {
+      let result = [];
+      for (let rn = 0; rn < nRows; ++rn) {
+        const row = [];
 
-    const squares = [];
-    for(let rn = 0; rn < nRows; ++rn) {
-      const row = [];
- 
-      for(let cn = 0; cn < nCols; ++cn) {
-        const message = `hello from ${rn}:${cn}`;
-        const onClick = ()=>alert(message);
-        const val = G.values[rn][cn];
+        for (let cn = 0; cn < nCols; ++cn) {
+          const message = `hello from ${rn}:${cn}`;
+          const onClick = () => alert(message);
+          const val = G.values[rn][cn];
 
-        row.push(
-          <GridBased.Square onClick={onClick} color={squareColor(rn,cn, checkered)}>
-            <Piece>{val}</Piece>
-          </GridBased.Square>);
+          row.push(
+            <GridBased.Square onClick={onClick} color={squareColor(rn, cn, checkered)}>
+              <Piece>{val}</Piece>
+            </GridBased.Square>);
+        }
+
+        result.push(row);
       }
 
-      squares.push(row);
+      return result;
+
     }
-  
-    return <GridBased.Board squares={squares} borderLabels={true} reverseRows={false}
-     internalBorders={!checkered}/>
+    return (<div>
+      <GridHolder>
+        <GridBased.Board squares={squares({checkered:true})} reverseRows={false}
+          borderLabels={true}
+          gridGap={'0'} borderWidth={'20px'}/>
+      </GridHolder>
+
+      <GridHolder>
+        <GridBased.Board squares={squares({checkered:false})} reverseRows={false}
+          borderLabels={false}
+          gridGap={'1%'} borderWidth={'20px'}/>
+      </GridHolder>
+
+
+    </div>);
   },
 }
