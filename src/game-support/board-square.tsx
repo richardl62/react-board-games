@@ -5,23 +5,23 @@ import { colors as defaultColors } from './colors';
 
 interface BaseProps {
     color: string;
-    highlightOnHover: boolean;
     highlightColor: string;
 };
 
-const Base = styled.div<BaseProps>`
-    width: 50px;
-    height: 50px;
+const BaseHoverDisabled = styled.div<BaseProps>`
+    display: inline-flex;
 
     position: relative;
     background-color: ${props => props.color};
+    z-index: 0;
+`;
+
+const BaseHoverEnabled = styled(BaseHoverDisabled)`
     &:hover { 
         background-color: ${props => props.highlightColor}; 
         --hover-helper-display: default;
         }
-    z-index: 0;
 `;
-
 
 const HoverHelper = styled.div<{ color: string }>`
     display: var(--hover-helper-display, none);
@@ -47,7 +47,6 @@ const HoverHelper = styled.div<{ color: string }>`
 const Element = styled.div`
     width: 100%;
     height: 100%;
-    position: absolute;
 
     z-index: 2;
 `;
@@ -74,11 +73,11 @@ export function BoardSquare(props: BoardSquareProps) {
         applyDefaults(props, defaultProps);
 
 
+    const Base = highlightOnHover ? BaseHoverEnabled : BaseHoverDisabled;
     return (
         <Base
             color={color}
             highlightColor={highlightColor}
-            highlightOnHover={highlightOnHover}
             onClick={onClick}
         >
             <HoverHelper color={color!} />

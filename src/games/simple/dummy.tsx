@@ -20,8 +20,9 @@ const GridHolder=styled.div`
 `;
 
 const Piece = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 50px;
+  height: 50px;
+
   font-size: 40px; // KLUDGE
 
   text-align: center;
@@ -72,8 +73,8 @@ export const dummy: AppGame = {
             <BoardSquare  key={JSON.stringify([rn,cn])} 
               onClick={onClick} 
                 color={squareColor(rn, cn, checkered)} 
-                highlightColor={rn ? "black" : undefined}
-                highlightOnHover={rn > 0}
+                highlightColor={cn === 1 ? "black" : undefined}
+                highlightOnHover={cn > 0}
                 >
               <Piece>{val}</Piece>
             </BoardSquare>);
@@ -85,6 +86,10 @@ export const dummy: AppGame = {
       return result;
 
     }
+    // return (<BoardSquare>
+    //   <Piece color="yellow">P</Piece>
+    // </BoardSquare>);
+
     return (<div>
       <GridHolder>
         <RectangularBoard squares={squares({checkered:true})}/>
@@ -94,7 +99,7 @@ export const dummy: AppGame = {
         <RectangularBoard squares={squares({checkered:false})} 
           reverseRows={true} borderLabels={true}
           gridGap={'2px'} borderWidth={'20px'}
-          colors={{background:'green', labels:'yellow'}}
+          // colors={{background:'green', labels:'yellow'}}
           />
       </GridHolder>
 
