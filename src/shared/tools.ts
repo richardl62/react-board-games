@@ -1,10 +1,5 @@
 import { useState } from 'react';
 
-/** Return supplied value, or supplied default if the value is undefined */
-export function setDefault<T>(value: T | undefined, def: T) {
-  return value === undefined ? def : value;
-}
-
 interface StatePromiseData<T> {
   state: 'unset' | 'pending' | 'fulfilled';
   value?: T;
@@ -84,3 +79,32 @@ export function deepCopyArray<T>(arr: T) : T {
 
 // const mapFunc = (x:number, indices: Array<number>) => [x, indices];
 // console.log(JSON.stringify(deepArrayMap(arr, mapFunc)));
+
+export function removeUndefined<T>(obj: T) : T {
+  for (var propName in obj) {
+    if (obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+  return obj
+}
+
+
+/**  Apply defaults to unspecified elements or elements supplies as undefined. */
+export function applyDefaults<T, D>(values: T, defaults: D) {
+  return {...defaults, ...removeUndefined({...values})} 
+}
+
+// interface A {
+//   a?: number;
+//   b?: number;
+// }
+// const d = {a:11, b:22, c:3}; 
+
+// const v1 : A = {a:1, b: undefined};
+// const res1 : A = applyDefaults(v1,d);
+// console.log("res1", res1);
+
+// const v2 : A = {a:1};
+// console.log("res2",applyDefaults(v2,d));
+

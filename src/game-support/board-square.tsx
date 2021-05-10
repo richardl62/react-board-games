@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { applyDefaults } from '../shared/tools';
 import { colors as defaultColors } from './colors';
 
 interface BaseProps {
@@ -69,9 +70,8 @@ export function BoardSquare(props: BoardSquareProps) {
         highlightColor: defaultColors.activeSquareHighlight,
     };
 
-    const { children, color, highlightOnHover, highlightColor, onClick } = {
-        ...defaultProps, ...props,
-    }
+    const { children, color, highlightOnHover, highlightColor, onClick } = 
+        applyDefaults(props, defaultProps);
 
 
     return (
@@ -81,7 +81,7 @@ export function BoardSquare(props: BoardSquareProps) {
             highlightOnHover={highlightOnHover}
             onClick={onClick}
         >
-            <HoverHelper color={color} />
+            <HoverHelper color={color!} />
             <Element> {children} </Element>
         </Base>
     )

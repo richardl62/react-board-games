@@ -1,7 +1,7 @@
 import React from 'react';
 import { colors as defaultColors } from "./colors";
 import styled from 'styled-components';
-import { deepCopyArray, setDefault } from '../shared/tools';
+import { deepCopyArray, applyDefaults } from '../shared/tools';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
@@ -58,16 +58,19 @@ interface BoardProps {
 }
 
 export function RectangularBoard(props: BoardProps) {  
-    const squares = props.squares;
-    const borderLabels = setDefault(props.borderLabels, false);
-    const reverseRows = setDefault(props.reverseRows, false);
-
-    const gridGap = setDefault(props.gridGap, 'none');
-    const borderWidth = setDefault(props.borderWidth, "4%"); // arbitray
-    const colors = setDefault(props.colors, {
-        background: defaultColors.boardBackground,
-        labels: defaultColors.boardBorderLabels,
-    });
+    const defaultProps = {
+        borderLabels: false,
+        reverseRows: false,
+        gridGap: 'none',
+        borderWidth: "4%", // arbitray
+        colors: {
+            background: defaultColors.boardBackground,
+            labels: defaultColors.boardBorderLabels,
+        },
+    }
+    
+    const { squares, borderLabels, reverseRows, gridGap, borderWidth, colors, } =
+        applyDefaults(props, defaultProps);
 
     const { nRows, nCols } = rowCol(squares);
 

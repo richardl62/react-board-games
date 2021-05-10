@@ -72,7 +72,8 @@ export const dummy: AppGame = {
             <BoardSquare  key={JSON.stringify([rn,cn])} 
               onClick={onClick} 
                 color={squareColor(rn, cn, checkered)} 
-                highlightOnHover={rn > 0 || cn > 0}
+                highlightColor={rn ? "black" : undefined}
+                highlightOnHover={rn > 0}
                 >
               <Piece>{val}</Piece>
             </BoardSquare>);
