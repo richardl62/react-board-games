@@ -1,45 +1,88 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from './colors';
+import { colors as defaultColors } from './colors';
 
-const Background = styled.div<{color: string}>`
+interface BaseProps {
+    color: string;
+    highlightOnHover: boolean;
+    highlightColor: string;
+};
 
+const Base = styled.div<BaseProps>`
     width: 50px;
     height: 50px;
 
     position: relative;
     background-color: ${props => props.color};
     &:hover { 
-        --backgroundHoverBoarder: 4px;
-        border:  var(--backgroundHoverBoarder) solid ${colors.activeSquareHighlight}
-        };
+        background-color: ${props => props.highlightColor}; 
+        --hover-helper-display: default;
+        }
+    z-index: 0;
 `;
 
-const Element = styled.div`
 
-    width: 50px;
-    height: 50px;
+const HoverHelper = styled.div<{ color: string }>`
+    display: var(--hover-helper-display, none);
+
     position: absolute;
+    top: 0;
+    left: 0;    
 
-    // KLUDGE?
-    top: calc(-1 * var(--backgroundHoverBoarder, 0));
-    left: calc(-1 * var(--backgroundHoverBoarder, 0));
+    box-sizing: content-box;
+    width: 100%;
+    height: 100%;
+        
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+
+
+    background-color: ${props => props.color};
 
     z-index: 1;
 `;
 
-interface SquareProps {
-    color: string;
+const Element = styled.div`
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    z-index: 2;
+`;
+
+interface BoardSquareProps {
     children: React.ReactElement;
-    onClick: () => void
+    color?: string;
+
+    highlightOnHover?: boolean;
+    highlightColor?: string;
+
+    onClick?: () => void
 }
 
-export function BoardSquare({color, children, onClick} : SquareProps) {
+
+export function BoardSquare(props: BoardSquareProps) {
+    const defaultProps = {
+        color: defaultColors.whiteSquare,
+        highlightOnHover: true,
+        highlightColor: defaultColors.activeSquareHighlight,
+    };
+
+    const { children, color, highlightOnHover, highlightColor, onClick } = {
+        ...defaultProps, ...props,
+    }
+
+
     return (
-        <Background color={color} onClick={onClick}>
-            <Element>
-                {children}
-            </Element>
-        </Background>
-        )
+        <Base
+            color={color}
+            highlightColor={highlightColor}
+            highlightOnHover={highlightOnHover}
+            onClick={onClick}
+        >
+            <HoverHelper color={color} />
+            <Element> {children} </Element>
+        </Base>
+    )
 }

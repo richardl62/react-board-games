@@ -1,5 +1,10 @@
 import { useState } from 'react';
 
+/** Return supplied value, or supplied default if the value is undefined */
+export function setDefault<T>(value: T | undefined, def: T) {
+  return value === undefined ? def : value;
+}
+
 interface StatePromiseData<T> {
   state: 'unset' | 'pending' | 'fulfilled';
   value?: T;

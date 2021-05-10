@@ -70,7 +70,10 @@ export const dummy: AppGame = {
 
           row.push(
             <BoardSquare  key={JSON.stringify([rn,cn])} 
-              onClick={onClick} color={squareColor(rn, cn, checkered)}>
+              onClick={onClick} 
+                color={squareColor(rn, cn, checkered)} 
+                highlightOnHover={rn > 0 || cn > 0}
+                >
               <Piece>{val}</Piece>
             </BoardSquare>);
         }
