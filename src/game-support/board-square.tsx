@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../colors';
+import { colors } from './colors';
 
 const Background = styled.div<{color: string}>`
 
@@ -34,7 +34,7 @@ interface SquareProps {
     onClick: () => void
 }
 
-export function Square({color, children, onClick} : SquareProps) {
+export function BoardSquare({color, children, onClick} : SquareProps) {
     return (
         <Background color={color} onClick={onClick}>
             <Element>

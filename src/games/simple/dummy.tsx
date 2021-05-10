@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GridBased } from '../../game-support';
+import { BoardSquare, RectangularBoard } from '../../game-support';
 import { colors } from '../../game-support/colors';
 import { AppGame, BoardProps } from '../../shared/types';
 
@@ -69,10 +69,10 @@ export const dummy: AppGame = {
           const val = G.values[rn][cn];
 
           row.push(
-            <GridBased.Square  key={JSON.stringify([rn,cn])} 
+            <BoardSquare  key={JSON.stringify([rn,cn])} 
               onClick={onClick} color={squareColor(rn, cn, checkered)}>
               <Piece>{val}</Piece>
-            </GridBased.Square>);
+            </BoardSquare>);
         }
 
         result.push(row);
@@ -83,11 +83,11 @@ export const dummy: AppGame = {
     }
     return (<div>
       <GridHolder>
-        <GridBased.Board squares={squares({checkered:true})}/>
+        <RectangularBoard squares={squares({checkered:true})}/>
       </GridHolder>
 
       <GridHolder>
-        <GridBased.Board squares={squares({checkered:false})} 
+        <RectangularBoard squares={squares({checkered:false})} 
           reverseRows={true} borderLabels={true}
           gridGap={'2px'} borderWidth={'20px'}
           colors={{background:'green', labels:'yellow'}}
