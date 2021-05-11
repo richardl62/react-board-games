@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { colors as defaultColors } from './colors';
 
@@ -64,7 +64,7 @@ const Highlight = styled.div<{color:string}>`
     background-color: ${props => props.color};  
 `
 interface BoardSquareProps {
-    children: React.ReactElement;
+    children: ReactNode;
     
     color?: string;
 

@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { DndProvider, useDrag  } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components';
 import { BoardSquare, RectangularBoard } from '../../game-support';
 import { colors } from '../../game-support/colors';
 import { AppGame, BoardProps } from '../../shared/types';
+
+const PIECE = 'piece';
 
 interface G {
   values: Array<Array<number>>;
@@ -19,7 +23,7 @@ const GridHolder=styled.div`
   margin: 3px;
 `;
 
-const Piece = styled.div`
+const StyledPiece = styled.div<{isDragging: boolean}>`
   width: 50px;
   height: 50px;
 
@@ -28,6 +32,24 @@ const Piece = styled.div`
   text-align: center;
   margin: auto;
 `
+
+interface DragPieceProps {
+  children: ReactNode;
+}
+
+function DragPiece({children} : DragPieceProps) {
+  const [{isDragging}, drag] = useDrag(() => ({
+    type: PIECE,
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }))
+
+  return (
+    <StyledPiece ref={drag} isDragging={isDragging}>
+      {children}
+    </StyledPiece>);  
+}
 
 function squareColor(row: number, col: number, checkered: boolean) {
   if (!checkered) {
@@ -69,7 +91,6 @@ export const dummy: AppGame = {
           const onClick = () => alert(message);
           const val = G.values[rn][cn];
 
-
           row.push(
             <BoardSquare  key={JSON.stringify([rn,cn])} 
               onClick={onClick} 
@@ -77,7 +98,7 @@ export const dummy: AppGame = {
                 showHover={cn === 0 ? true : cn === 1 ? "black" : false}
                 highlight={cn === 0 && rn === 0}
                 >
-              <Piece>{val}</Piece>
+              <DragPiece>{val}</DragPiece>
             </BoardSquare>);
         }
 
@@ -91,20 +112,12 @@ export const dummy: AppGame = {
     //   <Piece color="yellow">P</Piece>
     // </BoardSquare>);
 
-    return (<div>
+    return (
+      <DndProvider backend={HTML5Backend}>
       <GridHolder>
         <RectangularBoard squares={squares({checkered:true})}/>
       </GridHolder>
-
-      <GridHolder>
-        <RectangularBoard squares={squares({checkered:false})} 
-          reverseRows={true} borderLabels={true}
-          gridGap={'2px'} borderWidth={'20px'}
-          // colors={{background:'green', labels:'yellow'}}
-          />
-      </GridHolder>
-
-
-    </div>);
-  },
+      </DndProvider>
+      );
+    }
 }

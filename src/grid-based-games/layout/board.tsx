@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactNode } from 'react';
 import ControlledSquare from './square';
 import { GameControl } from '../control';
 import styled from 'styled-components';
@@ -27,7 +27,7 @@ const BorderNumber = styled(BoardBorder)`
     padding: 0 7px;
 `
 
-type Elems = Array<ReactElement>;
+type Elems = Array<ReactNode>;
 
 function addHeader(nCols: number, elems: Elems, rowName: string) {
     const key = (elemName: string | number) => rowName + '-' + elemName;
