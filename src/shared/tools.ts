@@ -77,34 +77,28 @@ export function deepCopyArray<T>(arr: T) : T {
 //   ],
 // ];
 
-// const mapFunc = (x:number, indices: Array<number>) => [x, indices];
-// console.log(JSON.stringify(deepArrayMap(arr, mapFunc)));
-
-export function removeUndefined<T>(obj: T) : T {
-  for (var propName in obj) {
-    if (obj[propName] === undefined) {
-      delete obj[propName];
+/** Return a copy of 'values' with defaults applied to missing elements 
+ *  or elements supplied as undefined.
+*/
+export function applyDefaults<T, D>(values: T, defaults: D) : T & D {
+  let result : any = {...values};
+  for (let propName in defaults) {
+    if (result[propName] === undefined) {
+      result[propName] = defaults[propName];
     }
   }
-  return obj
+
+  return result;
 }
 
 
-/**  Apply defaults to unspecified elements or elements supplies as undefined. */
-export function applyDefaults<T, D>(values: T, defaults: D) {
-  return {...defaults, ...removeUndefined({...values})} 
-}
+// const defaults = {a:11, b:22, c:3}; 
+// const values1 : {a:number, b?: number}= {a:1, b: undefined};
+// const res1 = applyDefaults(values1,defaults);
+// let a = res1.a;
 
-// interface A {
-//   a?: number;
-//   b?: number;
-// }
-// const d = {a:11, b:22, c:3}; 
+// console.log(a,"res1", res1);
 
-// const v1 : A = {a:1, b: undefined};
-// const res1 : A = applyDefaults(v1,d);
-// console.log("res1", res1);
-
-// const v2 : A = {a:1};
-// console.log("res2",applyDefaults(v2,d));
-
+// const values2 = {a:1};
+// const res2 = applyDefaults(values2,defaults);
+// console.log("res1", res2);
