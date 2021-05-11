@@ -69,12 +69,13 @@ export const dummy: AppGame = {
           const onClick = () => alert(message);
           const val = G.values[rn][cn];
 
+
           row.push(
             <BoardSquare  key={JSON.stringify([rn,cn])} 
               onClick={onClick} 
                 color={squareColor(rn, cn, checkered)} 
-                highlightColor={cn === 1 ? "black" : undefined}
-                highlightOnHover={cn > 0}
+                showHover={cn === 0 ? true : cn === 1 ? "black" : false}
+                highlight={cn === 0 && rn === 0}
                 >
               <Piece>{val}</Piece>
             </BoardSquare>);

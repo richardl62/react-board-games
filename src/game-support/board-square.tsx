@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { applyDefaults } from '../shared/tools';
 import { colors as defaultColors } from './colors';
 
 interface BaseProps {
     color: string;
-    highlightColor: string;
+    hoverColor: string;
 };
 
 const BaseHoverDisabled = styled.div<BaseProps>`
@@ -18,7 +17,7 @@ const BaseHoverDisabled = styled.div<BaseProps>`
 
 const BaseHoverEnabled = styled(BaseHoverDisabled)`
     &:hover { 
-        background-color: ${props => props.highlightColor}; 
+        background-color: ${props => props.hoverColor}; 
         --hover-helper-display: default;
         }
 `;
@@ -51,37 +50,54 @@ const Element = styled.div`
     z-index: 2;
 `;
 
+const Highlight = styled.div<{color:string}>`
+    position: absolute;
+    top: 35%;
+    left: 35%;
+
+    width: 30%;
+    height: 30%;
+    z-index: 3;
+
+    border-radius: 50%;
+
+    background-color: ${props => props.color};  
+`
 interface BoardSquareProps {
     children: React.ReactElement;
+    
     color?: string;
 
-    highlightOnHover?: boolean;
-    highlightColor?: string;
-
+    // false -> suppress, true-> default color, string -> specified color;
+    showHover?: boolean | string;
+    highlight?: boolean | string;
+ 
     onClick?: () => void
 }
 
 
 export function BoardSquare(props: BoardSquareProps) {
-    const defaultProps = {
-        color: defaultColors.whiteSquare,
-        highlightOnHover: true,
-        highlightColor: defaultColors.activeSquareHighlight,
-    };
+    let { children, color, showHover, highlight, onClick } = props;
 
-    const { children, color, highlightOnHover, highlightColor, onClick } = 
-        applyDefaults(props, defaultProps);
+    // Set defaults;
+    color = color || defaultColors.square;
 
+    const hoverColor = typeof showHover === 'string'? showHover :
+      defaultColors.squareHover;
 
-    const Base = highlightOnHover ? BaseHoverEnabled : BaseHoverDisabled;
+    const highlightColor = typeof highlight === 'string'? highlight :
+      defaultColors.squareHighlight;
+
+    const Base = showHover ? BaseHoverEnabled : BaseHoverDisabled;
     return (
         <Base
             color={color}
-            highlightColor={highlightColor}
+            hoverColor={hoverColor}
             onClick={onClick}
         >
-            <HoverHelper color={color!} />
+            <HoverHelper color={color} />
             <Element> {children} </Element>
+            {highlight? <Highlight color={highlightColor} /> : null }
         </Base>
     )
 }
