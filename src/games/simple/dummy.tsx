@@ -77,47 +77,45 @@ export const dummy: AppGame = {
     },
   },
 
-  board: ({ G, moves, events }: BoardProps<G>) => {
-    const nRows = G.values.length;
-    const nCols = G.values[0].length;
+  board: ({ G, moves, events }: BoardProps<G>) => (
+    <DndProvider backend={HTML5Backend}>
+      <GridHolder>
+        <RectangularBoard squares={makeSquares(G, { checkered: true })} />
+      </GridHolder>
+    </DndProvider>
+  ),
 
-    const squares = ({ checkered }: { checkered: boolean }) => {
-      let result = [];
-      for (let rn = 0; rn < nRows; ++rn) {
-        const row = [];
+}
+function makeSquares(G: G, { checkered }: { checkered: boolean }) {
+  const nRows = G.values.length;
+  const nCols = G.values[0].length;
 
-        for (let cn = 0; cn < nCols; ++cn) {
-          const message = `hello from ${rn}:${cn}`;
-          const onClick = () => alert(message);
-          const val = G.values[rn][cn];
 
-          row.push(
-            <BoardSquare  key={JSON.stringify([rn,cn])} 
-              onClick={onClick} 
-                color={squareColor(rn, cn, checkered)} 
-                showHover={cn === 0 ? true : cn === 1 ? "black" : false}
-                highlight={cn === 0 && rn === 0}
-                >
-              <DragPiece>{val}</DragPiece>
-            </BoardSquare>);
-        }
+    let result = [];
+    for (let rn = 0; rn < nRows; ++rn) {
+      const row = [];
 
-        result.push(row);
+      for (let cn = 0; cn < nCols; ++cn) {
+        const message = `hello from ${rn}:${cn}`;
+        const onClick = () => alert(message);
+        const val = G.values[rn][cn];
+
+        row.push(
+          <BoardSquare key={JSON.stringify([rn, cn])}
+            onClick={onClick}
+            color={squareColor(rn, cn, checkered)}
+            showHover={cn === 0 ? true : cn === 1 ? "black" : false}
+            highlight={cn === 0 && rn === 0}
+          >
+            <DragPiece>{val}</DragPiece>
+          </BoardSquare>);
       }
 
-      return result;
-
+      result.push(row);
     }
-    // return (<BoardSquare>
-    //   <Piece color="yellow">P</Piece>
-    // </BoardSquare>);
 
-    return (
-      <DndProvider backend={HTML5Backend}>
-      <GridHolder>
-        <RectangularBoard squares={squares({checkered:true})}/>
-      </GridHolder>
-      </DndProvider>
-      );
-    }
+    return result;
+
+
 }
+
