@@ -1,12 +1,10 @@
-import React, { ReactNode } from 'react';
-import { DndProvider, useDrag  } from 'react-dnd'
+import React from 'react';
+import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components';
 import { BoardSquare, RectangularBoard } from '../../game-support';
 import { colors } from '../../game-support/colors';
 import { AppGame, BoardProps } from '../../shared/types';
-
-const PIECE = 'piece';
 
 interface G {
   values: Array<Array<number>>;
@@ -23,7 +21,7 @@ const GridHolder=styled.div`
   margin: 3px;
 `;
 
-const StyledPiece = styled.div<{isDragging: boolean}>`
+const Piece = styled.div`
   width: 50px;
   height: 50px;
 
@@ -33,24 +31,6 @@ const StyledPiece = styled.div<{isDragging: boolean}>`
   margin: auto;
 `
 
-interface DragPieceProps {
-  children: ReactNode;
-}
-
-function DragPiece({children} : DragPieceProps) {
-  const [{isDragging}, drag] = useDrag(() => ({
-    type: PIECE,
-    collect: monitor => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }))
-
-  return (
-    <StyledPiece ref={drag} isDragging={isDragging}>
-      {children}
-    </StyledPiece>);  
-}
-
 function squareColor(row: number, col: number, checkered: boolean) {
   if (!checkered) {
     return colors.whiteSquare;
@@ -58,6 +38,39 @@ function squareColor(row: number, col: number, checkered: boolean) {
 
   const asTopLeft = (row + col) % 2 === 0;
   return asTopLeft ? colors.whiteSquare : colors.blackSquare;
+}
+
+
+
+function makeSquares(G: G, { checkered }: { checkered: boolean }) {
+  const nRows = G.values.length;
+  const nCols = G.values[0].length;
+
+
+    let result = [];
+    for (let rn = 0; rn < nRows; ++rn) {
+      const row = [];
+
+      for (let cn = 0; cn < nCols; ++cn) {
+        const message = `hello from ${rn}:${cn}`;
+        const onClick = () => alert(message);
+        const val = G.values[rn][cn];
+
+        row.push(
+          <BoardSquare key={JSON.stringify([rn, cn])}
+            onClick={onClick}
+            color={squareColor(rn, cn, checkered)}
+            showHover={cn === 0 ? true : cn === 1 ? "black" : false}
+            highlight={cn === 0 && rn === 0}
+          >
+            <Piece>{val}</Piece>
+          </BoardSquare>);
+      }
+
+      result.push(row);
+    }
+
+    return result;
 }
 
 export const dummy: AppGame = {
@@ -86,36 +99,3 @@ export const dummy: AppGame = {
   ),
 
 }
-function makeSquares(G: G, { checkered }: { checkered: boolean }) {
-  const nRows = G.values.length;
-  const nCols = G.values[0].length;
-
-
-    let result = [];
-    for (let rn = 0; rn < nRows; ++rn) {
-      const row = [];
-
-      for (let cn = 0; cn < nCols; ++cn) {
-        const message = `hello from ${rn}:${cn}`;
-        const onClick = () => alert(message);
-        const val = G.values[rn][cn];
-
-        row.push(
-          <BoardSquare key={JSON.stringify([rn, cn])}
-            onClick={onClick}
-            color={squareColor(rn, cn, checkered)}
-            showHover={cn === 0 ? true : cn === 1 ? "black" : false}
-            highlight={cn === 0 && rn === 0}
-          >
-            <DragPiece>{val}</DragPiece>
-          </BoardSquare>);
-      }
-
-      result.push(row);
-    }
-
-    return result;
-
-
-}
-

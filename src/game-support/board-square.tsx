@@ -1,10 +1,14 @@
 import React, { ReactNode } from 'react';
+import { useDrag } from 'react-dnd';
 import styled from 'styled-components';
 import { colors as defaultColors } from './colors';
+
+const PIECE='piece';
 
 interface BaseProps {
     color: string;
     hoverColor: string;
+    isDragging: boolean;
 };
 
 const BaseHoverDisabled = styled.div<BaseProps>`
@@ -76,10 +80,14 @@ export interface BoardSquareProps {
 }
 
 
-export function BoardSquare(props: BoardSquareProps) {
-    let { children, color, showHover, highlight, onClick } = props;
+export function BoardSquare({ children, color, showHover, highlight, onClick }: BoardSquareProps) {
+    const [{ isDragging }, dragRef] = useDrag(() => ({
+        type: PIECE,
+        collect: monitor => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }))
 
-    // Set defaults;
     color = color || defaultColors.square;
 
     const hoverColor = typeof showHover === 'string'? showHover :
@@ -93,10 +101,11 @@ export function BoardSquare(props: BoardSquareProps) {
         <Base
             color={color}
             hoverColor={hoverColor}
+            isDragging={isDragging}
             onClick={onClick}
         >
             <HoverHelper color={color} />
-            <Element> {children} </Element>
+            <Element ref={dragRef}> {children} </Element>
             {highlight? <Highlight color={highlightColor} /> : null }
         </Base>
     )

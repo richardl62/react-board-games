@@ -1,7 +1,7 @@
 import React from 'react';
 import { colors as defaultColors } from "./colors";
 import styled from 'styled-components';
-import { deepCopyArray, applyDefaults } from '../shared/tools';
+import { applyDefaults, deepArrayMap } from '../shared/tools';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
@@ -75,7 +75,7 @@ export function RectangularBoard(props: BoardProps) {
     const { nRows, nCols } = rowCol(squares);
 
     // elems will include border elements and squares.
-    let elems: Array<Array<JSX.Element>> = deepCopyArray(squares);
+    let elems: Array<Array<JSX.Element>> = deepArrayMap(squares, elem => elem);
     
     const borderElement = (label:string|number, keyStart: string) => {
 
