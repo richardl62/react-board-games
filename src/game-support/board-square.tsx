@@ -63,7 +63,7 @@ const Highlight = styled.div<{color:string}>`
 
     background-color: ${props => props.color};  
 `
-interface BoardSquareProps {
+export interface BoardSquareProps {
     children: ReactNode;
     
     color?: string;
