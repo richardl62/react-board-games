@@ -59,9 +59,9 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
 
         const elem: RectangularBoardElememt<Label> = {
             key: JSON.stringify([rn, cn]),
-            color: squareColor(rn, cn, checkered),
-            showHover: cn === 0 ? true : cn === 1 ? "black" : false,
-            highlight: cn === 0 && rn === 0,
+            backgroundColor: squareColor(rn, cn, checkered),
+            // showHover: cn === 0 ? true : cn === 1 ? "black" : false,
+            // highlight: cn === 0 && rn === 0,
             label: [rn,cn],
             onClick: onClick,
             onDrop: onDrop,
