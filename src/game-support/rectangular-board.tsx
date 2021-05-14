@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { colors as defaultColors } from "./colors";
 import styled from 'styled-components';
 import { applyDefaults, deepArrayMap } from '../shared/tools';
+import { BoardSquare, BoardSquareProps } from './board-square';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
@@ -39,11 +40,13 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-interface BoardProps {
-    /** The elements that form the squares of the board.
-     * Should be given keys
-    */
-    squares: Array<Array<JSX.Element>>;
+export interface RectangularBoardElememt<T> extends Omit<BoardSquareProps<T>,'children'> {
+    key: string; // React key
+    piece: ReactNode;
+}
+
+interface RectangularBoardProps<T = never> {
+    pieces: Array<Array<RectangularBoardElememt<T>>>;
     
     borderLabels?: boolean;
     reverseRows?: boolean;
@@ -57,7 +60,7 @@ interface BoardProps {
     } 
 }
 
-export function RectangularBoard(props: BoardProps) {  
+export function RectangularBoard<T = never>(props: RectangularBoardProps<T>) {  
     const defaultProps = {
         borderLabels: false,
         reverseRows: false,
@@ -69,13 +72,15 @@ export function RectangularBoard(props: BoardProps) {
         },
     }
     
-    const { squares, borderLabels, reverseRows, gridGap, borderWidth, colors, } =
+    const { pieces: squares, borderLabels, reverseRows, gridGap, borderWidth, colors, } =
         applyDefaults(props, defaultProps);
 
     const { nRows, nCols } = rowCol(squares);
 
     // elems will include border elements and squares.
-    let elems: Array<Array<JSX.Element>> = deepArrayMap(squares, elem => elem);
+    let elems: Array<Array<JSX.Element>> = deepArrayMap(squares, squareProps => 
+        <BoardSquare {...squareProps}>{squareProps.piece}</BoardSquare>
+        );
     
     const borderElement = (label:string|number, keyStart: string) => {
 

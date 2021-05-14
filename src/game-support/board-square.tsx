@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useDrag } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
 import { colors as defaultColors } from './colors';
 
@@ -67,26 +67,42 @@ const Highlight = styled.div<{color:string}>`
 
     background-color: ${props => props.color};  
 `
-export interface BoardSquareProps {
+export interface BoardSquareProps<T = never> {
     children: ReactNode;
-    
+
     color?: string;
 
     // false -> suppress, true-> default color, string -> specified color;
     showHover?: boolean | string;
     highlight?: boolean | string;
  
-    onClick?: () => void
+    label?: T;
+    onDrop?: (from: T, to: T) => void;
+    onClick?: (clicked: T) => void;
 }
 
 
-export function BoardSquare({ children, color, showHover, highlight, onClick }: BoardSquareProps) {
+export function BoardSquare<T>({ children, color, showHover, highlight, label, onDrop, onClick }: BoardSquareProps<T>) {
+
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: PIECE,
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     }))
+
+    let drop;
+    if( onDrop && label) {
+        drop = () => onDrop(label, label);
+    }
+
+    const [ /* { isDraggedOver } */, dropRef] = useDrop({
+        accept: PIECE,
+        drop: drop,
+        collect: (monitor) => ({
+            isDraggedOver: !!monitor.isOver(),
+        }),
+    });
 
     color = color || defaultColors.square;
 
@@ -97,12 +113,17 @@ export function BoardSquare({ children, color, showHover, highlight, onClick }: 
       defaultColors.squareHighlight;
 
     const Base = showHover ? BaseHoverEnabled : BaseHoverDisabled;
+    let baseOnClick;
+    if( onClick && label) {
+        baseOnClick = () => onClick(label);
+    }
     return (
         <Base
+            ref={dropRef}
             color={color}
             hoverColor={hoverColor}
             isDragging={isDragging}
-            onClick={onClick}
+            onClick={baseOnClick}
         >
             <HoverHelper color={color} />
             <Element ref={dragRef}> {children} </Element>

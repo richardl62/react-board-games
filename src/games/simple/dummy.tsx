@@ -1,9 +1,10 @@
 import React from 'react';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { BoardSquare, RectangularBoard } from '../../game-support';
+import { RectangularBoard } from '../../game-support';
 import { colors } from '../../game-support/colors';
+import { RectangularBoardElememt } from '../../game-support/rectangular-board';
 import { AppGame, BoardProps } from '../../shared/types';
 
 interface G {
@@ -40,7 +41,7 @@ function squareColor(row: number, col: number, checkered: boolean) {
   return asTopLeft ? colors.whiteSquare : colors.blackSquare;
 }
 
-
+type Label = [number, number];
 
 function makeSquares(G: G, { checkered }: { checkered: boolean }) {
   const nRows = G.values.length;
@@ -51,20 +52,23 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
     for (let rn = 0; rn < nRows; ++rn) {
       const row = [];
 
-      for (let cn = 0; cn < nCols; ++cn) {
-        const message = `hello from ${rn}:${cn}`;
-        const onClick = () => alert(message);
+      for (let cn = 0; cn < nCols; ++cn) {;
+        const onClick = (sq: Label) => console.log('clicked', sq);
+        const onDrop = (sq: Label) => console.log('dragged', sq);
         const val = G.values[rn][cn];
 
-        row.push(
-          <BoardSquare key={JSON.stringify([rn, cn])}
-            onClick={onClick}
-            color={squareColor(rn, cn, checkered)}
-            showHover={cn === 0 ? true : cn === 1 ? "black" : false}
-            highlight={cn === 0 && rn === 0}
-          >
-            <Piece>{val}</Piece>
-          </BoardSquare>);
+        const elem: RectangularBoardElememt<Label> = {
+            key: JSON.stringify([rn, cn]),
+            color: squareColor(rn, cn, checkered),
+            showHover: cn === 0 ? true : cn === 1 ? "black" : false,
+            highlight: cn === 0 && rn === 0,
+            label: [rn,cn],
+            onClick: onClick,
+            onDrop: onDrop,
+            piece: <Piece>{val}</Piece>,
+  
+        };
+        row.push(elem);
       }
 
       result.push(row);
@@ -93,7 +97,7 @@ export const dummy: AppGame = {
   board: ({ G, moves, events }: BoardProps<G>) => (
     <DndProvider backend={HTML5Backend}>
       <GridHolder>
-        <RectangularBoard squares={makeSquares(G, { checkered: true })} />
+        <RectangularBoard<Label> pieces={makeSquares(G, { checkered: true })} />
       </GridHolder>
     </DndProvider>
   ),
