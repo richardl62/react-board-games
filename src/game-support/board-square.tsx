@@ -23,7 +23,7 @@ const backgroundColor = (props: SquareProps, hovering: boolean) => {
 const Square = styled.div<SquareProps>`
     display: inline-flex;
     position: relative;
-    background-color: ${props => props.backgroundColor };
+    background-color: ${props => backgroundColor(props, false) };
     z-index: 0;
 
     &:hover {
@@ -49,9 +49,12 @@ const BorderHelper = styled.div<{ backgroundColor: string }>`
     z-index: 1;
 `;
 
-const Element = styled.div`
+const Element = styled.div<{isDragging: boolean, isDraggedOver: boolean}>`
     width: 100%;
     height: 100%;
+
+    opacity: ${props => props.isDraggedOver ? '0.3' : '1'};
+    visibility: ${props => props.isDragging ? 'hidden' : 'inherit'};
 
     z-index: 2;
 `;
@@ -69,7 +72,7 @@ const HighlightMarker = styled.div<{color:string}>`
 
     background-color: ${props => props.color};  
 `
-export interface BoardSquareProps<T = never> {
+export interface BoardSquareProps<T = object> {
     children: ReactNode;
 
     backgroundColor?: string;
@@ -79,45 +82,59 @@ export interface BoardSquareProps<T = never> {
     highlight?: boolean | string;
  
     label?: T;
-    onDrop?: (from: T, to: T) => void;
-    onClick?: (clicked: T) => void;
+    onDrop?: (fromLabel: T, toLabel: T) => void;
+    onClick?: (label: T) => void;
 }
 
 
-export function BoardSquare<T>({ children, backgroundColor, showHover, highlight, label, onDrop, onClick }: BoardSquareProps<T>) {
-
-    const [/*{ isDragging } */, dragRef] = useDrag(() => ({
+export function BoardSquare<Label>({ children, backgroundColor, showHover,
+    highlight, label, onDrop, onClick }: BoardSquareProps<Label>
+    ) {
+    const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
         collect: monitor => ({
-            isDragging: !!monitor.isDragging(),
+            isDragging: Boolean(monitor.isDragging()),
         }),
-    }))
+        item: () => {
+            console.log("Drag started", label);
+            return label;
+        },
+        end: (item: any) => console.log(`Drag ended: ${item}`),
+        
+    }),[label])
 
     let drop;
     if( onDrop && label) {
-        drop = () => onDrop(label, label);
+        drop = (from: Label) => onDrop(from, label);
     }
 
-    const [ /*isDraggedOver*/, dropRef] = useDrop({
+    const [ dropCollection, dropRef] = useDrop({
         accept: PIECE,
         drop: drop,
         collect: (monitor) => ({
-            isDraggedOver: !!monitor.isOver(),
+            isOver: !!monitor.isOver(),
+            canDrop: !!monitor.canDrop(),
+            item: monitor.getItem(),
         }),
     });
-
+    
     backgroundColor = backgroundColor || defaultColors.square;
 
-    const hoverColor = typeof showHover === 'string'? showHover :
-      defaultColors.squareHover;
+
     const highlightColor = typeof highlight === 'string'? highlight :
       defaultColors.squareHighlight;
 
     let showBorder : ShowBorder; 
-    if (showHover) {
+    let borderColor: string;
+    if (typeof showHover === 'string') {
         showBorder = 'onHover';
+        borderColor = showHover;
+    } else if (showHover === true) {
+        showBorder = 'onHover';
+        borderColor = defaultColors.squareHover;
     } else {
-        showBorder = false;
+        showBorder = false;        
+        borderColor = "";
     }
 
     let baseOnClick;
@@ -128,12 +145,20 @@ export function BoardSquare<T>({ children, backgroundColor, showHover, highlight
         <Square
             ref={dropRef}
             backgroundColor={backgroundColor}
-            borderColor={hoverColor}
+            borderColor={borderColor}
             showBorder={showBorder}
+
             onClick={baseOnClick}
+            onMouseDown={()=>console.log(`MouseDown on ${label}`)}
+            onMouseUp={()=>console.log(`MouseUp on ${label}`)}
         >
             <BorderHelper backgroundColor={backgroundColor} />
-            <Element ref={dragRef}> {children} </Element>
+            <Element ref={dragRef} 
+                isDragging={isDragging}
+                isDraggedOver={dropCollection.isOver}
+            > 
+                {children}
+            </Element>
             {highlight? <HighlightMarker color={highlightColor} /> : null }
         </Square>
     )

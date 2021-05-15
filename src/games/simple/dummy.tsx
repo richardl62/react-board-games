@@ -54,13 +54,13 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
 
       for (let cn = 0; cn < nCols; ++cn) {;
         const onClick = (sq: Label) => console.log('clicked', sq);
-        const onDrop = (sq: Label) => console.log('dragged', sq);
+        const onDrop = (from: Label, to: Label) => console.log('dragged', from, to);
         const val = G.values[rn][cn];
 
         const elem: RectangularBoardElememt<Label> = {
             key: JSON.stringify([rn, cn]),
             backgroundColor: squareColor(rn, cn, checkered),
-            // showHover: cn === 0 ? true : cn === 1 ? "black" : false,
+            showHover: cn === 0 ? true : cn === 1 ? "black" : false,
             // highlight: cn === 0 && rn === 0,
             label: [rn,cn],
             onClick: onClick,
