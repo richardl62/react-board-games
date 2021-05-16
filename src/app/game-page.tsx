@@ -5,6 +5,7 @@ import * as LobbyClient  from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
 import { useStatePromise } from '../shared/tools';
+import assert from 'assert';
 
 interface StartMatchProps {
   game: AppGame;
@@ -105,9 +106,8 @@ function GamePage(props: GamePageProps) {
     return <GamePlay game={game} matchID={matchID.value} player={player.value} numPlayers={numPlayers.value}/>
   }
 
-  if (matchID.unset && player.unset && numPlayers.unset) {
-    throw new Error("Unexpected unset value");
-  }
+  assert(!(matchID.unset && player.unset && numPlayers.unset),
+    "Unexpected unset value"); //BUGS
 
   return <div>Waiting ...</div>;
   }
