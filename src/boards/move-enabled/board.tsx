@@ -40,7 +40,7 @@ export function Board(props: BoardProps) {
 
  
     let basicElements = map2DArray(pieces, 
-        (elem, [row,col]) => {
+        (elem, [row,col]) : Basic.Element<SquareID> => {
             const squareID = {row:row, col:col, id:id};
             return {
                 ...elem,

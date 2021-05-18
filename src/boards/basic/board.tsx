@@ -40,7 +40,7 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-export interface Element<T=never> extends Omit<SquareProps<T>,'children'> {
+export interface Element<T=unknown> extends Omit<SquareProps<T>,'children'> {
     key: string; // React key
     piece: ReactNode;
 }

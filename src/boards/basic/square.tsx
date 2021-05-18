@@ -81,7 +81,7 @@ export interface SquareStyle {
     highlight?: boolean | string;
 }
 
-export interface SquareProps<T = object> extends SquareStyle {
+export interface SquareProps<T> extends SquareStyle {
     children: ReactNode;
     label: T;
 
@@ -98,11 +98,10 @@ export function Square<Label>({ children, backgroundColor, showHover,
         collect: monitor => ({
             isDragging: Boolean(monitor.isDragging()),
         }),
-        item: () => {
-            console.log("Drag started", label);
-            return label;
-        },
-        end: (item: any) => console.log(`Drag ended: ${item}`),
+
+        item: () => label,
+
+        end: (item: any) => console.log('Drag ended', JSON.stringify(item), JSON.stringify(label)),
         
     }),[label])
 
@@ -152,8 +151,8 @@ export function Square<Label>({ children, backgroundColor, showHover,
             showBorder={showBorder}
 
             onClick={baseOnClick}
-            onMouseDown={()=>console.log(`MouseDown on ${label}`)}
-            onMouseUp={()=>console.log(`MouseUp on ${label}`)}
+            // onMouseDown={()=>console.log(`MouseDown on ${label}`)}
+            // onMouseUp={()=>console.log(`MouseUp on ${label}`)}
         >
             <BorderHelper backgroundColor={backgroundColor} />
             <Element ref={dragRef} 
