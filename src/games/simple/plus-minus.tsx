@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppGame, BoardProps } from '../../shared/types';
+import { AppGame, Bgio } from '../../shared/types';
 
 interface G {
   value: number;
@@ -20,7 +20,7 @@ export const plusminus : AppGame = {
     },
   },
 
-  board: ({ G, moves, events }: BoardProps<G> ) => {
+  board: ({ G, moves, events }: Bgio.BoardProps<G> ) => {
     return (
       <div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>

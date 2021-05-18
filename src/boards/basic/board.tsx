@@ -59,7 +59,7 @@ export interface BoardStyle {
 }
 
 export interface BoardProps<T = never> extends BoardStyle {
-    pieces: Array<Array<Element<T>>>;
+    elements: Array<Array<Element<T>>>;
 }
 
 export function Board<T = never>(props: BoardProps<T>) {  
@@ -74,7 +74,7 @@ export function Board<T = never>(props: BoardProps<T>) {
         },
     }
     
-    const { pieces: squares, borderLabels, reverseRows, gridGap, borderWidth, colors, } =
+    const { elements: squares, borderLabels, reverseRows, gridGap, borderWidth, colors, } =
         applyDefaults(props, defaultProps);
 
     const { nRows, nCols } = rowCol(squares);

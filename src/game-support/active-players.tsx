@@ -1,5 +1,5 @@
 import React from 'react';
-import { BoardProps } from '../shared/types';
+import { Bgio } from '../shared/types';
 import styled from 'styled-components'
 export const unnamedPlayer = '_Unnamed Player_';
 
@@ -17,7 +17,7 @@ const PlayerName = styled.div<PlayerNameProps>`
   text-decoration: ${props => props.isCurrent ? "underline" : "default"};
 `;
 
-interface ActivePlayerProps extends BoardProps {
+interface ActivePlayerProps extends Bgio.BoardProps {
   setPlayersReady?: (arg: boolean) => void;
 }
 

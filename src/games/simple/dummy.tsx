@@ -3,8 +3,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { colors } from '../../boards';
-import { Board, Element } from '../../boards/basic';
-import { AppGame, BoardProps } from '../../shared/types';
+import { Board, Element, SquareID } from '../../boards/move-enabled';
+import { AppGame, Bgio } from '../../shared/types';
 
 interface G {
   values: Array<Array<number>>;
@@ -40,8 +40,6 @@ function squareColor(row: number, col: number, checkered: boolean) {
   return asTopLeft ? colors.whiteSquare : colors.blackSquare;
 }
 
-type Label = [number, number];
-
 function makeSquares(G: G, { checkered }: { checkered: boolean }) {
   const nRows = G.values.length;
   const nCols = G.values[0].length;
@@ -52,18 +50,11 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
       const row = [];
 
       for (let cn = 0; cn < nCols; ++cn) {;
-        const onClick = (sq: Label) => console.log('clicked', sq);
-        const onDrop = (from: Label, to: Label) => console.log('dragged', from, to);
         const val = G.values[rn][cn];
 
-        const elem: Element<Label> = {
-            key: JSON.stringify([rn, cn]),
+        const elem: Element = {
             backgroundColor: squareColor(rn, cn, checkered),
             showHover: cn === 0 ? true : cn === 1 ? "black" : false,
-            // highlight: cn === 0 && rn === 0,
-            label: [rn,cn],
-            onClick: onClick,
-            onDrop: onDrop,
             piece: <Piece>{val}</Piece>,
   
         };
@@ -75,6 +66,12 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
 
     return result;
 }
+const onClick = (sq: SquareID) => console.log('clicked', sq);
+const onMoveStart = (from: SquareID) => {
+  console.log('move started', from);
+  return true;
+}
+const onMoveEnd = (from: SquareID, to: SquareID | null) => console.log('moved', from, to);
 
 export const dummy: AppGame = {
   name: 'dummy',
@@ -93,10 +90,16 @@ export const dummy: AppGame = {
     },
   },
 
-  board: ({ G, moves, events }: BoardProps<G>) => (
+  board: ({ G, moves, events }: Bgio.BoardProps<G>) => (
     <DndProvider backend={HTML5Backend}>
       <GridHolder>
-        <Board<Label> pieces={makeSquares(G, { checkered: true })} />
+        <Board
+          elements={makeSquares(G, { checkered: true })} 
+          id={'dummy-game'}
+          onClick={onClick}
+          onMoveStart={onMoveStart}
+          onMoveEnd={onMoveEnd}
+          />
       </GridHolder>
     </DndProvider>
   ),

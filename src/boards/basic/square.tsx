@@ -83,8 +83,8 @@ export interface SquareStyle {
 
 export interface SquareProps<T = object> extends SquareStyle {
     children: ReactNode;
- 
-    label?: T;
+    label: T;
+
     onDrop?: (fromLabel: T, toLabel: T) => void;
     onClick?: (label: T) => void;
 }

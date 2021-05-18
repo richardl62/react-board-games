@@ -7,24 +7,24 @@ export interface Element extends Basic.SquareStyle {
     piece: ReactNode;
 } 
 
-export interface SquareID<BoardId = never> {
+export interface SquareID {
     row: number;
     col: number;
-    boardID?: BoardId;
+    boardID?: string;
 }
 
-export interface BoardProps<BoardId = never> extends Basic.BoardStyle {
-    pieces: Array<Array<Element>>;
-    id?: BoardId;
+export interface BoardProps extends Basic.BoardStyle {
+    elements: Array<Array<Element>>;
+    id?: string;
 
-    onClick?: (square: SquareID<BoardId>) => void;
+    onClick?: (square: SquareID) => void;
     
     /** Call at the (possible) start of a move. If false (rather then undefined)
      * dragging is disabled.
      * 
      * NOTE: In practice, the start of a move means onMouseDown.
      */
-    onMoveStart?: (square: SquareID<BoardId>) => boolean | undefined;
+    onMoveStart?: (square: SquareID) => boolean | undefined;
 
     /** Called at the end of a move.  'to' is set to null for an invalid move, 
      * e.g. dragging off the boards.
@@ -32,11 +32,11 @@ export interface BoardProps<BoardId = never> extends Basic.BoardStyle {
      * Will be called extactly once of each call to onMoveStart that does not
      * return false.
      */
-    onMoveEnd?: (from: SquareID<BoardId>, to: SquareID<BoardId> | null) => void;
+    onMoveEnd?: (from: SquareID, to: SquareID | null) => void;
 }
 
 export function Board(props: BoardProps) {
-    const {id, pieces, onClick} = props;
+    const {id, elements: pieces, onClick} = props;
 
  
     let basicElements = map2DArray(pieces, 
@@ -45,10 +45,11 @@ export function Board(props: BoardProps) {
             return {
                 ...elem,
                 key: `${row}-${col}`,
-                onClick: onClick && (() => onClick(squareID)),
+                label: squareID,
+                onClick: onClick,
             }
         }
     );
 
-    return <Basic.Board {...props} pieces={basicElements} />;
+    return <Basic.Board {...props} elements={basicElements} />;
 }
