@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { colors as defaultColors } from "../colors";
 import styled from 'styled-components';
-import { applyDefaults, deepArrayMap } from '../../shared/tools';
-import { Square, BoardSquareProps } from './square';
+import { applyDefaults, map2DArray } from '../../shared/tools';
+import { Square, SquareProps } from './square';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
@@ -40,14 +40,12 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-export interface Element<T> extends Omit<BoardSquareProps<T>,'children'> {
+export interface Element<T=never> extends Omit<SquareProps<T>,'children'> {
     key: string; // React key
     piece: ReactNode;
 }
 
-interface BoardProps<T = never> {
-    pieces: Array<Array<Element<T>>>;
-    
+export interface BoardStyle {
     borderLabels?: boolean;
     reverseRows?: boolean;
 
@@ -58,6 +56,10 @@ interface BoardProps<T = never> {
         background: string;
         labels: string;
     } 
+}
+
+export interface BoardProps<T = never> extends BoardStyle {
+    pieces: Array<Array<Element<T>>>;
 }
 
 export function Board<T = never>(props: BoardProps<T>) {  
@@ -78,7 +80,7 @@ export function Board<T = never>(props: BoardProps<T>) {
     const { nRows, nCols } = rowCol(squares);
 
     // elems will include border elements and squares.
-    let elems: Array<Array<JSX.Element>> = deepArrayMap(squares, squareProps => 
+    let elems: Array<Array<JSX.Element>> = map2DArray(squares, squareProps => 
         <Square {...squareProps}>{squareProps.piece}</Square>
         );
     

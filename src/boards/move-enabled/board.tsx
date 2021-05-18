@@ -1,23 +1,54 @@
 import { ReactNode } from "react";
-import { SquareStyle } from "./square";
+import { map2DArray } from "../../shared/tools";
+//import { map2DArray } from "../../shared/tools";
+import * as Basic from "../basic";
 
-export interface BoardElement extends SquareStyle {
-    elem: ReactNode;
+export interface Element extends Basic.SquareStyle {
+    piece: ReactNode;
 } 
 
-export interface BoardProps<Id = never> {
-    pieces: Array<Array<BoardElement>>;
+export interface SquareID<BoardId = never> {
+    row: number;
+    col: number;
+    boardID?: BoardId;
+}
+
+export interface BoardProps<BoardId = never> extends Basic.BoardStyle {
+    pieces: Array<Array<Element>>;
+    id?: BoardId;
+
+    onClick?: (square: SquareID<BoardId>) => void;
     
-    borderLabels?: boolean;
-    reverseRows?: boolean;
+    /** Call at the (possible) start of a move. If false (rather then undefined)
+     * dragging is disabled.
+     * 
+     * NOTE: In practice, the start of a move means onMouseDown.
+     */
+    onMoveStart?: (square: SquareID<BoardId>) => boolean | undefined;
 
-    gridGap?: string;
-    borderWidth?: string;
+    /** Called at the end of a move.  'to' is set to null for an invalid move, 
+     * e.g. dragging off the boards.
+     * 
+     * Will be called extactly once of each call to onMoveStart that does not
+     * return false.
+     */
+    onMoveEnd?: (from: SquareID<BoardId>, to: SquareID<BoardId> | null) => void;
+}
 
-    colors?: {
-        background: string;
-        labels: string;
-    } 
+export function Board(props: BoardProps) {
+    const {id, pieces, onClick} = props;
 
-    Id?: Id;
+ 
+    let basicElements = map2DArray(pieces, 
+        (elem, [row,col]) => {
+            const squareID = {row:row, col:col, id:id};
+            return {
+                ...elem,
+                key: `${row}-${col}`,
+                onClick: onClick && (() => onClick(squareID)),
+            }
+        }
+    );
+
+    return <Basic.Board {...props} pieces={basicElements} />;
 }

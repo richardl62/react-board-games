@@ -6,13 +6,13 @@ import { colors as defaultColors } from '../colors';
 const PIECE='piece';
 
 type ShowBorder = true | false | 'onHover';
-interface SquareProps {
+interface StyledSquareProps {
     backgroundColor: string;
     borderColor: string;
     showBorder: ShowBorder;
 };
 
-const backgroundColor = (props: SquareProps, hovering: boolean) => {
+const backgroundColor = (props: StyledSquareProps, hovering: boolean) => {
     const showBorder = props.showBorder === true || 
         (props.showBorder === 'onHover' && hovering);
 
@@ -20,7 +20,7 @@ const backgroundColor = (props: SquareProps, hovering: boolean) => {
     return showBorder ? props.borderColor : props.backgroundColor;
 }
 
-const StyledSquare = styled.div<SquareProps>`
+const StyledSquare = styled.div<StyledSquareProps>`
     display: inline-flex;
     position: relative;
     background-color: ${props => backgroundColor(props, false) };
@@ -72,14 +72,17 @@ const HighlightMarker = styled.div<{color:string}>`
 
     background-color: ${props => props.color};  
 `
-export interface BoardSquareProps<T = object> {
-    children: ReactNode;
 
+export interface SquareStyle {
     backgroundColor?: string;
 
     // false -> suppress, true-> default color, string -> specified color;
     showHover?: boolean | string;
     highlight?: boolean | string;
+}
+
+export interface SquareProps<T = object> extends SquareStyle {
+    children: ReactNode;
  
     label?: T;
     onDrop?: (fromLabel: T, toLabel: T) => void;
@@ -88,7 +91,7 @@ export interface BoardSquareProps<T = object> {
 
 
 export function Square<Label>({ children, backgroundColor, showHover,
-    highlight, label, onDrop, onClick }: BoardSquareProps<Label>
+    highlight, label, onDrop, onClick }: SquareProps<Label>
     ) {
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
