@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { colors } from '../../boards';
-import { Board, Element, SquareID } from '../../boards/move-enabled';
+import { DebugBoard, Element, SquareID } from '../../boards/move-enabled';
 import { AppGame, Bgio } from '../../shared/types';
 
 interface G {
@@ -93,7 +93,7 @@ export const dummy: AppGame = {
   board: ({ G, moves, events }: Bgio.BoardProps<G>) => (
     <DndProvider backend={HTML5Backend}>
       <GridHolder>
-        <Board
+        <DebugBoard
           elements={makeSquares(G, { checkered: true })} 
           id={'dummy-game'}
           onClick={onClick}
