@@ -36,7 +36,7 @@ export interface BoardProps extends Basic.BoardStyle {
 }
 
 export function Board(props: BoardProps) {
-    const {id, elements: pieces, onClick} = props;
+    const {id, elements: pieces, onClick, onMoveStart, onMoveEnd} = props;
 
  
     let basicElements = map2DArray(pieces, 
@@ -47,6 +47,8 @@ export function Board(props: BoardProps) {
                 key: `${row}-${col}`,
                 label: squareID,
                 onClick: onClick,
+                onMouseDown: onMoveStart,
+                onDrop: onMoveEnd,
             }
         }
     );

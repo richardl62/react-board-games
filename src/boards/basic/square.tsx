@@ -85,13 +85,14 @@ export interface SquareProps<T> extends SquareStyle {
     children: ReactNode;
     label: T;
 
-    onDrop?: (fromLabel: T, toLabel: T) => void;
+    onMouseDown?: (label: T) => void;
     onClick?: (label: T) => void;
+    onDrop?: (fromLabel: T, toLabel: T) => void;
 }
 
 
 export function Square<Label>({ children, backgroundColor, showHover,
-    highlight, label, onDrop, onClick }: SquareProps<Label>
+    highlight, label, onClick, onMouseDown, onDrop }: SquareProps<Label>
     ) {
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
@@ -101,7 +102,7 @@ export function Square<Label>({ children, backgroundColor, showHover,
 
         item: () => label,
 
-        end: (item: any) => console.log('Drag ended', JSON.stringify(item), JSON.stringify(label)),
+        //end: (item: any) => console.log('Drag ended', JSON.stringify(item), JSON.stringify(label)),
         
     }),[label])
 
@@ -138,10 +139,13 @@ export function Square<Label>({ children, backgroundColor, showHover,
         showBorder = false;        
         borderColor = "";
     }
-
     let baseOnClick;
     if( onClick && label) {
         baseOnClick = () => onClick(label);
+    }
+    let baseOnMouseDown;
+    if( onMouseDown && label) {
+        baseOnMouseDown = () => onMouseDown(label);
     }
     return (
         <StyledSquare
@@ -151,7 +155,7 @@ export function Square<Label>({ children, backgroundColor, showHover,
             showBorder={showBorder}
 
             onClick={baseOnClick}
-            // onMouseDown={()=>console.log(`MouseDown on ${label}`)}
+            onMouseDown={baseOnMouseDown}
             // onMouseUp={()=>console.log(`MouseUp on ${label}`)}
         >
             <BorderHelper backgroundColor={backgroundColor} />
