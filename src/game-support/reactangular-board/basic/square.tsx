@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { colors as defaultColors } from './colors';
+import { colors as defaultColors } from '../../colors';
 
 const PIECE='piece';
 

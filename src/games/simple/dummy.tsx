@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { RectangularBoard } from '../../game-support';
 import { colors } from '../../game-support/colors';
-import { RectangularBoardElememt } from '../../game-support/rectangular-board';
+import { RectangularBoardElememt } from '../../game-support/reactangular-board/basic/board';
 import { AppGame, BoardProps } from '../../shared/types';
 
 interface G {
