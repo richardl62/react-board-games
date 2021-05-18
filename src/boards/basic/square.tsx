@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { colors as defaultColors } from '../../colors';
+import { colors as defaultColors } from '../colors';
 
 const PIECE='piece';
 
@@ -20,7 +20,7 @@ const backgroundColor = (props: SquareProps, hovering: boolean) => {
     return showBorder ? props.borderColor : props.backgroundColor;
 }
 
-const Square = styled.div<SquareProps>`
+const StyledSquare = styled.div<SquareProps>`
     display: inline-flex;
     position: relative;
     background-color: ${props => backgroundColor(props, false) };
@@ -87,7 +87,7 @@ export interface BoardSquareProps<T = object> {
 }
 
 
-export function BoardSquare<Label>({ children, backgroundColor, showHover,
+export function Square<Label>({ children, backgroundColor, showHover,
     highlight, label, onDrop, onClick }: BoardSquareProps<Label>
     ) {
     const [{isDragging}, dragRef] = useDrag(() => ({
@@ -142,7 +142,7 @@ export function BoardSquare<Label>({ children, backgroundColor, showHover,
         baseOnClick = () => onClick(label);
     }
     return (
-        <Square
+        <StyledSquare
             ref={dropRef}
             backgroundColor={backgroundColor}
             borderColor={borderColor}
@@ -160,6 +160,6 @@ export function BoardSquare<Label>({ children, backgroundColor, showHover,
                 {children}
             </Element>
             {highlight? <HighlightMarker color={highlightColor} /> : null }
-        </Square>
+        </StyledSquare>
     )
 }

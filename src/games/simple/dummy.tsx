@@ -2,9 +2,8 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { RectangularBoard } from '../../game-support';
-import { colors } from '../../game-support/colors';
-import { RectangularBoardElememt } from '../../game-support/reactangular-board/basic/board';
+import { colors } from '../../boards';
+import { Board, Element } from '../../boards/basic';
 import { AppGame, BoardProps } from '../../shared/types';
 
 interface G {
@@ -57,7 +56,7 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
         const onDrop = (from: Label, to: Label) => console.log('dragged', from, to);
         const val = G.values[rn][cn];
 
-        const elem: RectangularBoardElememt<Label> = {
+        const elem: Element<Label> = {
             key: JSON.stringify([rn, cn]),
             backgroundColor: squareColor(rn, cn, checkered),
             showHover: cn === 0 ? true : cn === 1 ? "black" : false,
@@ -97,7 +96,7 @@ export const dummy: AppGame = {
   board: ({ G, moves, events }: BoardProps<G>) => (
     <DndProvider backend={HTML5Backend}>
       <GridHolder>
-        <RectangularBoard<Label> pieces={makeSquares(G, { checkered: true })} />
+        <Board<Label> pieces={makeSquares(G, { checkered: true })} />
       </GridHolder>
     </DndProvider>
   ),

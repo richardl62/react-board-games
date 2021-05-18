@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
-import { colors as defaultColors } from "../../colors";
+import { colors as defaultColors } from "../colors";
 import styled from 'styled-components';
-import { applyDefaults, deepArrayMap } from '../../../shared/tools';
-import { BoardSquare, BoardSquareProps } from './square';
+import { applyDefaults, deepArrayMap } from '../../shared/tools';
+import { Square, BoardSquareProps } from './square';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
@@ -15,7 +15,7 @@ const BorderElement = styled.div<{color: string}>`
 `;
 
 
-const Grid = styled.div<{
+const StyledGrid = styled.div<{
     nCols: number, 
     gridGap: string,
     borderWidth: string,
@@ -40,13 +40,13 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-export interface RectangularBoardElememt<T> extends Omit<BoardSquareProps<T>,'children'> {
+export interface Element<T> extends Omit<BoardSquareProps<T>,'children'> {
     key: string; // React key
     piece: ReactNode;
 }
 
-interface RectangularBoardProps<T = never> {
-    pieces: Array<Array<RectangularBoardElememt<T>>>;
+interface BoardProps<T = never> {
+    pieces: Array<Array<Element<T>>>;
     
     borderLabels?: boolean;
     reverseRows?: boolean;
@@ -60,7 +60,7 @@ interface RectangularBoardProps<T = never> {
     } 
 }
 
-export function RectangularBoard<T = never>(props: RectangularBoardProps<T>) {  
+export function Board<T = never>(props: BoardProps<T>) {  
     const defaultProps = {
         borderLabels: false,
         reverseRows: false,
@@ -79,7 +79,7 @@ export function RectangularBoard<T = never>(props: RectangularBoardProps<T>) {
 
     // elems will include border elements and squares.
     let elems: Array<Array<JSX.Element>> = deepArrayMap(squares, squareProps => 
-        <BoardSquare {...squareProps}>{squareProps.piece}</BoardSquare>
+        <Square {...squareProps}>{squareProps.piece}</Square>
         );
     
     const borderElement = (label:string|number, keyStart: string) => {
@@ -118,13 +118,13 @@ export function RectangularBoard<T = never>(props: RectangularBoardProps<T>) {
     }
 
     return (
-        <Grid
+        <StyledGrid
             nCols={elems[0].length}
             gridGap={gridGap}
             borderWidth={borderLabels ? '0' : borderWidth}
             backgroundColor={colors.background}
         >
             {elems}
-        </Grid>
+        </StyledGrid>
     );
 }
