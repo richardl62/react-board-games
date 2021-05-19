@@ -3,25 +3,21 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { colors } from '../../boards';
-import { DebugBoard, Element, SquareID } from '../../boards/move-enabled';
+import { DebugBoard, Element } from '../../boards/move-enabled';
+import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
-interface G {
-  values: Array<Array<number>>;
-};
+interface RowCol {
+  row: number;
+  col: number;
+}
 
-const initialValues = [
-  [1, 2, 3],
-  [7, 8, 9],
-];
+interface SquareProps {
+  moveStart: boolean;
+  moveEnd: boolean;
+}
 
-const GridHolder=styled.div`
-  display: inline-block;
-  border: 5px purple solid;
-  margin: 3px;
-`;
-
-const Piece = styled.div`
+const Square = styled.div<SquareProps>`
   width: 50px;
   height: 50px;
 
@@ -29,7 +25,35 @@ const Piece = styled.div`
 
   text-align: center;
   margin: auto;
-`
+
+  background-color: ${props => props.moveStart ? 'gold' : 'white'};
+  border:  ${props => props.moveEnd ? '2px solid red' : '1px solid black'} 
+`;
+
+interface SquareDef extends SquareProps {
+  value: number;
+}
+
+interface G {
+  squares: Array<Array<SquareDef>>;
+};
+
+const initialValues = [
+  [1, 2, 3],
+  [7, 8, 9],
+];
+
+function makeSquareDef(value: number) : SquareDef {
+  return {value:value, moveStart:false, moveEnd:false};
+}
+
+const GridHolder=styled.div`
+  display: inline-block;
+  border: 5px purple solid;
+  margin: 3px;
+`;
+
+
 
 function squareColor(row: number, col: number, checkered: boolean) {
   if (!checkered) {
@@ -41,8 +65,8 @@ function squareColor(row: number, col: number, checkered: boolean) {
 }
 
 function makeSquares(G: G, { checkered }: { checkered: boolean }) {
-  const nRows = G.values.length;
-  const nCols = G.values[0].length;
+  const nRows = G.squares.length;
+  const nCols = G.squares[0].length;
 
 
     let result = [];
@@ -50,12 +74,12 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
       const row = [];
 
       for (let cn = 0; cn < nCols; ++cn) {;
-        const val = G.values[rn][cn];
+        const sq = G.squares[rn][cn];
 
         const elem: Element = {
             backgroundColor: squareColor(rn, cn, checkered),
             showHover: cn === 0 ? true : cn === 1 ? "black" : false,
-            piece: <Piece>{val}</Piece>,
+            piece: <Square {...sq}>{sq.value}</Square>,
   
         };
         row.push(elem);
@@ -66,27 +90,37 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
 
     return result;
 }
-const onClick = (sq: SquareID) => console.log('clicked', sq);
-const onMoveStart = (from: SquareID) => {
-  console.log('move started', from);
-  return true;
-}
-const onMoveEnd = (from: SquareID, to: SquareID | null) => console.log('moved', from, to);
 
 export const dummy: AppGame = {
   name: 'dummy',
   displayName: 'Dummy',
 
-  setup: (): G => { return { values: initialValues }; },
+  setup: (): G => { 
+    const intialSquares = map2DArray(initialValues, makeSquareDef);
+    return { squares: intialSquares }; 
+    },
 
   minPlayers: 1,
   maxPlayers: 1,
 
+  
   moves: {
-    add1: (G: G, ctx: any, row: number, col: number) => {
-      let newValues = G.values.map(r => [...r]);
-      newValues[row][col] += 1;
-      return newValues;
+    start: (G: G, ctx: any, sq: RowCol) => {  
+        G.squares[sq.row][sq.col].moveStart = true;
+        G.squares.flat().forEach(sq => sq.moveEnd=false);
+    },
+
+    end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
+      G.squares[from.row][from.col].moveStart = false;
+      if(to) {
+        G.squares[to.row][to.col].moveEnd = true;
+      }
+      /* let newValues = G.squares.map(r => [...r]);
+      newValues[from.row][from.col].moveStart = false;
+      if(to) {
+        newValues[to.row][to.col].moveEnd = true;
+      }
+      return newValues; */
     },
   },
 
@@ -96,12 +130,13 @@ export const dummy: AppGame = {
         <DebugBoard
           elements={makeSquares(G, { checkered: true })} 
           id={'dummy-game'}
-          onClick={onClick}
-          onMoveStart={onMoveStart}
-          onMoveEnd={onMoveEnd}
+ 
+          onMoveStart={moves.start}
+          onMoveEnd={moves.end}
           />
       </GridHolder>
     </DndProvider>
   ),
 
 }
+

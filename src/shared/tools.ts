@@ -103,3 +103,7 @@ export function applyDefaults<T, D>(values: T, defaults: D) : T & D {
 // const values2 = {a:1};
 // const res2 = applyDefaults(values2,defaults);
 // console.log("res1", res2);
+
+export function sameJSON(obj1: any, obj2: any ): boolean {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}

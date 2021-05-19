@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { Board, BoardProps, SquareID } from "./board";
+import { Board } from "./board";
+import { BoardProps, SquareID } from "./types";
 
 
 export function DebugBoard(props: BoardProps) {
@@ -16,7 +17,7 @@ export function DebugBoard(props: BoardProps) {
         },
 
         onMoveEnd: (from: SquareID, to: SquareID | null) => {
-            console.log("DebugBoard onMoveEnd");
+            //console.log("DebugBoard onMoveEnd");
             console.assert(from === startOfMove.current,
                 "Inconsistent start of move", startOfMove, from);
             startOfMove.current = null;

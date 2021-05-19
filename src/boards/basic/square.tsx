@@ -81,18 +81,21 @@ export interface SquareStyle {
     highlight?: boolean | string;
 }
 
-export interface SquareProps<T> extends SquareStyle {
-    children: ReactNode;
-    label: T;
-
+export interface OnFunctions<T> {
     onMouseDown?: (label: T) => void;
+    onMouseUp?: (label: T) => void;
     onClick?: (label: T) => void;
     onDrop?: (fromLabel: T, toLabel: T) => void;
 }
 
+export interface SquareProps<T> extends SquareStyle, OnFunctions<T> {
+    children: ReactNode;
+    label: T;
+}
+
 
 export function Square<Label>({ children, backgroundColor, showHover,
-    highlight, label, onClick, onMouseDown, onDrop }: SquareProps<Label>
+    highlight, label, onClick, onMouseDown, onMouseUp, onDrop }: SquareProps<Label>
     ) {
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
@@ -106,14 +109,10 @@ export function Square<Label>({ children, backgroundColor, showHover,
         
     }),[label])
 
-    let drop;
-    if( onDrop && label) {
-        drop = (from: Label) => onDrop(from, label);
-    }
 
     const [ dropCollection, dropRef] = useDrop({
         accept: PIECE,
-        drop: drop,
+        drop: (from: Label) => onDrop?.(from, label),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop(),
@@ -139,14 +138,7 @@ export function Square<Label>({ children, backgroundColor, showHover,
         showBorder = false;        
         borderColor = "";
     }
-    let baseOnClick;
-    if( onClick && label) {
-        baseOnClick = () => onClick(label);
-    }
-    let baseOnMouseDown;
-    if( onMouseDown && label) {
-        baseOnMouseDown = () => onMouseDown(label);
-    }
+
     return (
         <StyledSquare
             ref={dropRef}
@@ -154,9 +146,9 @@ export function Square<Label>({ children, backgroundColor, showHover,
             borderColor={borderColor}
             showBorder={showBorder}
 
-            onClick={baseOnClick}
-            onMouseDown={baseOnMouseDown}
-            // onMouseUp={()=>console.log(`MouseUp on ${label}`)}
+            onClick={onClick && (() => onClick(label))}
+            onMouseDown={onMouseDown && (() => onMouseDown(label))}
+            onMouseUp={onMouseUp && (() => onMouseUp(label))}
         >
             <BorderHelper backgroundColor={backgroundColor} />
             <Element ref={dragRef} 
