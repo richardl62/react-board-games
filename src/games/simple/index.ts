@@ -1,6 +1,6 @@
-import { dummy } from "./dummy";
+import { swapSquares } from "./swap-squares";
 import { plusminus } from "./plus-minus";
 
-const games = [ plusminus, dummy ];
+const games = [ plusminus, swapSquares ];
 
 export default games;

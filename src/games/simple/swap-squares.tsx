@@ -92,9 +92,9 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
     return result;
 }
 
-export const dummy: AppGame = {
-  name: 'dummy',
-  displayName: 'Dummy',
+export const swapSquares: AppGame = {
+  name: 'swap-squares',
+  displayName: 'Swap Squares (test)',
 
   setup: (): G => { 
     const intialSquares = map2DArray(initialValues, makeSquareDef);
