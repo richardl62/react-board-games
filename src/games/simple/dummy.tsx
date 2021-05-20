@@ -14,7 +14,6 @@ interface RowCol {
 
 interface SquareProps {
   moveStart: boolean;
-  moveEnd: boolean;
 }
 
 const Square = styled.div<SquareProps>`
@@ -25,9 +24,6 @@ const Square = styled.div<SquareProps>`
 
   text-align: center;
   margin: auto;
-
-  background-color: ${props => props.moveStart ? 'gold' : 'white'};
-  border:  ${props => props.moveEnd ? '2px solid red' : '1px solid black'} 
 `;
 
 interface SquareDef extends SquareProps {
@@ -40,11 +36,12 @@ interface G {
 
 const initialValues = [
   [1, 2, 3],
+  [4, 5, 6],
   [7, 8, 9],
 ];
 
 function makeSquareDef(value: number) : SquareDef {
-  return {value:value, moveStart:false, moveEnd:false};
+  return {value:value, moveStart:false};
 }
 
 const GridHolder=styled.div`
@@ -55,7 +52,11 @@ const GridHolder=styled.div`
 
 
 
-function squareColor(row: number, col: number, checkered: boolean) {
+function squareColor(row: number, col: number, sq: SquareDef, checkered: boolean) {
+  if(sq.moveStart) {
+    return 'gold';
+  }
+
   if (!checkered) {
     return colors.whiteSquare;
   }
@@ -77,8 +78,8 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
         const sq = G.squares[rn][cn];
 
         const elem: Element = {
-            backgroundColor: squareColor(rn, cn, checkered),
-            showHover: cn === 0 ? true : cn === 1 ? "black" : false,
+            backgroundColor: squareColor(rn, cn, sq, checkered),
+            showHover: true,
             piece: <Square {...sq}>{sq.value}</Square>,
   
         };
@@ -107,13 +108,14 @@ export const dummy: AppGame = {
   moves: {
     start: (G: G, ctx: any, sq: RowCol) => {  
         G.squares[sq.row][sq.col].moveStart = true;
-        G.squares.flat().forEach(sq => sq.moveEnd=false);
     },
 
     end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
       G.squares[from.row][from.col].moveStart = false;
       if(to) {
-        G.squares[to.row][to.col].moveEnd = true;
+        const tmp = G.squares[to.row][to.col];
+        G.squares[to.row][to.col] = G.squares[from.row][from.col];
+        G.squares[from.row][from.col] = tmp;
       }
       /* let newValues = G.squares.map(r => [...r]);
       newValues[from.row][from.col].moveStart = false;
