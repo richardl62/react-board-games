@@ -40,18 +40,18 @@ const initialValues = [
   [7, 8, 9],
 ];
 
-function makeSquareDef(value: number) : SquareDef {
-  return {value:value, moveStart:false};
+function makeSquareDef(value: number): SquareDef {
+  return { value: value, moveStart: false };
 }
 
-const BoardHolder=styled.div`
+const BoardHolder = styled.div`
   display: inline-block;
   border: 5px purple solid;
   margin: 3px;
 `;
 
 function squareColor(row: number, col: number, sq: SquareDef, checkered: boolean) {
-  if(sq.moveStart) {
+  if (sq.moveStart) {
     return 'gold';
   }
 
@@ -68,72 +68,90 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
   const nCols = G.squares[0].length;
 
 
-    let result = [];
-    for (let rn = 0; rn < nRows; ++rn) {
-      const row = [];
+  let result = [];
+  for (let rn = 0; rn < nRows; ++rn) {
+    const row = [];
 
-      for (let cn = 0; cn < nCols; ++cn) {;
-        const sq = G.squares[rn][cn];
+    for (let cn = 0; cn < nCols; ++cn) {
+      ;
+      const sq = G.squares[rn][cn];
 
-        const elem: Element = {
-            backgroundColor: squareColor(rn, cn, sq, checkered),
-            showHover: true,
-            piece: <Square {...sq}>{sq.value}</Square>,
-  
-        };
-        row.push(elem);
-      }
+      const elem: Element = {
+        backgroundColor: squareColor(rn, cn, sq, checkered),
+        showHover: true,
+        piece: <Square {...sq}>{sq.value}</Square>,
 
-      result.push(row);
+      };
+      row.push(elem);
     }
 
-    return result;
+    result.push(row);
+  }
+
+  return result;
 }
 
 export const swapSquares: AppGame = {
   name: 'swap-squares',
   displayName: 'Swap Squares (for testing)',
 
-  setup: (): G => { 
+  setup: (): G => {
     const intialSquares = map2DArray(initialValues, makeSquareDef);
-    return { squares: intialSquares }; 
-    },
+    return { squares: intialSquares };
+  },
 
   minPlayers: 1,
   maxPlayers: 1,
 
-  
+
   moves: {
-    start: (G: G, ctx: any, sq: RowCol) => {  
-        G.squares[sq.row][sq.col].moveStart = true;
+    start: (G: G, ctx: any, sq: RowCol) => {
+      G.squares[sq.row][sq.col].moveStart = true;
     },
 
     end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
       G.squares[from.row][from.col].moveStart = false;
-      if(to) {
+      if (to) {
         const tmp = G.squares[to.row][to.col];
         G.squares[to.row][to.col] = G.squares[from.row][from.col];
         G.squares[from.row][from.col] = tmp;
       }
     },
+
+    // Using the BGIO supplied reset function lead to server errros.
+    // TO DO: Understand why this happened;
+    reset: (G: G, ctx: any) => {
+      for(let row = 0; row < G.squares.length; ++row) {
+        for(let col = 0; col < G.squares[row].length; ++col) {
+          G.squares[row][col].moveStart=false;
+          G.squares[row][col].value = initialValues[row][col];
+        }
+      }
+    },
   },
 
-  board: ({ G, moves, events, reset }: Bgio.BoardProps<G>) => (
-    <DndProvider backend={HTML5Backend}>
-      <div>
-        <BoardHolder>
-          <DebugBoard
-            elements={makeSquares(G, { checkered: true })}
-            id={'dummy-game'}
+  board: ({ G, moves, events, reset }: Bgio.BoardProps<G>) => {
+    const onReset = () => {
+      moves.reset();
+    }
+    return (
+      <DndProvider backend={HTML5Backend}>
+        <div>
+          <BoardHolder>
+            <DebugBoard
+              elements={makeSquares(G, { checkered: true })}
+              id={'dummy-game'}
 
-            onMoveStart={moves.start}
-            onMoveEnd={moves.end}
-          />
-        </BoardHolder>
-      </div>
-      <button type='button' onClick={reset}>Reset</button>
-    </DndProvider>
-  ),
+              onMoveStart={moves.start}
+              onMoveEnd={moves.end}
+            />
+          </BoardHolder>
+        </div>
+
+        <button type='button' onClick={onReset}>Reset</button>
+      </DndProvider>
+    )
+  },
 
 }
 
