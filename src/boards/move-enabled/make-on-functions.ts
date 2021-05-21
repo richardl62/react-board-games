@@ -89,7 +89,13 @@ export function makeBasicOnFunctions(moveStatus: MoveStatus, props: BoardProps)
         },
 
         allowDrag: (from: SquareID) : boolean => {
-            return !moveStatus.firstSquareClicked || sameJSON(from, moveStatus.start);
+            // Disallow drags during a click-move unless from the starting square
+            // of that move.
+            if(moveStatus.firstSquareClicked && !sameJSON(from, moveStatus.start)) {
+                return false;
+            }
+
+            return props.allowDrag ? props.allowDrag(from) : true;
         },
 
         onDrop: (from: SquareID, to: SquareID | null) => {

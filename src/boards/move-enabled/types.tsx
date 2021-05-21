@@ -28,4 +28,12 @@ export interface BoardProps extends Basic.BoardStyle {
      * return false.
      */
     onMoveEnd?: (from: SquareID, to: SquareID | null) => void;
+
+    /** Call at start of drag. Determine whether drags are proceed.  
+     * Defaults to always true.
+     * 
+     * NOTE: Drags are not allowed during a click-move unless dragging from
+     * the start square for that move.
+     */
+    allowDrag?: (from: SquareID) => boolean;
 }
