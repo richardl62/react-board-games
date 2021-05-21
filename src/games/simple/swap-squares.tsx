@@ -44,13 +44,11 @@ function makeSquareDef(value: number) : SquareDef {
   return {value:value, moveStart:false};
 }
 
-const GridHolder=styled.div`
+const BoardHolder=styled.div`
   display: inline-block;
   border: 5px purple solid;
   margin: 3px;
 `;
-
-
 
 function squareColor(row: number, col: number, sq: SquareDef, checkered: boolean) {
   if(sq.moveStart) {
@@ -94,7 +92,7 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
 
 export const swapSquares: AppGame = {
   name: 'swap-squares',
-  displayName: 'Swap Squares (test)',
+  displayName: 'Swap Squares (for testing)',
 
   setup: (): G => { 
     const intialSquares = map2DArray(initialValues, makeSquareDef);
@@ -117,26 +115,23 @@ export const swapSquares: AppGame = {
         G.squares[to.row][to.col] = G.squares[from.row][from.col];
         G.squares[from.row][from.col] = tmp;
       }
-      /* let newValues = G.squares.map(r => [...r]);
-      newValues[from.row][from.col].moveStart = false;
-      if(to) {
-        newValues[to.row][to.col].moveEnd = true;
-      }
-      return newValues; */
     },
   },
 
-  board: ({ G, moves, events }: Bgio.BoardProps<G>) => (
+  board: ({ G, moves, events, reset }: Bgio.BoardProps<G>) => (
     <DndProvider backend={HTML5Backend}>
-      <GridHolder>
-        <DebugBoard
-          elements={makeSquares(G, { checkered: true })} 
-          id={'dummy-game'}
- 
-          onMoveStart={moves.start}
-          onMoveEnd={moves.end}
+      <div>
+        <BoardHolder>
+          <DebugBoard
+            elements={makeSquares(G, { checkered: true })}
+            id={'dummy-game'}
+
+            onMoveStart={moves.start}
+            onMoveEnd={moves.end}
           />
-      </GridHolder>
+        </BoardHolder>
+      </div>
+      <button type='button' onClick={reset}>Reset</button>
     </DndProvider>
   ),
 
