@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import * as Basic from "../basic";
 import { BoardProps, SquareID } from "./types";
-import assert from "assert";
+import { assertAlert as assert } from '../../shared/assert';
 import { sameJSON } from "../../shared/tools";
 
 class MoveStatus {
@@ -92,7 +92,8 @@ export function useBasicOnFunctions(props: BoardProps)
         },
 
         onDrop: (from: SquareID, to: SquareID | null) => {
-            assert(sameJSON(from, moveStatus.start), "inconsistent start square for drop");
+            assert(sameJSON(from, moveStatus.start), "inconsistent start square for drop",
+                from, moveStatus.start);
             moveEnd(to);
         },
     }
