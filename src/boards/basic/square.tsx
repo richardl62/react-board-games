@@ -86,6 +86,9 @@ export interface OnFunctions<T> {
     onMouseUp?: (label: T) => void;
     onClick?: (label: T) => void;
     onDrop?: (fromLabel: T, toLabel: T) => void;
+    
+    /** Specify whether dragging is allowed. Defaults to true. */
+    allowDrag?: boolean;
 }
 
 export interface SquareProps<T> extends SquareStyle, OnFunctions<T> {
@@ -94,9 +97,12 @@ export interface SquareProps<T> extends SquareStyle, OnFunctions<T> {
 }
 
 
-export function Square<Label>({ children, backgroundColor, showHover,
-    highlight, label, onClick, onMouseDown, onMouseUp, onDrop }: SquareProps<Label>
-    ) {
+export function Square<Label>(props: SquareProps<Label>) {
+    const { children, showHover,
+            highlight, label, onClick, onMouseDown, onMouseUp, onDrop } = props;
+    const backgroundColor = props.backgroundColor || defaultColors.square;
+    const allowDrag = props.allowDrag ?? true;
+
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
         collect: monitor => ({
@@ -119,9 +125,6 @@ export function Square<Label>({ children, backgroundColor, showHover,
             item: monitor.getItem(),
         }),
     });
-    
-    backgroundColor = backgroundColor || defaultColors.square;
-
 
     const highlightColor = typeof highlight === 'string'? highlight :
       defaultColors.squareHighlight;
@@ -151,7 +154,7 @@ export function Square<Label>({ children, backgroundColor, showHover,
             onMouseUp={onMouseUp && (() => onMouseUp(label))}
         >
             <BorderHelper backgroundColor={backgroundColor} />
-            <Element ref={dragRef} 
+            <Element ref={allowDrag ? dragRef : undefined} 
                 isDragging={isDragging}
                 isDraggedOver={dropCollection.isOver}
             > 

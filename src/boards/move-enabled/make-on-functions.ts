@@ -1,10 +1,9 @@
-import { useRef } from "react";
 import * as Basic from "../basic";
 import { BoardProps, SquareID } from "./types";
 import { assertAlert as assert } from '../../shared/assert';
 import { sameJSON } from "../../shared/tools";
 
-class MoveStatus {
+export class MoveStatus {
     private _start: SquareID | null = null;
     get start() {return this._start;}
 
@@ -38,10 +37,8 @@ class MoveStatus {
     }
 }
 
-export function useBasicOnFunctions(props: BoardProps)
+export function useBasicOnFunctions(moveStatus: MoveStatus, props: BoardProps)
     {
-    const moveStatus = useRef<MoveStatus>(new MoveStatus()).current;
-
     const moveStart = (sq: SquareID) => {
         moveStatus.recordMoveStart(sq);
 
