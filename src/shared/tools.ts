@@ -104,6 +104,7 @@ export function applyDefaults<T, D>(values: T, defaults: D) : T & D {
 // const res2 = applyDefaults(values2,defaults);
 // console.log("res1", res2);
 
-export function sameJSON(obj1: any, obj2: any ): boolean {
+//TO DO: Ensure that T1 and T2 overlap.
+export function sameJSON<T1,T2>(obj1: T1, obj2: T2): boolean {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }

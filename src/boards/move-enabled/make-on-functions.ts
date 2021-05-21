@@ -37,7 +37,7 @@ export class MoveStatus {
     }
 }
 
-export function useBasicOnFunctions(moveStatus: MoveStatus, props: BoardProps)
+export function makeBasicOnFunctions(moveStatus: MoveStatus, props: BoardProps)
     {
     const moveStart = (sq: SquareID) => {
         moveStatus.recordMoveStart(sq);
@@ -86,6 +86,10 @@ export function useBasicOnFunctions(moveStatus: MoveStatus, props: BoardProps)
             } else {
                 console.error("No start square recorded on click");
             }
+        },
+
+        allowDrag: (from: SquareID) : boolean => {
+            return !moveStatus.firstSquareClicked || sameJSON(from, moveStatus.start);
         },
 
         onDrop: (from: SquareID, to: SquareID | null) => {
