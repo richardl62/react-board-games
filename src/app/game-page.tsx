@@ -59,13 +59,19 @@ interface GamePageProps {
   matchID: MatchID | null;
 }
 
+
 function GamePage(props: GamePageProps) {
+    
+  const { game } = props;    
   const [error, setError] = useState<Error | null>(null);
   const player = useStatePromise<Player>();
   const numPlayers = useStatePromise<number>();
   const matchID = useStatePromise<MatchID>(props.matchID);
-  
-  const { game } = props;
+
+  if(game.minPlayers) {
+    return <GamePlay game={game} local={true} />
+  }
+
 
   const storedPlayer = matchID.fulfilled && getStoredPlayer(matchID.value);
   

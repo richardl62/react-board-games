@@ -6,19 +6,27 @@ import * as UrlParams from './url-params';
 
 interface GamePlayProps {
   game: AppGame;
-  matchID: MatchID;
-  numPlayers: number;
-  player: Player;
+  local?: boolean;
+  numPlayers?: number;
+
+  matchID?: MatchID;
+  player?: Player;
 };
 
-export function GamePlay({ game, matchID, numPlayers, player }: GamePlayProps) {
-  const lobbyServer = UrlParams.lobbyServer();
+export function GamePlay({ game, local, matchID, numPlayers, player }: GamePlayProps) {
+
+  let multiplayer;
+  if(!local) {
+    const lobbyServer = UrlParams.lobbyServer();
+    multiplayer = SocketIO({ server: lobbyServer}) 
+  }
+
   let debugPanel = UrlParams.bgioDebugPanel;
 
   const GameClient = Client({
     game: game,
     board: game.board,
-    multiplayer: SocketIO({ server: lobbyServer}),
+    multiplayer: multiplayer,
 
     numPlayers: numPlayers,
     debug: debugPanel,
@@ -26,8 +34,7 @@ export function GamePlay({ game, matchID, numPlayers, player }: GamePlayProps) {
 
   return (
     <div>
-      <GameClient matchID={matchID.mid} 
-        playerID={player.id} credentials={player.credentials}
+      <GameClient 
       />
     </div>
   );
