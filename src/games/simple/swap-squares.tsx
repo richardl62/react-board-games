@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { colors } from '../../boards';
-import { DebugBoard, Element } from '../../boards/move-enabled';
+import { SelfTestBoard, Element } from '../../boards/move-enabled';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
@@ -138,7 +138,7 @@ export const swapSquares: AppGame = {
       <DndProvider backend={HTML5Backend}>
         <div>
           <BoardHolder>
-            <DebugBoard
+            <SelfTestBoard
               elements={makeSquares(G, { checkered: true })}
               id={'dummy-game'}
 

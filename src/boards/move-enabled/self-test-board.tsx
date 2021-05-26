@@ -3,7 +3,7 @@ import { Board } from "./board";
 import { BoardProps, SquareID } from "./types";
 
 
-export function DebugBoard(props: BoardProps) {
+export function SelfTestBoard(props: BoardProps) {
 
     const startOfMove = useRef<SquareID|null>(null);
 
