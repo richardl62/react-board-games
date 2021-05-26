@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MatchID, Player, AppGame } from '../shared/types';
-import { GamePlay } from './game-play';
+import * as GamePlay from './game-play';
 import * as LobbyClient  from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
@@ -9,15 +9,18 @@ import assert from 'assert';
 
 interface StartMatchProps {
   game: AppGame;
-  startMatch: (numPlayers: number) => void;
+  numPlayers: (arg: number) => void;
 }
 
-function StartMatch({game, startMatch} : StartMatchProps) {
+function NumPlayers(props : StartMatchProps) {
+  const game = props.game;
+  const numPlayersCallback = props.numPlayers;
+
   const [ numPlayers, setNumPlayers ] = useState<number>(game.minPlayers);
   const { minPlayers, maxPlayers } = game;
 
   if (minPlayers === maxPlayers) {
-    startMatch(minPlayers);
+    numPlayersCallback(minPlayers);
     return null;
   }
 
@@ -29,7 +32,7 @@ function StartMatch({game, startMatch} : StartMatchProps) {
       min={minPlayers} max={maxPlayers} value={numPlayers}
       onChange={(event) => setNumPlayers(Number(event.target.value))}
     />
-    <button type="button" onClick={()=>startMatch(numPlayers)}>Start Game</button>
+    <button type="button" onClick={()=>numPlayersCallback(numPlayers)}>Start Game</button>
 
   </div>);
 }
@@ -59,19 +62,18 @@ interface GamePageProps {
   matchID: MatchID | null;
 }
 
-
 function GamePage(props: GamePageProps) {
-    
-  const { game } = props;    
+  // KLUDGE: This function is hard to understand   
+  const { game } = props;  
   const [error, setError] = useState<Error | null>(null);
+  const [local, setLocal] = useState<boolean>(false);
   const player = useStatePromise<Player>();
   const numPlayers = useStatePromise<number>();
   const matchID = useStatePromise<MatchID>(props.matchID);
 
-  if(game.minPlayers) {
-    return <GamePlay game={game} local={true} />
+  if(local) {
+    return <GamePlay.Local game={game} />
   }
-
 
   const storedPlayer = matchID.fulfilled && getStoredPlayer(matchID.value);
   
@@ -82,11 +84,6 @@ function GamePage(props: GamePageProps) {
   if(matchID.fulfilled && numPlayers.unset) {
     const p = LobbyClient.numPlayers(game, matchID.value);
     numPlayers.setPromise(p).catch(setError);
-  }
-
-  const startMatch = (numPlayers: number) => {
-    const p = LobbyClient.createMatch(game, numPlayers);
-    matchID.setPromise(p).then(openMatchPage).catch(setError);
   }
 
   const joinMatch = (name: string) => {
@@ -101,7 +98,16 @@ function GamePage(props: GamePageProps) {
   }
 
   if(matchID.unset) {
-    return <StartMatch game={game} startMatch={startMatch} />
+    const setNumPlayers = (numPlayers: number) => {
+        if(numPlayers === 1) {
+          setLocal(true);
+          return null; //KLUDGE
+        } else {
+          const p = LobbyClient.createMatch(game, numPlayers);
+          matchID.setPromise(p).then(openMatchPage).catch(setError);
+        }
+    }
+    return <NumPlayers game={game} numPlayers={setNumPlayers} />
   }
 
   if (matchID.fulfilled && player.unset) {
@@ -109,7 +115,8 @@ function GamePage(props: GamePageProps) {
   }
 
   if (matchID.fulfilled && player.fulfilled && numPlayers.fulfilled) {
-    return <GamePlay game={game} matchID={matchID.value} player={player.value} numPlayers={numPlayers.value}/>
+    return <GamePlay.MultiPlayer game={game} matchID={matchID.value} 
+      player={player.value} numPlayers={numPlayers.value}/>
   }
 
   assert(!(matchID.unset && player.unset && numPlayers.unset),

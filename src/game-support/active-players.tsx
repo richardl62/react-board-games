@@ -18,7 +18,7 @@ const PlayerName = styled.div<PlayerNameProps>`
 `;
 
 interface ActivePlayerProps extends Bgio.BoardProps {
-  setPlayersReady?: (arg: boolean) => void;
+  setPlayersReady: (arg: boolean) => void;
 }
 
 export function ActivePlayers(props: ActivePlayerProps) {
@@ -58,7 +58,7 @@ export function ActivePlayers(props: ActivePlayerProps) {
   }
 
   const numToJoin = matchData.length - playerElems.length;
-  setPlayersReady && setPlayersReady(numToJoin === 0);
+  setPlayersReady(numToJoin === 0);
   
   return (
     <div>

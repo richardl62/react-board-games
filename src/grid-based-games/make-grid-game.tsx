@@ -46,13 +46,17 @@ function GameWrapper({ bgioProps, gameDefinition }: AppFriendlyGameProps) {
   const gameControlProps = useGameControlProps(gameDefinition);
   const gameControl = new GameControl(bgioProps, gameControlProps);
 
-
-  return (
-    <div>
-      <ActivePlayers {...bgioProps} setPlayersReady={setPlayersReady} />
-      {playersReady ? <SimpleGame gameControl={gameControl} /> : null}
-    </div>
-  );
+  if(bgioProps.matchID) {
+    return (
+      <div>
+        <ActivePlayers {...bgioProps} setPlayersReady={setPlayersReady} />
+        {playersReady ? <SimpleGame gameControl={gameControl} /> : null}
+      </div>
+    );
+  } else {
+    //KLUDGE? Assume this is a local game with no player information to display
+    return <SimpleGame gameControl={gameControl} />
+  }
 }
 
 export function makeGridGame<GameSpecific = void>(

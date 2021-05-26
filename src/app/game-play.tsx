@@ -4,29 +4,38 @@ import { SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 
-interface GamePlayProps {
+interface LocalProps {
   game: AppGame;
-  local?: boolean;
-  numPlayers?: number;
-
-  matchID?: MatchID;
-  player?: Player;
 };
 
-export function GamePlay({ game, local, matchID, numPlayers, player }: GamePlayProps) {
+export function Local({ game }: LocalProps) {
+  const GameClient = Client({
+    game: game,
+    board: game.board,
+  });
 
-  let multiplayer;
-  if(!local) {
-    const lobbyServer = UrlParams.lobbyServer();
-    multiplayer = SocketIO({ server: lobbyServer}) 
-  }
+  return (
+    <div>
+      <GameClient />
+    </div>
+  );
+}
 
+interface MultiPlayerProps {
+  game: AppGame;
+  matchID: MatchID;
+  numPlayers: number;
+  player: Player;
+};
+
+export function MultiPlayer({ game, matchID, numPlayers, player }: MultiPlayerProps) {
+  const lobbyServer = UrlParams.lobbyServer();
   let debugPanel = UrlParams.bgioDebugPanel;
 
   const GameClient = Client({
     game: game,
     board: game.board,
-    multiplayer: multiplayer,
+    multiplayer: SocketIO({ server: lobbyServer}),
 
     numPlayers: numPlayers,
     debug: debugPanel,
@@ -34,7 +43,8 @@ export function GamePlay({ game, local, matchID, numPlayers, player }: GamePlayP
 
   return (
     <div>
-      <GameClient 
+      <GameClient matchID={matchID.mid} 
+        playerID={player.id} credentials={player.credentials}
       />
     </div>
   );
