@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
+import { SquareStyle } from '.';
 import { colors as defaultColors } from '../colors';
 
 const PIECE='piece';
@@ -30,6 +31,7 @@ const StyledSquare = styled.div<StyledSquareProps>`
         background-color: ${props => props.borderColor };
         }
 `;
+
 const BorderHelper = styled.div<{ backgroundColor: string }>`
     position: absolute;
     top: 0;
@@ -72,14 +74,6 @@ const HighlightMarker = styled.div<{color:string}>`
 
     background-color: ${props => props.color};  
 `
-
-export interface SquareStyle {
-    backgroundColor?: string;
-
-    // false -> suppress, true-> default color, string -> specified color;
-    showHover?: boolean | string;
-    highlight?: boolean | string;
-}
 
 export interface OnFunctions<T> { // Not quite the right name
     onMouseDown?: (label: T) => void;

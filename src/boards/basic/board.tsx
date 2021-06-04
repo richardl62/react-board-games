@@ -3,6 +3,7 @@ import { colors as defaultColors } from "../colors";
 import styled from 'styled-components';
 import { applyDefaults, map2DArray } from '../../shared/tools';
 import { Square, SquareProps } from './square';
+import { BoardStyle } from './types';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
@@ -43,19 +44,6 @@ function rowCol(array: Array<Array<any>>) {
 export interface Element<T=unknown> extends Omit<SquareProps<T>,'children'> {
     key: string; // React key
     piece: ReactNode;
-}
-
-export interface BoardStyle {
-    borderLabels?: boolean;
-    reverseRows?: boolean;
-
-    gridGap?: string;
-    borderWidth?: string;
-
-    colors?: {
-        background: string;
-        labels: string;
-    } 
 }
 
 export interface BoardProps<T = never> extends BoardStyle {
