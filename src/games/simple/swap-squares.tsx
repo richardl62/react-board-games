@@ -2,10 +2,10 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { defaultColors } from '../../boards';
 import { SelfTestBoard, Element } from '../../boards/move-enabled';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
+import { checkeredColor } from '../../boards';
 
 interface RowCol {
   row: number;
@@ -26,7 +26,7 @@ const Square = styled.div<SquareProps>`
   margin: auto;
 `;
 
-interface SquareDef extends SquareProps {
+export interface SquareDef extends SquareProps {
   value: number;
 }
 
@@ -50,19 +50,6 @@ const BoardHolder = styled.div`
   margin: 3px;
 `;
 
-function squareColor(row: number, col: number, sq: SquareDef, checkered: boolean) {
-  if (sq.moveStart) {
-    return 'gold';
-  }
-
-  if (!checkered) {
-    return defaultColors.whiteSquare;
-  }
-
-  const asTopLeft = (row + col) % 2 === 0;
-  return asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
-}
-
 function makeSquares(G: G, { checkered }: { checkered: boolean }) {
   const nRows = G.squares.length;
   const nCols = G.squares[0].length;
@@ -73,11 +60,10 @@ function makeSquares(G: G, { checkered }: { checkered: boolean }) {
     const row = [];
 
     for (let cn = 0; cn < nCols; ++cn) {
-      ;
       const sq = G.squares[rn][cn];
 
       const elem: Element = {
-        backgroundColor: squareColor(rn, cn, sq, checkered),
+        backgroundColor: checkeredColor(rn, cn, sq),
         showHover: true,
         piece: <Square {...sq}>{sq.value}</Square>,
 
