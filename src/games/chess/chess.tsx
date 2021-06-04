@@ -1,33 +1,23 @@
 import React from 'react';
 import { makeSimpleName } from '../../game-support';
 import { AppGame, Bgio } from '../../shared/types';
-import { Board, Element as BoardElement } from '../../boards/move-enabled';
-import { map2DArray } from '../../shared/tools';
+import { Board } from '../../boards/move-enabled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import styled from 'styled-components';
 import { Piece } from "./piece";
-
-const StyledSquare = styled.div`
-  height: 50px;
-  width: 50px;
-`
-
-function Square({pieceName} : {pieceName : string | null}) {
-  return <StyledSquare>{pieceName && <Piece pieceName={pieceName}/>} </StyledSquare>
-}
+import { checkedBoardProps } from '../../boards';
 
 type G = Array<Array<string|null>>;
 
 function MainBoard(props: Bgio.BoardProps<G>) {
-  const elements = map2DArray(props.G, 
-      (name: string | null) : BoardElement => {
-        return {piece: <Square pieceName={name} />}
-      }
-  );
+  const pieces = props.G.map( row => row.map(
+    name => name && <Piece pieceName={name} />
+  ));
+
+  const boardProps = checkedBoardProps(pieces);
 
   return (<DndProvider backend={HTML5Backend}>
-      <Board elements={elements} />
+      <Board {...boardProps} />
     </DndProvider>)
 }
 
