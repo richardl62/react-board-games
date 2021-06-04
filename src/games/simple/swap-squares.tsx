@@ -2,7 +2,7 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { colors } from '../../boards';
+import { defaultColors } from '../../boards';
 import { SelfTestBoard, Element } from '../../boards/move-enabled';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
@@ -56,11 +56,11 @@ function squareColor(row: number, col: number, sq: SquareDef, checkered: boolean
   }
 
   if (!checkered) {
-    return colors.whiteSquare;
+    return defaultColors.whiteSquare;
   }
 
   const asTopLeft = (row + col) % 2 === 0;
-  return asTopLeft ? colors.whiteSquare : colors.blackSquare;
+  return asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
 }
 
 function makeSquares(G: G, { checkered }: { checkered: boolean }) {

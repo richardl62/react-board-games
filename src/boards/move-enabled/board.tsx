@@ -3,8 +3,9 @@ import { map2DArray } from "../../shared/tools";
 import * as Basic from "../basic";
 import { BoardProps, SquareID } from "./types";
 import { MoveStatus, makeBasicOnFunctions } from "./make-on-functions";
+import { SquareStyle } from "../interfaces";
 
-export interface Element extends Basic.SquareStyle {
+export interface Element extends SquareStyle {
     piece: ReactNode;
 } 
 

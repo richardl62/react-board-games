@@ -1,6 +1,5 @@
-import * as Basic from "../basic";
+import { BoardStyle } from "../interfaces";
 import { Element } from "./board";
-
 
 export interface SquareID {
     row: number;
@@ -8,7 +7,7 @@ export interface SquareID {
     boardID?: string;
 }
 
-export interface BoardProps extends Basic.BoardStyle {
+export interface BoardProps extends BoardStyle {
     elements: Array<Array<Element>>;
     id?: string;
 
@@ -37,3 +36,4 @@ export interface BoardProps extends Basic.BoardStyle {
      */
     allowDrag?: (from: SquareID) => boolean;
 }
+ 

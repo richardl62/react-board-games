@@ -1,3 +1,15 @@
+export const defaultColors = {
+    boardBackground: 'rgb(100,0,0)',
+    boardBorderLabels: 'white',
+    
+    square: 'white',
+    blackSquare: 'rgb(165,42,42)',
+    whiteSquare: 'rgb(255,248,220)',
+
+    squareHover: 'rgb(200 200 100)',
+    squareHighlight: 'rgb(83 243 10)', // bright green
+};
+
 export interface RowCol {
     row: number;
     col: number;
@@ -24,3 +36,4 @@ export interface BoardStyle {
 
     squareStyle?: (rc: RowCol) => SquareStyle;
 }
+

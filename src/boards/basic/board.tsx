@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react';
-import { colors as defaultColors } from "../colors";
 import styled from 'styled-components';
 import { applyDefaults, map2DArray } from '../../shared/tools';
+import { BoardStyle, defaultColors } from "../interfaces";
 import { Square, SquareProps } from './square';
-import { BoardStyle } from './types';
 
 const Corner = styled.div<{width: string}>`
     width: ${props => props.width};
