@@ -1,26 +1,61 @@
-import { StartingPieces, makeGridGameState, makeGridGame } from "../../grid-based-games";
+import React from 'react';
+import { makeSimpleName } from '../../game-support';
+import { AppGame, Bgio } from '../../shared/types';
+import { Board, Element as BoardElement } from '../../boards/move-enabled';
+import { map2DArray } from '../../shared/tools';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import styled from 'styled-components';
 import { Piece } from "./piece";
 
-function chess(displayName: string, pieces: StartingPieces) {
-  return makeGridGame({
+const StyledSquare = styled.div`
+  height: 50px;
+  width: 50px;
+`
+
+function Square({pieceName} : {pieceName : string | null}) {
+  return <StyledSquare>{pieceName && <Piece pieceName={pieceName}/>} </StyledSquare>
+}
+
+type G = Array<Array<string|null>>;
+
+function MainBoard(props: Bgio.BoardProps<G>) {
+  const elements = map2DArray(props.G, 
+      (name: string | null) : BoardElement => {
+        return {piece: <Square pieceName={name} />}
+      }
+  );
+
+  return (<DndProvider backend={HTML5Backend}>
+      <Board elements={elements} />
+    </DndProvider>)
+}
+
+function ChessBoard(props: Bgio.BoardProps<G>) {
+  return (
+    <div>
+      <MainBoard {...props} />
+    </div>
+  )
+}
+
+function chess(displayName: string, pieces: G) : AppGame {
+  return {
+    name: makeSimpleName(displayName),
     displayName: displayName,
 
     minPlayers: 1,
-    maxPlayers: 2,
-    setup: () => makeGridGameState(pieces),
+    maxPlayers: 1, //TEMPORARY
+    setup: () => pieces,
    
-    offBoardPieces: {
-      top: ['p', 'n', 'b', 'r', 'q', 'k'],
-      bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
-    },
+    moves: [],
+    // offBoardPieces: {
+    //   top: ['p', 'n', 'b', 'r', 'q', 'k'],
+    //   bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
+    // },
 
-    boardStyle: {
-      checkered: true,
-      labels: true,
-    },
-    
-    renderPiece: Piece,
-  });
+    board: ChessBoard
+  };
 }
 
 const games = [
