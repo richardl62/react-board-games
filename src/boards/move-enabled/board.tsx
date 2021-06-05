@@ -2,7 +2,7 @@ import React, { ReactNode, useRef } from "react";
 import { map2DArray } from "../../shared/tools";
 import * as Basic from "../basic";
 import { BoardProps, SquareID } from "./types";
-import { MoveStatus, makeBasicOnFunctions } from "./make-on-functions";
+import { MoveStatus } from "./make-on-functions";
 import { SquareStyle } from "../interfaces";
 
 export interface Element extends SquareStyle {
@@ -12,8 +12,7 @@ export interface Element extends SquareStyle {
 export function Board(props: BoardProps) {  
     const {id, elements: pieces } = props;
 
-    const moveStatus = useRef<MoveStatus>(new MoveStatus()).current;
-    const basicOnFunctions = makeBasicOnFunctions(moveStatus, props);
+    const moveStatus = useRef<MoveStatus>(new MoveStatus(props)).current;
     
     const basicElements = map2DArray(pieces, 
         (elem, [row,col]) : Basic.Element<SquareID> => {
@@ -23,7 +22,7 @@ export function Board(props: BoardProps) {
                 ...elem,
                 key: `${row}-${col}`,
                 label: squareID,
-                ...basicOnFunctions
+                ...moveStatus.basicOnFunctions()
             }
         }
     );

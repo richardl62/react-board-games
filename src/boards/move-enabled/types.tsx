@@ -7,10 +7,7 @@ export interface SquareID {
     boardID?: string;
 }
 
-export interface BoardProps extends BoardStyle {
-    elements: Array<Array<Element>>;
-    id?: string;
-
+export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
     /** Call at the (possible) start of a move. If false (rather then undefined
@@ -35,5 +32,10 @@ export interface BoardProps extends BoardStyle {
      * the start square for that move.
      */
     allowDrag?: (from: SquareID) => boolean;
+}
+
+export interface BoardProps extends BoardStyle, MoveFunctions {
+    elements: Array<Array<Element>>;
+    id?: string;
 }
  

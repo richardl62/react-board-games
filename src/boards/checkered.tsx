@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { defaultColors, RowCol } from './interfaces';
+import { defaultColors } from './interfaces';
 import { BoardProps, Element } from './move-enabled';
+import { MoveStatus } from './move-enabled/make-on-functions';
 
 export function checkeredColor(row: number, col: number, options?: {moveStart: boolean}) {
   if (options?.moveStart) {
@@ -20,7 +21,7 @@ const StyledSquare = styled.div`
 
 export function checkedBoardProps (
   pieces: Array<Array<ReactNode>>,
-  moveStart?: RowCol
+  moveStatus?: MoveStatus,
 ): BoardProps {
 
   const elements = pieces.map(
@@ -34,10 +35,12 @@ export function checkedBoardProps (
         }
       )
   )
-
-  return {
+  
+  const styleProps = {
     elements: elements,
     borderLabels: true,
-    borderWidth: `calc(${squareSize} / 2)`,
+    borderWidth: `calc(${squareSize} / 2)`
   }
+
+  return styleProps;
 }
