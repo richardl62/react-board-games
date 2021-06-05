@@ -3,7 +3,7 @@ import { sameJSON } from "../../shared/tools";
 import * as Basic from "../basic";
 import { MoveFunctions, SquareID } from "./types";
 
-export class MoveStatus {
+export class ClickDrag {
 
     constructor(moveFunctions: MoveFunctions) {
         this.moveFunctions = moveFunctions;

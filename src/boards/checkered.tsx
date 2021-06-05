@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { defaultColors } from './interfaces';
 import { BoardProps, Element } from './move-enabled';
-import { MoveStatus } from './move-enabled/make-on-functions';
+import { ClickDrag } from './move-enabled/click-drag';
 
 export function checkeredColor(row: number, col: number, options?: {moveStart: boolean}) {
   if (options?.moveStart) {
@@ -21,7 +21,7 @@ const StyledSquare = styled.div`
 
 export function checkedBoardProps (
   pieces: Array<Array<ReactNode>>,
-  moveStatus?: MoveStatus,
+  moveStatus?: ClickDrag,
 ): BoardProps {
 
   const elements = pieces.map(

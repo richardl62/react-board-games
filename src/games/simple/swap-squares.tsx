@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import { Board, Element } from '../../boards/move-enabled';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { checkeredColor } from '../../boards';
+import { ClickDrag } from '../../boards/move-enabled/click-drag';
 
 interface RowCol {
   row: number;
@@ -49,6 +50,29 @@ const BoardHolder = styled.div`
   border: 5px purple solid;
   margin: 3px;
 `;
+
+function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
+  const onReset = () => {
+    moves.reset();
+  }
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div>
+        <BoardHolder>
+          <Board
+            elements={makeSquares(G, { checkered: true })}
+            id={'dummy-game'}
+
+            onMoveStart={moves.start}
+            onMoveEnd={moves.end}
+          />
+        </BoardHolder>
+      </div>
+
+      <button type='button' onClick={onReset}>Reset</button>
+    </DndProvider>
+  )
+}
 
 function makeSquares(G: G, { checkered }: { checkered: boolean }) {
   const nRows = G.squares.length;
@@ -115,28 +139,7 @@ export const swapSquares: AppGame = {
     },
   },
 
-  board: ({ G, moves, events, reset }: Bgio.BoardProps<G>) => {
-    const onReset = () => {
-      moves.reset();
-    }
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <div>
-          <BoardHolder>
-            <Board
-              elements={makeSquares(G, { checkered: true })}
-              id={'dummy-game'}
-
-              onMoveStart={moves.start}
-              onMoveEnd={moves.end}
-            />
-          </BoardHolder>
-        </div>
-
-        <button type='button' onClick={onReset}>Reset</button>
-      </DndProvider>
-    )
-  },
+  board: SwapSquares,
 
 }
 
