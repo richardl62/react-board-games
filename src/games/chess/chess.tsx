@@ -5,16 +5,35 @@ import { Board } from '../../boards/move-enabled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Piece } from "./piece";
-import { checkedBoardProps } from '../../boards';
+import { BoardProps, BoardElement } from '../../boards/basic';
+import { makeCheckered } from '../../boards/basic/make-checkered';
+import styled from 'styled-components';
+import { squareSize } from '../../boards';
 
 type G = Array<Array<string|null>>;
 
+const Square = styled.div`
+  width: ${squareSize};
+  height: ${squareSize};
+`
 function MainBoard(props: Bgio.BoardProps<G>) {
-  const pieces = props.G.map( row => row.map(
-    name => name && <Piece pieceName={name} />
+  
+  const elements = props.G.map( row => row.map(
+    (name) : BoardElement  => {
+      return {
+        key: 'asd', // WRONG
+        label: 'chess', // WRONG
+
+        piece: <Square>{name && <Piece pieceName={name}/>}</Square>,
+      };
+    }
   ));
 
-  const boardProps = checkedBoardProps(pieces);
+  const boardProps : BoardProps = {
+    elements: elements,
+  }
+
+  makeCheckered(boardProps);
 
   return (<DndProvider backend={HTML5Backend}>
       <Board {...boardProps} />

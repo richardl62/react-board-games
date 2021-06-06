@@ -37,3 +37,5 @@ export interface BoardStyle {
     squareStyle?: (rc: RowCol) => SquareStyle;
 }
 
+// Recommended square size. KLUDGE
+export const squareSize = '50px';

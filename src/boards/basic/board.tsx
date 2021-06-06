@@ -40,16 +40,16 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-export interface Element<T=unknown> extends Omit<SquareProps<T>,'children'> {
+export interface BoardElement<T=unknown> extends Omit<SquareProps<T>,'children'> {
     key: string; // React key
     piece: ReactNode;
 }
 
-export interface BoardProps<T = never> extends BoardStyle {
-    elements: Array<Array<Element<T>>>;
+export interface BoardProps<T = unknown> extends BoardStyle {
+    elements: Array<Array<BoardElement<T>>>;
 }
 
-export function Board<T = never>(props: BoardProps<T>) {  
+export function Board<T = unknown>(props: BoardProps<T>) {  
     const defaultProps = {
         borderLabels: false,
         reverseRows: false,

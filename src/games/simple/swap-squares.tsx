@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
@@ -6,7 +6,6 @@ import { Board, Element } from '../../boards/move-enabled';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { checkeredColor } from '../../boards';
-import { ClickDrag } from '../../boards/move-enabled/click-drag';
 
 interface RowCol {
   row: number;

@@ -15,7 +15,7 @@ export function Board(props: BoardProps) {
     const moveStatus = useRef<ClickDrag>(new ClickDrag(props)).current;
     
     const basicElements = map2DArray(pieces, 
-        (elem, [row,col]) : Basic.Element<SquareID> => {
+        (elem, [row,col]) : Basic.BoardElement<SquareID> => {
             const squareID = {row:row, col:col, id:id};
       
             return {
