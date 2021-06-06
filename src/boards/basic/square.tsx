@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
+import { RowCol } from '../../grid-based-games';
 import { SquareStyle, defaultColors } from '../interfaces';
 
 const PIECE='piece';
@@ -44,7 +45,6 @@ const BorderHelper = styled.div<{ backgroundColor: string }>`
     height: 80%;
     margin: 10%;
 
-
     background-color: ${props => props.backgroundColor};
 
     z-index: 1;
@@ -74,24 +74,24 @@ const HighlightMarker = styled.div<{color:string}>`
     background-color: ${props => props.color};  
 `
 
-export interface OnFunctions<T> { // Not quite the right name
-    onMouseDown?: (label: T) => void;
-    onMouseUp?: (label: T) => void;
-    onClick?: (label: T) => void;
+export interface OnFunctions { // Not quite the right name
+    onMouseDown?: (square: RowCol) => void;
+    onMouseUp?: (square: RowCol) => void;
+    onClick?: (square: RowCol) => void;
 
-    onDrop?: (fromLabel: T, toLabel: T) => void;
+    onDrop?: (from: RowCol, to: RowCol) => void;
     
     /** Called at start of drag. Defaults to always true. */
-    allowDrag?: (from: T)=>boolean;
+    allowDrag?: (from: RowCol)=>boolean;
 }
 
-export interface SquareProps<T> extends SquareStyle, OnFunctions<T> {
+export interface SquareProps extends SquareStyle, OnFunctions {
     children: ReactNode;
-    label: T;
+    label: RowCol;
 }
 
 
-export function Square<Label>(props: SquareProps<Label>) {
+export function Square(props: SquareProps) {
     const { children, showHover,
             highlight, label, onClick, onMouseDown, onMouseUp, onDrop } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
@@ -112,7 +112,7 @@ export function Square<Label>(props: SquareProps<Label>) {
 
     const [ dropCollection, dropRef] = useDrop({
         accept: PIECE,
-        drop: (from: Label) => onDrop?.(from, label),
+        drop: (from: RowCol) => onDrop?.(from, label),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop(),

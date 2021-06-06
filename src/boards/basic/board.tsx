@@ -14,7 +14,6 @@ const BorderElement = styled.div<{color: string}>`
     font-family: 'Helvetica'; // No special reason
 `;
 
-
 const StyledGrid = styled.div<{
     nCols: number, 
     gridGap: string,
@@ -32,7 +31,6 @@ const StyledGrid = styled.div<{
     border: ${props => props.borderWidth} solid ${props => props.backgroundColor};
 `; 
 
-
 function rowCol(array: Array<Array<any>>) {
     return {
         nRows: array.length,
@@ -40,16 +38,16 @@ function rowCol(array: Array<Array<any>>) {
     }
 }
 
-export interface BoardElement<T=unknown> extends Omit<SquareProps<T>,'children'> {
+export interface BoardElement extends Omit<SquareProps,'children'> {
     key: string; // React key
     piece: ReactNode;
 }
 
-export interface BoardProps<T = unknown> extends BoardStyle {
-    elements: Array<Array<BoardElement<T>>>;
+export interface BoardProps extends BoardStyle {
+    elements: Array<Array<BoardElement>>;
 }
 
-export function Board<T = unknown>(props: BoardProps<T>) {  
+export function Board(props: BoardProps) {  
     const defaultProps = {
         borderLabels: false,
         reverseRows: false,

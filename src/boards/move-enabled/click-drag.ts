@@ -62,7 +62,7 @@ export class ClickDrag {
             onMoveEnd?.(start, sq);
         }
 
-        const onFuncs: Basic.OnFunctions<SquareID> = {
+        const onFuncs: Basic.OnFunctions = {
 
             onMouseDown: (sq: SquareID) => {
                 //console.log("onMouseDown", sq.toString());

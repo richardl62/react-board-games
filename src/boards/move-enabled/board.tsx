@@ -1,7 +1,7 @@
 import React, { ReactNode, useRef } from "react";
 import { map2DArray } from "../../shared/tools";
 import * as Basic from "../basic";
-import { BoardProps, SquareID } from "./types";
+import { BoardProps } from "./types";
 import { ClickDrag } from "./click-drag";
 import { SquareStyle } from "../interfaces";
 
@@ -15,7 +15,7 @@ export function Board(props: BoardProps) {
     const moveStatus = useRef<ClickDrag>(new ClickDrag(props)).current;
     
     const basicElements = map2DArray(pieces, 
-        (elem, [row,col]) : Basic.BoardElement<SquareID> => {
+        (elem, [row,col]) : Basic.BoardElement => {
             const squareID = {row:row, col:col, id:id};
       
             return {
@@ -27,7 +27,7 @@ export function Board(props: BoardProps) {
         }
     );
 
-    const basicBoardProps : Basic.BoardProps<SquareID> = {
+    const basicBoardProps : Basic.BoardProps = {
         ...props,
         elements: basicElements,
     };

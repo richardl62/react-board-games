@@ -22,7 +22,7 @@ function MainBoard(props: Bgio.BoardProps<G>) {
     (name) : BoardElement  => {
       return {
         key: 'asd', // WRONG
-        label: 'chess', // WRONG
+        label: {row:1, col: 1}, // WRONG
 
         piece: <Square>{name && <Piece pieceName={name}/>}</Square>,
       };

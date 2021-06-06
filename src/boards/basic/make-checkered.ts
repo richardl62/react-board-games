@@ -12,9 +12,9 @@ export function checkeredColor(row: number, col: number) {
  * Props are modified in place. The input props (after modification) are 
  * returned.
  */
-export function makeCheckered<T>(
-  props: BoardProps<T>
-): BoardProps<T> {
+export function makeCheckered(
+  props: BoardProps
+): BoardProps {
 
   const { elements } = props;
 
