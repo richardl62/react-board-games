@@ -10,17 +10,14 @@ export interface Element extends SquareStyle {
 } 
 
 export function Board(props: BoardProps) {  
-    const {id, elements: pieces } = props;
+    const {elements: pieces } = props;
 
     const moveStatus = useRef<ClickDrag>(new ClickDrag(props)).current;
     
     const basicElements = map2DArray(pieces, 
         (elem, [row,col]) : Basic.BoardElement => {
-            const squareID = {row:row, col:col, id:id};
-      
             return {
                 ...elem,
-                label: squareID,
                 ...moveStatus.basicOnFunctions()
             }
         }
