@@ -12,6 +12,7 @@ export function Local({ game }: LocalProps) {
   const GameClient = Client({
     game: game,
     board: game.board,
+    debug: UrlParams.bgioDebugPanel,
   });
 
   return (
@@ -29,16 +30,17 @@ interface MultiPlayerProps {
 };
 
 export function MultiPlayer({ game, matchID, numPlayers, player }: MultiPlayerProps) {
-  const lobbyServer = UrlParams.lobbyServer();
-  let debugPanel = UrlParams.bgioDebugPanel;
+  console.log("UrlParams", UrlParams);
+
+  const server = UrlParams.lobbyServer();
 
   const GameClient = Client({
     game: game,
     board: game.board,
-    multiplayer: SocketIO({ server: lobbyServer}),
+    multiplayer: SocketIO({ server: server}),
 
     numPlayers: numPlayers,
-    debug: debugPanel,
+    debug: UrlParams.bgioDebugPanel,
   });
 
   return (
