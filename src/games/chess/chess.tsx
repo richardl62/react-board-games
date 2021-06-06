@@ -21,7 +21,6 @@ function MainBoard(props: Bgio.BoardProps<G>) {
   const elements = props.G.map( row => row.map(
     (name) : BoardElement  => {
       return {
-        key: 'asd', // WRONG
         label: {row:1, col: 1}, // WRONG
 
         piece: <Square>{name && <Piece pieceName={name}/>}</Square>,

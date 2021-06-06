@@ -20,7 +20,6 @@ export function Board(props: BoardProps) {
       
             return {
                 ...elem,
-                key: `${row}-${col}`,
                 label: squareID,
                 ...moveStatus.basicOnFunctions()
             }

@@ -39,10 +39,8 @@ function rowCol(array: Array<Array<any>>) {
 }
 
 export interface BoardElement extends Omit<SquareProps,'children'> {
-    key: string; // React key
     piece: ReactNode;
 }
-
 export interface BoardProps extends BoardStyle {
     elements: Array<Array<BoardElement>>;
 }
@@ -65,9 +63,10 @@ export function Board(props: BoardProps) {
     const { nRows, nCols } = rowCol(squares);
 
     // elems will include border elements and squares.
-    let elems: Array<Array<JSX.Element>> = map2DArray(squares, squareProps => 
-        <Square {...squareProps}>{squareProps.piece}</Square>
-        );
+    let elems: Array<Array<JSX.Element>> = map2DArray(squares, 
+        (squareProps, indices) => 
+            <Square key={JSON.stringify(indices)} {...squareProps}>{squareProps.piece}</Square>
+    );
     
     const borderElement = (label:string|number, keyStart: string) => {
 
