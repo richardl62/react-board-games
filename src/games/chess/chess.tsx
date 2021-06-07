@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { makeSimpleName } from '../../game-support';
 import { AppGame, Bgio } from '../../shared/types';
 import { Board } from '../../boards/move-enabled';
@@ -8,7 +8,9 @@ import { Piece } from "./piece";
 import { BoardProps, BoardElement } from '../../boards/basic';
 import { makeCheckered } from '../../boards/basic/make-checkered';
 import styled from 'styled-components';
-import { squareSize } from '../../boards';
+import { MoveFunctions, SquareID, squareSize } from '../../boards';
+import { addOnFunctions } from '../../boards/basic/add-on-functions';
+import { ClickDrag } from '../../boards/basic/click-drag';
 
 type G = Array<Array<string|null>>;
 
@@ -16,6 +18,22 @@ const Square = styled.div`
   width: ${squareSize};
   height: ${squareSize};
 `
+const moveFunctions: MoveFunctions = {
+  onClick: (square: SquareID) => {
+    alert('onClick');
+    console.log('onClick', square);
+  },
+
+  onMoveStart: (square: SquareID) => {
+    console.log('onMoveStart', square);
+  },
+
+  onMoveEnd: (from: SquareID, to: SquareID | null) => {
+    console.log('onMoveEnd', from, to);
+  },
+
+};
+
 function MainBoard(props: Bgio.BoardProps<G>) {
   
   const elements = props.G.map( row => row.map(
@@ -30,6 +48,12 @@ function MainBoard(props: Bgio.BoardProps<G>) {
     elements: elements,
   }
 
+  const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
+
+  // const onFunctions = clickDrag.basicOnFunctions();
+  // onFunctions.onClick?.({row: 111, col: 111});
+
+  addOnFunctions(boardProps, clickDrag);
   makeCheckered(boardProps);
 
   return (<DndProvider backend={HTML5Backend}>

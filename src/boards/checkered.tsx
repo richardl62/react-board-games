@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { defaultColors } from './interfaces';
 import { BoardProps, Element } from './move-enabled';
-import { ClickDrag } from './move-enabled/click-drag';
+import { ClickDrag } from './basic/click-drag';
 
 export function checkeredColor(row: number, col: number, options?: {moveStart: boolean}) {
   if (options?.moveStart) {

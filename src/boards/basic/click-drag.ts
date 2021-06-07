@@ -1,7 +1,7 @@
 import { assertAlert as assert } from '../../shared/assert';
 import { sameJSON } from "../../shared/tools";
-import * as Basic from "../basic";
-import { MoveFunctions, SquareID } from "./types";
+import { OnFunctions } from "./square";
+import { MoveFunctions, SquareID } from "../interfaces";
 
 export class ClickDrag {
 
@@ -62,7 +62,7 @@ export class ClickDrag {
             onMoveEnd?.(start, sq);
         }
 
-        const onFuncs: Basic.OnFunctions = {
+        const onFuncs: OnFunctions = {
 
             onMouseDown: (sq: SquareID) => {
                 //console.log("onMouseDown", sq.toString());

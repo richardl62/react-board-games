@@ -2,7 +2,7 @@ import React, { ReactNode, useRef } from "react";
 import { map2DArray } from "../../shared/tools";
 import * as Basic from "../basic";
 import { BoardProps } from "./types";
-import { ClickDrag } from "./click-drag";
+import { ClickDrag } from "../basic/click-drag";
 import { SquareStyle } from "../interfaces";
 
 export interface Element extends SquareStyle {

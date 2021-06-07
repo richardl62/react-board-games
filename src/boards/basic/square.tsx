@@ -136,6 +136,10 @@ export function Square(props: SquareProps) {
         borderColor = "";
     }
 
+    const doOnClick = () => {
+        if(onClick) 
+            onClick(label)
+    }
     return (
         <StyledSquare
             ref={dropRef}
@@ -143,7 +147,8 @@ export function Square(props: SquareProps) {
             borderColor={borderColor}
             showBorder={showBorder}
 
-            onClick={onClick && (() => onClick(label))}
+            //onClick={onClick && (() => onClick(label))}
+            onClick={doOnClick}
             onMouseDown={onMouseDown && (() => onMouseDown(label))}
             onMouseUp={onMouseUp && (() => onMouseUp(label))}
         >
