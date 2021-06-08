@@ -20,7 +20,7 @@ const Square = styled.div`
 `
 const moveFunctions: Required<MoveFunctions> = {
   onClick: (square: SquareID) => {
-    alert('onClick');
+    //alert('onClick');
     console.log('onClick', square);
   },
 
@@ -51,7 +51,9 @@ function MainBoard(props: Bgio.BoardProps<G>) {
     elements: elements,
   }
 
+  console.log("In MainBoard", "moveFunctions=",moveFunctions);
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
+  console.log("In MainBoard", "clickDrag.basicOnFunctions())=",clickDrag.basicOnFunctions());
 
   addOnFunctions(boardProps, clickDrag.basicOnFunctions());
   makeCheckered(boardProps);

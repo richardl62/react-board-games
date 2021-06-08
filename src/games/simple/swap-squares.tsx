@@ -64,6 +64,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
 
             onMoveStart={moves.start}
             onMoveEnd={moves.end}
+            onClick={()=>console.log("square clicked")}
           />
         </BoardHolder>
       </div>
