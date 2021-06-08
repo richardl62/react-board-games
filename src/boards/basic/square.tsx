@@ -137,8 +137,10 @@ export function Square(props: SquareProps) {
     }
 
     const doOnClick = () => {
-        if(onClick) 
+        console.log("doOnClick", onClick)
+        if(onClick) {
             onClick(label)
+        }
     }
     return (
         <StyledSquare

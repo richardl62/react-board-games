@@ -43,8 +43,11 @@ export class ClickDrag {
     }
 
     basicOnFunctions() {
-        const { onClick, onMoveStart, onMoveEnd, allowDrag } = this.moveFunctions;
+        const { onClick: userOnClick, onMoveStart, onMoveEnd, allowDrag } = this.moveFunctions;
 
+        /*
+         * Helper functions
+        */
         const moveStart = (sq: SquareID) => {
             this.recordMoveStart(sq);
 
@@ -62,6 +65,7 @@ export class ClickDrag {
             onMoveEnd?.(start, sq);
         }
 
+        
         const onFuncs: OnFunctions = {
 
             onMouseDown: (sq: SquareID) => {
@@ -81,7 +85,7 @@ export class ClickDrag {
             onClick: (id: SquareID) => {
                 //console.log("onClick", id.toString());
 
-                onClick?.(id);
+                userOnClick?.(id);
 
                 if (this.start) {
                     if (this.firstSquareClicked) {
