@@ -51,9 +51,7 @@ function MainBoard(props: Bgio.BoardProps<G>) {
     elements: elements,
   }
 
-  console.log("In MainBoard", "moveFunctions=",moveFunctions);
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
-  console.log("In MainBoard", "clickDrag.basicOnFunctions())=",clickDrag.basicOnFunctions());
 
   addOnFunctions(boardProps, clickDrag.basicOnFunctions());
   makeCheckered(boardProps);

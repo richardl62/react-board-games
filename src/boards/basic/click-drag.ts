@@ -7,8 +7,8 @@ export class ClickDrag {
 
     constructor(moveFunctions: MoveFunctions) {
         this.moveFunctions = moveFunctions;
-        console.log("ClickDrag constructor: ", this.moveFunctions);
     }
+
     readonly moveFunctions: MoveFunctions;
 
     private _start: SquareID | null = null;
@@ -75,8 +75,7 @@ export class ClickDrag {
         }
     }
 
-    /*private*/ onClick(id: SquareID) {
-        console.log("ClickDrag.onClick", id, this.moveFunctions, this.moveFunctions.onClick);
+    onClick(id: SquareID) {
 
         this.moveFunctions.onClick?.(id);
 
