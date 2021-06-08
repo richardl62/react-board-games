@@ -9,7 +9,7 @@ export interface Element extends SquareStyle {
     piece: ReactNode;
 } 
 
-export function Board(props: BoardProps) {  
+export function MoveEnabledBoard(props: BoardProps) {  
     const {elements: pieces } = props;
 
     const clickDrag = useRef(new ClickDrag(props)).current;

@@ -2,7 +2,7 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, Element } from '../../boards/move-enabled';
+import { MoveEnabledBoard, Element } from '../../boards/move-enabled';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { checkeredColor } from '../../boards';
@@ -58,7 +58,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     <DndProvider backend={HTML5Backend}>
       <div>
         <BoardHolder>
-          <Board
+          <MoveEnabledBoard
             elements={makeSquares(G, { checkered: true })}
             id={'dummy-game'}
 

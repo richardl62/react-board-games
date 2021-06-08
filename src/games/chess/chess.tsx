@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { makeSimpleName } from '../../game-support';
 import { AppGame, Bgio } from '../../shared/types';
-import { Board } from '../../boards/move-enabled';
+import { Board } from '../../boards/basic';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Piece } from "./piece";
