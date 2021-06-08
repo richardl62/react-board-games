@@ -1,7 +1,7 @@
 import { assertAlert as assert } from '../../shared/assert';
 import { sameJSON } from "../../shared/tools";
-import { OnFunctions } from "./square";
 import { MoveFunctions, SquareID } from "../interfaces";
+import { OnFunctions } from './square';
 
 export class ClickDrag {
 
@@ -16,17 +16,18 @@ export class ClickDrag {
     private _firstSquareClicked: boolean = false;
     get firstSquareClicked() { return this._firstSquareClicked; }
 
-    show(str: string) {
+    private show(str: string) {
         console.log(`MoveStatus.${str}:`, this._start?.row, this._start?.col,
             this._firstSquareClicked);
     }
-    reset() {
+
+    private reset() {
         this._start = null;
         this._firstSquareClicked = false;
         //this.show('reset');
     }
 
-    recordMoveStart(sq: SquareID) {
+    private recordMoveStart(sq: SquareID) {
         assert(this.start === null, "Start square aleady selected")
         assert(!this.firstSquareClicked, "firstSquareClicked set");
 
@@ -34,7 +35,7 @@ export class ClickDrag {
         //this.show('recordMoveStart');
     }
 
-    markAsClickMove(sq: SquareID) {
+    private markAsClickMove(sq: SquareID) {
         assert(this.start !== null, "Start square not recorded")
         assert(!this.firstSquareClicked, "firstSquareClicked already set");
 
@@ -42,79 +43,76 @@ export class ClickDrag {
         //this.show('markAsClickMove');
     }
 
-    basicOnFunctions() {
-        const { onClick: userOnClick, onMoveStart, onMoveEnd, allowDrag } = this.moveFunctions;
+    private moveStart(sq: SquareID) {
+        this.recordMoveStart(sq);
 
-        /*
-         * Helper functions
-        */
-        const moveStart = (sq: SquareID) => {
-            this.recordMoveStart(sq);
+        //console.log('moveStart', sq);
+        this.moveFunctions.onMoveStart?.(sq);
+    }
 
-            //console.log('moveStart', sq);
-            onMoveStart?.(sq);
+    private moveEnd(sq: SquareID | null) {
+        const start = this.start;
+        this.reset();
+
+        assert(start !== null, "start square is null at end of Move");
+
+        //console.log('moveEnd', start, sq);
+        this.moveFunctions.onMoveEnd?.(start, sq);
+    }
+
+
+    private onMouseDown(sq: SquareID) {
+        //console.log("onMouseDown", sq.toString());
+
+        if (!this.start) {
+            this.moveStart(sq);
+        } else if (this.firstSquareClicked) {
+            // Do nothing
+        } else {
+            // Cancel the previously started move and start a new one
+            this.moveEnd(null);
+            this.moveStart(sq);
         }
+    }
 
-        const moveEnd = (sq: SquareID | null) => {
-            const start = this.start;
-            this.reset();
-    
-            assert(start !== null, "start square is null at end of Move");
-    
-            //console.log('moveEnd', start, sq);
-            onMoveEnd?.(start, sq);
+    private onClick(id: SquareID) {
+        //console.log("onClick", id.toString());
+
+        this.moveFunctions.onClick?.(id);
+
+        if (this.start) {
+            if (this.firstSquareClicked) {
+                this.moveEnd(id);
+            } else {
+                this.markAsClickMove(id);
+            }
+        } else {
+            console.error("No start square recorded on click");
         }
+    }
 
-        
-        const onFuncs: OnFunctions = {
-
-            onMouseDown: (sq: SquareID) => {
-                //console.log("onMouseDown", sq.toString());
-
-                if (!this.start) {
-                    moveStart(sq);
-                } else if (this.firstSquareClicked) {
-                    // Do nothing
-                } else {
-                    // Cancel the previously started move and start a new one
-                    moveEnd(null);
-                    moveStart(sq);
-                }
-            },
-
-            onClick: (id: SquareID) => {
-                //console.log("onClick", id.toString());
-
-                userOnClick?.(id);
-
-                if (this.start) {
-                    if (this.firstSquareClicked) {
-                        moveEnd(id);
-                    } else {
-                        this.markAsClickMove(id);
-                    }
-                } else {
-                    console.error("No start square recorded on click");
-                }
-            },
-
-            allowDrag: (from: SquareID): boolean => {
-                // Disallow drags during a click-move unless from the starting square
-                // of that move.
-                if (this.firstSquareClicked && !sameJSON(from, this.start)) {
-                    return false;
-                }
-
-                return allowDrag ? allowDrag(from) : true;
-            },
-
-            onDrop: (from: SquareID, to: SquareID | null) => {
-                assert(sameJSON(from, this.start), "inconsistent start square for drop",
-                    from, this.start);
-                moveEnd(to);
-            },
+    private allowDrag(from: SquareID): boolean {
+        // Disallow drags during a click-move unless from the starting square
+        // of that move.
+        if (this.firstSquareClicked && !sameJSON(from, this.start)) {
+            return false;
         }
+        const allowDrag = this.moveFunctions.allowDrag
+        return allowDrag ? allowDrag(from) : true;
+    }
 
-        return onFuncs;
+    private onDrop(from: SquareID, to: SquareID | null) {
+        assert(sameJSON(from, this.start), "inconsistent start square for drop",
+            from, this.start);
+        this.moveEnd(to);
+    }
+
+    basicOnFunctions() : Required<OnFunctions> {
+        return {
+            onMouseDown: (sq: SquareID) => this.onMouseDown(sq),
+            onClick: (sq: SquareID) => this.onClick(sq),
+            allowDrag: (sq: SquareID) => this.allowDrag(sq),
+            onDrop: (from: SquareID, to: SquareID | null) => this.onDrop(from, to),
+        };
     }
 }

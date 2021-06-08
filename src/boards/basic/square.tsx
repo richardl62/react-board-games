@@ -76,7 +76,6 @@ const HighlightMarker = styled.div<{color:string}>`
 
 export interface OnFunctions { // Not quite the right name
     onMouseDown?: (square: RowCol) => void;
-    onMouseUp?: (square: RowCol) => void;
     onClick?: (square: RowCol) => void;
 
     onDrop?: (from: RowCol, to: RowCol) => void;
@@ -93,7 +92,7 @@ export interface SquareProps extends SquareStyle, OnFunctions {
 
 export function Square(props: SquareProps) {
     const { children, showHover,
-            highlight, label, onClick, onMouseDown, onMouseUp, onDrop } = props;
+            highlight, label, onClick, onMouseDown, onDrop } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
     const allowDrag = props.allowDrag ?? (()=>true);
 
@@ -152,7 +151,6 @@ export function Square(props: SquareProps) {
             //onClick={onClick && (() => onClick(label))}
             onClick={doOnClick}
             onMouseDown={onMouseDown && (() => onMouseDown(label))}
-            onMouseUp={onMouseUp && (() => onMouseUp(label))}
         >
             <BorderHelper backgroundColor={backgroundColor} />
             <Element ref={dragRef} 

@@ -1,11 +1,12 @@
 
 import { BoardProps } from "./board";
 import { ClickDrag } from "./click-drag";
+import { OnFunctions } from "./square";
 
 export function addOnFunctions(props: BoardProps, clickDrag: ClickDrag) {  
     const { elements } = props;
 
-    const onFunctions = clickDrag.basicOnFunctions();
+    const onFunctions : OnFunctions = clickDrag.basicOnFunctions();
 
     for(let row = 0; row < elements.length; ++row) {
         for(let col = 0; col < elements[row].length; ++col) {
