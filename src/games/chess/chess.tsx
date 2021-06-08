@@ -18,7 +18,7 @@ const Square = styled.div`
   width: ${squareSize};
   height: ${squareSize};
 `
-const moveFunctions: MoveFunctions = {
+const moveFunctions: Required<MoveFunctions> = {
   onClick: (square: SquareID) => {
     alert('onClick');
     console.log('onClick', square);
@@ -32,7 +32,10 @@ const moveFunctions: MoveFunctions = {
     console.log('onMoveEnd', from, to);
   },
 
+  allowDrag: (from: SquareID) => true,
+
 };
+
 
 function MainBoard(props: Bgio.BoardProps<G>) {
   
@@ -50,10 +53,7 @@ function MainBoard(props: Bgio.BoardProps<G>) {
 
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
 
-  // const onFunctions = clickDrag.basicOnFunctions();
-  // onFunctions.onClick?.({row: 111, col: 111});
-
-  addOnFunctions(boardProps, clickDrag);
+  addOnFunctions(boardProps, clickDrag.basicOnFunctions());
   makeCheckered(boardProps);
 
   return (<DndProvider backend={HTML5Backend}>

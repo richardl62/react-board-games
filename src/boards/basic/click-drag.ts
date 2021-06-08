@@ -60,7 +60,6 @@ export class ClickDrag {
         this.moveFunctions.onMoveEnd?.(start, sq);
     }
 
-
     private onMouseDown(sq: SquareID) {
         //console.log("onMouseDown", sq.toString());
 
@@ -76,7 +75,7 @@ export class ClickDrag {
     }
 
     private onClick(id: SquareID) {
-        //console.log("onClick", id.toString());
+        console.log("ClickDrag.onClick", id, this.moveFunctions.onClick);
 
         this.moveFunctions.onClick?.(id);
 
