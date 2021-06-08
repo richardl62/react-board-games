@@ -1,8 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { RowCol } from '../../grid-based-games';
-import { SquareStyle, defaultColors } from '../interfaces';
+import { SquareStyle, defaultColors, RowCol } from './interfaces';
 
 const PIECE='piece';
 

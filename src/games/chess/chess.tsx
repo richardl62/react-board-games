@@ -1,16 +1,14 @@
 import React, { useRef } from 'react';
-import { makeSimpleName } from '../../game-support';
-import { AppGame, Bgio } from '../../shared/types';
-import { Board } from '../../boards/basic';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Piece } from "./piece";
-import { BoardProps, BoardElement } from '../../boards/basic';
-import { makeCheckered } from '../../boards/basic/make-checkered';
 import styled from 'styled-components';
-import { MoveFunctions, SquareID, squareSize } from '../../boards';
+import { Board, BoardElement, BoardProps, ClickDrag, makeCheckered, 
+  MoveFunctions, SquareID, squareSize } from '../../boards';
 import { addOnFunctions } from '../../boards/add-on-functions';
-import { ClickDrag } from '../../boards/basic/click-drag';
+import { makeSimpleName } from '../../game-support';
+import { AppGame, Bgio } from '../../shared/types';
+import { Piece } from "./piece";
+
 
 type G = Array<Array<string|null>>;
 

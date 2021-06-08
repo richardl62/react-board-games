@@ -1,5 +1,5 @@
 import { BoardProps } from './board';
-import { defaultColors, squareSize } from '../interfaces';
+import { defaultColors, squareSize } from './interfaces';
 
 export function checkeredColor(row: number, col: number) {
   const asTopLeft = (row + col) % 2 === 0;

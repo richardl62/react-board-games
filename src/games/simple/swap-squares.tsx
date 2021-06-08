@@ -2,10 +2,7 @@ import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, BoardElement } from '../../boards/basic';
-import { addOnFunctions } from '../../boards/add-on-functions';
-import { ClickDrag } from '../../boards/basic/click-drag';
-import { makeCheckered } from '../../boards/basic/make-checkered';
+import { addOnFunctions, Board, BoardElement, ClickDrag, makeCheckered } from '../../boards';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 

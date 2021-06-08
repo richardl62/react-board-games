@@ -1,6 +1,6 @@
-import { assertAlert as assert } from '../../shared/assert';
-import { sameJSON } from "../../shared/tools";
-import { MoveFunctions, SquareID } from "../interfaces";
+import { assertAlert as assert } from '../shared/assert';
+import { sameJSON } from "../shared/tools";
+import { MoveFunctions, SquareID } from "./interfaces";
 import { OnFunctions } from './square';
 
 export class ClickDrag {
