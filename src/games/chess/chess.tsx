@@ -9,7 +9,7 @@ import { BoardProps, BoardElement } from '../../boards/basic';
 import { makeCheckered } from '../../boards/basic/make-checkered';
 import styled from 'styled-components';
 import { MoveFunctions, SquareID, squareSize } from '../../boards';
-import { addOnFunctions } from '../../boards/basic/add-on-functions';
+import { addOnFunctions } from '../../boards/add-on-functions';
 import { ClickDrag } from '../../boards/basic/click-drag';
 
 type G = Array<Array<string|null>>;

@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { Board, BoardElement } from '../../boards/basic';
-import { addOnFunctions } from '../../boards/basic/add-on-functions';
+import { addOnFunctions } from '../../boards/add-on-functions';
 import { ClickDrag } from '../../boards/basic/click-drag';
 import { makeCheckered } from '../../boards/basic/make-checkered';
 import { map2DArray } from '../../shared/tools';
