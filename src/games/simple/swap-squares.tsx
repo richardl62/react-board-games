@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { addOnFunctions, Board, BoardElement, ClickDrag, makeCheckered } from '../../boards';
+import { Board, ClickDrag, makeBoardProps  } from '../../boards';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
@@ -43,7 +43,6 @@ function makeSquareDef(value: number): SquareDef {
   return { value: value, moveStart: false };
 }
 
-
 function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   const onReset = () => {
     moves.reset();
@@ -56,16 +55,16 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   }
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
   
-  const boardProps = {
-    elements: makeElements(G),
-  }
+  const elements = map2DArray(G.squares, sq =>
+      <Square {...sq}>{sq.value}</Square>,
+  );
 
-  addOnFunctions(boardProps, clickDrag.basicOnFunctions());
-  makeCheckered(boardProps);
-  if(clickDrag.start) {
-    const {row, col} = clickDrag.start;
-    boardProps.elements[row][col].backgroundColor = 'gold';
-  }
+  const boardProps = makeBoardProps(elements, 'checkered', clickDrag);
+
+  // if(clickDrag.start) {
+  //   const {row, col} = clickDrag.start;
+  //   boardProps.elements[row][col].backgroundColor = 'gold';
+  // }
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -78,25 +77,6 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   )
 }
 
-function makeElements(G: G) {
-  const nRows = G.squares.length;
-  const nCols = G.squares[0].length;
-
-  let elements: Array<Array<BoardElement>> = [];
-  for (let rn = 0; rn < nRows; ++rn) {
-    elements[rn] = [];
-    for (let cn = 0; cn < nCols; ++cn) {
-      const sq = G.squares[rn][cn];
-
-      elements[rn][cn] = {
-        piece: <Square {...sq}>{sq.value}</Square>,
-        showHover: true,
-      };
-    }
-  }
-
-  return elements;
-}
 
 export const swapSquares: AppGame = {
   name: 'swap-squares',
@@ -139,4 +119,6 @@ export const swapSquares: AppGame = {
   board: SwapSquares,
 
 }
+
+
 

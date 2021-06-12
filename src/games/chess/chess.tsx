@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, BoardElement, BoardProps, ClickDrag, makeCheckered, 
-  MoveFunctions, SquareID, squareSize } from '../../boards';
-import { addOnFunctions } from '../../boards/add-on-functions';
+import { 
+  Board, ClickDrag, makeBoardProps, MoveFunctions, SquareID, squareSize 
+} from '../../boards';
 import { makeSimpleName } from '../../game-support';
+import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
-
 
 type G = Array<Array<string|null>>;
 
@@ -18,7 +18,6 @@ const Square = styled.div`
 `
 const moveFunctions: Required<MoveFunctions> = {
   onClick: (square: SquareID) => {
-    //alert('onClick');
     console.log('onClick', square);
   },
 
@@ -34,25 +33,15 @@ const moveFunctions: Required<MoveFunctions> = {
 
 };
 
-
 function MainBoard(props: Bgio.BoardProps<G>) {
   
-  const elements = props.G.map( row => row.map(
-    (name) : BoardElement  => {
-      return {
-        piece: <Square>{name && <Piece pieceName={name}/>}</Square>,
-      };
-    }
-  ));
-
-  const boardProps : BoardProps = {
-    elements: elements,
-  }
+  const pieces = map2DArray(props.G, name => {
+     const p = name &&  <Piece pieceName={name}/>;
+     return <Square> {p} </Square>;
+  });
 
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
-
-  addOnFunctions(boardProps, clickDrag.basicOnFunctions());
-  makeCheckered(boardProps);
+  const boardProps = makeBoardProps(pieces, 'checkered', clickDrag);
 
   return (<DndProvider backend={HTML5Backend}>
       <Board {...boardProps} />
