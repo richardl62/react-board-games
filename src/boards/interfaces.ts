@@ -59,15 +59,7 @@ export interface MoveFunctions {
      * Will be called extactly once of each call to onMoveStart that does not
      * return false.
      */
-    onMoveEnd?: (from: SquareID, to: SquareID | null) => void;
-
-    /** Call at start of drag. Determine whether drags are proceed.  
-     * Defaults to always true.
-     * 
-     * NOTE: Drags are not allowed during a click-move unless dragging from
-     * the start square for that move.
-     */
-    allowDrag?: (from: SquareID) => boolean;
+    onMoveEnd: (from: SquareID, to: SquareID | null) => void;
 }
 
 // Recommended square size. KLUDGE

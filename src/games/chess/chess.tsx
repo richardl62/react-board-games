@@ -23,13 +23,13 @@ const Square = styled.div`
 `
 
 function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
-  
+  console.log("MainBoard: G.pieces[0][0]", G.pieces[0][0])
   const pieces = map2DArray(G.pieces, name => {
      const p = name &&  <Piece pieceName={name}/>;
      return <Square> {p} </Square>;
   });
 
-  const moveFunctions: Required<MoveFunctions> = {
+  const moveFunctions: MoveFunctions = {
     onClick: (square: SquareID) => {
       console.log('onClick', square);
     },
@@ -43,10 +43,6 @@ function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
     },
 
     onMoveEnd: moves.end,
-
-    allowDrag(sq: SquareID) {
-      return G.pieces[sq.row][sq.col] !== null;
-    }
   };
 
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;

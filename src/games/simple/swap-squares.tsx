@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, ClickDrag, makeBoardProps, RowCol } from '../../boards';
+import { Board, ClickDrag, makeBoardProps, MoveFunctions, RowCol } from '../../boards';
 import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
@@ -39,7 +39,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     moves.reset();
   }
 
-  const moveFunctions = {
+  const moveFunctions : MoveFunctions = {
     onMoveStart: (sq: RowCol) => {
       moves.start(sq);
       return true;

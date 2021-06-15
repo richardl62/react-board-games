@@ -56,7 +56,11 @@ export class ClickDrag {
         // Call the user callback, if any.
         this.moveFunctions.onClick?.(sid);
 
-        if (this.moveType === 'undetermined') {
+        if (this.moveType === 'none') {
+            // The previous onMouseDown did not start a move, which must
+            // be because if was blocked by the callback. So do nothing
+            // here.
+        } else if (this.moveType === 'undetermined') {
             assert(sameJSON(sid, this.start), "unexpected click square");
             this.moveType = 'click';
         } else if (this.moveType === 'click') {
@@ -70,18 +74,14 @@ export class ClickDrag {
     }
 
     private allowDrag(from: SquareID): boolean {
-        // Disallow drags during a click-move unless from the starting square
-        // of that move.
-        if (this.moveType === 'click' && !sameJSON(from, this.start)) {
-            return false;
+        // Drags are allowed only after a move has sucessfully started,
+        // and are not allowed during a click-move.
+        if(this.moveType === 'undetermined') {
+            this.moveType = 'drag';
+            return true;
         }
 
-        const allowDrag = this.moveFunctions.allowDrag;
-        const allowed = allowDrag ? allowDrag(from) : true;
-        if(allowed) {
-            this.moveType = 'drag';    
-        }
-        return allowed;
+        return false;
     }
 
     private onDrop(from: SquareID, to: SquareID | null) {
