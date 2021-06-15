@@ -46,10 +46,18 @@ export class ClickDrag {
     }
 
     private moveStart(sq: SquareID) {
-        this.recordMoveStart(sq);
-
+        let doMove;
+        if(!this.moveFunctions.onMoveStart) {
+            doMove = true;
+        } else {
+            doMove = this.moveFunctions.onMoveStart(sq);
+        }
+        
+        if(doMove) {
+            this.recordMoveStart(sq);
+        }
         //console.log('moveStart', sq);
-        this.moveFunctions.onMoveStart?.(sq);
+
     }
 
     private moveEnd(sq: SquareID | null) {

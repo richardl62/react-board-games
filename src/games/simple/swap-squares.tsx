@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { Board, ClickDrag, makeBoardProps, RowCol } from '../../boards';
-import { map2DArray } from '../../shared/tools';
+import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
 const Square = styled.div`
@@ -40,7 +40,10 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   }
 
   const moveFunctions = {
-    onMoveStart: moves.start,
+    onMoveStart: (sq: RowCol) => {
+      moves.start(sq);
+      return true;
+    },
     onMoveEnd: moves.end,
     onClick: () => console.log("square clicked"),
   }
@@ -87,7 +90,7 @@ export const swapSquares: AppGame = {
     },
 
     end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
-      if (to) {
+      if (to && !sameJSON(from, to)) {
         const tmp = G.squares[to.row][to.col];
         G.squares[to.row][to.col] = G.squares[from.row][from.col];
         G.squares[from.row][from.col] = tmp;

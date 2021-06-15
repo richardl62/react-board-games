@@ -47,12 +47,11 @@ export interface SquareID extends RowCol {
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
-    /** Call at the (possible) start of a move. If false (rather then undefined
-     * or null) dragging is disabled.
+    /** Call at the (possible) start of a move. If false the move is abandoned.
      *
      * NOTE: In practice, the start of a move means onMouseDown.
      */
-    onMoveStart?: (square: SquareID) => boolean | void;
+    onMoveStart: (square: SquareID) => boolean;
 
     /** Called at the end of a move.  'to' is set to null for an invalid move,
      * e.g. dragging off the boards.
