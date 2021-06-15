@@ -1,7 +1,9 @@
-import { assertAlert as assert } from '../shared/assert';
+import { assertThrow as assert } from '../shared/assert';
 import { sameJSON } from "../shared/tools";
 import { MoveFunctions, SquareID } from "./interfaces";
 import { OnFunctions } from './internal/square';
+
+type MoveType = 'none' | 'undetermined' | 'click' | 'drag';
 
 // KLUDGE?:  This classes records state that might be better recorded as part
 // the game data (i.e. as part of G in bgio terminology).
@@ -13,106 +15,83 @@ export class ClickDrag {
 
     readonly moveFunctions: MoveFunctions;
 
-    private _start: SquareID | null = null;
+    private _start: SquareID | null = null
     get start() { return this._start; }
 
-    private startedClickMove: boolean = false;
+    private moveType: MoveType = 'none';
 
     private show(str: string) {
         console.log(`MoveStatus.${str}:`, this._start?.row, this._start?.col,
-            this.startedClickMove);
+            this.moveType);
     }
 
     private reset() {
         this._start = null;
-        this.startedClickMove = false;
+        this.moveType = 'none';
         //this.show('reset');
-    }
-
-    private recordMoveStart(sq: SquareID) {
-        assert(this.start === null, "Start square aleady selected")
-        assert(!this.startedClickMove, "started click move");
-
-        this._start = sq;
-        //this.show('recordMoveStart');
-    }
-
-    private markAsClickMove(sq: SquareID) {
-        assert(this.start !== null, "Start square not recorded")
-        assert(!this.startedClickMove, "Click move not started");
-
-        this.startedClickMove = true;
-        //this.show('markAsClickMove');
-    }
-
-    private moveStart(sq: SquareID) {
-        let doMove;
-        if(!this.moveFunctions.onMoveStart) {
-            doMove = true;
-        } else {
-            doMove = this.moveFunctions.onMoveStart(sq);
-        }
-        
-        if(doMove) {
-            this.recordMoveStart(sq);
-        }
-        //console.log('moveStart', sq);
-
-    }
-
-    private moveEnd(sq: SquareID | null) {
-        const start = this.start;
-        this.reset();
-
-        assert(start !== null, "start square is null at end of Move");
-
-        //console.log('moveEnd', start, sq);
-        this.moveFunctions.onMoveEnd?.(start, sq);
     }
 
     private onMouseDown(sq: SquareID) {
         //console.log("onMouseDown", sq.toString());
 
-        if (!this.start) {
-            this.moveStart(sq);
-        } else if (this.startedClickMove) {
-            // Do nothing
+        // A mouse-down with no move in progress starts a move 
+        // (unless disallowed by callback). At this time the type
+        // of the move is undetermined.
+        if (this.moveType === 'none') {
+            const startMove = !this.moveFunctions.onMoveStart 
+                || this.moveFunctions.onMoveStart(sq);
+
+            if(startMove) {
+                this.moveType = 'undetermined';
+                this._start = sq;
+            }
         } else {
-            // Cancel the previously started move and start a new one
-            this.moveEnd(null);
-            this.moveStart(sq);
+            // It must be the 2nd click in a click move.
+            assert(this.moveType === 'click' && this.start);
         }
     }
 
-    onClick(id: SquareID) {
+    onClick(sid: SquareID) {
 
-        this.moveFunctions.onClick?.(id);
+        // Call the user callback, if any.
+        this.moveFunctions.onClick?.(sid);
 
-        if (this.start) {
-            if (this.startedClickMove) {
-                this.moveEnd(id);
-            } else {
-                this.markAsClickMove(id);
-            }
+        if (this.moveType === 'undetermined') {
+            assert(sameJSON(sid, this.start), "unexpected click square");
+            this.moveType = 'click';
+        } else if (this.moveType === 'click') {
+            assert(this.start !== null, "start square is null at end of Move");
+            this.moveFunctions.onMoveEnd?.(this.start, sid);
+
+            this.reset();
         } else {
-            console.error("No start square recorded on click");
+            assert(false, `Unexpected move type: ${this.moveType}`);
         }
     }
 
     private allowDrag(from: SquareID): boolean {
         // Disallow drags during a click-move unless from the starting square
         // of that move.
-        if (this.startedClickMove && !sameJSON(from, this.start)) {
+        if (this.moveType === 'click' && !sameJSON(from, this.start)) {
             return false;
         }
-        const allowDrag = this.moveFunctions.allowDrag
-        return allowDrag ? allowDrag(from) : true;
+
+        const allowDrag = this.moveFunctions.allowDrag;
+        const allowed = allowDrag ? allowDrag(from) : true;
+        if(allowed) {
+            this.moveType = 'drag';    
+        }
+        return allowed;
     }
 
     private onDrop(from: SquareID, to: SquareID | null) {
+        assert(this.moveType === 'drag');
         assert(sameJSON(from, this.start), "inconsistent start square for drop",
             from, this.start);
-        this.moveEnd(to);
+
+        this.moveFunctions.onMoveEnd?.(from, to);
+
+        this.reset();
     }
 
     basicOnFunctions() : Required<OnFunctions> {
