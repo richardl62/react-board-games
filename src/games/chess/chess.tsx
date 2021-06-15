@@ -41,7 +41,8 @@ function MainBoard(props: Bgio.BoardProps<G>) {
   });
 
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
-  const boardProps = makeBoardProps(pieces, 'checkered', clickDrag);
+  const boardProps = makeBoardProps(pieces, 'checkered', 
+    clickDrag.basicOnFunctions(), clickDrag.start);
 
   return (<DndProvider backend={HTML5Backend}>
       <Board {...boardProps} />

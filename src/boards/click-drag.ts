@@ -3,6 +3,8 @@ import { sameJSON } from "../shared/tools";
 import { MoveFunctions, SquareID } from "./interfaces";
 import { OnFunctions } from './internal/square';
 
+// KLUDGE?:  This classes records state that might be better recorded as part
+// the game data (i.e. as part of G in bgio terminology).
 export class ClickDrag {
 
     constructor(moveFunctions: MoveFunctions) {
@@ -14,23 +16,22 @@ export class ClickDrag {
     private _start: SquareID | null = null;
     get start() { return this._start; }
 
-    private _firstSquareClicked: boolean = false;
-    get firstSquareClicked() { return this._firstSquareClicked; }
+    private startedClickMove: boolean = false;
 
     private show(str: string) {
         console.log(`MoveStatus.${str}:`, this._start?.row, this._start?.col,
-            this._firstSquareClicked);
+            this.startedClickMove);
     }
 
     private reset() {
         this._start = null;
-        this._firstSquareClicked = false;
+        this.startedClickMove = false;
         //this.show('reset');
     }
 
     private recordMoveStart(sq: SquareID) {
         assert(this.start === null, "Start square aleady selected")
-        assert(!this.firstSquareClicked, "firstSquareClicked set");
+        assert(!this.startedClickMove, "started click move");
 
         this._start = sq;
         //this.show('recordMoveStart');
@@ -38,9 +39,9 @@ export class ClickDrag {
 
     private markAsClickMove(sq: SquareID) {
         assert(this.start !== null, "Start square not recorded")
-        assert(!this.firstSquareClicked, "firstSquareClicked already set");
+        assert(!this.startedClickMove, "Click move not started");
 
-        this._firstSquareClicked = true;
+        this.startedClickMove = true;
         //this.show('markAsClickMove');
     }
 
@@ -66,7 +67,7 @@ export class ClickDrag {
 
         if (!this.start) {
             this.moveStart(sq);
-        } else if (this.firstSquareClicked) {
+        } else if (this.startedClickMove) {
             // Do nothing
         } else {
             // Cancel the previously started move and start a new one
@@ -80,7 +81,7 @@ export class ClickDrag {
         this.moveFunctions.onClick?.(id);
 
         if (this.start) {
-            if (this.firstSquareClicked) {
+            if (this.startedClickMove) {
                 this.moveEnd(id);
             } else {
                 this.markAsClickMove(id);
@@ -93,7 +94,7 @@ export class ClickDrag {
     private allowDrag(from: SquareID): boolean {
         // Disallow drags during a click-move unless from the starting square
         // of that move.
-        if (this.firstSquareClicked && !sameJSON(from, this.start)) {
+        if (this.startedClickMove && !sameJSON(from, this.start)) {
             return false;
         }
         const allowDrag = this.moveFunctions.allowDrag

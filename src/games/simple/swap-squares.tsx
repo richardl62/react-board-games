@@ -6,12 +6,7 @@ import { Board, ClickDrag, makeBoardProps, RowCol } from '../../boards';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
-
-interface SquareProps {
-  moveStart: boolean;
-}
-
-const Square = styled.div<SquareProps>`
+const Square = styled.div`
   width: 50px;
   height: 50px;
 
@@ -21,7 +16,7 @@ const Square = styled.div<SquareProps>`
   margin: auto;
 `;
 
-export interface SquareDef extends SquareProps {
+export interface SquareDef {
   value: number;
 }
 
@@ -36,7 +31,7 @@ const initialValues = [
 ];
 
 function makeSquareDef(value: number): SquareDef {
-  return { value: value, moveStart: false };
+  return { value: value };
 }
 
 function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
@@ -55,7 +50,8 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     <Square {...sq}>{sq.value}</Square>,
   );
 
-  const boardProps = makeBoardProps(elements, 'checkered', clickDrag);
+  const boardProps = makeBoardProps(elements, 'checkered', 
+    clickDrag.basicOnFunctions(), clickDrag.start);
 
   // if(clickDrag.start) {
   //   const {row, col} = clickDrag.start;
@@ -88,11 +84,9 @@ export const swapSquares: AppGame = {
 
   moves: {
     start: (G: G, ctx: any, sq: RowCol) => {
-      G.squares[sq.row][sq.col].moveStart = true;
     },
 
     end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
-      G.squares[from.row][from.col].moveStart = false;
       if (to) {
         const tmp = G.squares[to.row][to.col];
         G.squares[to.row][to.col] = G.squares[from.row][from.col];
@@ -105,7 +99,6 @@ export const swapSquares: AppGame = {
     reset: (G: G, ctx: any) => {
       for (let row = 0; row < G.squares.length; ++row) {
         for (let col = 0; col < G.squares[row].length; ++col) {
-          G.squares[row][col].moveStart = false;
           G.squares[row][col].value = initialValues[row][col];
         }
       }
@@ -113,6 +106,5 @@ export const swapSquares: AppGame = {
   },
 
   board: SwapSquares,
-
 }
 
