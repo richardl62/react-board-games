@@ -1,7 +1,7 @@
 export const defaultColors = {
     boardBackground: 'rgb(100,0,0)',
     boardBorderLabels: 'white',
-    
+
     square: 'white',
     blackSquare: 'rgb(165,42,42)',
     whiteSquare: 'rgb(255,248,220)',
@@ -14,6 +14,7 @@ export interface RowCol {
     row: number;
     col: number;
 }
+
 export interface SquareStyle {
     backgroundColor?: string;
 
@@ -37,9 +38,7 @@ export interface BoardStyle {
     squareStyle?: (rc: RowCol) => SquareStyle;
 }
 
-export interface SquareID {
-    row: number;
-    col: number;
+export interface SquareID extends RowCol {
     boardID?: string;
 }
 
@@ -67,7 +66,7 @@ export interface MoveFunctions {
      * NOTE: Drags are not allowed during a click-move unless dragging from
      * the start square for that move.
      */
-    allowDrag?: (from: SquareID) => boolean; 
+    allowDrag?: (from: SquareID) => boolean;
 }
 
 // Recommended square size. KLUDGE

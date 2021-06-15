@@ -2,14 +2,10 @@ import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, ClickDrag, makeBoardProps  } from '../../boards';
+import { Board, ClickDrag, makeBoardProps, RowCol } from '../../boards';
 import { map2DArray } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
-interface RowCol {
-  row: number;
-  col: number;
-}
 
 interface SquareProps {
   moveStart: boolean;
@@ -51,12 +47,12 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   const moveFunctions = {
     onMoveStart: moves.start,
     onMoveEnd: moves.end,
-    onClick: ()=>console.log("square clicked"),
+    onClick: () => console.log("square clicked"),
   }
   const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
-  
+
   const elements = map2DArray(G.squares, sq =>
-      <Square {...sq}>{sq.value}</Square>,
+    <Square {...sq}>{sq.value}</Square>,
   );
 
   const boardProps = makeBoardProps(elements, 'checkered', clickDrag);
@@ -69,7 +65,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   return (
     <DndProvider backend={HTML5Backend}>
       <div>
-          <Board {...boardProps}/>
+        <Board {...boardProps} />
       </div>
 
       <button type='button' onClick={onReset}>Reset</button>
@@ -107,9 +103,9 @@ export const swapSquares: AppGame = {
     // Using the BGIO supplied reset function lead to server errros.
     // TO DO: Understand why this happened;
     reset: (G: G, ctx: any) => {
-      for(let row = 0; row < G.squares.length; ++row) {
-        for(let col = 0; col < G.squares[row].length; ++col) {
-          G.squares[row][col].moveStart=false;
+      for (let row = 0; row < G.squares.length; ++row) {
+        for (let col = 0; col < G.squares[row].length; ++col) {
+          G.squares[row][col].moveStart = false;
           G.squares[row][col].value = initialValues[row][col];
         }
       }
@@ -119,6 +115,4 @@ export const swapSquares: AppGame = {
   board: SwapSquares,
 
 }
-
-
 
