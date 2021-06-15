@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { map2DArray } from "../shared/tools";
-import { addOnFunctions } from "./add-on-functions";
+import { addOnFunctions } from "./internal/add-on-functions";
 import { BoardElement, BoardProps } from "./board";
 import { ClickDrag } from "./click-drag";
-import { makeCheckered } from "./make-checkered";
+import { makeCheckered } from "./internal/make-checkered";
 
 export function makeBoardProps(pieces: ReactNode[][], style: 'checkered', clickDrag: ClickDrag) : BoardProps {
   const elements = map2DArray(pieces, piece => {

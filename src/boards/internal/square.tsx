@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { SquareStyle, defaultColors, RowCol } from './interfaces';
+import { SquareStyle, defaultColors, RowCol } from '../interfaces';
 
 const PIECE='piece';
 

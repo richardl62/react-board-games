@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { applyDefaults } from '../shared/tools';
 import { BoardStyle, defaultColors } from "./interfaces";
-import { Square, SquareProps } from './square';
+import { Square, SquareProps } from './internal/square';
 
 const Corner = styled.div<{ width: string }>`
     width: ${props => props.width};
