@@ -3,7 +3,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { 
-  Board, ClickDrag, makeBoardProps, MoveFunctions, SquareID, squareSize 
+  Board,  makeBoardProps, MoveFunctions, SquareID, squareSize,
+  ClickDragState, makeOnFunctions, 
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
@@ -45,10 +46,12 @@ function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
     onMoveEnd: moves.end,
   };
 
-  const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
-  console.log('clickDrag.start', clickDrag.start);
+  const clickDragState = useRef(new ClickDragState()).current;
+  console.log('clickDrag.start', clickDragState.start);
+  
   const boardProps = makeBoardProps(pieces, 'checkered', 
-    clickDrag.basicOnFunctions(), clickDrag.start);
+    makeOnFunctions(moveFunctions, clickDragState), 
+    clickDragState.start);
 
   return (<DndProvider backend={HTML5Backend}>
       <Board {...boardProps} />
