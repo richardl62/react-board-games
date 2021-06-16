@@ -2,7 +2,10 @@ import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, ClickDrag, makeBoardProps, MoveFunctions, RowCol } from '../../boards';
+import {
+  Board, ClickDragState, makeBoardProps, makeOnFunctions,
+  MoveFunctions, RowCol
+} from '../../boards';
 import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
@@ -47,19 +50,15 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     onMoveEnd: moves.end,
     onClick: () => console.log("square clicked"),
   }
-  const clickDrag = useRef(new ClickDrag(moveFunctions)).current;
+  const clickDragState = useRef(new ClickDragState()).current;
 
   const elements = map2DArray(G.squares, sq =>
     <Square {...sq}>{sq.value}</Square>,
   );
 
   const boardProps = makeBoardProps(elements, 'checkered', 
-    clickDrag.basicOnFunctions(), clickDrag.start);
-
-  // if(clickDrag.start) {
-  //   const {row, col} = clickDrag.start;
-  //   boardProps.elements[row][col].backgroundColor = 'gold';
-  // }
+    makeOnFunctions(moveFunctions, clickDragState), 
+    clickDragState.start);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -71,7 +70,6 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     </DndProvider>
   )
 }
-
 
 export const swapSquares: AppGame = {
   name: 'swap-squares',
