@@ -2,8 +2,12 @@ export const defaultColors = {
     boardBackground: 'rgb(100,0,0)',
     boardBorderLabels: 'white',
 
+    /** Background color for plain (non-checkered) boards */
     square: 'white',
+    
+    /** Background color for checkered boards */
     blackSquare: 'rgb(165,42,42)',
+    /** Background color for checkered boards */
     whiteSquare: 'rgb(255,248,220)',
 
     moveStart: 'gold',

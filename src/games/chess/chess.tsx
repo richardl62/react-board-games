@@ -47,7 +47,6 @@ function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
   };
 
   const clickDragState = useRef(new ClickDragState()).current;
-  console.log('clickDrag.start', clickDragState.start);
   
   const boardProps = makeBoardProps(pieces, 'checkered', 
     makeOnFunctions(moveFunctions, clickDragState), 
