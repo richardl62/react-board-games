@@ -1,5 +1,4 @@
-import { makeGridGame, makeGridGameState } from "../../grid-based-games";
-import { moveFunction } from "./move-function";
+import { AppGame } from "../../shared/types";
 import { Piece } from "./piece";
 
 interface DraughtProps {
@@ -9,6 +8,7 @@ interface DraughtProps {
     nRowsOfPieces: number;
 }
 
+export //TEMPORARY KLUDGE
 function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
 
     const startingPiece = (row: number, col: number) => {
@@ -35,20 +35,20 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
         }
     }
 
-    return makeGridGame ({
+    return {
         displayName: name,
 
         minPlayers: 1,
         maxPlayers: 2,
 
-        setup: () => makeGridGameState(pieces),
+        //setup: () => makeGridGameState(pieces),
 
         offBoardPieces: {
             top: ['w', 'W'],
             bottom: ['b', 'B'],
         },
 
-        onMove: moveFunction,
+        //onMove: moveFunction,
 
         boardStyle: {
             checkered: true,
@@ -56,18 +56,18 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
         },
 
         renderPiece: Piece,
-    });
+    };
 }
 
-const games = [
-    draughts({
-        name: "Draughts (British)",
-        nRows: 8, nCols: 8, nRowsOfPieces: 3,
-    }),
+const games: Array<AppGame> = [
+    // draughts({
+    //     name: "Draughts (British)",
+    //     nRows: 8, nCols: 8, nRowsOfPieces: 3,
+    // }),
 
-    draughts({
-        name: "Draughts (International)",
-        nRows: 10, nCols: 10, nRowsOfPieces: 4,
-    }),
+    // draughts({
+    //     name: "Draughts (International)",
+    //     nRows: 10, nCols: 10, nRowsOfPieces: 4,
+    // }),
 ];
 export default games;

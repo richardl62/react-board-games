@@ -1,7 +1,13 @@
-import {
-    MoveControl, MoveResult, PiecePosition, RowCol, samePiecePosition
-} from '../../grid-based-games';
+
+import { RowCol } from '../../boards';
+import { sameJSON } from '../../shared/tools';
 import { pl1, pl2, bb } from './piece';
+
+
+type MoveControl<T> = T|any; //KLUDGE
+let MoveResult : any; //KLUDGE
+type PiecePosition = any; //KLUDGE
+
 
 export type BobailState = { moveBobailNext: boolean; };
 
@@ -108,7 +114,7 @@ export function onClick(pos_: PiecePosition, moveControl: MoveControl<BobailStat
     const pos: RowCol = pos_;
     let turnOver = false;
 
-    const reclick = moveControl.selectedSquare && samePiecePosition(moveControl.selectedSquare, pos);
+    const reclick = moveControl.selectedSquare && sameJSON(moveControl.selectedSquare, pos);
 
     // If a bad square has been clicked do nothing. 
     if (!moveControl.legalMove(pos) && !reclick) {

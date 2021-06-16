@@ -1,6 +1,6 @@
-import { makeGridGame } from '../../grid-based-games';
-import { onClick } from './actions';
-import { Piece, bb, pl1, pl2 } from './piece';
+import { AppGame, Bgio } from '../../shared/types';
+import { bb, /*Piece,*/ pl1, pl2 } from './piece';
+
 
 const initialState = {
     pieces: [
@@ -24,25 +24,25 @@ const initialState = {
     gameSpecific: { moveBobailNext: false },
 };
 
-export const bobail = makeGridGame(
+type G = typeof initialState;
+
+function Board(props: Bgio.BoardProps<G>) {
+    return (
+        <div>Hello. I am Bobail</div>
+    )
+};
+
+export const bobail : AppGame =
 {
+    name: 'bobail',
     displayName: 'Bobail',
 
     minPlayers: 1,
     maxPlayers: 2,
 
+    moves: [],
     setup: () => initialState,
 
-    offBoardPieces: { top: [], bottom: [], },
-
-    onClick: onClick,
-    onDrag: null,
-
-    boardStyle: {
-        checkered: false,
-        labels: false,
-    },
-
-    renderPiece: Piece,
-});
+    board: Board,
+};
 

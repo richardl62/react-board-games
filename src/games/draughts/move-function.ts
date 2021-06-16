@@ -1,10 +1,9 @@
-import {
-    defaultMoveFunction, makeRowCol, MoveControl, MoveResult, PiecePosition, 
-    RowCol
-} from "../../grid-based-games";
+import { RowCol } from "../../boards";
+
 
 
 // Find the steps in a diagonal path [from, to).
+export /* TEMPORARY KLUDGE */
 function findDiagonalPath(from: RowCol, to: RowCol) {
     const step = (num: number) => num > 0 ? 1 : -1;
 
@@ -25,20 +24,20 @@ function findDiagonalPath(from: RowCol, to: RowCol) {
     return null;
 }
 
-export function moveFunction(from: PiecePosition, to: PiecePosition | null, moveControl: MoveControl) {
-    const fromRowCol = makeRowCol(from);
-    const toRowCol = makeRowCol(to);
-    if(fromRowCol && toRowCol) {
-        const fromPiece = moveControl.piece(from);
-        const path = findDiagonalPath(fromRowCol, toRowCol);
-        if(path && !moveControl.piece(to!)) {
-            path.forEach(pos => moveControl.setPiece(pos, null));
-            moveControl.setPiece(toRowCol, fromPiece);
-            return new MoveResult('endOfTurn');
-        }
+// export function moveFunction(from: PiecePosition, to: PiecePosition | null, moveControl: MoveControl) {
+//     const fromRowCol = makeRowCol(from);
+//     const toRowCol = makeRowCol(to);
+//     if(fromRowCol && toRowCol) {
+//         const fromPiece = moveControl.piece(from);
+//         const path = findDiagonalPath(fromRowCol, toRowCol);
+//         if(path && !moveControl.piece(to!)) {
+//             path.forEach(pos => moveControl.setPiece(pos, null));
+//             moveControl.setPiece(toRowCol, fromPiece);
+//             return new MoveResult('endOfTurn');
+//         }
 
-        return new MoveResult('noop');
-    } else {
-        return defaultMoveFunction(from, to, moveControl);
-    }
-}
+//         return new MoveResult('noop');
+//     } else {
+//         return defaultMoveFunction(from, to, moveControl);
+//     }
+// }
