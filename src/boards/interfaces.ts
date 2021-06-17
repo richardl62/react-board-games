@@ -16,9 +16,10 @@ export const defaultColors = {
     squareHighlight: 'rgb(83 243 10)', // bright green
 };
 
-export interface RowCol {
+export interface SquareID {
     row: number;
     col: number;
+    boardID: string;
 }
 
 export interface SquareStyle {
@@ -41,12 +42,9 @@ export interface BoardStyle {
         labels: string;
     };
 
-    squareStyle?: (rc: RowCol) => SquareStyle;
+    squareStyle?: (rc: SquareID) => SquareStyle;
 }
 
-export interface SquareID extends RowCol {
-    boardID: string;
-}
 
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;

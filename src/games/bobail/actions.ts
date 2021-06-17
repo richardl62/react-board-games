@@ -1,8 +1,11 @@
 
-import { RowCol } from '../../boards';
 import { sameJSON } from '../../shared/tools';
 import { pl1, pl2, bb } from './piece';
 
+interface RowCol {
+    row: number;
+    col: number;
+}
 
 type MoveControl<T> = T|any; //KLUDGE
 let MoveResult : any; //KLUDGE

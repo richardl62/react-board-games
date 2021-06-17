@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, ClickDragState, makeBoardProps, makeOnFunctions,
-  MoveFunctions, RowCol, squareSize
+  MoveFunctions, SquareID, squareSize
 } from '../../boards';
 import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
@@ -39,7 +39,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   }
 
   const moveFunctions : MoveFunctions = {
-    onMoveStart: (sq: RowCol) => {
+    onMoveStart: (sq: SquareID) => {
       moves.start(sq);
       return true;
     },
@@ -81,10 +81,10 @@ export const swapSquares: AppGame = {
   maxPlayers: 1,
 
   moves: {
-    start: (G: G, ctx: any, sq: RowCol) => {
+    start: (G: G, ctx: any, sq: SquareID) => {
     },
 
-    end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
+    end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
       if (to && !sameJSON(from, to)) {
         const tmp = G.squares[to.row][to.col];
         G.squares[to.row][to.col] = G.squares[from.row][from.col];

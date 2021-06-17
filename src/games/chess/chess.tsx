@@ -36,10 +36,10 @@ const offBoard = (sq: SquareID) => sq.boardID !== 'main';
 const offBoardPiece = (sq: SquareID) : string => {
   //KLUDGE To avoid fighting with 
   assert(sq.boardID === 'white' || (sq.boardID === 'black'));
-  assert(sq.col === 0);
+  assert(sq.row === 0);
     
   const offBoard = offBoardPieces[sq.boardID];
-  return offBoard[sq.row];
+  return offBoard[sq.col];
 }
 
 interface OffBoardProps {

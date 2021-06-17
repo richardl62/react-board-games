@@ -1,10 +1,10 @@
-import { RowCol } from "../../boards";
+import { SquareID } from "../../boards";
 
 
 
 // Find the steps in a diagonal path [from, to).
 export /* TEMPORARY KLUDGE */
-function findDiagonalPath(from: RowCol, to: RowCol) {
+function findDiagonalPath(from: SquareID, to: SquareID) {
     const step = (num: number) => num > 0 ? 1 : -1;
 
     const rowDiff = to.row - from.row;
