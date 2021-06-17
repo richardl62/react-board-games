@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import styled from 'styled-components';
 import { 
-  Board,  makeBoardProps, MoveFunctions, SquareID, squareSize,
+  Board,  makeBoardProps, MoveFunctions, SquareID,
   ClickDragState, makeOnFunctions, 
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
@@ -18,17 +17,12 @@ type G = {
   moveStart: SquareID | null,
 }
 
-const Square = styled.div`
-  width: ${squareSize};
-  height: ${squareSize};
-`
 
 function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
   console.log("MainBoard: G.pieces[0][0]", G.pieces[0][0])
-  const pieces = map2DArray(G.pieces, name => {
-     const p = name &&  <Piece pieceName={name}/>;
-     return <Square> {p} </Square>;
-  });
+  const pieces = map2DArray(G.pieces, name =>
+      name && <Piece pieceName={name}/>
+    );
 
   const moveFunctions: MoveFunctions = {
     onClick: (square: SquareID) => {

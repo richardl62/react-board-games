@@ -4,17 +4,13 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, ClickDragState, makeBoardProps, makeOnFunctions,
-  MoveFunctions, RowCol
+  MoveFunctions, RowCol, squareSize
 } from '../../boards';
 import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
 const Square = styled.div`
-  width: 50px;
-  height: 50px;
-
-  font-size: 40px; // KLUDGE
-
+  font-size: calc(${squareSize} * 0.8); // KLUDGE
   text-align: center;
   margin: auto;
 `;

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { SquareStyle, defaultColors, RowCol } from '../interfaces';
+import { SquareStyle, defaultColors, RowCol, squareSize } from '../interfaces';
 
 const PIECE='piece';
 
@@ -23,6 +23,11 @@ const backgroundColor = (props: StyledSquareProps, hovering: boolean) => {
 const StyledSquare = styled.div<StyledSquareProps>`
     display: inline-flex;
     position: relative;
+    
+    //KLUDGE: Hard coded square size
+    height: ${squareSize};
+    width: ${squareSize};
+    
     background-color: ${props => backgroundColor(props, false) };
     z-index: 0;
 
