@@ -11,18 +11,23 @@ import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
 
-type Pieces = Array<Array<string|null>>;
+type Pieces = (string|null)[][];
 type G = {
   pieces: Pieces,
   moveStart: SquareID | null,
 }
 
+interface OffBoardProps {
+  bgioProps: Bgio.BoardProps<G>;
+  clickDragState: ClickDragState
+  pieces: string[];
+}
+function OffBoard({bgioProps, clickDragState, pieces}: OffBoardProps) {
+  const {G, moves} = bgioProps;
 
-function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
-  console.log("MainBoard: G.pieces[0][0]", G.pieces[0][0])
-  const pieces = map2DArray(G.pieces, name =>
-      name && <Piece pieceName={name}/>
-    );
+  const boardPieces = pieces.map(name =>
+    <Piece pieceName={name}/>
+  );
 
   const moveFunctions: MoveFunctions = {
     onClick: (square: SquareID) => {
@@ -40,22 +45,60 @@ function MainBoard({ G, moves }: Bgio.BoardProps<G>) {
     onMoveEnd: moves.end,
   };
 
-  const clickDragState = useRef(new ClickDragState()).current;
-  
-  const boardProps = makeBoardProps(pieces, 'checkered', 
-    makeOnFunctions(moveFunctions, clickDragState), 
-    clickDragState.start);
+  const onFunctions = makeOnFunctions(moveFunctions, clickDragState);
+  const boardProps = makeBoardProps([boardPieces], 'plain', 
+    onFunctions, clickDragState.start);
 
-  return (<DndProvider backend={HTML5Backend}>
-      <Board {...boardProps} />
-    </DndProvider>)
+  return <Board {...boardProps} />
+}
+
+interface MainBoardProps {
+  bgioProps: Bgio.BoardProps<G>;
+  clickDragState: ClickDragState
+}
+
+function MainBoard({ bgioProps, clickDragState }: MainBoardProps) {
+  const {G, moves} = bgioProps;
+
+  const boardPieces = map2DArray(G.pieces, name =>
+    name && <Piece pieceName={name}/>
+  );
+
+  const moveFunctions: MoveFunctions = {
+    onClick: (square: SquareID) => {
+      console.log('onClick', square);
+    },
+  
+    onMoveStart: (sq: SquareID) => {
+      const canMove = G.pieces[sq.row][sq.col] !== null;
+      if(canMove) {
+        moves.start(sq);
+      }
+      return canMove;
+    },
+
+    onMoveEnd: moves.end,
+  };
+
+  const onFunctions = makeOnFunctions(moveFunctions, clickDragState);
+  const boardProps = makeBoardProps(boardPieces, 'checkered', 
+    onFunctions, clickDragState.start);
+
+  return <Board {...boardProps} />
 }
 
 function ChessBoard(props: Bgio.BoardProps<G>) {
+  const clickDragState = useRef(new ClickDragState()).current;
+  
+  const top  = ['p', 'n', 'b', 'r', 'q', 'k'];
+  const bottom = ['P', 'N', 'B', 'R', 'Q', 'K'];
+
   return (
-    <div>
-      <MainBoard {...props} />
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <OffBoard  bgioProps={props} clickDragState={clickDragState} pieces={top}/>
+      <MainBoard bgioProps={props} clickDragState={clickDragState}/>
+      <OffBoard  bgioProps={props} clickDragState={clickDragState} pieces={bottom}/>
+    </DndProvider>
   )
 }
 
@@ -88,10 +131,6 @@ function chess(displayName: string, pieces: Pieces) : AppGame {
         G.moveStart = null;
       },
     },
-    // offBoardPieces: {
-    //   top: ['p', 'n', 'b', 'r', 'q', 'k'],
-    //   bottom: ['P', 'N', 'B', 'R', 'Q', 'K'],
-    // },
 
     board: ChessBoard
   };
