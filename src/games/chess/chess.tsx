@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import styled from 'styled-components';
 import { 
   Board,  makeBoardProps, MoveFunctions, SquareID,
-  ClickDragState, makeOnFunctions, 
+  ClickDragState, makeOnFunctions, squareSize, 
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
@@ -11,6 +12,12 @@ import { map2DArray, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
 
+const PlayArea=styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  gap: calc(${squareSize} * 0.1);
+  align-items: center;
+`
 type Pieces = (string|null)[][];
 type G = {
   pieces: Pieces,
@@ -23,7 +30,7 @@ interface OffBoardProps {
   pieces: string[];
 }
 function OffBoard({bgioProps, clickDragState, pieces}: OffBoardProps) {
-  const {G, moves} = bgioProps;
+  //const {G, moves} = bgioProps;
 
   const boardPieces = pieces.map(name =>
     <Piece pieceName={name}/>
@@ -31,23 +38,20 @@ function OffBoard({bgioProps, clickDragState, pieces}: OffBoardProps) {
 
   const moveFunctions: MoveFunctions = {
     onClick: (square: SquareID) => {
-      console.log('onClick', square);
+      console.log('onClick', JSON.stringify(square));
     },
   
-    onMoveStart: (sq: SquareID) => {
-      const canMove = G.pieces[sq.row][sq.col] !== null;
-      if(canMove) {
-        moves.start(sq);
-      }
-      return canMove;
-    },
+    onMoveStart: (sq: SquareID) => false,
 
-    onMoveEnd: moves.end,
+    onMoveEnd: ()=>{},
   };
 
   const onFunctions = makeOnFunctions(moveFunctions, clickDragState);
   const boardProps = makeBoardProps([boardPieces], 'plain', 
     onFunctions, clickDragState.start);
+  boardProps.borderLabels = false;
+  boardProps.borderWidth = 'none';
+  boardProps.gridGap = 'none';
 
   return <Board {...boardProps} />
 }
@@ -95,9 +99,11 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <OffBoard  bgioProps={props} clickDragState={clickDragState} pieces={top}/>
-      <MainBoard bgioProps={props} clickDragState={clickDragState}/>
-      <OffBoard  bgioProps={props} clickDragState={clickDragState} pieces={bottom}/>
+      <PlayArea>
+        <OffBoard bgioProps={props} clickDragState={clickDragState} pieces={top} />
+        <MainBoard bgioProps={props} clickDragState={clickDragState} />
+        <OffBoard bgioProps={props} clickDragState={clickDragState} pieces={bottom} />
+      </PlayArea>
     </DndProvider>
   )
 }
