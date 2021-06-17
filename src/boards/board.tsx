@@ -43,6 +43,7 @@ export interface BoardElement extends Omit<SquareProps, 'children' | 'label'> {
 }
 export interface BoardProps extends BoardStyle {
     elements: Array<Array<BoardElement>>;
+    boardID: string;
 }
 
 export function Board(props: BoardProps) {
@@ -57,7 +58,8 @@ export function Board(props: BoardProps) {
         },
     }
 
-    const { elements: inputElems, borderLabels, reverseRows, gridGap, borderWidth, colors, } =
+    const { elements: inputElems, borderLabels, reverseRows, gridGap, 
+        borderWidth, colors, boardID} =
         applyDefaults(props, defaultProps);
 
     const { nRows, nCols } = rowCol(inputElems);
@@ -69,7 +71,11 @@ export function Board(props: BoardProps) {
         for (let col = 0; col < nCols; ++col) {
             const sq = inputElems[row][col];
             elems[row][col] = (
-                <Square key={`${row}-${col}`} label={{ row: row, col: col }} {...sq}>{sq.piece}</Square>
+                <Square 
+                    key={`${row}-${col}`} 
+                    label={{ row: row, col: col, boardID: boardID }} 
+                    {...sq}>{sq.piece}
+                </Square>
             )
         }
     }

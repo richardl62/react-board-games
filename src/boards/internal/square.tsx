@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { SquareStyle, defaultColors, RowCol, squareSize } from '../interfaces';
+import { SquareStyle, defaultColors, SquareID, squareSize,  } from '../interfaces';
 
 const PIECE='piece';
 
@@ -79,20 +79,19 @@ const HighlightMarker = styled.div<{color:string}>`
 `
 
 export interface OnFunctions { // Not quite the right name
-    onMouseDown?: (square: RowCol) => void;
-    onClick?: (square: RowCol) => void;
+    onMouseDown?: (square: SquareID) => void;
+    onClick?: (square: SquareID) => void;
 
-    onDrop?: (from: RowCol, to: RowCol) => void;
+    onDrop?: (from: SquareID, to: SquareID) => void;
     
     /** Called at start of drag. Defaults to always true. */
-    allowDrag?: (from: RowCol)=>boolean;
+    allowDrag?: (from: SquareID)=>boolean;
 }
 
 export interface SquareProps extends SquareStyle, OnFunctions {
     children: ReactNode;
-    label: RowCol;
+    label: SquareID;
 }
-
 
 export function Square(props: SquareProps) {
     const { children, showHover,
@@ -115,7 +114,7 @@ export function Square(props: SquareProps) {
 
     const [ dropCollection, dropRef] = useDrop({
         accept: PIECE,
-        drop: (from: RowCol) => onDrop?.(from, label),
+        drop: (from: SquareID) => onDrop?.(from, label),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop(),

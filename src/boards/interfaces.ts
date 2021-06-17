@@ -45,7 +45,7 @@ export interface BoardStyle {
 }
 
 export interface SquareID extends RowCol {
-    boardID?: string;
+    boardID: string;
 }
 
 export interface MoveFunctions {

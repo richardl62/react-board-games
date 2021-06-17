@@ -6,6 +6,7 @@ import {
   Board,  makeBoardProps, MoveFunctions, SquareID,
   ClickDragState, makeOnFunctions, squareSize, 
 } from '../../boards';
+import { OnFunctions } from '../../boards/internal/square';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
 import { map2DArray, sameJSON } from '../../shared/tools';
@@ -24,57 +25,78 @@ type G = {
   moveStart: SquareID | null,
 }
 
-interface OffBoardProps {
-  bgioProps: Bgio.BoardProps<G>;
-  clickDragState: ClickDragState
-  pieces: string[];
-}
-function OffBoard({bgioProps, clickDragState, pieces}: OffBoardProps) {
-  //const {G, moves} = bgioProps;
+const offBoardPieces = {
+  black: ['p', 'n', 'b', 'r', 'q', 'k'],
+  white: ['P', 'N', 'B', 'R', 'Q', 'K'],
+};
 
+const offBoard = (sq: SquareID) => sq.boardID !== 'main';
+
+
+const offBoardPiece = (sq: SquareID) : string => {
+  //KLUDGE To avoid fighting with 
+  assert(sq.boardID === 'white' || (sq.boardID === 'black'));
+  assert(sq.col === 0);
+    
+  const offBoard = offBoardPieces[sq.boardID];
+  return offBoard[sq.row];
+}
+
+interface OffBoardProps {
+  onFunctions: OnFunctions;
+  clickDragState: ClickDragState;
+  rowName: keyof typeof offBoardPieces;
+}
+
+function OffBoard({onFunctions, clickDragState, rowName}: OffBoardProps) {
+  //const {G, moves} = bgioProps;
+  const pieces = offBoardPieces[rowName];
   const boardPieces = pieces.map(name =>
     <Piece pieceName={name}/>
   );
 
-  const moveFunctions: MoveFunctions = {
-    onClick: (square: SquareID) => {
-      console.log('onClick', JSON.stringify(square));
-    },
-  
-    onMoveStart: (sq: SquareID) => false,
-
-    onMoveEnd: ()=>{},
-  };
-
-  const onFunctions = makeOnFunctions(moveFunctions, clickDragState);
-  const boardProps = makeBoardProps([boardPieces], 'plain', 
+  const boardProps = makeBoardProps([boardPieces], 'plain',
+    rowName, 
     onFunctions, clickDragState.start);
   boardProps.borderLabels = false;
   boardProps.borderWidth = 'none';
   boardProps.gridGap = 'none';
+  boardProps.boardID = rowName;
 
   return <Board {...boardProps} />
 }
 
 interface MainBoardProps {
-  bgioProps: Bgio.BoardProps<G>;
-  clickDragState: ClickDragState
+  onFunctions: OnFunctions;
+  clickDragState: ClickDragState;
+  pieces: (string | null)[][];
 }
 
-function MainBoard({ bgioProps, clickDragState }: MainBoardProps) {
-  const {G, moves} = bgioProps;
+function MainBoard({ onFunctions, clickDragState, pieces }: MainBoardProps) {
 
-  const boardPieces = map2DArray(G.pieces, name =>
+  const boardPieces = map2DArray(pieces, name =>
     name && <Piece pieceName={name}/>
   );
 
+  const boardProps = makeBoardProps(boardPieces, 'checkered',
+    'main', 
+    onFunctions, clickDragState.start);
+  boardProps.boardID = "main";
+
+  return <Board {...boardProps} />
+}
+
+function ChessBoard(props: Bgio.BoardProps<G>) {
+  const {G, moves} = props;
+
+  const clickDragState = useRef(new ClickDragState()).current;
   const moveFunctions: MoveFunctions = {
-    onClick: (square: SquareID) => {
-      console.log('onClick', square);
+    onClick: (sq: SquareID) => {
+      console.log('onClick', JSON.stringify(sq));
     },
   
     onMoveStart: (sq: SquareID) => {
-      const canMove = G.pieces[sq.row][sq.col] !== null;
+      const canMove = offBoard(sq) || G.pieces[sq.row][sq.col] !== null;
       if(canMove) {
         moves.start(sq);
       }
@@ -85,24 +107,13 @@ function MainBoard({ bgioProps, clickDragState }: MainBoardProps) {
   };
 
   const onFunctions = makeOnFunctions(moveFunctions, clickDragState);
-  const boardProps = makeBoardProps(boardPieces, 'checkered', 
-    onFunctions, clickDragState.start);
-
-  return <Board {...boardProps} />
-}
-
-function ChessBoard(props: Bgio.BoardProps<G>) {
-  const clickDragState = useRef(new ClickDragState()).current;
-  
-  const top  = ['p', 'n', 'b', 'r', 'q', 'k'];
-  const bottom = ['P', 'N', 'B', 'R', 'Q', 'K'];
 
   return (
     <DndProvider backend={HTML5Backend}>
       <PlayArea>
-        <OffBoard bgioProps={props} clickDragState={clickDragState} pieces={top} />
-        <MainBoard bgioProps={props} clickDragState={clickDragState} />
-        <OffBoard bgioProps={props} clickDragState={clickDragState} pieces={bottom} />
+        <OffBoard onFunctions={onFunctions} clickDragState={clickDragState} rowName='black' />
+        <MainBoard onFunctions={onFunctions} clickDragState={clickDragState} pieces={G.pieces} />
+        <OffBoard onFunctions={onFunctions} clickDragState={clickDragState} rowName='white' />
       </PlayArea>
     </DndProvider>
   )
@@ -130,11 +141,16 @@ function chess(displayName: string, pieces: Pieces) : AppGame {
 
       end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
         assert(sameJSON(G.moveStart, from));
-        if (to) {
-          G.pieces[to.row][to.col] = G.pieces[from.row][from.col];
-          G.pieces[from.row][from.col] = null;
-        }
-        G.moveStart = null;
+
+          if (to && !offBoard(to)) {
+            if (offBoard(from)) {
+              G.pieces[to.row][to.col] = offBoardPiece(from);
+            } else {
+              G.pieces[to.row][to.col] = G.pieces[from.row][from.col];
+              G.pieces[from.row][from.col] = null;
+            }
+          }
+        
       },
     },
 

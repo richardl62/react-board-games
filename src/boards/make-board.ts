@@ -9,6 +9,7 @@ import { OnFunctions } from "./internal/square";
 export function makeBoardProps(
   pieces: ReactNode[][], 
   style: 'plain'|'checkered',
+  boardID: string,
   onFunctions?: OnFunctions,
   moveStart?: RowCol | null,
   ) : BoardProps {
@@ -21,6 +22,7 @@ export function makeBoardProps(
   })
   const boardProps : BoardProps = {
     elements: elements,
+    boardID: boardID,
   }
 
   if(onFunctions) {
