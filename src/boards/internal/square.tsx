@@ -54,12 +54,12 @@ const BorderHelper = styled.div<{ backgroundColor: string }>`
     z-index: 1;
 `;
 
-const Element = styled.div<{isDragging: boolean, isDraggedOver: boolean}>`
+const Element = styled.div<{hidden: boolean, isDraggedOver: boolean}>`
     width: 100%;
     height: 100%;
 
     opacity: ${props => props.isDraggedOver ? '0.3' : '1'};
-    visibility: ${props => props.isDragging ? 'hidden' : 'inherit'};
+    visibility: ${props => props.hidden ? 'hidden' : 'inherit'};
 
     z-index: 2;
 `;
@@ -151,7 +151,7 @@ export function Square(props: SquareProps) {
         >
             <BorderHelper backgroundColor={backgroundColor} />
             <Element ref={dragRef} 
-                isDragging={isDragging}
+                hidden={isDragging}
                 isDraggedOver={dropCollection.isOver}
             > 
                 {children}
