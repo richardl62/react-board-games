@@ -1,7 +1,7 @@
 import { assertThrow as assert } from '../shared/assert';
 import { sameJSON } from "../shared/tools";
 import { MoveFunctions, SquareID } from "./interfaces";
-import { SquareInteraction } from './internal/square';
+import { DragType, SquareInteraction } from './internal/square';
 
 type MoveType = 'none' | 'undetermined' | 'click' | 'drag';
 
@@ -15,11 +15,18 @@ export class ClickDragState {
     }
 }
 
+/** Set SquareInteraction members.
+ * dragType is set to return 'move'.
+*/
 export function makeSquareInteraction(
     moveFunctions: MoveFunctions,
     /** Read and changed */
     state: ClickDragState,
-    ) : SquareInteraction
+
+    
+    // Not sure how useful this type specification is.
+    // The idea is to make sure members are not forgotten.
+    ) : Required<SquareInteraction>
 {
     const onMouseDown = (sq: SquareID) => {
         //console.log("onMouseDown", sq.toString());
@@ -84,10 +91,13 @@ export function makeSquareInteraction(
         state.reset();
     }
 
+    const dragType = () => DragType.move;
     return {
         onMouseDown: onMouseDown,
         onClick: onClick,
         allowDrag: allowDrag,
         onDrop: onDrop,
+        dragType: dragType,
     };
+
 }

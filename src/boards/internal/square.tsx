@@ -78,6 +78,11 @@ const HighlightMarker = styled.div<{color:string}>`
     background-color: ${props => props.color};  
 `
 
+export enum DragType {
+    move,
+    copy,
+};
+
 export interface SquareInteraction {
     onMouseDown?: (square: SquareID) => void;
     onClick?: (square: SquareID) => void;
@@ -86,6 +91,11 @@ export interface SquareInteraction {
     
     /** Called at start of drag. Defaults to always true. */
     allowDrag?: (from: SquareID)=>boolean;
+
+    /** Should the drag move or copy the piece.
+     * Defaults to moving.
+     */
+    dragType?: (from: SquareID)=>DragType;
 }
 
 export interface SquareProps extends SquareStyle, SquareInteraction {
@@ -98,6 +108,7 @@ export function Square(props: SquareProps) {
             highlight, label, onClick, onMouseDown, onDrop } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
     const allowDrag = props.allowDrag ?? (()=>true);
+    const dragType = props.allowDrag ?? (()=>DragType.move);
 
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
@@ -151,7 +162,7 @@ export function Square(props: SquareProps) {
         >
             <BorderHelper backgroundColor={backgroundColor} />
             <Element ref={dragRef} 
-                hidden={isDragging}
+                hidden={isDragging && dragType(label) === DragType.copy}
                 isDraggedOver={dropCollection.isOver}
             > 
                 {children}
