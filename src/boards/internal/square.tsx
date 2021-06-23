@@ -78,7 +78,7 @@ const HighlightMarker = styled.div<{color:string}>`
     background-color: ${props => props.color};  
 `
 
-export interface OnFunctions { // Not quite the right name
+export interface SquareInteraction {
     onMouseDown?: (square: SquareID) => void;
     onClick?: (square: SquareID) => void;
 
@@ -88,7 +88,7 @@ export interface OnFunctions { // Not quite the right name
     allowDrag?: (from: SquareID)=>boolean;
 }
 
-export interface SquareProps extends SquareStyle, OnFunctions {
+export interface SquareProps extends SquareStyle, SquareInteraction {
     children: ReactNode;
     label: SquareID;
 }

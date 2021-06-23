@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
-  Board, ClickDragState, makeBoardProps, makeOnFunctions,
+  Board, ClickDragState, makeBoardProps, makeSquareInteraction,
   MoveFunctions, SquareID, squareSize
 } from '../../boards';
 import { map2DArray, sameJSON } from '../../shared/tools';
@@ -54,7 +54,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
 
   const boardProps = makeBoardProps(elements, 'checkered', 
     'swapSquares',
-    makeOnFunctions(moveFunctions, clickDragState), 
+    makeSquareInteraction(moveFunctions, clickDragState), 
     clickDragState.start);
 
   return (

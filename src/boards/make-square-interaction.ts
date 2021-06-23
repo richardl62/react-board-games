@@ -1,7 +1,7 @@
 import { assertThrow as assert } from '../shared/assert';
 import { sameJSON } from "../shared/tools";
 import { MoveFunctions, SquareID } from "./interfaces";
-import { OnFunctions } from './internal/square';
+import { SquareInteraction } from './internal/square';
 
 type MoveType = 'none' | 'undetermined' | 'click' | 'drag';
 
@@ -15,11 +15,11 @@ export class ClickDragState {
     }
 }
 
-export function makeOnFunctions(
+export function makeSquareInteraction(
     moveFunctions: MoveFunctions,
     /** Read and changed */
     state: ClickDragState,
-    ) : OnFunctions
+    ) : SquareInteraction
 {
     const onMouseDown = (sq: SquareID) => {
         //console.log("onMouseDown", sq.toString());
