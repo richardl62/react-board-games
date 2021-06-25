@@ -9,7 +9,7 @@ import {
 import { DragType, SquareInteraction } from '../../boards/internal/square';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
-import { map2DArray, sameJSON } from '../../shared/tools';
+import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
 
@@ -74,7 +74,7 @@ interface MainBoardProps {
 
 function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps) {
 
-  const boardPieces = map2DArray(pieces, name =>
+  const boardPieces = nestedArrayMap(pieces, name =>
     name && <Piece pieceName={name} />
   );
 

@@ -1,4 +1,19 @@
-export function map2DArray<T, MappedT>(
+
+/** Check is an array of arrays is reactangular in the sense of all rows 
+ * having the same length.  Returns true for empty array.
+ */
+export function isRectangular(arr: any[][]) {
+  for(let row = 1; row < arr.length; ++row) {
+    if(arr[row].length !== arr[0].length) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/** map the elements of an array of arrays */
+export function nestedArrayMap<T, MappedT>(
   array: Array<Array<T>>,
   func: (elem: T, indices: [number, number]) => MappedT,
   ) : Array<Array<MappedT>> {

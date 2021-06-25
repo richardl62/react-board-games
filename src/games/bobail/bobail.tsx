@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { Board, ClickDragState, makeBoardProps, makeSquareInteraction, MoveFunctions, SquareID, squareSize } from '../../boards';
-import { map2DArray } from '../../shared/tools';
+import { nestedArrayMap } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { bb, Piece, pl1, pl2 } from './piece';
 
@@ -37,7 +37,7 @@ type G = typeof initialState;
 
 function BobailBoard({ G, moves }: Bgio.BoardProps<G>) {
 
-    const pieces = map2DArray(G.pieces, name => {
+    const pieces = nestedArrayMap(G.pieces, name => {
         const p = name &&  <Piece pieceName={name}/>;
         return <Square>{p}</Square>;
      });

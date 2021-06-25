@@ -1,18 +1,25 @@
 import { ReactNode } from "react";
-import { map2DArray } from "../shared/tools";
+import { nestedArrayMap } from "../shared/tools";
 import { BoardElement, BoardProps } from "./board";
 import { defaultColors, SquareID } from "./interfaces";
 import { setBoardStyle } from "./internal/set-board-style";
 import { SquareInteraction } from "./internal/square";
 
+ /** Helper function to make a Board */
 export function makeBoardProps(
   pieces: ReactNode[][], 
+
+  /** Board style: plain or checkered */
   style: 'plain'|'checkered',
+
+  /** board ID */
   boardID: string,
+
   squareInteraction?: SquareInteraction,
   moveStart?: SquareID | null,
-  ) : BoardProps {
-  const elements = map2DArray(pieces, piece => {
+  ) : BoardProps 
+{
+  const elements = nestedArrayMap(pieces, piece => {
     const elem: BoardElement = {
       piece: piece,
       showHover: true,
@@ -25,7 +32,7 @@ export function makeBoardProps(
   }
 
   if(squareInteraction) {
-    boardProps.elements = map2DArray(boardProps.elements, 
+    boardProps.elements = nestedArrayMap(boardProps.elements, 
       elem => {return {...elem, ...squareInteraction}}   
      )
   }

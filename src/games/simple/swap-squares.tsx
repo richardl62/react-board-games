@@ -6,7 +6,7 @@ import {
   Board, ClickDragState, makeBoardProps, makeSquareInteraction,
   MoveFunctions, SquareID, squareSize
 } from '../../boards';
-import { map2DArray, sameJSON } from '../../shared/tools';
+import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
 const Square = styled.div`
@@ -48,7 +48,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   }
   const clickDragState = useRef(new ClickDragState()).current;
 
-  const elements = map2DArray(G.squares, sq =>
+  const elements = nestedArrayMap(G.squares, sq =>
     <Square {...sq}>{sq.value}</Square>,
   );
 
@@ -73,7 +73,7 @@ export const swapSquares: AppGame = {
   displayName: 'Swap Squares (for testing)',
 
   setup: (): G => {
-    const intialSquares = map2DArray(initialValues, makeSquareDef);
+    const intialSquares = nestedArrayMap(initialValues, makeSquareDef);
     return { squares: intialSquares };
   },
 
