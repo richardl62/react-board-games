@@ -55,13 +55,14 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
     <Piece pieceName={name} />
   );
 
-  const boardProps = makeBoardProps([boardPieces], 'plain',
+  const boardProps = makeBoardProps(
+    [boardPieces],
+    {
+      checkered: false,
+      border: 'none',
+    },
     rowName,
     squareInteraction, clickDragState.start);
-  boardProps.borderLabels = false;
-  boardProps.borderWidth = 'none';
-  boardProps.gridGap = 'none';
-  boardProps.boardID = rowName;
 
   return <Board {...boardProps} />
 }
@@ -78,7 +79,12 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
     name && <Piece pieceName={name} />
   );
 
-  const boardProps = makeBoardProps(boardPieces, 'checkered',
+  const boardProps = makeBoardProps(
+    boardPieces,
+    {
+      checkered: true,
+      border: 'labelled',
+    },
     'main',
     squareInteraction, clickDragState.start);
   boardProps.boardID = "main";
@@ -118,11 +124,11 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
         <MainBoard
           squareInteraction={basicSquareInteraction}
           clickDragState={clickDragState} pieces={G.pieces}
-         />
+        />
         <OffBoard
           squareInteraction={offBoardSquareInteraction}
           clickDragState={clickDragState} rowName='white'
-          />
+        />
       </PlayArea>
     </DndProvider>
   )

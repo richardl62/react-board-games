@@ -1,6 +1,6 @@
-import { assert } from 'console';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
+import assert from '../shared/assert';
 import { applyDefaults, isRectangular } from '../shared/tools';
 import { BoardStyle, defaultColors } from "./interfaces";
 import { Square, SquareProps } from './internal/square';
@@ -52,7 +52,7 @@ export function Board(props: BoardProps) {
         borderLabels: false,
         reverseRows: false,
         gridGap: 'none',
-        borderWidth: "4%", // arbitray
+        borderWidth: 'none',
         colors: {
             background: defaultColors.boardBackground,
             labels: defaultColors.boardBorderLabels,

@@ -1,17 +1,26 @@
 import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
 import { DragType, SquareInteraction } from "../../boards/internal/square";
 import { nestedArrayMap } from "../../shared/tools";
 import { AppGame, Bgio } from "../../shared/types";
 import { Tile } from "./tile";
 
+const StyledScrabble = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+`;
+
 type Letter = string;
+
 
 type G = {
     board: (Letter|null)[][],
-    ranks: (Letter|null)[][],
+    racks: (Letter|null)[][],
     moveStart: SquareID | null,
 }
 
@@ -28,7 +37,9 @@ function MainBoard({letters, squareInteraction, clickDragState}: BoardProps) {
     
       const boardProps = makeBoardProps(
         tiles, 
-        'plain',
+        {
+          border: 'simple',
+        },
         'mainBoard',
         squareInteraction, 
         clickDragState.start
@@ -45,8 +56,23 @@ interface RackProps {
     letters: (Letter|null)[];
 }
 
-function Rack(props: RackProps) {
-    return <div>Rack</div>
+function Rack({letters, squareInteraction, clickDragState}: RackProps) {
+  const tiles = letters.map(letter =>
+      letter && <Tile letter={letter} />
+    );
+  
+    const boardProps = makeBoardProps(
+      [ tiles ], 
+      {
+        border: 'simple',
+      },
+      'mainBoard',
+      squareInteraction, 
+      clickDragState.start
+    );
+
+  
+    return <Board {...boardProps} />
 }
 
 function Scrabble(props: Bgio.BoardProps<G>) {
@@ -68,25 +94,26 @@ function Scrabble(props: Bgio.BoardProps<G>) {
       }
     };
   
-    const basicSquareInteraction = makeSquareInteraction(moveFunctions, clickDragState);
-    const offBoardSquareInteraction = { ...basicSquareInteraction, dragType: () => DragType.copy };
-    return (
-        <DndProvider backend={HTML5Backend}>
-          <Rack
-            squareInteraction={offBoardSquareInteraction}
-            clickDragState={clickDragState}
-            letters={G.ranks[0] /*KLUDGE*/} 
-          />
-          <MainBoard
-            squareInteraction={offBoardSquareInteraction}
-            clickDragState={clickDragState}
-            letters={G.board} 
-          />
-       
-      </DndProvider>
-    )
-  }
-  
+  const basicSquareInteraction = makeSquareInteraction(moveFunctions, clickDragState);
+  const offBoardSquareInteraction = { ...basicSquareInteraction, dragType: () => DragType.copy };
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <StyledScrabble>
+        <Rack
+          squareInteraction={offBoardSquareInteraction}
+          clickDragState={clickDragState}
+          letters={G.racks[0] /*KLUDGE*/}
+        />
+        <MainBoard
+          squareInteraction={offBoardSquareInteraction}
+          clickDragState={clickDragState}
+          letters={G.board}
+        />
+      </StyledScrabble>
+    </DndProvider>
+  )
+}
+
 
 export const scrabble: AppGame = {
 
@@ -102,8 +129,8 @@ export const scrabble: AppGame = {
                 [null,null,null],
                 ['x', 'y', 'z'],
             ],
-            ranks:[
-                ['l', 'm', 'n'],
+            racks:[
+                ['l', 'm', 'n', 'o', 'p'],
             ],
             moveStart: null,
         }

@@ -1,10 +1,17 @@
 import { BoardProps } from '../board';
 import { defaultColors, squareSize } from '../interfaces';
 
+export interface BoardStyle {
+  checkered?: boolean;
+  border: 'labelled' | 'simple' | 'none';  
+}
+
 export function checkeredColor(row: number, col: number) {
   const asTopLeft = (row + col) % 2 === 0;
   return asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
 }
+
+
 
 /** Modify the input props to make it suitable for a checkered board.
  * This involves setting colors and boarder properies.
@@ -14,7 +21,7 @@ export function checkeredColor(row: number, col: number) {
  */
 export function setBoardStyle(
   props: BoardProps,
-  style: 'plain' | 'checkered',
+  style: BoardStyle,
 ): BoardProps {
 
   const { elements } = props;
@@ -23,7 +30,7 @@ export function setBoardStyle(
     const row = elements[rowNum];
 
     for (let colNum = 0; colNum < row.length; ++colNum) {
-      if(style === 'checkered') {
+      if(style.checkered) {
         row[colNum].backgroundColor = checkeredColor(rowNum, colNum);
       } else {
         row[colNum].backgroundColor = defaultColors.square;
@@ -31,12 +38,19 @@ export function setBoardStyle(
     }
   }
 
-  props.borderLabels = true;
-  if(style !== 'checkered') {
-    props.gridGap = '2px';
-  }
-  props.borderWidth = `calc(${squareSize} / 2)`
-  
+  if (style.border !== 'none') {
 
+    if (!style.checkered) {
+      props.gridGap = '2px';
+    }
+
+    if(style.border === 'labelled') {
+      props.borderLabels = true;  
+      props.borderWidth = `calc(${squareSize} / 2)`;
+    } else {
+      props.borderWidth = `4px`;
+    }
+  }
+  
   return props;
 }

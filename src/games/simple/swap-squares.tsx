@@ -52,7 +52,12 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     <Square {...sq}>{sq.value}</Square>,
   );
 
-  const boardProps = makeBoardProps(elements, 'checkered', 
+  const boardProps = makeBoardProps(
+    elements, 
+    {
+      checkered: true,
+      border: 'labelled',
+    },
     'swapSquares',
     makeSquareInteraction(moveFunctions, clickDragState), 
     clickDragState.start);
