@@ -5,6 +5,8 @@ import { defaultColors, SquareID } from "./interfaces";
 import { setBoardStyle } from "./internal/set-board-style";
 import { SquareInteraction } from "./internal/square";
 
+
+
  /** Helper function to make a Board */
 export function makeBoardProps(
   pieces: ReactNode[][], 
