@@ -38,7 +38,10 @@ function MainBoard({letters, squareInteraction, clickDragState}: BoardProps) {
       const boardProps = makeBoardProps(
         tiles, 
         {
-          border: 'simple',
+          squareBackground: true,
+          externalBorders: true,
+          internalBorders: true,
+ 
         },
         'mainBoard',
         squareInteraction, 
@@ -63,8 +66,10 @@ function Rack({letters, squareInteraction, clickDragState}: RackProps) {
   
     const boardProps = makeBoardProps(
       [ tiles ], 
-      {
-        border: 'simple',
+      {     
+        squareBackground: false,
+        externalBorders: false,
+        internalBorders: false,
       },
       'mainBoard',
       squareInteraction, 

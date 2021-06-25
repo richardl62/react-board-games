@@ -1,18 +1,32 @@
 import { BoardProps } from '../board';
-import { defaultColors, squareSize } from '../interfaces';
+import { defaultColors, SquareID, squareSize } from '../interfaces';
 
 export interface BoardStyle {
-  checkered?: boolean;
-  border: 'labelled' | 'simple' | 'none';  
+  /** 
+   * Boolean, 'checkered' or function mapping SquareID to color 
+   * True means 'you pick the sytle'. 
+  */
+  squareBackground: boolean | ((sq: SquareID) => string);
+  
+  /** True means 'you pick the sytle'. */
+  internalBorders: boolean;
+
+  /** True means 'you pick the sytle'. */
+  externalBorders: boolean | 'labelled';
 }
 
-export function checkeredColor(row: number, col: number) {
-  const asTopLeft = (row + col) % 2 === 0;
+export function checkered(sq: SquareID) {
+  const asTopLeft = (sq.row + sq.col) % 2 === 0;
   return asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
 }
 
-
-
+function squareID(row: number, col: number, boardID: string) : SquareID {
+  return {
+    row: row,
+    col: col,
+    boardID: boardID,
+  }
+}
 /** Modify the input props to make it suitable for a checkered board.
  * This involves setting colors and boarder properies.
  *  
@@ -26,25 +40,25 @@ export function setBoardStyle(
 
   const { elements } = props;
 
-  for (let rowNum = 0; rowNum < elements.length; ++rowNum) {
-    const row = elements[rowNum];
-
-    for (let colNum = 0; colNum < row.length; ++colNum) {
-      if(style.checkered) {
-        row[colNum].backgroundColor = checkeredColor(rowNum, colNum);
-      } else {
-        row[colNum].backgroundColor = defaultColors.square;
-      } 
+  const backgroundColor = (row: number, col: number) => {
+    if(typeof style.squareBackground === 'function') {
+      return style.squareBackground(
+        squareID(row, col, props.boardID)
+      );
     }
   }
 
-  if (style.border !== 'none') {
-
-    if (!style.checkered) {
-      props.gridGap = '2px';
+  for (let rowNum = 0; rowNum < elements.length; ++rowNum) {
+    const row = elements[rowNum];
+    for (let colNum = 0; colNum < row.length; ++colNum) {
+        row[colNum].backgroundColor = backgroundColor(rowNum, colNum);
     }
+  }
 
-    if(style.border === 'labelled') {
+
+  if (style.externalBorders) {
+
+    if(style.externalBorders === 'labelled') {
       props.borderLabels = true;  
       props.borderWidth = `calc(${squareSize} / 2)`;
     } else {
@@ -52,5 +66,9 @@ export function setBoardStyle(
     }
   }
   
+  if(style.internalBorders) {
+    props.gridGap = "2px";
+  }
+
   return props;
 }

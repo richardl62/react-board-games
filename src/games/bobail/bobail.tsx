@@ -51,7 +51,9 @@ function BobailBoard({ G, moves }: Bgio.BoardProps<G>) {
      const boardProps = makeBoardProps(
         pieces, 
         {
-            border: 'simple',
+            squareBackground: true,
+            internalBorders: true,
+            externalBorders: true,
         },
         'bobail', 
         makeSquareInteraction(moveFunctions, clickDragState), 

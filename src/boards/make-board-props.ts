@@ -2,8 +2,10 @@ import { ReactNode } from "react";
 import { nestedArrayMap } from "../shared/tools";
 import { BoardElement, BoardProps } from "./board";
 import { defaultColors, SquareID } from "./interfaces";
-import { BoardStyle, setBoardStyle } from "./internal/set-board-style";
+import { BoardStyle, setBoardStyle, checkered } from "./internal/set-board-style";
 import { SquareInteraction } from "./internal/square";
+
+
 
  /** Helper function to make a Board */
 export function makeBoardProps(
@@ -44,3 +46,5 @@ export function makeBoardProps(
 
   return boardProps;
 }
+
+export { checkered };

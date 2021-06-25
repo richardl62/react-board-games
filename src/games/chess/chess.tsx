@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {
   Board, makeBoardProps, MoveFunctions, SquareID,
   ClickDragState, makeSquareInteraction, squareSize,
+  checkered,
 } from '../../boards';
 import { DragType, SquareInteraction } from '../../boards/internal/square';
 import { makeSimpleName } from '../../game-support';
@@ -58,8 +59,9 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
   const boardProps = makeBoardProps(
     [boardPieces],
     {
-      checkered: false,
-      border: 'none',
+      squareBackground: false,
+      internalBorders: false,
+      externalBorders: false,
     },
     rowName,
     squareInteraction, clickDragState.start);
@@ -82,8 +84,9 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
   const boardProps = makeBoardProps(
     boardPieces,
     {
-      checkered: true,
-      border: 'labelled',
+      squareBackground: checkered,
+      externalBorders: 'labelled',
+      internalBorders: false,
     },
     'main',
     squareInteraction, clickDragState.start);
