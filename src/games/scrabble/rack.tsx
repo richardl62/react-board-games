@@ -2,7 +2,7 @@ import { Board, ClickDragState, makeBoardProps } from "../../boards";
 import { SquareInteraction } from "../../boards/internal/square";
 import { Tile } from "./tile";
 import { Letter } from "./scrabble";
-import { squareSize } from "./square-type";
+import { squareSize } from "./style";
 
 interface RackProps {
   squareInteraction: SquareInteraction;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { squareSize } from "./square-type";
+import { squareSize } from "./style";
 
 const StyledTile = styled.div`
     font-size: calc(${squareSize} * 0.8);
