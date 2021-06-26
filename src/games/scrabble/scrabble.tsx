@@ -4,9 +4,11 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
 import { DragType } from "../../boards/internal/square";
+import { nestedArrayMap } from "../../shared/tools";
 import { AppGame, Bgio } from "../../shared/types";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
+import { squareTypesArray } from "./square-type";
 
 const StyledScrabble = styled.div`
   display: inline-flex;
@@ -64,6 +66,7 @@ function Scrabble(props: Bgio.BoardProps<G>) {
 }
 
 
+
 export const scrabble: AppGame = {
 
     name: 'scrabble',
@@ -73,11 +76,7 @@ export const scrabble: AppGame = {
     maxPlayers: 1, //TEMPORARY
     setup: (): G => {
         return {
-            board: [
-                ['a', 'b', 'c'],
-                [null,null,null],
-                ['x', 'y', 'z'],
-            ],
+            board: nestedArrayMap(squareTypesArray, () => null), // KLUDGE?
             racks:[
                 ['l', 'm', 'n', 'o', 'p'],
             ],

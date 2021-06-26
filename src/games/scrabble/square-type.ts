@@ -25,10 +25,10 @@ export const squareTypesArray  = [
     [T, s, s, d, s, s, s, D, s, s, s, d, s, s, T],
     [s, s, d, s, s, s, d, s, d, s, s, s, d, s, s],
     [s, t, s, s, s, t, s, s, s, t, s, s, s, t, s],
-    [s, s, s, s, D, s, s, s, s, t, D, s, s, s, s],
+    [s, s, s, s, D, s, s, s, s, s, D, s, s, s, s],
     [d, s, s, D, s, s, s, d, s, s, s, D, s, s, d],
     [s, s, D, s, s, s, d, s, d, s, s, s, D, s, s],
-    [s, D, s, s, s, t, s, s, s, t, s, s, t, D, s],
+    [s, D, s, s, s, t, s, s, s, t, s, s, s, D, s],
     [T, s, s, d, s, s, s, T, s, s, s, d, s, s, T],
 ]
 
