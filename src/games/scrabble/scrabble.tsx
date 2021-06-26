@@ -2,11 +2,11 @@ import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { Board, ClickDragState, makeBoardProps, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
-import { DragType, SquareInteraction } from "../../boards/internal/square";
-import { nestedArrayMap } from "../../shared/tools";
+import { ClickDragState, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
+import { DragType } from "../../boards/internal/square";
 import { AppGame, Bgio } from "../../shared/types";
-import { Tile } from "./tile";
+import { MainBoard } from "./main-board";
+import { Rack } from "./rack";
 
 const StyledScrabble = styled.div`
   display: inline-flex;
@@ -15,69 +15,13 @@ const StyledScrabble = styled.div`
   align-items: center;
 `;
 
-type Letter = string;
+export type Letter = string;
 
 
 type G = {
     board: (Letter|null)[][],
     racks: (Letter|null)[][],
     moveStart: SquareID | null,
-}
-
-interface BoardProps {
-    squareInteraction: SquareInteraction;
-    clickDragState: ClickDragState;
-    letters: (Letter|null)[][];
-  }
-
-function MainBoard({letters, squareInteraction, clickDragState}: BoardProps) {
-    const tiles = nestedArrayMap(letters, letter =>
-        letter && <Tile letter={letter} />
-      );
-    
-      const boardProps = makeBoardProps(
-        tiles, 
-        {
-          squareBackground: true,
-          externalBorders: true,
-          internalBorders: true,
- 
-        },
-        'mainBoard',
-        squareInteraction, 
-        clickDragState.start
-      );
-  
-    
-      return <Board {...boardProps} />
-}
-
-
-interface RackProps {
-    squareInteraction: SquareInteraction;
-    clickDragState: ClickDragState;
-    letters: (Letter|null)[];
-}
-
-function Rack({letters, squareInteraction, clickDragState}: RackProps) {
-  const tiles = letters.map(letter =>
-      letter && <Tile letter={letter} />
-    );
-  
-    const boardProps = makeBoardProps(
-      [ tiles ], 
-      {     
-        squareBackground: false,
-        externalBorders: false,
-        internalBorders: false,
-      },
-      'mainBoard',
-      squareInteraction, 
-      clickDragState.start
-    );
-
-  
-    return <Board {...boardProps} />
 }
 
 function Scrabble(props: Bgio.BoardProps<G>) {

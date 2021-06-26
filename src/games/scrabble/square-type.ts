@@ -1,8 +1,6 @@
 import assert from "../../shared/assert";
 
-
-
-export const enum SquareType {
+export enum SquareType {
     doubleWord,
     tripleWord,
     doubleLetter,
@@ -16,8 +14,7 @@ const d = SquareType.doubleLetter;
 const t = SquareType.tripleLetter;
 const s = SquareType.simple;
 
-
-const squareTypesArray  = [
+export const squareTypesArray  = [
     [T, s, s, d, s, s, s, T, s, s, s, d, s, s, T],
     [s, D, s, s, s, t, s, s, s, t, s, s, s, D, s],
     [s, s, D, s, s, s, d, s, d, s, s, s, D, s, s],
