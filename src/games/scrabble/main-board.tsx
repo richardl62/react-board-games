@@ -4,6 +4,7 @@ import { nestedArrayMap } from "../../shared/tools";
 import { Tile } from "./tile";
 import { Letter } from "./scrabble";
 import { squareSize, SquareType, squareTypesArray } from "./square-type";
+import './letters.ts'
 
 interface MainBoardProps {
   squareInteraction: SquareInteraction;
