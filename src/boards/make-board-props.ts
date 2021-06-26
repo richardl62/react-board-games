@@ -24,9 +24,11 @@ export function makeBoardProps(
     const elem: BoardElement = {
       piece: piece,
       showHover: true,
+      size: style.squareSize,
     }
     return elem;
   })
+  
   const boardProps : BoardProps = {
     elements: elements,
     boardID: boardID,

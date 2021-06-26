@@ -1,5 +1,7 @@
 import assert from "../../shared/assert";
 
+export const squareSize = '30px';
+
 export enum SquareType {
     doubleWord,
     tripleWord,

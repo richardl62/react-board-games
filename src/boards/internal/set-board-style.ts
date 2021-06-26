@@ -1,5 +1,5 @@
 import { BoardProps } from '../board';
-import { defaultColors, SquareID, squareSize } from '../interfaces';
+import { defaultColors, SquareID } from '../interfaces';
 
 export interface BoardStyle {
   /** 
@@ -13,6 +13,8 @@ export interface BoardStyle {
 
   /** True means 'you pick the sytle'. */
   externalBorders: boolean | 'labelled';
+
+  squareSize: string;
 }
 
 export function checkered(sq: SquareID) {
@@ -60,7 +62,7 @@ export function setBoardStyle(
 
     if(style.externalBorders === 'labelled') {
       props.borderLabels = true;  
-      props.borderWidth = `calc(${squareSize} / 2)`;
+      props.borderWidth = `calc(${style.squareSize} / 2)`;
     } else {
       props.borderWidth = `4px`;
     }

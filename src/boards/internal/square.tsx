@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components';
-import { SquareStyle, defaultColors, SquareID, squareSize,  } from '../interfaces';
+import { SquareStyle, defaultColors, SquareID } from '../interfaces';
 
 const PIECE='piece';
 
@@ -10,6 +10,7 @@ interface StyledSquareProps {
     backgroundColor: string;
     borderColor: string;
     showBorder: ShowBorder;
+    size: string;
 };
 
 const backgroundColor = (props: StyledSquareProps, hovering: boolean) => {
@@ -25,8 +26,8 @@ const StyledSquare = styled.div<StyledSquareProps>`
     position: relative;
     
     //KLUDGE: Hard coded square size
-    height: ${squareSize};
-    width: ${squareSize};
+    height: ${props => props.size};
+    width: ${props => props.size};
     
     background-color: ${props => backgroundColor(props, false) };
     z-index: 0;
@@ -105,7 +106,7 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 
 export function Square(props: SquareProps) {
     const { children, showHover,
-            highlight, label, onClick, onMouseDown, onDrop } = props;
+            highlight, label, onClick, onMouseDown, onDrop, size } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
     const allowDrag = props.allowDrag ?? (()=>true);
     const dragType = props.allowDrag ?? (()=>DragType.move);
@@ -155,6 +156,7 @@ export function Square(props: SquareProps) {
             backgroundColor={backgroundColor}
             borderColor={borderColor}
             showBorder={showBorder}
+            size={size}
 
             //onClick={onClick && (() => onClick(label))}
             onClick={onClick && (() => onClick(label))}

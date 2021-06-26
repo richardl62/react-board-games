@@ -3,7 +3,7 @@ import { SquareInteraction } from "../../boards/internal/square";
 import { nestedArrayMap } from "../../shared/tools";
 import { Tile } from "./tile";
 import { Letter } from "./scrabble";
-import { SquareType, squareTypesArray } from "./square-type";
+import { squareSize, SquareType, squareTypesArray } from "./square-type";
 
 interface MainBoardProps {
   squareInteraction: SquareInteraction;
@@ -38,6 +38,7 @@ export function MainBoard({ letters, squareInteraction, clickDragState }: MainBo
       squareBackground: sq => squareColors[sq.row][sq.col],
       externalBorders: true,
       internalBorders: true,
+      squareSize: squareSize,
     },
     'mainBoard',
     squareInteraction,

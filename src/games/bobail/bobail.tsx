@@ -2,10 +2,12 @@ import { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, ClickDragState, makeBoardProps, makeSquareInteraction, MoveFunctions, SquareID, squareSize } from '../../boards';
+import { Board, ClickDragState, makeBoardProps, makeSquareInteraction, MoveFunctions, SquareID } from '../../boards';
 import { nestedArrayMap } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { bb, Piece, pl1, pl2 } from './piece';
+
+const squareSize = '50px';
 
 const Square = styled.div`
     width: ${squareSize};
@@ -54,6 +56,7 @@ function BobailBoard({ G, moves }: Bgio.BoardProps<G>) {
             squareBackground: true,
             internalBorders: true,
             externalBorders: true,
+            squareSize: squareSize,
         },
         'bobail', 
         makeSquareInteraction(moveFunctions, clickDragState), 

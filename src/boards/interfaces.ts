@@ -28,6 +28,8 @@ export interface SquareStyle {
     // false -> suppress, true-> default color, string -> specified color;
     showHover?: boolean | string;
     highlight?: boolean | string;
+
+    size: string;
 }
 
 export interface BoardStyle {
@@ -63,6 +65,3 @@ export interface MoveFunctions {
      */
     onMoveEnd: (from: SquareID, to: SquareID | null) => void;
 }
-
-// Recommended square size. KLUDGE
-export const squareSize = '50px';

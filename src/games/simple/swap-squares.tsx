@@ -4,10 +4,12 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, ClickDragState, makeBoardProps, makeSquareInteraction,
-  MoveFunctions, SquareID, squareSize, checkered
+  MoveFunctions, SquareID, checkered
 } from '../../boards';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
+
+const squareSize = '50px';
 
 const Square = styled.div`
   font-size: calc(${squareSize} * 0.8); // KLUDGE
@@ -58,6 +60,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
       squareBackground: checkered,
       internalBorders: false,
       externalBorders: 'labelled',
+      squareSize: squareSize,
     },
     'swapSquares',
     makeSquareInteraction(moveFunctions, clickDragState), 

@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, makeBoardProps, MoveFunctions, SquareID,
-  ClickDragState, makeSquareInteraction, squareSize,
+  ClickDragState, makeSquareInteraction,
   checkered,
 } from '../../boards';
 import { DragType, SquareInteraction } from '../../boards/internal/square';
@@ -13,6 +13,8 @@ import assert from '../../shared/assert';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
+
+const squareSize = '50px';
 
 const PlayArea = styled.div`
   display: inline-flex;
@@ -62,6 +64,7 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
       squareBackground: false,
       internalBorders: false,
       externalBorders: false,
+      squareSize: squareSize,
     },
     rowName,
     squareInteraction, clickDragState.start);
@@ -87,6 +90,7 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
       squareBackground: checkered,
       externalBorders: 'labelled',
       internalBorders: false,
+      squareSize: squareSize,
     },
     'main',
     squareInteraction, clickDragState.start);
