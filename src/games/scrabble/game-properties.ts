@@ -1,8 +1,8 @@
 import assert from "../../shared/assert";
 import { SquareType } from "./square-type";
 
-export const values = {
-    _: 0,
+const letterScores = {
+    '?': 0,
     A: 1, E: 1, I:1, L:1, N:1, O:1, R:1, S:1, T:1, U:1,
     D:2, G:2,
     B:3, C:3, M:3, P:3,
@@ -11,16 +11,20 @@ export const values = {
     J: 8, X: 8,
     Q:10, Z: 10,
 }
-export type Letter = keyof typeof values;
+export type Letter = keyof typeof letterScores;
 
-const distribution = {
-    A:9, B:2, C:2, D:4, E:12, F:2, G:3, H:2, I:9, J:1, K:1, L:4, M:2, N:6, O:8, P:2, Q:1, R:6, S:4, T:6, U:4, V:2, W:2, X:1, Y:2, Z:1, _:2, 
+export function letterScore(l: Letter) : number {
+    return letterScores[l];
+}
+
+const letterDistribution = {
+    A:9, B:2, C:2, D:4, E:12, F:2, G:3, H:2, I:9, J:1, K:1, L:4, M:2, N:6, O:8, P:2, Q:1, R:6, S:4, T:6, U:4, V:2, W:2, X:1, Y:2, Z:1, '?':2, 
 };
 
 export let fullBag: Array<Letter> = [];
-for(const letter_ in distribution) {
-    const letter = letter_ as keyof typeof distribution;
-    const count = distribution[letter];
+for(const letter_ in letterDistribution) {
+    const letter = letter_ as keyof typeof letterDistribution;
+    const count = letterDistribution[letter];
     for(let i = 0; i < count; ++i) {
         fullBag.push(letter);
     }
@@ -54,7 +58,7 @@ export const squareTypesArray  = [
 assert(squareTypesArray.length === 15);
 squareTypesArray.forEach(row => assert(row.length === 15));
 
-assert(Object.keys(values).length === 27, "Problem with setup");
-assert(Object.keys(distribution).length === 27, "Problem with setup");
+assert(Object.keys(letterScores).length === 27, "Problem with setup");
+assert(Object.keys(letterDistribution).length === 27, "Problem with setup");
 assert(fullBag.length === 100, "Problem with setup");
 

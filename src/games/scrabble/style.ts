@@ -16,3 +16,6 @@ export function squareColor(type: SquareType) : string {
           return '#fff8dc'; // cornsilk
     }
   }
+
+  export const tileBackgroundColor = "brown";
+  export const tileTextColor = "white";

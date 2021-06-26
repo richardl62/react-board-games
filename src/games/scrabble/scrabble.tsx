@@ -6,9 +6,9 @@ import { ClickDragState, makeSquareInteraction, MoveFunctions, SquareID } from "
 import { DragType } from "../../boards/internal/square";
 import { nestedArrayMap } from "../../shared/tools";
 import { AppGame, Bgio } from "../../shared/types";
+import { Letter, squareTypesArray } from "./game-properties";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
-import { squareTypesArray } from "./square-type";
 
 const StyledScrabble = styled.div`
   display: inline-flex;
@@ -16,8 +16,6 @@ const StyledScrabble = styled.div`
   gap: 5px;
   align-items: center;
 `;
-
-export type Letter = string;
 
 
 type G = {
@@ -78,7 +76,7 @@ export const scrabble: AppGame = {
         return {
             board: nestedArrayMap(squareTypesArray, () => null), // KLUDGE?
             racks:[
-                ['l', 'm', 'n', 'o', 'p'],
+                ['L', 'M', 'N', 'O', 'P', '?'],
             ],
             moveStart: null,
         }

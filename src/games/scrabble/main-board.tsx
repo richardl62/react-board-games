@@ -1,11 +1,9 @@
 import { Board, ClickDragState, makeBoardProps } from "../../boards";
 import { SquareInteraction } from "../../boards/internal/square";
 import { nestedArrayMap } from "../../shared/tools";
-import { Tile } from "./tile";
-import { Letter } from "./scrabble";
-import { SquareType, squareTypesArray } from "./square-type";
+import { Letter, squareTypesArray } from "./game-properties";
 import { squareColor, squareSize } from "./style";
-import './game-properties.ts'
+import { Tile } from "./tile";
 
 interface MainBoardProps {
   squareInteraction: SquareInteraction;

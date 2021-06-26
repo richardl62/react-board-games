@@ -1,8 +1,8 @@
 import { Board, ClickDragState, makeBoardProps } from "../../boards";
 import { SquareInteraction } from "../../boards/internal/square";
-import { Tile } from "./tile";
-import { Letter } from "./scrabble";
+import { Letter } from "./game-properties";
 import { squareSize } from "./style";
+import { Tile } from "./tile";
 
 interface RackProps {
   squareInteraction: SquareInteraction;
@@ -16,9 +16,9 @@ export function Rack({ letters, squareInteraction, clickDragState }: RackProps) 
   const boardProps = makeBoardProps(
     [tiles],
     {
-      squareBackground: false,
-      externalBorders: false,
-      internalBorders: false,
+      squareBackground: true,
+      externalBorders: true,
+      internalBorders: true,
       squareSize: squareSize,
     },
     'mainBoard',
