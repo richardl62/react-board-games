@@ -12,6 +12,7 @@ interface RackProps {
 export function Rack({ letters, squareInteraction, clickDragState }: RackProps) {
   const tiles = letters.map(letter => letter && <Tile letter={letter} />
   );
+  tiles.push(null)
 
   const boardProps = makeBoardProps(
     [tiles],

@@ -9,7 +9,7 @@ import { SquareInteraction } from "./internal/square";
 
  /** Helper function to make a Board */
 export function makeBoardProps(
-  pieces: ReactNode[][], 
+  pieces: (ReactNode|null)[][], 
 
   style: BoardStyle,
 
