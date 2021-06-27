@@ -3,11 +3,9 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
-  Board, makeBoardProps, MoveFunctions, SquareID,
-  ClickDragState, makeSquareInteraction,
-  checkered,
+  Board, checkered, ClickDragState, DragType, makeBoardProps,
+  makeSquareInteraction, MoveFunctions, SquareID, SquareInteraction,
 } from '../../boards';
-import { DragType, SquareInteraction } from '../../boards/internal/square';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';

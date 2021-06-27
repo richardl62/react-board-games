@@ -3,10 +3,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
-import { DragType } from "../../boards/internal/square";
-import { nestedArrayMap } from "../../shared/tools";
 import { AppGame, Bgio } from "../../shared/types";
-import { Letter, squareTypesArray } from "./game-properties";
+import { GameData, moves, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 
@@ -17,14 +15,7 @@ const StyledScrabble = styled.div`
   align-items: center;
 `;
 
-
-type G = {
-    board: (Letter|null)[][],
-    racks: (Letter|null)[][],
-    moveStart: SquareID | null,
-}
-
-function Scrabble(props: Bgio.BoardProps<G>) {
+function Scrabble(props: Bgio.BoardProps<GameData>) {
     const { G } = props;
   
     const clickDragState = useRef(new ClickDragState()).current;
@@ -43,18 +34,17 @@ function Scrabble(props: Bgio.BoardProps<G>) {
       }
     };
   
-  const basicSquareInteraction = makeSquareInteraction(moveFunctions, clickDragState);
-  const offBoardSquareInteraction = { ...basicSquareInteraction, dragType: () => DragType.copy };
+  const squareInteraction = makeSquareInteraction(moveFunctions, clickDragState);
   return (
     <DndProvider backend={HTML5Backend}>
       <StyledScrabble>
         <Rack
-          squareInteraction={offBoardSquareInteraction}
+          squareInteraction={squareInteraction}
           clickDragState={clickDragState}
           letters={G.racks[0] /*KLUDGE*/}
         />
         <MainBoard
-          squareInteraction={offBoardSquareInteraction}
+          squareInteraction={squareInteraction}
           clickDragState={clickDragState}
           letters={G.board}
         />
@@ -63,8 +53,6 @@ function Scrabble(props: Bgio.BoardProps<G>) {
   )
 }
 
-
-
 export const scrabble: AppGame = {
 
     name: 'scrabble',
@@ -72,19 +60,10 @@ export const scrabble: AppGame = {
 
     minPlayers: 1,
     maxPlayers: 1, //TEMPORARY
-    setup: (): G => {
-        return {
-            board: nestedArrayMap(squareTypesArray, () => null), // KLUDGE?
-            racks:[
-                ['L', 'M', 'N', 'O', 'P', '?'],
-            ],
-            moveStart: null,
-        }
-    },
 
-    moves: {
+    setup: startingGameData,
 
-    },
+    moves: moves,
 
     board: Scrabble,
 };

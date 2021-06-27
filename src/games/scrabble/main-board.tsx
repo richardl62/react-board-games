@@ -1,5 +1,4 @@
-import { Board, ClickDragState, makeBoardProps } from "../../boards";
-import { SquareInteraction } from "../../boards/internal/square";
+import { Board, ClickDragState, makeBoardProps, SquareInteraction } from "../../boards";
 import { nestedArrayMap } from "../../shared/tools";
 import { Letter, squareTypesArray } from "./game-properties";
 import { squareColor, squareSize } from "./style";

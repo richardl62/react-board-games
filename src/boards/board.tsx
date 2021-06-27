@@ -129,3 +129,6 @@ export function Board(props: BoardProps) {
         </StyledGrid>
     );
 }
+
+export { DragType } from './internal/square';
+export type { SquareInteraction } from './internal/square';
