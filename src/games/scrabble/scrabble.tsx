@@ -4,7 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
-import { GameData, moves, startingGameData } from "./game-data";
+import { GameData, moves, startingGameData } from "./game-actions";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 
