@@ -10,6 +10,8 @@ export interface GameData {
     moveStart: SquareID | null,
 }
 
+const playerNumber = 0;
+
 export function startingGameData() : GameData {
     return {
         board: nestedArrayMap(squareTypesArray, () => null), // KLUDGE?
@@ -38,7 +40,55 @@ function rackPos(sq: SquareID): number {
     return sq.col;
 }
 
-  
+/** get the letter at a square */
+function getLetter(G: GameData, sq: SquareID) : Letter | null {
+    if(onRack(sq)) {
+        return G.racks[playerNumber][rackPos(sq)]
+    } else {
+        return G.board[sq.row][sq.col];
+    }
+}
+
+function makeRackGap(rack: (Letter|null)[], pos: number) {
+    const nullPos = rack.findIndex(l => l === null);
+    assert(nullPos >= 0, "makeRackGap did not find an empty square");
+    if(nullPos < pos) {
+        for(let ind = nullPos; ind < pos; ++ind) {
+            rack[ind] = rack[ind+1];
+        }
+    } else {
+        for(let ind = nullPos; ind > pos; --ind) {
+            rack[ind] = rack[ind-1];
+        }
+    }
+    rack[pos] = null;
+}
+
+enum RackAction {
+    insert,
+    overwrite,
+}
+/** Set a square to a given value */
+function setLetter(
+    G: GameData, sq: SquareID, 
+    value: Letter | null, 
+    rackAction : RackAction = RackAction.overwrite,  
+    ) {
+    if(onRack(sq)) {
+        let rack = [...G.racks[playerNumber]];
+        const pos = rackPos(sq);
+        if(rackAction === RackAction.insert) {
+            makeRackGap(rack, pos);
+        }
+        rack[pos] = value;
+        G.racks[playerNumber] = rack; 
+    } else {
+        let row = [...G.board[sq.row]];
+        row[sq.col] = value;
+        G.board[sq.row] = row; 
+    }
+}
+
 export const moves = {
     start: (G: GameData, ctx: any, sq: SquareID) => {
         G.moveStart = sq;
@@ -50,36 +100,12 @@ export const moves = {
         fromSq: SquareID, 
         toSq: SquareID
         ) => {
-        const playerNumber = 0;
-        let rack = [...G.racks[playerNumber]];
-        let newBoard = [...G.board];
 
-        if(onRack(fromSq) && onRack(toSq)) {
-            moveInRack(fromSq, toSq, rack);
-        }
-
-        if(!onRack(toSq)) {
-            newBoard[toSq.row][toSq.col] = 'A';
-        }
-        G.racks[playerNumber] = rack;
+        const letter = getLetter(G, fromSq);
+        setLetter(G, fromSq, null);
+        setLetter(G, toSq, letter, RackAction.insert);
     },
 };
-
-function moveInRack(fromSq: SquareID, toSq: SquareID, rack: (Letter | null)[]) {
-    const from = rackPos(fromSq);
-    const to = rackPos(toSq);
-    const fromVal = rack[from];
-    if (from < to) {
-        for (let ind = from; ind < to; ++ind) {
-            rack[ind] = rack[ind + 1];
-        }
-    } else {
-        for (let ind = from; ind > to; --ind) {
-            rack[ind] = rack[ind - 1];
-        }
-    }
-    rack[to] = fromVal;
-}
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
     const { G: {moveStart}, moves } = props;
@@ -96,3 +122,4 @@ export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions 
       }
     }
   };
+
