@@ -1,5 +1,6 @@
 import { Board, ClickDragState, makeBoardProps, SquareInteraction } from "../../boards";
 import { nestedArrayMap } from "../../shared/tools";
+import { boardIDs } from "./game-actions";
 import { Letter, squareTypesArray } from "./game-properties";
 import { squareColor, squareSize } from "./style";
 import { Tile } from "./tile";
@@ -24,7 +25,7 @@ export function MainBoard({ letters, squareInteraction, clickDragState }: MainBo
       internalBorders: true,
       squareSize: squareSize,
     },
-    'mainBoard',
+    boardIDs.main,
     squareInteraction,
     clickDragState.start
   );

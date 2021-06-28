@@ -2,9 +2,9 @@ import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { ClickDragState, makeSquareInteraction, MoveFunctions, SquareID } from "../../boards";
+import { ClickDragState, makeSquareInteraction } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
-import { GameData, moves, startingGameData } from "./game-actions";
+import { GameData, moveFunctions, moves, startingGameData } from "./game-actions";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 
@@ -16,37 +16,24 @@ const StyledScrabble = styled.div`
 `;
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
-    const { G } = props;
-  
-    const clickDragState = useRef(new ClickDragState()).current;
-    const moveFunctions: MoveFunctions = {
-      onClick: (sq: SquareID) => {
-        console.log('onClick', JSON.stringify(sq));
-      },
-  
-      onMoveStart: (sq: SquareID) => {
-        console.log('onMoveStart', JSON.stringify(sq));
-        return true;
-      },
-  
-      onMoveEnd: (sq: SquareID) => {
-        console.log('onMoveEnd', JSON.stringify(sq));
-      }
-    };
-  
-  const squareInteraction = makeSquareInteraction(moveFunctions, clickDragState);
+  const clickDragState = useRef(new ClickDragState()).current;
+  const squareInteraction = makeSquareInteraction(
+    moveFunctions(props),
+    clickDragState
+  );
+
   return (
     <DndProvider backend={HTML5Backend}>
       <StyledScrabble>
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          letters={G.racks[0] /*KLUDGE*/}
+          letters={props.G.racks[0] /*KLUDGE: should be for active player */}
         />
         <MainBoard
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          letters={G.board}
+          letters={props.G.board}
         />
       </StyledScrabble>
     </DndProvider>
@@ -55,15 +42,15 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
 
 export const scrabble: AppGame = {
 
-    name: 'scrabble',
-    displayName: 'Scrabble',
+  name: 'scrabble',
+  displayName: 'Scrabble',
 
-    minPlayers: 1,
-    maxPlayers: 1, //TEMPORARY
+  minPlayers: 1,
+  maxPlayers: 1, //TEMPORARY
 
-    setup: startingGameData,
+  setup: startingGameData,
 
-    moves: moves,
+  moves: moves,
 
-    board: Scrabble,
+  board: Scrabble,
 };

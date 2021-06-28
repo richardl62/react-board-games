@@ -1,4 +1,5 @@
 import { Board, ClickDragState, makeBoardProps, SquareInteraction } from "../../boards";
+import { boardIDs } from "./game-actions";
 import { Letter } from "./game-properties";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
@@ -11,7 +12,6 @@ interface RackProps {
 export function Rack({ letters, squareInteraction, clickDragState }: RackProps) {
   const tiles = letters.map(letter => letter && <Tile letter={letter} />
   );
-  tiles.push(null)
 
   const boardProps = makeBoardProps(
     [tiles],
@@ -21,7 +21,7 @@ export function Rack({ letters, squareInteraction, clickDragState }: RackProps) 
       internalBorders: true,
       squareSize: squareSize,
     },
-    'mainBoard',
+    boardIDs.rack,
     squareInteraction,
     clickDragState.start
   );
