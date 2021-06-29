@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -5,15 +6,26 @@ import styled from "styled-components";
 import { ClickDragState, makeSquareInteraction } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
 import { GameData, moveFunctions, moves, startingGameData } from "./game-actions";
+import { GameInteractions } from "./game-interactions";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 
-const StyledScrabble = styled.div`
+
+function BoardAndRack({ children }: { children: ReactElement[] }) {
+  //Hmm. There must be a better way.
+  const Inner = styled.div`
   display: inline-flex;
   flex-direction: column;
   gap: 5px;
   align-items: center;
-`;
+  `;
+
+  return (<div>
+    <Inner>
+      {children}
+    </Inner>
+  </div>);
+}
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
   const clickDragState = useRef(new ClickDragState()).current;
@@ -24,7 +36,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <StyledScrabble>
+      <BoardAndRack>
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
@@ -35,7 +47,8 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           clickDragState={clickDragState}
           letters={props.G.board}
         />
-      </StyledScrabble>
+      </BoardAndRack>
+      <GameInteractions {...props} />
     </DndProvider>
   )
 }

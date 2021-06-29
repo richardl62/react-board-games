@@ -1,24 +1,29 @@
 import { MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
-import { nestedArrayMap, sameJSON } from "../../shared/tools";
+import { nestedArrayMap, sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
-import { Letter, squareTypesArray } from "./game-properties";
+import { fullBag, Letter, squareTypesArray, rackSize } from "./game-properties";
 
 export interface GameData {
     board: (Letter | null)[][],
     racks: (Letter | null)[][],
     moveStart: SquareID | null,
+    bag: Letter[],
 }
 
 const playerNumber = 0;
 
 export function startingGameData() : GameData {
+    const rack = Array<Letter|null>(rackSize);
+    rack.fill(null);
+
     return {
         board: nestedArrayMap(squareTypesArray, () => null), // KLUDGE?
         racks:[
-            ['A', 'B', 'C', 'D', 'E', 'F', '?'],
+            rack,
         ],
         moveStart: null,
+        bag: shuffle([...fullBag]),
     }
 }
 
@@ -64,6 +69,16 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
     rack[pos] = null;
 }
 
+function fillRack(G: GameData) {
+    let rack = G.racks[playerNumber];
+    let bag = G.bag;
+    for(let i = 0; i < rack.length; ++i) {
+        if(rack[i] === null && bag.length > 0) {
+            rack[i] = bag.pop()!;
+        }
+    }
+}
+
 enum RackAction {
     insert,
     overwrite,
@@ -105,6 +120,8 @@ export const moves = {
         setLetter(G, fromSq, null);
         setLetter(G, toSq, letter, RackAction.insert);
     },
+
+    fillRack: fillRack,
 };
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
