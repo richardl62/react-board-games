@@ -5,26 +5,25 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, makeSquareInteraction } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
-import { moveFunctions, moves } from "./game-actions";
+import { moveFunctions, bgioMoves } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
 import { GameInteractions } from "./game-interactions";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 
-
-function BoardAndRack({ children }: { children: ReactElement[] }) {
-  //Hmm. There must be a better way.
-  const Inner = styled.div`
+const InnerBoardAndRack = styled.div`
   display: inline-flex;
   flex-direction: column;
   gap: 5px;
   align-items: center;
   `;
 
+function BoardAndRack({ children }: { children: ReactElement[] }) {
+  //Hmm. There must be a better way.
   return (<div>
-    <Inner>
+    <InnerBoardAndRack>
       {children}
-    </Inner>
+    </InnerBoardAndRack>
   </div>);
 }
 
@@ -42,6 +41,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
           letters={props.G.racks[0] /*KLUDGE: should be for active player */}
+          shuffle={props.moves.shuffleRack}
         />
         <MainBoard
           squareInteraction={squareInteraction}
@@ -64,7 +64,7 @@ export const scrabble: AppGame = {
 
   setup: startingGameData,
 
-  moves: moves,
+  moves: bgioMoves,
 
   board: Scrabble,
 };

@@ -1,6 +1,6 @@
 import { MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
-import { sameJSON } from "../../shared/tools";
+import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { GameData } from "./game-data";
@@ -83,21 +83,20 @@ function setLetter(
     }
 }
 
-export const moves = {
+export const bgioMoves = {
     start: (G: GameData, ctx: any, sq: SquareID) => {
         G.moveStart = sq;
     },
 
-    move: (
-        G: GameData, 
-        ctx: any, 
-        fromSq: SquareID, 
-        toSq: SquareID
-        ) => {
+    move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
 
         const letter = getLetter(G, fromSq);
         setLetter(G, fromSq, null);
         setLetter(G, toSq, letter, RackAction.insert);
+    },
+
+    shuffleRack: (G: GameData) => {
+        shuffle(G.racks[playerNumber]);
     },
 
     fillRack: fillRack,
