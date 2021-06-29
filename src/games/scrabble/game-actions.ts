@@ -1,32 +1,11 @@
 import { MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
-import { nestedArrayMap, sameJSON, shuffle } from "../../shared/tools";
+import { sameJSON } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
-import { fullBag, Letter, squareTypesArray, rackSize } from "./game-properties";
-
-export interface GameData {
-    board: (Letter | null)[][],
-    racks: (Letter | null)[][],
-    moveStart: SquareID | null,
-    bag: Letter[],
-}
+import { Letter } from "./letter-properties";
+import { GameData } from "./game-data";
 
 const playerNumber = 0;
-
-export function startingGameData() : GameData {
-    const rack = Array<Letter|null>(rackSize);
-    rack.fill(null);
-
-    return {
-        board: nestedArrayMap(squareTypesArray, () => null), // KLUDGE?
-        racks:[
-            rack,
-        ],
-        moveStart: null,
-        bag: shuffle([...fullBag]),
-    }
-}
-
 export const boardIDs = {
     rack: 'rack',
     main: 'main',

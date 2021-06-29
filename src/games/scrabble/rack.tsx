@@ -1,6 +1,6 @@
 import { Board, ClickDragState, makeBoardProps, SquareInteraction } from "../../boards";
 import { boardIDs } from "./game-actions";
-import { Letter } from "./game-properties";
+import { Letter } from "./letter-properties";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 

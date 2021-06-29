@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Letter, letterScore } from "./game-properties";
+import { Letter, letterScore } from "./letter-properties";
 import { squareSize, tileBackgroundColor, tileTextColor } from "./style";
 
 const StyledTile = styled.div`
