@@ -3,7 +3,7 @@ import assert from "../../shared/assert";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
-import { GameData } from "./game-data";
+import { SquareData, GameData } from "./game-data";
 
 const playerNumber = 0;
 export const boardIDs = {
@@ -25,9 +25,13 @@ function rackPos(sq: SquareID): number {
 }
 
 /** get the letter at a square */
-function getLetter(G: GameData, sq: SquareID) : Letter | null {
+function getSquareData(G: GameData, sq: SquareID) : SquareData | null {
     if(onRack(sq)) {
-        return G.racks[playerNumber][rackPos(sq)]
+        const letter = G.racks[playerNumber][rackPos(sq)];
+        return letter && {
+            letter: letter,
+            active: true, // rank letters are always active
+        }
     } else {
         return G.board[sq.row][sq.col];
     }
@@ -48,7 +52,7 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
     rack[pos] = null;
 }
 
-function fillRack(G: GameData) {
+function finishTurn(G: GameData) {
     let rack = G.racks[playerNumber];
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
@@ -56,6 +60,10 @@ function fillRack(G: GameData) {
             rack[i] = bag.pop()!;
         }
     }
+
+    G.board.forEach(row => 
+        row.forEach(sd => sd && (sd.active = false))
+    );
 }
 
 enum RackAction {
@@ -64,8 +72,9 @@ enum RackAction {
 }
 /** Set a square to a given value */
 function setLetter(
-    G: GameData, sq: SquareID, 
-    value: Letter | null, 
+    G: GameData, 
+    sq: SquareID, 
+    letter: Letter | null, 
     rackAction : RackAction = RackAction.overwrite,  
     ) {
     if(onRack(sq)) {
@@ -74,11 +83,11 @@ function setLetter(
         if(rackAction === RackAction.insert) {
             makeRackGap(rack, pos);
         }
-        rack[pos] = value;
+        rack[pos] = letter;
         G.racks[playerNumber] = rack; 
     } else {
         let row = [...G.board[sq.row]];
-        row[sq.col] = value;
+        row[sq.col] = letter && {letter:letter, active: true};
         G.board[sq.row] = row; 
     }
 }
@@ -90,16 +99,16 @@ export const bgioMoves = {
 
     move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
 
-        const letter = getLetter(G, fromSq);
+        const squareData = getSquareData(G, fromSq);
         setLetter(G, fromSq, null);
-        setLetter(G, toSq, letter, RackAction.insert);
+        setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
     },
 
     shuffleRack: (G: GameData) => {
         shuffle(G.racks[playerNumber]);
     },
 
-    fillRack: fillRack,
+    finishTurn: finishTurn,
 };
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {

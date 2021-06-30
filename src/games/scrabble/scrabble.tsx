@@ -46,7 +46,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
         <MainBoard
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          letters={props.G.board}
+          board={props.G.board}
         />
       </BoardAndRack>
       <GameInteractions {...props} />
