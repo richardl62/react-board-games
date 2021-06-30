@@ -15,7 +15,9 @@ interface MainBoardProps {
 const squareColors = nestedArrayMap(squareTypesArray, squareColor);
 
 export function MainBoard({ letters, squareInteraction, clickDragState }: MainBoardProps) {
-  const tiles = nestedArrayMap(letters, letter => letter && <Tile letter={letter} />
+  const markAsMovable = true;
+  const tiles = nestedArrayMap(letters, letter => letter && 
+    <Tile letter={letter} markAsMovable={markAsMovable}/>
   );
 
   const boardProps = makeBoardProps(
