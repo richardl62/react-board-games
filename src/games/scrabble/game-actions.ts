@@ -3,7 +3,7 @@ import assert from "../../shared/assert";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
-import { SquareData, GameData } from "./game-data";
+import { TileData, GameData } from "./game-data";
 
 const playerNumber = 0;
 export const boardIDs = {
@@ -25,7 +25,7 @@ function rackPos(sq: SquareID): number {
 }
 
 /** get the letter at a square */
-function getSquareData(G: GameData, sq: SquareID) : SquareData | null {
+function getSquareData(G: GameData, sq: SquareID) : TileData | null {
     if(onRack(sq)) {
         const letter = G.racks[playerNumber][rackPos(sq)];
         return letter && {
@@ -112,12 +112,16 @@ export const bgioMoves = {
 };
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
-    const { G: {moveStart}, moves } = props;
+    const { G: {moveStart, board}, moves } = props;
 
+    const isActive = (sq: SquareID) : boolean =>
+    {
+        return onRack(sq) || Boolean(board[sq.row][sq.col]?.active);
+    } 
     return {
       onMoveStart: (sq: SquareID) => {
         moves.start(sq);
-        return true;
+        return isActive(sq);
       },
   
       onMoveEnd: (from: SquareID, to: SquareID | null) => {

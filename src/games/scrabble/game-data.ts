@@ -4,18 +4,18 @@ import { fullBag, Letter } from "./letter-properties";
 import { squareTypesArray, rackSize } from "./board-properties";
 import assert from "../../shared/assert";
 
-export interface SquareData {
+export interface TileData {
     letter: Letter;
     /** movable in the current turn.  Rack tiles are always active. */
     active: boolean;
 }
 
-export function getLetter(sd : SquareData | null) : Letter | null {
+export function getLetter(sd : TileData | null) : Letter | null {
     return sd && sd.letter;
 }
 
 export interface GameData {
-    board: (SquareData | null)[][];
+    board: (TileData | null)[][];
     racks: (Letter | null)[][];
     moveStart: SquareID | null;
     bag: Letter[];

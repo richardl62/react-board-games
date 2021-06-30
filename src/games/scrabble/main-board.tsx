@@ -4,12 +4,12 @@ import { boardIDs } from "./game-actions";
 import { squareTypesArray } from "./board-properties";
 import { squareColor, squareSize } from "./style";
 import { Tile } from "./tile";
-import { SquareData } from "./game-data";
+import { TileData } from "./game-data";
 
 interface MainBoardProps {
   squareInteraction: SquareInteraction;
   clickDragState: ClickDragState;
-  board: (SquareData | null)[][];
+  board: (TileData | null)[][];
 }
 
 const squareColors = nestedArrayMap(squareTypesArray, squareColor);
@@ -18,8 +18,8 @@ export function MainBoard({ board, squareInteraction, clickDragState }: MainBoar
 
   const tiles = nestedArrayMap(board, sd => {
     if(!sd) return null;
-    const markAsMovable = sd.active;
-    return <Tile letter={sd.letter} markAsMovable={markAsMovable}/>
+    const markAsMoveable = sd.active;
+    return <Tile letter={sd.letter} markAsMoveable={markAsMoveable}/>
   });
 
   const boardProps = makeBoardProps(

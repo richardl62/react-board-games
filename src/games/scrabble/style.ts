@@ -19,4 +19,4 @@ export function squareColor(type: SquareType) : string {
 
   export const tileBackgroundColor = "brown";
   export const tileTextColor = "white";
-  export const tileHighlightColor = "yellow";
+  export const moveableTileBorder = `yellow solid calc(${squareSize} * 0.1)`;
