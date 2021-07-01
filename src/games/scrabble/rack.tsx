@@ -5,17 +5,24 @@ import { Letter } from "./letter-properties";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 
-const RackAndButton = styled.div`
-display:flex;
-gap: 5px;
+const RackAndButtons = styled.div`
+display:inline-flex;
+gap: 1%;
+margin-left: 5%;
+`
+
+const Button = styled.button<{visible?: boolean}>`
+  visibility: ${props => props.visible === false ? 'hidden' : 'default'};
 `
 interface RackProps {
   squareInteraction: SquareInteraction;
   clickDragState: ClickDragState;
   letters: (Letter | null)[];
   shuffle: () => void
+  recall?: () => void;
 }
-export function Rack({ letters, squareInteraction, clickDragState, shuffle }: RackProps) {
+export function Rack({ letters, squareInteraction, clickDragState, 
+  shuffle, recall }: RackProps) {
   const tiles = letters.map(letter => letter && <Tile letter={letter} />
   );
 
@@ -32,8 +39,9 @@ export function Rack({ letters, squareInteraction, clickDragState, shuffle }: Ra
     clickDragState.start
   );
 
-  return (<RackAndButton>
-    <button onClick={shuffle}>Shuffle</button>
+  return (<RackAndButtons>
+    <Button onClick={recall} visible={!!recall}>Recall</Button>
+    <Button onClick={shuffle}>Shuffle</Button>
     <Board {...boardProps} />
-  </RackAndButton>);
+  </RackAndButtons>);
 }

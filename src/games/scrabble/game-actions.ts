@@ -66,6 +66,29 @@ function finishTurn(G: GameData) {
     );
 }
 
+function addToRack(G: GameData, l: Letter) {
+    let rack = G.racks[playerNumber];
+    let emptyIndex = rack.findIndex(l => l === null);
+    assert(emptyIndex >= 0, "Attempt to add to full rack");
+    rack[emptyIndex] = l;
+}
+
+/* move blank spaces to the end */
+function compactRack(G: GameData) {
+    let rack = G.racks[playerNumber];
+
+    let setPos = 0;
+    for(let readPos = 0; readPos < rack.length; ++readPos) {
+        if(rack[readPos]) {
+            rack[setPos] = rack[readPos];
+            ++setPos;  
+        }
+    }
+    for(; setPos < rack.length; ++setPos) {
+        rack[setPos] = null;
+    }
+}
+
 enum RackAction {
     insert,
     overwrite,
@@ -98,12 +121,24 @@ export const bgioMoves = {
     },
 
     move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
-
         const squareData = getSquareData(G, fromSq);
         setLetter(G, fromSq, null);
         setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
+        compactRack(G);
     },
 
+    recallRack: (G: GameData) => {
+        for(let row = 0; row < G.board.length; ++row) {
+            for(let col = 0; col < G.board[row].length; ++col) {
+                let sq = G.board[row][col];
+                if(sq?.active) {
+                    addToRack(G, sq.letter);
+                    G.board[row][col] = null;
+                }
+            }
+        }
+        
+    },
     shuffleRack: (G: GameData) => {
         shuffle(G.racks[playerNumber]);
     },

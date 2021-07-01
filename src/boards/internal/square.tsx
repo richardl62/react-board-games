@@ -88,6 +88,7 @@ export interface SquareInteraction {
     onMouseDown?: (square: SquareID) => void;
     onClick?: (square: SquareID) => void;
 
+    /* If onDrop is omitted, dropping is prevented */
     onDrop?: (from: SquareID, to: SquareID) => void;
     
     /** Called at start of drag. Defaults to always true. */
@@ -106,7 +107,8 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 
 export function Square(props: SquareProps) {
     const { children, showHover,
-            highlight, label, onClick, onMouseDown, onDrop, size } = props;
+            highlight, label, onClick, onMouseDown, 
+            onDrop, size } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
     const allowDrag = props.allowDrag ?? (()=>true);
     const dragType = props.allowDrag ?? (()=>DragType.move);
