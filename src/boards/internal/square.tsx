@@ -111,7 +111,7 @@ export function Square(props: SquareProps) {
             onDrop, size } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
     const allowDrag = props.allowDrag ?? (()=>true);
-    const dragType = props.allowDrag ?? (()=>DragType.move);
+    const dragType = props.dragType ?? (()=>DragType.move);
 
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
