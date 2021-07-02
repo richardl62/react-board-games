@@ -47,21 +47,3 @@ export interface BoardStyle {
     squareStyle?: (rc: SquareID) => SquareStyle;
 }
 
-
-export interface MoveFunctions {
-    onClick?: (square: SquareID) => void;
-
-    /** Call at the (possible) start of a move. If false the move is abandoned.
-     *
-     * NOTE: In practice, the start of a move means onMouseDown.
-     */
-    onMoveStart: (square: SquareID) => boolean;
-
-    /** Called at the end of a move.  'to' is set to null for an invalid move,
-     * e.g. dragging off the boards.
-     *
-     * Will be called extactly once of each call to onMoveStart that does not
-     * return false.
-     */
-    onMoveEnd: (from: SquareID, to: SquareID | null) => void;
-}

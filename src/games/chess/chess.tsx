@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, checkered, ClickDragState, DragType, makeBoardProps,
-  makeSquareInteraction, MoveFunctions, SquareID, SquareInteraction,
+  makeOfFunctions, MoveFunctions, SquareID, SquareInteraction,
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
@@ -117,7 +117,7 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
     onMoveEnd: moves.end,
   };
 
-  const basicSquareInteraction = makeSquareInteraction(moveFunctions, clickDragState);
+  const basicSquareInteraction = makeOfFunctions(moveFunctions, clickDragState);
   const offBoardSquareInteraction = { ...basicSquareInteraction, dragType: () => DragType.copy };
   return (
     <DndProvider backend={HTML5Backend}>

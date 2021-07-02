@@ -1,4 +1,4 @@
 export * from './board';
 export * from './make-board-props';
-export * from './make-square-interaction';
+export * from './move-functions';
 export * from './interfaces';

@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { ClickDragState, makeSquareInteraction } from "../../boards";
+import { ClickDragState, makeOfFunctions } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
 import { moveFunctions, bgioMoves } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
@@ -34,7 +34,7 @@ function tilesOut(gameData: GameData) : boolean {
 }
 function Scrabble(props: Bgio.BoardProps<GameData>) {
   const clickDragState = useRef(new ClickDragState()).current;
-  const squareInteraction = makeSquareInteraction(
+  const squareInteraction = makeOfFunctions(
     moveFunctions(props),
     clickDragState
   );
