@@ -6,6 +6,8 @@ import { DragType, SquareInteraction } from './internal/square';
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
+    dragType?: (square: SquareID) => DragType;
+
     /** Call at the (possible) start of a move. If false the move is abandoned.
      *
      * NOTE: In practice, the start of a move means onMouseDown.
@@ -89,15 +91,12 @@ export function makeOfFunctions(
         }
     }
 
-    const allowDrag = (from: SquareID) => {
+    const onDragStart = (from: SquareID) => {
         // Drags are allowed only after a move has sucessfully started,
         // and are not allowed during a click-move.
         if(state.moveStatus === 'mouseDown') {
             state.moveStatus = 'dragging';
-            return true;
         }
-
-        return false;
     }
 
     const onDrop = (from: SquareID, to: SquareID | null) => {
@@ -109,14 +108,13 @@ export function makeOfFunctions(
 
         state.reset();
     }
-
-    const dragType = () => DragType.move;
+    const dragType = moveFunctions.dragType || (() => DragType.move);
     return {
         onMouseDown: onMouseDown,
         onClick: onClick,
-        allowDrag: allowDrag,
-        onDrop: onDrop,
+        onDragStart: onDragStart,
         dragType: dragType,
+        onDrop: onDrop,
     };
 
 }

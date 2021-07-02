@@ -88,11 +88,14 @@ export interface SquareInteraction {
     onMouseDown?: (square: SquareID) => void;
     onClick?: (square: SquareID) => void;
 
+    /** Called at start of a possible drag. 
+     * If omitted dragging is disabled. (This is equivalent to providing a 
+     * function that returns DragType.disabled). 
+     **/
+    onDragStart?: (from: SquareID) => void;
+
     /* If onDrop is omitted, dropping is prevented */
     onDrop?: (from: SquareID, to: SquareID) => void;
-    
-    /** Called at start of drag. Defaults to always true. */
-    allowDrag?: (from: SquareID)=>boolean;
 
     /** Should the drag move or copy the piece.
      * Defaults to moving.
@@ -108,22 +111,27 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 export function Square(props: SquareProps) {
     const { children, showHover,
             highlight, label, onClick, onMouseDown, 
-            onDrop, size } = props;
+            onDragStart, onDrop, size 
+        } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
-    const allowDrag = props.allowDrag ?? (()=>true);
     const dragType = props.dragType ?? (()=>DragType.move);
 
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
-        collect: monitor => ({
-            isDragging: Boolean(monitor.isDragging()),
-        }),
+        collect: monitor => {
+            return {
+                isDragging: Boolean(monitor.isDragging()),
+            };
+        },
 
-        item: () => allowDrag(label) ? label: null,
-
-        //end: (item: any) => console.log('Drag ended', JSON.stringify(item), JSON.stringify(label)),
+        item: () => {
+            if(onDragStart) {
+		        onDragStart(label);
+            	return label;
+             }
+        }
         
-    }),[label])
+    }),[label, onDragStart])
 
 
     const [ dropCollection, dropRef] = useDrop({
@@ -152,6 +160,7 @@ export function Square(props: SquareProps) {
         borderColor = "";
     }
 
+    let hidden = isDragging && dragType(label) === DragType.copy;
     return (
         <StyledSquare
             ref={dropRef}
@@ -165,13 +174,14 @@ export function Square(props: SquareProps) {
             onMouseDown={onMouseDown && (() => onMouseDown(label))}
         >
             <BorderHelper backgroundColor={backgroundColor} />
-            <Element ref={dragRef} 
-                hidden={isDragging && dragType(label) === DragType.copy}
+            <Element 
+                ref={dragRef} 
+                hidden={hidden}
                 isDraggedOver={dropCollection.isOver}
             > 
                 {children}
             </Element>
             {highlight? <HighlightMarker color={highlightColor} /> : null }
         </StyledSquare>
-    )
+    );
 }
