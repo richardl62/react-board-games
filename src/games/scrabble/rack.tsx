@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Board, ClickDragState, makeBoardProps, SquareInteraction } from "../../boards";
+import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
 import { boardIDs } from "./game-actions";
 import { Letter } from "./letter-properties";
 import { squareSize } from "./style";
@@ -15,7 +15,7 @@ const Button = styled.button<{visible?: boolean}>`
   visibility: ${props => props.visible === false ? 'hidden' : 'default'};
 `
 interface RackProps {
-  squareInteraction: SquareInteraction;
+  squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   letters: (Letter | null)[];
   shuffle: () => void

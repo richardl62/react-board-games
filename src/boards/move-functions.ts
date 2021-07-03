@@ -36,10 +36,9 @@ export class ClickDragState {
     }
 }
 
-/** Set SquareInteraction members.
- * dragType is set to return 'move'.
- */
-export function makeOfFunctions(
+export type SquareInteractionFunc = (sq: SquareID) => SquareInteraction;
+
+export function squareInteractionFunc(
     moveFunctions: MoveFunctions,
     /** Read and changed */
     state: ClickDragState,
@@ -47,7 +46,7 @@ export function makeOfFunctions(
     
     // Not sure how useful this type specification is.
     // The idea is to make sure members are not forgotten.
-    ) : Required<SquareInteraction>
+    ) : SquareInteractionFunc
 {
     const onMouseDown = (sq: SquareID) => {
         //console.log("onMouseDown", sq.toString());
@@ -109,12 +108,14 @@ export function makeOfFunctions(
         state.reset();
     }
     const dragType = moveFunctions.dragType;
-    return {
-        onMouseDown: onMouseDown,
-        onClick: onClick,
-        onDragStart: onDragStart,
-        dragType: dragType,
-        onDrop: onDrop,
+    return (sq: SquareID) :  Required<SquareInteraction> => {
+        return {
+            onMouseDown: () => onMouseDown(sq),
+            onClick: () => onClick(sq),
+            onDragStart: () => onDragStart(sq),
+            dragType: dragType(sq),
+            onDrop: (from: SquareID) => onDrop(from, sq), // Hmm. What happend to 'to' being null?
+        }
     };
 
 }

@@ -42,6 +42,7 @@ function rowCol(array: Array<Array<any>>) {
 export interface BoardElement extends Omit<SquareProps, 'children' | 'label'> {
     piece: ReactNode;
 }
+
 export interface BoardProps extends BoardStyle {
     elements: Array<Array<BoardElement>>;
     boardID: string;

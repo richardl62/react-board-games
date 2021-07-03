@@ -1,4 +1,4 @@
-import { Board, ClickDragState, makeBoardProps, SquareInteraction } from "../../boards";
+import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
 import { nestedArrayMap } from "../../shared/tools";
 import { boardIDs } from "./game-actions";
 import { squareTypesArray } from "./board-properties";
@@ -7,7 +7,7 @@ import { Tile } from "./tile";
 import { TileData } from "./game-data";
 
 interface MainBoardProps {
-  squareInteraction: SquareInteraction;
+  squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   board: (TileData | null)[][];
 }

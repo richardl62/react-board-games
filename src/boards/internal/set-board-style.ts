@@ -1,5 +1,5 @@
 import { BoardProps } from '../board';
-import { defaultColors, SquareID } from '../interfaces';
+import { defaultColors, squareID, SquareID } from '../interfaces';
 
 export interface BoardStyle {
   /** 
@@ -22,13 +22,6 @@ export function checkered(sq: SquareID) {
   return asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
 }
 
-function squareID(row: number, col: number, boardID: string) : SquareID {
-  return {
-    row: row,
-    col: col,
-    boardID: boardID,
-  }
-}
 /** Modify the input props to make it suitable for a checkered board.
  * This involves setting colors and boarder properies.
  *  

@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, checkered, ClickDragState, DragType, makeBoardProps,
-  makeOfFunctions, MoveFunctions, SquareID, SquareInteraction,
+  squareInteractionFunc, MoveFunctions, SquareID, SquareInteractionFunc,
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
@@ -44,7 +44,7 @@ const offBoardPiece = (sq: SquareID): string => {
 }
 
 interface OffBoardProps {
-  squareInteraction: SquareInteraction;
+  squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   rowName: keyof typeof offBoardPieces;
 }
@@ -65,13 +65,14 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
       squareSize: squareSize,
     },
     rowName,
-    squareInteraction, clickDragState.start);
+    squareInteraction, 
+    clickDragState.start);
 
   return <Board {...boardProps} />
 }
 
 interface MainBoardProps {
-  squareInteraction: SquareInteraction;
+  squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   pieces: (string | null)[][];
 }
@@ -119,21 +120,25 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
     dragType: (sq: SquareID) => offBoard(sq) ? DragType.copy : DragType.move,
   };
 
-  const squareInteraction = makeOfFunctions(moveFunctions, clickDragState);
+  const squareInteraction = squareInteractionFunc(moveFunctions, clickDragState);
+  
   return (
     <DndProvider backend={HTML5Backend}>
       <PlayArea>
         <OffBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState} rowName='black'
+          clickDragState={clickDragState} 
+          rowName='black'
         />
         <MainBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState} pieces={G.pieces}
+          clickDragState={clickDragState} 
+          pieces={G.pieces}
         />
         <OffBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState} rowName='white'
+          clickDragState={clickDragState} 
+          rowName='white'
         />
       </PlayArea>
     </DndProvider>

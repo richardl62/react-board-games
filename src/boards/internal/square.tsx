@@ -78,29 +78,30 @@ const HighlightMarker = styled.div<{color:string}>`
 
     background-color: ${props => props.color};  
 `
-
 export enum DragType {
     move,
     copy,
+    disable,
 };
 
 export interface SquareInteraction {
-    onMouseDown?: (square: SquareID) => void;
-    onClick?: (square: SquareID) => void;
+    onMouseDown?: () => void;
+    onClick?: () => void;
 
     /** Called at start of a possible drag. 
      * If omitted dragging is disabled. (This is equivalent to providing a 
-     * function that returns DragType.disabled). 
+     * DragType of disabled). 
      **/
-    onDragStart?: (from: SquareID) => void;
-
-    /* If onDrop is omitted, dropping is prevented */
-    onDrop?: (from: SquareID, to: SquareID) => void;
+    onDragStart?: () => void;
 
     /** Should the drag move or copy the piece.
      * Defaults to moving.
+     * To Do: Consider making the return value of onDragStart.
      */
-    dragType?: (from: SquareID)=>DragType;
+    dragType: DragType;
+    
+    /* If onDrop is omitted, dropping is prevented */
+    onDrop?: (from: SquareID) => void;
 }
 
 export interface SquareProps extends SquareStyle, SquareInteraction {
@@ -125,8 +126,8 @@ export function Square(props: SquareProps) {
         },
 
         item: () => {
-            if(onDragStart) {
-		        onDragStart(label);
+            if(onDragStart && dragType !== DragType.disable) {
+		        onDragStart();
             	return label;
              }
         }
@@ -136,7 +137,7 @@ export function Square(props: SquareProps) {
 
     const [ dropCollection, dropRef] = useDrop({
         accept: PIECE,
-        drop: (from: SquareID) => onDrop?.(from, label),
+        drop: (from: SquareID) => onDrop?.(from),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop(),
@@ -160,7 +161,7 @@ export function Square(props: SquareProps) {
         borderColor = "";
     }
 
-    let hidden = isDragging && dragType(label) === DragType.copy;
+    let hidden = isDragging && dragType === DragType.copy;
     return (
         <StyledSquare
             ref={dropRef}
@@ -170,8 +171,8 @@ export function Square(props: SquareProps) {
             size={size}
 
             //onClick={onClick && (() => onClick(label))}
-            onClick={onClick && (() => onClick(label))}
-            onMouseDown={onMouseDown && (() => onMouseDown(label))}
+            onClick={onClick && (() => onClick())}
+            onMouseDown={onMouseDown && (() => onMouseDown())}
         >
             <BorderHelper backgroundColor={backgroundColor} />
             <Element 

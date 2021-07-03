@@ -22,6 +22,14 @@ export interface SquareID {
     boardID: string;
 }
 
+export function squareID(row: number, col: number, boardID: string) : SquareID {
+    return {
+      row: row,
+      col: col,
+      boardID: boardID,
+    }
+  }
+
 export interface SquareStyle {
     backgroundColor?: string;
 

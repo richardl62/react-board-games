@@ -1,10 +1,8 @@
 import { ReactNode } from "react";
-import { nestedArrayMap } from "../shared/tools";
 import { BoardElement, BoardProps } from "./board";
-import { defaultColors, SquareID } from "./interfaces";
+import { defaultColors, squareID, SquareID } from "./interfaces";
 import { BoardStyle, setBoardStyle, checkered } from "./internal/set-board-style";
 import { SquareInteraction } from "./internal/square";
-
 
 
  /** Helper function to make a Board */
@@ -16,35 +14,41 @@ export function makeBoardProps(
   /** board ID */
   boardID: string,
 
-  squareInteraction?: SquareInteraction,
-  moveStart?: SquareID | null,
+  /** Click and drag functions for the square 
+   * (When called, sq.boardID will be input boardID.)
+  */
+  squareInteraction: (sq: SquareID) => SquareInteraction,
+
+  moveStart: SquareID | null,
   ) : BoardProps 
 {
-  const elements = nestedArrayMap(pieces, piece => {
-    const elem: BoardElement = {
-      piece: piece,
-      showHover: true,
-      size: style.squareSize,
-    }
-    return elem;
-  })
+  let elements: Array<Array<BoardElement>> = [];
+  for(let row = 0; row < pieces.length; ++row) {
+     elements[row] = [];
+     for(let col = 0; col < pieces[row].length; ++col) {
+        const sq = squareID(row, col, boardID);
+        const elem = {
+          piece: pieces[row][col],
+          showHover: true,
+          size: style.squareSize,
+          ...squareInteraction(sq),
+        }
+
+        elements[row][col] = elem;
+     }
+  }
   
+  if(moveStart && moveStart.boardID === boardID) {
+    const {row, col} = moveStart;
+    elements[row][col].backgroundColor = defaultColors.moveStart;
+  }
+
   const boardProps : BoardProps = {
     elements: elements,
     boardID: boardID,
   }
 
-  if(squareInteraction) {
-    boardProps.elements = nestedArrayMap(boardProps.elements, 
-      elem => {return {...elem, ...squareInteraction}}   
-     )
-  }
-
   setBoardStyle(boardProps, style);
-  if(moveStart && moveStart.boardID === "boardID") {
-    const {row, col} = moveStart;
-    boardProps.elements[row][col].backgroundColor = defaultColors.moveStart;
-  }
 
   return boardProps;
 }
