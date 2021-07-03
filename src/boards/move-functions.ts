@@ -7,16 +7,14 @@ export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
     /** Call at the (possible) start of a move. If false the move is abandoned.
-     *
-     * NOTE: In practice, the start of a move means onMouseDown.
      */
     onMoveStart: (square: SquareID) => boolean;
 
-    /** Called at the end of a move.  'to' is set to null for an invalid move,
+    /** Called at the end of a move. 'to' is set to null for an invalid move,
      * e.g. dragging off the boards.
      *
-     * Will be called extactly once of each call to onMoveStart that does not
-     * return false.  Called with 'to' === null on a 'bad' move, i.e. a drag
+     * Will be called extactly once for each call to onMoveStart that does not
+     * return false. Called with 'to' === null on a 'bad' move, i.e. a drag
      * to a non-droppable location.
      */
     onMoveEnd: (from: SquareID, to: SquareID | null) => void;
@@ -54,7 +52,7 @@ export function squareInteractionFunc(
         moveStatus?: MoveStatus | MoveStatus[], 
         start?: SquareID | null
     ) => {
-        console.log(funcName, state.moveStatus, state.start)
+        //console.log(funcName, state.moveStatus, state.start)
         if(moveStatus !== undefined) {
             const statusArray = [moveStatus].flat()
             assert(statusArray.includes(state.moveStatus), "unexpected moveStatus",

@@ -172,7 +172,8 @@ export function Square(props: SquareProps) {
         borderColor = "";
     }
 
-    let hidden = isDragging && dragType === DragType.copy;
+    // To do: Use ReactDnD to implement copy vs drag.
+    let hidden = isDragging && dragType === DragType.move;
     return (
         <StyledSquare
             ref={dropRef}

@@ -24,6 +24,12 @@ function rackPos(sq: SquareID): number {
     return sq.col;
 }
 
+
+function canChange(G: GameData, sq: SquareID) : boolean
+{
+    return onRack(sq) || G.board[sq.row][sq.col] === null;
+} 
+
 /** get the letter at a square */
 function getSquareData(G: GameData, sq: SquareID) : TileData | null {
     if(onRack(sq)) {
@@ -121,10 +127,12 @@ export const bgioMoves = {
     },
 
     move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
-        const squareData = getSquareData(G, fromSq);
-        setLetter(G, fromSq, null);
-        setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
-        compactRack(G);
+        if(canChange(G, toSq) && !sameJSON(fromSq, toSq)) {
+            const squareData = getSquareData(G, fromSq);
+            setLetter(G, fromSq, null);
+            setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
+            compactRack(G);
+        }
     },
 
     recallRack: (G: GameData) => {
@@ -147,7 +155,7 @@ export const bgioMoves = {
 };
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
-    const { G: {moveStart, board}, moves } = props;
+    const { G: {board}, moves } = props;
 
     const isActive = (sq: SquareID) : boolean =>
     {
@@ -155,12 +163,14 @@ export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions 
     } 
     return {
       onMoveStart: (sq: SquareID) => {
-        moves.start(sq);
-        return isActive(sq);
+        const canMove = isActive(sq); 
+        if(canMove) {
+            moves.start(sq);
+        }
+        return canMove;
       },
   
       onMoveEnd: (from: SquareID, to: SquareID | null) => {
-        assert(sameJSON(moveStart, from));
         moves.move(from, to);
       },
 
