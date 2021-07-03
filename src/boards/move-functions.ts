@@ -6,8 +6,6 @@ import { DragType, SquareInteraction } from './internal/square';
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
-    dragType: (square: SquareID) => DragType;
-
     /** Call at the (possible) start of a move. If false the move is abandoned.
      *
      * NOTE: In practice, the start of a move means onMouseDown.
@@ -22,9 +20,12 @@ export interface MoveFunctions {
      * to a non-droppable location.
      */
     onMoveEnd: (from: SquareID, to: SquareID | null) => void;
+
+    /** Report whether any drags should move or copy */
+    dragType: (square: SquareID) => DragType;
 }
 
-type MoveStatus = 'none' | 'mouseDown' | 'firstClick' | 'dragging' | 'dropped';
+type MoveStatus = 'none' | 'clickMoveStarted' | 'dragging' | 'dropped';
 
 export class ClickDragState {
     moveStatus: MoveStatus = 'none';
@@ -48,82 +49,81 @@ export function squareInteractionFunc(
     // The idea is to make sure members are not forgotten.
     ) : SquareInteractionFunc
 {
-    const onMouseDown = (sq: SquareID) => {
-        //console.log("onMouseDown", sq.toString());
+    const check = (
+        funcName: string,
+        moveStatus?: MoveStatus | MoveStatus[], 
+        start?: SquareID | null
+    ) => {
+        console.log(funcName, state.moveStatus, state.start)
+        if(moveStatus !== undefined) {
+            const statusArray = [moveStatus].flat()
+            assert(statusArray.includes(state.moveStatus), "unexpected moveStatus",
+                state.moveStatus);
+        }
 
-        // A mouse-down with no move in progress starts a move 
-        // (unless disallowed by callback). At this time the type
-        // of the move is undetermined.
-        if (state.moveStatus === 'none') {
-            const startMove = !moveFunctions.onMoveStart 
-                || moveFunctions.onMoveStart(sq);
-
-            if(startMove) {
-                state.moveStatus = 'mouseDown';
-                state.start = sq;
-            }
-        } else {
-            assert(state.moveStatus === 'firstClick' && state.start,
-                "Unexpected state on click", state.moveStatus
-            );
+        if(start !== undefined) {
+            assert(sameJSON(start, state.start), "unexpected start position",
+                state.start);
         }
     }
+    
+    const onMouseDown = (sq: SquareID) => {}
 
-    const onClick = (sid: SquareID) => {
+    const onClick = (sq: SquareID) => {
+        check("onClick");
 
         // Call the user callback, if any.
-        moveFunctions.onClick?.(sid);
+        moveFunctions.onClick?.(sq);
 
         if (state.moveStatus === 'none') {
-            // A move was not started by the mouseDown. This must
-            // be because it was blocked by the callback. So do nothing
-            // here.
-        } else if (state.moveStatus === 'mouseDown') {
-            assert(sameJSON(sid, state.start), "unexpected click square");
-            state.moveStatus = 'firstClick';
-        } else if (state.moveStatus === 'firstClick') {
-            assert(state.start !== null, "start square is null at end of Move");
-            moveFunctions.onMoveEnd(state.start, sid);
+            const startMove = moveFunctions.onMoveStart(sq);
+
+            if(startMove) {
+                state.moveStatus = 'clickMoveStarted';
+                state.start = sq;
+            }
+        } else if (state.moveStatus === 'clickMoveStarted' 
+            && state.start !== null // defensive
+            ) {
+            moveFunctions.onMoveEnd(state.start, sq);
 
             state.reset();
         } else {
-            assert(false, `Unexpected move type: ${state.moveStatus}`);
+            assert(false, "Unexpected state on click", state.moveStatus);
         }
     }
 
     const onDragStart = (from: SquareID) => {
-        // Drags are allowed only after a move has sucessfully started,
-        // and are not allowed during a click-move.
-        if(state.moveStatus === 'mouseDown') {
-            state.moveStatus = 'dragging';
-        }
+        check("onDragStart", 'none');
+            
+        state.moveStatus = 'dragging';
+        state.start = from;
     }
 
     const onDrop = (from: SquareID, to: SquareID) => {
-        assert(state.moveStatus === 'dragging');
-        assert(sameJSON(from, state.start), "inconsistent start square for drop",
-            from, state.start);
+        check('onDrop','dragging', from); 
 
         moveFunctions.onMoveEnd(from, to);
+
         state.moveStatus = 'dropped';
     }
 
     const onDragEnd = (from: SquareID) => {
-        assert(sameJSON(from, state.start), "inconsistent start square for drop",
-            from, state.start);
-
-
+        check('onDragEnd', ['dropped','dragging'], from);
         if(state.moveStatus !== 'dropped') {
-            // The drop failed.
-            assert(state.moveStatus === 'dragging', 
-                "unexpected state at end of drag", state.moveStatus);
             moveFunctions.onMoveEnd(from, null);
         }
 
         state.reset();
     }
 
-    const dragType = (sq: SquareID) => DragType.disable; //moveFunctions.dragType;
+    const dragType = (from: SquareID) => { 
+        if(state.moveStatus === 'clickMoveStarted') {
+            return DragType.disable;
+        }
+    
+        return moveFunctions.dragType(from);
+    }
 
     return (sq: SquareID) :  Required<SquareInteraction> => {
         return {

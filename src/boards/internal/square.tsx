@@ -119,7 +119,7 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 export function Square(props: SquareProps) {
     const { children, showHover,
             highlight, label, onClick, onMouseDown, 
-            onDragStart, onDrop, size 
+            onDragStart, onDrop, onDragEnd, size 
         } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
     const dragType : DragType = props.dragType ?? DragType.disable;
@@ -134,14 +134,13 @@ export function Square(props: SquareProps) {
 
         item: () => {
             if(onDragStart && dragType !== DragType.disable) {
-                console.log("Drag start", label);
 		        onDragStart();
             	return label;
              }
         },
 
         end: (item) => {
-            console.log("Drag end", item);
+            onDragEnd?.();
         },
 
     }),[label, onDragStart])

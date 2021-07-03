@@ -8,7 +8,7 @@ import {
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
-import { nestedArrayMap, sameJSON } from '../../shared/tools';
+import { nestedArrayMap } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
 
@@ -103,9 +103,6 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
 
   const clickDragState = useRef(new ClickDragState()).current;
   const moveFunctions: MoveFunctions = {
-    onClick: (sq: SquareID) => {
-      console.log('onClick', JSON.stringify(sq));
-    },
 
     onMoveStart: (sq: SquareID) => {
       const canMove = offBoard(sq) || G.pieces[sq.row][sq.col] !== null;
@@ -166,7 +163,7 @@ function chess(displayName: string, pieces: Pieces): AppGame {
       },
 
       end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
-        assert(sameJSON(G.moveStart, from));
+        //assert(sameJSON(G.moveStart, from));
 
         if (to && !offBoard(to)) {
           if (offBoard(from)) {
