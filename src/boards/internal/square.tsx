@@ -98,7 +98,14 @@ export interface SquareInteraction {
      * Defaults to moving.
      * To Do: Consider making the return value of onDragStart.
      */
-    dragType: DragType;
+    dragType?: DragType;
+
+    /**  Called once for each call to onDragStart (assuming both are supplied).
+    * If the drag is successful, there will be an intervening call to onDrop.
+    * (Unsuccessful drags occur if the piece is dragged to a non-droppable
+    * location.)
+    */
+    onDragEnd?:() => void;
     
     /* If onDrop is omitted, dropping is prevented */
     onDrop?: (from: SquareID) => void;
@@ -115,7 +122,7 @@ export function Square(props: SquareProps) {
             onDragStart, onDrop, size 
         } = props;
     const backgroundColor = props.backgroundColor || defaultColors.square;
-    const dragType = props.dragType ?? (()=>DragType.move);
+    const dragType : DragType = props.dragType ?? DragType.disable;
 
     const [{isDragging}, dragRef] = useDrag(() => ({
         type: PIECE,
@@ -127,11 +134,16 @@ export function Square(props: SquareProps) {
 
         item: () => {
             if(onDragStart && dragType !== DragType.disable) {
+                console.log("Drag start", label);
 		        onDragStart();
             	return label;
              }
-        }
-        
+        },
+
+        end: (item) => {
+            console.log("Drag end", item);
+        },
+
     }),[label, onDragStart])
 
 

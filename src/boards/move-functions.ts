@@ -18,13 +18,13 @@ export interface MoveFunctions {
      * e.g. dragging off the boards.
      *
      * Will be called extactly once of each call to onMoveStart that does not
-     * return false.  Called with 'to' === null on a 'bad' move, e.g. a drag
-     * off the board.
+     * return false.  Called with 'to' === null on a 'bad' move, i.e. a drag
+     * to a non-droppable location.
      */
     onMoveEnd: (from: SquareID, to: SquareID | null) => void;
 }
 
-type MoveStatus = 'none' | 'mouseDown' | 'firstClick' | 'dragging';
+type MoveStatus = 'none' | 'mouseDown' | 'firstClick' | 'dragging' | 'dropped';
 
 export class ClickDragState {
     moveStatus: MoveStatus = 'none';
@@ -63,8 +63,9 @@ export function squareInteractionFunc(
                 state.start = sq;
             }
         } else {
-            // It must be the 2nd click in a click move.
-            assert(state.moveStatus === 'firstClick' && state.start);
+            assert(state.moveStatus === 'firstClick' && state.start,
+                "Unexpected state on click", state.moveStatus
+            );
         }
     }
 
@@ -82,7 +83,7 @@ export function squareInteractionFunc(
             state.moveStatus = 'firstClick';
         } else if (state.moveStatus === 'firstClick') {
             assert(state.start !== null, "start square is null at end of Move");
-            moveFunctions.onMoveEnd?.(state.start, sid);
+            moveFunctions.onMoveEnd(state.start, sid);
 
             state.reset();
         } else {
@@ -98,23 +99,40 @@ export function squareInteractionFunc(
         }
     }
 
-    const onDrop = (from: SquareID, to: SquareID | null) => {
+    const onDrop = (from: SquareID, to: SquareID) => {
         assert(state.moveStatus === 'dragging');
         assert(sameJSON(from, state.start), "inconsistent start square for drop",
             from, state.start);
 
-        moveFunctions.onMoveEnd?.(from, to);
+        moveFunctions.onMoveEnd(from, to);
+        state.moveStatus = 'dropped';
+    }
+
+    const onDragEnd = (from: SquareID) => {
+        assert(sameJSON(from, state.start), "inconsistent start square for drop",
+            from, state.start);
+
+
+        if(state.moveStatus !== 'dropped') {
+            // The drop failed.
+            assert(state.moveStatus === 'dragging', 
+                "unexpected state at end of drag", state.moveStatus);
+            moveFunctions.onMoveEnd(from, null);
+        }
 
         state.reset();
     }
-    const dragType = moveFunctions.dragType;
+
+    const dragType = (sq: SquareID) => DragType.disable; //moveFunctions.dragType;
+
     return (sq: SquareID) :  Required<SquareInteraction> => {
         return {
             onMouseDown: () => onMouseDown(sq),
             onClick: () => onClick(sq),
             onDragStart: () => onDragStart(sq),
+            onDragEnd: () => onDragEnd(sq),
             dragType: dragType(sq),
-            onDrop: (from: SquareID) => onDrop(from, sq), // Hmm. What happend to 'to' being null?
+            onDrop: (from: SquareID) => onDrop(from, sq),
         }
     };
 
