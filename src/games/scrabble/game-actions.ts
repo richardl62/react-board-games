@@ -1,4 +1,4 @@
-import { MoveFunctions, SquareID } from "../../boards";
+import { DragType, MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
@@ -162,7 +162,9 @@ export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions 
       onMoveEnd: (from: SquareID, to: SquareID | null) => {
         assert(sameJSON(moveStart, from));
         moves.move(from, to);
-      }
+      },
+
+      dragType: () => DragType.move,
     }
   };
 

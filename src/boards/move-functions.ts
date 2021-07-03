@@ -6,7 +6,7 @@ import { DragType, SquareInteraction } from './internal/square';
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
-    dragType?: (square: SquareID) => DragType;
+    dragType: (square: SquareID) => DragType;
 
     /** Call at the (possible) start of a move. If false the move is abandoned.
      *
@@ -108,7 +108,7 @@ export function makeOfFunctions(
 
         state.reset();
     }
-    const dragType = moveFunctions.dragType || (() => DragType.move);
+    const dragType = moveFunctions.dragType;
     return {
         onMouseDown: onMouseDown,
         onClick: onClick,

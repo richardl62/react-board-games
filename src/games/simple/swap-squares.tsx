@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
   Board, ClickDragState, makeBoardProps, makeOfFunctions,
-  MoveFunctions, SquareID, checkered
+  MoveFunctions, SquareID, checkered, DragType
 } from '../../boards';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
@@ -46,7 +46,7 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
       return true;
     },
     onMoveEnd: moves.end,
-    onClick: () => console.log("square clicked"),
+    dragType: () => DragType.move, 
   }
   const clickDragState = useRef(new ClickDragState()).current;
 

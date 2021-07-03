@@ -115,23 +115,24 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
     },
 
     onMoveEnd: moves.end,
+
+    dragType: (sq: SquareID) => offBoard(sq) ? DragType.copy : DragType.move,
   };
 
-  const basicSquareInteraction = makeOfFunctions(moveFunctions, clickDragState);
-  const offBoardSquareInteraction = { ...basicSquareInteraction, dragType: () => DragType.copy };
+  const squareInteraction = makeOfFunctions(moveFunctions, clickDragState);
   return (
     <DndProvider backend={HTML5Backend}>
       <PlayArea>
         <OffBoard
-          squareInteraction={offBoardSquareInteraction}
+          squareInteraction={squareInteraction}
           clickDragState={clickDragState} rowName='black'
         />
         <MainBoard
-          squareInteraction={basicSquareInteraction}
+          squareInteraction={squareInteraction}
           clickDragState={clickDragState} pieces={G.pieces}
         />
         <OffBoard
-          squareInteraction={offBoardSquareInteraction}
+          squareInteraction={squareInteraction}
           clickDragState={clickDragState} rowName='white'
         />
       </PlayArea>
