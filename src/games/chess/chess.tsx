@@ -8,7 +8,7 @@ import {
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
-import { nestedArrayMap } from '../../shared/tools';
+import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 import { Piece } from "./piece";
 
@@ -165,7 +165,7 @@ function chess(displayName: string, pieces: Pieces): AppGame {
       end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
         //assert(sameJSON(G.moveStart, from));
 
-        if (to && !offBoard(to)) {
+        if (to && !offBoard(to) && !sameJSON(to, from)) {
           if (offBoard(from)) {
             G.pieces[to.row][to.col] = offBoardPiece(from);
           } else {
