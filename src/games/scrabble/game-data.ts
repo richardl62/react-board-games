@@ -19,6 +19,7 @@ export interface GameData {
     racks: (Letter | null)[][];
     moveStart: SquareID | null;
     bag: Letter[];
+    scoreThisTurn: number | null;
 }
 
 export function startingGameData(): GameData {
@@ -37,5 +38,6 @@ export function startingGameData(): GameData {
         ],
         moveStart: null,
         bag: bag,
+        scoreThisTurn: null,
     };
 }

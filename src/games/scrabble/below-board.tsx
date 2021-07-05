@@ -1,5 +1,26 @@
 import styled from "styled-components";
 
-export const BelowBoard = styled.button`
+const Message = styled.div`
+  display: inline-block;
+  margin-right: 0.5em;
   font-size: large;
+  font-weight: bold;
 `;
+
+
+interface BelowBoardProps {
+  score: number | null ;
+  done: () => void;
+}
+export function BelowBoard({score, done} : BelowBoardProps) {
+  if(score === null) {
+    return <Message>Score not available</Message>
+  }
+
+  return (
+    <div>
+      <Message>Score: <span> {score}</span></Message> 
+      <button onClick={done}>Done</button>
+    </div>
+  );
+}

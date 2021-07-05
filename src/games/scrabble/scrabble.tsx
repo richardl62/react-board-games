@@ -43,7 +43,10 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           clickDragState={clickDragState}
           board={props.G.board}
         />
-        <BelowBoard onClick={() => props.moves.finishTurn()}>Done</BelowBoard>
+        <BelowBoard 
+          score={props.G.scoreThisTurn}
+          done={() => props.moves.finishTurn()}
+        />
       </Game>
     </DndProvider>
   )
