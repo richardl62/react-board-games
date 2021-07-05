@@ -1,33 +1,20 @@
-import { ReactElement } from "react";
 import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, squareInteractionFunc } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
+import { BelowBoard } from "./below-board";
 import { moveFunctions, bgioMoves } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 
-const InnerBoardAndRack = styled.div`
+const Game = styled.div`
   display: inline-flex;
   flex-direction: column;
   gap: 5px;
   `;
-
-const DoneButton = styled.button`
-  font-size: large;
-`
-
-function BoardAndRack({ children }: { children: ReactElement[] }) {
-  //Hmm. There must be a better way.
-  return (<div>
-    <InnerBoardAndRack>
-      {children}
-    </InnerBoardAndRack>
-  </div>);
-}
 
 function tilesOut(gameData: GameData) : boolean {
   return !!gameData.board.find(row => row.find(sq=>sq?.active));
@@ -43,7 +30,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
   const recall = tilesOut(props.G) && props.moves.recallRack;
   return (
     <DndProvider backend={HTML5Backend}>
-      <BoardAndRack>
+      <Game>
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
@@ -56,8 +43,8 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           clickDragState={clickDragState}
           board={props.G.board}
         />
-        <DoneButton onClick={() => props.moves.finishTurn()}>Done</DoneButton>
-      </BoardAndRack>
+        <BelowBoard onClick={() => props.moves.finishTurn()}>Done</BelowBoard>
+      </Game>
     </DndProvider>
   )
 }
