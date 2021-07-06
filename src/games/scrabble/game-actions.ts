@@ -4,6 +4,7 @@ import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { TileData, GameData } from "./game-data";
+import { scoreThisTurn } from "./score-this-turn";
 
 const playerNumber = 0;
 export const boardIDs = {
@@ -132,6 +133,8 @@ export const bgioMoves = {
             setLetter(G, fromSq, null);
             setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
             compactRack(G);
+
+            G.scoreThisTurn = scoreThisTurn(G.board);
         }
     },
 

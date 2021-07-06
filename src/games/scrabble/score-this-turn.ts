@@ -1,26 +1,38 @@
 import { TileData } from "./game-data";
-import { letterScore } from "./letter-properties";
 
 interface RowCol {
     row: number;
     col: number;
 }
 
-function rowCol(row: number, col: number) : RowCol {
-    return {row:row, col:col};
+function rowCol(row: number, col: number) {
+    return {row: row, col: col};
+}
+type Direction = 'row' | 'col';
+
+function otherDirection(dir : Direction) : Direction {
+    return dir === 'row' ? 'col' : 'row';
 }
 
-function allEqual(arr: any[]) {
-    for(let i = 1; i < arr.length; ++i) {
-        if(arr[i] !== arr[0]) {
+function inSameLine(positions: RowCol[], direction: Direction) {
+    const indices = positions.map(rc => rc[direction]);
+    for (let i = 1; i < indices.length; ++i) {
+        if (indices[i] !== indices[0]) {
             return false;
         }
+
+        return true;
     }
+}
 
-    return true;
-} 
+function findWordContainingHelper(
+    /** Part of the board.  */
+    squares: (TileData | null)[],
 
-function scoreWord(indices: number[], squares: (TileData | null)[]) : number | null {
+    /** Must be in numerical order */
+    indices: number[],
+) : number[] | null {
+
     let start = indices[0];
     while(squares[start-1]) {
         --start;
@@ -34,53 +46,81 @@ function scoreWord(indices: number[], squares: (TileData | null)[]) : number | n
     if(start === end || indices[indices.length-1] > end) {
         return null;
     }
-
-    let score = 0;
-    for(let ind = start; ind <= end; ++ind) {
-        score += letterScore(squares[ind]!.letter);
-    }
     
-    return score;
+    let result = [];
+    for(let i = start; i <= end; ++i) {
+        result.push(i);
+    }
+
+    return result;
 }
 
-function scoreWordSameRow(tiles: RowCol[], board: (TileData | null)[][]) : number | null {
-    const row = tiles[0].row;
-    const squares = board[row];
-    const indices = tiles.map(rc => rc.col);
+function findWordContaining(
+    positions: RowCol[],
+    board: (TileData | null)[][],
+    direction: Direction,
+): RowCol[] | null {
 
-    return scoreWord(indices, squares);
+    if (inSameLine(positions, direction)) {
+        if (direction === 'row') {
+            const row = positions[0].row;
+            const array = board[row];
+            const indices = positions.map(rc => rc.col);
+            const subArray = findWordContainingHelper(array, indices);
+            return subArray && subArray.map(val => rowCol(row, val));
+        } else {
+            const col = positions[0].row;
+            const array = board.map(row => row[col]);
+            const indices = positions.map(rc => rc.row);
+            const subArray = findWordContainingHelper(array, indices);
+            return subArray && subArray.map(val => rowCol(val, col));
+        }
+    }
+
+    return null;
 }
 
-function scoreWordSameCol(tiles: RowCol[], board: (TileData | null)[][]) : number | null {
-    const col = tiles[0].col;
-    const squares = board.map(row => row[col]);
-    const indices = tiles.map(rc => rc.row);
+function findWords(
+    board: (TileData | null)[][],
+    positions: RowCol[],
+    primaryDirection: Direction,
+): RowCol[][] | null {
 
-    return scoreWord(indices, squares);
+    const secondaryDirection = otherDirection(primaryDirection);
+
+    let mainWord = findWordContaining(positions, board, primaryDirection);
+    if (mainWord) {
+        let words = [mainWord];
+
+        positions.forEach(rc => {
+            const word = findWordContaining([rc], board, secondaryDirection);
+            if (word) {
+                words.push(word)
+            }
+        })
+        return words;
+    }
+
+    return null;
 }
 
+export function scoreThisTurn(board: (TileData | null)[][]): number | null {
 
-export function scoreThisTurn(board: (TileData | null)[][]) : number|null {
+    let active: RowCol[] = [];
 
-    let active : RowCol[] = [];
-
-    for(let row = 0; row < board.length; ++row) {
-        for(let col = 0; col < board[row].length; ++col) {
-            if(board[row][col]?.active) {
+    for (let row = 0; row < board.length; ++row) {
+        for (let col = 0; col < board[row].length; ++col) {
+            if (board[row][col]?.active) {
                 active.push(rowCol(row, col));
             }
         }
     }
-    let score;
+
+    const words = findWords(board, active, 'row') ||
+        findWords(board, active, 'col');
+
+
+    console.log('scoreThisTurn', ...(words || []));
     
-    if( active.length === 0) {
-        score = 0;
-    } else if(allEqual(active.map(rc => rc.row))) {
-        score = scoreWordSameRow(active, board);
-    } else if(allEqual(active.map(rc => rc.col))) {
-        score = scoreWordSameCol(active, board);
-    } else {
-        score = null;
-    }
-    return score;
+    return words && words.length; // For now
 }

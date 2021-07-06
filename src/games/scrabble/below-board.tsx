@@ -14,7 +14,7 @@ interface BelowBoardProps {
 }
 export function BelowBoard({score, done} : BelowBoardProps) {
   if(score === null) {
-    return <Message>Score not available</Message>
+    return <Message>Tiles are not correct placed</Message>
   }
 
   return (
