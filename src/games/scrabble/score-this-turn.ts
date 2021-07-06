@@ -1,3 +1,4 @@
+import assert from "../../shared/assert";
 import { TileData } from "./game-data";
 
 interface RowCol {
@@ -14,66 +15,107 @@ function otherDirection(dir : Direction) : Direction {
     return dir === 'row' ? 'col' : 'row';
 }
 
-function inSameLine(positions: RowCol[], direction: Direction) {
+
+export function makeString(    
+    positions: RowCol[],
+    board: (TileData | null)[][]
+) : string {
+
+    const letters = positions.map(rc => {
+        const td = board[rc.row][rc.col];
+        assert(td);
+        return td.letter;
+    });
+    return "".concat(...letters);
+}
+
+
+/** Check if all the positions have the same row (if
+ *  direction === 'row') or column (if direction === 'col') 
+ */
+function sameRowCol(positions: RowCol[], direction: Direction) : boolean {
     const indices = positions.map(rc => rc[direction]);
     for (let i = 1; i < indices.length; ++i) {
         if (indices[i] !== indices[0]) {
             return false;
         }
-
-        return true;
     }
+
+    return true;
 }
 
-function findWordContainingHelper(
-    /** Part of the board.  */
-    squares: (TileData | null)[],
+/** Return 'word indices' that included the input indices.
+ * Or return an empty array if no suitable indices are found.
+ *  
+ * Word indices statisfy these conditions:
+ * 1) They are sequential.
+ * 2) values[x] is non-null (or undefined) for each index value x.
+ * 3) They are maximal subject to the other conditions.
+ * 
+ * This is a help for findWordsContaining.
+ */
+function findAdjancentIndices(
+    values: any[],
 
     /** Must be in numerical order */
     indices: number[],
-) : number[] | null {
+): number[] {
+
+    const usableIndex = (ind: number) => {
+        return values[ind] !== null && values[ind] !== undefined;
+    };
 
     let start = indices[0];
-    while(squares[start-1]) {
+    while (usableIndex(start - 1)) {
         --start;
     }
 
-    let end = indices[0];
-    while(squares[end+1]) {
-        ++end;
+    let result = [];
+    for(let ind = start; usableIndex(ind); ++ind) {
+        result.push(ind);
     }
 
-    if(start === end || indices[indices.length-1] > end) {
-        return null;
+    // By construction, results include indices[0].  If results also include
+    // the value of indices, then all of indices must be included.
+    if(indices[indices.length-1] <= result[result.length-1]) {
+        return result;
     }
     
-    let result = [];
-    for(let i = start; i <= end; ++i) {
-        result.push(i);
-    }
-
-    return result;
+    return [];
 }
 
-function findWordContaining(
+
+/** Return a maximal RowCol array that indicate a candidate word
+ * that run in the specified direction and includes all of 
+ * 'positions'. Or return null if is not possible.
+ */ 
+function findWordsContaining(
     positions: RowCol[],
     board: (TileData | null)[][],
     direction: Direction,
 ): RowCol[] | null {
+    if (!sameRowCol(positions, direction)) {
+        return null;
+    }
 
-    if (inSameLine(positions, direction)) {
-        if (direction === 'row') {
-            const row = positions[0].row;
-            const array = board[row];
-            const indices = positions.map(rc => rc.col);
-            const subArray = findWordContainingHelper(array, indices);
-            return subArray && subArray.map(val => rowCol(row, val));
-        } else {
-            const col = positions[0].row;
-            const array = board.map(row => row[col]);
-            const indices = positions.map(rc => rc.row);
-            const subArray = findWordContainingHelper(array, indices);
-            return subArray && subArray.map(val => rowCol(val, col));
+    if (direction === 'row') {
+        const row = positions[0].row;
+        const array = board[row];
+        const indices = positions.map(rc => rc.col);
+        const subArray = findAdjancentIndices(array, indices);
+        if(subArray.length > 1) {
+            return subArray.map(val => rowCol(row, val));
+        }
+    } 
+    
+    if (direction === 'col') {
+        const col = positions[0].col;
+        const array = board.map(row => row[col]);
+        const indices = positions.map(rc => rc.row);
+        const subArray = findAdjancentIndices(array, indices);
+
+        if(subArray.length > 1) {
+            return subArray.map(val => rowCol(val, col));
         }
     }
 
@@ -86,22 +128,23 @@ function findWords(
     primaryDirection: Direction,
 ): RowCol[][] | null {
 
-    const secondaryDirection = otherDirection(primaryDirection);
-
-    let mainWord = findWordContaining(positions, board, primaryDirection);
-    if (mainWord) {
-        let words = [mainWord];
-
-        positions.forEach(rc => {
-            const word = findWordContaining([rc], board, secondaryDirection);
-            if (word) {
-                words.push(word)
-            }
-        })
-        return words;
+    let mainWord = findWordsContaining(positions, board, primaryDirection);
+    if (!mainWord) {
+        return null;
     }
+ 
+    let words = [mainWord];
 
-    return null;
+    positions.forEach(rc => {
+        const word = findWordsContaining([rc], board,
+            otherDirection(primaryDirection)
+        );
+
+        if (word) {
+            words.push(word)
+        }
+    })
+    return words;
 }
 
 export function scoreThisTurn(board: (TileData | null)[][]): number | null {
@@ -119,8 +162,12 @@ export function scoreThisTurn(board: (TileData | null)[][]): number | null {
     const words = findWords(board, active, 'row') ||
         findWords(board, active, 'col');
 
-
-    console.log('scoreThisTurn', ...(words || []));
+    // if(words) {
+    //     const wstr = words.map(w => makeString(w, board));
+    //     console.log('scoreThisTurn', ...wstr);
+    // } else {
+    //     console.log('scoreThisTurn: no words found');
+    // }
     
-    return words && words.length; // For now
+    return words && words.length; // For no
 }
