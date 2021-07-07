@@ -4,12 +4,12 @@ import { boardIDs } from "./game-actions";
 import { squareTypesArray } from "./board-properties";
 import { squareColor, squareSize } from "./style";
 import { Tile } from "./tile";
-import { TileData } from "./game-data";
+import { BoardData } from "./game-data";
 
 interface MainBoardProps {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
-  board: (TileData | null)[][];
+  board: BoardData;
 }
 
 const squareColors = nestedArrayMap(squareTypesArray, squareColor);

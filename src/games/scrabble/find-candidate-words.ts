@@ -1,5 +1,5 @@
 import assert from "../../shared/assert";
-import { TileData } from "./game-data";
+import { BoardData } from "./game-data";
 
 interface RowCol {
     row: number;
@@ -18,7 +18,7 @@ function otherDirection(dir : Direction) : Direction {
 
 export function makeString(    
     positions: RowCol[],
-    board: (TileData | null)[][]
+    board: BoardData,
 ) : string {
 
     const letters = positions.map(rc => {
@@ -91,7 +91,7 @@ function findAdjancentIndices(
  */ 
 function findWordsContaining(
     positions: RowCol[],
-    board: (TileData | null)[][],
+    board: BoardData,
     direction: Direction,
 ): RowCol[] | null {
     if (!sameRowCol(positions, direction)) {
@@ -122,8 +122,8 @@ function findWordsContaining(
     return null;
 }
 
-function findWords(
-    board: (TileData | null)[][],
+function findCandidateWordsDirected(
+    board: BoardData,
     positions: RowCol[],
     primaryDirection: Direction,
 ): RowCol[][] | null {
@@ -147,7 +147,7 @@ function findWords(
     return words;
 }
 
-export function scoreThisTurn(board: (TileData | null)[][]): number | null {
+export function findCandidateWords(board: BoardData): RowCol[][] | null {
 
     let active: RowCol[] = [];
 
@@ -159,15 +159,9 @@ export function scoreThisTurn(board: (TileData | null)[][]): number | null {
         }
     }
 
-    const words = findWords(board, active, 'row') ||
-        findWords(board, active, 'col');
-
-    // if(words) {
-    //     const wstr = words.map(w => makeString(w, board));
-    //     console.log('scoreThisTurn', ...wstr);
-    // } else {
-    //     console.log('scoreThisTurn: no words found');
-    // }
+    const words = 
+        findCandidateWordsDirected(board, active, 'row') ||
+        findCandidateWordsDirected(board, active, 'col')
     
-    return words && words.length; // For no
+    return words;
 }

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BoardData } from "./game-data";
 import {  WordCheck } from "./word-check";
 
 const Message = styled.div`
@@ -11,11 +12,12 @@ export const WordInput = styled.input`
   margin-right: 0.2em;
 `
 interface BelowBoardProps {
-  score: number | null ;
+  board: BoardData ;
   done: () => void;
 }
 
-export function Score({score, done} : BelowBoardProps) {
+export function Score({board, done} : BelowBoardProps) {
+  const score = 999;
   if(score === null) {
     return <Message>Tiles are not correct placed</Message>
   }

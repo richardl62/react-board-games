@@ -34,7 +34,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          letters={props.G.racks[0] /*KLUDGE: should be for active player */}
+          letters={props.G.playerData[0].rack /*KLUDGE: should be for active player */}
           shuffle={shuffle}
           recall={recall || undefined}
         />
@@ -44,7 +44,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           board={props.G.board}
         />
         <BelowBoard 
-          score={props.G.scoreThisTurn}
+          board={props.G.board}
           done={() => props.moves.finishTurn()}
         />
       </Game>

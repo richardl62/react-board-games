@@ -14,30 +14,40 @@ export function getLetter(sd : TileData | null) : Letter | null {
     return sd && sd.letter;
 }
 
+export type BoardData = (TileData | null)[][];
+
+export interface PlayerData {
+    rack: (Letter | null)[];
+    score: number;
+}
 export interface GameData {
-    board: (TileData | null)[][];
-    racks: (Letter | null)[][];
+    board: BoardData;
+    playerData: PlayerData[]; 
     moveStart: SquareID | null;
     bag: Letter[];
-    scoreThisTurn: number | null;
 }
 
 export function startingGameData(): GameData {
     let bag = shuffle([...fullBag]); 
     assert(bag.length > rackSize);
 
-    const rack : Letter[] = [];
-    for(let i = 0; i < rackSize; ++i) {
-        rack.push(bag.pop()!);
+    const rack = () => {
+        let letters : Letter[] = [];
+        for (let i = 0; i < rackSize; ++i) {
+            letters.push(bag.pop()!);
+        }
+
+        return letters;
     }
 
     return {
         board: nestedArrayMap(squareTypesArray, () => null),
-        racks: [
-            rack,
+        playerData: [
+            {rack: rack(),
+             score: 0
+            }
         ],
         moveStart: null,
         bag: bag,
-        scoreThisTurn: null,
     };
 }

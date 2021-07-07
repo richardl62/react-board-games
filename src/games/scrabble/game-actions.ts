@@ -4,7 +4,7 @@ import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { TileData, GameData } from "./game-data";
-import { scoreThisTurn } from "./score-this-turn";
+
 
 const playerNumber = 0;
 export const boardIDs = {
@@ -34,7 +34,7 @@ function canChange(G: GameData, sq: SquareID) : boolean
 /** get the letter at a square */
 function getSquareData(G: GameData, sq: SquareID) : TileData | null {
     if(onRack(sq)) {
-        const letter = G.racks[playerNumber][rackPos(sq)];
+        const letter = G.playerData[playerNumber].rack[rackPos(sq)];
         return letter && {
             letter: letter,
             active: true, // rank letters are always active
@@ -60,7 +60,7 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
 }
 
 function finishTurn(G: GameData) {
-    let rack = G.racks[playerNumber];
+    let rack = G.playerData[playerNumber].rack;
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
         if(rack[i] === null && bag.length > 0) {
@@ -74,7 +74,7 @@ function finishTurn(G: GameData) {
 }
 
 function addToRack(G: GameData, l: Letter) {
-    let rack = G.racks[playerNumber];
+    let rack = G.playerData[playerNumber].rack;
     let emptyIndex = rack.findIndex(l => l === null);
     assert(emptyIndex >= 0, "Attempt to add to full rack");
     rack[emptyIndex] = l;
@@ -82,7 +82,7 @@ function addToRack(G: GameData, l: Letter) {
 
 /* move blank spaces to the end */
 function compactRack(G: GameData) {
-    let rack = G.racks[playerNumber];
+    let rack = G.playerData[playerNumber].rack;
 
     let setPos = 0;
     for(let readPos = 0; readPos < rack.length; ++readPos) {
@@ -108,13 +108,13 @@ function setLetter(
     rackAction : RackAction = RackAction.overwrite,  
     ) {
     if(onRack(sq)) {
-        let rack = [...G.racks[playerNumber]];
+        let rack = [...G.playerData[playerNumber].rack];
         const pos = rackPos(sq);
         if(rackAction === RackAction.insert) {
             makeRackGap(rack, pos);
         }
         rack[pos] = letter;
-        G.racks[playerNumber] = rack; 
+        G.playerData[playerNumber].rack = rack; 
     } else {
         let row = [...G.board[sq.row]];
         row[sq.col] = letter && {letter:letter, active: true};
@@ -133,8 +133,6 @@ export const bgioMoves = {
             setLetter(G, fromSq, null);
             setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
             compactRack(G);
-
-            G.scoreThisTurn = scoreThisTurn(G.board);
         }
     },
 
@@ -151,7 +149,7 @@ export const bgioMoves = {
         
     },
     shuffleRack: (G: GameData) => {
-        shuffle(G.racks[playerNumber]);
+        shuffle(G.playerData[playerNumber].rack);
     },
 
     finishTurn: finishTurn,
