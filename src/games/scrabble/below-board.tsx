@@ -1,18 +1,21 @@
 import styled from "styled-components";
+import {  WordCheck } from "./word-check";
 
 const Message = styled.div`
   display: inline-block;
-  margin-right: 0.5em;
   font-size: large;
   font-weight: bold;
 `;
 
-
+export const WordInput = styled.input`
+  margin-right: 0.2em;
+`
 interface BelowBoardProps {
   score: number | null ;
   done: () => void;
 }
-export function BelowBoard({score, done} : BelowBoardProps) {
+
+export function Score({score, done} : BelowBoardProps) {
   if(score === null) {
     return <Message>Tiles are not correct placed</Message>
   }
@@ -24,3 +27,13 @@ export function BelowBoard({score, done} : BelowBoardProps) {
     </div>
   );
 }
+
+export function BelowBoard(props : BelowBoardProps) {
+  return (
+    <>
+      <WordCheck />
+      <Score {...props} />
+    </>
+  );
+}
+
