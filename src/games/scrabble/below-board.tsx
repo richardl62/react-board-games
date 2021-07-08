@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BoardData } from "./game-data";
-import {  WordCheck } from "./word-check";
+import {  WordChecker } from "./word-check";
 
 const Message = styled.div`
   display: inline-block;
@@ -31,7 +31,7 @@ export function BelowBoard({endTurn} : BelowBoardProps) {
   const score = -999;
   return (
     <>
-      <WordCheck />
+      <WordChecker />
       <Score score={score} done={() => endTurn(score)} />
     </>
   );
