@@ -5,7 +5,6 @@ import { findCandidateWords, RowCol } from "./find-candidate-words";
 import { getWord } from "./game-actions";
 import { BoardData } from "./game-data";
 import { scoreWords } from "./score-word";
-import {  WordChecker } from "./word-check";
 
 const Message = styled.div`
   display: inline-block;
@@ -28,7 +27,8 @@ function Score({score, done} : ScoreProps) {
   );
 }
 
-function findInvalidWords(board: BoardData, cwords: RowCol[][]) : string[] {
+/** Return a sorted list of invalid words, or null if there are none */
+function findInvalidWords(board: BoardData, cwords: RowCol[][]) : string[] | null {
     let invalid : string[] = [];
     cwords.forEach(cw => {
       const word = getWord(board, cw);
@@ -37,21 +37,26 @@ function findInvalidWords(board: BoardData, cwords: RowCol[][]) : string[] {
       }
     })
     
-    return invalid.sort();
+    return invalid.length > 0 ? invalid.sort() : null;
 }
 
-export interface BelowBoardProps {
+interface EndTurnActionsProps {
   board: BoardData;
   endTurn: (score: number) => void
 }
-export function BelowBoard({board, endTurn} : BelowBoardProps) {
+
+export function EndTurnActions({board, endTurn} : EndTurnActionsProps) {
   const cwords = findCandidateWords(board);
-  const score = cwords && scoreWords(board, cwords);
-  const invalidWords = cwords && findInvalidWords(board, cwords);
+
+  if(!cwords) {
+    return <Message>Place tiles in valid positions</Message>
+  }
+
+  const score = scoreWords(board, cwords);
+  const invalidWords = findInvalidWords(board, cwords);
 
   return (
     <>
-      <WordChecker />
       <Score score={score}
         done={() => { assert(score !== null); endTurn(score) }}
       />
@@ -59,5 +64,6 @@ export function BelowBoard({board, endTurn} : BelowBoardProps) {
     </>
   );
 }
+
 
 

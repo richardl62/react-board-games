@@ -4,12 +4,13 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
-import { BelowBoard } from "./below-board";
+import { EndTurnActions } from "./end-turn-actions";
 import { onRack, playerNumber, tilesOut } from "./game-actions";
 import { bgioMoves } from "./bgio-moves";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
+import { WordChecker } from "./word-check";
 
 const Game = styled.div`
   display: inline-flex;
@@ -59,7 +60,8 @@ function Scrabble({G, moves}: Bgio.BoardProps<GameData>) {
           clickDragState={clickDragState}
           board={G.board}
         />
-        <BelowBoard 
+        <WordChecker/>
+        <EndTurnActions 
           board={G.board}
           endTurn={(score: number) => moves.finishTurn(score)}
         />
