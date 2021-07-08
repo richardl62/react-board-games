@@ -16,9 +16,14 @@ export function getLetter(sd : TileData | null) : Letter | null {
 
 export type BoardData = (TileData | null)[][];
 
+export interface PlayerData {
+    rack: (Letter | null)[];
+    score: number;
+}
+
 export interface GameData {
     board: BoardData;
-    racks: (Letter | null)[][];
+    playerData: PlayerData[]; 
     bag: Letter[];
 
     // To help with click-moves
@@ -29,15 +34,21 @@ export function startingGameData(): GameData {
     let bag = shuffle([...fullBag]); 
     assert(bag.length > rackSize);
 
-    const rack : Letter[] = [];
-    for(let i = 0; i < rackSize; ++i) {
-        rack.push(bag.pop()!);
+    const rack = () => {
+        let letters : Letter[] = [];
+        for (let i = 0; i < rackSize; ++i) {
+            letters.push(bag.pop()!);
+        }
+
+        return letters;
     }
 
     return {
         board: nestedArrayMap(squareTypesArray, () => null),
-        racks: [
-            rack,
+        playerData: [
+            {rack: rack(),
+             score: 0
+            }
         ],
         moveStart: null,
         bag: bag,
