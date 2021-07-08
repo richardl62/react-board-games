@@ -12,6 +12,7 @@ export const bgioMoves = {
     move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
         if (canChange(G, toSq) && !sameJSON(fromSq, toSq)) {
             const squareData = getSquareData(G, fromSq);
+            
             setLetter(G, fromSq, null);
             setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
             compactRack(G);
