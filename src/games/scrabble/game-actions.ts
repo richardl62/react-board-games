@@ -4,7 +4,6 @@ import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { TileData, GameData } from "./game-data";
-import { scoreThisTurn } from "./score-this-turn";
 
 const playerNumber = 0;
 export const boardIDs = {
@@ -59,7 +58,9 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
     rack[pos] = null;
 }
 
-function finishTurn(G: GameData) {
+
+function refillRack(G: GameData) {
+    // Refill the rack
     let rack = G.racks[playerNumber];
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
@@ -67,10 +68,6 @@ function finishTurn(G: GameData) {
             rack[i] = bag.pop()!;
         }
     }
-
-    G.board.forEach(row => 
-        row.forEach(sd => sd && (sd.active = false))
-    );
 }
 
 function addToRack(G: GameData, l: Letter) {
@@ -133,8 +130,6 @@ export const bgioMoves = {
             setLetter(G, fromSq, null);
             setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
             compactRack(G);
-
-            G.scoreThisTurn = scoreThisTurn(G.board);
         }
     },
 
@@ -150,11 +145,19 @@ export const bgioMoves = {
         }
         
     },
+
     shuffleRack: (G: GameData) => {
         shuffle(G.racks[playerNumber]);
     },
 
-    finishTurn: finishTurn,
+    finishTurn: (G: GameData, ctx: any, score: number) => {
+        refillRack(G);
+
+        // Mark board entires as non-active
+        G.board.forEach(row =>
+            row.forEach(sd => sd && (sd.active = false))
+        );
+    }
 };
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {

@@ -14,12 +14,15 @@ export function getLetter(sd : TileData | null) : Letter | null {
     return sd && sd.letter;
 }
 
+export type BoardData = (TileData | null)[][];
+
 export interface GameData {
-    board: (TileData | null)[][];
+    board: BoardData;
     racks: (Letter | null)[][];
-    moveStart: SquareID | null;
     bag: Letter[];
-    scoreThisTurn: number | null;
+
+    // To help with click-moves
+    moveStart: SquareID | null;
 }
 
 export function startingGameData(): GameData {
@@ -38,6 +41,5 @@ export function startingGameData(): GameData {
         ],
         moveStart: null,
         bag: bag,
-        scoreThisTurn: null,
     };
 }

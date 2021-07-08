@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BoardData } from "./game-data";
 import {  WordCheck } from "./word-check";
 
 const Message = styled.div`
@@ -8,15 +9,12 @@ const Message = styled.div`
   margin-right: 0.5em;
 `;
 
-export const WordInput = styled.input`
-  margin-right: 0.2em;
-`
-interface BelowBoardProps {
+interface ScoreProps {
   score: number | null ;
   done: () => void;
 }
 
-export function Score({score, done} : BelowBoardProps) {
+function Score({score, done} : ScoreProps) {
   return (
     <div>
       <Message>Score: <span> {score ? score : '-'}</span></Message> 
@@ -25,11 +23,16 @@ export function Score({score, done} : BelowBoardProps) {
   );
 }
 
-export function BelowBoard(props : BelowBoardProps) {
+export interface BelowBoardProps {
+  board: BoardData;
+  endTurn: (score: number) => void
+}
+export function BelowBoard({endTurn} : BelowBoardProps) {
+  const score = -999;
   return (
     <>
       <WordCheck />
-      <Score {...props} />
+      <Score score={score} done={() => endTurn(score)} />
     </>
   );
 }

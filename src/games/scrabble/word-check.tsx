@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { checkWord } from "./check-word";
-import { WordInput } from "./below-board";
 
+const WordInput = styled.input`
+  margin-right: 0.2em;
+`
 const ValidityMessage = styled.span<{ valid: boolean; }> `
   font-size: large;
   color: ${props => props.valid ? 'default' : 'red'};

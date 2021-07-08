@@ -44,8 +44,8 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           board={props.G.board}
         />
         <BelowBoard 
-          score={props.G.scoreThisTurn}
-          done={() => props.moves.finishTurn()}
+          board={props.G.board}
+          endTurn={(score: number) => props.moves.finishTurn(score)}
         />
       </Game>
     </DndProvider>

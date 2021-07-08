@@ -1,5 +1,5 @@
 import assert from "../../shared/assert";
-import { TileData } from "./game-data";
+import { BoardData, TileData } from "./game-data";
 
 interface RowCol {
     row: number;
@@ -18,7 +18,7 @@ function otherDirection(dir : Direction) : Direction {
 
 export function makeString(    
     positions: RowCol[],
-    board: (TileData | null)[][]
+    board: BoardData
 ) : string {
 
     const letters = positions.map(rc => {
@@ -28,7 +28,6 @@ export function makeString(
     });
     return "".concat(...letters);
 }
-
 
 /** Check if all the positions have the same row (if
  *  direction === 'row') or column (if direction === 'col') 
@@ -91,7 +90,7 @@ function findAdjancentIndices(
  */ 
 function findWordsContaining(
     positions: RowCol[],
-    board: (TileData | null)[][],
+    board: BoardData,
     direction: Direction,
 ): RowCol[] | null {
     if (!sameRowCol(positions, direction)) {
@@ -123,7 +122,7 @@ function findWordsContaining(
 }
 
 function findWords(
-    board: (TileData | null)[][],
+    board: BoardData,
     positions: RowCol[],
     primaryDirection: Direction,
 ): RowCol[][] | null {
@@ -147,7 +146,7 @@ function findWords(
     return words;
 }
 
-export function scoreThisTurn(board: (TileData | null)[][]): number | null {
+export function scoreThisTurn(board: BoardData): number | null {
 
     let active: RowCol[] = [];
 
