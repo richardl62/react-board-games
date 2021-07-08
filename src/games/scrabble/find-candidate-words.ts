@@ -89,10 +89,14 @@ function findAdjancentIndices(
  * 'positions'. Or return null if is not possible.
  */ 
 function findWordsContaining(
+    /** Must be non-empty */
     positions: RowCol[],
+  
     board: BoardData,
     direction: Direction,
 ): RowCol[] | null {
+    assert(positions.length > 0);
+
     if (!sameRowCol(positions, direction)) {
         return null;
     }
@@ -126,6 +130,9 @@ function findCandidateWordsDirected(
     positions: RowCol[],
     primaryDirection: Direction,
 ): RowCol[][] | null {
+    if(positions.length === 0) {
+        return null;
+    }
 
     let mainWord = findWordsContaining(positions, board, primaryDirection);
     if (!mainWord) {
