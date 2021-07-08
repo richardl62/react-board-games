@@ -5,6 +5,7 @@ const Message = styled.div`
   display: inline-block;
   font-size: large;
   font-weight: bold;
+  margin-right: 0.5em;
 `;
 
 export const WordInput = styled.input`
@@ -16,14 +17,10 @@ interface BelowBoardProps {
 }
 
 export function Score({score, done} : BelowBoardProps) {
-  if(score === null) {
-    return <Message>Tiles are not correct placed</Message>
-  }
-
   return (
     <div>
-      <Message>Score: <span> {score}</span></Message> 
-      <button onClick={done}>Done</button>
+      <Message>Score: <span> {score ? score : '-'}</span></Message> 
+      <button onClick={done} disabled={!score}>Done</button>
     </div>
   );
 }
