@@ -16,7 +16,7 @@ function Validity({ valid }: { valid: boolean; }) {
   </ValidityMessage>;
 }
 
-export function WordCheck() {
+export function WordChecker() {
   const [word, setEnteredWord] = useState("");
   const [valid, setValid] = useState<boolean | 'unknown'>('unknown');
 
