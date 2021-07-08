@@ -2,7 +2,8 @@ import { DragType, MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
-import { TileData, GameData } from "./game-data";
+import { TileData, GameData, BoardData } from "./game-data";
+import { RowCol } from "./find-candidate-words";
 
 // KLUDGE: For now support only one player.
 export const playerNumber = 0;
@@ -69,6 +70,23 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
 */
 export function tilesOut(gameData: GameData) : boolean {
     return !!gameData.board.find(row => row.find(sq=>sq?.active));
+}
+
+export function getWord(
+    board: BoardData,
+
+    /** must refer to non-empty board positions */
+    positions: RowCol[]
+    ) : string 
+
+    {
+    let letters = positions.map(rc => {
+        const sq = board[rc.row][rc.col];
+        assert(sq);
+        return sq.letter;
+    });
+
+    return "".concat(...letters);
 }
 
 export function fillRack(G: GameData) {
