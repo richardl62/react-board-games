@@ -1,7 +1,7 @@
 import assert from "../../shared/assert";
 import { BoardData } from "./game-data";
 
-interface RowCol {
+export interface RowCol {
     row: number;
     col: number;
 }
