@@ -1,5 +1,8 @@
 import styled from "styled-components";
+import assert from "../../shared/assert";
+import { findCandidateWords } from "./find-candidate-words";
 import { BoardData } from "./game-data";
+import { scoreWords } from "./score-word";
 import {  WordChecker } from "./word-check";
 
 const Message = styled.div`
@@ -27,12 +30,16 @@ export interface BelowBoardProps {
   board: BoardData;
   endTurn: (score: number) => void
 }
-export function BelowBoard({endTurn} : BelowBoardProps) {
-  const score = -999;
+export function BelowBoard({board, endTurn} : BelowBoardProps) {
+  const cwords = findCandidateWords(board);
+  const score = cwords && scoreWords(board, cwords);
+
   return (
     <>
       <WordChecker />
-      <Score score={score} done={() => endTurn(score)} />
+      <Score score={score}
+        done={() => { assert(score !== null); endTurn(score) }}
+      />
     </>
   );
 }
