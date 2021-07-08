@@ -2,10 +2,11 @@ import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { ClickDragState, squareInteractionFunc } from "../../boards";
+import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
 import { BelowBoard } from "./below-board";
-import { moveFunctions, bgioMoves } from "./game-actions";
+import { onRack, playerNumber, tilesOut } from "./game-actions";
+import { bgioMoves } from "./bgio-moves";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
@@ -16,36 +17,51 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-function tilesOut(gameData: GameData) : boolean {
-  return !!gameData.board.find(row => row.find(sq=>sq?.active));
-}
-function Scrabble(props: Bgio.BoardProps<GameData>) {
+function Scrabble({G, moves}: Bgio.BoardProps<GameData>) {
+  const {board} = G;
+
   const clickDragState = useRef(new ClickDragState()).current;
+
+  const moveFunctions = {
+    onMoveStart: (sq: SquareID) => {
+      const canMove = onRack(sq) || Boolean(board[sq.row][sq.col]?.active)
+      if(canMove) {
+          moves.start(sq);
+      }
+      return canMove;
+    },
+
+    onMoveEnd: (from: SquareID, to: SquareID | null) => {
+      moves.move(from, to);
+    },
+
+    dragType: () => DragType.move,
+  }
+
   const squareInteraction = squareInteractionFunc(
-    moveFunctions(props),
-    clickDragState
+    moveFunctions, clickDragState
   );
 
-  const shuffle = props.moves.shuffleRack;
-  const recall = tilesOut(props.G) && props.moves.recallRack;
+  const shuffle = moves.shuffleRack;
+  const recall = tilesOut(G) && moves.recallRack;
   return (
     <DndProvider backend={HTML5Backend}>
       <Game>
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          letters={props.G.playerData[0].rack /*KLUDGE: should be for active player */}
+          letters={G.playerData[playerNumber].rack}
           shuffle={shuffle}
           recall={recall || undefined}
         />
         <MainBoard
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          board={props.G.board}
+          board={G.board}
         />
         <BelowBoard 
-          board={props.G.board}
-          endTurn={(score: number) => props.moves.finishTurn(score)}
+          board={G.board}
+          endTurn={(score: number) => moves.finishTurn(score)}
         />
       </Game>
     </DndProvider>

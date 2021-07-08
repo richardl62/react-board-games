@@ -1,17 +1,18 @@
 import { DragType, MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
-import { sameJSON, shuffle } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { TileData, GameData } from "./game-data";
 
-const playerNumber = 0;
+// KLUDGE: For now support only one player.
+export const playerNumber = 0;
+
 export const boardIDs = {
     rack: 'rack',
     main: 'main',
 }
 
-function onRack(sq: SquareID | null): boolean {
+export function onRack(sq: SquareID | null): boolean {
     if(sq && sq.boardID === boardIDs.rack) {
         assert(sq.row === 0); 
         return true;
@@ -25,13 +26,13 @@ function rackPos(sq: SquareID): number {
 }
 
 
-function canChange(G: GameData, sq: SquareID) : boolean
+export function canChange(G: GameData, sq: SquareID) : boolean
 {
     return onRack(sq) || G.board[sq.row][sq.col] === null;
 } 
 
 /** get the letter at a square */
-function getSquareData(G: GameData, sq: SquareID) : TileData | null {
+export function getSquareData(G: GameData, sq: SquareID) : TileData | null {
     if(onRack(sq)) {
         const letter = G.playerData[playerNumber].rack[rackPos(sq)];
         return letter && {
@@ -58,9 +59,19 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
     rack[pos] = null;
 }
 
+/** 
+* Report whether there are active tiles on the board.
+* 
+* Active tiles are those taken from the rack. 
+*
+* Note: For most of the game this is equivalent to checking if the rank has 
+* gaps. But difference can occur at the end of the game when the bag is emtpy.
+*/
+export function tilesOut(gameData: GameData) : boolean {
+    return !!gameData.board.find(row => row.find(sq=>sq?.active));
+}
 
-function refillRack(G: GameData) {
-
+export function fillRack(G: GameData) {
     let rack = G.playerData[playerNumber].rack;
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
@@ -70,7 +81,7 @@ function refillRack(G: GameData) {
     }
 }
 
-function addToRack(G: GameData, l: Letter) {
+export function addToRack(G: GameData, l: Letter) {
     let rack = G.playerData[playerNumber].rack;
     let emptyIndex = rack.findIndex(l => l === null);
     assert(emptyIndex >= 0, "Attempt to add to full rack");
@@ -78,7 +89,7 @@ function addToRack(G: GameData, l: Letter) {
 }
 
 /* move blank spaces to the end */
-function compactRack(G: GameData) {
+export function compactRack(G: GameData) {
     let rack = G.playerData[playerNumber].rack;
 
     let setPos = 0;
@@ -93,12 +104,13 @@ function compactRack(G: GameData) {
     }
 }
 
-enum RackAction {
+export enum RackAction {
     insert,
     overwrite,
 }
+
 /** Set a square to a given value */
-function setLetter(
+export function setLetter(
     G: GameData, 
     sq: SquareID, 
     letter: Letter | null, 
@@ -118,47 +130,6 @@ function setLetter(
         G.board[sq.row] = row; 
     }
 }
-
-export const bgioMoves = {
-    start: (G: GameData, ctx: any, sq: SquareID) => {
-        G.moveStart = sq;
-    },
-
-    move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
-        if(canChange(G, toSq) && !sameJSON(fromSq, toSq)) {
-            const squareData = getSquareData(G, fromSq);
-            setLetter(G, fromSq, null);
-            setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
-            compactRack(G);
-        }
-    },
-
-    recallRack: (G: GameData) => {
-        for(let row = 0; row < G.board.length; ++row) {
-            for(let col = 0; col < G.board[row].length; ++col) {
-                let sq = G.board[row][col];
-                if(sq?.active) {
-                    addToRack(G, sq.letter);
-                    G.board[row][col] = null;
-                }
-            }
-        }
-        
-    },
-
-    shuffleRack: (G: GameData) => {
-        shuffle(G.playerData[playerNumber].rack);
-    },
-
-    finishTurn: (G: GameData, ctx: any, score: number) => {
-        refillRack(G);
-
-        // Mark board entires as non-active
-        G.board.forEach(row =>
-            row.forEach(sd => sd && (sd.active = false))
-        );
-    }
-};
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
     const { G: {board}, moves } = props;
