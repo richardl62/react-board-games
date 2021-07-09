@@ -1,11 +1,5 @@
-export function checkWord(word: string) : boolean {
-    const revisedWord = word.trim().toLocaleLowerCase();
-    return !!revisedWord && wordList.search(`\n${revisedWord}\n`) >= 0;
-}
-
-// wordList downloaded from https://www.wordgamedictionary.com/sowpods/download/sowpods.txt
-export const wordList = `
-aa
+// wordList downloaded from https://www.wordgamedictionary.com/sowpods/download/.txt
+export const legalWordsRawString = `aa
 aah
 aahed
 aahing
@@ -267757,5 +267751,4 @@ zythums
 zyzzyva
 zyzzyvas
 zzz
-zzzs
-`
+zzzs`

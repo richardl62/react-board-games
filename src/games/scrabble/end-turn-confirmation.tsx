@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { checkWord } from "./check-word";
+import { isLegalWord } from "./is-legal-word";
 
 const IllegalWords = styled.div`
   display: inline-flex;
@@ -32,7 +32,7 @@ export function EndTurnConfirmation({ words, endTurn}: EndTurnConfirmationProps)
   if (wordsToConfirm.length === 0) {
     const onClick = () => {
       // Find any invalid words
-      const invalid = words.filter(w => !checkWord(w));
+      const invalid = words.filter(w => !isLegalWord(w));
   
       if (invalid.length === 0) {
         endTurn();
