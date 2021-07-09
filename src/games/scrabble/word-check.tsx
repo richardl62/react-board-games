@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { checkWord } from "./check-word";
+import { isLegalWord } from "./is-legal-word";
 
 const WordInput = styled.input`
   margin-right: 0.2em;
@@ -28,7 +28,7 @@ export function WordChecker() {
   };
 
   const onSubmit = (e: any) => {
-    setValid(checkWord(word));
+    setValid(isLegalWord(word));
     e.preventDefault();
   };
 
