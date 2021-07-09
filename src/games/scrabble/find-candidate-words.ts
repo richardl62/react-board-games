@@ -153,7 +153,7 @@ function findCandidateWordsDirected(
     return words;
 }
 
-export function findCandidateWords(board: BoardData): RowCol[][] | null {
+export function findCandidateWords(board: BoardData): RowCol[][] {
 
     let active: RowCol[] = [];
 
@@ -169,5 +169,5 @@ export function findCandidateWords(board: BoardData): RowCol[][] | null {
         findCandidateWordsDirected(board, active, 'row') ||
         findCandidateWordsDirected(board, active, 'col')
     
-    return words;
+    return words || [];
 }

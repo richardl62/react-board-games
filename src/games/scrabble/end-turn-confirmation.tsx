@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { checkWord } from "./check-word";
 
-export const Message = styled.div`
-  display: inline-block;
-  font-size: large;
-  font-weight: bold;
-  margin-right: 0.5em;
-`;
-
-const InvalidWords = styled.div`
+const IllegalWords = styled.div`
   display: inline-flex;
   gap: 0.5em;
-`
+  font-size: large;
+  margin-bottom: 0.2em;
+  font-weight: bold;
+  color: darkred;
+`;
 
 interface EndTurnConfirmationProps {
   words: string[];
@@ -32,34 +29,34 @@ export function EndTurnConfirmation({ words, endTurn}: EndTurnConfirmationProps)
   const [wordsToConfirm, setWordsToConfirm] = useState<string[]>([]);
   useEffect(() => setWordsToConfirm([]), [words])
 
-  const onDoneClick = () => {
-    // Find any invalid words
-    const invalid = words.filter(w => !checkWord(w));
-
-    if (invalid.length === 0) {
-      endTurn();
-    } else {
-      setWordsToConfirm(invalid);
-    }
-  }
-
-  const permitIllegal = (allow: boolean) => {
-    setWordsToConfirm([]);
-    if (allow) {
-      endTurn();
-    }
-  }
-
   if (wordsToConfirm.length === 0) {
-    return <button onClick={onDoneClick}>Done</button>
+    const onClick = () => {
+      // Find any invalid words
+      const invalid = words.filter(w => !checkWord(w));
+  
+      if (invalid.length === 0) {
+        endTurn();
+      } else {
+        setWordsToConfirm(invalid);
+      }
+    }
+
+    return (
+      <div>
+        <button onClick={onClick}>End Turn</button>
+      </div>
+    )
   } else {
     return (
-      <InvalidWords>
-        IllLegal Words:
-        {words.map(w => <span key={w}>{w.toLocaleLowerCase()}</span>)}
-        <button onClick={() => permitIllegal(true)}>Allow</button>
-        <button onClick={() => permitIllegal(false)}>Don't Allow</button>
-      </InvalidWords>
+      <div>
+        <IllegalWords>
+          Unrecognised Words:
+          {words.map(w => <span key={w}>{w.toLocaleLowerCase()}</span>)}
+        </IllegalWords>
+        <div>
+          <button onClick={endTurn}>Accept Unrecognised Words</button>
+        </div>
+      </div>
     );
   }
 }
