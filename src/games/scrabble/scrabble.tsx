@@ -7,7 +7,7 @@ import { AppGame, Bgio } from "../../shared/types";
 import { bgioMoves } from "./bgio-moves";
 import { EndTurnConfirmation } from "./end-turn-confirmation";
 import { findCandidateWords } from "./find-candidate-words";
-import { getWord, onRack, playerNumber, tilesOut } from "./game-actions";
+import { getWord, onRack } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
@@ -27,7 +27,8 @@ const Score = styled.div`
   margin-right: 0.5em;
   `;
 
-function Scrabble({G, moves}: Bgio.BoardProps<GameData>) {
+function Scrabble(props: Bgio.BoardProps<GameData>) {
+  const {G, moves} = props;
   const {board} = G;
 
   const clickDragState = useRef(new ClickDragState()).current;
@@ -51,9 +52,6 @@ function Scrabble({G, moves}: Bgio.BoardProps<GameData>) {
     moveFunctions, clickDragState
   );
 
-  const shuffle = moves.shuffleRack;
-  const recall = tilesOut(G) && moves.recallRack;
-
   const cWords = findCandidateWords(board);
   const validTilePositions = cWords.length > 0;
   const words = cWords.map(cw => getWord(board, cw));
@@ -65,9 +63,7 @@ function Scrabble({G, moves}: Bgio.BoardProps<GameData>) {
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          letters={G.playerData[playerNumber].rack}
-          shuffle={shuffle}
-          recall={recall || undefined}
+          {...props}
         />
         <MainBoard
           squareInteraction={squareInteraction}
