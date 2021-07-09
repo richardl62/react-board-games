@@ -4,7 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
-import { EndTurnActions } from "./end-turn-actions";
+import { EndTurnActions } from "./EndTurnActionsProps";
 import { onRack, playerNumber, tilesOut } from "./game-actions";
 import { bgioMoves } from "./bgio-moves";
 import { GameData, startingGameData } from "./game-data";
