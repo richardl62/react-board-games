@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
-import { boardIDs } from "./game-actions";
-import { Letter } from "./letter-properties";
+import { Bgio } from "../../shared/types";
+import { boardIDs, playerNumber, tilesOut } from "./game-actions";
+import { GameData } from "./game-data";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 
@@ -14,17 +15,16 @@ margin-left: 5%;
 const Button = styled.button<{visible?: boolean}>`
   visibility: ${props => props.visible === false ? 'hidden' : 'default'};
 `
-interface RackProps {
+
+interface RackProps extends Bgio.BoardProps<GameData> {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
-  letters: (Letter | null)[];
-  shuffle: () => void
-  recall?: () => void;
 }
-export function Rack({ letters, squareInteraction, clickDragState, 
-  shuffle, recall }: RackProps) {
-  const tiles = letters.map(letter => letter && <Tile letter={letter} />
-  );
+export function Rack({ squareInteraction, clickDragState, G, moves } : RackProps ) {;
+  const hasTilesOut = tilesOut(G);
+  const letters = G.playerData[playerNumber].rack
+  const tiles = letters.map(letter => letter && <Tile letter={letter} />);
+  
 
   const boardProps = makeBoardProps(
     [tiles],
@@ -40,8 +40,8 @@ export function Rack({ letters, squareInteraction, clickDragState,
   );
 
   return (<RackAndButtons>
-    <Button onClick={recall} visible={!!recall}>Recall</Button>
-    <Button onClick={shuffle}>Shuffle</Button>
+    <Button onClick={moves.recall} visible={hasTilesOut}>Recall</Button>
+    <Button onClick={moves.shuffle}>Shuffle</Button>
     <Board {...boardProps} />
   </RackAndButtons>);
 }
