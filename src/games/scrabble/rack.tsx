@@ -1,5 +1,6 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
+import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import { Bgio } from "../../shared/types";
 import { boardIDs, playerNumber, tilesOut } from "./game-actions";
 import { GameData } from "./game-data";
@@ -12,8 +13,15 @@ gap: 1%;
 margin-left: 5%;
 `
 
-const Button = styled.button<{visible?: boolean}>`
+const StartingButtons = styled.div`
+display:inline-flex;
+min-width: 50px;
+justify-content: right;
+`
+
+const Button = styled.button<{visible?: boolean, pressed?: boolean}>`
   visibility: ${props => props.visible === false ? 'hidden' : 'default'};
+  color: ${props => props.pressed === true ? 'red' : 'default'};
 `
 
 interface RackProps extends Bgio.BoardProps<GameData> {
@@ -25,7 +33,13 @@ export function Rack({ squareInteraction, clickDragState, G, moves } : RackProps
   const letters = G.playerData[playerNumber].rack
   const tiles = letters.map(letter => letter && <Tile letter={letter} />);
   
+  const [enableSwap, setEnableSwap] = useState(true);
 
+  const swapInteraction = (sq: SquareID) => {
+    return {
+      onClick: () => (console.log(sq))
+    }
+  };
   const boardProps = makeBoardProps(
     [tiles],
     {
@@ -35,13 +49,27 @@ export function Rack({ squareInteraction, clickDragState, G, moves } : RackProps
       squareSize: squareSize,
     },
     boardIDs.rack,
-    squareInteraction,
-    clickDragState.start
+
+    enableSwap ? swapInteraction : squareInteraction,
+    
+    clickDragState.start, 
   );
 
+  const toggleEnableSwap = () => {
+    moves.recallRack();
+    setEnableSwap(!enableSwap);
+  }
+
   return (<RackAndButtons>
-    <Button onClick={moves.recall} visible={hasTilesOut}>Recall</Button>
-    <Button onClick={moves.shuffle}>Shuffle</Button>
+    <StartingButtons>
+      {!enableSwap && hasTilesOut && <Button onClick={moves.recallRack}>Recall</Button>}
+      {!enableSwap && !hasTilesOut && <Button onClick={moves.shuffleRack}>Shuffle</Button>}
+      {enableSwap && <Button>Commit</Button>}
+    </StartingButtons>
+
     <Board {...boardProps} />
+
+    <Button onClick={toggleEnableSwap} pressed={enableSwap}>Swap</Button>
+
   </RackAndButtons>);
 }
