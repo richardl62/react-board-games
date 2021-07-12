@@ -82,7 +82,7 @@ export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps)
 
         <Board {...boardProps} />
 
-        <button onClick={makeSwap}>Make Swap</button>
+        {swappable.includes(true) && <button onClick={makeSwap}>Make Swap</button> }
         <button onClick={cancelSwap}>Cancel</button>
       </RackAndButtons>
     )
@@ -91,7 +91,7 @@ export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps)
     const doEnableSwap = () => {
       assert(!swappable);
       moves.recallRack();
-      setSwappable(Array(nLetters).fill(true));
+      setSwappable(Array(nLetters).fill(false));
     }
 
     return (<RackAndButtons>

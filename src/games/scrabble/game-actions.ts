@@ -89,7 +89,12 @@ export function getWord(
     return "".concat(...letters);
 }
 
+/** Draw letters from bag to replace null tiles in rack 
+ * Existing rack is compacted first.
+*/
 export function fillRack(G: GameData) {
+    compactRack(G);
+
     let rack = G.playerData[playerNumber].rack;
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
@@ -173,3 +178,6 @@ export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions 
     }
   };
 
+export function canSwapTiles(G: GameData) {
+    return G.bag.length >= 7;
+}
