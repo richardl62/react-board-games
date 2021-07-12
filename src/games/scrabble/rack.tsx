@@ -64,8 +64,13 @@ export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps)
   );
 
   if (swappable) {
-    const swapDone = () => {
+    const makeSwap = () => {
       assert(swappable);
+      moves.swapTilesInRack(swappable);
+      setSwappable(null);
+    }
+
+    const cancelSwap = () => {
       setSwappable(null);
     }
     
@@ -77,7 +82,8 @@ export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps)
 
         <Board {...boardProps} />
 
-        <button onClick={swapDone}>Done</button>
+        <button onClick={makeSwap}>Make Swap</button>
+        <button onClick={cancelSwap}>Cancel</button>
       </RackAndButtons>
     )
   } else {
