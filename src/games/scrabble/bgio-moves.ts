@@ -43,5 +43,9 @@ export const bgioMoves = {
         );
 
         G.playerData[playerNumber].score += score;
-    }
+    },
+
+    swapTilesInRack: (G: GameData, ctx: any, toSwap: boolean[]) => {
+        console.log("to swap", toSwap);
+    },
 };
