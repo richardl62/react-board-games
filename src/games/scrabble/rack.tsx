@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
+import assert from "../../shared/assert";
 import { Bgio } from "../../shared/types";
 import { boardIDs, playerNumber, tilesOut } from "./game-actions";
 import { GameData } from "./game-data";
@@ -28,43 +29,50 @@ interface RackProps extends Bgio.BoardProps<GameData> {
 export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps) {
   const hasTilesOut = tilesOut(G);
   const letters = G.playerData[playerNumber].rack
-  const tiles = letters.map(letter => letter && <Tile letter={letter} />);
+  const nLetters = letters.length;
 
-  const [enableSwap, setEnableSwap] = useState(true);
+  const [swappable, setSwappable] = useState<boolean[] | null>(null);
+
+  const tiles = letters.map((letter, index) => letter && <Tile letter={letter}
+    markAsMoveable={swappable !== null && swappable[index]}
+    />);
 
   const swapInteraction = (sq: SquareID) => {
     return {
-      onClick: () => (console.log(sq))
+      onClick: () => {
+        assert(swappable);
+        let newSwappable = [...swappable];
+        newSwappable[sq.col] = !newSwappable[sq.col];
+        setSwappable(newSwappable);
+      }
     }
   };
 
   const boardProps = makeBoardProps(
     [tiles],
     {
-      squareBackground: true,
+      squareBackground: (siq: SquareID) =>"white",
       externalBorders: true,
       internalBorders: true,
       squareSize: squareSize,
     },
     boardIDs.rack,
 
-    enableSwap ? swapInteraction : squareInteraction,
+    swappable ? swapInteraction : squareInteraction,
 
     clickDragState.start,
   );
 
-  const doEnableSwap = () => {
-    moves.recallRack();
-    setEnableSwap(true);
-  }
-  const swapDone = () => {
-    setEnableSwap(false);
-  }
-  if (enableSwap) {
+  if (swappable) {
+    const swapDone = () => {
+      assert(swappable);
+      setSwappable(null);
+    }
+    
     return (
       <RackAndButtons>
         <PreRack>
-          {enableSwap && <span>Select times to swap </span>}
+           <span>Select times to swap </span>
         </PreRack>
 
         <Board {...boardProps} />
@@ -73,6 +81,12 @@ export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps)
       </RackAndButtons>
     )
   } else {
+
+    const doEnableSwap = () => {
+      assert(!swappable);
+      moves.recallRack();
+      setSwappable(Array(nLetters).fill(true));
+    }
 
     return (<RackAndButtons>
       <PreRack>
