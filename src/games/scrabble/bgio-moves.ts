@@ -6,6 +6,19 @@ import { canChange, getSquareData, setLetter, RackAction, compactRack,
 import { Letter } from "./letter-properties";
 import assert from "../../shared/assert";
 
+export interface ClientMoves {
+    start: (sq: SquareID) => void;
+
+    move: (fromSq: SquareID, toSq: SquareID) => void;
+
+    recallRack: () => void;
+
+    shuffleRack: () => void;
+
+    finishTurn: (score: number) => void;
+
+    swapTilesInRack: (toSwap: boolean[]) => void; 
+};
 
 export const bgioMoves = {
     start: (G: GameData, ctx: any, sq: SquareID) => {
@@ -13,6 +26,7 @@ export const bgioMoves = {
     },
 
     move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
+
         if (canChange(G, toSq) && !sameJSON(fromSq, toSq)) {
             const squareData = getSquareData(G, fromSq);
             

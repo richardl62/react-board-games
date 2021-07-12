@@ -30,7 +30,7 @@ interface RackProps extends Bgio.BoardProps<GameData> {
 
 export function Rack(props: RackProps) {
   const { squareInteraction, clickDragState, G } = props;
-  const moves = props.moves as any asi ClientMoves;
+  const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
   const letters = G.playerData[playerNumber].rack
   const nLetters = letters.length;
