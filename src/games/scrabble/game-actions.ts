@@ -4,6 +4,7 @@ import { Bgio } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { TileData, GameData, BoardData } from "./game-data";
 import { RowCol } from "./find-candidate-words";
+import { ClientMoves } from "./bgio-moves";
 
 // KLUDGE: For now support only one player.
 export const playerNumber = 0;
@@ -155,7 +156,8 @@ export function setLetter(
 }
 
 export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
-    const { G: {board}, moves } = props;
+    const { G: {board} } = props;
+    const moves  = props.moves as any as ClientMoves;
 
     const isActive = (sq: SquareID) : boolean =>
     {
@@ -171,7 +173,9 @@ export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions 
       },
   
       onMoveEnd: (from: SquareID, to: SquareID | null) => {
-        moves.move(from, to);
+        if(to) {
+            moves.move(from, to);
+        }
       },
 
       dragType: () => DragType.move,

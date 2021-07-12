@@ -4,7 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
-import { bgioMoves } from "./bgio-moves";
+import { bgioMoves, ClientMoves } from "./bgio-moves";
 import { EndTurnConfirmation } from "./end-turn-confirmation";
 import { findCandidateWords } from "./find-candidate-words";
 import { getWord, onRack } from "./game-actions";
@@ -31,7 +31,8 @@ const ScoreAndBagSize = styled.div`
 `;;
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
-  const {G, moves} = props;
+  const {G } = props;
+  const moves = props.moves as any as ClientMoves;
   const {board} = G;
 
   const clickDragState = useRef(new ClickDragState()).current;
@@ -45,7 +46,9 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
     },
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
-      moves.move(from, to);
+      if (to) {
+        moves.move(from, to);
+      }
     },
 
     dragType: () => DragType.move,
