@@ -20,12 +20,15 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-const Score = styled.div`
-  display: inline-block;
+const ScoreAndBagSize = styled.div`
+  display: flex;
+  justify-content: space-between;  
   font-size: large;
   font-weight: bold;
   margin-right: 0.5em;
-  `;
+
+  colour: red;
+`;;
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
   const {G, moves} = props;
@@ -71,8 +74,14 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           board={G.board}
         />
         <WordChecker/>
-        <Score>Score: <span> {validTilePositions ? score : '-'}</span></Score>
-        
+        <ScoreAndBagSize>
+          <div>
+            Score: <span> {validTilePositions ? score : '-'}</span>
+          </div>
+          <div>
+            Tiles in bag: <span>{G.bag.length}</span>
+          </div>
+        </ScoreAndBagSize>
         {validTilePositions && 
             <EndTurnConfirmation 
               words={words}
