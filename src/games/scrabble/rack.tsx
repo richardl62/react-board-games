@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import assert from "../../shared/assert";
 import { Bgio } from "../../shared/types";
+import { ClientMoves } from "./bgio-moves";
 import { boardIDs, playerNumber, tilesOut } from "./game-actions";
 import { GameData } from "./game-data";
 import { squareSize } from "./style";
@@ -26,7 +27,10 @@ interface RackProps extends Bgio.BoardProps<GameData> {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
 }
-export function Rack({ squareInteraction, clickDragState, G, moves }: RackProps) {
+
+export function Rack(props: RackProps) {
+  const { squareInteraction, clickDragState, G } = props;
+  const moves = props.moves as any asi ClientMoves;
   const hasTilesOut = tilesOut(G);
   const letters = G.playerData[playerNumber].rack
   const nLetters = letters.length;
