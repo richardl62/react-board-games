@@ -51,7 +51,7 @@ export function EndTurnConfirmation({ words, endTurn}: EndTurnConfirmationProps)
       <div>
         <IllegalWords>
           Unrecognised Words:
-          {words.map(w => <span key={w}>{w.toLocaleLowerCase()}</span>)}
+          {wordsToConfirm.map(w => <span key={w}>{w.toLocaleLowerCase()}</span>)}
         </IllegalWords>
         <div>
           <button onClick={endTurn}>Allow Unrecognised Words</button>
