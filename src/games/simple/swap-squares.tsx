@@ -1,32 +1,23 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { colors } from '../../boards';
-import { SelfTestBoard, Element } from '../../boards/move-enabled';
-import { map2DArray } from '../../shared/tools';
+import {
+  Board, ClickDragState, makeBoardProps, squareInteractionFunc,
+  MoveFunctions, SquareID, checkered, DragType
+} from '../../boards';
+import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, Bgio } from '../../shared/types';
 
-interface RowCol {
-  row: number;
-  col: number;
-}
+const squareSize = '50px';
 
-interface SquareProps {
-  moveStart: boolean;
-}
-
-const Square = styled.div<SquareProps>`
-  width: 50px;
-  height: 50px;
-
-  font-size: 40px; // KLUDGE
-
+const Square = styled.div`
+  font-size: calc(${squareSize} * 0.8); // KLUDGE
   text-align: center;
   margin: auto;
 `;
 
-interface SquareDef extends SquareProps {
+export interface SquareDef {
   value: number;
 }
 
@@ -41,54 +32,49 @@ const initialValues = [
 ];
 
 function makeSquareDef(value: number): SquareDef {
-  return { value: value, moveStart: false };
+  return { value: value };
 }
 
-const BoardHolder = styled.div`
-  display: inline-block;
-  border: 5px purple solid;
-  margin: 3px;
-`;
-
-function squareColor(row: number, col: number, sq: SquareDef, checkered: boolean) {
-  if (sq.moveStart) {
-    return 'gold';
+function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
+  const onReset = () => {
+    moves.reset();
   }
 
-  if (!checkered) {
-    return colors.whiteSquare;
+  const moveFunctions : MoveFunctions = {
+    onMoveStart: (sq: SquareID) => {
+      moves.start(sq);
+      return true;
+    },
+    onMoveEnd: moves.end,
+    dragType: () => DragType.move, 
   }
+  const clickDragState = useRef(new ClickDragState()).current;
 
-  const asTopLeft = (row + col) % 2 === 0;
-  return asTopLeft ? colors.whiteSquare : colors.blackSquare;
-}
+  const elements = nestedArrayMap(G.squares, sq =>
+    <Square {...sq}>{sq.value}</Square>,
+  );
 
-function makeSquares(G: G, { checkered }: { checkered: boolean }) {
-  const nRows = G.squares.length;
-  const nCols = G.squares[0].length;
+  const boardProps = makeBoardProps(
+    elements, 
+    {
+      squareBackground: checkered,
+      internalBorders: false,
+      externalBorders: 'labelled',
+      squareSize: squareSize,
+    },
+    'swapSquares',
+    squareInteractionFunc(moveFunctions, clickDragState), 
+    clickDragState.start);
 
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div>
+        <Board {...boardProps} />
+      </div>
 
-  let result = [];
-  for (let rn = 0; rn < nRows; ++rn) {
-    const row = [];
-
-    for (let cn = 0; cn < nCols; ++cn) {
-      ;
-      const sq = G.squares[rn][cn];
-
-      const elem: Element = {
-        backgroundColor: squareColor(rn, cn, sq, checkered),
-        showHover: true,
-        piece: <Square {...sq}>{sq.value}</Square>,
-
-      };
-      row.push(elem);
-    }
-
-    result.push(row);
-  }
-
-  return result;
+      <button type='button' onClick={onReset}>Reset</button>
+    </DndProvider>
+  )
 }
 
 export const swapSquares: AppGame = {
@@ -96,22 +82,19 @@ export const swapSquares: AppGame = {
   displayName: 'Swap Squares (for testing)',
 
   setup: (): G => {
-    const intialSquares = map2DArray(initialValues, makeSquareDef);
+    const intialSquares = nestedArrayMap(initialValues, makeSquareDef);
     return { squares: intialSquares };
   },
 
   minPlayers: 1,
   maxPlayers: 1,
 
-
   moves: {
-    start: (G: G, ctx: any, sq: RowCol) => {
-      G.squares[sq.row][sq.col].moveStart = true;
+    start: (G: G, ctx: any, sq: SquareID) => {
     },
 
-    end: (G: G, ctx: any, from: RowCol, to: RowCol | null) => {
-      G.squares[from.row][from.col].moveStart = false;
-      if (to) {
+    end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
+      if (to && !sameJSON(from, to)) {
         const tmp = G.squares[to.row][to.col];
         G.squares[to.row][to.col] = G.squares[from.row][from.col];
         G.squares[from.row][from.col] = tmp;
@@ -121,37 +104,14 @@ export const swapSquares: AppGame = {
     // Using the BGIO supplied reset function lead to server errros.
     // TO DO: Understand why this happened;
     reset: (G: G, ctx: any) => {
-      for(let row = 0; row < G.squares.length; ++row) {
-        for(let col = 0; col < G.squares[row].length; ++col) {
-          G.squares[row][col].moveStart=false;
+      for (let row = 0; row < G.squares.length; ++row) {
+        for (let col = 0; col < G.squares[row].length; ++col) {
           G.squares[row][col].value = initialValues[row][col];
         }
       }
     },
   },
 
-  board: ({ G, moves, events, reset }: Bgio.BoardProps<G>) => {
-    const onReset = () => {
-      moves.reset();
-    }
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <div>
-          <BoardHolder>
-            <SelfTestBoard
-              elements={makeSquares(G, { checkered: true })}
-              id={'dummy-game'}
-
-              onMoveStart={moves.start}
-              onMoveEnd={moves.end}
-            />
-          </BoardHolder>
-        </div>
-
-        <button type='button' onClick={onReset}>Reset</button>
-      </DndProvider>
-    )
-  },
-
+  board: SwapSquares,
 }
 

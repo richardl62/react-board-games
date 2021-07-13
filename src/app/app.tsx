@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { AppGame } from '../shared/types'
 import { games as appGames } from '../games';
@@ -69,6 +69,9 @@ function gameRoute(game: AppGame) {
 
 
 function App() {
+  useEffect(() => {
+    document.title = 'Available Games'
+  });
 
   const renderHomePage = () => <HomePage games={appGames} />;
   const renderPageNotFound = () => <PageNotFound games={appGames} />;

@@ -1,57 +1,29 @@
-import { useState } from 'react';
 
-interface StatePromiseData<T> {
-  state: 'unset' | 'pending' | 'fulfilled';
-  value?: T;
-}
-
-// Warning: No error handling done here.
-export function useStatePromise<T>(inputVal: T | null = null) {
-  const [data, setData] = useState<StatePromiseData<T>>(
-    inputVal? {state: 'fulfilled', value: inputVal} : {state: 'unset'}
-  );
-
-  const set = (val: T) => {
-      setData({state: 'fulfilled', value: val});
-   };
-
-  const get = () => {
-      // The two test below should always give the same result.
-      if(data.state !== 'fulfilled' || data.value === undefined) {  
-        throw new Error("Value is not ready");
-      }
-
-      return data.value;
-  };
-
-  return {
-    unset: data.state === 'unset',
-    pending: data.state === 'pending',
-    fulfilled: data.state === 'fulfilled',
-
-    get value() { return get(); },
-
-    set value(val: T) { set(val);},
-
-    setPromise: (p: Promise<T>) => {
-      setData({state: 'pending'});
-      p.then(set);
-      return p;
-    },
+/** Check is an array of arrays is reactangular in the sense of all rows 
+ * having the same length.  Returns true for empty array.
+ */
+export function isRectangular(arr: any[][]) {
+  for (let row = 1; row < arr.length; ++row) {
+    if (arr[row].length !== arr[0].length) {
+      return false;
+    }
   }
+
+  return true;
 }
 
-export function map2DArray<T, MappedT>(
+/** map the elements of an array of arrays */
+export function nestedArrayMap<T, MappedT>(
   array: Array<Array<T>>,
   func: (elem: T, indices: [number, number]) => MappedT,
-  ) : Array<Array<MappedT>> {
-  
+): Array<Array<MappedT>> {
+
   let result: Array<Array<MappedT>> = [];
 
-  for(let ind1 = 0; ind1 < array.length; ++ind1) {
+  for (let ind1 = 0; ind1 < array.length; ++ind1) {
     result[ind1] = [];
 
-    for(let ind2 = 0; ind2 < array[ind1].length; ++ind2) {
+    for (let ind2 = 0; ind2 < array[ind1].length; ++ind2) {
       const mapped = func(array[ind1][ind2], [ind1, ind2]);
       result[ind1][ind2] = mapped;
     }
@@ -81,8 +53,8 @@ export function map2DArray<T, MappedT>(
 /** Return a copy of 'values' with defaults applied to missing elements 
  *  or elements supplied as undefined.
 */
-export function applyDefaults<T, D>(values: T, defaults: D) : T & D {
-  let result : any = {...values};
+export function applyDefaults<T, D>(values: T, defaults: D): T & D {
+  let result: any = { ...values };
   for (let propName in defaults) {
     if (result[propName] === undefined) {
       result[propName] = defaults[propName];
@@ -105,6 +77,19 @@ export function applyDefaults<T, D>(values: T, defaults: D) : T & D {
 // console.log("res1", res2);
 
 //TO DO: Ensure that T1 and T2 overlap.
-export function sameJSON<T1,T2>(obj1: T1, obj2: T2): boolean {
+export function sameJSON<T1, T2>(obj1: T1, obj2: T2): boolean {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
+
+/** Shuffle an array in place. Return the shuffled array */
+export function shuffle<T>(array: Array<T>) : Array<T> {
+  // From https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
+}
+
+

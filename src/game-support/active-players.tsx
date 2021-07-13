@@ -3,7 +3,6 @@ import { Bgio } from '../shared/types';
 import styled from 'styled-components'
 export const unnamedPlayer = '_Unnamed Player_';
 
-
 const PlayerNames = styled.div`
   display: flex;
 `;
