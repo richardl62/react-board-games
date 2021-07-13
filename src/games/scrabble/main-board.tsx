@@ -22,19 +22,18 @@ export function MainBoard({ board, squareInteraction, clickDragState }: MainBoar
     return <Tile letter={sd.letter} markAsMoveable={markAsMoveable}/>
   });
 
-  const boardProps = makeBoardProps(
-    tiles,
-    {
+  const boardProps = makeBoardProps({
+    pieces: tiles,
+    style: {
       squareBackground: sq => squareColors[sq.row][sq.col],
       externalBorders: true,
       internalBorders: true,
       squareSize: squareSize,
     },
-    boardIDs.main,
-    squareInteraction,
-    clickDragState.start
-  );
-
+    boardID: boardIDs.main,
+    squareInteraction: squareInteraction,
+    moveStart: clickDragState.start,
+  });
 
   return <Board {...boardProps} />;
 }

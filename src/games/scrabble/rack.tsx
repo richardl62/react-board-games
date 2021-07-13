@@ -52,20 +52,20 @@ export function Rack(props: RackProps) {
     }
   };
 
-  const boardProps = makeBoardProps(
-    [tiles],
-    {
+  const boardProps = makeBoardProps({
+    pieces: [tiles],
+    style: {
       squareBackground: (siq: SquareID) =>"white",
       externalBorders: true,
       internalBorders: true,
       squareSize: squareSize,
     },
-    boardIDs.rack,
+    boardID: boardIDs.rack,
 
-    swappable ? swapInteraction : squareInteraction,
+    squareInteraction: swappable ? swapInteraction : squareInteraction,
 
-    clickDragState.start,
-  );
+    moveStart: clickDragState.start,
+  });
 
   if (swappable) {
     const makeSwap = () => {

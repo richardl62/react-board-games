@@ -56,17 +56,18 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
     <Piece pieceName={name} />
   );
 
-  const boardProps = makeBoardProps(
-    [boardPieces],
-    {
+  const boardProps = makeBoardProps({
+    pieces: [boardPieces],
+    style: {
       squareBackground: false,
       internalBorders: false,
       externalBorders: false,
       squareSize: squareSize,
     },
-    rowName,
-    squareInteraction, 
-    clickDragState.start);
+    boardID: rowName,
+    squareInteraction: squareInteraction, 
+    moveStart: clickDragState.start
+  });
 
   return <Board {...boardProps} />
 }
@@ -83,16 +84,18 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
     name && <Piece pieceName={name} />
   );
 
-  const boardProps = makeBoardProps(
-    boardPieces,
-    {
+  const boardProps = makeBoardProps({
+    pieces: boardPieces,
+    style: {
       squareBackground: checkered,
       externalBorders: 'labelled',
       internalBorders: false,
       squareSize: squareSize,
     },
-    'main',
-    squareInteraction, clickDragState.start);
+    boardID: 'main',
+    squareInteraction,
+    moveStart: clickDragState.start
+  });
   boardProps.boardID = "main";
 
   return <Board {...boardProps} />

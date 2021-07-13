@@ -54,17 +54,18 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     <Square {...sq}>{sq.value}</Square>,
   );
 
-  const boardProps = makeBoardProps(
-    elements, 
-    {
+  const boardProps = makeBoardProps({
+    pieces: elements, 
+    style: {
       squareBackground: checkered,
       internalBorders: false,
       externalBorders: 'labelled',
       squareSize: squareSize,
     },
-    'swapSquares',
-    squareInteractionFunc(moveFunctions, clickDragState), 
-    clickDragState.start);
+    boardID: 'swapSquares',
+    squareInteraction: squareInteractionFunc(moveFunctions, clickDragState), 
+    moveStart: clickDragState.start
+  });
 
   return (
     <DndProvider backend={HTML5Backend}>

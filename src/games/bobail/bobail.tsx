@@ -51,18 +51,18 @@ function BobailBoard({ G, moves }: Bgio.BoardProps<G>) {
         onMoveEnd: (from: SquareID, to: SquareID | null) => {},
      };
      
-    const boardProps = makeBoardProps(
-        pieces, 
-        {
+    const boardProps = makeBoardProps({
+        pieces: pieces, 
+        style: {
             squareBackground: true,
             internalBorders: true,
             externalBorders: true,
             squareSize: squareSize,
         },
-        'bobail', 
-        squareInteractionFunc(moveFunctions, clickDragState), 
-        clickDragState.start
-    );
+        boardID: 'bobail', 
+        squareInteraction: squareInteractionFunc(moveFunctions, clickDragState), 
+        moveStart: clickDragState.start
+    });
  
    return (<DndProvider backend={HTML5Backend}>
        <Board {...boardProps} />

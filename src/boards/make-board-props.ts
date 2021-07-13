@@ -6,21 +6,25 @@ import { SquareInteraction } from "./internal/square";
 
 
  /** Helper function to make a Board */
-export function makeBoardProps(
-  pieces: (ReactNode|null)[][], 
+ interface MakeBoardPropsParam {
+  pieces: (ReactNode|null)[][]; 
 
-  style: BoardStyle,
+  style: BoardStyle;
 
   /** board ID */
-  boardID: string,
+  boardID: string;
 
   /** Click and drag functions for the square 
    * (When called, sq.boardID will be input boardID.)
   */
-  squareInteraction: (sq: SquareID) => SquareInteraction,
+  squareInteraction: (sq: SquareID) => SquareInteraction;
 
-  moveStart: SquareID | null,
-  ) : BoardProps 
+  moveStart: SquareID | null;
+ }
+
+export function makeBoardProps(
+  {pieces, style, boardID, squareInteraction, moveStart} : MakeBoardPropsParam,
+) : BoardProps 
 {
   let elements: Array<Array<BoardElement>> = [];
   for(let row = 0; row < pieces.length; ++row) {
