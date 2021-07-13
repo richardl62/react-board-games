@@ -5,11 +5,23 @@ import { BoardStyle, setBoardStyle, checkered } from "./internal/set-board-style
 import { SquareInteraction } from "./internal/square";
 
 
- /** Helper function to make a Board */
- interface MakeBoardPropsParam {
-  pieces: (ReactNode|null)[][]; 
+/** Helper function to make a Board */
+interface MakeBoardPropsParam {
+  pieces: (ReactNode | null)[][];
 
-  style: BoardStyle;
+  /** 
+   * Function to mapping SquareID to color, or 'default' to mean
+   * 'you pick the sytle'. 
+  */
+  squareBackground: string | ((sq: SquareID) => string);
+
+  /** True means 'you pick the style'. */
+  internalBorders: boolean;
+
+  /** True means 'you pick the style'. */
+  externalBorders: boolean | 'labelled';
+
+  squareSize: string;
 
   /** board ID */
   boardID: string;
@@ -20,38 +32,37 @@ import { SquareInteraction } from "./internal/square";
   squareInteraction: (sq: SquareID) => SquareInteraction;
 
   moveStart: SquareID | null;
- }
+}
 
-export function makeBoardProps(
-  {pieces, style, boardID, squareInteraction, moveStart} : MakeBoardPropsParam,
-) : BoardProps 
-{
+export function makeBoardProps(props: MakeBoardPropsParam): BoardProps {
+  const { pieces, squareSize, boardID, squareInteraction, moveStart } = props;
   let elements: Array<Array<BoardElement>> = [];
-  for(let row = 0; row < pieces.length; ++row) {
-     elements[row] = [];
-     for(let col = 0; col < pieces[row].length; ++col) {
-        const sq = squareID(row, col, boardID);
-        const elem = {
-          piece: pieces[row][col],
-          showHover: true,
-          size: style.squareSize,
-          ...squareInteraction(sq),
-        }
+  for (let row = 0; row < pieces.length; ++row) {
+    elements[row] = [];
+    for (let col = 0; col < pieces[row].length; ++col) {
+      const sq = squareID(row, col, boardID);
+      const elem = {
+        piece: pieces[row][col],
+        showHover: true,
+        size: squareSize,
+        ...squareInteraction(sq),
+      }
 
-        elements[row][col] = elem;
-     }
+      elements[row][col] = elem;
+    }
   }
-  
-  if(moveStart && moveStart.boardID === boardID) {
-    const {row, col} = moveStart;
+
+  if (moveStart && moveStart.boardID === boardID) {
+    const { row, col } = moveStart;
     elements[row][col].backgroundColor = defaultColors.moveStart;
   }
 
-  const boardProps : BoardProps = {
+  const boardProps: BoardProps = {
     elements: elements,
     boardID: boardID,
   }
 
+  const style: BoardStyle = props; // KLUDGE?
   setBoardStyle(boardProps, style);
 
   return boardProps;

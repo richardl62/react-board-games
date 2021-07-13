@@ -54,12 +54,12 @@ export function Rack(props: RackProps) {
 
   const boardProps = makeBoardProps({
     pieces: [tiles],
-    style: {
-      squareBackground: (siq: SquareID) =>"white",
-      externalBorders: true,
-      internalBorders: true,
-      squareSize: squareSize,
-    },
+
+    squareBackground: (siq: SquareID) => "white",
+    externalBorders: true,
+    internalBorders: true,
+    squareSize: squareSize,
+  
     boardID: boardIDs.rack,
 
     squareInteraction: swappable ? swapInteraction : squareInteraction,

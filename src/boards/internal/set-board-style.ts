@@ -3,15 +3,15 @@ import { defaultColors, squareID, SquareID } from '../interfaces';
 
 export interface BoardStyle {
   /** 
-   * Boolean, 'checkered' or function mapping SquareID to color 
-   * True means 'you pick the sytle'. 
+   * Function to mapping SquareID to color, or 'default' to mean
+   * 'you pick the sytle'. 
   */
-  squareBackground: boolean | ((sq: SquareID) => string);
+  squareBackground: string | ((sq: SquareID) => string );
   
-  /** True means 'you pick the sytle'. */
+  /** True means 'you pick the style'. */
   internalBorders: boolean;
 
-  /** True means 'you pick the sytle'. */
+  /** True means 'you pick the style'. */
   externalBorders: boolean | 'labelled';
 
   squareSize: string;
@@ -35,12 +35,14 @@ export function setBoardStyle(
 
   const { elements } = props;
 
-  const backgroundColor = (row: number, col: number) => {
+  const backgroundColor = (row: number, col: number) : string => {
     if(typeof style.squareBackground === 'function') {
       return style.squareBackground(
         squareID(row, col, props.boardID)
       );
     }
+
+    return style.squareBackground;
   }
 
   for (let rowNum = 0; rowNum < elements.length; ++rowNum) {

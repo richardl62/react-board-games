@@ -40,36 +40,34 @@ type G = typeof initialState;
 function BobailBoard({ G, moves }: Bgio.BoardProps<G>) {
 
     const pieces = nestedArrayMap(G.pieces, name => {
-        const p = name &&  <Piece pieceName={name}/>;
+        const p = name && <Piece pieceName={name} />;
         return <Square>{p}</Square>;
-     });
+    });
 
-     const clickDragState = useRef(new ClickDragState()).current;
-     const moveFunctions : MoveFunctions = {
+    const clickDragState = useRef(new ClickDragState()).current;
+    const moveFunctions: MoveFunctions = {
         onMoveStart: () => true,
-        dragType: () => DragType.move, 
-        onMoveEnd: (from: SquareID, to: SquareID | null) => {},
-     };
-     
+        dragType: () => DragType.move,
+        onMoveEnd: (from: SquareID, to: SquareID | null) => { },
+    };
+
     const boardProps = makeBoardProps({
-        pieces: pieces, 
-        style: {
-            squareBackground: true,
-            internalBorders: true,
-            externalBorders: true,
-            squareSize: squareSize,
-        },
-        boardID: 'bobail', 
-        squareInteraction: squareInteractionFunc(moveFunctions, clickDragState), 
+        pieces: pieces,
+        squareBackground: 'white',
+        internalBorders: true,
+        externalBorders: true,
+        squareSize: squareSize,
+        boardID: 'bobail',
+        squareInteraction: squareInteractionFunc(moveFunctions, clickDragState),
         moveStart: clickDragState.start
     });
- 
-   return (<DndProvider backend={HTML5Backend}>
-       <Board {...boardProps} />
-     </DndProvider>)
+
+    return (<DndProvider backend={HTML5Backend}>
+        <Board {...boardProps} />
+    </DndProvider>)
 };
 
-export const bobail : AppGame =
+export const bobail: AppGame =
 {
     name: 'bobail',
     displayName: 'Bobail',

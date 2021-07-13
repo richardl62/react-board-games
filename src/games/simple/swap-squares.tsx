@@ -40,13 +40,13 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
     moves.reset();
   }
 
-  const moveFunctions : MoveFunctions = {
+  const moveFunctions: MoveFunctions = {
     onMoveStart: (sq: SquareID) => {
       moves.start(sq);
       return true;
     },
     onMoveEnd: moves.end,
-    dragType: () => DragType.move, 
+    dragType: () => DragType.move,
   }
   const clickDragState = useRef(new ClickDragState()).current;
 
@@ -55,15 +55,15 @@ function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
   );
 
   const boardProps = makeBoardProps({
-    pieces: elements, 
-    style: {
-      squareBackground: checkered,
-      internalBorders: false,
-      externalBorders: 'labelled',
-      squareSize: squareSize,
-    },
+    pieces: elements,
+
+    squareBackground: checkered,
+    internalBorders: false,
+    externalBorders: 'labelled',
+    squareSize: squareSize,
+
     boardID: 'swapSquares',
-    squareInteraction: squareInteractionFunc(moveFunctions, clickDragState), 
+    squareInteraction: squareInteractionFunc(moveFunctions, clickDragState),
     moveStart: clickDragState.start
   });
 
@@ -115,4 +115,3 @@ export const swapSquares: AppGame = {
 
   board: SwapSquares,
 }
-

@@ -58,14 +58,14 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
 
   const boardProps = makeBoardProps({
     pieces: [boardPieces],
-    style: {
-      squareBackground: false,
-      internalBorders: false,
-      externalBorders: false,
-      squareSize: squareSize,
-    },
+
+    squareBackground: 'white',
+    internalBorders: false,
+    externalBorders: false,
+    squareSize: squareSize,
+
     boardID: rowName,
-    squareInteraction: squareInteraction, 
+    squareInteraction: squareInteraction,
     moveStart: clickDragState.start
   });
 
@@ -86,12 +86,12 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
 
   const boardProps = makeBoardProps({
     pieces: boardPieces,
-    style: {
-      squareBackground: checkered,
-      externalBorders: 'labelled',
-      internalBorders: false,
-      squareSize: squareSize,
-    },
+
+    squareBackground: checkered,
+    externalBorders: 'labelled',
+    internalBorders: false,
+    squareSize: squareSize,
+
     boardID: 'main',
     squareInteraction,
     moveStart: clickDragState.start
@@ -121,23 +121,23 @@ function ChessBoard(props: Bgio.BoardProps<G>) {
   };
 
   const squareInteraction = squareInteractionFunc(moveFunctions, clickDragState);
-  
+
   return (
     <DndProvider backend={HTML5Backend}>
       <PlayArea>
         <OffBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState} 
+          clickDragState={clickDragState}
           rowName='black'
         />
         <MainBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState} 
+          clickDragState={clickDragState}
           pieces={G.pieces}
         />
         <OffBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState} 
+          clickDragState={clickDragState}
           rowName='white'
         />
       </PlayArea>
