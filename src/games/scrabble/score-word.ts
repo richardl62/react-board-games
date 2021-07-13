@@ -17,10 +17,13 @@ export function scoreWord(board: BoardData, word: RowCol[]) {
         const sq = board[rc.row][rc.col];
         assert(sq);
 
-        const mults = multipliers(squareTypesArray[rc.row][rc.col]);
-
-        score += letterScore(sq.letter) * mults.letter;
-        wordMult *= mults.word;
+        if(sq.active) {
+            const mults = multipliers(squareTypesArray[rc.row][rc.col]);
+            score += letterScore(sq.letter) * mults.letter;
+            wordMult *= mults.word;
+        } else {
+            score += letterScore(sq.letter);
+        }
     })
 
     return score * wordMult;
