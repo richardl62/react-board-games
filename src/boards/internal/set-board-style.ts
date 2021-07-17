@@ -1,5 +1,5 @@
 import { BoardProps } from '../board';
-import { defaultColors, squareID, SquareID } from '../interfaces';
+import { defaultColors, SquareBackgroundProps, squareID, SquareID } from '../interfaces';
 
 export interface BoardStyle {
   /** 
@@ -35,20 +35,27 @@ export function setBoardStyle(
 
   const { elements } = props;
 
-  const backgroundColor = (row: number, col: number) : string => {
+  const background = (row: number, col: number) : SquareBackgroundProps => {
     if(typeof style.squareBackground === 'function') {
-      return style.squareBackground(
+      const sb =style.squareBackground(
         squareID(row, col, props.boardID)
       );
+      return {
+        color: sb,
+        text: "AB",
+      };
     }
 
-    return style.squareBackground;
+    return {
+      color: style.squareBackground,
+      text: "",
+    }
   }
 
   for (let rowNum = 0; rowNum < elements.length; ++rowNum) {
     const row = elements[rowNum];
     for (let colNum = 0; colNum < row.length; ++colNum) {
-        row[colNum].background = {color: backgroundColor(rowNum, colNum)};
+        row[colNum].background = background(rowNum, colNum);
     }
   }
 

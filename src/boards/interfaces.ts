@@ -30,10 +30,12 @@ export function squareID(row: number, col: number, boardID: string) : SquareID {
     }
   }
 
+export interface SquareBackgroundProps {
+    color: string
+    text: string;
+};
 export interface SquareStyle {
-    background: {
-        color: string
-    };
+    background: SquareBackgroundProps;
 
     // false -> suppress, true-> default color, string -> specified color;
     showHover?: boolean | string;

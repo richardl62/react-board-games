@@ -45,7 +45,10 @@ export function makeBoardProps(props: MakeBoardPropsParam): BoardProps {
         piece: pieces[row][col],
         showHover: true,
         size: squareSize,
-        background: {color: defaultColors.square},
+        background: {
+          color: defaultColors.square,
+          text: "",
+        },
         ...squareInteraction(sq),
       }
 

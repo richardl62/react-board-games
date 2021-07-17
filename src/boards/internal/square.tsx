@@ -122,11 +122,11 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 }
 
 export function Square(props: SquareProps) {
-    const { children, showHover,
+    const { children, background, showHover,
             highlight, label, onClick, onMouseDown, 
             onDragStart, onDrop, onDragEnd, size 
         } = props;
-    const backgroundColor = props.background.color;
+
     const dragType : DragType = props.dragType ?? DragType.disable;
 
     const [{isDragging}, dragRef] = useDrag(() => ({
@@ -182,7 +182,7 @@ export function Square(props: SquareProps) {
     return (
         <StyledSquare
             ref={dropRef}
-            backgroundColor={backgroundColor}
+            backgroundColor={background.color}
             borderColor={borderColor}
             showBorder={showBorder}
             size={size}
@@ -191,8 +191,8 @@ export function Square(props: SquareProps) {
             onClick={onClick && (() => onClick())}
             onMouseDown={onMouseDown && (() => onMouseDown())}
         >
-            <SquareHelper backgroundColor={backgroundColor}>
-                DL
+            <SquareHelper backgroundColor={background.color}>
+                {background.text}
             </SquareHelper>
             <Element 
                 ref={dragRef} 
