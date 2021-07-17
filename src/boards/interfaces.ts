@@ -32,7 +32,7 @@ export function squareID(row: number, col: number, boardID: string) : SquareID {
 
 export interface SquareBackgroundProps {
     color: string
-    text: string;
+    text?: string;
 };
 export interface SquareStyle {
     background: SquareBackgroundProps;

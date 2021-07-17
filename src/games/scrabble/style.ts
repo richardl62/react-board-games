@@ -1,20 +1,35 @@
+import { SquareBackgroundProps } from "../../boards";
 import { SquareType } from "./square-type";
 
 export const squareSize = '30px';
 
-export function squareColor(type: SquareType) : string {
+export function scrabbleSquareBackground(type: SquareType) : SquareBackgroundProps {
+    let color;
+    let text;
     switch(type) {
       case SquareType.tripleWord:
-        return '#e00000';  //darkish red
+        color = '#e00000';  //darkish red
+        text = "TW";
+        break;
       case SquareType.doubleWord:
-        return '#ff7540';
+        color = '#ff7540';
+        text = "DW";
+        break;
       case SquareType.tripleLetter:
-          return 'blue';
+        color = 'blue';
+        text = "TL";
+        break;
       case SquareType.doubleLetter:
-          return 'lightblue';
+        color = 'lightblue';
+        text = "DL";
+        break;
       case SquareType.simple:
-          return '#fff8dc'; // cornsilk
+        color = '#fff8dc'; // cornsilk
+        text = "";
+        break;
     }
+
+    return {color:color, text: text};
   }
 
   export const tileBackgroundColor = "brown";

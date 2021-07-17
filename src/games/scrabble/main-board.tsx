@@ -2,7 +2,7 @@ import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "..
 import { nestedArrayMap } from "../../shared/tools";
 import { boardIDs } from "./game-actions";
 import { squareTypesArray } from "./board-properties";
-import { squareColor, squareSize } from "./style";
+import { scrabbleSquareBackground, squareSize } from "./style";
 import { Tile } from "./tile";
 import { BoardData } from "./game-data";
 
@@ -12,7 +12,7 @@ interface MainBoardProps {
   board: BoardData;
 }
 
-const squareColors = nestedArrayMap(squareTypesArray, squareColor);
+const squareColors = nestedArrayMap(squareTypesArray, scrabbleSquareBackground);
 
 export function MainBoard({ board, squareInteraction, clickDragState }: MainBoardProps) {
 

@@ -55,7 +55,7 @@ export function Rack(props: RackProps) {
   const boardProps = makeBoardProps({
     pieces: [tiles],
 
-    squareBackground: (siq: SquareID) => "white",
+    squareBackground: (siq: SquareID) => {return {color: "white", text:""}},
     externalBorders: true,
     internalBorders: true,
     squareSize: squareSize,

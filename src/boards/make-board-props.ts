@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { BoardElement, BoardProps } from "./board";
-import { defaultColors, squareID, SquareID } from "./interfaces";
+import { defaultColors, SquareBackgroundProps, squareID, SquareID } from "./interfaces";
 import { BoardStyle, setBoardStyle, checkered } from "./internal/set-board-style";
 import { SquareInteraction } from "./internal/square";
 
@@ -13,7 +13,7 @@ interface MakeBoardPropsParam {
    * Function to mapping SquareID to color, or 'default' to mean
    * 'you pick the sytle'. 
   */
-  squareBackground: string | ((sq: SquareID) => string);
+  squareBackground: string | ((sq: SquareID) => SquareBackgroundProps);
 
   /** True means 'you pick the style'. */
   internalBorders: boolean;

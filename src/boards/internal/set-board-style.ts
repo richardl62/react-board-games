@@ -6,7 +6,7 @@ export interface BoardStyle {
    * Function to mapping SquareID to color, or 'default' to mean
    * 'you pick the sytle'. 
   */
-  squareBackground: string | ((sq: SquareID) => string );
+  squareBackground: string | ((sq: SquareID) => SquareBackgroundProps );
   
   /** True means 'you pick the style'. */
   internalBorders: boolean;
@@ -17,9 +17,10 @@ export interface BoardStyle {
   squareSize: string;
 }
 
-export function checkered(sq: SquareID) {
+export function checkered(sq: SquareID) : SquareBackgroundProps {
   const asTopLeft = (sq.row + sq.col) % 2 === 0;
-  return asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
+  const color = asTopLeft ? defaultColors.whiteSquare : defaultColors.blackSquare;
+  return {color: color}
 }
 
 /** Modify the input props to make it suitable for a checkered board.
@@ -37,18 +38,11 @@ export function setBoardStyle(
 
   const background = (row: number, col: number) : SquareBackgroundProps => {
     if(typeof style.squareBackground === 'function') {
-      const sb =style.squareBackground(
-        squareID(row, col, props.boardID)
-      );
-      return {
-        color: sb,
-        text: "AB",
-      };
+      return style.squareBackground(squareID(row, col, props.boardID));
     }
 
     return {
       color: style.squareBackground,
-      text: "",
     }
   }
 
