@@ -45,6 +45,7 @@ export function makeBoardProps(props: MakeBoardPropsParam): BoardProps {
         piece: pieces[row][col],
         showHover: true,
         size: squareSize,
+        background: {color: defaultColors.square},
         ...squareInteraction(sq),
       }
 
@@ -54,7 +55,7 @@ export function makeBoardProps(props: MakeBoardPropsParam): BoardProps {
 
   if (moveStart && moveStart.boardID === boardID) {
     const { row, col } = moveStart;
-    elements[row][col].backgroundColor = defaultColors.moveStart;
+    elements[row][col].background.color = defaultColors.moveStart;
   }
 
   const boardProps: BoardProps = {

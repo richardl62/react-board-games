@@ -48,7 +48,7 @@ export function setBoardStyle(
   for (let rowNum = 0; rowNum < elements.length; ++rowNum) {
     const row = elements[rowNum];
     for (let colNum = 0; colNum < row.length; ++colNum) {
-        row[colNum].backgroundColor = backgroundColor(rowNum, colNum);
+        row[colNum].background = {color: backgroundColor(rowNum, colNum)};
     }
   }
 

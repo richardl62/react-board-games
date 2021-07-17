@@ -126,7 +126,7 @@ export function Square(props: SquareProps) {
             highlight, label, onClick, onMouseDown, 
             onDragStart, onDrop, onDragEnd, size 
         } = props;
-    const backgroundColor = props.backgroundColor || defaultColors.square;
+    const backgroundColor = props.background.color;
     const dragType : DragType = props.dragType ?? DragType.disable;
 
     const [{isDragging}, dragRef] = useDrag(() => ({
