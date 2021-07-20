@@ -12,6 +12,7 @@ import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
 import { scoreWords } from "./score-word";
+import { Scores } from "./scores";
 import { WordChecker } from "./word-check";
 
 const Game = styled.div`
@@ -27,7 +28,7 @@ const ScoreAndBagSize = styled.div`
   font-weight: bold;
   margin-right: 0.5em;
 
-  colour: red;
+  color: red;
 `;;
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
@@ -65,6 +66,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <div>
       <Game>
         <Rack
           squareInteraction={squareInteraction}
@@ -92,6 +94,8 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
             />
         }
       </Game>
+      <Scores G={G} />
+      </div>
     </DndProvider>
   )
 }
