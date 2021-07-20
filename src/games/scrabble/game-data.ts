@@ -4,6 +4,8 @@ import { fullBag, Letter } from "./letter-properties";
 import { squareTypesArray, rackSize } from "./board-properties";
 import assert from "../../shared/assert";
 
+const nPlayers = 2; // KLUDGE
+
 export interface TileData {
     letter: Letter;
     /** movable in the current turn.  Rack tiles are always active. */
@@ -17,6 +19,7 @@ export function getLetter(sd : TileData | null) : Letter | null {
 export type BoardData = (TileData | null)[][];
 
 export interface PlayerData {
+    name: string;
     rack: (Letter | null)[];
     score: number;
 }
@@ -43,13 +46,17 @@ export function startingGameData(): GameData {
         return letters;
     }
 
+    let playerData : PlayerData[] = [];
+    for(let p = 0; p < nPlayers; ++p) {
+        playerData.push({
+            name: `Player ${p+1}`,
+            rack: rack(),
+            score: 0,
+        });
+    }
     return {
         board: nestedArrayMap(squareTypesArray, () => null),
-        playerData: [
-            {rack: rack(),
-             score: 0
-            }
-        ],
+        playerData: playerData,
         moveStart: null,
         bag: bag,
     };
