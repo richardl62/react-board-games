@@ -4,7 +4,7 @@ import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc 
 import assert from "../../shared/assert";
 import { Bgio } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
-import { boardIDs, playerNumber, tilesOut } from "./game-actions";
+import { boardIDs, tilesOut } from "./game-actions";
 import { GameData } from "./game-data";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
@@ -32,7 +32,7 @@ export function Rack(props: RackProps) {
   const { squareInteraction, clickDragState, G } = props;
   const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
-  const letters = G.playerData[playerNumber].rack
+  const letters = G.playerData[G.currentPlayer].rack
   const nLetters = letters.length;
 
   const [swappable, setSwappable] = useState<boolean[] | null>(null);

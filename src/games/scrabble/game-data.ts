@@ -27,6 +27,7 @@ export interface PlayerData {
 export interface GameData {
     board: BoardData;
     playerData: PlayerData[]; 
+    currentPlayer: number;
     bag: Letter[];
 
     // To help with click-moves
@@ -57,7 +58,8 @@ export function startingGameData(): GameData {
     return {
         board: nestedArrayMap(squareTypesArray, () => null),
         playerData: playerData,
-        moveStart: null,
+        currentPlayer: 0,
         bag: bag,
+        moveStart: null,
     };
 }

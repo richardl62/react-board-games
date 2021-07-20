@@ -2,7 +2,7 @@ import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { GameData } from "./game-data";
 import { canChange, getSquareData, setLetter, RackAction, compactRack,
-     addToRack, playerNumber, fillRack, canSwapTiles } from "./game-actions";
+     addToRack, fillRack, canSwapTiles } from "./game-actions";
 import { Letter } from "./letter-properties";
 import assert from "../../shared/assert";
 
@@ -49,7 +49,7 @@ export const bgioMoves = {
     },
 
     shuffleRack: (G: GameData, ctx: any) => {
-        shuffle(G.playerData[playerNumber].rack);
+        shuffle(G.playerData[G.currentPlayer].rack);
     },
 
     finishTurn: (G: GameData, ctx: any, score: number) => {
@@ -59,13 +59,20 @@ export const bgioMoves = {
             row.forEach(sd => sd && (sd.active = false))
         );
 
-        G.playerData[playerNumber].score += score;
+        G.playerData[G.currentPlayer].score += score;
+
+        if(G.currentPlayer === G.playerData.length - 1) {
+            G.currentPlayer = 0;
+        } else {
+            ++G.currentPlayer;
+        }
+
     },
 
     swapTilesInRack: (G: GameData, ctx: any, toSwap: boolean[]) => {
         canSwapTiles(G);
 
-        let {rack} = G.playerData[playerNumber];
+        let {rack} = G.playerData[G.currentPlayer];
         let removedLetters : Letter[] = [];
         for(let i = 0; i < rack.length; ++i) {
             if(toSwap[i]) {
