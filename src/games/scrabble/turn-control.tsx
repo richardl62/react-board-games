@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
+import { sameJSON } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { findCandidateWords } from "./find-candidate-words";
@@ -31,8 +32,11 @@ export function TurnControl(props: Bgio.BoardProps<GameData>) {
   const board = props.G.board;
   const moves = props.moves as any as ClientMoves;
   const candidtateWords = findCandidateWords(board);
-
+  
   const [reportIllegalWords, setReportIllegalWords] = useState(false);
+
+  let previousWordsRef = useRef<string[]>([]);
+
 
   if (candidtateWords === 'empty') {
     return <OuterDiv>
@@ -49,6 +53,16 @@ export function TurnControl(props: Bgio.BoardProps<GameData>) {
   const score = scoreWords(board, candidtateWords);
   const words = candidtateWords.map(cw => getWord(board, cw));
   const illegalWords = words.filter(word => !isLegalWord(word));
+
+  const previousWords = [...previousWordsRef.current];
+  previousWordsRef.current = words;
+
+  console.log("Rendering TurnControl", previousWords, words);
+  if(!sameJSON(previousWords, words)) {
+    console.log("candidate words have changed");
+    setReportIllegalWords(false);
+  }
+
 
   if (illegalWords.length > 0 && reportIllegalWords) {
     const onClick = () => {
