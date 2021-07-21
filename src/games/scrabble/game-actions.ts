@@ -24,12 +24,6 @@ function rackPos(sq: SquareID): number {
     return sq.col;
 }
 
-
-export function canChange(G: GameData, sq: SquareID) : boolean
-{
-    return onRack(sq) || G.board[sq.row][sq.col] === null;
-} 
-
 /** get the letter at a square */
 export function getSquareData(G: GameData, sq: SquareID) : TileData | null {
     if(onRack(sq)) {

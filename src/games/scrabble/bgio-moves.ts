@@ -1,7 +1,7 @@
 import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { GameData } from "./game-data";
-import { canChange, getSquareData, setLetter, RackAction, compactRack,
+import { getSquareData, setLetter, compactRack,
     fillRack, canSwapTiles, recallRack, selectNextPlayer } from "./game-actions";
 import { Letter } from "./letter-properties";
 import assert from "../../shared/assert";
@@ -28,12 +28,15 @@ export const bgioMoves = {
     },
 
     move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
+        const fromData = getSquareData(G, fromSq);
+        const toData = getSquareData(G, toSq);
 
-        if (canChange(G, toSq) && !sameJSON(fromSq, toSq)) {
-            const squareData = getSquareData(G, fromSq);
-            
-            setLetter(G, fromSq, null);
-            setLetter(G, toSq, squareData && squareData.letter, RackAction.insert);
+        assert(fromData);
+
+        if ((toData === null || toData.active) && !sameJSON(fromSq, toSq)) {
+
+            setLetter(G, fromSq, toData ? toData.letter : null);
+            setLetter(G, toSq, fromData.letter);
             compactRack(G);
         }
     },
