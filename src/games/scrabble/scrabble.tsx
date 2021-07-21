@@ -15,20 +15,24 @@ import { scoreWords } from "./score-word";
 import { Scores } from "./scores";
 import { WordChecker } from "./word-check";
 
+const SpaceBetween = styled.div`
+  display: flex;
+  justify-content: space-between
+`;
 const Game = styled.div`
   display: inline-flex;
   flex-direction: column;
   gap: 5px;
   `;
 
-const ScoreAndBagSize = styled.div`
-  display: flex;
-  justify-content: space-between;  
+const ScoreAndControls = styled.div`
+  display: flex; 
   font-size: large;
-  font-weight: bold;
-  margin-right: 0.5em;
+  * {
+    margin-right: 1em;
+  };
 
-  color: red;
+  margin-right: 0.6em;
 `;;
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
@@ -78,21 +82,23 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
           clickDragState={clickDragState}
           board={G.board}
         />
-        <WordChecker/>
-        <ScoreAndBagSize>
+        <SpaceBetween>
+          <WordChecker/>
           <div>
-            Score: <span> {validTilePositions ? score : '-'}</span>
+            Tiles left: <span>{G.bag.length}</span>
           </div>
-          <div>
-            Tiles in bag: <span>{G.bag.length}</span>
-          </div>
-        </ScoreAndBagSize>
-        {validTilePositions && 
-            <EndTurnConfirmation 
+        </SpaceBetween>
+        
+        <ScoreAndControls>
+          <div>{`Score this turn: ${score}`}</div>
+          {validTilePositions &&
+            <EndTurnConfirmation
               words={words}
               endTurn={() => moves.finishTurn(score)}
             />
-        }
+          }
+        </ScoreAndControls>
+
       </Game>
     </DndProvider>
   )

@@ -4,6 +4,7 @@ import { GameData } from "./game-data";
 const StyledScores=styled.div`
     display: flex;
     justify-content: space-between;
+    font-size: large;
 `;
 
 const PlayerScore=styled.div<{current: boolean}>`

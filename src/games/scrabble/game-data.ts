@@ -4,7 +4,7 @@ import { fullBag, Letter } from "./letter-properties";
 import { squareTypesArray, rackSize } from "./board-properties";
 import assert from "../../shared/assert";
 
-const nPlayers = 2; // KLUDGE
+const nPlayers = 4; // KLUDGE
 
 export interface TileData {
     letter: Letter;
