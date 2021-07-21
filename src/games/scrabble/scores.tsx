@@ -1,14 +1,24 @@
+import styled from "styled-components";
 import { GameData } from "./game-data";
+
+const StyledScores=styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const PlayerScore=styled.div<{current: boolean}>`
+    text-decoration: ${props => props.current ? 'underline' : 'none'};
+`;
 
 interface ScoresProps {
     G: GameData
 }
 export function Scores({G} : ScoresProps) {
-    return <div>
-        {G.playerData.map(pd=> (
-            <div key={pd.name}>
+    return <StyledScores>
+        {G.playerData.map((pd,index)=> (
+            <PlayerScore key={pd.name} current={index === G.currentPlayer} >
                 {`${pd.name}: ${pd.score}`}
-            </div>
+            </PlayerScore>
         ))}
-    </div>
+    </StyledScores>
 }

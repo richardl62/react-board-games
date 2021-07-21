@@ -66,8 +66,8 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
       <Game>
+        <Scores G={G} />
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
@@ -94,8 +94,6 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
             />
         }
       </Game>
-      <Scores G={G} />
-      </div>
     </DndProvider>
   )
 }
