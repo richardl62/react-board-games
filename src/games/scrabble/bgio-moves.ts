@@ -2,7 +2,7 @@ import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { GameData } from "./game-data";
 import { canChange, getSquareData, setLetter, RackAction, compactRack,
-     addToRack, fillRack, canSwapTiles } from "./game-actions";
+    fillRack, canSwapTiles, recallRack, selectNextPlayer } from "./game-actions";
 import { Letter } from "./letter-properties";
 import assert from "../../shared/assert";
 
@@ -16,6 +16,8 @@ export interface ClientMoves {
     shuffleRack: () => void;
 
     finishTurn: (score: number) => void;
+
+    pass: () => void;
 
     swapTilesInRack: (toSwap: boolean[]) => void; 
 };
@@ -37,15 +39,7 @@ export const bgioMoves = {
     },
 
     recallRack: (G: GameData, ctx: any) => {
-        for (let row = 0; row < G.board.length; ++row) {
-            for (let col = 0; col < G.board[row].length; ++col) {
-                let sq = G.board[row][col];
-                if (sq?.active) {
-                    addToRack(G, sq.letter);
-                    G.board[row][col] = null;
-                }
-            }
-        }
+
     },
 
     shuffleRack: (G: GameData, ctx: any) => {
@@ -60,13 +54,12 @@ export const bgioMoves = {
         );
 
         G.playerData[G.currentPlayer].score += score;
+        selectNextPlayer(G);
+    },
 
-        if(G.currentPlayer === G.playerData.length - 1) {
-            G.currentPlayer = 0;
-        } else {
-            ++G.currentPlayer;
-        }
-
+    pass: (G: GameData, ctx: any) => {
+        recallRack(G);
+        selectNextPlayer(G);
     },
 
     swapTilesInRack: (G: GameData, ctx: any, toSwap: boolean[]) => {

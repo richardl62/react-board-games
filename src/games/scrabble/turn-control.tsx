@@ -1,12 +1,15 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { Bgio } from "../../shared/types";
+import { ClientMoves } from "./bgio-moves";
 import { EndTurnConfirmation } from "./end-turn-confirmation";
 import { findCandidateWords } from "./find-candidate-words";
 import { getWord } from "./game-actions";
 import { GameData } from "./game-data";
+import { isLegalWord } from "./is-legal-word";
 import { scoreWords } from "./score-word";
 
-const ScoreAndControls = styled.div`
+const OuterDiv = styled.div`
   display: flex; 
   font-size: large;
   * {
@@ -16,20 +19,29 @@ const ScoreAndControls = styled.div`
   margin-right: 0.6em;
 `;
 
-export function TurnControl({ G: { board }, moves }: Bgio.BoardProps<GameData>) {
+export function TurnControl(props: Bgio.BoardProps<GameData>) {
+  const board = props.G.board;
+  const moves = props.moves as any as ClientMoves;
+  const candidtateWords = findCandidateWords(board);
 
-    const cWords = findCandidateWords(board);
-    const validTilePositions = cWords.length > 0;
-    const words = cWords.map(cw => getWord(board, cw));
-    const score = scoreWords(board, cWords);
+  if (candidtateWords === 'empty') {
+    return <OuterDiv>
+      <button onClick={moves.pass}> Pass </button>
+    </OuterDiv>
+  }
 
-    return (<ScoreAndControls>
-        <div>{`Score this turn: ${score}`}</div>
-        {validTilePositions &&
-            <EndTurnConfirmation
-                words={words}
-                endTurn={() => moves.finishTurn(score)}
-            />
-        }
-    </ScoreAndControls>)
+  const scoreMessage = 'score this turn: ';
+
+  if (candidtateWords === 'invalid') {
+    return <OuterDiv> <div>{scoreMessage + '-'}</div> </OuterDiv>
+  }
+
+  const score = scoreWords(board, candidtateWords);
+
+  return (
+    <OuterDiv>
+      <div>{scoreMessage + score}</div>
+      <button onClick={() => moves.finishTurn(score)}> done </button>
+    </OuterDiv>
+  );
 }

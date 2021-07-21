@@ -102,6 +102,27 @@ export function fillRack(G: GameData) {
     }
 }
 
+
+export function recallRack(G: GameData) {
+    for (let row = 0; row < G.board.length; ++row) {
+        for (let col = 0; col < G.board[row].length; ++col) {
+            let sq = G.board[row][col];
+            if (sq?.active) {
+                addToRack(G, sq.letter);
+                G.board[row][col] = null;
+            }
+        }
+    }
+}
+
+export function selectNextPlayer(G: GameData) {
+    if (G.currentPlayer === G.playerData.length - 1) {
+        G.currentPlayer = 0;
+    } else {
+        ++G.currentPlayer;
+    }
+}
+
 export function addToRack(G: GameData, l: Letter) {
     let rack = G.playerData[G.currentPlayer].rack;
     let emptyIndex = rack.findIndex(l => l === null);
