@@ -5,14 +5,12 @@ import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { AppGame, Bgio } from "../../shared/types";
 import { bgioMoves, ClientMoves } from "./bgio-moves";
-import { EndTurnConfirmation } from "./end-turn-confirmation";
-import { findCandidateWords } from "./find-candidate-words";
-import { getWord, onRack } from "./game-actions";
+import { onRack } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
-import { scoreWords } from "./score-word";
 import { Scores } from "./scores";
+import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 
 const SpaceBetween = styled.div`
@@ -24,16 +22,6 @@ const Game = styled.div`
   flex-direction: column;
   gap: 5px;
   `;
-
-const ScoreAndControls = styled.div`
-  display: flex; 
-  font-size: large;
-  * {
-    margin-right: 1em;
-  };
-
-  margin-right: 0.6em;
-`;;
 
 function Scrabble(props: Bgio.BoardProps<GameData>) {
   const {G } = props;
@@ -63,11 +51,6 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
     moveFunctions, clickDragState
   );
 
-  const cWords = findCandidateWords(board);
-  const validTilePositions = cWords.length > 0;
-  const words = cWords.map(cw => getWord(board, cw));
-  const score = scoreWords(board, cWords);
-
   return (
     <DndProvider backend={HTML5Backend}>
       <Game>
@@ -88,16 +71,8 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
             Tiles left: <span>{G.bag.length}</span>
           </div>
         </SpaceBetween>
-        
-        <ScoreAndControls>
-          <div>{`Score this turn: ${score}`}</div>
-          {validTilePositions &&
-            <EndTurnConfirmation
-              words={words}
-              endTurn={() => moves.finishTurn(score)}
-            />
-          }
-        </ScoreAndControls>
+
+        <TurnControl {...props}/>
 
       </Game>
     </DndProvider>
