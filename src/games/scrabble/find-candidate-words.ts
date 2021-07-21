@@ -153,7 +153,16 @@ function findCandidateWordsDirected(
     return words;
 }
 
-export function findCandidateWords(board: BoardData): RowCol[][] {
+/** Return one of the following:
+ * 
+ * 'empty' - There are no active letters
+ * 
+ * 'invalidPositions' - The active letters are in invalid positions
+ *  (e.g. they don't form all part of the same word).
+ * 
+ * RowCol[][] - Array of candidate words (more precisely array of positions of candidate words).
+*/
+export function findCandidateWords(board: BoardData): 'empty' | 'invalid' | RowCol[][]   {
 
     let active: RowCol[] = [];
 
@@ -165,9 +174,13 @@ export function findCandidateWords(board: BoardData): RowCol[][] {
         }
     }
 
+    if(active.length === 0) {
+        return 'empty';
+    }
+
     const words = 
         findCandidateWordsDirected(board, active, 'row') ||
         findCandidateWordsDirected(board, active, 'col')
     
-    return words || [];
+    return words || 'invalid';
 }
