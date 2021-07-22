@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { sameJSON } from "../../shared/tools";
 import { Bgio } from "../../shared/types";
@@ -33,10 +33,8 @@ export function TurnControl(props: Bgio.BoardProps<GameData>) {
   const moves = props.moves as any as ClientMoves;
   const candidtateWords = findCandidateWords(board);
   
-  const [reportIllegalWords, setReportIllegalWords] = useState(false);
-
-  let previousWordsRef = useRef<string[]>([]);
-
+  // wwdp -> word when done pressed.
+  const [wwdp, setWwdp] = useState<string[]>([]);
 
   if (candidtateWords === 'empty') {
     return <OuterDiv>
@@ -52,21 +50,14 @@ export function TurnControl(props: Bgio.BoardProps<GameData>) {
 
   const score = scoreWords(board, candidtateWords);
   const words = candidtateWords.map(cw => getWord(board, cw));
-  const illegalWords = words.filter(word => !isLegalWord(word));
 
-  const previousWords = [...previousWordsRef.current];
-  previousWordsRef.current = words;
-
-  console.log("Rendering TurnControl", previousWords, words);
-  if(!sameJSON(previousWords, words)) {
-    console.log("candidate words have changed");
-    setReportIllegalWords(false);
+  let unrecognisedWords : string[] = [];
+  if(sameJSON(words, wwdp)) {
+    unrecognisedWords = words.filter(wd => !isLegalWord(wd));
   }
 
-
-  if (illegalWords.length > 0 && reportIllegalWords) {
+  if (unrecognisedWords.length > 0) {
     const onClick = () => {
-        setReportIllegalWords(false);
         moves.finishTurn(score);
     }
 
@@ -74,7 +65,7 @@ export function TurnControl(props: Bgio.BoardProps<GameData>) {
       <div>
         <IllegalWords>
           Unrecognised Words:
-          {illegalWords.map(w => <span key={w}>{w.toLowerCase()}</span>)}
+          {unrecognisedWords.map(w => <span key={w}>{w.toLowerCase()}</span>)}
         </IllegalWords>
 
         <OuterDiv>
@@ -85,11 +76,11 @@ export function TurnControl(props: Bgio.BoardProps<GameData>) {
     )
   } else {
     const onClick = () => {
-        if(illegalWords.length > 0) {
-          setReportIllegalWords(true);
-        } else {
-          moves.finishTurn(score);
-        }
+      setWwdp(words);
+      unrecognisedWords = words.filter(wd => !isLegalWord(wd));
+      if(unrecognisedWords.length === 0) {
+        moves.finishTurn(score);
+      } 
     }
     return (
       <OuterDiv>
