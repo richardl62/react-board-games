@@ -82,7 +82,6 @@ function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
     <button onClick={onDone}> Done (permit illegal words) </button> :
     <button onClick={onUncheckedDone}> done </button>
 
-
    return (
      <div>
        {reportIllegalWords && <IllegalWord illegalWords={illegalWords.current} />}

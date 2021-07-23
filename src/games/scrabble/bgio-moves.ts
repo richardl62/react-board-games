@@ -42,7 +42,7 @@ export const bgioMoves = {
     },
 
     recallRack: (G: GameData, ctx: any) => {
-
+        recallRack(G);
     },
 
     shuffleRack: (G: GameData, ctx: any) => {
