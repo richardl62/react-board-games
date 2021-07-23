@@ -1,6 +1,5 @@
 
-import { ReactNode } from "react";
-import { useRef, useState } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
 import { sameJSON } from "../../shared/tools";
 import { Bgio } from "../../shared/types";

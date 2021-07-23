@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import assert from "../../shared/assert";

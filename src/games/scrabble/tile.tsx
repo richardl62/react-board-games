@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { Letter, letterScore } from "./letter-properties";
 import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style"

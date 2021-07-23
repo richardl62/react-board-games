@@ -1,3 +1,4 @@
+import React from "react";
 import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
 import { nestedArrayMap } from "../../shared/tools";
 import { boardIDs } from "./game-actions";
