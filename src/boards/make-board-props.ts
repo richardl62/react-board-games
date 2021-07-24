@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { BoardElement, BoardProps } from "./board";
 import { defaultColors, SquareBackgroundProps, squareID, SquareID } from "./interfaces";
 import { BoardStyle, setBoardStyle, checkered } from "./internal/set-board-style";
