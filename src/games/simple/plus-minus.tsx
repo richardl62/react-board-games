@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ActivePlayers } from '../../game-support';
 import { AppGame, Bgio } from '../../shared/types';
 
 interface G {
   value: number;
 };
+
+
+function Board(props: Bgio.BoardProps<G>) {
+  const { G, moves, events } = props;
+
+  const [playersReady, setPlayersReady] = useState(false);
+  return (
+    <div>
+      <ActivePlayers {...props} setPlayersReady={setPlayersReady}/>
+      {playersReady && (<div>
+        <button type="button" onClick={(() => moves.add(1))}>+1</button>
+        <button type="button" onClick={(() => moves.add(-1))}>-1</button>
+        <button type="button" onClick={() => events.endTurn!()}>End Turn</button>
+        <div>{G.value}</div>
+      </div>)}
+    </div>);
+}
 
 export const plusminus : AppGame = {
   name: 'plusminus',
@@ -20,14 +38,5 @@ export const plusminus : AppGame = {
     },
   },
 
-  board: ({ G, moves, events }: Bgio.BoardProps<G> ) => {
-    return (
-      <div>
-        <button type="button" onClick={(() => moves.add(1))}>+1</button>
-        <button type="button" onClick={(() => moves.add(-1))}>-1</button>
-        <button type="button" onClick={() => events.endTurn!()}>End Turn</button>
-        <div>{G.value}</div>
-      </div>
-    )
-  },
+  board: Board,
 }

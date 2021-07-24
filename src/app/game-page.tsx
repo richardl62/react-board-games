@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import assert from '../shared/assert';
 import { MatchID, Player, AppGame } from '../shared/types';
 import * as GamePlay from './game-play';
 import * as LobbyClient from '../shared/bgio';
@@ -14,15 +15,20 @@ function NumPlayers(props: StartMatchProps) {
   const game = props.game;
   const numPlayersCallback = props.numPlayers;
 
-  const [numPlayers, setNumPlayers] = useState<number>(game.minPlayers);
   const { minPlayers, maxPlayers } = game;
+  assert(maxPlayers >= 2); // If only one play is allowed, we should not have got here.
+  const defaultNumPlayers = Math.max(minPlayers, 2);
+
+  const [numPlayers, setNumPlayers] = useState<number>(defaultNumPlayers);
 
   return (<div>
     <label htmlFor='numPlayers'>
       {`Number of players (${minPlayers}-${maxPlayers}):`}
     </label>
+    
     <input type="number" name='numPlayers'
-      min={minPlayers} max={maxPlayers} value={numPlayers}
+      min={minPlayers} max={maxPlayers} 
+      value={numPlayers}
       onChange={(event) => setNumPlayers(Number(event.target.value))}
     />
     <button type="button" onClick={() => numPlayersCallback(numPlayers)}>Start Game</button>
