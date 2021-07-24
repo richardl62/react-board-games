@@ -3,7 +3,7 @@ export const unnamedPlayer = '_Unnamed Player_';  // Why is this needed?
 
 export interface PlayerData {
   name: string;
-  status: 'ready' | 'notJoined' | 'offline';
+  status: 'ready' | 'not joined' | 'offline';
 }
 
 export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
@@ -25,7 +25,7 @@ export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
     } else {
       return {
         name: defaultPlayerName,
-        status: 'notJoined',
+        status: 'not joined',
       }
     }
   })
