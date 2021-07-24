@@ -11,7 +11,19 @@ export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
   const playerID = Number(props.playerID);
   const currentPlayer = Number(ctx.currentPlayer)
  
-  if (!matchData || !matchData[playerID] || !matchData[currentPlayer]) {
+  if(!matchData) {
+    // Assume this is a single-player off-line game.
+    // To do: Make this an properly supported option.
+    return [
+      {
+      name: 'Player (offline)',
+      status: 'ready',
+      }
+    ];
+  }
+
+  if (!matchData[playerID] || !matchData[currentPlayer]) {
+    console.log(matchData, playerID, currentPlayer)
     throw new Error("Problem getting player data from match data");
   }
 

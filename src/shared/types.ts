@@ -1,3 +1,4 @@
+import { Ctx } from "boardgame.io";
 import * as Bgio from "./bgio-types";
 export * as Bgio from "./bgio-types";
 
@@ -20,7 +21,7 @@ export interface BasicGame<G = any> {
   // Space-free name suitable for passing to bgio.
   name: string;
 
-  setup: () => G;
+  setup: (ctx: Ctx) => G;
   moves: any; // KLUDGE
 
   minPlayers: number,

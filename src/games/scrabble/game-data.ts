@@ -1,10 +1,9 @@
+import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
-import { nestedArrayMap, shuffle } from "../../shared/tools";
-import { fullBag, Letter } from "./letter-properties";
-import { squareTypesArray, rackSize } from "./board-properties";
 import assert from "../../shared/assert";
-
-const nPlayers = 4; // KLUDGE
+import { nestedArrayMap, shuffle } from "../../shared/tools";
+import { rackSize, squareTypesArray } from "./board-properties";
+import { fullBag, Letter } from "./letter-properties";
 
 export interface TileData {
     letter: Letter;
@@ -34,7 +33,7 @@ export interface GameData {
     moveStart: SquareID | null;
 }
 
-export function startingGameData(): GameData {
+export function startingGameData(ctx: Ctx): GameData {
     let bag = shuffle([...fullBag]); 
     assert(bag.length > rackSize);
 
@@ -48,7 +47,7 @@ export function startingGameData(): GameData {
     }
 
     let playerData : PlayerData[] = [];
-    for(let p = 0; p < nPlayers; ++p) {
+    for(let p = 0; p < ctx.numPlayers; ++p) {
         playerData.push({
             name: `Player ${p+1}`,
             rack: rack(),
