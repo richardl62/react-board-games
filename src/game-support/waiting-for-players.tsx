@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Bgio } from '../shared/types';
 import { PlayerData, getPlayerData } from './player-data';
+import { GameWarnings } from './show-warning';
 
 const Name = styled.span`
     font-weight: bold;
@@ -51,6 +52,7 @@ export function WaitingForPlayers(props: Bgio.BoardProps) {
             <PlayerDataGrid>
                 {playerData.map(playerElements)}
             </PlayerDataGrid>
+            <GameWarnings {...props} />
             <div>
                 <a href={window.location.href}>Game Link</a>
                 <span> (Use to invite other player)</span>

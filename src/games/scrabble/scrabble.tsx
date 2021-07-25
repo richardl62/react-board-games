@@ -4,6 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { playersReady } from "../../game-support";
+import { GameWarnings } from "../../game-support/show-warning";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
 import { AppGame, Bgio } from "../../shared/types";
 import { bgioMoves, ClientMoves } from "./bgio-moves";
@@ -60,6 +61,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
   return (
     <DndProvider backend={HTML5Backend}>
       <Game>
+        <GameWarnings {...props}/>
         <Scores G={G} />
         <Rack
           squareInteraction={squareInteraction}
