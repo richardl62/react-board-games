@@ -43,7 +43,7 @@ export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
   })
 }
 
-export function playersReady(playerData: PlayerData[]) : boolean {
-  const unready = playerData.find(p => p.status !== 'ready');
+export function playersReady(props: Bgio.BoardProps) : boolean {
+  const unready = getPlayerData(props).find(p => p.status !== 'ready');
   return unready === undefined;
 }

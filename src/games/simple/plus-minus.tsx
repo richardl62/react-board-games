@@ -11,7 +11,7 @@ function Board(props: Bgio.BoardProps<G>) {
   const { G, moves, events } = props;
 
   const playerData = getPlayerData(props);
-  const ready = playersReady(playerData);
+  const ready = playersReady(props);
 
   const playerSpan = (pd: PlayerData) => <span key={pd.name}>{`${pd.name} ${pd.status} - `}</span>;
   return (
