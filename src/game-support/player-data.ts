@@ -43,7 +43,25 @@ export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
   })
 }
 
-export function playersReady(props: Bgio.BoardProps) : boolean {
-  const unready = getPlayerData(props).find(p => p.status !== 'ready');
-  return unready === undefined;
+/**
+ * joined -> all players joined. (Some may be offline.)
+ * online -> all players joined and online.
+ */
+export function playerStatus(props: Bgio.BoardProps): { 
+  joined: boolean; 
+  online: boolean; 
+}  {
+  const playerData = getPlayerData(props);
+
+  let allJoined = true;
+  let allOnline = true;
+  for(let pd of playerData) {
+    if(pd.status !== "ready") {
+      allOnline = false;
+    }
+    if(pd.status === "not joined") {
+      allJoined = false;
+    }
+  }
+  return {joined: allJoined, online: allOnline};
 }

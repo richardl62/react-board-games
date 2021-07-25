@@ -3,7 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
-import { playersReady } from "../../game-support";
+import { playerStatus } from "../../game-support";
 import { GameWarnings } from "../../game-support/show-warning";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
 import { AppGame, Bgio } from "../../shared/types";
@@ -54,7 +54,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
     moveFunctions, clickDragState
   );
 
-  if(!playersReady(props)) {
+  if(!playerStatus(props).joined) {
     return <WaitingForPlayers {...props} />
   }
 

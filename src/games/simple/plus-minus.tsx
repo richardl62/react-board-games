@@ -1,5 +1,6 @@
 import React from 'react';
-import { getPlayerData, PlayerData, playersReady } from '../../game-support';
+import { getPlayerData, PlayerData, playerStatus } from '../../game-support';
+import { GameWarnings } from '../../game-support/show-warning';
 import { AppGame, Bgio } from '../../shared/types';
 
 interface G {
@@ -11,13 +12,14 @@ function Board(props: Bgio.BoardProps<G>) {
   const { G, moves, events } = props;
 
   const playerData = getPlayerData(props);
-  const ready = playersReady(props);
+  const joined = playerStatus(props).joined;
 
   const playerSpan = (pd: PlayerData) => <span key={pd.name}>{`${pd.name} ${pd.status} - `}</span>;
   return (
     <div>
       <div>{playerData.map(playerSpan)}</div>
-      {ready && (<div>
+      <GameWarnings {...props} />
+      {joined && (<div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>
         <button type="button" onClick={(() => moves.add(-1))}>-1</button>
         <button type="button" onClick={() => events.endTurn!()}>End Turn</button>
