@@ -4,7 +4,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { playerStatus } from "../../game-support";
-import { GameWarnings } from "../../game-support/show-warning";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
 import { AppGame, Bgio } from "../../shared/types";
 import { bgioMoves, ClientMoves } from "./bgio-moves";
@@ -12,7 +11,7 @@ import { onRack } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { Rack } from "./rack";
-import { Scores } from "./scores";
+import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 
@@ -61,8 +60,7 @@ function Scrabble(props: Bgio.BoardProps<GameData>) {
   return (
     <DndProvider backend={HTML5Backend}>
       <Game>
-        <GameWarnings {...props}/>
-        <Scores G={G} />
+        <ScoresEtc {...props} />
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
