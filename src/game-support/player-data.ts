@@ -31,7 +31,7 @@ export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
     const defaultPlayerName = `Player ${index + 1}`;
     if(md.name) {
       return {
-        name: (md.name === unnamedPlayer) ? md.name: defaultPlayerName,
+        name: (md.name === unnamedPlayer) ? defaultPlayerName : md.name,
         status: md.isConnected ? 'ready' : 'offline',
       }
     } else {
