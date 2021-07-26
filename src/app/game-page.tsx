@@ -1,56 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import assert from '../shared/assert';
 import { MatchID, Player, AppGame } from '../shared/types';
 import * as GamePlay from './game-play';
 import * as LobbyClient from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
-
-interface StartMatchOptions {
-  nPlayers: number;
-  offline: boolean;
-}
-interface GetOptionsAndStartMatchProps {
-  game: AppGame;
-  startMatch: (arg: StartMatchOptions) => void;
-}
-
-function GetOptionsAndStartMatch(
-  {
-    game : { minPlayers , maxPlayers }, 
-    startMatch
-  }: GetOptionsAndStartMatchProps
-) {
-
-  assert(maxPlayers >= 2); // If only one play is allowed, we should not have got here.
-  const defaultNumPlayers = Math.max(minPlayers, 2);
-
-  const [numPlayers, setNumPlayers] = useState<number>(defaultNumPlayers);
-
-  return (<div>
-    <label htmlFor='numPlayers'>
-      {`Number of players (${minPlayers}-${maxPlayers}):`}
-    </label>
-    
-    <input type="number" name='numPlayers'
-      min={minPlayers} max={maxPlayers} 
-      value={numPlayers}
-      onChange={(event) => setNumPlayers(Number(event.target.value))}
-    />
-    <button type="button" onClick={() => startMatch({nPlayers: numPlayers, offline: false})}>
-      Start Game
-    </button>
-
-    <div>
-      <br/>
-      <span>Test/Debug: </span>
-      <button type="button" onClick={() => startMatch({nPlayers: numPlayers, offline: true})}>
-        Start Offline
-      </button>
-    </div>
-
-  </div>);
-}
+import { StartMatchOptions, StartMatchParams } from './start-match-options';
 
 interface SetNameProps {
   buttonText: string;
@@ -109,7 +63,7 @@ function GamePage(props: GamePageProps) {
     setState({ ...state, error: error });
   }
 
-  const startMatch = ({nPlayers, offline} : StartMatchOptions) => {
+  const startMatch = ({nPlayers, offline} : StartMatchParams) => {
     if (offline) {
       setState({ ...state, local: true });
     } else {
@@ -134,7 +88,7 @@ function GamePage(props: GamePageProps) {
   }
 
   if (!state.matchID) {
-    return <GetOptionsAndStartMatch game={game} startMatch={startMatch} />
+    return <StartMatchOptions game={game} setOptions={startMatch} />
   }
 
   if (!state.numPlayers) {
