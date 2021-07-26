@@ -5,7 +5,7 @@ import { BoardProps as BoardProps_} from "boardgame.io/react";
 
 type MatchDataElem_ = Required<BoardProps_>["matchData"][0]; 
 
-interface MatchDataElem extends MatchDataElem_{
+export interface MatchDataElem extends MatchDataElem_{
     isConnected?: boolean;
 } 
 

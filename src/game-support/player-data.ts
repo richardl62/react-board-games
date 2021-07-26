@@ -1,3 +1,4 @@
+import { MatchDataElem } from '../shared/bgio-types';
 import { Bgio } from '../shared/types';
 export const unnamedPlayer = '_Unnamed Player_';  // Why is this needed?
 
@@ -6,22 +7,28 @@ export interface PlayerData {
   status: 'ready' | 'not joined' | 'offline';
 }
 
-export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
-  const { ctx, matchData } = props;
-  const playerID = Number(props.playerID);
-  const currentPlayer = Number(ctx.currentPlayer)
- 
-  if(!matchData) {
-    // Assume this is a single-player off-line game.
+function getMatchData(props: Bgio.BoardProps) : MatchDataElem[] {
+  if(props.matchData) {
+    return props.matchData;
+  } else {
+        // Assume this is a single-player off-line game.
     // To do: Make this an properly supported option.
     return [
       {
-      name: 'Player (offline)',
-      status: 'ready',
+        name: 'Player (offline)',
+        id: 0,
+        isConnected: true,
       }
     ];
   }
+}
 
+export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
+  const { ctx } = props;
+  const playerID = Number(props.playerID);
+  const currentPlayer = Number(ctx.currentPlayer)
+ 
+  const matchData = getMatchData(props);
   if (!matchData[playerID] || !matchData[currentPlayer]) {
     console.log(matchData, playerID, currentPlayer)
     throw new Error("Problem getting player data from match data");
