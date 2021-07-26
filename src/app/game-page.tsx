@@ -6,16 +6,22 @@ import * as LobbyClient from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
 
-interface StartMatchProps {
+interface StartMatchOptions {
+  nPlayers: number;
+  offline: boolean;
+}
+interface GetOptionsAndStartMatchProps {
   game: AppGame;
-  numPlayers: (arg: number) => void;
+  startMatch: (arg: StartMatchOptions) => void;
 }
 
-function NumPlayers(props: StartMatchProps) {
-  const game = props.game;
-  const numPlayersCallback = props.numPlayers;
+function GetOptionsAndStartMatch(
+  {
+    game : { minPlayers , maxPlayers }, 
+    startMatch
+  }: GetOptionsAndStartMatchProps
+) {
 
-  const { minPlayers, maxPlayers } = game;
   assert(maxPlayers >= 2); // If only one play is allowed, we should not have got here.
   const defaultNumPlayers = Math.max(minPlayers, 2);
 
@@ -31,7 +37,17 @@ function NumPlayers(props: StartMatchProps) {
       value={numPlayers}
       onChange={(event) => setNumPlayers(Number(event.target.value))}
     />
-    <button type="button" onClick={() => numPlayersCallback(numPlayers)}>Start Game</button>
+    <button type="button" onClick={() => startMatch({nPlayers: numPlayers, offline: false})}>
+      Start Game
+    </button>
+
+    <div>
+      <br/>
+      <span>Test/Debug: </span>
+      <button type="button" onClick={() => startMatch({nPlayers: numPlayers, offline: true})}>
+        Start Offline
+      </button>
+    </div>
 
   </div>);
 }
@@ -93,12 +109,12 @@ function GamePage(props: GamePageProps) {
     setState({ ...state, error: error });
   }
 
-  const setNumPlayers = (numPlayers: number) => {
-    if (numPlayers === 1) {
+  const startMatch = ({nPlayers, offline} : StartMatchOptions) => {
+    if (offline) {
       setState({ ...state, local: true });
     } else {
       setState({ ...state, waiting: true });
-      LobbyClient.createMatch(game, numPlayers)
+      LobbyClient.createMatch(game, nPlayers)
         .then(openMatchPage)
         .catch(setError);
     }
@@ -118,12 +134,7 @@ function GamePage(props: GamePageProps) {
   }
 
   if (!state.matchID) {
-    if (game.minPlayers === game.maxPlayers) {
-      setNumPlayers(game.minPlayers);
-      return null;
-    }
-
-    return <NumPlayers game={game} numPlayers={setNumPlayers} />
+    return <GetOptionsAndStartMatch game={game} startMatch={startMatch} />
   }
 
   if (!state.numPlayers) {
