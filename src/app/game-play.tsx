@@ -6,14 +6,16 @@ import * as UrlParams from './url-params';
 
 interface LocalProps {
   game: AppGame;
+  numPlayers: number;
 };
 
-export function Local({ game }: LocalProps) {
+export function Local({ game, numPlayers }: LocalProps) {
   const GameClient = Client({
     game: game,
     board: game.board,
     debug: UrlParams.bgioDebugPanel,
   });
+  console.log("numPlayers=", numPlayers);
 
   return (
     <div>

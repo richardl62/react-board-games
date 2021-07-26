@@ -65,7 +65,7 @@ function GamePage(props: GamePageProps) {
 
   const startMatch = ({nPlayers, offline} : StartMatchParams) => {
     if (offline) {
-      setState({ ...state, local: true });
+      setState({ ...state, numPlayers:nPlayers, local: true });
     } else {
       setState({ ...state, waiting: true });
       LobbyClient.createMatch(game, nPlayers)
@@ -84,7 +84,7 @@ function GamePage(props: GamePageProps) {
   }
 
   if (state.local) {
-    return <GamePlay.Local game={game} />
+    return <GamePlay.Local game={game} numPlayers={state.numPlayers!} />
   }
 
   if (!state.matchID) {
