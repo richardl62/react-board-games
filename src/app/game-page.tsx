@@ -30,6 +30,14 @@ function SetName(props: SetNameProps) {
     </div>);
 }
 
+interface State {
+  matchID: MatchID | null;
+
+  local: boolean;
+  player: Player | null;
+  numPlayers: number | null;
+};
+
 
 interface GamePageProps {
   game: AppGame;
@@ -37,46 +45,39 @@ interface GamePageProps {
 }
 
 function GamePage(props: GamePageProps) {
-  interface State {
-    game: AppGame;
-    waiting: boolean;
-    error?: Error;
-    local?: boolean;
-    matchID?: MatchID | null;
-    player?: Player | null;
-    numPlayers?: number;
-  };
+
   const game = props.game;
 
+  const [waiting, setWaiting] = useState(false);
+  const [error, setError] = useState<Error|null>(null);
+
   const [state, setState] = useState<State>({
-    game: game,
-    waiting: false,
     matchID: props.matchID,
+
+    local: false,
+    numPlayers: null,
+
     player: props.matchID && getStoredPlayer(props.matchID),
   });
 
-  const setError = (error: Error) => {
-    setState({ ...state, error: error });
-  }
 
   const startMatch = ({nPlayers, offline} : StartMatchParams) => {
     if (offline) {
       setState({ ...state, numPlayers:nPlayers, local: true });
     } else {
-      setState({ ...state, waiting: true });
+      setWaiting(true);
       LobbyClient.createMatch(game, nPlayers)
         .then(openMatchPage)
         .catch(setError);
     }
   }
 
-  if (state.error) {
-    console.log("GamePage error: state=", state);
-    return <div>{`ERROR: ${state.error.message}`}</div>
+  if (error) {
+    return <div>{`ERROR: ${error.message}`}</div>
   }
 
-  if (state.waiting) {
-    return <div>Waiting ...</div>;
+  if (waiting) {
+    return <div>Waiting for server ...</div>;
   }
 
   if (state.local) {
@@ -88,9 +89,12 @@ function GamePage(props: GamePageProps) {
   }
 
   if (!state.numPlayers) {
-    setState({ ...state, waiting: true });
+    setWaiting(true);
     LobbyClient.numPlayers(game, state.matchID)
-      .then(numPlayers => setState({ ...state, numPlayers: numPlayers, waiting: false }))
+      .then(numPlayers => {
+          setState({ ...state, numPlayers: numPlayers});
+          setWaiting(false);
+      })
       .catch(setError);
     return null;
   }
@@ -99,12 +103,13 @@ function GamePage(props: GamePageProps) {
     const matchID = state.matchID;
     const setName = (name: string) => {
 
-      setState({ ...state, waiting: true });
+      setWaiting(true);
 
       LobbyClient.joinMatch(game, matchID, name)
         .then(player => {
           setStoredPlayer(matchID, player);
-          setState({ ...state, player: player, waiting: false });
+          setState({ ...state, player: player});
+          setWaiting(false);
         })
         .catch(setError);
     }
