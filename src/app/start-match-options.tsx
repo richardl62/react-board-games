@@ -38,9 +38,7 @@ export function StartMatchOptions(
     game: { minPlayers, maxPlayers }, setOptions: startMatch
   }: StartMatchProps) {
 
-  assert(maxPlayers >= 2); // If only one play is allowed, we should not have got here.
   const defaultNumPlayers = Math.max(minPlayers, 2);
-
   const [numPlayers, setNumPlayers] = useState<number>(defaultNumPlayers);
 
   return (
