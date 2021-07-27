@@ -3,40 +3,17 @@ import { Client } from "boardgame.io/react";
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
+import { MatchOptions } from './start-match-options';
+import assert from '../shared/assert';
 
-interface LocalProps {
-  game: AppGame;
-  numPlayers: number;
-};
-
-export function Local({ game, numPlayers }: LocalProps) {
-
-  useEffect(() => {
-    document.title = game.displayName
-  });
-
-  const GameClient = Client({
-    game: game,
-    board: game.board,
-    debug: UrlParams.bgioDebugPanel,
-  });
-  console.log("numPlayers=", numPlayers);
-
-  return (
-    <div>
-      <GameClient />
-    </div>
-  );
-}
-
-interface MultiPlayerProps {
+interface GamePlayProps {
   game: AppGame;
   matchID: MatchID;
-  numPlayers: number;
-  player: Player;
+  matchOptions: MatchOptions;
+  player: Player | null;
 };
 
-export function MultiPlayer({ game, matchID, numPlayers, player }: MultiPlayerProps) {
+export function GamePlay({ game, matchID, matchOptions, player }: GamePlayProps) {
   console.log("UrlParams", UrlParams);
 
   useEffect(() => {
@@ -44,22 +21,27 @@ export function MultiPlayer({ game, matchID, numPlayers, player }: MultiPlayerPr
   });
 
 
-  const server = UrlParams.lobbyServer();
+  if(matchOptions.local) {
+    return <div>Local Game - more work needed</div>
+  } else {
+    assert(player);
+    const server = UrlParams.lobbyServer();
 
-  const GameClient = Client({
-    game: game,
-    board: game.board,
-    multiplayer: SocketIO({ server: server}),
+    const GameClient = Client({
+      game: game,
+      board: game.board,
+      multiplayer: SocketIO({ server: server }),
 
-    numPlayers: numPlayers,
-    debug: UrlParams.bgioDebugPanel,
-  });
+      numPlayers: matchOptions.nPlayers,
+      debug: UrlParams.bgioDebugPanel,
+    });
 
-  return (
-    <div>
-      <GameClient matchID={matchID.mid} 
-        playerID={player.id} credentials={player.credentials}
-      />
-    </div>
-  );
+    return (
+      <div>
+        <GameClient matchID={matchID.mid}
+          playerID={player.id} credentials={player.credentials}
+        />
+      </div>
+    );
+  }
 }

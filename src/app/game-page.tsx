@@ -1,123 +1,97 @@
-import React, { useState } from 'react';
+import React, { ReactChild, useState } from 'react';
 import { MatchID, Player, AppGame } from '../shared/types';
-import * as GamePlay from './game-play';
+import { GamePlay } from './game-play';
 import * as LobbyClient from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
-import { StartMatchOptions, StartMatchParams } from './start-match-options';
+import { MatchOptions, StartMatchOptions } from './start-match-options';
+import assert from '../shared/assert';
 
-interface SetNameProps {
-  buttonText: string;
-  setName: (arg: string) => void;
+interface GetPlayerNameProps {
+  children: ReactChild;
+  nameCallback: (arg: string) => void;
 }
 
-function SetName(props: SetNameProps) {
-  const setNameCallback = props.setName;
-  const buttonText = props.buttonText;
+function GetPlayerName({children: child, nameCallback}: GetPlayerNameProps) {
 
   const [name, setName] = useState<string>('');
   return (
     <div>
       <div>
         <label>Name</label>
-        <input value={name} placeholder='Player name' onInput={e => setName(e.currentTarget.value)} />
+        <input 
+          value={name} 
+          placeholder='Player name' 
+          onInput={e => setName(e.currentTarget.value)} 
+        />
 
-        <button type="button" onClick={() => setNameCallback(name)}>
-          {buttonText}
+        <button 
+          type="button"
+          onClick={() => nameCallback(name)}
+        >
+          {child}
         </button>
 
       </div>
     </div>);
 }
 
-interface State {
-  matchID: MatchID | null;
-
-  local: boolean;
-  player: Player | null;
-  numPlayers: number | null;
-};
-
-
 interface GamePageProps {
   game: AppGame;
   matchID: MatchID | null;
 }
 
-function GamePage(props: GamePageProps) {
-
-  const game = props.game;
-
+function GamePage({game, matchID}: GamePageProps) {
   const [waiting, setWaiting] = useState(false);
   const [error, setError] = useState<Error|null>(null);
-
-  const [state, setState] = useState<State>({
-    matchID: props.matchID,
-
-    local: false,
-    numPlayers: null,
-
-    player: props.matchID && getStoredPlayer(props.matchID),
-  });
-
-
-  const startMatch = ({nPlayers, offline} : StartMatchParams) => {
-    if (offline) {
-      setState({ ...state, numPlayers:nPlayers, local: true });
+  const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);
+  const [player, setPlayer] = useState<Player|null>(matchID && getStoredPlayer(matchID));
+  
+  const processMatchOptions = (matchOptions : MatchOptions) => {
+    if (matchOptions.local) {
+      setMatchOptions(matchOptions);
     } else {
       setWaiting(true);
-      LobbyClient.createMatch(game, nPlayers)
+      LobbyClient.createMatch(game, matchOptions.nPlayers)
         .then(openMatchPage)
         .catch(setError);
     }
   }
 
+  const joinGame = (name: string) => {
+    assert(matchID);
+    setWaiting(true);
+
+    LobbyClient.joinMatch(game, matchID, name)
+      .then(player => {
+        setStoredPlayer(matchID, player);
+        setPlayer(player);
+        setWaiting(false);
+      })
+      .catch(setError);
+  }
+
   if (error) {
-    return <div>{`ERROR: ${error.message}`}</div>
+    return <div>{`Error contacting server (${error.message})`}</div>
   }
 
   if (waiting) {
     return <div>Waiting for server ...</div>;
   }
 
-  if (state.local) {
-    return <GamePlay.Local game={game} numPlayers={state.numPlayers!} />
+  if (!matchOptions) {
+    return <StartMatchOptions game={game} optionsCallback={processMatchOptions} />
+  }
+  assert(matchID);
+
+  if (!player && !matchOptions.local) {
+
+
+    return <GetPlayerName nameCallback={joinGame}>Join As</GetPlayerName>
   }
 
-  if (!state.matchID) {
-    return <StartMatchOptions game={game} setOptions={startMatch} />
-  }
-
-  if (!state.numPlayers) {
-    setWaiting(true);
-    LobbyClient.numPlayers(game, state.matchID)
-      .then(numPlayers => {
-          setState({ ...state, numPlayers: numPlayers});
-          setWaiting(false);
-      })
-      .catch(setError);
-    return null;
-  }
-
-  if (!state.player) {
-    const matchID = state.matchID;
-    const setName = (name: string) => {
-
-      setWaiting(true);
-
-      LobbyClient.joinMatch(game, matchID, name)
-        .then(player => {
-          setStoredPlayer(matchID, player);
-          setState({ ...state, player: player});
-          setWaiting(false);
-        })
-        .catch(setError);
-    }
-    return <SetName setName={setName} buttonText={'Join Match'} />;
-  }
-
-  return <GamePlay.MultiPlayer game={game} matchID={state.matchID}
-    player={state.player} numPlayers={state.numPlayers} />
+  return <GamePlay game={game} matchID={matchID} matchOptions={matchOptions}
+    player={player} />
 }
 
 export { GamePage };

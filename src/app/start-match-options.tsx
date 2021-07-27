@@ -22,19 +22,19 @@ const Legend = styled.div`
   left: 30px;
 `;
 
-export interface StartMatchParams {
-    nPlayers: number;
-    offline: boolean;
-  }
-  
+export interface MatchOptions {
+  local: boolean;
+  nPlayers: number;
+}
+
 interface StartMatchProps {
     game: AppGame;
-    setOptions: (arg: StartMatchParams) => void;
+    optionsCallback: (arg: MatchOptions) => void;
   }
 
 export function StartMatchOptions(
   {
-    game: { minPlayers, maxPlayers }, setOptions: startMatch
+    game: { minPlayers, maxPlayers }, optionsCallback: startMatch
   }: StartMatchProps) {
 
   const defaultNumPlayers = Math.max(minPlayers, 2);
@@ -52,7 +52,7 @@ export function StartMatchOptions(
           min={minPlayers} max={maxPlayers}
           value={numPlayers}
           onChange={(event) => setNumPlayers(Number(event.target.value))} />
-        <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, offline: false })}>
+        <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: false })}>
           Start Game
         </button>
       </div>
@@ -60,7 +60,7 @@ export function StartMatchOptions(
       <Box>
         <Legend>Test/debug</Legend>
 
-        <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, offline: true })}>
+        <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: true })}>
           Start Offline
         </button>
       </Box>
