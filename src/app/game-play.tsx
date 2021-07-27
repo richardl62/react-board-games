@@ -1,6 +1,6 @@
 import React from 'react';
 import { Client } from "boardgame.io/react";
-import { SocketIO } from 'boardgame.io/multiplayer';
+import { SocketIO, Local as LocalServer  } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 
@@ -10,16 +10,20 @@ interface LocalProps {
 };
 
 export function Local({ game, numPlayers }: LocalProps) {
+  console.log("UrlParams", UrlParams);
+
   const GameClient = Client({
     game: game,
     board: game.board,
+    multiplayer: LocalServer(),
+
+    numPlayers: numPlayers,
     debug: UrlParams.bgioDebugPanel,
   });
-  console.log("numPlayers=", numPlayers);
 
   return (
     <div>
-      <GameClient />
+      <GameClient playerID={'0'}/>
     </div>
   );
 }
