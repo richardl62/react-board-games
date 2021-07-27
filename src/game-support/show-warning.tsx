@@ -28,8 +28,8 @@ export function GameWarnings(props: Bgio.BoardProps) {
 
     return (
         <WarningsDiv>
-            <span>Warnings:</span>
-            {warnings.map(w => <span>{w}</span>)}
+            <span key='-'>Warnings:</span>
+            {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
     );
 }

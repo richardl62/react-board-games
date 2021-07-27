@@ -40,8 +40,8 @@ function playerElements({name, status}: PlayerData) {
     const StatusElem = (status==='offline') ? WarningStatus : StandardStatus;
 
     return [
-        <Name>{name}</Name>,
-        <StatusElem>{statusText(status)}</StatusElem>
+        <Name key={'n-'+name} >{name}</Name>,
+        <StatusElem key={'s-'+name} >{statusText(status)}</StatusElem>
     ];
 }
 
