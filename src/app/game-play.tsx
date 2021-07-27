@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Client } from "boardgame.io/react";
-import { SocketIO, Local as LocalServer  } from 'boardgame.io/multiplayer';
+import { SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 
@@ -10,20 +10,21 @@ interface LocalProps {
 };
 
 export function Local({ game, numPlayers }: LocalProps) {
-  console.log("UrlParams", UrlParams);
+
+  useEffect(() => {
+    document.title = game.displayName
+  });
 
   const GameClient = Client({
     game: game,
     board: game.board,
-    multiplayer: LocalServer(),
-
-    numPlayers: numPlayers,
     debug: UrlParams.bgioDebugPanel,
   });
+  console.log("numPlayers=", numPlayers);
 
   return (
     <div>
-      <GameClient playerID={'0'}/>
+      <GameClient />
     </div>
   );
 }
@@ -37,6 +38,11 @@ interface MultiPlayerProps {
 
 export function MultiPlayer({ game, matchID, numPlayers, player }: MultiPlayerProps) {
   console.log("UrlParams", UrlParams);
+
+  useEffect(() => {
+    document.title = game.displayName
+  });
+
 
   const server = UrlParams.lobbyServer();
 

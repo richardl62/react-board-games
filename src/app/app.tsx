@@ -70,7 +70,7 @@ function gameRoute(game: AppGame) {
 
 function App() {
   useEffect(() => {
-    document.title = 'Available Games'
+    document.title = 'Games'
   });
 
   const renderHomePage = () => <HomePage games={appGames} />;

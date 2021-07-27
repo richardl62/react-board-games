@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import assert from '../shared/assert';
 import { AppGame } from '../shared/types';
 
 const OuterDiv = styled.div`

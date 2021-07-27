@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { MatchID, Player, AppGame } from '../shared/types';
 import * as GamePlay from './game-play';
 import * as LobbyClient from '../shared/bgio';
@@ -47,10 +47,6 @@ function GamePage(props: GamePageProps) {
     numPlayers?: number;
   };
   const game = props.game;
-
-  useEffect(() => {
-    document.title = game.displayName
-  }, [game.displayName]);
 
   const [state, setState] = useState<State>({
     game: game,
