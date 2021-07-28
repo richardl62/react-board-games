@@ -1,6 +1,6 @@
 import React, { ReactChild, useState } from 'react';
 import { MatchID, Player, AppGame } from '../shared/types';
-import { GamePlay } from './game-play';
+import { GamePlayOnline, GamePlayLocal } from './game-play';
 import * as LobbyClient from '../shared/bgio';
 import { openMatchPage } from './url-params';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
@@ -79,19 +79,23 @@ function GamePage({game, matchID}: GamePageProps) {
     return <div>Waiting for server ...</div>;
   }
 
-  if (!matchOptions) {
-    return <StartMatchOptions game={game} optionsCallback={processMatchOptions} />
-  }
-  assert(matchID);
-
-  if (!player && !matchOptions.local) {
-
-
+  if (matchID && !player) {
     return <GetPlayerName nameCallback={joinGame}>Join As</GetPlayerName>
   }
 
-  return <GamePlay game={game} matchID={matchID} matchOptions={matchOptions}
-    player={player} />
+  if (matchID && player) {
+    return  <GamePlayOnline game={game} matchID={matchID} player={player} />
+  }
+
+  if (!matchOptions) {
+    return <StartMatchOptions game={game} optionsCallback={processMatchOptions} />
+  }
+  
+  if(matchOptions.local) {
+    return <GamePlayLocal game={game} numPlayers={matchOptions.nPlayers} />
+  }
+
+  throw new Error("Problem with GamePage")
 }
 
 export { GamePage };

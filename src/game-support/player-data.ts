@@ -10,17 +10,21 @@ export interface PlayerData {
 function getMatchData(props: Bgio.BoardProps) : MatchDataElem[] {
   if(props.matchData) {
     return props.matchData;
-  } else {
-        // Assume this is a single-player off-line game.
-    // To do: Make this an properly supported option.
-    return [
-      {
-        name: 'Player (offline)',
-        id: 0,
-        isConnected: true,
-      }
-    ];
   }
+
+  // This appears to be an online game.  Return constucted data.
+  const numPlayers = props.ctx.numPlayers;
+
+  const result = [];
+  for (let id = 0; id < numPlayers; ++id) {
+    result.push({
+      name: `Player ${id + 1}`,
+      id: 0,
+      isConnected: true,
+    })
+  }
+
+  return result;  
 }
 
 export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
