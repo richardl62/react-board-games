@@ -7,7 +7,7 @@ import {
   MoveFunctions, SquareID, checkered, DragType
 } from '../../boards';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
-import { AppGame, Bgio } from '../../shared/types';
+import { AppGame, BoardProps } from '../../shared/types';
 
 const squareSize = '50px';
 
@@ -35,7 +35,7 @@ function makeSquareDef(value: number): SquareDef {
   return { value: value };
 }
 
-function SwapSquares({ G, moves, events, reset }: Bgio.BoardProps<G>) {
+function SwapSquares({ G, moves, events, reset }: BoardProps<G>) {
   const onReset = () => {
     moves.reset();
   }

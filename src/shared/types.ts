@@ -1,8 +1,8 @@
 import { Ctx } from "boardgame.io";
-import * as Bgio from "./bgio-types";
-export * as Bgio from "./bgio-types";
+import { BoardProps } from "./board-props";
+export type { BoardProps } ;
 
-export type MatchData = Bgio.BoardProps["matchData"];
+export type MatchData = BoardProps["matchData"];
 
 export interface Player {
   id: string;
@@ -29,5 +29,5 @@ export interface BasicGame<G = any> {
 }
 
 export interface AppGame<G = any> extends BasicGame<G> {
-  board: (props: Bgio.BoardProps<G>) => JSX.Element;
+  board: (props: BoardProps<G>) => JSX.Element;
 }

@@ -1,6 +1,6 @@
 import { DragType, MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
-import { Bgio } from "../../shared/types";
+import { BoardProps } from "../../shared/types";
 import { Letter } from "./letter-properties";
 import { TileData, GameData, BoardData } from "./game-data";
 import { RowCol } from "./find-candidate-words";
@@ -167,7 +167,7 @@ export function setLetter(
     }
 }
 
-export function moveFunctions(props: Bgio.BoardProps<GameData>) : MoveFunctions {
+export function moveFunctions(props: BoardProps<GameData>) : MoveFunctions {
     const { G: {board} } = props;
     const moves  = props.moves as any as ClientMoves;
 

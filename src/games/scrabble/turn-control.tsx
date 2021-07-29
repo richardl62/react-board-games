@@ -2,7 +2,7 @@
 import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
 import { sameJSON } from "../../shared/tools";
-import { Bgio } from "../../shared/types";
+import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { findCandidateWords } from "./find-candidate-words";
 import { getWord } from "./game-actions";
@@ -92,7 +92,7 @@ function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
    )
 }
 
-export function TurnControl(props: Bgio.BoardProps<GameData>) {
+export function TurnControl(props: BoardProps<GameData>) {
   const board = props.G.board;
   const moves = props.moves as any as ClientMoves;
   const candidtateWords = findCandidateWords(board);

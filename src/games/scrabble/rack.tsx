@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import assert from "../../shared/assert";
-import { Bgio } from "../../shared/types";
+import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { boardIDs, tilesOut } from "./game-actions";
 import { GameData } from "./game-data";
@@ -23,7 +23,7 @@ align-items: center;
 gap: 3%;
 `
 
-interface RackProps extends Bgio.BoardProps<GameData> {
+interface RackProps extends BoardProps<GameData> {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
 }

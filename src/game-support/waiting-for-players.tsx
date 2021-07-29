@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Bgio } from '../shared/types';
+import { BoardProps } from '../shared/types';
 import { PlayerData, getPlayerData } from './player-data';
 import { GameWarnings } from './show-warning';
 
@@ -45,7 +45,7 @@ function playerElements({name, status}: PlayerData) {
     ];
 }
 
-export function WaitingForPlayers(props: Bgio.BoardProps) {
+export function WaitingForPlayers(props: BoardProps) {
     const playerData = getPlayerData(props);
 
     return (

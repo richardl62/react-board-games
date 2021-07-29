@@ -1,14 +1,14 @@
 import React from 'react';
 import { getPlayerData, PlayerData, playerStatus } from '../../game-support';
 import { GameWarnings } from '../../game-support/show-warning';
-import { AppGame, Bgio } from '../../shared/types';
+import { AppGame, BoardProps } from '../../shared/types';
 
 interface G {
   value: number;
 };
 
 
-function Board(props: Bgio.BoardProps<G>) {
+function Board(props: BoardProps<G>) {
   const { G, moves, events } = props;
 
   const playerData = getPlayerData(props);

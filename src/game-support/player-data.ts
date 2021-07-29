@@ -1,5 +1,5 @@
-import { MatchDataElem } from '../shared/bgio-types';
-import { Bgio } from '../shared/types';
+import { MatchDataElem } from '../shared/board-props';
+import { BoardProps } from '../shared/types';
 export const unnamedPlayer = '_Unnamed Player_';  // Why is this needed?
 
 export interface PlayerData {
@@ -7,7 +7,7 @@ export interface PlayerData {
   status: 'ready' | 'not joined' | 'offline';
 }
 
-function getMatchData(props: Bgio.BoardProps) : MatchDataElem[] {
+function getMatchData(props: BoardProps) : MatchDataElem[] {
   if(props.matchData) {
     return props.matchData;
   }
@@ -27,7 +27,7 @@ function getMatchData(props: Bgio.BoardProps) : MatchDataElem[] {
   return result;  
 }
 
-export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
+export function getPlayerData(props: BoardProps) : PlayerData[] {
   const { ctx } = props;
   const playerID = Number(props.playerID);
   const currentPlayer = Number(ctx.currentPlayer)
@@ -58,7 +58,7 @@ export function getPlayerData(props: Bgio.BoardProps) : PlayerData[] {
  * joined -> all players joined. (Some may be offline.)
  * online -> all players joined and online.
  */
-export function playerStatus(props: Bgio.BoardProps): { 
+export function playerStatus(props: BoardProps): { 
   joined: boolean; 
   online: boolean; 
 }  {

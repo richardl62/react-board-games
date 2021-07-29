@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { getPlayerData } from "../../game-support";
 import { GameWarnings } from "../../game-support/show-warning";
 import assert from "../../shared/assert";
-import { Bgio } from "../../shared/types";
+import { BoardProps } from "../../shared/types";
 import { GameData } from "./game-data";
 
 const StyledScoresEtc=styled.div`
@@ -17,7 +17,7 @@ const PlayerScore=styled.div<{current: boolean}>`
 `;
 
 // To do: Think of a better name
-export function ScoresEtc(props : Bgio.BoardProps<GameData>) {
+export function ScoresEtc(props : BoardProps<GameData>) {
     const generalPd = getPlayerData(props);
     const scrabblePd = props.G.playerData;
     assert(generalPd.length === scrabblePd.length);

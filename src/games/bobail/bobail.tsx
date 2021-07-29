@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { Board, ClickDragState, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions, SquareID } from '../../boards';
 import { nestedArrayMap } from '../../shared/tools';
-import { AppGame, Bgio } from '../../shared/types';
+import { AppGame, BoardProps } from '../../shared/types';
 import { bb, Piece, pl1, pl2 } from './piece';
 
 const squareSize = '50px';
@@ -37,7 +37,7 @@ const initialState = {
 
 type G = typeof initialState;
 
-function BobailBoard({ G, moves }: Bgio.BoardProps<G>) {
+function BobailBoard({ G, moves }: BoardProps<G>) {
 
     const pieces = nestedArrayMap(G.pieces, name => {
         const p = name && <Piece pieceName={name} />;

@@ -9,7 +9,7 @@ import {
 import { makeSimpleName } from '../../game-support';
 import assert from '../../shared/assert';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
-import { AppGame, Bgio } from '../../shared/types';
+import { AppGame, BoardProps } from '../../shared/types';
 import { Piece } from "./piece";
 
 const squareSize = '50px';
@@ -101,7 +101,7 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
   return <Board {...boardProps} />
 }
 
-function ChessBoard(props: Bgio.BoardProps<G>) {
+function ChessBoard(props: BoardProps<G>) {
   const { G, moves } = props;
 
   const clickDragState = useRef(new ClickDragState()).current;
