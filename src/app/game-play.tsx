@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Client } from "boardgame.io/react";
+import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local, SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
+import { makeBoardProps } from '../shared/board-props';
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -16,7 +17,7 @@ export function GamePlayLocal({ game, numPlayers}: GamePlayLocalProps) {
 
   const GameClient = Client({
     game: game,
-    board: game.board,
+    board: (props: BgioBoardProps) => game.board(makeBoardProps(props)),
     multiplayer: Local(),
     numPlayers: numPlayers,
     debug: UrlParams.bgioDebugPanel,
@@ -46,7 +47,7 @@ export function GamePlayOnline({ game, matchID, player }: GamePlayOnlineProps) {
 
   const GameClient = Client({
     game: game,
-    board: game.board,
+    board: (props: BgioBoardProps) => game.board(makeBoardProps(props)),
     multiplayer: SocketIO({ server: server }),
 
     //numPlayers: matchOptions.nPlayers, - is this needed for multi-player and if so why?

@@ -15,4 +15,9 @@ export interface MatchDataElem extends MatchDataElem_{
  */
 export interface BoardProps<G extends any = any> extends BgioBoardProps<G> {
     matchData?: Array<MatchDataElem>;
+    dummy: Number;
+}
+
+export function makeBoardProps<G>(bgioProps: BgioBoardProps<G>) : BoardProps<G> {
+    return {...bgioProps, dummy: 1};
 }
