@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BoardProps } from '../shared/types';
-import { PlayerData, getPlayerData } from './player-data';
 import { GameWarnings } from './show-warning';
 
 const Name = styled.span`
@@ -24,6 +23,7 @@ const PlayerDataGrid = styled.div`
     row-gap: 0.5em;
     margin-bottom: 0.5em;
 `
+type PlayerData = BoardProps['playerData'][0];
 
 function statusText(status: PlayerData['status']) : string {
     switch(status) {
@@ -46,12 +46,10 @@ function playerElements({name, status}: PlayerData) {
 }
 
 export function WaitingForPlayers(props: BoardProps) {
-    const playerData = getPlayerData(props);
-
     return (
         <div>
             <PlayerDataGrid>
-                {playerData.map(playerElements)}
+                {props.playerData.map(playerElements)}
             </PlayerDataGrid>
             <GameWarnings {...props} />
             <div>

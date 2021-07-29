@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPlayerData, PlayerData, playerStatus } from '../../game-support';
+import { PlayerData } from '../../game-support';
 import { GameWarnings } from '../../game-support/show-warning';
 import { AppGame, BoardProps } from '../../shared/types';
 
@@ -9,17 +9,15 @@ interface G {
 
 
 function Board(props: BoardProps<G>) {
-  const { G, moves, events } = props;
+  const { G, moves, events } = props
 
-  const playerData = getPlayerData(props);
-  const joined = playerStatus(props).joined;
 
   const playerSpan = (pd: PlayerData) => <span key={pd.name}>{`${pd.name} ${pd.status} - `}</span>;
   return (
     <div>
-      <div>{playerData.map(playerSpan)}</div>
+      <div>{props.playerData.map(playerSpan)}</div>
       <GameWarnings {...props} />
-      {joined && (<div>
+      {props.allJoined && (<div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>
         <button type="button" onClick={(() => moves.add(-1))}>-1</button>
         <button type="button" onClick={() => events.endTurn!()}>End Turn</button>

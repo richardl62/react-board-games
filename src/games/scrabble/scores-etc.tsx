@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { getPlayerData } from "../../game-support";
 import { GameWarnings } from "../../game-support/show-warning";
 import assert from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
@@ -18,7 +17,7 @@ const PlayerScore=styled.div<{current: boolean}>`
 
 // To do: Think of a better name
 export function ScoresEtc(props : BoardProps<GameData>) {
-    const generalPd = getPlayerData(props);
+    const generalPd = props.playerData;
     const scrabblePd = props.G.playerData;
     assert(generalPd.length === scrabblePd.length);
     const nPlayers = generalPd.length;

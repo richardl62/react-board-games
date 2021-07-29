@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { BoardProps } from "./board-props";
-export type { BoardProps } ;
+export type { BoardProps };
 
 export type MatchData = BoardProps["matchData"];
 

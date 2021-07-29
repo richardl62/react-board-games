@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BoardProps } from '../shared/types';
-import { getPlayerData } from './player-data';
 
 const WarningsDiv = styled.div`
     display: inline;
@@ -19,7 +18,7 @@ const WarningsDiv = styled.div`
  * Currently, this the only warning is players being off line.
  */
 export function GameWarnings(props: BoardProps) {
-    const offline = getPlayerData(props).filter(pd => pd.status === 'offline');
+    const offline = props.playerData.filter(pd => pd.status === 'offline');
     const warnings = offline.map(pd => `${pd.name} is offline`);
 
     if(warnings.length === 0) {
