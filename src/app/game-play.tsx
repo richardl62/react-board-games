@@ -10,6 +10,11 @@ interface GamePlayLocalProps {
   numPlayers : number;
 }
 
+function localClientGame(game: AppGame, props: BgioBoardProps) {
+  console.log("localClientGame", props);
+  return game.board(makeBoardProps(props));
+}
+
 export function GamePlayLocal({ game, numPlayers}: GamePlayLocalProps) {
   useEffect(() => {
     document.title = game.displayName
@@ -17,7 +22,7 @@ export function GamePlayLocal({ game, numPlayers}: GamePlayLocalProps) {
 
   const GameClient = Client({
     game: game,
-    board: (props: BgioBoardProps) => game.board(makeBoardProps(props)),
+    board: (props: BgioBoardProps) => localClientGame(game, props),
     multiplayer: Local(),
     numPlayers: numPlayers,
     debug: UrlParams.bgioDebugPanel,

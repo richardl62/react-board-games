@@ -25,11 +25,17 @@ export function ScoresEtc(props : BoardProps<GameData>) {
     let scoreElems = [];
     for(let index = 0; index < nPlayers; ++index) {
         const name = generalPd[index].name;
+        const isYou = generalPd[index].id === props.playerID;
         const score = scrabblePd[index].score;
         const current = index === props.G.currentPlayer;
+
+        let displayName = name;
+        if(isYou) {
+            displayName += " (you)"
+        }
         scoreElems.push(
             <PlayerScore key={name} current={current} >
-                {`${name}: ${score}`}
+                {`${displayName}: ${score}`}
             </PlayerScore>
         )
     }
