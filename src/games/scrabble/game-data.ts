@@ -18,7 +18,6 @@ export function getLetter(sd : TileData | null) : Letter | null {
 export type BoardData = (TileData | null)[][];
 
 export interface PlayerData {
-    name: string;
     rack: (Letter | null)[];
     score: number;
 }
@@ -49,7 +48,6 @@ export function startingGameData(ctx: Ctx): GameData {
     let playerData : PlayerData[] = [];
     for(let p = 0; p < ctx.numPlayers; ++p) {
         playerData.push({
-            name: `Player ${p+1}`,
             rack: rack(),
             score: 0,
         });
