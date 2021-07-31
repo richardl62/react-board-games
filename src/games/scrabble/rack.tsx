@@ -27,10 +27,14 @@ interface RackProps extends BoardProps<GameData> {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   rack: RackType;
+  /** For use after a swap. 
+   * (might be better to pass in a 'doSwap' function)
+   */
+  endTurn: () => void;
 }
 
 export function Rack(props: RackProps) {
-  const { squareInteraction, clickDragState, G } = props;
+  const { squareInteraction, clickDragState, G} = props;
   const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
   const letters = props.rack;

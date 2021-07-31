@@ -1,6 +1,7 @@
 
 import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
+import assert from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
@@ -98,9 +99,14 @@ export function TurnControl(props: BoardProps<GameData>) {
   const candidtateWords = findCandidateWords(board);
 
   if (candidtateWords === 'emptyBoard') {
+    const pass = () => {
+      moves.endOfTurnActions();
+      assert(props.events.endTurn);
+      props.events.endTurn();
+    }
     return (
       <StyledScoreLine>
-        <button onClick={moves.pass}> Pass </button>
+        <button onClick={pass}> Pass </button>
       </StyledScoreLine>
     );
   }
@@ -111,8 +117,13 @@ export function TurnControl(props: BoardProps<GameData>) {
 
   const score = scoreWords(board, candidtateWords);
   const words = candidtateWords.map(cw => getWord(board, cw));
-  const onDone = () => moves.finishTurn(score);
-
+  const onDone = () => {
+      moves.endOfTurnActions();
+      moves.recordScore(score);
+      assert(props.events.endTurn);
+      props.events.endTurn();
+  }
+  
   return (
     <ScoreAndDone 
       score={score} 

@@ -16,9 +16,8 @@ export interface ClientMoves {
 
     shuffleRack: () => void;
 
-    finishTurn: (score: number) => void;
-
-    pass: () => void;
+    endOfTurnActions: () => void;
+    recordScore: (score: number) => void;
 
     swapTilesInRack: (toSwap: boolean[]) => void; 
 };
@@ -53,20 +52,17 @@ export const bgioMoves = {
         shuffle(rack);
     },
 
-    finishTurn: (G: GameData, ctx: Ctx, score: number) => {
+    endOfTurnActions: (G: GameData, ctx: Ctx) => {
         const rack = G.playerData[ctx.currentPlayer].rack;
         fillRack(G, rack);
 
         G.board.forEach(row => 
             row.forEach(sd => sd && (sd.active = false))
         );
-
-        G.playerData[ctx.currentPlayer].score += score;
     },
 
-    pass: (G: GameData, ctx: Ctx) => {
-        const rack = G.playerData[ctx.currentPlayer].rack;
-        recallRack(G, rack);
+    recordScore: (G: GameData, ctx: Ctx, score: number) => {
+        G.playerData[ctx.currentPlayer].score += score;
     },
 
     swapTilesInRack: (G: GameData, rack: Rack, toSwap: boolean[]) => {

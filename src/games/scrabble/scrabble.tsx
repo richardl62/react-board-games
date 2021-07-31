@@ -26,7 +26,7 @@ const Game = styled.div`
   `;
 
 function Scrabble(props: BoardProps<GameData>) {
-  const {G, playerID } = props;
+  const {G, playerID, events } = props;
   assert(playerID);
   const moves = props.moves as any as ClientMoves;
   const {board} = G;
@@ -58,6 +58,9 @@ function Scrabble(props: BoardProps<GameData>) {
     return <WaitingForPlayers {...props} />
   }
 
+  const endTurn = events.endTurn;
+  assert(endTurn);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Game>
@@ -66,6 +69,7 @@ function Scrabble(props: BoardProps<GameData>) {
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
           rack={G.playerData[playerID].rack}
+          endTurn={endTurn}
           {...props}
         />
         <MainBoard
