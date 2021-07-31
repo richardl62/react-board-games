@@ -46,7 +46,7 @@ export const bgioMoves = {
     },
 
     shuffleRack: (G: GameData, ctx: any) => {
-        shuffle(G.playerData[G.currentPlayer].rack);
+        shuffle(G.playerData[G.currentPlayerKLUDGE].rack);
     },
 
     finishTurn: (G: GameData, ctx: any, score: number) => {
@@ -56,7 +56,7 @@ export const bgioMoves = {
             row.forEach(sd => sd && (sd.active = false))
         );
 
-        G.playerData[G.currentPlayer].score += score;
+        G.playerData[G.currentPlayerKLUDGE].score += score;
         selectNextPlayer(G);
     },
 
@@ -68,7 +68,7 @@ export const bgioMoves = {
     swapTilesInRack: (G: GameData, ctx: any, toSwap: boolean[]) => {
         canSwapTiles(G);
 
-        let {rack} = G.playerData[G.currentPlayer];
+        let {rack} = G.playerData[G.currentPlayerKLUDGE];
         let removedLetters : Letter[] = [];
         for(let i = 0; i < rack.length; ++i) {
             if(toSwap[i]) {

@@ -27,7 +27,7 @@ function rackPos(sq: SquareID): number {
 /** get the letter at a square */
 export function getSquareData(G: GameData, sq: SquareID) : TileData | null {
     if(onRack(sq)) {
-        const letter = G.playerData[G.currentPlayer].rack[rackPos(sq)];
+        const letter = G.playerData[G.currentPlayerKLUDGE].rack[rackPos(sq)];
         return letter && {
             letter: letter,
             active: true, // rank letters are always active
@@ -87,7 +87,7 @@ export function getWord(
 export function fillRack(G: GameData) {
     compactRack(G);
 
-    let rack = G.playerData[G.currentPlayer].rack;
+    let rack = G.playerData[G.currentPlayerKLUDGE].rack;
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
         if(rack[i] === null && bag.length > 0) {
@@ -110,15 +110,15 @@ export function recallRack(G: GameData) {
 }
 
 export function selectNextPlayer(G: GameData) {
-    if (G.currentPlayer === G.playerData.length - 1) {
-        G.currentPlayer = 0;
+    if (G.currentPlayerKLUDGE === G.playerData.length - 1) {
+        G.currentPlayerKLUDGE = 0;
     } else {
-        ++G.currentPlayer;
+        ++G.currentPlayerKLUDGE;
     }
 }
 
 export function addToRack(G: GameData, l: Letter) {
-    let rack = G.playerData[G.currentPlayer].rack;
+    let rack = G.playerData[G.currentPlayerKLUDGE].rack;
     let emptyIndex = rack.findIndex(l => l === null);
     assert(emptyIndex >= 0, "Attempt to add to full rack");
     rack[emptyIndex] = l;
@@ -126,7 +126,7 @@ export function addToRack(G: GameData, l: Letter) {
 
 /* move blank spaces to the end */
 export function compactRack(G: GameData) {
-    let rack = G.playerData[G.currentPlayer].rack;
+    let rack = G.playerData[G.currentPlayerKLUDGE].rack;
 
     let setPos = 0;
     for(let readPos = 0; readPos < rack.length; ++readPos) {
@@ -153,13 +153,13 @@ export function setLetter(
     rackAction : RackAction = RackAction.overwrite,  
     ) {
     if(onRack(sq)) {
-        let rack = [...G.playerData[G.currentPlayer].rack];
+        let rack = [...G.playerData[G.currentPlayerKLUDGE].rack];
         const pos = rackPos(sq);
         if(rackAction === RackAction.insert) {
             makeRackGap(rack, pos);
         }
         rack[pos] = letter;
-        G.playerData[G.currentPlayer].rack = rack; 
+        G.playerData[G.currentPlayerKLUDGE].rack = rack; 
     } else {
         let row = [...G.board[sq.row]];
         row[sq.col] = letter && {letter:letter, active: true};

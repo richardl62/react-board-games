@@ -27,7 +27,7 @@ export function ScoresEtc(props : BoardProps<GameData>) {
         const name = generalPd[index].name;
         const isYou = generalPd[index].id === props.playerID;
         const score = scrabblePd[index].score;
-        const current = index === props.G.currentPlayer;
+        const current = index === props.G.currentPlayerKLUDGE;
 
         let displayName = name;
         if(isYou) {
