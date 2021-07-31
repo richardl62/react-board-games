@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Ctx } from "boardgame.io";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
@@ -160,12 +161,12 @@ function chess(displayName: string, pieces: Pieces): AppGame {
     },
 
     moves: {
-      start: (G: G, ctx: any, sq: SquareID) => {
+      start: (G: G, ctx: Ctx, sq: SquareID) => {
         assert(G.pieces[sq.row][sq.col] !== null);
         G.moveStart = sq;
       },
 
-      end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
+      end: (G: G, ctx: Ctx, from: SquareID, to: SquareID | null) => {
         //assert(sameJSON(G.moveStart, from));
 
         if (to && !offBoard(to) && !sameJSON(to, from)) {

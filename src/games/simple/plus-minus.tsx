@@ -1,4 +1,5 @@
 import React from 'react';
+import { Ctx } from "boardgame.io";
 import { PlayerData } from '../../game-support';
 import { GameWarnings } from '../../game-support/show-warning';
 import { AppGame, BoardProps } from '../../shared/types';
@@ -37,7 +38,7 @@ export const plusminus : AppGame = {
   maxPlayers: 100,
 
   moves: {
-    add: (G: G, ctx: any, value: number) => {
+    add: (G: G, ctx: Ctx, value: number) => {
       G.value += value;
     },
   },

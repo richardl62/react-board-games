@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Ctx } from "boardgame.io";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
@@ -91,10 +92,10 @@ export const swapSquares: AppGame = {
   maxPlayers: 1,
 
   moves: {
-    start: (G: G, ctx: any, sq: SquareID) => {
+    start: (G: G, ctx: Ctx, sq: SquareID) => {
     },
 
-    end: (G: G, ctx: any, from: SquareID, to: SquareID | null) => {
+    end: (G: G, ctx: Ctx, from: SquareID, to: SquareID | null) => {
       if (to && !sameJSON(from, to)) {
         const tmp = G.squares[to.row][to.col];
         G.squares[to.row][to.col] = G.squares[from.row][from.col];
@@ -104,7 +105,7 @@ export const swapSquares: AppGame = {
 
     // Using the BGIO supplied reset function lead to server errros.
     // TO DO: Understand why this happened;
-    reset: (G: G, ctx: any) => {
+    reset: (G: G, ctx: Ctx) => {
       for (let row = 0; row < G.squares.length; ++row) {
         for (let col = 0; col < G.squares[row].length; ++col) {
           G.squares[row][col].value = initialValues[row][col];

@@ -1,3 +1,4 @@
+import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { GameData } from "./game-data";
@@ -23,11 +24,11 @@ export interface ClientMoves {
 };
 
 export const bgioMoves = {
-    start: (G: GameData, ctx: any, sq: SquareID) => {
+    start: (G: GameData, ctx: Ctx, sq: SquareID) => {
         G.moveStart = sq;
     },
 
-    move: (G: GameData, ctx: any, fromSq: SquareID, toSq: SquareID) => {
+    move: (G: GameData, ctx: Ctx, fromSq: SquareID, toSq: SquareID) => {
         const fromData = getSquareData(G, fromSq);
         const toData = getSquareData(G, toSq);
 
@@ -41,15 +42,15 @@ export const bgioMoves = {
         }
     },
 
-    recallRack: (G: GameData, ctx: any) => {
+    recallRack: (G: GameData, ctx: Ctx) => {
         recallRack(G);
     },
 
-    shuffleRack: (G: GameData, ctx: any) => {
+    shuffleRack: (G: GameData, ctx: Ctx) => {
         shuffle(G.playerData[G.currentPlayerKLUDGE].rack);
     },
 
-    finishTurn: (G: GameData, ctx: any, score: number) => {
+    finishTurn: (G: GameData, ctx: Ctx, score: number) => {
         fillRack(G);
 
         G.board.forEach(row => 
@@ -60,12 +61,12 @@ export const bgioMoves = {
         selectNextPlayer(G);
     },
 
-    pass: (G: GameData, ctx: any) => {
+    pass: (G: GameData, ctx: Ctx) => {
         recallRack(G);
         selectNextPlayer(G);
     },
 
-    swapTilesInRack: (G: GameData, ctx: any, toSwap: boolean[]) => {
+    swapTilesInRack: (G: GameData, ctx: Ctx, toSwap: boolean[]) => {
         canSwapTiles(G);
 
         let {rack} = G.playerData[G.currentPlayerKLUDGE];
