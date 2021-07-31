@@ -5,7 +5,7 @@ import assert from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { boardIDs, tilesOut } from "./game-actions";
-import { GameData } from "./game-data";
+import { GameData, Rack as RackType } from "./game-data";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 
@@ -26,13 +26,14 @@ gap: 3%;
 interface RackProps extends BoardProps<GameData> {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
+  rack: RackType;
 }
 
 export function Rack(props: RackProps) {
   const { squareInteraction, clickDragState, G } = props;
   const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
-  const letters = G.playerData[G.currentPlayerKLUDGE].rack
+  const letters = props.rack;
   const nLetters = letters.length;
 
   const [swappable, setSwappable] = useState<boolean[] | null>(null);

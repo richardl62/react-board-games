@@ -17,15 +17,18 @@ export function getLetter(sd : TileData | null) : Letter | null {
 
 export type BoardData = (TileData | null)[][];
 
+export type Rack = (Letter | null)[];
+
 export interface PlayerData {
-    rack: (Letter | null)[];
+    rack: Rack;
     score: number;
 }
 
+type PlayerDataDictionary = {[id: string] : PlayerData};
+
 export interface GameData {
     board: BoardData;
-    playerData: PlayerData[]; 
-    currentPlayerKLUDGE: number;
+    playerData: PlayerDataDictionary; 
     bag: Letter[];
 
     // To help with click-moves
@@ -45,17 +48,20 @@ export function startingGameData(ctx: Ctx): GameData {
         return letters;
     }
 
-    let playerData : PlayerData[] = [];
-    for(let p = 0; p < ctx.numPlayers; ++p) {
-        playerData.push({
+
+    let playerData: PlayerDataDictionary = {};
+    for (let p = 0; p < ctx.numPlayers; ++p) {
+        const playerID = p.toString(); //Kludge?
+        playerData[playerID] = {
             rack: rack(),
             score: 0,
-        });
+        };
     }
+    
+
     return {
         board: nestedArrayMap(squareTypesArray, () => null),
         playerData: playerData,
-        currentPlayerKLUDGE: 0,
         bag: bag,
         moveStart: null,
     };

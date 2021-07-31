@@ -2,7 +2,7 @@ import { DragType, MoveFunctions, SquareID } from "../../boards";
 import assert from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { Letter } from "./letter-properties";
-import { TileData, GameData, BoardData } from "./game-data";
+import { TileData, GameData, BoardData, Rack } from "./game-data";
 import { RowCol } from "./find-candidate-words";
 import { ClientMoves } from "./bgio-moves";
 
@@ -25,9 +25,9 @@ function rackPos(sq: SquareID): number {
 }
 
 /** get the letter at a square */
-export function getSquareData(G: GameData, sq: SquareID) : TileData | null {
+export function getSquareData(G: GameData, rack: Rack, sq: SquareID) : TileData | null {
     if(onRack(sq)) {
-        const letter = G.playerData[G.currentPlayerKLUDGE].rack[rackPos(sq)];
+        const letter = rack[rackPos(sq)];
         return letter && {
             letter: letter,
             active: true, // rank letters are always active
@@ -84,10 +84,9 @@ export function getWord(
 /** Draw letters from bag to replace null tiles in rack 
  * Existing rack is compacted first.
 */
-export function fillRack(G: GameData) {
-    compactRack(G);
-
-    let rack = G.playerData[G.currentPlayerKLUDGE].rack;
+export function fillRack(G: GameData, rack: Rack) {
+    compactRack(G, rack);
+    
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
         if(rack[i] === null && bag.length > 0) {
@@ -97,37 +96,27 @@ export function fillRack(G: GameData) {
 }
 
 
-export function recallRack(G: GameData) {
+export function recallRack(G: GameData, rack: Rack) {
     for (let row = 0; row < G.board.length; ++row) {
         for (let col = 0; col < G.board[row].length; ++col) {
             let sq = G.board[row][col];
             if (sq?.active) {
-                addToRack(G, sq.letter);
+                addToRack(rack, sq.letter);
                 G.board[row][col] = null;
             }
         }
     }
 }
 
-export function selectNextPlayer(G: GameData) {
-    if (G.currentPlayerKLUDGE === G.playerData.length - 1) {
-        G.currentPlayerKLUDGE = 0;
-    } else {
-        ++G.currentPlayerKLUDGE;
-    }
-}
 
-export function addToRack(G: GameData, l: Letter) {
-    let rack = G.playerData[G.currentPlayerKLUDGE].rack;
+export function addToRack(rack: Rack, l: Letter) {
     let emptyIndex = rack.findIndex(l => l === null);
     assert(emptyIndex >= 0, "Attempt to add to full rack");
     rack[emptyIndex] = l;
 }
 
 /* move blank spaces to the end */
-export function compactRack(G: GameData) {
-    let rack = G.playerData[G.currentPlayerKLUDGE].rack;
-
+export function compactRack(G: GameData, rack: Rack) {
     let setPos = 0;
     for(let readPos = 0; readPos < rack.length; ++readPos) {
         if(rack[readPos]) {
@@ -148,18 +137,17 @@ export enum RackAction {
 /** Set a square to a given value */
 export function setLetter(
     G: GameData, 
+    rack: Rack,
     sq: SquareID, 
     letter: Letter | null, 
     rackAction : RackAction = RackAction.overwrite,  
     ) {
     if(onRack(sq)) {
-        let rack = [...G.playerData[G.currentPlayerKLUDGE].rack];
         const pos = rackPos(sq);
         if(rackAction === RackAction.insert) {
             makeRackGap(rack, pos);
         }
         rack[pos] = letter;
-        G.playerData[G.currentPlayerKLUDGE].rack = rack; 
     } else {
         let row = [...G.board[sq.row]];
         row[sq.col] = letter && {letter:letter, active: true};

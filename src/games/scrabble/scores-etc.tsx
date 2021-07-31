@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../game-support/show-warning";
-import assert from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { GameData } from "./game-data";
 
@@ -19,7 +18,6 @@ const PlayerScore=styled.div<{current: boolean}>`
 export function ScoresEtc(props : BoardProps<GameData>) {
     const generalPd = props.playerData;
     const scrabblePd = props.G.playerData;
-    assert(generalPd.length === scrabblePd.length);
     const nPlayers = generalPd.length;
 
     let scoreElems = [];
@@ -27,7 +25,8 @@ export function ScoresEtc(props : BoardProps<GameData>) {
         const name = generalPd[index].name;
         const isYou = generalPd[index].id === props.playerID;
         const score = scrabblePd[index].score;
-        const current = index === props.G.currentPlayerKLUDGE;
+        const id = index.toString(); // KLUDGE
+        const current = id === props.ctx.currentPlayer;
 
         let displayName = name;
         if(isYou) {

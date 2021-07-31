@@ -8,7 +8,7 @@ interface RowCol {
 }
 
 type MoveControl<T> = T|any; //KLUDGE
-let MoveResult : any; //KLUDGE
+let MoveResult : any; //ctx: Ctx
 type PiecePosition = any; //KLUDGE
 
 

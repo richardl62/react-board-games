@@ -1,9 +1,9 @@
 import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
-import { GameData } from "./game-data";
+import { GameData, Rack } from "./game-data";
 import { getSquareData, setLetter, compactRack,
-    fillRack, canSwapTiles, recallRack, selectNextPlayer } from "./game-actions";
+    fillRack, canSwapTiles, recallRack } from "./game-actions";
 import { Letter } from "./letter-properties";
 import assert from "../../shared/assert";
 
@@ -29,48 +29,48 @@ export const bgioMoves = {
     },
 
     move: (G: GameData, ctx: Ctx, fromSq: SquareID, toSq: SquareID) => {
-        const fromData = getSquareData(G, fromSq);
-        const toData = getSquareData(G, toSq);
+        const rack = G.playerData[ctx.currentPlayer].rack;
+        const fromData = getSquareData(G, rack, fromSq);
+        const toData = getSquareData(G, rack, toSq);
 
         assert(fromData);
 
         if ((toData === null || toData.active) && !sameJSON(fromSq, toSq)) {
 
-            setLetter(G, fromSq, toData ? toData.letter : null);
-            setLetter(G, toSq, fromData.letter);
-            compactRack(G);
+            setLetter(G, rack, fromSq, toData ? toData.letter : null);
+            setLetter(G, rack, toSq, fromData.letter);
+            compactRack(G, rack);
         }
     },
 
     recallRack: (G: GameData, ctx: Ctx) => {
-        recallRack(G);
+        const rack = G.playerData[ctx.currentPlayer].rack;
+        recallRack(G, rack);
     },
 
     shuffleRack: (G: GameData, ctx: Ctx) => {
-        shuffle(G.playerData[G.currentPlayerKLUDGE].rack);
+        const rack = G.playerData[ctx.currentPlayer].rack;
+        shuffle(rack);
     },
 
     finishTurn: (G: GameData, ctx: Ctx, score: number) => {
-        fillRack(G);
+        const rack = G.playerData[ctx.currentPlayer].rack;
+        fillRack(G, rack);
 
         G.board.forEach(row => 
             row.forEach(sd => sd && (sd.active = false))
         );
 
-        G.playerData[G.currentPlayerKLUDGE].score += score;
-        selectNextPlayer(G);
+        G.playerData[ctx.currentPlayer].score += score;
     },
 
     pass: (G: GameData, ctx: Ctx) => {
-        recallRack(G);
-        selectNextPlayer(G);
+        const rack = G.playerData[ctx.currentPlayer].rack;
+        recallRack(G, rack);
     },
 
-    swapTilesInRack: (G: GameData, ctx: Ctx, toSwap: boolean[]) => {
-        canSwapTiles(G);
-
-        let {rack} = G.playerData[G.currentPlayerKLUDGE];
-        let removedLetters : Letter[] = [];
+    swapTilesInRack: (G: GameData, rack: Rack, toSwap: boolean[]) => {
+        canSwapTiles(G);        let removedLetters : Letter[] = [];
         for(let i = 0; i < rack.length; ++i) {
             if(toSwap[i]) {
                 const l = rack[i];
@@ -80,7 +80,7 @@ export const bgioMoves = {
             }
         }
 
-        fillRack(G);
+        fillRack(G, rack);
 
         G.bag.push(...removedLetters);
         shuffle(G.bag);
