@@ -31,11 +31,13 @@ interface RackProps extends BoardProps<GameData> {
 }
 
 export function Rack(props: RackProps) {
-  const {  G, squareInteraction, clickDragState, swapTiles} = props;
+  const { playerID, G, ctx, squareInteraction, clickDragState, swapTiles} = props;
   const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
   const letters = props.rack;
   const nLetters = letters.length;
+
+  const isMyTurn =  playerID === ctx.currentPlayer;
 
   // selectedForSwap is null if a swap is not in progress.
   const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -71,6 +73,12 @@ export function Rack(props: RackProps) {
   });
 
   if (selectedForSwap) {
+    const makeSwap = () => {
+      setSelectedForSwap(null);
+      // KLUDGE?: Relies to selectedForSwap not being immediately changed by
+      // setSelectedForSwap.
+      swapTiles(selectedForSwap);
+    }
     const cancelSwap = () => {
       setSelectedForSwap(null);
     }
@@ -84,7 +92,7 @@ export function Rack(props: RackProps) {
         <Board {...boardProps} />
 
         {selectedForSwap.includes(true) && 
-          <button onClick={() => swapTiles(selectedForSwap)}>Make Swap</button> }
+          <button onClick={makeSwap}>Make Swap</button> }
         <button onClick={cancelSwap}>Cancel</button>
       </RackAndButtons>
     )
@@ -99,12 +107,22 @@ export function Rack(props: RackProps) {
     return (<RackAndButtons>
       <PreRack>
         {hasTilesOut && <button onClick={moves.recallRack}>Recall</button>}
-        <button onClick={moves.shuffleRack}>Shuffle</button>
+        <button 
+          onClick={moves.shuffleRack}
+          disabled={!isMyTurn}
+        >
+          Shuffle
+          </button>
       </PreRack>
 
       <Board {...boardProps} />
 
-      <button onClick={doEnableSwap}>Swap</button>
+      <button 
+        onClick={doEnableSwap}
+        disabled={!isMyTurn}
+      >
+        Swap
+      </button>
 
     </RackAndButtons>
     );
