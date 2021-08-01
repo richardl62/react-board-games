@@ -97,6 +97,7 @@ export function TurnControl(props: BoardProps<GameData>) {
   const board = props.G.board;
   const moves = props.moves as any as ClientMoves;
   const candidtateWords = findCandidateWords(board);
+  const isMyTurn = props.playerID === props.ctx.currentPlayer;
 
   if (candidtateWords === 'emptyBoard') {
     const pass = () => {
@@ -106,7 +107,7 @@ export function TurnControl(props: BoardProps<GameData>) {
     }
     return (
       <StyledScoreLine>
-        <button onClick={pass}> Pass </button>
+        <button onClick={pass} disabled={!isMyTurn}> Pass </button>
       </StyledScoreLine>
     );
   }
