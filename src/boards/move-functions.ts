@@ -6,9 +6,9 @@ import { DragType, SquareInteraction } from './internal/square';
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
-    /** Call at the (possible) start of a move. If false the move is abandoned.
+    /** Call at the (possible) start of a click move. If false the move is abandoned.
      */
-    onMoveStart: (square: SquareID) => boolean;
+    onClickMoveStart: (square: SquareID) => boolean;
 
     /** Called at the end of a move. 'to' is set to null for an invalid move,
      * e.g. dragging off the boards.
@@ -74,7 +74,7 @@ export function squareInteractionFunc(
         moveFunctions.onClick?.(sq);
 
         if (state.moveStatus === 'none') {
-            const startMove = moveFunctions.onMoveStart(sq);
+            const startMove = moveFunctions.onClickMoveStart(sq);
 
             if(startMove) {
                 state.moveStatus = 'clickMoveStarted';

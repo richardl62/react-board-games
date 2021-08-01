@@ -32,9 +32,11 @@ function Scrabble(props: BoardProps<GameData>) {
   const {board} = G;
 
   const clickDragState = useRef(new ClickDragState()).current;
+  
+  const isMyTurn = false;
   const moveFunctions = {
-    onMoveStart: (sq: SquareID) => {
-      const canMove = onRack(sq) || Boolean(board[sq.row][sq.col]?.active)
+    onClickMoveStart: (sq: SquareID) => {
+      const canMove = isMyTurn && (onRack(sq) || Boolean(board[sq.row][sq.col]?.active));
       if(canMove) {
           moves.start(sq);
       }

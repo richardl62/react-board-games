@@ -11,7 +11,6 @@ interface GamePlayLocalProps {
 }
 
 function localClientGame(game: AppGame, props: BgioBoardProps) {
-  console.log("localClientGame", props);
   return game.board(makeBoardProps(props));
 }
 

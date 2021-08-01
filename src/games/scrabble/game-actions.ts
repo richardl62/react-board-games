@@ -164,7 +164,7 @@ export function moveFunctions(props: BoardProps<GameData>) : MoveFunctions {
         return onRack(sq) || Boolean(board[sq.row][sq.col]?.active);
     } 
     return {
-      onMoveStart: (sq: SquareID) => {
+      onClickMoveStart: (sq: SquareID) => {
         const canMove = isActive(sq); 
         if(canMove) {
             moves.start(sq);

@@ -42,7 +42,7 @@ function SwapSquares({ G, moves, events, reset }: BoardProps<G>) {
   }
 
   const moveFunctions: MoveFunctions = {
-    onMoveStart: (sq: SquareID) => {
+    onClickMoveStart: (sq: SquareID) => {
       moves.start(sq);
       return true;
     },
