@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
-import { GameData, Rack } from "./game-data";
+import { GameData } from "./game-data";
 import { getSquareData, setLetter, compactRack,
     fillRack, canSwapTiles, recallRack } from "./game-actions";
 import { Letter } from "./letter-properties";
@@ -19,7 +19,7 @@ export interface ClientMoves {
     endOfTurnActions: () => void;
     recordScore: (score: number) => void;
 
-    swapTilesInRack: (toSwap: boolean[]) => void; 
+    swapTilesInRack: (playerID: string, toSwap: boolean[]) => void; 
 };
 
 export const bgioMoves = {
@@ -65,8 +65,15 @@ export const bgioMoves = {
         G.playerData[ctx.currentPlayer].score += score;
     },
 
-    swapTilesInRack: (G: GameData, rack: Rack, toSwap: boolean[]) => {
-        canSwapTiles(G);        let removedLetters : Letter[] = [];
+    swapTilesInRack: (G: GameData, ctx: Ctx, playerID: string, toSwap: boolean[]) => {
+        if(!canSwapTiles(G)) {
+            console.error("Invalid attempt to swap title");
+            return;
+        }        
+        let rack = G.playerData[playerID].rack;
+        assert(rack.length === toSwap.length, "Problem swapping tiles");
+        
+        let removedLetters : Letter[] = [];
         for(let i = 0; i < rack.length; ++i) {
             if(toSwap[i]) {
                 const l = rack[i];

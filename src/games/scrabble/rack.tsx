@@ -27,32 +27,30 @@ interface RackProps extends BoardProps<GameData> {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   rack: RackType;
-  /** For use after a swap. 
-   * (might be better to pass in a 'doSwap' function)
-   */
-  endTurn: () => void;
+  swapTiles: (toSwap: boolean[]) => void;
 }
 
 export function Rack(props: RackProps) {
-  const { squareInteraction, clickDragState, G} = props;
+  const {  G, squareInteraction, clickDragState, swapTiles} = props;
   const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
   const letters = props.rack;
   const nLetters = letters.length;
 
-  const [swappable, setSwappable] = useState<boolean[] | null>(null);
+  // selectedForSwap is null if a swap is not in progress.
+  const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
 
   const tiles = letters.map((letter, index) => letter && <Tile letter={letter}
-    markAsMoveable={swappable !== null && swappable[index]}
+    markAsMoveable={selectedForSwap !== null && selectedForSwap[index]}
     />);
 
-  const swapInteraction = (sq: SquareID) => {
+  const toggleSelectForSwap = (sq: SquareID) => {
     return {
       onClick: () => {
-        assert(swappable);
-        let newSwappable = [...swappable];
+        assert(selectedForSwap);
+        let newSwappable = [...selectedForSwap];
         newSwappable[sq.col] = !newSwappable[sq.col];
-        setSwappable(newSwappable);
+        setSelectedForSwap(newSwappable);
       }
     }
   };
@@ -67,20 +65,14 @@ export function Rack(props: RackProps) {
   
     boardID: boardIDs.rack,
 
-    squareInteraction: swappable ? swapInteraction : squareInteraction,
+    squareInteraction: selectedForSwap ? toggleSelectForSwap : squareInteraction,
 
     moveStart: clickDragState.start,
   });
 
-  if (swappable) {
-    const makeSwap = () => {
-      assert(swappable);
-      moves.swapTilesInRack(swappable);
-      setSwappable(null);
-    }
-
+  if (selectedForSwap) {
     const cancelSwap = () => {
-      setSwappable(null);
+      setSelectedForSwap(null);
     }
     
     return (
@@ -91,16 +83,17 @@ export function Rack(props: RackProps) {
 
         <Board {...boardProps} />
 
-        {swappable.includes(true) && <button onClick={makeSwap}>Make Swap</button> }
+        {selectedForSwap.includes(true) && 
+          <button onClick={() => swapTiles(selectedForSwap)}>Make Swap</button> }
         <button onClick={cancelSwap}>Cancel</button>
       </RackAndButtons>
     )
   } else {
 
     const doEnableSwap = () => {
-      assert(!swappable);
+      assert(!selectedForSwap);
       moves.recallRack();
-      setSwappable(Array(nLetters).fill(false));
+      setSelectedForSwap(Array(nLetters).fill(false));
     }
 
     return (<RackAndButtons>

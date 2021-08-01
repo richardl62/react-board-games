@@ -58,8 +58,12 @@ function Scrabble(props: BoardProps<GameData>) {
     return <WaitingForPlayers {...props} />
   }
 
-  const endTurn = events.endTurn;
-  assert(endTurn);
+  const rack = G.playerData[playerID].rack;
+  const swapTiles = (toSwap: boolean[]) => {
+    moves.swapTilesInRack(playerID, toSwap);
+    assert(events.endTurn);
+    events.endTurn();
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -68,8 +72,8 @@ function Scrabble(props: BoardProps<GameData>) {
         <Rack
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
-          rack={G.playerData[playerID].rack}
-          endTurn={endTurn}
+          rack={rack}
+          swapTiles={swapTiles}
           {...props}
         />
         <MainBoard
