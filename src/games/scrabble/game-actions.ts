@@ -174,7 +174,7 @@ export function moveFunctions(props: BoardProps<GameData>) : MoveFunctions {
   
       onMoveEnd: (from: SquareID, to: SquareID | null) => {
         if(to) {
-            moves.move(from, to);
+            moves.move({from:from, to: to});
         }
       },
 

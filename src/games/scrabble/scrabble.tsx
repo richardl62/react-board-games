@@ -48,7 +48,7 @@ function Scrabble(props: BoardProps<GameData>) {
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
       if (to) {
-        moves.move(from, to);
+        moves.move({from: from, to: to});
       }
     },
 
@@ -65,7 +65,7 @@ function Scrabble(props: BoardProps<GameData>) {
 
   const rack = G.playerData[playerID].rack;
   const swapTiles = (toSwap: boolean[]) => {
-    moves.swapTilesInRack(playerID, toSwap);
+    moves.swapTilesInRack(toSwap);
     assert(events.endTurn);
     events.endTurn();
   };

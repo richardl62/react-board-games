@@ -2,90 +2,102 @@ import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
 import { GameData } from "./game-data";
-import { getSquareData, setLetter, compactRack,
-    fillRack, canSwapTiles, recallRack } from "./game-actions";
+import {
+    getSquareData, setLetter, compactRack,
+    fillRack, canSwapTiles, recallRack as doRecallRack
+} from "./game-actions";
 import { Letter } from "./letter-properties";
 import assert from "../../shared/assert";
 
-export interface ClientMoves {
-    start: (sq: SquareID) => void;
+type StartParam = SquareID;
+const start = (G: GameData, ctx: Ctx, sq: StartParam) => {
+    G.moveStart = sq;
+};
 
-    move: (fromSq: SquareID, toSq: SquareID) => void;
+type MoveParam = { from: SquareID, to: SquareID, };
+const move = (G: GameData, ctx: Ctx, { from, to }: MoveParam) => {
+    const rack = G.playerData[ctx.currentPlayer].rack;
+    const fromData = getSquareData(G, rack, from);
+    const toData = getSquareData(G, rack, to);
 
-    recallRack: () => void;
+    assert(fromData);
 
-    shuffleRack: () => void;
+    if ((toData === null || toData.active) && !sameJSON(from, to)) {
 
-    endOfTurnActions: () => void;
-    recordScore: (score: number) => void;
+        setLetter(G, rack, from, toData ? toData.letter : null);
+        setLetter(G, rack, to, fromData.letter);
+        compactRack(G, rack);
+    }
+};
 
-    swapTilesInRack: (playerID: string, toSwap: boolean[]) => void; 
+type RecallRackParam = void;
+const recallRack = (G: GameData, ctx: Ctx, dummy: RecallRackParam) => {
+    const rack = G.playerData[ctx.currentPlayer].rack;
+    doRecallRack(G, rack);
+};
+
+type ShuffleRackParam = void;
+const shuffleRack = (G: GameData, ctx: Ctx, dummy: ShuffleRackParam) => {
+    const rack = G.playerData[ctx.currentPlayer].rack;
+    shuffle(rack);
+};
+
+type EndOfTurnActionsParam = void;
+const endOfTurnActions = (G: GameData, ctx: Ctx, dummy: EndOfTurnActionsParam) => {
+    const rack = G.playerData[ctx.currentPlayer].rack;
+    fillRack(G, rack);
+
+    G.board.forEach(row =>
+        row.forEach(sd => sd && (sd.active = false))
+    );
+};
+
+type RecordScoreParam = number;
+const recordScore = (G: GameData, ctx: Ctx, score: RecordScoreParam) => {
+    G.playerData[ctx.currentPlayer].score += score;
+};
+
+type SwapTilesInRackParam = boolean[];
+const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) => {
+    if (!canSwapTiles(G)) {
+        console.error("Invalid attempt to swap title");
+        return;
+    }
+    const rack = G.playerData[ctx.currentPlayer].rack;
+    assert(rack.length === toSwap.length, "Problem swapping tiles");
+
+    let removedLetters: Letter[] = [];
+    for (let i = 0; i < rack.length; ++i) {
+        if (toSwap[i]) {
+            const l = rack[i];
+            assert(l);
+            removedLetters.push(l);
+            rack[i] = null;
+        }
+    }
+
+    fillRack(G, rack);
+
+    G.bag.push(...removedLetters);
+    shuffle(G.bag);
 };
 
 export const bgioMoves = {
-    start: (G: GameData, ctx: Ctx, sq: SquareID) => {
-        G.moveStart = sq;
-    },
+    start: start,
+    move: move,
+    recallRack: recallRack,
+    shuffleRack: shuffleRack,
+    endOfTurnActions: endOfTurnActions,
+    recordScore: recordScore,
+    swapTilesInRack: swapTilesInRack,
+};
 
-    move: (G: GameData, ctx: Ctx, fromSq: SquareID, toSq: SquareID) => {
-        const rack = G.playerData[ctx.currentPlayer].rack;
-        const fromData = getSquareData(G, rack, fromSq);
-        const toData = getSquareData(G, rack, toSq);
-
-        assert(fromData);
-
-        if ((toData === null || toData.active) && !sameJSON(fromSq, toSq)) {
-
-            setLetter(G, rack, fromSq, toData ? toData.letter : null);
-            setLetter(G, rack, toSq, fromData.letter);
-            compactRack(G, rack);
-        }
-    },
-
-    recallRack: (G: GameData, ctx: Ctx) => {
-        const rack = G.playerData[ctx.currentPlayer].rack;
-        recallRack(G, rack);
-    },
-
-    shuffleRack: (G: GameData, ctx: Ctx) => {
-        const rack = G.playerData[ctx.currentPlayer].rack;
-        shuffle(rack);
-    },
-
-    endOfTurnActions: (G: GameData, ctx: Ctx) => {
-        const rack = G.playerData[ctx.currentPlayer].rack;
-        fillRack(G, rack);
-
-        G.board.forEach(row => 
-            row.forEach(sd => sd && (sd.active = false))
-        );
-    },
-
-    recordScore: (G: GameData, ctx: Ctx, score: number) => {
-        G.playerData[ctx.currentPlayer].score += score;
-    },
-
-    swapTilesInRack: (G: GameData, ctx: Ctx, playerID: string, toSwap: boolean[]) => {
-        if(!canSwapTiles(G)) {
-            console.error("Invalid attempt to swap title");
-            return;
-        }        
-        let rack = G.playerData[playerID].rack;
-        assert(rack.length === toSwap.length, "Problem swapping tiles");
-        
-        let removedLetters : Letter[] = [];
-        for(let i = 0; i < rack.length; ++i) {
-            if(toSwap[i]) {
-                const l = rack[i];
-                assert(l);
-                removedLetters.push(l);
-                rack[i] = null;
-            }
-        }
-
-        fillRack(G, rack);
-
-        G.bag.push(...removedLetters);
-        shuffle(G.bag);
-    },
+export interface ClientMoves {
+    start: (arg: StartParam) => void;
+    move: (arg: MoveParam) => void;
+    recallRack: (arg: RecallRackParam) => void;
+    shuffleRack: (arg: ShuffleRackParam) => void;
+    endOfTurnActions: (arg: EndOfTurnActionsParam) => void;
+    recordScore: (arg: RecordScoreParam) => void;
+    swapTilesInRack: (arg: SwapTilesInRackParam) => void;
 };

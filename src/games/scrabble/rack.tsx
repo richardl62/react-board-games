@@ -106,9 +106,9 @@ export function Rack(props: RackProps) {
 
     return (<RackAndButtons>
       <PreRack>
-        {hasTilesOut && <button onClick={moves.recallRack}>Recall</button>}
+        {hasTilesOut && <button onClick={() => moves.recallRack()}>Recall</button>}
         <button 
-          onClick={moves.shuffleRack}
+          onClick={() => moves.shuffleRack()}
           disabled={!isMyTurn}
         >
           Shuffle
