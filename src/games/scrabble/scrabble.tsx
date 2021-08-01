@@ -33,14 +33,17 @@ function Scrabble(props: BoardProps<GameData>) {
 
   const clickDragState = useRef(new ClickDragState()).current;
   
-  const isMyTurn = false;
+  const isMyTurn = props.playerID === props.ctx.currentPlayer;
+  const canMove = (sq: SquareID) =>
+    isMyTurn && (onRack(sq) || Boolean(board[sq.row][sq.col]?.active));
+
   const moveFunctions = {
     onClickMoveStart: (sq: SquareID) => {
-      const canMove = isMyTurn && (onRack(sq) || Boolean(board[sq.row][sq.col]?.active));
-      if(canMove) {
+      if(canMove(sq)) {
           moves.start(sq);
+          return true;
       }
-      return canMove;
+      return false;
     },
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
@@ -49,7 +52,7 @@ function Scrabble(props: BoardProps<GameData>) {
       }
     },
 
-    dragType: () => DragType.move,
+    dragType: (sq: SquareID) => canMove(sq) ? DragType.move : DragType.disable,
   }
 
   const squareInteraction = squareInteractionFunc(
