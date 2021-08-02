@@ -29,9 +29,9 @@ export function GameWarnings(props: BoardProps) {
         }
     }
 
-    if(warnings.length === 0) {
-        return null;
-    }
+    // if(warnings.length === 0) {
+    //     return null;
+    // }
 
     return (
         <WarningsDiv>

@@ -7,7 +7,7 @@ import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
 // 'G extends any = any' is copied from BoardProps. I don't see why it is better than 'any'.
 /**
- * This BoardProps is an extending of BgioBoardProps Bgio BoardProps.
+ * This BoardProps is an extention of BgioBoardProps Bgio BoardProps.
  */
 export interface BoardProps<G extends any = any> extends BgioBoardProps<G> {
   playerData: PlayerDataDictionary;

@@ -36,8 +36,6 @@ function statusText(status: PlayerData['status']) : string {
     }
 }
 
-
-
 export function WaitingForPlayers(props: BoardProps) {
 
     const playerElements = (id: string) => {
