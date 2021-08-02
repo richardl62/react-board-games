@@ -1,8 +1,8 @@
 import React from 'react';
 import { Ctx } from "boardgame.io";
-import { PlayerData } from '../../game-support';
 import { GameWarnings } from '../../game-support/show-warning';
 import { AppGame, BoardProps } from '../../shared/types';
+import assert from '../../shared/assert';
 
 interface G {
   value: number;
@@ -13,10 +13,15 @@ function Board(props: BoardProps<G>) {
   const { G, moves, events } = props
 
 
-  const playerSpan = (pd: PlayerData) => <span key={pd.name}>{`${pd.name} ${pd.status} - `}</span>;
+  const playerSpan = (id: string) => {
+    assert(props.matchData);
+    const pd = props.playerData[id];
+    <span key={pd.name}>{`${pd.name} ${pd.status} - `}</span>
+  }
+
   return (
     <div>
-      <div>{props.playerData.map(playerSpan)}</div>
+      <div>{props.ctx.playOrder.map(playerSpan)}</div>
       <GameWarnings {...props} />
       {props.allJoined && (<div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>

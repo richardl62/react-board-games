@@ -18,12 +18,17 @@ const WarningsDiv = styled.div`
  * Currently, this the only warning is players being off line.
  */
 export function GameWarnings(props: BoardProps) {
-    const offline = props.playerData.filter(pd => pd.status === 'offline');
-    const warnings = offline.map(pd => `${pd.name} is offline`);
 
-    if(warnings.length === 0) {
-        return null;
-    }
+    const warnings : string [] = [];
+    console.log("TO DO:  Get this function to work properly");
+    // for(let .)
+    // if(props.playerData.find(pd => pd.status === 'offline'))
+    //     const offline = props.playerData.filter(pd => pd.status === 'offline');
+    //  = offline.map(pd => `${pd.name} is offline`);
+
+    // if(warnings.length === 0) {
+    //     return null;
+    // }
 
     return (
         <WarningsDiv>

@@ -1,62 +1,55 @@
-import { BoardProps as BgioBoardProps, MatchDataElem } from "./bgio-types";
+import assert  from "assert";
+import { BoardProps as BgioBoardProps } from "./bgio-types";
 export const unnamedPlayer = '_Unnamed Player_';  // Why is this needed?
 
 export interface PlayerData {
   name: string;
-  id: string;
   status: 'ready' | 'not joined' | 'offline';
 }
+
+export type PlayerDataDictionary = {[arg: string] : PlayerData};
 
 function defaultPlayerName(index: number) {
   return `Player ${index + 1}`;
 }
 
-function makePlayerDataElem(md: MatchDataElem, index: number): PlayerData {
-  return (md.name) ?
-    {
-      name: (md.name === unnamedPlayer) ? defaultPlayerName(index) : md.name,
-      id: md.id.toString(),
-      status: md.isConnected ? 'ready' : 'offline',
-    } :
-    {
-      name: defaultPlayerName(index),
-      id: index.toString(),
+function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData {
+  const playerIndex = parseInt(playerID);
+  assert(!isNaN(playerIndex) && playerIndex >= 0 && playerIndex < props.ctx.numPlayers,
+    `Unexpected player ID: "${playerID}"`
+  );
+
+  if (!props.matchData) {
+    // This seems to be an offline game
+    return {
+      name: defaultPlayerName(playerIndex),
+      status: 'ready',
+    }
+  }
+
+  const md = props.matchData.find(md => md.id === playerIndex);
+  assert(md, `Cannot find player data for ID ${playerID}`);
+  
+  if (!md.name) {
+    return {
+      name: defaultPlayerName(playerIndex),
       status: 'not joined',
     }
-}
-
-function sanityCheck(props: BgioBoardProps, playerData: PlayerData[]) {
-
-  const checkPlayerID = (id: string | null) => {
-    return playerData.find(pd => pd.id === id) !== undefined;
   }
 
-  if (!checkPlayerID(props.playerID) || 
-    !checkPlayerID(props.ctx.currentPlayer)) {
-    console.log(playerData, props)
-    throw new Error("Problem getting player data from match data");
+  return {
+    name: (md.name === unnamedPlayer) ? defaultPlayerName(playerIndex) : md.name,
+    status: md.isConnected ? 'ready' : 'offline'
   }
+
 }
 
-export function makePlayerData(props: BgioBoardProps): PlayerData[] {
+export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
  
-  let playerData : PlayerData[];
-
-  if(props.matchData) {
-    playerData = props.matchData.map(makePlayerDataElem);
-  } else {
-    // This is a local game.  Make up playerData accordingly.
-    playerData = [];
-    for(let index = 0; index < props.ctx.numPlayers; ++index) {
-      playerData[index] = {
-        name: `Player ${index + 1}`,
-        id: `${index}`,
-        status: 'ready',
-      }
-    }
+  let playerData : PlayerDataDictionary = {};
+  for(let id in props.ctx.playOrder) {
+    playerData[id] = makePlayerDataElem(props, id);
   }
-
-  sanityCheck(props, playerData);
 
   return playerData;
 }

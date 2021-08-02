@@ -36,20 +36,24 @@ function statusText(status: PlayerData['status']) : string {
     }
 }
 
-function playerElements({name, status}: PlayerData) {
-    const StatusElem = (status==='offline') ? WarningStatus : StandardStatus;
 
-    return [
-        <Name key={'n-'+name} >{name}</Name>,
-        <StatusElem key={'s-'+name} >{statusText(status)}</StatusElem>
-    ];
-}
 
 export function WaitingForPlayers(props: BoardProps) {
+
+    const playerElements = (id: string) => {
+        const {status, name} = props.G.playerData(id);
+        const StatusElem = (status==='offline') ? WarningStatus : StandardStatus;
+    
+        return [
+            <Name key={'n-'+name} >{name}</Name>,
+            <StatusElem key={'s-'+name} >{statusText(status)}</StatusElem>
+        ];
+    }
+
     return (
         <div>
             <PlayerDataGrid>
-                {props.playerData.map(playerElements)}
+                {props.ctx.playOrder.map(playerElements)}
             </PlayerDataGrid>
             <GameWarnings {...props} />
             <div>

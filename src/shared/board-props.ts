@@ -2,7 +2,7 @@
 // isConnected as an optional member. The code below is my way of add it.
 
 import { BoardProps as BgioBoardProps } from "./bgio-types";
-import { PlayerData, makePlayerData } from "./player-data";
+import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
 
 // 'G extends any = any' is copied from BoardProps. I don't see why it is better than 'any'.
@@ -10,7 +10,7 @@ import { PlayerData, makePlayerData } from "./player-data";
  * This BoardProps is an extending of BgioBoardProps Bgio BoardProps.
  */
 export interface BoardProps<G extends any = any> extends BgioBoardProps<G> {
-  playerData: PlayerData[];
+  playerData: PlayerDataDictionary;
   allJoined: boolean;
   allReady: boolean;
 }
@@ -21,7 +21,8 @@ export function makeBoardProps<G>(bgioProps: BgioBoardProps<G>): BoardProps<G> {
 
   let allJoined = true;
   let allReady = true;
-  for (let pd of playerData) {
+  for (let playerID in playerData) {
+    const pd = playerData[playerID];
     if (pd.status !== "ready") {
       allReady = false;
     }
