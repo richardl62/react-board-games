@@ -19,21 +19,24 @@ const WarningsDiv = styled.div`
  */
 export function GameWarnings(props: BoardProps) {
 
-    const warnings : string [] = [];
-    console.log("TO DO:  Get this function to work properly");
-    // for(let .)
-    // if(props.playerData.find(pd => pd.status === 'offline'))
-    //     const offline = props.playerData.filter(pd => pd.status === 'offline');
-    //  = offline.map(pd => `${pd.name} is offline`);
 
-    // if(warnings.length === 0) {
-    //     return null;
-    // }
+    let warnings: string[] = [];
+
+    for(let pId in props.G.playerData) {
+        const {name, status } = props.G.playerData[pId];
+        if(status === 'offline') {
+            warnings.push(`${name} is offline`);
+        }
+    }
+
+    if(warnings.length === 0) {
+        return null;
+    }
 
     return (
         <WarningsDiv>
             <span key='-'>Warnings:</span>
             {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
-    );
-}
+    )   
+};
