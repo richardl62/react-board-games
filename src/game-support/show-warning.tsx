@@ -22,16 +22,16 @@ export function GameWarnings(props: BoardProps) {
 
     let warnings: string[] = [];
 
-    for(let pId in props.G.playerData) {
-        const {name, status } = props.G.playerData[pId];
+    for(let pId in props.playerData) {
+        const {name, status } = props.playerData[pId];
         if(status === 'offline') {
             warnings.push(`${name} is offline`);
         }
     }
 
-    // if(warnings.length === 0) {
-    //     return null;
-    // }
+    if(warnings.length === 0) { 
+        return null;
+    }
 
     return (
         <WarningsDiv>

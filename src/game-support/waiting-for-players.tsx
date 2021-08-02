@@ -39,7 +39,7 @@ function statusText(status: PlayerData['status']) : string {
 export function WaitingForPlayers(props: BoardProps) {
 
     const playerElements = (id: string) => {
-        const {status, name} = props.G.playerData(id);
+        const {status, name} = props.playerData[id];
         const StatusElem = (status==='offline') ? WarningStatus : StandardStatus;
     
         return [

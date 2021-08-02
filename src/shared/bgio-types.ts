@@ -10,6 +10,6 @@ export interface MatchDataElem extends MatchDataElem_{
 } 
 
 // 'G extends any = any' is copied from Bgio. I don't see why it is better than 'any'.
-export interface BoardProps<G extends any = any> extends BoardProps_<G> {
+export interface BoardProps<G={}> extends BoardProps_<G> {
     matchData?: Array<MatchDataElem>;
 }

@@ -9,7 +9,7 @@ import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 /**
  * This BoardProps is an extention of BgioBoardProps Bgio BoardProps.
  */
-export interface BoardProps<G extends any = any> extends BgioBoardProps<G> {
+export interface BoardProps<G={}> extends BgioBoardProps<G> {
   playerData: PlayerDataDictionary;
   allJoined: boolean;
   allReady: boolean;

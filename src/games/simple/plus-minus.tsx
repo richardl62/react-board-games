@@ -3,6 +3,7 @@ import { Ctx } from "boardgame.io";
 import { GameWarnings } from '../../game-support/show-warning';
 import { AppGame, BoardProps } from '../../shared/types';
 import styled from 'styled-components';
+import { WaitingForPlayers } from '../../game-support/waiting-for-players';
 
 interface G {
   value: number;
@@ -36,6 +37,11 @@ function PlayerData(props: BoardProps<G>) {
 }
 
 function Board(props: BoardProps<G>) {
+
+  if(!props.allJoined) {
+    return <WaitingForPlayers {...props} />
+  }
+  
   const { G, moves, events } = props
   return (
     <div>
