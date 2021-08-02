@@ -9,7 +9,7 @@ import { GameData, Rack as RackType } from "./game-data";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 
-const RackAndButtons = styled.div`
+const StyledRackEtc = styled.div`
 display:inline-flex;
 gap: 1%;
 `
@@ -30,7 +30,7 @@ interface RackProps extends BoardProps<GameData> {
   swapTiles: (toSwap: boolean[]) => void;
 }
 
-export function Rack(props: RackProps) {
+export function RackEtc(props: RackProps) {
   const { playerID, G, ctx, squareInteraction, clickDragState, swapTiles} = props;
   const moves = props.moves as any as ClientMoves;
   const hasTilesOut = tilesOut(G);
@@ -84,7 +84,7 @@ export function Rack(props: RackProps) {
     }
     
     return (
-      <RackAndButtons>
+      <StyledRackEtc>
         <PreRack>
            <span>Select times to swap </span>
         </PreRack>
@@ -94,7 +94,7 @@ export function Rack(props: RackProps) {
         {selectedForSwap.includes(true) && 
           <button onClick={makeSwap}>Make Swap</button> }
         <button onClick={cancelSwap}>Cancel</button>
-      </RackAndButtons>
+      </StyledRackEtc>
     )
   } else {
 
@@ -104,7 +104,7 @@ export function Rack(props: RackProps) {
       setSelectedForSwap(Array(nLetters).fill(false));
     }
 
-    return (<RackAndButtons>
+    return (<StyledRackEtc>
       <PreRack>
         {hasTilesOut && <button onClick={() => moves.recallRack()}>Recall</button>}
         <button 
@@ -124,7 +124,7 @@ export function Rack(props: RackProps) {
         Swap
       </button>
 
-    </RackAndButtons>
+    </StyledRackEtc>
     );
   };
 }

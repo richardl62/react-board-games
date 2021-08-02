@@ -10,7 +10,7 @@ import { bgioMoves, ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
 import { GameData, startingGameData } from "./game-data";
 import { MainBoard } from "./main-board";
-import { Rack } from "./rack";
+import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
@@ -74,7 +74,7 @@ function Scrabble(props: BoardProps<GameData>) {
     <DndProvider backend={HTML5Backend}>
       <Game>
         <ScoresEtc {...props} />
-        <Rack
+        <RackEtc
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
           rack={rack}
