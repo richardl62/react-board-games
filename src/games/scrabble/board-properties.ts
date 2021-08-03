@@ -30,3 +30,5 @@ export const rackSize = 7;
 // Sanity checks. (Could be debug-only)
 assert(squareTypesArray.length === 15);
 squareTypesArray.forEach(row => assert(row.length === 15));
+
+export const allLetterBonus = 50;

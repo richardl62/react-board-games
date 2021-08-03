@@ -5,7 +5,8 @@ import assert from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
-import { findCandidateWords } from "./find-candidate-words";
+import { rackSize, allLetterBonus } from "./board-properties";
+import { findActiveLetters, findCandidateWords } from "./find-candidate-words";
 import { getWord } from "./game-actions";
 import { GameData } from "./game-data";
 import { isLegalWord } from "./is-legal-word";
@@ -96,10 +97,10 @@ function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
 export function TurnControl(props: BoardProps<GameData>) {
   const board = props.G.board;
   const moves = props.moves as any as ClientMoves;
-  const candidtateWords = findCandidateWords(board);
+  const active = findActiveLetters(board)
   const isMyTurn = props.playerID === props.ctx.currentPlayer;
 
-  if (candidtateWords === 'emptyBoard') {
+  if (active.length === 0) {
     const pass = () => {
       moves.endOfTurnActions();
       assert(props.events.endTurn);
@@ -112,11 +113,16 @@ export function TurnControl(props: BoardProps<GameData>) {
     );
   }
 
-  if (candidtateWords === 'invalidPositions') {
+  const candidtateWords = findCandidateWords(board, active);
+  if (!candidtateWords) {
     return <ScoreLine score={null}/>
   }
 
-  const score = scoreWords(board, candidtateWords);
+  let score = scoreWords(board, candidtateWords);
+  if(active.length === rackSize) {
+    score += allLetterBonus;
+  }
+  
   const words = candidtateWords.map(cw => getWord(board, cw));
   const onDone = () => {
       moves.endOfTurnActions();

@@ -43,6 +43,21 @@ function sameRowCol(positions: RowCol[], direction: Direction) : boolean {
     return true;
 }
 
+export function findActiveLetters(board: BoardData) : RowCol[] 
+{
+    let active: RowCol[] = [];
+
+    for (let row = 0; row < board.length; ++row) {
+        for (let col = 0; col < board[row].length; ++col) {
+            if (board[row][col]?.active) {
+                active.push(rowCol(row, col));
+            }
+        }
+    }
+
+    return active;
+}
+
 /** Return 'word indices' that included the input indices.
  * Or return an empty array if no suitable indices are found.
  *  
@@ -155,32 +170,15 @@ function findCandidateWordsDirected(
 
 /** Return one of the following:
  * 
- * 'emptyBoard' - There are no active letters
- * 
- * 'invalidPositions' - The active letters are in invalid positions
- *  (e.g. they don't form all part of the same word).
- * 
  * RowCol[][] - Array of candidate words (more precisely array of positions of candidate words).
+ * 
+ * null - The active letters are in invalid positions (e.g. they don't form all part of the same word).
 */
-export function findCandidateWords(board: BoardData): 'emptyBoard' | 'invalidPositions' | RowCol[][]   {
+export function findCandidateWords(
+    board: BoardData,
+    active: RowCol[],
+): RowCol[][] | null {
 
-    let active: RowCol[] = [];
-
-    for (let row = 0; row < board.length; ++row) {
-        for (let col = 0; col < board[row].length; ++col) {
-            if (board[row][col]?.active) {
-                active.push(rowCol(row, col));
-            }
-        }
-    }
-
-    if(active.length === 0) {
-        return 'emptyBoard';
-    }
-
-    const words = 
-        findCandidateWordsDirected(board, active, 'row') ||
+    return findCandidateWordsDirected(board, active, 'row') ||
         findCandidateWordsDirected(board, active, 'col')
-    
-    return words || 'invalidPositions';
 }
