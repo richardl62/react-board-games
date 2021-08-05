@@ -5,7 +5,7 @@ import { gAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
-import { rackSize, allLetterBonus } from "./scrabble-game-properties";
+import { allLetterBonus } from "./scrabble-game-properties";
 import { findActiveLetters, findCandidateWords } from "./find-candidate-words";
 import { getWord } from "./game-actions";
 import { GameData } from "./game-data";
@@ -94,11 +94,18 @@ function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
    )
 }
 
+function getRackSize(G: GameData) : number { 
+  const firstPlayerData = Object.entries(G.playerData)[0][1]; 
+  return firstPlayerData.rack.length;
+}
+
 export function TurnControl(props: BoardProps<GameData>) {
   const board = props.G.board;
   const moves = props.moves as any as ClientMoves;
   const active = findActiveLetters(board)
   const isMyTurn = props.playerID === props.ctx.currentPlayer;
+  const rackSize = getRackSize(props.G);
+
 
   if (active.length === 0) {
     const pass = () => {
