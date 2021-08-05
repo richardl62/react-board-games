@@ -39,7 +39,7 @@ export interface ScrabbleConfig {
 }
 
 
-const standard : ScrabbleConfig = {
+export const standard : ScrabbleConfig = {
     letterDistribution: {
         A: 9, B: 2, C: 2, D: 4, E: 12, F: 2, G: 3, H: 2, 
         I: 9, J: 1, K: 1, L: 4, M:  2, N: 6, O: 8, P: 2, 
@@ -85,7 +85,7 @@ gAssert(standard.boardLayout.length === 15);
 standard.boardLayout.forEach(row => gAssert(row.length === 15));
 
 
-const simple : ScrabbleConfig = {
+export const simple : ScrabbleConfig = {
     letterDistribution: {
         A: 1, B: 1, C: 1, D: 1, E: 1, F: 1, G: 1, H: 1, 
         '?': 2, 
@@ -106,7 +106,7 @@ Object.freeze(simple);
 
 const useSimpleConfig = false;
 
-export function scrabbleConfig() : ScrabbleConfig {
+export function scrabbleConfig() : ScrabbleConfig {  // TEMPORARY
     return useSimpleConfig ? simple: standard;
 }
 

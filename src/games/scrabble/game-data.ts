@@ -49,7 +49,7 @@ function makeBag({letterDistribution}: ScrabbleConfig): Letter[] {
 }
 
 export function startingGameData(ctx: Ctx): GameData {
-    let bag = shuffle(makeBag(scrabbleConfig())); 
+    let bag = makeBag(scrabbleConfig()); 
 
     const rack = () => {
         let letters : Letter[] = [];

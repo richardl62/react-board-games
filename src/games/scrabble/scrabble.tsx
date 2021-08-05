@@ -5,10 +5,10 @@ import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
 import { gAssert } from "../../shared/assert";
-import { AppGame, BoardProps } from "../../shared/types";
-import { bgioMoves, ClientMoves } from "./bgio-moves";
+import { BoardProps } from "../../shared/types";
+import { ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
-import { GameData, startingGameData } from "./game-data";
+import { GameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
@@ -25,7 +25,7 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-function Scrabble(props: BoardProps<GameData>) {
+export function ScrabbleBoard(props: BoardProps<GameData>) {
   const {G, playerID, events } = props;
   gAssert(playerID);
   const moves = props.moves as any as ClientMoves;
@@ -100,16 +100,3 @@ function Scrabble(props: BoardProps<GameData>) {
   )
 }
 
-export const scrabble: AppGame = {
-  name: 'scrabble',
-  displayName: 'Scrabble',
-
-  minPlayers: 1,
-  maxPlayers: 4,
-
-  setup: startingGameData,
-
-  moves: bgioMoves,
-
-  board: Scrabble,
-};
