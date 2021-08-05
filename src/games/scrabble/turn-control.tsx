@@ -3,7 +3,6 @@ import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
 import { gAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
-import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { allLetterBonus } from "./scrabble-config";
 import { findActiveLetters, findCandidateWords } from "./find-candidate-words";
@@ -11,6 +10,7 @@ import { getWord } from "./game-actions";
 import { GameData } from "./game-data";
 import { isLegalWord } from "./is-legal-word";
 import { scoreWords } from "./score-word";
+import { ScrabbleBoardProps } from "./scrabble-board-props";
 
 const StyledScoreLine = styled.div`
   display: flex; 
@@ -99,13 +99,13 @@ function getRackSize(G: GameData) : number {
   return firstPlayerData.rack.length;
 }
 
-export function TurnControl(props: BoardProps<GameData>) {
+export function TurnControl(props: ScrabbleBoardProps) {
   const board = props.G.board;
   const moves = props.moves as any as ClientMoves;
   const active = findActiveLetters(board)
   const isMyTurn = props.playerID === props.ctx.currentPlayer;
   const rackSize = getRackSize(props.G);
-
+  const config = props.config;
 
   if (active.length === 0) {
     const pass = () => {
@@ -125,7 +125,7 @@ export function TurnControl(props: BoardProps<GameData>) {
     return <ScoreLine score={null}/>
   }
 
-  let score = scoreWords(board, candidtateWords);
+  let score = scoreWords(board, candidtateWords, config);
   if(active.length === rackSize) {
     score += allLetterBonus;
   }

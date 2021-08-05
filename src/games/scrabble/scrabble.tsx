@@ -5,10 +5,8 @@ import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
 import { gAssert } from "../../shared/assert";
-import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
-import { GameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
@@ -28,7 +26,7 @@ const Game = styled.div`
 
 
 export function ScrabbleBoard(props: ScrabbleBoardProps) {
-  const {G, playerID, events } = props;
+  const {G, playerID, events, config } = props;
   gAssert(playerID);
   const moves = props.moves as any as ClientMoves;
   const {board} = G;
@@ -87,6 +85,7 @@ export function ScrabbleBoard(props: ScrabbleBoardProps) {
           squareInteraction={squareInteraction}
           clickDragState={clickDragState}
           board={G.board}
+          config={config}
         />
         <SpaceBetween>
           <WordChecker/>

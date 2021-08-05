@@ -11,12 +11,12 @@ interface MainBoardProps {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   board: BoardData;
-  scrabbleConfig: ScrabbleConfig;
+  config: ScrabbleConfig;
 }
 
 
 
-export function MainBoard({ board, squareInteraction, scrabbleConfig, clickDragState }: MainBoardProps) {
+export function MainBoard({ board, squareInteraction, config, clickDragState }: MainBoardProps) {
 
   const tiles = nestedArrayMap(board, sd => {
     if (!sd) return null;
@@ -25,7 +25,7 @@ export function MainBoard({ board, squareInteraction, scrabbleConfig, clickDragS
   });
 
   const squareColors = nestedArrayMap(
-    scrabbleConfig.boardLayout,
+    config.boardLayout,
     scrabbleSquareBackground
   );
 

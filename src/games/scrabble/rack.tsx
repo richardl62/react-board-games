@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import { gAssert } from "../../shared/assert";
-import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { boardIDs, tilesOut } from "./game-actions";
-import { GameData, Rack as RackType } from "./game-data";
+import { Rack as RackType } from "./game-data";
+import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 
@@ -23,7 +23,7 @@ align-items: center;
 gap: 3%;
 `
 
-interface RackProps extends BoardProps<GameData> {
+interface RackProps extends ScrabbleBoardProps {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   rack: RackType;
