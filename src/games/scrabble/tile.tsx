@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Letter, letterScore } from "./letter-properties";
+import { Letter, letterScore } from "./scrabble-game-properties";
 import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style"
 
 const StyledLetter = styled.div`

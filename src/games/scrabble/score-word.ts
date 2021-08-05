@@ -1,8 +1,8 @@
 
 import { gAssert } from "../../shared/assert";
-import { squareTypesArray } from "./board-properties";
+import { squareTypesArray } from "./scrabble-game-properties";
 import { BoardData } from "./game-data";
-import { letterScore } from "./letter-properties";
+import { letterScore } from "./scrabble-game-properties";
 import { multipliers } from "./square-type";
 
 interface RowCol {

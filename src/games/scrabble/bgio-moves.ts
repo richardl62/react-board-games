@@ -6,7 +6,7 @@ import {
     getSquareData, setLetter, compactRack,
     fillRack, canSwapTiles, recallRack as doRecallRack
 } from "./game-actions";
-import { Letter } from "./letter-properties";
+import { Letter } from "./scrabble-game-properties";
 import { gAssert } from "../../shared/assert";
 
 type StartParam = SquareID;
