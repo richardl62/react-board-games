@@ -2,7 +2,7 @@ import { gAssert } from "../../shared/assert";
 import { SquareType } from "./square-type";
 
 // KLUDGE?: For now at least, all scrabble configurations use the same letter scores.
-const letterScores = {
+export const letterScores = {
     '?': 0,
     A: 1, E: 1, I:1, L:1, N:1, O:1, R:1, S:1, T:1, U:1,
     D:2, G:2,
@@ -28,7 +28,18 @@ const d = SquareType.doubleLetter;
 const t = SquareType.tripleLetter;
 const s = SquareType.simple;
 
-export const standard = {
+interface LetterDistribution {
+    [key: string]: any;
+}
+
+export interface ScrabbleConfig {
+    letterDistribution : LetterDistribution;
+    boardLayout: SquareType[][];
+    rackSize: number;
+}
+
+
+const standard : ScrabbleConfig = {
     letterDistribution: {
         A: 9, B: 2, C: 2, D: 4, E: 12, F: 2, G: 3, H: 2, 
         I: 9, J: 1, K: 1, L: 4, M:  2, N: 6, O: 8, P: 2, 
@@ -57,7 +68,7 @@ export const standard = {
 }
 Object.freeze(standard);
 
-export type ScrabbleConfig = typeof standard;
+
 
 // Sanity checks. (Could be debug-only)
 
@@ -72,5 +83,31 @@ gAssert(letterCount === 100, "Problem with setup");
 
 gAssert(standard.boardLayout.length === 15);
 standard.boardLayout.forEach(row => gAssert(row.length === 15));
+
+
+const simple : ScrabbleConfig = {
+    letterDistribution: {
+        A: 1, B: 1, C: 1, D: 1, E: 1, F: 1, G: 1, H: 1, 
+        '?': 2, 
+    },
+
+    boardLayout: [
+        [t, s, s, s, t,],
+        [s, d, s, d, s,],
+        [s, s, D, s, s,],
+        [s, d, s, d, s,],
+        [t, s, s, s, t,],
+
+    ],
+
+    rackSize: 3,
+}
+Object.freeze(simple);
+
+const useSimpleConfig = false;
+
+export function scrabbleConfig() : ScrabbleConfig {
+    return useSimpleConfig ? simple: standard;
+}
 
 

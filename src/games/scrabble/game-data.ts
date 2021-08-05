@@ -2,8 +2,7 @@ import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { gAssert } from "../../shared/assert";
 import { nestedArrayMap, shuffle } from "../../shared/tools";
-import { rackSize, squareTypesArray } from "./scrabble-config";
-import { fullBag, Letter } from "./scrabble-config";
+import { scrabbleConfig, Letter, ScrabbleConfig } from "./scrabble-config";
 
 export interface TileData {
     letter: Letter;
@@ -35,19 +34,33 @@ export interface GameData {
     moveStart: SquareID | null;
 }
 
+function makeBag({letterDistribution}: ScrabbleConfig): Letter[] {
+
+    let bag: Array<Letter> = [];
+    for (const letter_ in letterDistribution) {
+        const letter = letter_ as Letter; // KLUDGE? - why does TS need this?
+        const count = letterDistribution[letter];
+        for (let i = 0; i < count; ++i) {
+            bag.push(letter);
+        }
+    }
+
+    return shuffle(bag);
+}
+
 export function startingGameData(ctx: Ctx): GameData {
-    let bag = shuffle([...fullBag]); 
-    gAssert(bag.length > rackSize);
+    let bag = shuffle(makeBag(scrabbleConfig())); 
 
     const rack = () => {
         let letters : Letter[] = [];
-        for (let i = 0; i < rackSize; ++i) {
-            letters.push(bag.pop()!);
+        for (let i = 0; i < scrabbleConfig().rackSize; ++i) {
+            const letter = bag.pop();
+            gAssert(letter, "Too few letters for initial setup");
+            letters.push(letter);
         }
 
         return letters;
     }
-
 
     let playerData: PlayerDataDictionary = {};
     for (let p = 0; p < ctx.numPlayers; ++p) {
@@ -58,9 +71,8 @@ export function startingGameData(ctx: Ctx): GameData {
         };
     }
     
-
     return {
-        board: nestedArrayMap(squareTypesArray, () => null),
+        board: nestedArrayMap(scrabbleConfig().boardLayout, () => null),
         playerData: playerData,
         bag: bag,
         moveStart: null,
