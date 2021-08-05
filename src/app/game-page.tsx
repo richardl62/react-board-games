@@ -1,11 +1,11 @@
 import React, { ReactChild, useState } from 'react';
-import { MatchID, Player, AppGame } from '../shared/types';
-import { GamePlayOnline, GamePlayLocal } from './game-play';
+import { gAssert } from '../shared/assert';
 import * as LobbyClient from '../shared/bgio';
-import { openMatchPage } from './url-params';
+import { AppGame, MatchID, Player } from '../shared/types';
+import { GamePlayLocal, GamePlayOnline } from './game-play';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
 import { MatchOptions, StartMatchOptions } from './start-match-options';
-import assert from '../shared/assert';
+import { openMatchPage } from './url-params';
 
 interface GetPlayerNameProps {
   children: ReactChild;
@@ -59,7 +59,7 @@ function GamePage({game, matchID}: GamePageProps) {
   }
 
   const joinGame = (name: string) => {
-    assert(matchID);
+    gAssert(matchID);
     setWaiting(true);
 
     LobbyClient.joinMatch(game, matchID, name)

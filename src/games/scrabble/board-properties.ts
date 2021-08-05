@@ -1,4 +1,4 @@
-import assert from "../../shared/assert";
+import { gAssert } from "../../shared/assert";
 import { SquareType } from "./square-type";
 
 const D = SquareType.doubleWord;
@@ -28,7 +28,7 @@ Object.freeze(squareTypesArray);
 
 export const rackSize = 7;
 // Sanity checks. (Could be debug-only)
-assert(squareTypesArray.length === 15);
-squareTypesArray.forEach(row => assert(row.length === 15));
+gAssert(squareTypesArray.length === 15);
+squareTypesArray.forEach(row => gAssert(row.length === 15));
 
 export const allLetterBonus = 50;

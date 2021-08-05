@@ -1,4 +1,4 @@
-import assert from "../../shared/assert";
+import { gAssert } from "../../shared/assert";
 
 const letterScores = {
     '?': 0,
@@ -32,8 +32,8 @@ for(const letter_ in letterDistribution) {
 } 
 Object.freeze(fullBag);
 
-assert(Object.keys(letterScores).length === 27, "Problem with setup");
-assert(Object.keys(letterDistribution).length === 27, "Problem with setup");
-assert(fullBag.length === 100, "Problem with setup");
+gAssert(Object.keys(letterScores).length === 27, "Problem with setup");
+gAssert(Object.keys(letterDistribution).length === 27, "Problem with setup");
+gAssert(fullBag.length === 100, "Problem with setup");
 
 

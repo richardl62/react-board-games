@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../game-support/show-warning";
-import assert from "../../shared/assert";
+import { gAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { GameData } from "./game-data";
 
@@ -22,7 +22,7 @@ export function ScoresEtc(props : BoardProps<GameData>) {
     let scoreElems = props.ctx.playOrder.map(playerID => {
         const generalPd = props.playerData[playerID];
         const scrabblePd = props.G.playerData[playerID];
-        assert(generalPd && scrabblePd);
+        gAssert(generalPd && scrabblePd);
 
         const name = generalPd.name;
         const score = scrabblePd.score;

@@ -1,7 +1,7 @@
 
 import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
-import assert from "../../shared/assert";
+import { gAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
@@ -103,7 +103,7 @@ export function TurnControl(props: BoardProps<GameData>) {
   if (active.length === 0) {
     const pass = () => {
       moves.endOfTurnActions();
-      assert(props.events.endTurn);
+      gAssert(props.events.endTurn);
       props.events.endTurn();
     }
     return (
@@ -127,7 +127,7 @@ export function TurnControl(props: BoardProps<GameData>) {
   const onDone = () => {
       moves.endOfTurnActions();
       moves.recordScore(score);
-      assert(props.events.endTurn);
+      gAssert(props.events.endTurn);
       props.events.endTurn();
   }
   

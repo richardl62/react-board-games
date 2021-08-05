@@ -1,4 +1,5 @@
-import assert from "assert";
+
+import { gAssert } from "../../shared/assert";
 import { squareTypesArray } from "./board-properties";
 import { BoardData } from "./game-data";
 import { letterScore } from "./letter-properties";
@@ -15,7 +16,7 @@ export function scoreWord(board: BoardData, word: RowCol[]) {
 
     word.forEach(rc => {
         const sq = board[rc.row][rc.col];
-        assert(sq);
+        gAssert(sq);
 
         if(sq.active) {
             const mults = multipliers(squareTypesArray[rc.row][rc.col]);

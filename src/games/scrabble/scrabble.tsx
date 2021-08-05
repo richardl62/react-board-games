@@ -4,7 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
-import assert from "../../shared/assert";
+import { gAssert } from "../../shared/assert";
 import { AppGame, BoardProps } from "../../shared/types";
 import { bgioMoves, ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
@@ -27,7 +27,7 @@ const Game = styled.div`
 
 function Scrabble(props: BoardProps<GameData>) {
   const {G, playerID, events } = props;
-  assert(playerID);
+  gAssert(playerID);
   const moves = props.moves as any as ClientMoves;
   const {board} = G;
 
@@ -66,7 +66,7 @@ function Scrabble(props: BoardProps<GameData>) {
   const rack = G.playerData[playerID].rack;
   const swapTiles = (toSwap: boolean[]) => {
     moves.swapTilesInRack(toSwap);
-    assert(events.endTurn);
+    gAssert(events.endTurn);
     events.endTurn();
   };
 

@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
-import assert from "../../shared/assert";
+import { gAssert } from "../../shared/assert";
 import { nestedArrayMap, shuffle } from "../../shared/tools";
 import { rackSize, squareTypesArray } from "./board-properties";
 import { fullBag, Letter } from "./letter-properties";
@@ -37,7 +37,7 @@ export interface GameData {
 
 export function startingGameData(ctx: Ctx): GameData {
     let bag = shuffle([...fullBag]); 
-    assert(bag.length > rackSize);
+    gAssert(bag.length > rackSize);
 
     const rack = () => {
         let letters : Letter[] = [];
