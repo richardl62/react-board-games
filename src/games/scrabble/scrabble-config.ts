@@ -104,10 +104,3 @@ export const simple : ScrabbleConfig = {
 }
 Object.freeze(simple);
 
-const useSimpleConfig = false;
-
-export function scrabbleConfig() : ScrabbleConfig {  // TEMPORARY
-    return useSimpleConfig ? simple: standard;
-}
-
-

@@ -12,6 +12,7 @@ import { GameData } from "./game-data";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
+import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 
@@ -25,7 +26,8 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-export function ScrabbleBoard(props: BoardProps<GameData>) {
+
+export function ScrabbleBoard(props: ScrabbleBoardProps) {
   const {G, playerID, events } = props;
   gAssert(playerID);
   const moves = props.moves as any as ClientMoves;

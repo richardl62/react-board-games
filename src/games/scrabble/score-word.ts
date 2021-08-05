@@ -1,7 +1,7 @@
 
 import { gAssert } from "../../shared/assert";
 import { BoardData } from "./game-data";
-import { scrabbleConfig, Letter, letterScores } from "./scrabble-config";
+import { Letter, letterScores, ScrabbleConfig } from "./scrabble-config";
 import { multipliers } from "./square-type";
 
 function letterScore(letter: Letter) {
@@ -13,7 +13,7 @@ interface RowCol {
     col: number;
 }
 
-export function scoreWord(board: BoardData, word: RowCol[]) {
+export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: ScrabbleConfig) {
     let score = 0;
     let wordMult = 1;
 
@@ -23,7 +23,7 @@ export function scoreWord(board: BoardData, word: RowCol[]) {
 
         if(sq.active) {
             const mults = multipliers(
-                scrabbleConfig().boardLayout[rc.row][rc.col]
+                scrabbleConfig.boardLayout[rc.row][rc.col]
             );
             score += letterScore(sq.letter) * mults.letter;
             wordMult *= mults.word;
@@ -35,9 +35,9 @@ export function scoreWord(board: BoardData, word: RowCol[]) {
     return score * wordMult;
 }
 
-export function scoreWords(board: BoardData, words: RowCol[][]) : number {
+export function scoreWords(board: BoardData, words: RowCol[][], scabbleConfig: ScrabbleConfig) : number {
     let score = 0;
-    words.forEach(word => {score += scoreWord(board, word)});
+    words.forEach(word => {score += scoreWord(board, word, scabbleConfig)});
 
     return score;
 }

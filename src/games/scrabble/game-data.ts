@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { gAssert } from "../../shared/assert";
 import { nestedArrayMap, shuffle } from "../../shared/tools";
-import { scrabbleConfig, Letter, ScrabbleConfig } from "./scrabble-config";
+import { Letter, ScrabbleConfig } from "./scrabble-config";
 
 export interface TileData {
     letter: Letter;
@@ -48,12 +48,12 @@ function makeBag({letterDistribution}: ScrabbleConfig): Letter[] {
     return shuffle(bag);
 }
 
-export function startingGameData(ctx: Ctx): GameData {
-    let bag = makeBag(scrabbleConfig()); 
+export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
+    let bag = makeBag(config); 
 
     const rack = () => {
         let letters : Letter[] = [];
-        for (let i = 0; i < scrabbleConfig().rackSize; ++i) {
+        for (let i = 0; i < config.rackSize; ++i) {
             const letter = bag.pop();
             gAssert(letter, "Too few letters for initial setup");
             letters.push(letter);
@@ -72,7 +72,7 @@ export function startingGameData(ctx: Ctx): GameData {
     }
     
     return {
-        board: nestedArrayMap(scrabbleConfig().boardLayout, () => null),
+        board: nestedArrayMap(config.boardLayout, () => null),
         playerData: playerData,
         bag: bag,
         moveStart: null,

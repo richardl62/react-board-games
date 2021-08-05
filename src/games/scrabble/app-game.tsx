@@ -1,3 +1,4 @@
+import { Ctx } from "boardgame.io";
 import { AppGame } from "../../shared/types";
 import { bgioMoves } from "./bgio-moves";
 import { startingGameData } from "./game-data";
@@ -12,7 +13,7 @@ export function makeAppGame(param: ReducedAppGame, config: ScrabbleConfig) : App
     return {
     ...param,
   
-    setup: startingGameData,
+    setup: (ctx: Ctx) => startingGameData(ctx, config),
   
     moves: bgioMoves,
   

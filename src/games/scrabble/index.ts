@@ -9,7 +9,7 @@ const games = [
            minPlayers: 1,
            maxPlayers: 4, 
         },
-        simpleConfig,
+        standardConfig,
     ), 
     makeAppGame(
         {
