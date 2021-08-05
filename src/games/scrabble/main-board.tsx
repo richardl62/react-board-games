@@ -2,7 +2,7 @@ import React from "react";
 import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
 import { nestedArrayMap } from "../../shared/tools";
 import { boardIDs } from "./game-actions";
-import { squareTypesArray } from "./scrabble-game-properties";
+import { squareTypesArray } from "./scrabble-config";
 import { scrabbleSquareBackground, squareSize } from "./style";
 import { Tile } from "./tile";
 import { BoardData } from "./game-data";

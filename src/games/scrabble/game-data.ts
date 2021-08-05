@@ -2,8 +2,8 @@ import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { gAssert } from "../../shared/assert";
 import { nestedArrayMap, shuffle } from "../../shared/tools";
-import { rackSize, squareTypesArray } from "./scrabble-game-properties";
-import { fullBag, Letter } from "./scrabble-game-properties";
+import { rackSize, squareTypesArray } from "./scrabble-config";
+import { fullBag, Letter } from "./scrabble-config";
 
 export interface TileData {
     letter: Letter;

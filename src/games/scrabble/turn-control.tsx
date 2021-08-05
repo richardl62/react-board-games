@@ -5,7 +5,7 @@ import { gAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
-import { allLetterBonus } from "./scrabble-game-properties";
+import { allLetterBonus } from "./scrabble-config";
 import { findActiveLetters, findCandidateWords } from "./find-candidate-words";
 import { getWord } from "./game-actions";
 import { GameData } from "./game-data";

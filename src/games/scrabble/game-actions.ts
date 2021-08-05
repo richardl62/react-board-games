@@ -1,7 +1,7 @@
 import { DragType, MoveFunctions, SquareID } from "../../boards";
 import { gAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
-import { Letter } from "./scrabble-game-properties";
+import { Letter } from "./scrabble-config";
 import { TileData, GameData, BoardData, Rack } from "./game-data";
 import { RowCol } from "./find-candidate-words";
 import { ClientMoves } from "./bgio-moves";
