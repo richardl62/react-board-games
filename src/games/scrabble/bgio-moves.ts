@@ -7,7 +7,7 @@ import {
     fillRack, canSwapTiles, recallRack as doRecallRack
 } from "./game-actions";
 import { Letter } from "./scrabble-config";
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 
 type StartParam = SquareID;
 const start = (G: GameData, ctx: Ctx, sq: StartParam) => {
@@ -20,7 +20,7 @@ const move = (G: GameData, ctx: Ctx, { from, to }: MoveParam) => {
     const fromData = getSquareData(G, rack, from);
     const toData = getSquareData(G, rack, to);
 
-    gAssert(fromData);
+    sAssert(fromData);
 
     if ((toData === null || toData.active) && !sameJSON(from, to)) {
 
@@ -64,13 +64,13 @@ const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) =>
         return;
     }
     const rack = G.playerData[ctx.currentPlayer].rack;
-    gAssert(rack.length === toSwap.length, "Problem swapping tiles");
+    sAssert(rack.length === toSwap.length, "Problem swapping tiles");
 
     let removedLetters: Letter[] = [];
     for (let i = 0; i < rack.length; ++i) {
         if (toSwap[i]) {
             const l = rack[i];
-            gAssert(l);
+            sAssert(l);
             removedLetters.push(l);
             rack[i] = null;
         }

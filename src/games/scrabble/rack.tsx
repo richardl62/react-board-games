@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { ClientMoves } from "./bgio-moves";
 import { boardIDs, tilesOut } from "./game-actions";
 import { Rack as RackType } from "./game-data";
@@ -49,7 +49,7 @@ export function RackEtc(props: RackProps) {
   const toggleSelectForSwap = (sq: SquareID) => {
     return {
       onClick: () => {
-        gAssert(selectedForSwap);
+        sAssert(selectedForSwap);
         let newSwappable = [...selectedForSwap];
         newSwappable[sq.col] = !newSwappable[sq.col];
         setSelectedForSwap(newSwappable);
@@ -99,7 +99,7 @@ export function RackEtc(props: RackProps) {
   } else {
 
     const doEnableSwap = () => {
-      gAssert(!selectedForSwap);
+      sAssert(!selectedForSwap);
       moves.recallRack();
       setSelectedForSwap(Array(nLetters).fill(false));
     }

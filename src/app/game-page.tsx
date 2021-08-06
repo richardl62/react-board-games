@@ -1,5 +1,5 @@
 import React, { ReactChild, useState } from 'react';
-import { gAssert } from '../shared/assert';
+import { sAssert } from '../shared/assert';
 import * as LobbyClient from '../shared/bgio';
 import { AppGame, MatchID, Player } from '../shared/types';
 import { GamePlayLocal, GamePlayOnline } from './game-play';
@@ -59,7 +59,7 @@ function GamePage({game, matchID}: GamePageProps) {
   }
 
   const joinGame = (name: string) => {
-    gAssert(matchID);
+    sAssert(matchID);
     setWaiting(true);
 
     LobbyClient.joinMatch(game, matchID, name)

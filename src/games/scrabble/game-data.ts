@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { nestedArrayMap, shuffle } from "../../shared/tools";
 import { Letter, ScrabbleConfig } from "./scrabble-config";
 
@@ -55,7 +55,7 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
         let letters : Letter[] = [];
         for (let i = 0; i < config.rackSize; ++i) {
             const letter = bag.pop();
-            gAssert(letter, "Too few letters for initial setup");
+            sAssert(letter, "Too few letters for initial setup");
             letters.push(letter);
         }
 

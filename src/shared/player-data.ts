@@ -1,4 +1,4 @@
-import { gAssert } from "./assert";
+import { sAssert } from "./assert";
 import { BoardProps as BgioBoardProps } from "./bgio-types";
 export const unnamedPlayer = '_Unnamed Player_';  // Why is this needed?
 
@@ -15,7 +15,7 @@ function defaultPlayerName(index: number) {
 
 function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData {
   const playerIndex = parseInt(playerID);
-  gAssert(!isNaN(playerIndex) && playerIndex >= 0 && playerIndex < props.ctx.numPlayers,
+  sAssert(!isNaN(playerIndex) && playerIndex >= 0 && playerIndex < props.ctx.numPlayers,
     `Unexpected player ID: "${playerID}"`
   );
 
@@ -28,7 +28,7 @@ function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData
   }
 
   const md = props.matchData.find(md => md.id === playerIndex);
-  gAssert(md, `Cannot find player data for ID ${playerID}`);
+  sAssert(md, `Cannot find player data for ID ${playerID}`);
   
   if (!md.name) {
     return {

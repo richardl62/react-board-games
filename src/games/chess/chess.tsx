@@ -8,7 +8,7 @@ import {
   squareInteractionFunc, MoveFunctions, SquareID, SquareInteractionFunc,
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
-import { gAssert } from '../../shared/assert';
+import { sAssert } from '../../shared/assert';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
 import { AppGame, BoardProps } from '../../shared/types';
 import { Piece } from "./piece";
@@ -37,8 +37,8 @@ const offBoard = (sq: SquareID) => sq.boardID !== 'main';
 
 const offBoardPiece = (sq: SquareID): string => {
   //KLUDGE To avoid fighting with 
-  gAssert(sq.boardID === 'white' || (sq.boardID === 'black'));
-  gAssert(sq.row === 0);
+  sAssert(sq.boardID === 'white' || (sq.boardID === 'black'));
+  sAssert(sq.row === 0);
 
   const offBoard = offBoardPieces[sq.boardID];
   return offBoard[sq.col];
@@ -162,7 +162,7 @@ function chess(displayName: string, pieces: Pieces): AppGame {
 
     moves: {
       start: (G: G, ctx: Ctx, sq: SquareID) => {
-        gAssert(G.pieces[sq.row][sq.col] !== null);
+        sAssert(G.pieces[sq.row][sq.col] !== null);
         G.moveStart = sq;
       },
 

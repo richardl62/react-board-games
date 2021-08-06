@@ -28,7 +28,8 @@ export function assertSilent(condition: any, message?: string,
     doAssert((arg:string)=>{} , condition, message, args);
 }
 
-// 'gAssert' -> 'general assert' or 'game assert' or something.
-// This name is used rather than 'assert' to destinguish it from standard assert
-// functions, and imparticular to make it easier to get MS code to import it.
-export { assertThrow as gAssert };
+// 'sAssert' -> 'standard assert'.
+// This name is used rather than 'assert' to destinguish it from other assert 
+// functions, e.g. console.assert, and so make it easier to get MS code to 
+// automatically import it.
+export { assertThrow as sAssert };

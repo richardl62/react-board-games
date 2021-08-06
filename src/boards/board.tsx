@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { gAssert } from '../shared/assert';
+import { sAssert } from '../shared/assert';
 import { applyDefaults, isRectangular } from '../shared/tools';
 import { BoardStyle, defaultColors } from "./interfaces";
 import { Square, SquareProps } from './internal/square';
@@ -64,7 +64,7 @@ export function Board(props: BoardProps) {
         borderWidth, colors, boardID} =
         applyDefaults(props, defaultProps);
 
-    gAssert(isRectangular(inputElems), "Board array must be probably 2D");
+    sAssert(isRectangular(inputElems), "Board array must be probably 2D");
 
     const { nRows, nCols } = rowCol(inputElems);
 

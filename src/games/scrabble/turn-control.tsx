@@ -1,7 +1,7 @@
 
 import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { allLetterBonus } from "./scrabble-config";
@@ -110,7 +110,7 @@ export function TurnControl(props: ScrabbleBoardProps) {
   if (active.length === 0) {
     const pass = () => {
       moves.endOfTurnActions();
-      gAssert(props.events.endTurn);
+      sAssert(props.events.endTurn);
       props.events.endTurn();
     }
     return (
@@ -134,7 +134,7 @@ export function TurnControl(props: ScrabbleBoardProps) {
   const onDone = () => {
       moves.endOfTurnActions();
       moves.recordScore(score);
-      gAssert(props.events.endTurn);
+      sAssert(props.events.endTurn);
       props.events.endTurn();
   }
   

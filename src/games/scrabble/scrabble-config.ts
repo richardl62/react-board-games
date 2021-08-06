@@ -1,4 +1,4 @@
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { SquareType } from "./square-type";
 
 // KLUDGE?: For now at least, all scrabble configurations use the same letter scores.
@@ -72,17 +72,17 @@ Object.freeze(standard);
 
 // Sanity checks. (Could be debug-only)
 
-gAssert(Object.keys(letterScores).length === 27, "Problem with setup");
-gAssert(Object.keys(standard.letterDistribution).length === 27, "Problem with setup");
+sAssert(Object.keys(letterScores).length === 27, "Problem with setup");
+sAssert(Object.keys(standard.letterDistribution).length === 27, "Problem with setup");
 
 //KLUDGE: Overly complex - using reduce just of the practice. 
 const letterCount : number = Object.entries(standard.letterDistribution).reduce(
     (prevCount, ld) => prevCount + ld[1], 0
 )
-gAssert(letterCount === 100, "Problem with setup");
+sAssert(letterCount === 100, "Problem with setup");
 
-gAssert(standard.boardLayout.length === 15);
-standard.boardLayout.forEach(row => gAssert(row.length === 15));
+sAssert(standard.boardLayout.length === 15);
+standard.boardLayout.forEach(row => sAssert(row.length === 15));
 
 
 export const simple : ScrabbleConfig = {

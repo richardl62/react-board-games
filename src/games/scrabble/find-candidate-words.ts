@@ -1,4 +1,4 @@
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { BoardData } from "./game-data";
 
 export interface RowCol {
@@ -23,7 +23,7 @@ export function makeString(
 
     const letters = positions.map(rc => {
         const td = board[rc.row][rc.col];
-        gAssert(td);
+        sAssert(td);
         return td.letter;
     });
     return "".concat(...letters);
@@ -110,7 +110,7 @@ function findWordsContaining(
     board: BoardData,
     direction: Direction,
 ): RowCol[] | null {
-    gAssert(positions.length > 0);
+    sAssert(positions.length > 0);
 
     if (!sameRowCol(positions, direction)) {
         return null;

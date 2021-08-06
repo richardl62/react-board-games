@@ -1,4 +1,4 @@
-import { assertThrow as gAssert } from '../shared/assert';
+import { assertThrow as sAssert } from '../shared/assert';
 import { sameJSON } from "../shared/tools";
 import { SquareID } from "./interfaces";
 import { DragType, SquareInteraction } from './internal/square';
@@ -55,12 +55,12 @@ export function squareInteractionFunc(
         //console.log(funcName, state.moveStatus, state.start)
         if(moveStatus !== undefined) {
             const statusArray = [moveStatus].flat()
-            gAssert(statusArray.includes(state.moveStatus), "unexpected moveStatus",
+            sAssert(statusArray.includes(state.moveStatus), "unexpected moveStatus",
                 state.moveStatus);
         }
 
         if(start !== undefined) {
-            gAssert(sameJSON(start, state.start), "unexpected start position",
+            sAssert(sameJSON(start, state.start), "unexpected start position",
                 state.start);
         }
     }
@@ -87,7 +87,7 @@ export function squareInteractionFunc(
 
             state.reset();
         } else {
-            gAssert(false, "Unexpected state on click", state.moveStatus);
+            sAssert(false, "Unexpected state on click", state.moveStatus);
         }
     }
 

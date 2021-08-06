@@ -1,5 +1,5 @@
 
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { BoardData } from "./game-data";
 import { Letter, letterScores, ScrabbleConfig } from "./scrabble-config";
 import { multipliers } from "./square-type";
@@ -19,7 +19,7 @@ export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: Scra
 
     word.forEach(rc => {
         const sq = board[rc.row][rc.col];
-        gAssert(sq);
+        sAssert(sq);
 
         if(sq.active) {
             const mults = multipliers(

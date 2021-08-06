@@ -1,5 +1,5 @@
 import { DragType, MoveFunctions, SquareID } from "../../boards";
-import { gAssert } from "../../shared/assert";
+import { sAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { Letter } from "./scrabble-config";
 import { TileData, GameData, BoardData, Rack } from "./game-data";
@@ -13,14 +13,14 @@ export const boardIDs = {
 
 export function onRack(sq: SquareID | null): boolean {
     if(sq && sq.boardID === boardIDs.rack) {
-        gAssert(sq.row === 0); 
+        sAssert(sq.row === 0); 
         return true;
     } 
     return false;
 }
 
 function rackPos(sq: SquareID): number {
-    gAssert(onRack(sq)) ;
+    sAssert(onRack(sq)) ;
     return sq.col;
 }
 
@@ -39,7 +39,7 @@ export function getSquareData(G: GameData, rack: Rack, sq: SquareID) : TileData 
 
 function makeRackGap(rack: (Letter|null)[], pos: number) {
     const nullPos = rack.findIndex(l => l === null);
-    gAssert(nullPos >= 0, "makeRackGap did not find an empty square");
+    sAssert(nullPos >= 0, "makeRackGap did not find an empty square");
     if(nullPos < pos) {
         for(let ind = nullPos; ind < pos; ++ind) {
             rack[ind] = rack[ind+1];
@@ -74,7 +74,7 @@ export function getWord(
     {
     let letters = positions.map(rc => {
         const sq = board[rc.row][rc.col];
-        gAssert(sq);
+        sAssert(sq);
         return sq.letter;
     });
 
@@ -111,7 +111,7 @@ export function recallRack(G: GameData, rack: Rack) {
 
 export function addToRack(rack: Rack, l: Letter) {
     let emptyIndex = rack.findIndex(l => l === null);
-    gAssert(emptyIndex >= 0, "Attempt to add to full rack");
+    sAssert(emptyIndex >= 0, "Attempt to add to full rack");
     rack[emptyIndex] = l;
 }
 
