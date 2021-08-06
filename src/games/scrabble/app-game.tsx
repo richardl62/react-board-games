@@ -1,3 +1,4 @@
+import React from "react";
 import { Ctx } from "boardgame.io";
 import { AppGame, BoardProps } from "../../shared/types";
 import { bgioMoves } from "./bgio-moves";
