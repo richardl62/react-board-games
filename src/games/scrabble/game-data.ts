@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
-import { nestedArrayMap, shuffle } from "../../shared/tools";
+import { nestedArrayMap } from "../../shared/tools";
 import { Letter, ScrabbleConfig } from "./scrabble-config";
 
 export interface TileData {
@@ -34,22 +34,9 @@ export interface GameData {
     moveStart: SquareID | null;
 }
 
-function makeBag({letterDistribution}: ScrabbleConfig): Letter[] {
-
-    let bag: Array<Letter> = [];
-    for (const letter_ in letterDistribution) {
-        const letter = letter_ as Letter; // KLUDGE? - why does TS need this?
-        const count = letterDistribution[letter];
-        for (let i = 0; i < count; ++i) {
-            bag.push(letter);
-        }
-    }
-
-    return shuffle(bag);
-}
 
 export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
-    let bag = makeBag(config); 
+    let bag = config.makeFullBag(); 
 
     const rack = () => {
         let letters : Letter[] = [];

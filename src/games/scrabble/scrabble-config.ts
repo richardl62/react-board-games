@@ -1,4 +1,5 @@
 import { sAssert } from "../../shared/assert";
+import { shuffle } from "../../shared/tools";
 import { SquareType } from "./square-type";
 
 // KLUDGE?: For now at least, all scrabble configurations use the same letter scores.
@@ -12,6 +13,13 @@ export const letterScores = {
     J: 8, X: 8,
     Q:10, Z: 10,
 }
+
+const standardLetterDistribution = {
+    A: 9, B: 2, C: 2, D: 4, E: 12, F: 2, G: 3, H: 2, 
+    I: 9, J: 1, K: 1, L: 4, M:  2, N: 6, O: 8, P: 2, 
+    Q: 1, R: 6, S: 4, T: 6, U:  4, V: 2, W: 2, X: 1, Y: 2, Z: 1, '?': 2,
+};
+
 Object.freeze(letterScore);
 export type Letter = keyof typeof letterScores;
 
@@ -28,23 +36,43 @@ const d = SquareType.doubleLetter;
 const t = SquareType.tripleLetter;
 const s = SquareType.simple;
 
-interface LetterDistribution {
-    [key: string]: any;
-}
 
 export interface ScrabbleConfig {
-    letterDistribution : LetterDistribution;
+    name: string,
+    displayName: string,
+    minPlayers: number,
+    maxPlayers: number, 
+    
+    /** Make a full bag of letters suitable for use at the start
+     * of a game. It returned bad is shuffled if appropriate.
+     * (In general shuffling is appropriate. But for some test purposes,
+     * an unshuffled bag make be perfered.)
+     */
+    makeFullBag : () => Letter[];
     boardLayout: SquareType[][];
     rackSize: number;
 }
 
 
-export const standard : ScrabbleConfig = {
-    letterDistribution: {
-        A: 9, B: 2, C: 2, D: 4, E: 12, F: 2, G: 3, H: 2, 
-        I: 9, J: 1, K: 1, L: 4, M:  2, N: 6, O: 8, P: 2, 
-        Q: 1, R: 6, S: 4, T: 6, U:  4, V: 2, W: 2, X: 1, Y: 2, Z: 1, '?': 2,
+const standard : ScrabbleConfig = {
+    name: 'scrabble',
+    displayName: 'Scrabble',
+    minPlayers: 1,
+    maxPlayers: 4, 
+
+    makeFullBag() {
+        let bag: Array<Letter> = [];
+        for (const letter_ in standardLetterDistribution) {
+            const letter = letter_ as Letter; // KLUDGE? - why does TS need this?
+            const count = standardLetterDistribution[letter];
+            for (let i = 0; i < count; ++i) {
+                bag.push(letter);
+            }
+        }
+    
+        return shuffle(bag);
     },
+
 
     boardLayout: [
         [T, s, s, d, s, s, s, T, s, s, s, d, s, s, T],
@@ -73,10 +101,10 @@ Object.freeze(standard);
 // Sanity checks. (Could be debug-only)
 
 sAssert(Object.keys(letterScores).length === 27, "Problem with setup");
-sAssert(Object.keys(standard.letterDistribution).length === 27, "Problem with setup");
+sAssert(Object.keys(standardLetterDistribution).length === 27, "Problem with setup");
 
 //KLUDGE: Overly complex - using reduce just of the practice. 
-const letterCount : number = Object.entries(standard.letterDistribution).reduce(
+const letterCount : number = Object.entries(standardLetterDistribution).reduce(
     (prevCount, ld) => prevCount + ld[1], 0
 )
 sAssert(letterCount === 100, "Problem with setup");
@@ -85,10 +113,17 @@ sAssert(standard.boardLayout.length === 15);
 standard.boardLayout.forEach(row => sAssert(row.length === 15));
 
 
-export const simple : ScrabbleConfig = {
-    letterDistribution: {
-        A: 1, B: 1, C: 1, D: 1, E: 1, F: 1, G: 1, H: 1, 
-        '?': 2, 
+const simple: ScrabbleConfig = {
+    name: 'scrabble-simple',
+    displayName: 'Simple Scrabble (for testing)',
+    minPlayers: 1,
+    maxPlayers: 4,
+    rackSize: 3,
+
+    makeFullBag: () => {
+        // Unshuffled to help with testing
+        let bag : Letter[] = ['A', 'B', '?', 'C', 'D', '?', 'E', 'F', 'G', 'H',];
+        return bag.reverse();
     },
 
     boardLayout: [
@@ -100,7 +135,10 @@ export const simple : ScrabbleConfig = {
 
     ],
 
-    rackSize: 3,
 }
 Object.freeze(simple);
+
+export const configs = [standard, simple];
+
+
 
