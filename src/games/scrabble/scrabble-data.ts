@@ -16,11 +16,14 @@ export class ScrabbleData {
         this.currentPlayer = props.ctx.currentPlayer;
         this.G = props.G;
         this.ctx = props.ctx;
-        this.moves = props.moves as any;
+        this.moves = props.moves as any as ClientMoves;
+        this.events = props.events;
         this.clickDragState = clickDragState;
         this.allJoined = props.allJoined;
         this.playerData = props.playerData;
         this.config = props.config;
+        this.boardProps = props;
+
     }
 
     private readonly ctx: Ctx;
@@ -29,16 +32,19 @@ export class ScrabbleData {
     readonly playerID: string;
     readonly currentPlayer: string;
     readonly moves: ClientMoves;
+    readonly events: ScrabbleBoardProps['events'];
     readonly clickDragState: ClickDragState;
     readonly allJoined: boolean;
     readonly playerData: PlayerDataDictionary;
     readonly config: ScrabbleConfig;
 
+    readonly boardProps: ScrabbleBoardProps;
+
     get board() {return this.G.board;}
     get rackEtc() {return this.G.playerData;}
     get bag() {return this.G.bag;}
     get playOrder() {return this.ctx.playOrder}
-    get events() : any {throw new Error("To do");}
+
 
 
     get isMyTurn() : boolean {

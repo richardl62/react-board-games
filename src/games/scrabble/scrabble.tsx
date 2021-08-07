@@ -51,7 +51,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
   );
 
   if(!scrabbleData.allJoined) {
-    <WaitingForPlayers {...scrabbleData.boardData />
+    <WaitingForPlayers {...scrabbleData.boardProps} />
   }
 
   const rack = scrabbleData.rackEtc[scrabbleData.playerID].rack;
