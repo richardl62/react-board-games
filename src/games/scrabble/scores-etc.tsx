@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../game-support/show-warning";
-import { sAssert } from "../../shared/assert";
 import { ScrabbleData } from "./scrabble-data";
 
 const StyledScoresEtc=styled.div`
@@ -18,23 +17,16 @@ const PlayerScore=styled.div<{current: boolean}>`
 export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}) {
 
 
-    let scoreElems = scrabbleData.playOrder.map(playerID => {
-        const generalPd = scrabbleData.playerData[playerID];
-        const scrabblePd = scrabbleData.rackEtc[playerID];
-        sAssert(generalPd && scrabblePd);
-
-        const name = generalPd.name;
-        const score = scrabblePd.score;
-        const isYou = playerID === scrabbleData.playerID;
-
-        const current = playerID === scrabbleData.currentPlayer;
+    let scoreElems = scrabbleData.playOrder.map(pid => {
+        const score = scrabbleData.score(pid);
+        const name = scrabbleData.name(pid)
 
         let displayName = name;
-        if (isYou) {
+        if (pid === scrabbleData.playerID) {
             displayName += " (you)"
         }
         return (
-            <PlayerScore key={name} current={current} >
+            <PlayerScore key={name} current={scrabbleData.isMyTurn} >
                 {`${displayName}: ${score}`}
             </PlayerScore>
         );

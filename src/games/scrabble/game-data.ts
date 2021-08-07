@@ -18,12 +18,12 @@ export type BoardData = (TileData | null)[][];
 
 export type Rack = (Letter | null)[];
 
-export interface PlayerData {
+export interface GamePlayerData {
     rack: Rack;
     score: number;
 }
 
-type PlayerDataDictionary = {[id: string] : PlayerData};
+type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
 export interface GameData {
     board: BoardData;

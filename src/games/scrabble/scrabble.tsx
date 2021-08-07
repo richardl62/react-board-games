@@ -53,7 +53,6 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
     <WaitingForPlayers {...scrabbleData.boardProps} />
   }
 
-  const rack = scrabbleData.rackEtc[scrabbleData.playerID].rack;
   const swapTiles = (toSwap: boolean[]) => {
     scrabbleData.swapTiles(toSwap);
     scrabbleData.endTurn(0);
@@ -66,7 +65,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         <RackEtc
           squareInteraction={squareInteraction}
           clickDragState={scrabbleData.clickDragState}
-          rack={rack}
+          rack={scrabbleData.rack()}
           swapTiles={swapTiles}
           scrabbleData={scrabbleData}
         />

@@ -2,10 +2,10 @@ import { Ctx } from "boardgame.io";
 import { useRef } from "react";
 import { ClickDragState, SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
-import { PlayerDataDictionary } from "../../shared/player-data";
+import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
-import { GameData } from "./game-data";
+import { GameData, Rack } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { ScrabbleConfig } from "./scrabble-config";
 
@@ -21,7 +21,6 @@ export class ScrabbleData {
         this.ctx = props.ctx;
         this.moves = props.moves as any as ClientMoves;
         this.allJoined = props.allJoined;
-        this.playerData = props.playerData;
         this.config = props.config;
     }
 
@@ -32,22 +31,41 @@ export class ScrabbleData {
     readonly playerID: string;
     readonly currentPlayer: string;
     readonly allJoined: boolean;
-    readonly playerData: PlayerDataDictionary;
-
     readonly clickDragState: ClickDragState;
 
     readonly config: ScrabbleConfig;
 
-    readonly boardProps: ScrabbleBoardProps;
+    /** Intended for use only when 'leaving the world of Scrabble',
+     *  e.g. when using game-agnostic tools.
+     */
+    readonly boardProps: BoardProps;
 
     get board() {return this.G.board;}
-    get rackEtc() {return this.G.playerData;}
     get bag() {return this.G.bag;}
     get playOrder() {return this.ctx.playOrder}
 
     get isMyTurn() : boolean {
         return this.playerID === this.ctx.currentPlayer;
     } 
+
+
+    name(pid: string = this.playerID) : string {
+        const playerData = this.boardProps.playerData[pid];
+        sAssert(playerData);
+        return playerData.name;
+    }
+
+    rack(pid: string = this.playerID) : Rack {
+        const playerData = this.G.playerData[pid];
+        sAssert(playerData);
+        return playerData.rack;
+    }
+
+    score(pid: string = this.playerID) : number {
+        const playerData = this.G.playerData[pid];
+        sAssert(playerData);
+        return playerData.score;
+    }
 
     canMove(sq: SquareID) : boolean {
         return this.isMyTurn && (onRack(sq) || Boolean(this.board[sq.row][sq.col]?.active));
