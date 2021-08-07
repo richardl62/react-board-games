@@ -1,7 +1,6 @@
 
 import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
 import { allLetterBonus } from "./scrabble-config";
 import { findActiveLetters, findCandidateWords } from "./find-candidate-words";
@@ -99,9 +98,7 @@ export function TurnControl({scrabbleData}: {scrabbleData: ScrabbleData}) {
 
   if (active.length === 0) {
     const pass = () => {
-      scrabbleData.moves.endOfTurnActions();
-      sAssert(scrabbleData.events.endTurn);
-      scrabbleData.events.endTurn();
+      scrabbleData.endTurn(0);
     }
     return (
       <StyledScoreLine>
@@ -122,10 +119,7 @@ export function TurnControl({scrabbleData}: {scrabbleData: ScrabbleData}) {
   
   const words = candidtateWords.map(cw => getWord(scrabbleData.board, cw));
   const onDone = () => {
-      scrabbleData.moves.endOfTurnActions();
-      scrabbleData.moves.recordScore(score);
-      sAssert(scrabbleData.events.endTurn);
-      scrabbleData.events.endTurn();
+      scrabbleData.endTurn(score);
   }
   
   return (

@@ -97,15 +97,15 @@ export function RackEtc(props: RackProps) {
 
     const doEnableSwap = () => {
       sAssert(!selectedForSwap);
-      scrabbleData.moves.recallRack();
+      scrabbleData.recallRack();
       setSelectedForSwap(Array(nLetters).fill(false));
     }
 
     return (<StyledRackEtc>
       <PreRack>
-        {hasTilesOut && <button onClick={() => scrabbleData.moves.recallRack()}>Recall</button>}
+        {hasTilesOut && <button onClick={() => scrabbleData.recallRack()}>Recall</button>}
         <button 
-          onClick={() => scrabbleData.moves.shuffleRack()}
+          onClick={() => scrabbleData.shuffleRack()}
           disabled={!scrabbleData.isMyTurn}
         >
           Shuffle

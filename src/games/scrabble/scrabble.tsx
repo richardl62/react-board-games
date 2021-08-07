@@ -4,7 +4,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
-import { sAssert } from "../../shared/assert";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
@@ -31,7 +30,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
   const moveFunctions = {
     onClickMoveStart: (sq: SquareID) => {
       if(scrabbleData.canMove(sq)) {
-          scrabbleData.moves.start(sq);
+          scrabbleData.startMove(sq);
           return true;
       }
       return false;
@@ -39,7 +38,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
       if (to) {
-        scrabbleData.moves.move({from: from, to: to});
+        scrabbleData.move({from: from, to: to});
       }
     },
 
@@ -56,9 +55,8 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
 
   const rack = scrabbleData.rackEtc[scrabbleData.playerID].rack;
   const swapTiles = (toSwap: boolean[]) => {
-    scrabbleData.moves.swapTilesInRack(toSwap);
-    sAssert(scrabbleData.events.endTurn);
-    scrabbleData.events.endTurn();
+    scrabbleData.swapTiles(toSwap);
+    scrabbleData.endTurn(0);
   };
 
   return (
