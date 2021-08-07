@@ -75,9 +75,7 @@ export class ScrabbleData {
 
 
     endTurn(score: number) {
-        this.moves.endOfTurnActions();
-        this.moves.recordScore(score);
-
+        this.moves.endOfTurnActions(score);
 
         sAssert(this.boardProps.events.endTurn);
         this.boardProps.events.endTurn();

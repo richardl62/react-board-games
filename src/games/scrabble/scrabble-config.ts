@@ -47,6 +47,8 @@ export interface ScrabbleConfig {
      * of a game. It returned bad is shuffled if appropriate.
      * (In general shuffling is appropriate. But for some test purposes,
      * an unshuffled bag make be perfered.)
+     * The bag in always shuffled after an exchange of tile (even when
+     * this would be unhelpful for testing.)  Aug 2021
      */
     makeFullBag : () => Letter[];
     boardLayout: SquareType[][];

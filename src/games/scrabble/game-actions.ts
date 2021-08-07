@@ -183,5 +183,6 @@ export function moveFunctions(props: BoardProps<GameData>) : MoveFunctions {
   };
 
 export function canSwapTiles(G: GameData) {
-    return G.bag.length >= 7;
+    const rankSize = Object.values(G.playerData)[0].rack.length;
+    return G.bag.length >= rankSize;
 }
