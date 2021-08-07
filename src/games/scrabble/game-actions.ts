@@ -60,8 +60,8 @@ function makeRackGap(rack: (Letter|null)[], pos: number) {
 * Note: For most of the game this is equivalent to checking if the rank has 
 * gaps. But difference can occur at the end of the game when the bag is emtpy.
 */
-export function tilesOut(gameData: GameData) : boolean {
-    return !!gameData.board.find(row => row.find(sq=>sq?.active));
+export function tilesOut(board: BoardData) : boolean {
+    return !!board.find(row => row.find(sq=>sq?.active));
 }
 
 export function getWord(

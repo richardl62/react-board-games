@@ -3,14 +3,12 @@ import React, { ReactNode, useRef, useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../shared/assert";
 import { sameJSON } from "../../shared/tools";
-import { ClientMoves } from "./bgio-moves";
 import { allLetterBonus } from "./scrabble-config";
 import { findActiveLetters, findCandidateWords } from "./find-candidate-words";
 import { getWord } from "./game-actions";
-import { GameData } from "./game-data";
 import { isLegalWord } from "./is-legal-word";
 import { scoreWords } from "./score-word";
-import { ScrabbleBoardProps } from "./scrabble-board-props";
+import { ScrabbleData } from "./scrabble-data";
 
 const StyledScoreLine = styled.div`
   display: flex; 
@@ -94,48 +92,40 @@ function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
    )
 }
 
-function getRackSize(G: GameData) : number { 
-  const firstPlayerData = Object.entries(G.playerData)[0][1]; 
-  return firstPlayerData.rack.length;
-}
 
-export function TurnControl(props: ScrabbleBoardProps) {
-  const board = props.G.board;
-  const moves = props.moves as any as ClientMoves;
-  const active = findActiveLetters(board)
-  const isMyTurn = props.playerID === props.ctx.currentPlayer;
-  const rackSize = getRackSize(props.G);
-  const config = props.config;
+export function TurnControl({scrabbleData}: {scrabbleData: ScrabbleData}) {
+  const active = findActiveLetters(scrabbleData.board);
+  const config = scrabbleData.config;
 
   if (active.length === 0) {
     const pass = () => {
-      moves.endOfTurnActions();
-      sAssert(props.events.endTurn);
-      props.events.endTurn();
+      scrabbleData.moves.endOfTurnActions();
+      sAssert(scrabbleData.events.endTurn);
+      scrabbleData.events.endTurn();
     }
     return (
       <StyledScoreLine>
-        <button onClick={pass} disabled={!isMyTurn}> Pass </button>
+        <button onClick={pass} disabled={!scrabbleData.isMyTurn}> Pass </button>
       </StyledScoreLine>
     );
   }
 
-  const candidtateWords = findCandidateWords(board, active);
+  const candidtateWords = findCandidateWords(scrabbleData.board, active);
   if (!candidtateWords) {
     return <ScoreLine score={null}/>
   }
 
-  let score = scoreWords(board, candidtateWords, config);
-  if(active.length === rackSize) {
+  let score = scoreWords(scrabbleData.board, candidtateWords, config);
+  if(active.length === config.rackSize) {
     score += allLetterBonus;
   }
   
-  const words = candidtateWords.map(cw => getWord(board, cw));
+  const words = candidtateWords.map(cw => getWord(scrabbleData.board, cw));
   const onDone = () => {
-      moves.endOfTurnActions();
-      moves.recordScore(score);
-      sAssert(props.events.endTurn);
-      props.events.endTurn();
+      scrabbleData.moves.endOfTurnActions();
+      scrabbleData.moves.recordScore(score);
+      sAssert(scrabbleData.events.endTurn);
+      scrabbleData.events.endTurn();
   }
   
   return (

@@ -13,6 +13,7 @@ export class ScrabbleData {
     constructor(props: ScrabbleBoardProps, clickDragState: ClickDragState) {
         sAssert(props.playerID);
         this.playerID = props.playerID;
+        this.currentPlayer = props.ctx.currentPlayer;
         this.G = props.G;
         this.ctx = props.ctx;
         this.moves = props.moves as any;
@@ -26,6 +27,7 @@ export class ScrabbleData {
     private readonly G: GameData;
     
     readonly playerID: string;
+    readonly currentPlayer: string;
     readonly moves: ClientMoves;
     readonly clickDragState: ClickDragState;
     readonly allJoined: boolean;
@@ -34,6 +36,7 @@ export class ScrabbleData {
 
     get board() {return this.G.board;}
     get rackEtc() {return this.G.playerData;}
+    get bag() {return this.G.bag;}
     get playOrder() {return this.ctx.playOrder}
     get events() : any {throw new Error("To do");}
 

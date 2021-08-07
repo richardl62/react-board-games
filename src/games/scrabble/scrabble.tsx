@@ -51,7 +51,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
   );
 
   if(!scrabbleData.allJoined) {
-    <WaitingForPlayers scrabbleData={scrabbleData} />
+    <WaitingForPlayers {...scrabbleData.boardData />
   }
 
   const rack = scrabbleData.rackEtc[scrabbleData.playerID].rack;
@@ -70,7 +70,6 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
           clickDragState={scrabbleData.clickDragState}
           rack={rack}
           swapTiles={swapTiles}
-          //Hmm, why this as well as the above?
           scrabbleData={scrabbleData}
         />
         <MainBoard
@@ -82,7 +81,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         <SpaceBetween>
           <WordChecker/>
           <div>
-            Tiles left: <span>{G.bag.length}</span>
+            Tiles left: <span>{scrabbleData.bag.length}</span>
           </div>
         </SpaceBetween>
 

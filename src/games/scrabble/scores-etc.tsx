@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../game-support/show-warning";
 import { sAssert } from "../../shared/assert";
-import { BoardProps } from "../../shared/types";
-import { GameData } from "./game-data";
+import { ScrabbleData } from "./scrabble-data";
 
 const StyledScoresEtc=styled.div`
     display: flex;
@@ -16,19 +15,19 @@ const PlayerScore=styled.div<{current: boolean}>`
 `;
 
 // To do: Think of a better name
-export function ScoresEtc(props : BoardProps<GameData>) {
+export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}) {
 
 
-    let scoreElems = props.ctx.playOrder.map(playerID => {
-        const generalPd = props.playerData[playerID];
-        const scrabblePd = props.G.playerData[playerID];
+    let scoreElems = scrabbleData.playOrder.map(playerID => {
+        const generalPd = scrabbleData.playerData[playerID];
+        const scrabblePd = scrabbleData.rackEtc[playerID];
         sAssert(generalPd && scrabblePd);
 
         const name = generalPd.name;
         const score = scrabblePd.score;
-        const isYou = playerID === props.playerID;
+        const isYou = playerID === scrabbleData.playerID;
 
-        const current = playerID === props.ctx.currentPlayer;
+        const current = playerID === scrabbleData.currentPlayer;
 
         let displayName = name;
         if (isYou) {
@@ -44,7 +43,7 @@ export function ScoresEtc(props : BoardProps<GameData>) {
     return (
         <div>
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...props} />
+            <GameWarnings scrabbleData={scrabbleData}/>
         </div>
     )
 }

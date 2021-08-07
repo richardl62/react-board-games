@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import { sAssert } from "../../shared/assert";
-import { ClientMoves } from "./bgio-moves";
 import { boardIDs, tilesOut } from "./game-actions";
 import { Rack as RackType } from "./game-data";
-import { ScrabbleBoardProps } from "./scrabble-board-props";
+import { ScrabbleData } from "./scrabble-data";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 
@@ -23,21 +22,19 @@ align-items: center;
 gap: 3%;
 `
 
-interface RackProps extends ScrabbleBoardProps {
+interface RackProps {
   squareInteraction: SquareInteractionFunc;
   clickDragState: ClickDragState;
   rack: RackType;
   swapTiles: (toSwap: boolean[]) => void;
+  scrabbleData: ScrabbleData;
 }
 
 export function RackEtc(props: RackProps) {
-  const { playerID, G, ctx, squareInteraction, clickDragState, swapTiles} = props;
-  const moves = props.moves as any as ClientMoves;
-  const hasTilesOut = tilesOut(G);
+  const {squareInteraction, clickDragState, swapTiles, scrabbleData } = props;
+  const hasTilesOut = tilesOut(scrabbleData.board);
   const letters = props.rack;
   const nLetters = letters.length;
-
-  const isMyTurn =  playerID === ctx.currentPlayer;
 
   // selectedForSwap is null if a swap is not in progress.
   const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -100,16 +97,16 @@ export function RackEtc(props: RackProps) {
 
     const doEnableSwap = () => {
       sAssert(!selectedForSwap);
-      moves.recallRack();
+      scrabbleData.moves.recallRack();
       setSelectedForSwap(Array(nLetters).fill(false));
     }
 
     return (<StyledRackEtc>
       <PreRack>
-        {hasTilesOut && <button onClick={() => moves.recallRack()}>Recall</button>}
+        {hasTilesOut && <button onClick={() => scrabbleData.moves.recallRack()}>Recall</button>}
         <button 
-          onClick={() => moves.shuffleRack()}
-          disabled={!isMyTurn}
+          onClick={() => scrabbleData.moves.shuffleRack()}
+          disabled={!scrabbleData.isMyTurn}
         >
           Shuffle
           </button>
@@ -119,7 +116,7 @@ export function RackEtc(props: RackProps) {
 
       <button 
         onClick={doEnableSwap}
-        disabled={!isMyTurn}
+        disabled={!scrabbleData.isMyTurn}
       >
         Swap
       </button>
