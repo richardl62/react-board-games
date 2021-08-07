@@ -1,16 +1,15 @@
-import React, { useRef } from "react";
+import React from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { ClickDragState, DragType, SquareID, squareInteractionFunc } from "../../boards";
+import { DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
 import { sAssert } from "../../shared/assert";
-import { ClientMoves } from "./bgio-moves";
-import { onRack } from "./game-actions";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
+import { useScrabbleData } from "./scrabble-data";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 
@@ -24,23 +23,15 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-
-export function ScrabbleBoard(props: ScrabbleBoardProps) {
-  const {G, playerID, events, config } = props;
-  sAssert(playerID);
-  const moves = props.moves as any as ClientMoves;
-  const {board} = G;
-
-  const clickDragState = useRef(new ClickDragState()).current;
   
-  const isMyTurn = props.playerID === props.ctx.currentPlayer;
-  const canMove = (sq: SquareID) =>
-    isMyTurn && (onRack(sq) || Boolean(board[sq.row][sq.col]?.active));
+export function ScrabbleBoard(props_: ScrabbleBoardProps) {
+  const scrabbleData = useScrabbleData(props_);
+
 
   const moveFunctions = {
     onClickMoveStart: (sq: SquareID) => {
-      if(canMove(sq)) {
-          moves.start(sq);
+      if(scrabbleData.canMove(sq)) {
+          scrabbleData.moves.start(sq);
           return true;
       }
       return false;
@@ -48,44 +39,45 @@ export function ScrabbleBoard(props: ScrabbleBoardProps) {
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
       if (to) {
-        moves.move({from: from, to: to});
+        scrabbleData.moves.move({from: from, to: to});
       }
     },
 
-    dragType: (sq: SquareID) => canMove(sq) ? DragType.move : DragType.disable,
+    dragType: (sq: SquareID) => scrabbleData.canMove(sq) ? DragType.move : DragType.disable,
   }
 
   const squareInteraction = squareInteractionFunc(
-    moveFunctions, clickDragState
+    moveFunctions, scrabbleData.clickDragState
   );
 
-  if(!props.allJoined) {
-    return <WaitingForPlayers {...props} />
+  if(!scrabbleData.allJoined) {
+    <WaitingForPlayers scrabbleData={scrabbleData} />
   }
 
-  const rack = G.playerData[playerID].rack;
+  const rack = scrabbleData.rackEtc[scrabbleData.playerID].rack;
   const swapTiles = (toSwap: boolean[]) => {
-    moves.swapTilesInRack(toSwap);
-    sAssert(events.endTurn);
-    events.endTurn();
+    scrabbleData.moves.swapTilesInRack(toSwap);
+    sAssert(scrabbleData.events.endTurn);
+    scrabbleData.events.endTurn();
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Game>
-        <ScoresEtc {...props} />
+        <ScoresEtc scrabbleData={scrabbleData} />
         <RackEtc
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState}
+          clickDragState={scrabbleData.clickDragState}
           rack={rack}
           swapTiles={swapTiles}
-          {...props}
+          //Hmm, why this as well as the above?
+          scrabbleData={scrabbleData}
         />
         <MainBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState}
-          board={G.board}
-          config={config}
+          clickDragState={scrabbleData.clickDragState}
+          board={scrabbleData.board}
+          config={scrabbleData.config}
         />
         <SpaceBetween>
           <WordChecker/>
@@ -94,7 +86,7 @@ export function ScrabbleBoard(props: ScrabbleBoardProps) {
           </div>
         </SpaceBetween>
 
-        <TurnControl {...props}/>
+        <TurnControl scrabbleData={scrabbleData}/>
 
       </Game>
     </DndProvider>
