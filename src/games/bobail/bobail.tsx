@@ -46,7 +46,6 @@ function BobailBoard({ G, moves }: BoardProps<G>) {
 
     const clickDragState = useRef(new ClickDragState()).current;
     const moveFunctions: MoveFunctions = {
-        onClickMoveStart: () => true,
         dragType: () => DragType.move,
         onMoveEnd: (from: SquareID, to: SquareID | null) => { },
     };

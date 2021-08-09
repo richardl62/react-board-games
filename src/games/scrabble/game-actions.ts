@@ -156,22 +156,9 @@ export function setLetter(
 }
 
 export function moveFunctions(props: BoardProps<GameData>) : MoveFunctions {
-    const { G: {board} } = props;
-    const moves  = props.moves as any as ClientMoves;
 
-    const isActive = (sq: SquareID) : boolean =>
-    {
-        return onRack(sq) || Boolean(board[sq.row][sq.col]?.active);
-    } 
+    const moves  = props.moves as any as ClientMoves;
     return {
-      onClickMoveStart: (sq: SquareID) => {
-        const canMove = isActive(sq); 
-        if(canMove) {
-            moves.start(sq);
-        }
-        return canMove;
-      },
-  
       onMoveEnd: (from: SquareID, to: SquareID | null) => {
         if(to) {
             moves.move({from:from, to: to});

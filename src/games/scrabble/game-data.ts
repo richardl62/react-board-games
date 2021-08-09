@@ -1,5 +1,4 @@
 import { Ctx } from "boardgame.io";
-import { SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { nestedArrayMap } from "../../shared/tools";
 import { Letter, ScrabbleConfig } from "./scrabble-config";
@@ -29,9 +28,6 @@ export interface GameData {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
-
-    // To help with click-moves
-    moveStart: SquareID | null;
 }
 
 
@@ -62,6 +58,5 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
         board: nestedArrayMap(config.boardLayout, () => null),
         playerData: playerData,
         bag: bag,
-        moveStart: null,
     };
 }

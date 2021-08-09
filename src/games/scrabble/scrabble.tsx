@@ -28,13 +28,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
 
 
   const moveFunctions = {
-    onClickMoveStart: (sq: SquareID) => {
-      if(scrabbleData.canMove(sq)) {
-          scrabbleData.startMove(sq);
-          return true;
-      }
-      return false;
-    },
+
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
       if (to) {

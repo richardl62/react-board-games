@@ -71,10 +71,6 @@ export class ScrabbleData {
         return this.isMyTurn && (onRack(sq) || Boolean(this.board[sq.row][sq.col]?.active));
     }
 
-    startMove(sq: SquareID){
-        this.moves.start(sq);
-    }
-
     move(arg: {from: SquareID,to: SquareID}){
         this.moves.move(arg);
     }

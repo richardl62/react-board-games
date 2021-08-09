@@ -6,16 +6,8 @@ import { DragType, SquareInteraction } from './internal/square';
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
 
-    /** Call at the (possible) start of a click move. If false the move is abandoned.
-     */
-    onClickMoveStart: (square: SquareID) => boolean;
-
     /** Called at the end of a move. 'to' is set to null for an invalid move,
      * e.g. dragging off the boards.
-     *
-     * Will be called extactly once for each call to onMoveStart that does not
-     * return false. Called with 'to' === null on a 'bad' move, i.e. a drag
-     * to a non-droppable location.
      */
     onMoveEnd: (from: SquareID, to: SquareID | null) => void;
 
@@ -23,7 +15,7 @@ export interface MoveFunctions {
     dragType: (square: SquareID) => DragType;
 }
 
-type MoveStatus = 'none' | 'clickMoveStarted' | 'dragging' | 'dropped';
+type MoveStatus = 'none' | 'dragging' | 'dropped';
 
 export class ClickDragState {
     moveStatus: MoveStatus = 'none';
@@ -64,31 +56,9 @@ export function squareInteractionFunc(
                 state.start);
         }
     }
-    
-    const onMouseDown = (sq: SquareID) => {}
 
     const onClick = (sq: SquareID) => {
-        check("onClick");
-
-        // Call the user callback, if any.
         moveFunctions.onClick?.(sq);
-
-        if (state.moveStatus === 'none') {
-            const startMove = moveFunctions.onClickMoveStart(sq);
-
-            if(startMove) {
-                state.moveStatus = 'clickMoveStarted';
-                state.start = sq;
-            }
-        } else if (state.moveStatus === 'clickMoveStarted' 
-            && state.start !== null // defensive
-            ) {
-            moveFunctions.onMoveEnd(state.start, sq);
-
-            state.reset();
-        } else {
-            sAssert(false, "Unexpected state on click", state.moveStatus);
-        }
     }
 
     const onDragStart = (from: SquareID) => {
@@ -116,16 +86,11 @@ export function squareInteractionFunc(
     }
 
     const dragType = (from: SquareID) => { 
-        if(state.moveStatus === 'clickMoveStarted') {
-            return DragType.disable;
-        }
-    
         return moveFunctions.dragType(from);
     }
 
     return (sq: SquareID) :  Required<SquareInteraction> => {
         return {
-            onMouseDown: () => onMouseDown(sq),
             onClick: () => onClick(sq),
             onDragStart: () => onDragStart(sq),
             onDragEnd: () => onDragEnd(sq),

@@ -90,7 +90,6 @@ export enum DragType {
 };
 
 export interface SquareInteraction {
-    onMouseDown?: () => void;
     onClick?: () => void;
 
     /** Called at start of a possible drag. 
@@ -123,7 +122,7 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 
 export function Square(props: SquareProps) {
     const { children, background, showHover,
-            highlight, label, onClick, onMouseDown, 
+            highlight, label, onClick,
             onDragStart, onDrop, onDragEnd, size 
         } = props;
 
@@ -189,7 +188,6 @@ export function Square(props: SquareProps) {
 
             //onClick={onClick && (() => onClick(label))}
             onClick={onClick && (() => onClick())}
-            onMouseDown={onMouseDown && (() => onMouseDown())}
         >
             <SquareHelper backgroundColor={background.color}>
                 {background.text}

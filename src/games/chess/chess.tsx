@@ -107,15 +107,6 @@ function ChessBoard(props: BoardProps<G>) {
 
   const clickDragState = useRef(new ClickDragState()).current;
   const moveFunctions: MoveFunctions = {
-
-    onClickMoveStart: (sq: SquareID) => {
-      const canMove = offBoard(sq) || G.pieces[sq.row][sq.col] !== null;
-      if (canMove) {
-        moves.start(sq);
-      }
-      return canMove;
-    },
-
     onMoveEnd: moves.end,
 
     dragType: (sq: SquareID) => offBoard(sq) ? DragType.copy : DragType.move,

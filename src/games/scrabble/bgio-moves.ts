@@ -9,11 +9,6 @@ import {
 import { Letter } from "./scrabble-config";
 import { sAssert } from "../../shared/assert";
 
-type StartParam = SquareID;
-const start = (G: GameData, ctx: Ctx, sq: StartParam) => {
-    G.moveStart = sq;
-};
-
 type MoveParam = { from: SquareID, to: SquareID, };
 const move = (G: GameData, ctx: Ctx, { from, to }: MoveParam) => {
     const rack = G.playerData[ctx.currentPlayer].rack;
@@ -79,7 +74,6 @@ const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) =>
 };
 
 export const bgioMoves = {
-    start: start,
     move: move,
     recallRack: recallRack,
     shuffleRack: shuffleRack,
@@ -88,7 +82,6 @@ export const bgioMoves = {
 };
 
 export interface ClientMoves {
-    start: (arg: StartParam) => void;
     move: (arg: MoveParam) => void;
     recallRack: (arg: RecallRackParam) => void;
     shuffleRack: (arg: ShuffleRackParam) => void;
