@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Ctx } from "boardgame.io";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
-  Board, checkered, ClickDragState, DragType, makeBoardProps,
+  Board, checkered, DragType, makeBoardProps,
   squareInteractionFunc, MoveFunctions, SquareID, SquareInteractionFunc,
 } from '../../boards';
 import { makeSimpleName } from '../../game-support';
@@ -46,11 +46,10 @@ const offBoardPiece = (sq: SquareID): string => {
 
 interface OffBoardProps {
   squareInteraction: SquareInteractionFunc;
-  clickDragState: ClickDragState;
   rowName: keyof typeof offBoardPieces;
 }
 
-function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps) {
+function OffBoard({ squareInteraction, rowName }: OffBoardProps) {
   //const {G, moves} = bgioProps;
   const pieces = offBoardPieces[rowName];
   const boardPieces = pieces.map(name =>
@@ -67,7 +66,7 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
 
     boardID: rowName,
     squareInteraction: squareInteraction,
-    moveStart: clickDragState.start
+    moveStart: null, //clickDragState.start
   });
 
   return <Board {...boardProps} />
@@ -75,11 +74,10 @@ function OffBoard({ squareInteraction, clickDragState, rowName }: OffBoardProps)
 
 interface MainBoardProps {
   squareInteraction: SquareInteractionFunc;
-  clickDragState: ClickDragState;
   pieces: (string | null)[][];
 }
 
-function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps) {
+function MainBoard({ squareInteraction, pieces }: MainBoardProps) {
 
   const boardPieces = nestedArrayMap(pieces, name =>
     name && <Piece pieceName={name} />
@@ -95,7 +93,7 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
 
     boardID: 'main',
     squareInteraction,
-    moveStart: clickDragState.start
+    moveStart: null, //clickDragState.start
   });
   boardProps.boardID = "main";
 
@@ -105,31 +103,27 @@ function MainBoard({ squareInteraction, clickDragState, pieces }: MainBoardProps
 function ChessBoard(props: BoardProps<G>) {
   const { G, moves } = props;
 
-  const clickDragState = useRef(new ClickDragState()).current;
   const moveFunctions: MoveFunctions = {
     onMoveEnd: moves.end,
 
     dragType: (sq: SquareID) => offBoard(sq) ? DragType.copy : DragType.move,
   };
 
-  const squareInteraction = squareInteractionFunc(moveFunctions, clickDragState);
+  const squareInteraction = squareInteractionFunc(moveFunctions);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <PlayArea>
         <OffBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState}
           rowName='black'
         />
         <MainBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState}
           pieces={G.pieces}
         />
         <OffBoard
           squareInteraction={squareInteraction}
-          clickDragState={clickDragState}
           rowName='white'
         />
       </PlayArea>

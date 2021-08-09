@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Ctx } from "boardgame.io";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import {
-  Board, ClickDragState, makeBoardProps, squareInteractionFunc,
+  Board, makeBoardProps, squareInteractionFunc,
   MoveFunctions, SquareID, checkered, DragType
 } from '../../boards';
 import { nestedArrayMap, sameJSON } from '../../shared/tools';
@@ -45,8 +45,6 @@ function SwapSquares({ G, moves, events, reset }: BoardProps<G>) {
     onMoveEnd: moves.end,
     dragType: () => DragType.move,
   }
-  const clickDragState = useRef(new ClickDragState()).current;
-
   const elements = nestedArrayMap(G.squares, sq =>
     <Square {...sq}>{sq.value}</Square>,
   );
@@ -60,8 +58,9 @@ function SwapSquares({ G, moves, events, reset }: BoardProps<G>) {
     squareSize: squareSize,
 
     boardID: 'swapSquares',
-    squareInteraction: squareInteractionFunc(moveFunctions, clickDragState),
-    moveStart: clickDragState.start
+    squareInteraction: squareInteractionFunc(moveFunctions),
+    //moveStart: clickDragState.start
+    moveStart: null, // For now
   });
 
   return (

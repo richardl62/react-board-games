@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Board, ClickDragState, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
+import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { boardIDs, tilesOut } from "./game-actions";
 import { Rack as RackType } from "./game-data";
@@ -24,14 +24,13 @@ gap: 3%;
 
 interface RackProps {
   squareInteraction: SquareInteractionFunc;
-  clickDragState: ClickDragState;
   rack: RackType;
   swapTiles: (toSwap: boolean[]) => void;
   scrabbleData: ScrabbleData;
 }
 
 export function RackEtc(props: RackProps) {
-  const {squareInteraction, clickDragState, swapTiles, scrabbleData } = props;
+  const {squareInteraction, swapTiles, scrabbleData } = props;
   const hasTilesOut = tilesOut(scrabbleData.board);
   const letters = props.rack;
   const nLetters = letters.length;
@@ -66,7 +65,7 @@ export function RackEtc(props: RackProps) {
 
     squareInteraction: selectedForSwap ? toggleSelectForSwap : squareInteraction,
 
-    moveStart: clickDragState.start,
+    moveStart: null, //clickDragState.start,
   });
 
   if (selectedForSwap) {

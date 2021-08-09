@@ -1,6 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { useRef } from "react";
-import { ClickDragState, SquareID } from "../../boards";
+import {  SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
@@ -10,9 +9,8 @@ import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { ScrabbleConfig } from "./scrabble-config";
 
 export class ScrabbleData {
-    constructor(props: ScrabbleBoardProps, clickDragState: ClickDragState) {
+    constructor(props: ScrabbleBoardProps) {
         this.boardProps = props;
-        this.clickDragState = clickDragState;
 
         sAssert(props.playerID);
         this.playerID = props.playerID;
@@ -31,7 +29,6 @@ export class ScrabbleData {
     readonly playerID: string;
     readonly currentPlayer: string;
     readonly allJoined: boolean;
-    readonly clickDragState: ClickDragState;
 
     readonly config: ScrabbleConfig;
 
@@ -97,6 +94,5 @@ export class ScrabbleData {
 }
 
 export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData{
-    const clickDragState = useRef(new ClickDragState()).current;
-    return new ScrabbleData(props, clickDragState);
+    return new ScrabbleData(props);
 }

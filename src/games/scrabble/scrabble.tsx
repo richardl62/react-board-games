@@ -39,9 +39,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
     dragType: (sq: SquareID) => scrabbleData.canMove(sq) ? DragType.move : DragType.disable,
   }
 
-  const squareInteraction = squareInteractionFunc(
-    moveFunctions, scrabbleData.clickDragState
-  );
+  const squareInteraction = squareInteractionFunc(moveFunctions);
 
   if(!scrabbleData.allJoined) {
     <WaitingForPlayers {...scrabbleData.boardProps} />
@@ -58,14 +56,12 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         <ScoresEtc scrabbleData={scrabbleData} />
         <RackEtc
           squareInteraction={squareInteraction}
-          clickDragState={scrabbleData.clickDragState}
           rack={scrabbleData.rack()}
           swapTiles={swapTiles}
           scrabbleData={scrabbleData}
         />
         <MainBoard
           squareInteraction={squareInteraction}
-          clickDragState={scrabbleData.clickDragState}
           board={scrabbleData.board}
           config={scrabbleData.config}
         />

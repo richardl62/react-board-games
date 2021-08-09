@@ -1,5 +1,5 @@
 import React from "react";
-import { Board, ClickDragState, makeBoardProps, SquareInteractionFunc } from "../../boards";
+import { Board, makeBoardProps, SquareInteractionFunc } from "../../boards";
 import { nestedArrayMap } from "../../shared/tools";
 import { boardIDs } from "./game-actions";
 import { ScrabbleConfig } from "./scrabble-config";
@@ -9,14 +9,13 @@ import { BoardData } from "./game-data";
 
 interface MainBoardProps {
   squareInteraction: SquareInteractionFunc;
-  clickDragState: ClickDragState;
   board: BoardData;
   config: ScrabbleConfig;
 }
 
 
 
-export function MainBoard({ board, squareInteraction, config, clickDragState }: MainBoardProps) {
+export function MainBoard({ board, squareInteraction, config }: MainBoardProps) {
 
   const tiles = nestedArrayMap(board, sd => {
     if (!sd) return null;
@@ -39,7 +38,7 @@ export function MainBoard({ board, squareInteraction, config, clickDragState }: 
 
     boardID: boardIDs.main,
     squareInteraction: squareInteraction,
-    moveStart: clickDragState.start,
+    moveStart: null, //clickDragState.start,
   });
 
   return <Board {...boardProps} />;
