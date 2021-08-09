@@ -27,14 +27,8 @@ export function squareInteractionFunc(
         moveFunctions.onClick?.(sq);
     }
 
-    const onDragStart = (from: SquareID) => {
-    }
-
     const onDrop = (from: SquareID, to: SquareID) => {
         moveFunctions.onMoveEnd(from, to);
-    }
-
-    const onDragEnd = (from: SquareID) => {
     }
 
     const dragType = (from: SquareID) => { 
@@ -44,8 +38,6 @@ export function squareInteractionFunc(
     return (sq: SquareID) :  Required<SquareInteraction> => {
         return {
             onClick: () => onClick(sq),
-            onDragStart: () => onDragStart(sq),
-            onDragEnd: () => onDragEnd(sq),
             dragType: dragType(sq),
             onDrop: (from: SquareID) => onDrop(from, sq),
         }

@@ -92,24 +92,11 @@ export enum DragType {
 export interface SquareInteraction {
     onClick?: () => void;
 
-    /** Called at start of a possible drag. 
-     * If omitted dragging is disabled. (This is equivalent to providing a 
-     * DragType of disabled). 
-     **/
-    onDragStart?: () => void;
-
     /** Should the drag move or copy the piece.
      * Defaults to moving.
      * To Do: Consider making the return value of onDragStart.
      */
     dragType?: DragType;
-
-    /**  Called once for each call to onDragStart (assuming both are supplied).
-    * If the drag is successful, there will be an intervening call to onDrop.
-    * (Unsuccessful drags occur if the piece is dragged to a non-droppable
-    * location.)
-    */
-    onDragEnd?:() => void;
     
     /* If onDrop is omitted, dropping is prevented */
     onDrop?: (from: SquareID) => void;
@@ -123,7 +110,7 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 export function Square(props: SquareProps) {
     const { children, background, showHover,
             highlight, label, onClick,
-            onDragStart, onDrop, onDragEnd, size 
+            onDrop, size 
         } = props;
 
     const dragType : DragType = props.dragType ?? DragType.disable;
@@ -137,17 +124,12 @@ export function Square(props: SquareProps) {
         },
 
         item: () => {
-            if(onDragStart && dragType !== DragType.disable) {
-		        onDragStart();
+            if( dragType !== DragType.disable ) {
             	return label;
              }
         },
-
-        end: (item) => {
-            onDragEnd?.();
-        },
-
-    }),[label, onDragStart])
+        
+    }),[label])
 
 
     const [ dropCollection, dropRef] = useDrop({
