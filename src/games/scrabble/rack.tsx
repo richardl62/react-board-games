@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { boardIDs, tilesOut } from "./game-actions";
-import { Rack as RackType } from "./game-data";
-import { ScrabbleData } from "./scrabble-data";
+import { ScrabbleData, Rack as RackType } from "./scrabble-data";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 

@@ -11,7 +11,7 @@ import { sAssert } from "../../shared/assert";
 
 type MoveParam = { from: SquareID, to: SquareID, };
 const move = (G: GameData, ctx: Ctx, { from, to }: MoveParam) => {
-    const rack = G.playerData[ctx.currentPlayer].rack;
+    const rack = G.playerData[ctx.currentPlayer].playableTiles;
     const fromData = getSquareData(G, rack, from);
     const toData = getSquareData(G, rack, to);
 
@@ -27,20 +27,20 @@ const move = (G: GameData, ctx: Ctx, { from, to }: MoveParam) => {
 
 type RecallRackParam = void;
 const recallRack = (G: GameData, ctx: Ctx, dummy: RecallRackParam) => {
-    const rack = G.playerData[ctx.currentPlayer].rack;
+    const rack = G.playerData[ctx.currentPlayer].playableTiles;
     doRecallRack(G, rack);
 };
 
 type ShuffleRackParam = void;
 const shuffleRack = (G: GameData, ctx: Ctx, dummy: ShuffleRackParam) => {
-    const rack = G.playerData[ctx.currentPlayer].rack;
+    const rack = G.playerData[ctx.currentPlayer].playableTiles;
     shuffle(rack);
 };
 
 type EndOfTurnActionsParam = number;
 const endOfTurnActions = (G: GameData, ctx: Ctx, score: EndOfTurnActionsParam) => {
     G.playerData[ctx.currentPlayer].score += score;
-    const rack = G.playerData[ctx.currentPlayer].rack;
+    const rack = G.playerData[ctx.currentPlayer].playableTiles;
     fillRack(G, rack);
 
     G.board.forEach(row =>
@@ -54,7 +54,7 @@ const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) =>
         console.error("Invalid attempt to swap title");
         return;
     }
-    const rack = G.playerData[ctx.currentPlayer].rack;
+    const rack = G.playerData[ctx.currentPlayer].playableTiles;
     sAssert(rack.length === toSwap.length, "Problem swapping tiles");
 
     let removedLetters: Letter[] = [];

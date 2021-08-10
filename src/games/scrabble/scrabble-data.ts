@@ -1,15 +1,36 @@
 import { Ctx } from "boardgame.io";
+import { useState } from "react";
 import {  SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
-import { GameData, Rack } from "./game-data";
+import { GameData } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
-import { ScrabbleConfig } from "./scrabble-config";
+import { Letter, ScrabbleConfig } from "./scrabble-config";
+
+export type Rack = (Letter | null)[];
+
+type PlayableTilePosition = 
+    {
+        rack: number; 
+    } |
+    {
+        board: {row: number; col: number;}
+    };
+
+function defaultPlayableTilePositions(rackSize: number) : PlayableTilePosition[] {
+    let positions = [];
+    for(let pos = 0; pos < rackSize; ++pos) {
+        positions.push({rack: pos});
+    }
+    return positions;
+}
 
 export class ScrabbleData {
-    constructor(props: ScrabbleBoardProps) {
+    constructor(props: ScrabbleBoardProps,
+        playableTilePositions: PlayableTilePosition[],
+        setPlayableTilePositions: (arg: PlayableTilePosition[]) => void) {
         this.boardProps = props;
 
         sAssert(props.playerID);
@@ -20,6 +41,10 @@ export class ScrabbleData {
         this.moves = props.moves as any as ClientMoves;
         this.allJoined = props.allJoined;
         this.config = props.config;
+
+
+        this.rack = this.G.playerData[this.playerID].playableTiles;
+        sAssert(this.rack);
     }
 
     private readonly ctx: Ctx;
@@ -29,6 +54,7 @@ export class ScrabbleData {
     readonly playerID: string;
     readonly currentPlayer: string;
     readonly allJoined: boolean;
+    readonly rack: Rack;
 
     readonly config: ScrabbleConfig;
 
@@ -45,17 +71,10 @@ export class ScrabbleData {
         return this.playerID === this.ctx.currentPlayer;
     } 
 
-
     name(pid: string = this.playerID) : string {
         const playerData = this.boardProps.playerData[pid];
         sAssert(playerData);
         return playerData.name;
-    }
-
-    rack(pid: string = this.playerID) : Rack {
-        const playerData = this.G.playerData[pid];
-        sAssert(playerData);
-        return playerData.rack;
     }
 
     score(pid: string = this.playerID) : number {
@@ -84,7 +103,6 @@ export class ScrabbleData {
         this.moves.swapTilesInRack(toSwap);
     }
 
-
     endTurn(score: number) {
         this.moves.endOfTurnActions(score);
 
@@ -94,5 +112,8 @@ export class ScrabbleData {
 }
 
 export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData{
-    return new ScrabbleData(props);
+    const [playableTilePositions, setPlayableTilePositions] = 
+        useState(defaultPlayableTilePositions(props.config.rackSize));
+
+    return new ScrabbleData(props, playableTilePositions, setPlayableTilePositions);
 }

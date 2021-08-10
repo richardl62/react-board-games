@@ -56,7 +56,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         <ScoresEtc scrabbleData={scrabbleData} />
         <RackEtc
           squareInteraction={squareInteraction}
-          rack={scrabbleData.rack()}
+          rack={scrabbleData.rack}
           swapTiles={swapTiles}
           scrabbleData={scrabbleData}
         />
