@@ -14,9 +14,12 @@ export type Rack = (Letter | null)[];
 type PlayableTilePosition = 
     {
         rack: number; 
+        board?: undefined;
     } |
     {
+        rack?: undefined;
         board: {row: number; col: number;}
+
     };
 
 function defaultPlayableTilePositions(rackSize: number) : PlayableTilePosition[] {
@@ -30,7 +33,28 @@ function defaultPlayableTilePositions(rackSize: number) : PlayableTilePosition[]
 class BoardAndRack {
     constructor(board: BoardData, playableTiles: Rack, playableTilePositions: PlayableTilePosition[]) {
         this.board = board.map(row => [...row]);
-        this.rack = [...playableTiles];
+        this.rack = playableTilePositions.map(()=>null); // Empty for now.
+        
+        sAssert(playableTiles.length === playableTilePositions.length);
+
+        for (let index = 0; index < playableTilePositions.length; ++index) {
+            const letter = playableTiles[index];
+            if (letter) {
+                const ptp = playableTilePositions[index];
+                if (ptp.board) {
+                    const { row, col } = ptp.board;
+
+                    sAssert(this.board[row][col] === null);
+                    this.board[row][col] = {
+                        letter: letter,
+                        active: true,
+                    };
+                } else {
+                    sAssert(this.rack[ptp.rack] === null);
+                    this.rack[ptp.rack] = letter;
+                }
+            }
+        }
     }
 
     readonly board: BoardData;
@@ -100,8 +124,15 @@ export class ScrabbleData extends BoardAndRack {
         return this.isMyTurn && (onRack(sq) || Boolean(this.board[sq.row][sq.col]?.active));
     }
 
-    move(arg: {from: SquareID,to: SquareID}){
-        // this.moves.move(arg);
+    move({from, to}: {from: SquareID,to: SquareID}){
+        console.log(from, to);
+        if(from.boardID === "rack" && to.boardID !== "rack") {
+            const rackPos = from.row;
+            const rowCol = to;
+            let newPTP = [...this.playableTilePositions];
+            newPTP[rackPos] = {board: rowCol};
+            this.setPlayableTilePositions(newPTP);
+        }
     }
 
     recallRack(){
