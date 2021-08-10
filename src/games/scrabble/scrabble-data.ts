@@ -5,7 +5,7 @@ import { sAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
 import { ClientMoves } from "./bgio-moves";
 import { onRack } from "./game-actions";
-import { GameData } from "./game-data";
+import { BoardData, GameData } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { Letter, ScrabbleConfig } from "./scrabble-config";
 
@@ -27,13 +27,29 @@ function defaultPlayableTilePositions(rackSize: number) : PlayableTilePosition[]
     return positions;
 }
 
-export class ScrabbleData {
+class BoardAndRack {
+    constructor(board: BoardData, playableTiles: Rack, playableTilePositions: PlayableTilePosition[]) {
+        this.board = board.map(row => [...row]);
+        this.rack = [...playableTiles];
+    }
+
+    readonly board: BoardData;
+    readonly rack: Rack;
+}
+
+export class ScrabbleData extends BoardAndRack {
     constructor(props: ScrabbleBoardProps,
         playableTilePositions: PlayableTilePosition[],
         setPlayableTilePositions: (arg: PlayableTilePosition[]) => void) {
-        this.boardProps = props;
 
         sAssert(props.playerID);
+        const playableTiles = props.G.playerData[props.playerID].playableTiles;
+
+        super(props.G.board, playableTiles, playableTilePositions);
+        this.boardProps = props;
+        this.playableTilePositions = playableTilePositions;
+        this.setPlayableTilePositions = setPlayableTilePositions;
+
         this.playerID = props.playerID;
         this.currentPlayer = props.ctx.currentPlayer;
         this.G = props.G;
@@ -41,12 +57,10 @@ export class ScrabbleData {
         this.moves = props.moves as any as ClientMoves;
         this.allJoined = props.allJoined;
         this.config = props.config;
-
-
-        this.rack = this.G.playerData[this.playerID].playableTiles;
-        sAssert(this.rack);
     }
 
+    private readonly playableTilePositions: PlayableTilePosition[];
+    private readonly setPlayableTilePositions: (arg: PlayableTilePosition[]) => void;
     private readonly ctx: Ctx;
     private readonly G: GameData;
     private readonly moves: ClientMoves;
@@ -54,7 +68,7 @@ export class ScrabbleData {
     readonly playerID: string;
     readonly currentPlayer: string;
     readonly allJoined: boolean;
-    readonly rack: Rack;
+
 
     readonly config: ScrabbleConfig;
 
@@ -63,7 +77,6 @@ export class ScrabbleData {
      */
     readonly boardProps: BoardProps;
 
-    get board() {return this.G.board;}
     get bag() {return this.G.bag;}
     get playOrder() {return this.ctx.playOrder}
 
@@ -88,7 +101,7 @@ export class ScrabbleData {
     }
 
     move(arg: {from: SquareID,to: SquareID}){
-        this.moves.move(arg);
+        // this.moves.move(arg);
     }
 
     recallRack(){
