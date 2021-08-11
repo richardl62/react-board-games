@@ -1,7 +1,8 @@
 import { sAssert } from "../../shared/assert";
 import { BoardData } from "./game-data";
 import { Letter } from "./scrabble-config";
-import { Rack } from "./scrabble-data";
+
+export type Rack = (Letter | null)[];
 
 export type TilePosition = 
     {
@@ -13,10 +14,10 @@ export type TilePosition =
         board: {row: number; col: number;}
     };
 
-
 /** 
- * BoardAndRack provides function to update (wait for ut) a board and rank.
- * It does not know anything about setting state of calling Bgio.
+ * BoardAndRack is a helper class for ScrabbleData.  It provides function to update 
+ * (wait for it) a board and rank. It does not know anything about setting state 
+ * or calling Bgio.
 */
 export class BoardAndRack {
     constructor(board: BoardData, rack: Rack) {

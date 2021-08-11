@@ -42,7 +42,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
   const squareInteraction = squareInteractionFunc(moveFunctions);
 
   if(!scrabbleData.allJoined) {
-    <WaitingForPlayers {...scrabbleData.boardProps} />
+    <WaitingForPlayers {...scrabbleData.getProps()} />
   }
 
   const swapTiles = (toSwap: boolean[]) => {

@@ -31,6 +31,7 @@ export interface GameData {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
+    turn: number;
 }
 
 
@@ -61,5 +62,6 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
         board: nestedArrayMap(config.boardLayout, () => null),
         playerData: playerData,
         bag: bag,
+        turn: 0,
     };
 }

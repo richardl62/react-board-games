@@ -49,12 +49,13 @@ const endOfTurnActions = (G: GameData, ctx: Ctx,
     let newRack = [...rack];
     fillRack(G, newRack);
     G.playerData[ctx.currentPlayer].playableTiles = newRack;
-
     G.playerData[ctx.currentPlayer].score += score;
 
-    G.board.forEach(row =>
-        row.forEach(sd => sd && (sd.active = false))
-    );
+    G.board = board.map(row => row.map(
+        sq => sq && {...sq, active: false}
+    ));
+
+    G.turn++;
 };
 
 type SwapTilesInRackParam = boolean[];

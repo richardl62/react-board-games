@@ -35,7 +35,7 @@ export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}) {
     return (
         <div>
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...scrabbleData.boardProps}/>
+            <GameWarnings {...scrabbleData.getProps()}/>
         </div>
     )
 }
