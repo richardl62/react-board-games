@@ -12,17 +12,23 @@ import { Letter, ScrabbleConfig } from "./scrabble-config";
 export type Rack = (Letter | null)[];
 type UseStateResult<T> = [T, Dispatch<SetStateAction<T>>];
 
-// type PlayableTilePosition = 
-//     {
-//         rack: number; 
-//         board?: undefined;
-//     } |
-//     {
-//         rack?: undefined;
-//         board: {row: number; col: number;}
+type TilePosition = 
+    {
+        rack: {pos: number}; 
+        board?: undefined;
+    } |
+    {
+        rack?: undefined;
+        board: {row: number; col: number;}
+    };
 
-//     };
-
+function tilePosition(sq: SquareID) : TilePosition {
+    if(onRack(sq)) {
+        return {rack: {pos: sq.col}};
+    } else {
+        return {board: sq};
+    }
+}
 
 
 class BoardAndRack {
@@ -44,32 +50,33 @@ class BoardAndRack {
     private readonly rackState: UseStateResult<Rack>;
 
 
-    getLetter(sq: SquareID) : Letter | null {
-        if(onRack(sq)) {
-            return this.rack[sq.col];
+    getLetter(tp: TilePosition) : Letter | null {
+        if(tp.rack) {
+            return this.rack[tp.rack.pos];
         } else {
-            const bsq = this.board[sq.row][sq.col];
+            const bsq = this.board[tp.board.row][tp.board.col];
             return bsq && bsq.letter;
         }
     }
 
-    setActiveLetter(sq: SquareID, letter: Letter | null){
-        if(onRack(sq)) {
-           this.rack[sq.col] = letter;
+    setActiveLetter(tp: TilePosition, letter: Letter | null){
+        if(tp.rack) {
+           this.rack[tp.rack.pos] = letter;
         } else {
-            this.board[sq.row][sq.col] = letter && {
+            this.board[tp.board.row][tp.board.col] = letter && {
                 letter: letter,
                 active: true,
             }
         }
     }
 
-    isPlayable(sq: SquareID) : boolean {
-        if(onRack(sq)) {
+    isPlayable(tp: TilePosition) : boolean {
+        if(tp.rack) {
             return true;
         }
 
-        return true; // For now.
+        const bsq = this.board[tp.board.row][tp.board.col];
+        return Boolean(bsq && bsq.active);
     }
 
     updateState() {
@@ -141,14 +148,26 @@ export class ScrabbleData {
     }
 
     canMove(sq: SquareID) : boolean {
-        return this.boardAndRack.isPlayable(sq);
+        return this.boardAndRack.isPlayable(tilePosition(sq));
     }
 
-    move({from, to}: {from: SquareID,to: SquareID}){
+    move(arg: {from: SquareID,to: SquareID}){
+        const from = tilePosition(arg.from);
+        const to = tilePosition(arg.to);
+
         const br = this.boardAndRack;
+
         const letter = br.getLetter(from);
-        br.setActiveLetter(to, letter);
         br.setActiveLetter(from, null);
+        if(to.board) {
+            br.setActiveLetter(to, letter);
+        } else {
+
+        }
+
+
+
+
 
         br.updateState();
     }
