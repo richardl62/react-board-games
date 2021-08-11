@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { SquareID } from "../../boards";
 import { sameJSON, shuffle } from "../../shared/tools";
-import { GameData } from "./game-data";
+import { BoardData, GameData } from "./game-data";
 import {
     getSquareData, setLetter, compactRack,
     fillRack, canSwapTiles, recallRack as doRecallRack
@@ -37,11 +37,20 @@ const shuffleRack = (G: GameData, ctx: Ctx, dummy: ShuffleRackParam) => {
     shuffle(rack);
 };
 
-type EndOfTurnActionsParam = number;
-const endOfTurnActions = (G: GameData, ctx: Ctx, score: EndOfTurnActionsParam) => {
+interface EndOfTurnActionsParam {
+    board: BoardData;
+    rack: (Letter|null)[];
+    score: number;
+};
+
+const endOfTurnActions = (G: GameData, ctx: Ctx, 
+    {board, rack, score}: EndOfTurnActionsParam
+    ) => {
+    let newRack = [...rack];
+    fillRack(G, newRack);
+    G.playerData[ctx.currentPlayer].playableTiles = newRack;
+
     G.playerData[ctx.currentPlayer].score += score;
-    const rack = G.playerData[ctx.currentPlayer].playableTiles;
-    fillRack(G, rack);
 
     G.board.forEach(row =>
         row.forEach(sd => sd && (sd.active = false))
