@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {  SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { BoardProps } from "../../shared/types";
@@ -10,70 +10,89 @@ import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { Letter, ScrabbleConfig } from "./scrabble-config";
 
 export type Rack = (Letter | null)[];
+type UseStateResult<T> = [T, Dispatch<SetStateAction<T>>];
 
-type PlayableTilePosition = 
-    {
-        rack: number; 
-        board?: undefined;
-    } |
-    {
-        rack?: undefined;
-        board: {row: number; col: number;}
+// type PlayableTilePosition = 
+//     {
+//         rack: number; 
+//         board?: undefined;
+//     } |
+//     {
+//         rack?: undefined;
+//         board: {row: number; col: number;}
 
-    };
+//     };
 
-function defaultPlayableTilePositions(rackSize: number) : PlayableTilePosition[] {
-    let positions = [];
-    for(let pos = 0; pos < rackSize; ++pos) {
-        positions.push({rack: pos});
-    }
-    return positions;
-}
+
 
 class BoardAndRack {
-    constructor(board: BoardData, playableTiles: Rack, playableTilePositions: PlayableTilePosition[]) {
-        this.board = board.map(row => [...row]);
-        this.rack = playableTilePositions.map(()=>null); // Empty for now.
-        
-        sAssert(playableTiles.length === playableTilePositions.length);
+    constructor(
+        boardState: UseStateResult<BoardData>,
+        rackState: UseStateResult<Rack>,
+        ) {
+            this.boardState = boardState;
+            this.rackState = rackState;
 
-        for (let index = 0; index < playableTilePositions.length; ++index) {
-            const letter = playableTiles[index];
-            if (letter) {
-                const ptp = playableTilePositions[index];
-                if (ptp.board) {
-                    const { row, col } = ptp.board;
+            // Working copies of board and rack.
+            this.board = boardState[0].map(row => [...row]);
+            this.rack = [...rackState[0]];
+        }
 
-                    sAssert(this.board[row][col] === null);
-                    this.board[row][col] = {
-                        letter: letter,
-                        active: true,
-                    };
-                } else {
-                    sAssert(this.rack[ptp.rack] === null);
-                    this.rack[ptp.rack] = letter;
-                }
+    private readonly board: BoardData;
+    private readonly boardState: UseStateResult<BoardData>;
+    private readonly rack: Rack;
+    private readonly rackState: UseStateResult<Rack>;
+
+
+    getLetter(sq: SquareID) : Letter | null {
+        if(onRack(sq)) {
+            return this.rack[sq.col];
+        } else {
+            const bsq = this.board[sq.row][sq.col];
+            return bsq && bsq.letter;
+        }
+    }
+
+    setActiveLetter(sq: SquareID, letter: Letter | null){
+        if(onRack(sq)) {
+           this.rack[sq.col] = letter;
+        } else {
+            this.board[sq.row][sq.col] = letter && {
+                letter: letter,
+                active: true,
             }
         }
     }
 
-    readonly board: BoardData;
-    readonly rack: Rack;
+    isPlayable(sq: SquareID) : boolean {
+        if(onRack(sq)) {
+            return true;
+        }
+
+        return true; // For now.
+    }
+
+    updateState() {
+        this.boardState[1](this.board);
+        this.rackState[1](this.rack);
+    }
+
+    getBoardFromState() : BoardData {
+        return this.boardState[0];
+    }
+
+    getRackFromState() : Rack {
+        return this.rackState[0];
+    }
 }
 
-export class ScrabbleData extends BoardAndRack {
-    constructor(props: ScrabbleBoardProps,
-        playableTilePositions: PlayableTilePosition[],
-        setPlayableTilePositions: (arg: PlayableTilePosition[]) => void) {
+export class ScrabbleData {
+    constructor(props: ScrabbleBoardProps, boardAndRack: BoardAndRack) {
 
         sAssert(props.playerID);
-        const playableTiles = props.G.playerData[props.playerID].playableTiles;
-
-        super(props.G.board, playableTiles, playableTilePositions);
         this.boardProps = props;
-        this.playableTilePositions = playableTilePositions;
-        this.setPlayableTilePositions = setPlayableTilePositions;
-
+        this.boardAndRack = boardAndRack;
+  
         this.playerID = props.playerID;
         this.currentPlayer = props.ctx.currentPlayer;
         this.G = props.G;
@@ -83,8 +102,7 @@ export class ScrabbleData extends BoardAndRack {
         this.config = props.config;
     }
 
-    private readonly playableTilePositions: PlayableTilePosition[];
-    private readonly setPlayableTilePositions: (arg: PlayableTilePosition[]) => void;
+    private readonly boardAndRack: BoardAndRack;
     private readonly ctx: Ctx;
     private readonly G: GameData;
     private readonly moves: ClientMoves;
@@ -101,8 +119,10 @@ export class ScrabbleData extends BoardAndRack {
      */
     readonly boardProps: BoardProps;
 
-    get bag() {return this.G.bag;}
-    get playOrder() {return this.ctx.playOrder}
+    get board() { return this.boardAndRack.getBoardFromState() };
+    get rack() { return this.boardAndRack.getRackFromState(); }
+    get bag() { return this.G.bag; }
+    get playOrder() { return this.ctx.playOrder }
 
     get isMyTurn() : boolean {
         return this.playerID === this.ctx.currentPlayer;
@@ -121,18 +141,16 @@ export class ScrabbleData extends BoardAndRack {
     }
 
     canMove(sq: SquareID) : boolean {
-        return this.isMyTurn && (onRack(sq) || Boolean(this.board[sq.row][sq.col]?.active));
+        return this.boardAndRack.isPlayable(sq);
     }
 
     move({from, to}: {from: SquareID,to: SquareID}){
-        console.log(from, to);
-        if(from.boardID === "rack" && to.boardID !== "rack") {
-            const rackPos = from.row;
-            const rowCol = to;
-            let newPTP = [...this.playableTilePositions];
-            newPTP[rackPos] = {board: rowCol};
-            this.setPlayableTilePositions(newPTP);
-        }
+        const br = this.boardAndRack;
+        const letter = br.getLetter(from);
+        br.setActiveLetter(to, letter);
+        br.setActiveLetter(from, null);
+
+        br.updateState();
     }
 
     recallRack(){
@@ -156,8 +174,10 @@ export class ScrabbleData extends BoardAndRack {
 }
 
 export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData{
-    const [playableTilePositions, setPlayableTilePositions] = 
-        useState(defaultPlayableTilePositions(props.config.rackSize));
+    sAssert(props.playerID);
+    const boardState = useState<BoardData>(props.G.board);
+    const rackState = useState(props.G.playerData[props.playerID].playableTiles);
+    const boardAndRack = new BoardAndRack(boardState, rackState);
 
-    return new ScrabbleData(props, playableTilePositions, setPlayableTilePositions);
+    return new ScrabbleData(props, boardAndRack);
 }
