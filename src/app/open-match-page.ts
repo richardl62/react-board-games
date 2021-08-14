@@ -10,10 +10,11 @@ export function openOnlineMatchPage(matchID: MatchID) {
   window.location.href = url.href;
 }
 
-export function openOfflineMatchPage() {
+export function openOfflineMatchPage(nPlayers: number) {
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
-  searchParams.set('offline', "1");
+  searchParams.set('offline', '1');
+  searchParams.set('np', nPlayers.toString());
   url.search = searchParams.toString();
 
   window.location.href = url.href;
@@ -31,7 +32,7 @@ interface OpenMatchPageArgs {
 export function openMatchPage({game, nPlayers, matchID, local, setWaiting, setError}: OpenMatchPageArgs) {
 
     if (local) {
-      openOfflineMatchPage();
+      openOfflineMatchPage(nPlayers);
     } else {
       setWaiting(true);
       LobbyClient.createMatch(game, nPlayers)

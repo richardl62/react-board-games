@@ -21,10 +21,12 @@ function getAndDeleteFlag(key: string) : boolean {
   }
 
   if (truthy.includes(str!)) {
-    console.log(`Bad value for URL boolean ${str}`);
+    return true;
   }
 
-  return true;
+  console.log(`Bad value for URL boolean ${key}: ${str}`);
+  return false; // Well, why not?
+
 }
 
 
@@ -37,6 +39,17 @@ const matchID_ = getAndDelete('match-id');
 export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 const server = getAndDelete('server');
+
+export let offline : null | {nPlayers: number} = null;
+if(getAndDeleteFlag('offline')){
+  const np_ = getAndDelete('np');
+  if(np_){
+    offline = {nPlayers: parseInt(np_)}
+  } else {
+    console.log("URL param 'np' is missing (required for offline game)")
+  }
+}
+
   
 if (usp.toString()) {
   console.log("Unrecongised url parameters", usp.toString())

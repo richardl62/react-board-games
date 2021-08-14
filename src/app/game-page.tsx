@@ -2,7 +2,7 @@ import React, { ReactChild, useState } from 'react';
 import { sAssert } from '../shared/assert';
 import * as Bgio from '../shared/bgio';
 import { AppGame, MatchID, Player } from '../shared/types';
-import { GamePlayOnline } from './game-play';
+import { GamePlayOffline, GamePlayOnline } from './game-play';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
 import { openMatchPage } from './open-match-page';
 import { MatchOptions, StartMatchOptions } from './start-match-options';
@@ -39,9 +39,10 @@ function GetPlayerName({children: child, nameCallback}: GetPlayerNameProps) {
 interface GamePageProps {
   game: AppGame;
   matchID: MatchID | null;
+  offline: {nPlayers: number} | null;
 }
 
-function GamePage({game, matchID}: GamePageProps) {
+function GamePage({game, matchID, offline}: GamePageProps) {
   const [waiting, setWaiting] = useState(false);
   const [error, setError] = useState<Error|null>(null);
   const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);
@@ -73,6 +74,10 @@ function GamePage({game, matchID}: GamePageProps) {
     return <GetPlayerName nameCallback={joinGame}>Join As</GetPlayerName>
   }
 
+  if(offline) {
+    return <GamePlayOffline game={game} numPlayers={offline.nPlayers} />
+  }
+
   if (matchID && player) {
     return  <GamePlayOnline game={game} matchID={matchID} player={player} />
   }
@@ -80,14 +85,14 @@ function GamePage({game, matchID}: GamePageProps) {
   if (!matchOptions) {
     return <StartMatchOptions game={game} optionsCallback={setMatchOptions} />
   }
-  
+
+  console.log("offline:",offline)
+
+
   openMatchPage({...matchOptions, game:game, setWaiting: setWaiting, setError: setError});
 
-  return (<div>
-      <div>Openning match page</div>
-      <br/>
-      <div>If this message shows for more than a few seconds something has gone wrong</div>
-    </div>)
+  // If this is reached for more than a few seconds something has gone wrong<
+  return null;
 }
 
 export { GamePage };

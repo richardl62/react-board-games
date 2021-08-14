@@ -61,7 +61,7 @@ function PageNotFound(props: HomePageProps) {
 function gameRoute(game: AppGame) {
   const path = UrlParams.gamePath(game);
 
-  const component = () => <GamePage game={game} matchID={UrlParams.matchID} />;
+  const component = () => <GamePage game={game} matchID={UrlParams.matchID} offline={UrlParams.offline} />;
 
   return (<Route key={path} exact path={path} component={component} />);
 }
