@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
-import { AppGame } from '../shared/types'
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import styled from 'styled-components';
 import { games as appGames } from '../games';
+import { AppGame } from '../shared/types';
+import './app.css';
 import { GamePage } from './game-page';
 import * as UrlParams from './url-params';
-import styled from 'styled-components';
-
-import './app.css';
 
 const GameLinksStyled = styled.div`
   display: flex;
@@ -25,16 +24,16 @@ interface HomePageProps {
 
 function gameLinkElement(game: AppGame, index: number) {
   const key = (n: number) => game.name + n;
-  const to={
+  const to = {
     pathname: UrlParams.gamePath(game),
     search: window.location.search,
   }
-  return  <Link key={key(3)} to={to}>{game.displayName}</Link>
+  return <Link key={key(3)} to={to}>{game.displayName}</Link>
 }
 
 function GameLinks({ games }: HomePageProps) {
   return (
-    <GameLinksStyled> 
+    <GameLinksStyled>
       {games.map(gameLinkElement)}
     </GameLinksStyled>
   )
@@ -62,12 +61,14 @@ function PageNotFound(props: HomePageProps) {
 function gameRoute(game: AppGame) {
   const path = UrlParams.gamePath(game);
 
-  const component= () => <GamePage game={game} matchID={UrlParams.matchID}/>;
+  const component = () => <GamePage game={game} matchID={UrlParams.matchID} />;
 
-  return (<Route key={path} exact path={path} component={component} />); 
+  return (<Route key={path} exact path={path} component={component} />);
 }
 
-
+/**
+ * Games App.
+ */
 function App() {
   useEffect(() => {
     document.title = 'Games'
@@ -76,11 +77,13 @@ function App() {
   const renderHomePage = () => <HomePage games={appGames} />;
   const renderPageNotFound = () => <PageNotFound games={appGames} />;
   return (
-    <Switch>
-      <Route key="/" exact path="/" component={renderHomePage} />
-      {appGames.map(gameRoute)}
-      <Route key="pageNotFound" component={renderPageNotFound} />
-    </Switch>
+    <BrowserRouter>
+      <Switch>
+        <Route key="/" exact path="/" component={renderHomePage} />
+        {appGames.map(gameRoute)}
+        <Route key="pageNotFound" component={renderPageNotFound} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
