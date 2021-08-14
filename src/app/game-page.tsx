@@ -1,11 +1,11 @@
 import React, { ReactChild, useState } from 'react';
 import { sAssert } from '../shared/assert';
-import * as LobbyClient from '../shared/bgio';
+import * as Bgio from '../shared/bgio';
 import { AppGame, MatchID, Player } from '../shared/types';
-import { GamePlayLocal, GamePlayOnline } from './game-play';
+import { GamePlayOnline } from './game-play';
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
+import { openMatchPage } from './open-match-page';
 import { MatchOptions, StartMatchOptions } from './start-match-options';
-import { openMatchPage } from './url-params';
 
 interface GetPlayerNameProps {
   children: ReactChild;
@@ -47,22 +47,12 @@ function GamePage({game, matchID}: GamePageProps) {
   const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);
   const [player, setPlayer] = useState<Player|null>(matchID && getStoredPlayer(matchID));
   
-  const processMatchOptions = (matchOptions : MatchOptions) => {
-    if (matchOptions.local) {
-      setMatchOptions(matchOptions);
-    } else {
-      setWaiting(true);
-      LobbyClient.createMatch(game, matchOptions.nPlayers)
-        .then(openMatchPage)
-        .catch(setError);
-    }
-  }
 
   const joinGame = (name: string) => {
     sAssert(matchID);
     setWaiting(true);
 
-    LobbyClient.joinMatch(game, matchID, name)
+    Bgio.joinMatch(game, matchID, name)
       .then(player => {
         setStoredPlayer(matchID, player);
         setPlayer(player);
@@ -72,7 +62,7 @@ function GamePage({game, matchID}: GamePageProps) {
   }
 
   if (error) {
-    return <div>{`Error contacting server (${error.message})`}</div>
+    return <div>{`Error starting game (${error.message})`}</div>
   }
 
   if (waiting) {
@@ -88,14 +78,17 @@ function GamePage({game, matchID}: GamePageProps) {
   }
 
   if (!matchOptions) {
-    return <StartMatchOptions game={game} optionsCallback={processMatchOptions} />
+    return <StartMatchOptions game={game} optionsCallback={setMatchOptions} />
   }
   
-  if(matchOptions.local) {
-    return <GamePlayLocal game={game} numPlayers={matchOptions.nPlayers} />
-  }
+  openMatchPage({...matchOptions, game:game, setWaiting: setWaiting, setError: setError});
 
-  throw new Error("Problem with GamePage")
+  return (<div>
+      <div>Openning match page</div>
+      <br/>
+      <div>If this message shows for more than a few seconds something has gone wrong</div>
+    </div>)
 }
 
 export { GamePage };
+

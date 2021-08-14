@@ -45,15 +45,6 @@ if (usp.toString()) {
 export function gamePath(game: AppGame) {
   return '/' + game.name;
 }
-
-export function openMatchPage(matchID: MatchID) {
-  const url = new URL(window.location.href);
-  const searchParams = new URLSearchParams(url.search);
-  searchParams.set('match-id', matchID.mid);
-  url.search = searchParams.toString();
-
-  window.location.href = url.href;
-}
 export function lobbyServer() { 
   const url = new URL(window.location.href);
   let result;

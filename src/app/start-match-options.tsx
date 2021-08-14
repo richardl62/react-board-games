@@ -34,7 +34,8 @@ interface StartMatchProps {
 
 export function StartMatchOptions(
   {
-    game: { minPlayers, maxPlayers }, optionsCallback: startMatch
+    game: { minPlayers, maxPlayers }, 
+    optionsCallback: startMatch
   }: StartMatchProps) {
 
   const defaultNumPlayers = Math.max(minPlayers, 2);
