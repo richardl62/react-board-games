@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local, SocketIO } from 'boardgame.io/multiplayer';
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 import { makeBoardProps } from '../shared/board-props';
+import { TestDebugBox } from '../shared/test-debug-box';
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -18,11 +19,12 @@ export function GamePlayOffline({ game, numPlayers}: GamePlayLocalProps) {
   useEffect(() => {
     document.title = game.displayName
   });
+  const [persist, setPersist] = useState(false);
 
   const GameClient = Client({
     game: game,
     board: (props: BgioBoardProps) => localClientGame(game, props),
-    multiplayer: Local(),
+    multiplayer: Local({persist:persist}),
     numPlayers: numPlayers,
     debug: UrlParams.bgioDebugPanel,
   });
@@ -31,7 +33,15 @@ export function GamePlayOffline({ game, numPlayers}: GamePlayLocalProps) {
   for(let id = 0; id < numPlayers; ++id) {
     games[id] = <GameClient key={id} playerID={id.toString()} />
   }
-  return (<div> {games} </div>);
+  return (
+    <div>
+      <div>{games}</div> 
+      <TestDebugBox> 
+        <span>{'Peristant storage (experimental): '}</span>
+        <button onClick={() => setPersist(!persist)}>{`Turn ${persist ? 'off' : 'on'}`}</button>
+      </TestDebugBox>
+    </div>
+  );
 }
 
 interface GamePlayOnlineProps {
