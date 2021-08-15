@@ -1,25 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AppGame } from '../shared/types';
+import { TestDebugBox } from '../shared/test-debug-box';
 
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
-`;
-
-const Box = styled.div`
-  position: relative;
-  border: 1px dashed black;
-  border-radius: 5px;
-  margin-top: 20px;
-`;
-
-const Legend = styled.div`
-  width: fit-content;
-  position: inherit;
-  background-color: white;
-  top: -10px;
-  left: 30px;
 `;
 
 export interface MatchOptions {
@@ -58,13 +44,11 @@ export function StartMatchOptions(
         </button>
       </div>
 
-      <Box>
-        <Legend>Test/debug</Legend>
-
+      <TestDebugBox>
         <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: true })}>
           Start Offline
         </button>
-      </Box>
+      </TestDebugBox>
 
     </OuterDiv>
   );

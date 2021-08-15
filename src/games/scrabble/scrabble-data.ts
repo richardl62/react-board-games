@@ -136,10 +136,7 @@ export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData {
     const boardState = useState<BoardData>([[]] /*KLUDGE: Any empty array, e.g. [], gives crashes*/);
     const rackState = useState<Rack>([]);
 
-    console.log("useScrabbleData: playerID=", props.playerID, "turn=", props.G.turn);
-
     useEffect(()=>{
-        console.log("useEffect action", props.G.board);
         boardState[1](props.G.board);
         rackState[1](playableTiles)
     // eslint-disable-next-line react-hooks/exhaustive-deps
