@@ -1,43 +1,42 @@
 import * as LobbyClient from '../shared/bgio';
 import { AppGame, MatchID } from "../shared/types";
 
-export function openOnlineMatchPage(matchID: MatchID) {
-  const url = new URL(window.location.href);
-  const searchParams = new URLSearchParams(url.search);
-  searchParams.set('match-id', matchID.mid);
-  url.search = searchParams.toString();
 
-  window.location.href = url.href;
-}
 
-export function openOfflineMatchPage(nPlayers: number) {
+export function getOfflineMatchLink(nPlayers: number, persistentState: boolean) {
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
   searchParams.set('offline', '1');
   searchParams.set('np', nPlayers.toString());
+  if(persistentState) {
+    searchParams.set('persist', '1');
+  }
   url.search = searchParams.toString();
 
-  window.location.href = url.href;
+  return url.href;
 }
 
 interface OpenMatchPageArgs {
   game: AppGame;
   nPlayers: number;
   matchID?: string;
-  local: boolean;
   setWaiting: (arg: boolean) => void;
   setError: (arg: Error) => void;
 }
 
-export function openMatchPage({game, nPlayers, matchID, local, setWaiting, setError}: OpenMatchPageArgs) {
+export function openOnlineMatchPage({ game, nPlayers, matchID, setWaiting, setError }: OpenMatchPageArgs) {
 
-    if (local) {
-      openOfflineMatchPage(nPlayers);
-    } else {
-      setWaiting(true);
-      LobbyClient.createMatch(game, nPlayers)
-        .then(openOnlineMatchPage)
-        .catch(setError);
-    }
+  const doOpen = (matchID: MatchID) => {
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    searchParams.set('match-id', matchID.mid);
+    url.search = searchParams.toString();
 
+    window.location.href = url.href;
+  }
+
+  setWaiting(true);
+  LobbyClient.createMatch(game, nPlayers)
+    .then(doOpen)
+    .catch(setError);
 }

@@ -2,10 +2,21 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AppGame } from '../shared/types';
 import { TestDebugBox } from '../shared/test-debug-box';
+import { getOfflineMatchLink } from './open-match-page';
 
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
+`;
+
+const OfflineLinkDiv=styled.div`
+  label {
+    margin-left: 8px;
+  }
+
+  input {
+    margin-left: 4px;
+  }
 `;
 
 export interface MatchOptions {
@@ -14,9 +25,9 @@ export interface MatchOptions {
 }
 
 interface StartMatchProps {
-    game: AppGame;
-    optionsCallback: (arg: MatchOptions) => void;
-  }
+  game: AppGame;
+  optionsCallback: (arg: MatchOptions) => void;
+}
 
 export function StartMatchOptions(
   {
@@ -25,8 +36,8 @@ export function StartMatchOptions(
   }: StartMatchProps) {
 
   const defaultNumPlayers = Math.max(minPlayers, 2);
-  const [numPlayers, setNumPlayers] = useState<number>(defaultNumPlayers);
-
+  const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
+  const [persist, setPersist] = useState(false);
   return (
     <OuterDiv>
 
@@ -45,9 +56,20 @@ export function StartMatchOptions(
       </div>
 
       <TestDebugBox>
-        <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: true })}>
-          Start Offline
-        </button>
+
+        <OfflineLinkDiv>
+        <a href={getOfflineMatchLink(numPlayers, persist)}>Play offline</a>
+        
+        <label>
+          Persistent Storage
+          <input
+            type="checkbox"
+            value={persist ? 1 : 0}
+            onChange={() => { setPersist(!persist) }}
+          />
+        </label>
+        </OfflineLinkDiv>
+
       </TestDebugBox>
 
     </OuterDiv>

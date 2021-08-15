@@ -5,7 +5,7 @@ import { AppGame, MatchID, Player } from '../shared/types';
 import { GamePlayOffline } from './game-play-offline';
 import { GamePlayOnline } from "./game-play-online";
 import { getStoredPlayer, setStoredPlayer } from './local-storage';
-import { openMatchPage } from './open-match-page';
+import { openOnlineMatchPage } from './open-match-page';
 import { MatchOptions, StartMatchOptions } from './start-match-options';
 
 interface GetPlayerNameProps {
@@ -40,7 +40,7 @@ function GetPlayerName({children: child, nameCallback}: GetPlayerNameProps) {
 interface GamePageProps {
   game: AppGame;
   matchID: MatchID | null;
-  offline: {nPlayers: number} | null;
+  offline: {nPlayers: number, persist: boolean} | null;
 }
 
 function GamePage({game, matchID, offline}: GamePageProps) {
@@ -48,7 +48,6 @@ function GamePage({game, matchID, offline}: GamePageProps) {
   const [error, setError] = useState<Error|null>(null);
   const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);
   const [player, setPlayer] = useState<Player|null>(matchID && getStoredPlayer(matchID));
-  
 
   const joinGame = (name: string) => {
     sAssert(matchID);
@@ -76,7 +75,7 @@ function GamePage({game, matchID, offline}: GamePageProps) {
   }
 
   if(offline) {
-    return <GamePlayOffline game={game} numPlayers={offline.nPlayers} />
+    return <GamePlayOffline game={game} {...offline} />
   }
 
   if (matchID && player) {
@@ -87,10 +86,8 @@ function GamePage({game, matchID, offline}: GamePageProps) {
     return <StartMatchOptions game={game} optionsCallback={setMatchOptions} />
   }
 
-  console.log("offline:",offline)
 
-
-  openMatchPage({...matchOptions, game:game, setWaiting: setWaiting, setError: setError});
+  openOnlineMatchPage({...matchOptions, game:game, setWaiting: setWaiting, setError: setError});
 
   // If this is reached for more than a few seconds something has gone wrong<
   return null;

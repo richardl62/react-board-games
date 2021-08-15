@@ -40,11 +40,19 @@ export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 const server = getAndDelete('server');
 
-export let offline : null | {nPlayers: number} = null;
+export interface OfflineGameData {
+  nPlayers:number;
+  persist: boolean;
+}
+
+export let offline : null | OfflineGameData= null;
 if(getAndDeleteFlag('offline')){
   const np_ = getAndDelete('np');
   if(np_){
-    offline = {nPlayers: parseInt(np_)}
+    offline = {
+      nPlayers: parseInt(np_),
+      persist: getAndDeleteFlag("persist"),
+    }
   } else {
     console.log("URL param 'np' is missing (required for offline game)")
   }
