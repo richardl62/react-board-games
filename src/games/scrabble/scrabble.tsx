@@ -1,6 +1,7 @@
 import React from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useErrorHandler } from "react-error-boundary";
 import styled from "styled-components";
 import { DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
@@ -25,14 +26,18 @@ const Game = styled.div`
   
 export function ScrabbleBoard(props_: ScrabbleBoardProps) {
   const scrabbleData = useScrabbleData(props_);
-
+  const handleError = useErrorHandler()
 
   const moveFunctions = {
 
 
     onMoveEnd: (from: SquareID, to: SquareID | null) => {
       if (to) {
-        scrabbleData.move({from: from, to: to});
+        try {
+          scrabbleData.move({from: from, to: to});
+        } catch(error) {
+          handleError(error);
+        }
       }
     },
 
