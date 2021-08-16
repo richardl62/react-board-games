@@ -1,10 +1,22 @@
 import { Ctx } from "boardgame.io";
 import { shuffle } from "../../shared/tools";
 import { BoardData, GameData } from "./game-data";
-import { canSwapTiles, fillRack } from "./game-actions";
+import { canSwapTiles, compactRack } from "./game-actions";
 import { Letter } from "./scrabble-config";
 import { sAssert } from "../../shared/assert";
+import { Rack } from "./scrabble-data";
 
+function fillRack(G: GameData, rack: Rack) {
+    compactRack(rack);
+    
+    let bag = G.bag;
+    for(let i = 0; i < rack.length; ++i) {
+        if(rack[i] === null) {
+            const fromBag = bag.pop();
+            rack[i] = fromBag || null;
+        }
+    }
+}
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
@@ -46,6 +58,8 @@ const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) =>
         }
     }
 
+    compactRack(rack);
+    
     fillRack(G, rack);
 
     G.bag.push(...removedLetters);
