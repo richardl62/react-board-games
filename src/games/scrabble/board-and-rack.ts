@@ -14,6 +14,39 @@ export type TilePosition =
         board: {row: number; col: number;}
     };
 
+
+function moveTilesUp(rack: Rack, posToClear: number) : boolean {
+    let posOfGap = null;
+    for(let pos = posToClear; pos <= rack.length; ++pos) {
+        if(rack[pos] === null) {
+            posOfGap = pos;
+            break;
+        }
+    }
+    if(posOfGap === null) {
+        return false;
+    }
+    
+    for(let pos = posOfGap; pos > posToClear; --pos) {
+        rack[pos] = rack[pos-1];
+    }
+    rack[posToClear] = null;
+
+
+    return true;
+}
+
+function moveTilesDown(rack: Rack, posToClear: number): boolean {
+    rack.reverse();
+    const posToClearReversed = rack.length - (posToClear + 1);
+    const result = moveTilesUp(rack, posToClearReversed);
+    rack.reverse();
+
+    sAssert(rack[posToClear] === null || !result, "Problem rearranging tiles in rack");
+    return result;
+}
+
+
 /** 
  * BoardAndRack is a helper class for ScrabbleData.  It provides function to update 
  * (wait for it) a board and rank. It does not know anything about setting state 
@@ -59,14 +92,13 @@ export class BoardAndRack {
 
     insertIntoRack(tp: TilePosition, letter: Letter | null) {
         sAssert(tp.rack);
-        //TEMPORARY - crude initial implementation
-        for (let i = 0; i < this.rack.length; ++i) {
-            if (this.rack[i] === null) {
-                this.rack[i] = letter;
-            }
+        const pos = tp.rack.pos;
+        
+        if(moveTilesDown(this.rack, pos) || moveTilesUp(this.rack, pos)) {
+            this.rack[pos] = letter;
+        } else {
+            throw new Error("attempt to insert into full rack");
         }
-
-        sAssert(false, "attempt to insert into full rack");
     }
 
     isPlayable(tp: TilePosition): boolean {
