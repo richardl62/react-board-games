@@ -43,7 +43,7 @@ interface ScoreLineProps {
   score: number | null;
   children?: ReactNode;
 }
-function ScoreLine({score, children} : ScoreLineProps) {
+function ScoreLine({ score, children }: ScoreLineProps) {
   return (
     <StyledScoreLine>
       <span>{'Score this turn: ' + (score ?? '-')}</span>
@@ -53,21 +53,22 @@ function ScoreLine({score, children} : ScoreLineProps) {
 }
 
 interface ScoreAndDoneProps {
+  scrabbleData: ScrabbleData;
   score: number;
   words: string[];
-  onDone: () => void
 }
 
-function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
- // illegal words when 'done' was pressed.
- const illegalWords = useRef<string[]>([]);
+function ScoreAndDone({ scrabbleData, score, words }: ScoreAndDoneProps) {
+  // illegal words when 'done' was pressed.
+  const illegalWords = useRef<string[]>([]);
 
- // wwdp -> words when 'done' pressed
- const [wwdp, setWwdp] = useState<string[]>([]);
+  // wwdp -> words when 'done' pressed
+  const [wwdp, setWwdp] = useState<string[]>([]);
 
- const reportIllegalWords = sameJSON(words, wwdp) 
-   && illegalWords.current.length > 0; 
+  const reportIllegalWords = sameJSON(words, wwdp)
+    && illegalWords.current.length > 0;
 
+  const onDone = () => scrabbleData.endTurn(score);
   const onUncheckedDone = () => {
     setWwdp(words);
     illegalWords.current = words.filter(wd => !isLegalWord(wd));
@@ -76,23 +77,31 @@ function ScoreAndDone({score, words, onDone}: ScoreAndDoneProps) {
     }
   }
 
- const doneButton = reportIllegalWords?
-    <button onClick={onDone}> Done (permit illegal words) </button> :
-    <button onClick={onUncheckedDone}> done </button>
+  const DoneButton = () => {
+    if (!scrabbleData.isMyTurn) {
+      return null;
+    }
 
-   return (
-     <div>
-       {reportIllegalWords && <IllegalWord illegalWords={illegalWords.current} />}
+    if (reportIllegalWords) {
+      return <button onClick={onDone}> Done (permit illegal words) </button>;
+    }
 
-       <ScoreLine score={score} >
-         {doneButton}
-       </ScoreLine>
-     </div>
-   )
+    return <button onClick={onUncheckedDone}> Done </button>
+  }
+
+  return (
+    <div>
+      {reportIllegalWords && <IllegalWord illegalWords={illegalWords.current} />}
+
+      <ScoreLine score={score} >
+        <DoneButton />
+      </ScoreLine>
+    </div>
+  )
 }
 
 
-export function TurnControl({scrabbleData}: {scrabbleData: ScrabbleData}) {
+export function TurnControl({ scrabbleData }: { scrabbleData: ScrabbleData }) {
   const active = findActiveLetters(scrabbleData.board);
   const config = scrabbleData.config;
 
@@ -102,31 +111,28 @@ export function TurnControl({scrabbleData}: {scrabbleData: ScrabbleData}) {
     }
     return (
       <StyledScoreLine>
-        <button onClick={pass} disabled={!scrabbleData.isMyTurn}> Pass </button>
+        { scrabbleData.isMyTurn && <button onClick={pass}> Pass </button> }
       </StyledScoreLine>
     );
   }
 
   const candidtateWords = findCandidateWords(scrabbleData.board, active);
   if (!candidtateWords) {
-    return <ScoreLine score={null}/>
+    return <ScoreLine score={null} />
   }
 
   let score = scoreWords(scrabbleData.board, candidtateWords, config);
-  if(active.length === config.rackSize) {
+  if (active.length === config.rackSize) {
     score += allLetterBonus;
   }
-  
+
   const words = candidtateWords.map(cw => getWord(scrabbleData.board, cw));
-  const onDone = () => {
-      scrabbleData.endTurn(score);
-  }
-  
+
   return (
-    <ScoreAndDone 
-      score={score} 
+    <ScoreAndDone
+      score={score}
       words={words}
-      onDone={onDone}
+      scrabbleData={scrabbleData}
     />
   );
 }
