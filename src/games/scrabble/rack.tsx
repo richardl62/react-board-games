@@ -111,12 +111,8 @@ export function RackEtc(props: RackProps) {
 
       <Board {...boardProps} />
 
-      <button 
-        onClick={doEnableSwap}
-        disabled={!scrabbleData.isMyTurn}
-      >
-        Swap
-      </button>
+      {scrabbleData.isMyTurn && 
+        <button onClick={doEnableSwap}>Swap</button>}
 
     </StyledRackEtc>
     );
