@@ -85,7 +85,7 @@ export class ScrabbleData {
     }
 
     canMove(sq: SquareID) : boolean {
-        return this.boardAndRack.isPlayable(tilePosition(sq));
+        return this.boardAndRack.isActive(tilePosition(sq));
     }
 
     move(arg: {from: SquareID,to: SquareID}){
@@ -95,17 +95,21 @@ export class ScrabbleData {
         const br = this.boardAndRack;
 
         const fromLetter = br.getLetter(from);
+        const toLetter  = br.getLetter(to)
 
-        if (to.board) {
-            if (!br.getLetter(to)) {
-                br.setActiveLetter(from, null);
-                br.setActiveLetter(to, fromLetter);
-            }
-        } else {
+        if (to.rack) {
             br.setActiveLetter(from, null);
             br.insertIntoRack(to, fromLetter);
+        } else  {
+            if (toLetter === null) {
+                br.setActiveLetter(from, null);
+                br.setActiveLetter(to, fromLetter);
+            } else if(br.isActive(to)) {
+                br.setActiveLetter(from, null);
+                br.addToRack(toLetter);
+                br.setActiveLetter(to, fromLetter);
+            }
         }
-
 
         this.setState();
     }

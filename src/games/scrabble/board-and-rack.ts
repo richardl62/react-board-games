@@ -90,6 +90,12 @@ export class BoardAndRack {
         }
     }
 
+    addToRack(letter: Letter) {
+        const emptySquare = this.rack.findIndex(l => l === null);
+        sAssert(emptySquare >= 0, "Problem adding tile to rack");
+        this.rack[emptySquare] = letter;
+    }
+
     insertIntoRack(tp: TilePosition, letter: Letter | null) {
         sAssert(tp.rack);
         const pos = tp.rack.pos;
@@ -101,9 +107,15 @@ export class BoardAndRack {
         }
     }
 
-    isPlayable(tp: TilePosition): boolean {
+    /** Check if there is an active tile at the given position.
+     *  'active' tiles are those that can be moved during the current turn.
+     *  (So they are either on the rack or were moved from the rack during the
+     *  current turn.)
+     *  If there is no tile at the given position the function returns false.
+     */
+    isActive(tp: TilePosition): boolean {
         if (tp.rack) {
-            return true;
+            return Boolean(this.rack[tp.rack.pos]);
         }
 
         const bsq = this.board[tp.board.row][tp.board.col];
