@@ -26,7 +26,7 @@ export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}) {
             displayName += " (you)"
         }
         return (
-            <PlayerScore key={name} current={scrabbleData.isMyTurn} >
+            <PlayerScore key={name} current={pid === scrabbleData.currentPlayer} >
                 {`${displayName}: ${score}`}
             </PlayerScore>
         );

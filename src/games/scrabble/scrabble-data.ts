@@ -53,12 +53,15 @@ export class ScrabbleData {
         sAssert(this.props.playerID); 
         return this.props.playerID;
     }
+    get currentPlayer() {
+        return this.props.ctx.currentPlayer;
+    }
     get allJoined() { return this.props.allJoined; }
     get config() {return this.props.config;}
 
 
     get isMyTurn() : boolean {
-        return this.props.playerID === this.props.ctx.currentPlayer;
+        return this.props.playerID === this.currentPlayer;
     } 
 
     /** Limited use only 
