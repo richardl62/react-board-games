@@ -1,13 +1,10 @@
 import { Ctx } from "boardgame.io";
 import { shuffle } from "../../shared/tools";
 import { BoardData, GameData } from "./game-data";
-import { compactRack } from "./game-actions";
 import { Letter } from "./scrabble-config";
 import { Rack } from "./scrabble-data";
 
 function fillRack(G: GameData, rack: Rack) {
-    compactRack(rack);
-    
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
         if(rack[i] === null) {
