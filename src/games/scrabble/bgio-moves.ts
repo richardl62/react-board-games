@@ -37,14 +37,14 @@ const shuffleRack = (G: GameData, ctx: Ctx, dummy: ShuffleRackParam) => {
     shuffle(rack);
 };
 
-interface EndOfTurnActionsParam {
+interface setBoardRandAndScoreParam {
     board: BoardData;
     rack: (Letter|null)[];
     score: number;
 };
 
-const endOfTurnActions = (G: GameData, ctx: Ctx, 
-    {board, rack, score}: EndOfTurnActionsParam
+const setBoardRandAndScore = (G: GameData, ctx: Ctx, 
+    {board, rack, score}: setBoardRandAndScoreParam
     ) => {
     let newRack = [...rack];
     fillRack(G, newRack);
@@ -87,7 +87,7 @@ export const bgioMoves = {
     move: move,
     recallRack: recallRack,
     shuffleRack: shuffleRack,
-    endOfTurnActions: endOfTurnActions,
+    setBoardRandAndScore: setBoardRandAndScore,
     swapTilesInRack: swapTilesInRack,
 };
 
@@ -95,6 +95,6 @@ export interface ClientMoves {
     move: (arg: MoveParam) => void;
     recallRack: (arg: RecallRackParam) => void;
     shuffleRack: (arg: ShuffleRackParam) => void;
-    endOfTurnActions: (arg: EndOfTurnActionsParam) => void;
+    setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
     swapTilesInRack: (arg: SwapTilesInRackParam) => void;
 };

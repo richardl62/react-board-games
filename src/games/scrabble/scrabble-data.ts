@@ -113,7 +113,7 @@ export class ScrabbleData {
     }
 
     endTurn(score: number) {
-        this.moves.endOfTurnActions({
+        this.moves.setBoardRandAndScore({
             score: score,
             rack: this.boardAndRack.getRack(),
             board: this.boardAndRack.getBoard(),
