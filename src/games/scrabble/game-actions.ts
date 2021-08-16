@@ -1,10 +1,8 @@
-import { DragType, MoveFunctions, SquareID } from "../../boards";
+import { SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
-import { BoardProps } from "../../shared/types";
 import { Letter } from "./scrabble-config";
 import { TileData, GameData, BoardData } from "./game-data";
 import { RowCol } from "./find-candidate-words";
-import { ClientMoves } from "./bgio-moves";
 
 type Rack = (Letter|null)[];
 export const boardIDs = {
@@ -155,20 +153,6 @@ export function setLetter(
         G.board[sq.row] = row; 
     }
 }
-
-export function moveFunctions(props: BoardProps<GameData>) : MoveFunctions {
-
-    const moves  = props.moves as any as ClientMoves;
-    return {
-      onMoveEnd: (from: SquareID, to: SquareID | null) => {
-        if(to) {
-            moves.move({from:from, to: to});
-        }
-      },
-
-      dragType: () => DragType.move,
-    }
-  };
 
 export function canSwapTiles(G: GameData) {
     const rankSize = Object.values(G.playerData)[0].playableTiles.length;

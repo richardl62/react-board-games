@@ -1,29 +1,11 @@
 import { Ctx } from "boardgame.io";
-import { SquareID } from "../../boards";
-import { sameJSON, shuffle } from "../../shared/tools";
+import { shuffle } from "../../shared/tools";
 import { BoardData, GameData } from "./game-data";
 import {
-    getSquareData, setLetter, compactRack,
     fillRack, canSwapTiles, recallRack as doRecallRack
 } from "./game-actions";
 import { Letter } from "./scrabble-config";
 import { sAssert } from "../../shared/assert";
-
-type MoveParam = { from: SquareID, to: SquareID, };
-const move = (G: GameData, ctx: Ctx, { from, to }: MoveParam) => {
-    const rack = G.playerData[ctx.currentPlayer].playableTiles;
-    const fromData = getSquareData(G, rack, from);
-    const toData = getSquareData(G, rack, to);
-
-    sAssert(fromData);
-
-    if ((toData === null || toData.active) && !sameJSON(from, to)) {
-
-        setLetter(G, rack, from, toData ? toData.letter : null);
-        setLetter(G, rack, to, fromData.letter);
-        compactRack(G, rack);
-    }
-};
 
 type RecallRackParam = void;
 const recallRack = (G: GameData, ctx: Ctx, dummy: RecallRackParam) => {
@@ -84,7 +66,6 @@ const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) =>
 };
 
 export const bgioMoves = {
-    move: move,
     recallRack: recallRack,
     shuffleRack: shuffleRack,
     setBoardRandAndScore: setBoardRandAndScore,
@@ -92,7 +73,6 @@ export const bgioMoves = {
 };
 
 export interface ClientMoves {
-    move: (arg: MoveParam) => void;
     recallRack: (arg: RecallRackParam) => void;
     shuffleRack: (arg: ShuffleRackParam) => void;
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
