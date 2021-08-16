@@ -84,7 +84,7 @@ export function getWord(
  * Existing rack is compacted first.
 */
 export function fillRack(G: GameData, rack: Rack) {
-    compactRack(G, rack);
+    compactRack(rack);
     
     let bag = G.bag;
     for(let i = 0; i < rack.length; ++i) {
@@ -94,20 +94,6 @@ export function fillRack(G: GameData, rack: Rack) {
     }
 }
 
-
-export function recallRack(G: GameData, rack: Rack) {
-    for (let row = 0; row < G.board.length; ++row) {
-        for (let col = 0; col < G.board[row].length; ++col) {
-            let sq = G.board[row][col];
-            if (sq?.active) {
-                addToRack(rack, sq.letter);
-                G.board[row][col] = null;
-            }
-        }
-    }
-}
-
-
 export function addToRack(rack: Rack, l: Letter) {
     let emptyIndex = rack.findIndex(l => l === null);
     sAssert(emptyIndex >= 0, "Attempt to add to full rack");
@@ -115,7 +101,7 @@ export function addToRack(rack: Rack, l: Letter) {
 }
 
 /* move blank spaces to the end */
-export function compactRack(G: GameData, rack: Rack) {
+export function compactRack(rack: Rack) {
     let setPos = 0;
     for(let readPos = 0; readPos < rack.length; ++readPos) {
         if(rack[readPos]) {

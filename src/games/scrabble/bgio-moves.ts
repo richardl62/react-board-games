@@ -1,23 +1,10 @@
 import { Ctx } from "boardgame.io";
 import { shuffle } from "../../shared/tools";
 import { BoardData, GameData } from "./game-data";
-import {
-    fillRack, canSwapTiles, recallRack as doRecallRack
-} from "./game-actions";
+import { canSwapTiles, fillRack } from "./game-actions";
 import { Letter } from "./scrabble-config";
 import { sAssert } from "../../shared/assert";
 
-type RecallRackParam = void;
-const recallRack = (G: GameData, ctx: Ctx, dummy: RecallRackParam) => {
-    const rack = G.playerData[ctx.currentPlayer].playableTiles;
-    doRecallRack(G, rack);
-};
-
-type ShuffleRackParam = void;
-const shuffleRack = (G: GameData, ctx: Ctx, dummy: ShuffleRackParam) => {
-    const rack = G.playerData[ctx.currentPlayer].playableTiles;
-    shuffle(rack);
-};
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
@@ -66,15 +53,11 @@ const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) =>
 };
 
 export const bgioMoves = {
-    recallRack: recallRack,
-    shuffleRack: shuffleRack,
     setBoardRandAndScore: setBoardRandAndScore,
     swapTilesInRack: swapTilesInRack,
 };
 
 export interface ClientMoves {
-    recallRack: (arg: RecallRackParam) => void;
-    shuffleRack: (arg: ShuffleRackParam) => void;
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
     swapTilesInRack: (arg: SwapTilesInRackParam) => void;
 };

@@ -102,12 +102,11 @@ export function RackEtc(props: RackProps) {
     return (<StyledRackEtc>
       <PreRack>
         {hasTilesOut && <button onClick={() => scrabbleData.recallRack()}>Recall</button>}
-        <button 
+        <button
           onClick={() => scrabbleData.shuffleRack()}
-          disabled={!scrabbleData.isMyTurn}
         >
           Shuffle
-          </button>
+        </button>
       </PreRack>
 
       <Board {...boardProps} />

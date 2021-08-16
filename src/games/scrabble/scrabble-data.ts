@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {  SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
+import { shuffle } from "../../shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
-import { onRack } from "./game-actions";
+import { addToRack, compactRack, onRack } from "./game-actions";
 import { BoardData } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
 
@@ -100,12 +101,23 @@ export class ScrabbleData {
         this.setState();
     }
 
-    recallRack(){
-        this.props.moves.recallRack();
+    recallRack() {
+        for (let row = 0; row < this.board.length; ++row) {
+            for (let col = 0; col < this.board[row].length; ++col) {
+                let sq = this.board[row][col];
+                if (sq?.active) {
+                    addToRack(this.rack, sq.letter);
+                    this.board[row][col] = null;
+                }
+            }
+        }
+        this.setState();
     }
 
     shuffleRack(){
-        this.moves.shuffleRack();
+        shuffle(this.rack);
+        compactRack(this.rack);
+        this.setState(); // Inefficient as board has not changes.
     }
 
     swapTiles(toSwap: boolean[]) {
