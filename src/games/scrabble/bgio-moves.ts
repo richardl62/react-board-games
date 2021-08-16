@@ -1,9 +1,8 @@
 import { Ctx } from "boardgame.io";
 import { shuffle } from "../../shared/tools";
 import { BoardData, GameData } from "./game-data";
-import { canSwapTiles, compactRack } from "./game-actions";
+import { compactRack } from "./game-actions";
 import { Letter } from "./scrabble-config";
-import { sAssert } from "../../shared/assert";
 import { Rack } from "./scrabble-data";
 
 function fillRack(G: GameData, rack: Rack) {
@@ -39,39 +38,18 @@ const setBoardRandAndScore = (G: GameData, ctx: Ctx,
     G.turn++;
 };
 
-type SwapTilesInRackParam = boolean[];
-const swapTilesInRack = (G: GameData, ctx: Ctx, toSwap: SwapTilesInRackParam) => {
-    if (!canSwapTiles(G)) {
-        console.error("Invalid attempt to swap title");
-        return;
-    }
-    const rack = G.playerData[ctx.currentPlayer].playableTiles;
-    sAssert(rack.length === toSwap.length, "Problem swapping tiles");
-
-    let removedLetters: Letter[] = [];
-    for (let i = 0; i < rack.length; ++i) {
-        if (toSwap[i]) {
-            const l = rack[i];
-            sAssert(l);
-            removedLetters.push(l);
-            rack[i] = null;
-        }
-    }
-
-    compactRack(rack);
-    
-    fillRack(G, rack);
-
-    G.bag.push(...removedLetters);
+type addTilesToBagParam = Letter[];
+const addTilesToBag = (G: GameData, ctx: Ctx, letters: addTilesToBagParam) => {
+    G.bag.push(...letters);
     shuffle(G.bag);
 };
 
 export const bgioMoves = {
     setBoardRandAndScore: setBoardRandAndScore,
-    swapTilesInRack: swapTilesInRack,
+    addTilesToBag: addTilesToBag,
 };
 
 export interface ClientMoves {
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
-    swapTilesInRack: (arg: SwapTilesInRackParam) => void;
+    addTilesToBag: (arg: addTilesToBagParam) => void;
 };

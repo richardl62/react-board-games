@@ -7,6 +7,7 @@ import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, compactRack, onRack } from "./game-actions";
 import { BoardData } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
+import { Letter } from "./scrabble-config";
 
 export type { Rack };
 
@@ -120,8 +121,24 @@ export class ScrabbleData {
         this.setState(); // Inefficient as board has not changes.
     }
 
+    /**
+     * 
+     * @param toSwap Array of the same size as the rack.
+     * Tiles are swapped if the correspoing element of toSwap is true.
+     */
     swapTiles(toSwap: boolean[]) {
-        this.moves.swapTilesInRack(toSwap);
+        sAssert(toSwap.length === this.rack.length);
+        let toReturn: Letter[] = [];
+        for(let index = 0; index < toSwap.length; ++index) {
+            if(toSwap[index]) {
+                const rt = this.rack[index];
+                sAssert(rt);
+                toReturn.push(rt);
+                this.rack[index] = null;
+            }
+        }
+
+        this.moves.addTilesToBag(toReturn);
     }
 
     endTurn(score: number) {
