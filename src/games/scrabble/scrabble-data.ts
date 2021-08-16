@@ -94,13 +94,18 @@ export class ScrabbleData {
 
         const br = this.boardAndRack;
 
-        const letter = br.getLetter(from);
-        br.setActiveLetter(from, null);
-        if(to.board) {
-            br.setActiveLetter(to, letter);
+        const fromLetter = br.getLetter(from);
+
+        if (to.board) {
+            if (!br.getLetter(to)) {
+                br.setActiveLetter(from, null);
+                br.setActiveLetter(to, fromLetter);
+            }
         } else {
-            br.insertIntoRack(to, letter);
+            br.setActiveLetter(from, null);
+            br.insertIntoRack(to, fromLetter);
         }
+
 
         this.setState();
     }
