@@ -73,7 +73,7 @@ export const bobail: AppGame =
     minPlayers: 1,
     maxPlayers: 1,
 
-    moves: [],
+    moves: {},
     setup: () => initialState,
 
     board: BobailBoard,

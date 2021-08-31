@@ -1,4 +1,4 @@
-import { Ctx } from "boardgame.io";
+import { Move } from "boardgame.io";
 import { shuffle } from "../../shared/tools";
 import { BoardData, GameData } from "./game-data";
 import { Letter } from "./scrabble-config";
@@ -20,7 +20,7 @@ interface setBoardRandAndScoreParam {
     score: number;
 };
 
-const setBoardRandAndScore = (G: GameData, ctx: Ctx, 
+const setBoardRandAndScore : Move<GameData> = (G, ctx, 
     {board, rack, score}: setBoardRandAndScoreParam
     ) => {
     let newRack = [...rack];
@@ -36,7 +36,7 @@ const setBoardRandAndScore = (G: GameData, ctx: Ctx,
 };
 
 type addTilesToBagParam = Letter[];
-const addTilesToBag = (G: GameData, ctx: Ctx, letters: addTilesToBagParam) => {
+const addTilesToBag : Move<GameData> = (G, ctx, letters: addTilesToBagParam) => {
     G.bag.push(...letters);
     shuffle(G.bag);
 };

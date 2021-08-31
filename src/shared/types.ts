@@ -1,4 +1,4 @@
-import { Ctx } from "boardgame.io";
+import { Game } from "boardgame.io";
 import { BoardProps } from "./board-props";
 export type { BoardProps };
 
@@ -13,21 +13,15 @@ export interface MatchID {
   mid: string
 } 
 
-export interface BasicGame<G = any> {
-  // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
+export interface AppGame<G = any> extends Game<G> {
+    // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
   // display purposes.
   displayName: string;
 
   // Space-free name suitable for passing to bgio.
   name: string;
 
-  setup: (ctx: Ctx) => G;
-  moves: any; // KLUDGE
-
   minPlayers: number,
   maxPlayers: number,
-}
-
-export interface AppGame<G = any> extends BasicGame<G> {
   board: (props: BoardProps<G>) => JSX.Element;
 }
