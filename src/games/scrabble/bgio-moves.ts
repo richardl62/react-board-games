@@ -23,6 +23,7 @@ interface setBoardRandAndScoreParam {
 const setBoardRandAndScore : Move<GameData> = (G, ctx, 
     {board, rack, score}: setBoardRandAndScoreParam
     ) => {
+    console.log("setBoardRandAndScore called");
     let newRack = [...rack];
     fillRack(G, newRack);
     G.playerData[ctx.currentPlayer].playableTiles = newRack;
@@ -37,6 +38,7 @@ const setBoardRandAndScore : Move<GameData> = (G, ctx,
 
 type addTilesToBagParam = Letter[];
 const addTilesToBag : Move<GameData> = (G, ctx, letters: addTilesToBagParam) => {
+    console.log("addTilesToBag called");
     G.bag.push(...letters);
     shuffle(G.bag);
 };

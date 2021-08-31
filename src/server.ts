@@ -4,7 +4,7 @@ import path from 'path';
 import serve from 'koa-static';
 import { games } from './games';
 
-console.log("Games: ", games.map(g => g.name));
+console.log("Starting games server");
 
 const server = Server({ games: games });
 const PORT = process.env.PORT || 8000;
