@@ -40,21 +40,9 @@ function PlayerData(props: BoardProps<G>) {
     {props.ctx.playOrder.map(playerSpan)}
   </div>
 }
-// KUUDGE: Copy and paste - same code elsewhere
-let lastCall = new Date();
-function logTime(name: String) {
-  const date = new Date();
-  const ellapsed = (date.getTime() - lastCall.getTime()) / 1000;
-  lastCall = date;
-
-  const [hour, minutes, seconds] = [date.getHours(), date.getMinutes(), date.getSeconds()];
-  const now = `${hour}:${minutes}:${seconds}`;
-  console.log(name, now, `(${ellapsed})`);
-}
 
 function Board(props: BoardProps<G>) {
-  logTime("Plus-minus board");
-  
+
   if (!props.allJoined) {
     return <WaitingForPlayers {...props} />
   }

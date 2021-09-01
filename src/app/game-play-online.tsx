@@ -5,18 +5,6 @@ import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from './url-params';
 import { makeBoardProps } from '../shared/board-props';
 
-// KUUDGE: Copy and paste - same code elsewhere
-let lastCall = new Date();
-function logTime(name: String) {
-  const date = new Date();
-  const ellapsed = (date.getTime() - lastCall.getTime()) / 1000;
-  lastCall = date;
-
-  const [hour, minutes, seconds] = [date.getHours(), date.getMinutes(), date.getSeconds()];
-  const now = `${hour}:${minutes}:${seconds}`;
-  console.log(name, now, `(${ellapsed})`);
-}
-
 interface GamePlayOnlineProps {
   game: AppGame;
   matchID: MatchID;
@@ -25,7 +13,7 @@ interface GamePlayOnlineProps {
 ;
 
 export function GamePlayOnline({ game, matchID, player }: GamePlayOnlineProps) {
-  logTime('GamePlayOnline');
+  console.log("UrlParams", UrlParams);
 
   useEffect(() => {
     document.title = game.displayName;

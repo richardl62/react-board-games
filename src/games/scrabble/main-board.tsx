@@ -13,17 +13,7 @@ interface MainBoardProps {
   config: ScrabbleConfig;
 }
 
-// KUUDGE: Copy and paste - same code elsewhere
-let lastCall = new Date();
-function logTime(name: String) {
-  const date = new Date();
-  const ellapsed = (date.getTime() - lastCall.getTime()) / 1000;
-  lastCall = date;
 
-  const [hour, minutes, seconds] = [date.getHours(), date.getMinutes(), date.getSeconds()];
-  const now = `${hour}:${minutes}:${seconds}`;
-  console.log(name, now, `(${ellapsed})`);
-}
 
 export function MainBoard({ board, squareInteraction, config }: MainBoardProps) {
 
@@ -50,6 +40,6 @@ export function MainBoard({ board, squareInteraction, config }: MainBoardProps) 
     squareInteraction: squareInteraction,
     moveStart: null, //clickDragState.start,
   });
-  logTime("Scrabble board");
+
   return <Board {...boardProps} />;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { games as appGames } from '../games';
@@ -70,9 +70,9 @@ function gameRoute(game: AppGame) {
  * Games App.
  */
 function App() {
-  const date = new Date();
-  const [hour, minutes, seconds] = [date.getHours(), date.getMinutes(), date.getSeconds()];
-  console.log(`App: ${hour}:${minutes}:${seconds}`);
+  useEffect(() => {
+    document.title = 'Games'
+  });
 
   const renderHomePage = () => <HomePage games={appGames} />;
   const renderPageNotFound = () => <PageNotFound games={appGames} />;
