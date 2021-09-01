@@ -83,8 +83,10 @@ export class BoardAndRack {
         if (tp.rack) {
             this.rack[tp.rack.pos] = letter;
         } else {
+            console.warn("Bug: Does not allow for blanks");
             this.board[tp.board.row][tp.board.col] = letter && {
                 letter: letter,
+                isBlank: false,
                 active: true,
             };
         }

@@ -1,12 +1,9 @@
 
 import { sAssert } from "../../shared/assert";
 import { BoardData } from "./game-data";
-import { Letter, letterScores, ScrabbleConfig } from "./scrabble-config";
+import { tileScore, ScrabbleConfig } from "./scrabble-config";
 import { multipliers } from "./square-type";
 
-function letterScore(letter: Letter) {
-    return letterScores[letter];
-}
 
 interface RowCol {
     row: number;
@@ -25,10 +22,10 @@ export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: Scra
             const mults = multipliers(
                 scrabbleConfig.boardLayout[rc.row][rc.col]
             );
-            score += letterScore(sq.letter) * mults.letter;
+            score += tileScore(sq) * mults.letter;
             wordMult *= mults.word;
         } else {
-            score += letterScore(sq.letter);
+            score += tileScore(sq);
         }
     })
 

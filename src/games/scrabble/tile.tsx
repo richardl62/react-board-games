@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Letter, letterScore } from "./scrabble-config";
+import { Letter, tileScore } from "./scrabble-config";
 import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style"
 
 const StyledLetter = styled.div`
@@ -38,7 +38,9 @@ interface TileProps {
 }
 
 export function Tile({ letter, markAsMoveable }: TileProps) {
-    const score = letterScore(letter);
+    console.warn("Bug: Does not allow for blanks");
+    const tile = {letter: letter, isBlank: false};
+    const score = tileScore(tile);
     return (
         <StyledLetter>
             {letter}

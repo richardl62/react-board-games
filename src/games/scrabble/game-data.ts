@@ -5,6 +5,7 @@ import { Letter, ScrabbleConfig } from "./scrabble-config";
 
 export interface TileData {
     letter: Letter;
+    isBlank: boolean;
     /** movable in the current turn.  Rack tiles are always active. */
     active: boolean;
 }
