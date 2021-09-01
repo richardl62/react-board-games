@@ -1,7 +1,7 @@
 import { Move } from "boardgame.io";
 import { shuffle } from "../../shared/tools";
+import { CoreTile } from "./core-tile";
 import { BoardData, GameData } from "./game-data";
-import { Letter } from "./scrabble-config";
 import { Rack } from "./scrabble-data";
 
 function fillRack(G: GameData, rack: Rack) {
@@ -16,7 +16,7 @@ function fillRack(G: GameData, rack: Rack) {
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
-    rack: (Letter|null)[];
+    rack: (CoreTile|null)[];
     score: number;
 };
 
@@ -36,10 +36,10 @@ const setBoardRandAndScore : Move<GameData> = (G, ctx,
     G.turn++;
 };
 
-type addTilesToBagParam = Letter[];
-const addTilesToBag : Move<GameData> = (G, ctx, letters: addTilesToBagParam) => {
+type addTilesToBagParam = CoreTile[];
+const addTilesToBag : Move<GameData> = (G, ctx, tiles: addTilesToBagParam) => {
     console.log("addTilesToBag called");
-    G.bag.push(...letters);
+    G.bag.push(...tiles);
     shuffle(G.bag);
 };
 

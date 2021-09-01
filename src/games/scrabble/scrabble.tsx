@@ -30,8 +30,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
 
   const moveFunctions = {
 
-
-    onMoveEnd: (from: SquareID, to: SquareID | null) => {
+    onMoveEnd: (from: SquareID, to: SquareID | null)=> {
       if (to) {
         try {
           scrabbleData.move({from: from, to: to});
@@ -78,7 +77,6 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         </SpaceBetween>
 
         <TurnControl scrabbleData={scrabbleData}/>
-
       </Game>
     </DndProvider>
   )

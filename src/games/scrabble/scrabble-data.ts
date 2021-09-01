@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {  SquareID } from "../../boards";
+import {  squareID, SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
 import { shuffle } from "../../shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
-import { addToRack, compactRack, onRack } from "./game-actions";
+import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
 import { BoardData } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
-import { Letter } from "./scrabble-config";
+import { CoreTile } from "./core-tile";
+import { blank, Letter } from "./letters";
 
 export type { Rack };
 
@@ -94,20 +95,20 @@ export class ScrabbleData {
 
         const br = this.boardAndRack;
 
-        const fromLetter = br.getLetter(from);
-        const toLetter  = br.getLetter(to)
+        const fromLetter = br.getTile(from);
+        const toLetter  = br.getTile(to)
 
         if (to.rack) {
-            br.setActiveLetter(from, null);
+            br.setActiveTile(from, null);
             br.insertIntoRack(to, fromLetter);
         } else  {
             if (toLetter === null) {
-                br.setActiveLetter(from, null);
-                br.setActiveLetter(to, fromLetter);
+                br.setActiveTile(from, null);
+                br.setActiveTile(to, fromLetter);
             } else if(br.isActive(to)) {
-                br.setActiveLetter(from, null);
+                br.setActiveTile(from, null);
                 br.addToRack(toLetter);
-                br.setActiveLetter(to, fromLetter);
+                br.setActiveTile(to, fromLetter);
             }
         }
 
@@ -117,9 +118,9 @@ export class ScrabbleData {
     recallRack() {
         for (let row = 0; row < this.board.length; ++row) {
             for (let col = 0; col < this.board[row].length; ++col) {
-                let sq = this.board[row][col];
-                if (sq?.active) {
-                    addToRack(this.rack, sq.letter);
+                let tile = this.board[row][col];
+                if (tile?.active) {
+                    addToRack(this.rack, tile);
                     this.board[row][col] = null;
                 }
             }
@@ -140,7 +141,7 @@ export class ScrabbleData {
      */
     swapTiles(toSwap: boolean[]) {
         sAssert(toSwap.length === this.rack.length);
-        let toReturn: Letter[] = [];
+        let toReturn: CoreTile[] = [];
         for(let index = 0; index < toSwap.length; ++index) {
             if(toSwap[index]) {
                 const rt = this.rack[index];
@@ -163,6 +164,28 @@ export class ScrabbleData {
         sAssert(this.props.events.endTurn);
         this.props.events.endTurn();
     }
+
+    getUnsetBlack(): SquareID | null {
+        for (let row = 0; row < this.board.length; ++row) {
+            for (let col = 0; col < this.board[row].length; ++col) {
+                if(this.board[row][col]?.letter === blank) {
+                    return squareID(row, col, boardIDs.main);
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    setBlank(id: SquareID, letter: Letter) {
+        sAssert(!onRack(id));
+
+        const sq = this.board[id.row][id.col];
+        sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
+        sq.letter = letter;
+
+        this.setState();
+    };
 
     private setState() {
         this.boardState[1](this.board);

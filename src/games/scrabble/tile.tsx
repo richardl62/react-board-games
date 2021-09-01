@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Letter, tileScore } from "./scrabble-config";
+import { CoreTile, tileScore } from "./core-tile";
 import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style"
 
 const StyledLetter = styled.div`
@@ -30,20 +30,18 @@ const Marker = styled.div`
 `;
 
 interface TileProps {
-    letter: Letter;
+    tile: CoreTile;
     // True for titles that should marked as moveable.
     // (This is used for titles on the board that were played during the current
     // turn.)
     markAsMoveable?: boolean;
 }
 
-export function Tile({ letter, markAsMoveable }: TileProps) {
-    console.warn("Bug: Does not allow for blanks");
-    const tile = {letter: letter, isBlank: false};
+export function Tile({ tile, markAsMoveable }: TileProps) {
     const score = tileScore(tile);
     return (
         <StyledLetter>
-            {letter}
+            {tile.letter}
             <Score>{score}</Score>
             {markAsMoveable ? <Marker /> : null}
         </StyledLetter>

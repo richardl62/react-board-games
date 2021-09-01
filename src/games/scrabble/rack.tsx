@@ -31,13 +31,13 @@ interface RackProps {
 export function RackEtc(props: RackProps) {
   const {squareInteraction, swapTiles, scrabbleData } = props;
   const hasTilesOut = tilesOut(scrabbleData.board);
-  const letters = props.rack;
-  const nLetters = letters.length;
+  const coreTiles = props.rack;
+  const nTiles = coreTiles.length;
 
   // selectedForSwap is null if a swap is not in progress.
   const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
 
-  const tiles = letters.map((letter, index) => letter && <Tile letter={letter}
+  const tiles = coreTiles.map((tile, index) => tile && <Tile tile={tile}
     markAsMoveable={selectedForSwap !== null && selectedForSwap[index]}
     />);
 
@@ -96,7 +96,7 @@ export function RackEtc(props: RackProps) {
     const doEnableSwap = () => {
       sAssert(!selectedForSwap);
       scrabbleData.recallRack();
-      setSelectedForSwap(Array(nLetters).fill(false));
+      setSelectedForSwap(Array(nTiles).fill(false));
     }
 
     return (<StyledRackEtc>

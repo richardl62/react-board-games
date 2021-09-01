@@ -1,8 +1,9 @@
 import { sAssert } from "../../shared/assert";
+import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData } from "./game-data";
-import { Letter } from "./scrabble-config";
+import { blank } from "./letters";
 
-export type Rack = (Letter | null)[];
+export type Rack = (CoreTile | null)[];
 
 export type TilePosition = 
     {
@@ -70,40 +71,46 @@ export class BoardAndRack {
         this.rack = [...rack];
     }
 
-    getLetter(tp: TilePosition): Letter | null {
+    getTile(tp: TilePosition): CoreTile | null {
         if (tp.rack) {
             return this.rack[tp.rack.pos];
         } else {
-            const bsq = this.board[tp.board.row][tp.board.col];
-            return bsq && bsq.letter;
+            return this.board[tp.board.row][tp.board.col];
         }
     }
 
-    setActiveLetter(tp: TilePosition, letter: Letter | null) {
+    setActiveTile(tp: TilePosition, tile: CoreTile | null) {
         if (tp.rack) {
-            this.rack[tp.rack.pos] = letter;
+            this.rack[tp.rack.pos] = tile;
         } else {
-            console.warn("Bug: Does not allow for blanks");
-            this.board[tp.board.row][tp.board.col] = letter && {
-                letter: letter,
-                isBlank: false,
+            this.board[tp.board.row][tp.board.col] = tile && {
+                ...tile,
                 active: true,
             };
         }
     }
 
-    addToRack(letter: Letter) {
-        const emptySquare = this.rack.findIndex(l => l === null);
-        sAssert(emptySquare >= 0, "Problem adding tile to rack");
-        this.rack[emptySquare] = letter;
+    private setRackTile(tile: CoreTile | null, pos: number) {
+        // User suppled values for blanks are cleared when in rack.
+        if(tile?.isBlank) {
+            this.rack[pos] = makeCoreTile(blank);
+        } else {
+            this.rack[pos] = tile;
+        }
     }
 
-    insertIntoRack(tp: TilePosition, letter: Letter | null) {
+    addToRack(tile: CoreTile) {
+        const emptySquare = this.rack.findIndex(l => l === null);
+        sAssert(emptySquare >= 0, "Problem adding tile to rack");
+        this.setRackTile(tile, emptySquare);
+    }
+
+    insertIntoRack(tp: TilePosition, tile: CoreTile | null) {
         sAssert(tp.rack);
         const pos = tp.rack.pos;
         
         if(moveTilesDown(this.rack, pos) || moveTilesUp(this.rack, pos)) {
-            this.rack[pos] = letter;
+            this.setRackTile(tile, pos);
         } else {
             throw new Error("attempt to insert into full rack");
         }

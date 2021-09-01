@@ -1,9 +1,9 @@
 
 import { sAssert } from "../../shared/assert";
+import { tileScore } from "./core-tile";
 import { BoardData } from "./game-data";
-import { tileScore, ScrabbleConfig } from "./scrabble-config";
+import { ScrabbleConfig } from "./scrabble-config";
 import { multipliers } from "./square-type";
-
 
 interface RowCol {
     row: number;

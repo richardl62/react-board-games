@@ -1,11 +1,12 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../shared/assert";
 import { nestedArrayMap } from "../../shared/tools";
-import { Letter, ScrabbleConfig } from "./scrabble-config";
+import { ScrabbleConfig } from "./scrabble-config";
+import { Letter } from "./letters";
+import { CoreTile } from "./core-tile";
 
-export interface TileData {
-    letter: Letter;
-    isBlank: boolean;
+export interface TileData extends CoreTile {
+
     /** movable in the current turn.  Rack tiles are always active. */
     active: boolean;
 }
@@ -22,7 +23,7 @@ export interface GamePlayerData {
      * off the rack onto the board, but are still available for moving (i.e
      * have not yet been permanently added as part of the turn.)
      */
-    playableTiles: (Letter|null)[];
+    playableTiles: (CoreTile|null)[];
     score: number;
 }
 
@@ -31,7 +32,7 @@ type PlayerDataDictionary = {[id: string] : GamePlayerData};
 export interface GameData {
     board: BoardData;
     playerData: PlayerDataDictionary; 
-    bag: Letter[];
+    bag: CoreTile[];
     turn: number;
 }
 
@@ -40,14 +41,14 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
     let bag = config.makeFullBag(); 
 
     const rack = () => {
-        let letters : Letter[] = [];
+        let tiles : CoreTile[] = [];
         for (let i = 0; i < config.rackSize; ++i) {
-            const letter = bag.pop();
-            sAssert(letter, "Too few letters for initial setup");
-            letters.push(letter);
+            const tile = bag.pop();
+            sAssert(tile, "Too few tiles for initial setup");
+            tiles.push(tile);
         }
 
-        return letters;
+        return tiles;
     }
 
     let playerData: PlayerDataDictionary = {};

@@ -1,21 +1,35 @@
 import { SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
-import { Letter } from "./scrabble-config";
 import { GameData, BoardData } from "./game-data";
 import { RowCol } from "./find-candidate-words";
+import { CoreTile, makeCoreTile } from "./core-tile";
+import { blank } from "./letters";
 
-type Rack = (Letter|null)[];
+type Rack = (CoreTile|null)[];
 export const boardIDs = {
     rack: 'rack',
     main: 'main',
 }
 
-export function onRack(sq: SquareID | null): boolean {
-    if(sq && sq.boardID === boardIDs.rack) {
-        sAssert(sq.row === 0); 
+function sanityCheck(sq: SquareID ) {
+    if(sq.boardID === boardIDs.main) {
         return true;
-    } 
+    }
+
+    if(sq.boardID === boardIDs.rack) {
+        return sq.row === 0;
+    }
+
     return false;
+}
+
+export function onRack(sq: SquareID | null): boolean {
+    if(!sq) {
+        return false;
+    } 
+    sAssert(sanityCheck(sq));
+
+    return sq.boardID === boardIDs.rack;
 }
 
 /** 
@@ -49,10 +63,12 @@ export function getWord(
 
 
 
-export function addToRack(rack: Rack, l: Letter) {
-    let emptyIndex = rack.findIndex(l => l === null);
+export function addToRack(rack: Rack, tile: CoreTile) {
+    let emptyIndex = rack.findIndex(t => t === null);
     sAssert(emptyIndex >= 0, "Attempt to add to full rack");
-    rack[emptyIndex] = l;
+
+    // Black tiles lose any user defined value when returned to the rack.
+    rack[emptyIndex] = tile.isBlank? makeCoreTile(blank) : tile; 
 }
 
 /* move blank spaces to the end */

@@ -20,7 +20,7 @@ export function MainBoard({ board, squareInteraction, config }: MainBoardProps) 
   const tiles = nestedArrayMap(board, sd => {
     if (!sd) return null;
     const markAsMoveable = sd.active;
-    return <Tile letter={sd.letter} markAsMoveable={markAsMoveable} />
+    return <Tile tile={sd} markAsMoveable={markAsMoveable} />
   });
 
   const squareColors = nestedArrayMap(
