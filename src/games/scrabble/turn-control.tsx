@@ -9,7 +9,7 @@ import { isLegalWord } from "./is-legal-word";
 import { scoreWords } from "./score-word";
 import { ScrabbleData } from "./scrabble-data";
 import { sAssert } from "../../shared/assert";
-import { LetterChooser } from "./letter-chooser";
+import { LetterSelector } from "./letter-selector";
 import { Letter } from "./letters";
 
 const StyledScoreLine = styled.div`
@@ -105,8 +105,8 @@ function ScoreAndDone({ scrabbleData, score, words }: ScoreAndDoneProps) {
   const unsetBlank = scrabbleData.getUnsetBlack();
   return (
     <div>
-      {unsetBlank && <LetterChooser 
-          recordChoosen={(l: Letter) => scrabbleData.setBlank(unsetBlank, l)}
+      {unsetBlank && <LetterSelector 
+          recordSelection={(l: Letter) => scrabbleData.setBlank(unsetBlank, l)}
       />}
       {reportIllegalWords && <IllegalWord illegalWords={illegalWords.current} />}
 
