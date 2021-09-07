@@ -99,12 +99,12 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
       return {
         score: wordsAndScore.score,
         illegalWords: illegalWordsState.illegal,
-        onDone: uncheckedDone,
+        onDone: scrabbleData.isMyTurn ? uncheckedDone : undefined,
       }
     } else {
       return {
         score: score,
-        onDone: checkedDone,
+        onDone: scrabbleData.isMyTurn ? checkedDone : undefined,
       }
     }
   }
