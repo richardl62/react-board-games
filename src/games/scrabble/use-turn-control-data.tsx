@@ -5,6 +5,8 @@ import { scoreWords } from "./score-word";
 import { ScrabbleData } from "./scrabble-data";
 import { isLegalWord } from "./is-legal-word"
 import { useState } from "react";
+import { Letter } from "./letters";
+import { SquareID } from "../../boards";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
   return words1.join() === words2.join();
@@ -12,11 +14,11 @@ function sameWordList(words1: string[], words2: string[]) : boolean {
 
 interface WordsAndScore {
   words: string[];
+  score: number;
+
   /** For later convenience, use null rather than an empty array */
   illegalWords: string[] | null;
-  score: number;
 }
-
 
 function getWordsAndScore(scrabbleData: ScrabbleData, active: RowCol[]): WordsAndScore | null {
   const candidateWords = findCandidateWords(scrabbleData.board, active);
@@ -47,26 +49,31 @@ function getWordsAndScore(scrabbleData: ScrabbleData, active: RowCol[]): WordsAn
 export interface TurnControlData {
   score?: number | '-';
   illegalWords?: string[];
-  onSetBlank?: (() => void);
-  onDone?: (() => void);
   onPass?: (() => void);
+
+  onSetBlank?: () => void;
+  doSetBlank?: (arg: Letter) => void;
+
+  onDone?: () => void;
 }
 
 
 export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData {
-  interface IllegalWordState {
+  interface IllegalWordsData {
     illegal: string[]; // Words to report
     all: string[]; // All words at time illegal words were recorded.
   }
-  const [illegalWordsState, setIllegalWordsState] = useState<IllegalWordState|null>(null);
+  const [illegalWordsData, setIllegalWordsData] = useState<IllegalWordsData|null>(null);
+  const [blankToSet, setBlankToSet] = useState<SquareID|null>(null);
 
   const active = findActiveLetters(scrabbleData.board);
   const wordsAndScore = getWordsAndScore(scrabbleData, active);
+  const unsetBlank = scrabbleData.getUnsetBlack();
 
-  if(illegalWordsState) {
+  if(illegalWordsData) {
     // Clear the illegalWord
-    if(!wordsAndScore || !sameWordList(illegalWordsState.all, wordsAndScore.words)) {
-      setIllegalWordsState(null);
+    if(!wordsAndScore || !sameWordList(illegalWordsData.all, wordsAndScore.words)) {
+      setIllegalWordsData(null);
     } 
   }
 
@@ -79,34 +86,47 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
       score: '-',
     }
   } else {
+    
     const { score, words, illegalWords } = wordsAndScore;
 
-    const uncheckedDone = () => {
-      scrabbleData.endTurn(score);
-      setIllegalWordsState(null);
+
+    let result: TurnControlData = {};
+
+    result.score = score;
+
+    if(illegalWordsData) {
+       result.illegalWords = illegalWordsData.illegal;
+    } 
+
+    if(unsetBlank) {
+      result.onSetBlank = () => setBlankToSet(unsetBlank); 
     }
 
-    const checkedDone = () => {
-
-      if (!illegalWords) {
-        uncheckedDone();
-      } else {
-        setIllegalWordsState({all: words, illegal: illegalWords});
+    if(blankToSet) {
+      result.doSetBlank = (l: Letter) => {
+        scrabbleData.setBlank(blankToSet, l);
+        setBlankToSet(null);
       }
     }
 
-    if (illegalWordsState) {
-      return {
-        score: wordsAndScore.score,
-        illegalWords: illegalWordsState.illegal,
-        onDone: scrabbleData.isMyTurn ? uncheckedDone : undefined,
+    if(scrabbleData.isMyTurn && !unsetBlank) {
+      const uncheckedDone = () => {
+        scrabbleData.endTurn(score);
+        setIllegalWordsData(null);
       }
-    } else {
-      return {
-        score: score,
-        onDone: scrabbleData.isMyTurn ? checkedDone : undefined,
+
+      const checkedDone = () => {
+        if (!illegalWords) {
+          uncheckedDone();
+        } else {
+          setIllegalWordsData({all: words, illegal: illegalWords});
+        }
       }
+
+      result.onDone = illegalWordsData ? uncheckedDone : checkedDone;
     }
+
+    return result;
   }
 }
 

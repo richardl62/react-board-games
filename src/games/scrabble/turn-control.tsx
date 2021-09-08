@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { LetterSelector } from "./letter-selector";
 import { ScrabbleData } from "./scrabble-data";
 import { useTurnControlData } from "./use-turn-control-data";
 
@@ -24,11 +25,15 @@ const StyledIllegalWords = styled.div`
 /** 'Dumb' class that does the formatting for TurnControl */
 export function TurnControl({scrabbleData} :  {scrabbleData: ScrabbleData}) {
 
-  const { score, illegalWords, onPass, onDone, onSetBlank } = useTurnControlData(scrabbleData);
+  const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(scrabbleData);
   const doButtonText = illegalWords ?
     'Done (permitting illegal words)' :
     'Done'
     ;
+
+  if(doSetBlank) {
+    return <LetterSelector recordSelection={doSetBlank} />
+  }
 
   return (
     <div>
