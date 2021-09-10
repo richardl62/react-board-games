@@ -72,7 +72,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         <SpaceBetween>
           <WordChecker/>
           <div>
-            Tiles in bag: <span>{scrabbleData.bag.length}</span>
+            Tiles in bag: <span>{scrabbleData.nTilesInBag}</span>
           </div>
         </SpaceBetween>
 

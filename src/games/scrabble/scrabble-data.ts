@@ -35,12 +35,14 @@ export class ScrabbleData {
         this.rackState = rackState;
 
         this.boardAndRack = new BoardAndRack(boardState[0], rackState[0])
+        this.bag = [...props.G.bag];
     }
 
     private readonly props: ScrabbleBoardProps;
     private readonly boardState: UseStateResult<BoardData>;
     private readonly rackState: UseStateResult<Rack>;
     private boardAndRack: BoardAndRack;
+    private bag: CoreTile[];
 
     private get moves() : ClientMoves {
         return this.props.moves as any;
@@ -48,7 +50,6 @@ export class ScrabbleData {
 
     get board() { return this.boardAndRack.getBoard() };
     get rack() { return this.boardAndRack.getRack(); }
-    get bag() { return this.props.G.bag; }
     get playOrder() { return this.props.ctx.playOrder }
     get playerID() { 
         sAssert(this.props.playerID); 
@@ -60,11 +61,13 @@ export class ScrabbleData {
     get allJoined() { return this.props.allJoined; }
     get config() {return this.props.config;}
 
-
     get isMyTurn() : boolean {
         return this.props.playerID === this.currentPlayer;
     } 
 
+    get nTilesInBag() : number {
+        return this.bag.length;
+    }
     /** Limited use only 
      * Intened for use when using non-scrabble-specific utilities.
      */
@@ -135,30 +138,38 @@ export class ScrabbleData {
     }
 
     /**
-     * 
      * @param toSwap Array of the same size as the rack.
      * Tiles are swapped if the correspoing element of toSwap is true.
+     * (The true elements of toSwap must correspond to non-null elememts 
+     * of the rack).
      */
     swapTiles(toSwap: boolean[]) {
-        sAssert(toSwap.length === this.rack.length);
-        let toReturn: CoreTile[] = [];
-        for(let index = 0; index < toSwap.length; ++index) {
-            if(toSwap[index]) {
-                const rt = this.rack[index];
-                sAssert(rt);
-                toReturn.push(rt);
-                this.rack[index] = null;
+        const rack = this.boardAndRack.getRack();
+
+        for (let ri = 0; ri < toSwap.length; ++ri) {
+            if(toSwap[ri]) {
+                const old = rack[ri];
+                sAssert(old);
+                this.bag.push(old);
+                rack[ri] = this.bag.shift()!;
             }
         }
-
-        this.moves.addTilesToBag(toReturn);
+        this.boardAndRack.resetRack(rack);
+        shuffle(this.bag);
     }
 
     endTurn(score: number) {
+        let rack = this.boardAndRack.getRack();
+        for(let ri = 0; ri < rack.length; ++ri) {
+            if(!rack[ri]) {
+                rack[ri] = this.bag.pop() || null;
+            }
+        }
         this.moves.setBoardRandAndScore({
             score: score,
             rack: this.boardAndRack.getRack(),
             board: this.boardAndRack.getBoard(),
+            bag: this.bag,
         });
 
         sAssert(this.props.events.endTurn);

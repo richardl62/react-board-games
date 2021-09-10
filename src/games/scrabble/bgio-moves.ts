@@ -1,52 +1,36 @@
 import { Move } from "boardgame.io";
-import { shuffle } from "../../shared/tools";
 import { CoreTile } from "./core-tile";
 import { BoardData, GameData } from "./game-data";
-import { Rack } from "./scrabble-data";
-
-function fillRack(G: GameData, rack: Rack) {
-    let bag = G.bag;
-    for(let i = 0; i < rack.length; ++i) {
-        if(rack[i] === null) {
-            const fromBag = bag.pop();
-            rack[i] = fromBag || null;
-        }
-    }
-}
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
-    rack: (CoreTile|null)[];
+    rack: (CoreTile | null)[];
+    bag: CoreTile[];
     score: number;
 };
 
-const setBoardRandAndScore : Move<GameData> = (G, ctx, 
-    {board, rack, score}: setBoardRandAndScoreParam
-    ) => {
-    let newRack = [...rack];
-    fillRack(G, newRack);
-    G.playerData[ctx.currentPlayer].playableTiles = newRack;
+const setBoardRandAndScore: Move<GameData> = (G, ctx,
+    { board, rack, bag, score }: setBoardRandAndScoreParam
+) => {
+
+    G.bag = bag;
+    G.playerData[ctx.currentPlayer].playableTiles = rack;
     G.playerData[ctx.currentPlayer].score += score;
 
+    // KLUDGE: 'active' does not really belong server side
+    // And if it did, the logic for setting it might be better
+    // client side.
     G.board = board.map(row => row.map(
-        sq => sq && {...sq, active: false}
+        sq => sq && { ...sq, active: false }
     ));
 
     G.turn++;
 };
 
-type addTilesToBagParam = CoreTile[];
-const addTilesToBag : Move<GameData> = (G, ctx, tiles: addTilesToBagParam) => {
-    G.bag.push(...tiles);
-    shuffle(G.bag);
-};
-
 export const bgioMoves = {
     setBoardRandAndScore: setBoardRandAndScore,
-    addTilesToBag: addTilesToBag,
 };
 
 export interface ClientMoves {
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
-    addTilesToBag: (arg: addTilesToBagParam) => void;
 };
