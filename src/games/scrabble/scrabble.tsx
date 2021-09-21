@@ -5,6 +5,7 @@ import { useErrorHandler } from "react-error-boundary";
 import styled from "styled-components";
 import { DragType, SquareID, squareInteractionFunc } from "../../boards";
 import { WaitingForPlayers } from "../../game-support/waiting-for-players";
+import { sAssert } from "../../shared/assert";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
@@ -49,7 +50,9 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
     <WaitingForPlayers {...scrabbleData.getProps()} />
   }
 
-  const swapTiles = (toSwap: boolean[]) => {
+  const allowSwapping = scrabbleData.nTilesInBag >= scrabbleData.config.rackSize;
+  const doSwapTiles = (toSwap: boolean[]) => {
+    sAssert(allowSwapping);
     scrabbleData.swapTiles(toSwap);
     scrabbleData.endTurn(0);
   };
@@ -61,7 +64,7 @@ export function ScrabbleBoard(props_: ScrabbleBoardProps) {
         <RackEtc
           squareInteraction={squareInteraction}
           rack={scrabbleData.rack}
-          swapTiles={swapTiles}
+          swapTiles={allowSwapping ? doSwapTiles : undefined}
           scrabbleData={scrabbleData}
         />
         <MainBoard

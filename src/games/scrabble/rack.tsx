@@ -24,7 +24,7 @@ gap: 3%;
 interface RackProps {
   squareInteraction: SquareInteractionFunc;
   rack: RackType;
-  swapTiles: (toSwap: boolean[]) => void;
+  swapTiles?: (toSwap: boolean[]) => void;
   scrabbleData: ScrabbleData;
 }
 
@@ -68,7 +68,10 @@ export function RackEtc(props: RackProps) {
   });
 
   if (selectedForSwap) {
+    sAssert(swapTiles);
+
     const makeSwap = () => {
+
       setSelectedForSwap(null);
       // KLUDGE?: Relies to selectedForSwap not being immediately changed by
       // setSelectedForSwap.
@@ -112,7 +115,12 @@ export function RackEtc(props: RackProps) {
       <Board {...boardProps} />
 
       {scrabbleData.isMyTurn && 
-        <button onClick={doEnableSwap}>Swap</button>}
+        <button 
+          onClick={doEnableSwap}
+          disabled={!swapTiles}
+        >
+          Swap
+        </button>}
 
     </StyledRackEtc>
     );

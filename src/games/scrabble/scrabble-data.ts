@@ -149,7 +149,7 @@ export class ScrabbleData {
         for (let ri = 0; ri < toSwap.length; ++ri) {
             if(toSwap[ri]) {
                 const old = rack[ri];
-                sAssert(old);
+                sAssert(old, "Attempt to swap non-existant tile");
                 this.bag.push(old);
                 rack[ri] = this.bag.shift()!;
             }
