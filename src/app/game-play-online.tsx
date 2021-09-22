@@ -9,12 +9,9 @@ interface GamePlayOnlineProps {
   game: AppGame;
   matchID: MatchID;
   player: Player;
-}
-;
+};
 
 export function GamePlayOnline({ game, matchID, player }: GamePlayOnlineProps) {
-  console.log("UrlParams", UrlParams);
-
   useEffect(() => {
     document.title = game.displayName;
   });
