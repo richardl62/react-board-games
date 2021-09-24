@@ -75,11 +75,13 @@ const simple: ScrabbleConfig = {
     displayName: 'Simple Scrabble (for testing)',
     minPlayers: 1,
     maxPlayers: 4,
-    rackSize: 3,
+    rackSize: 4,
 
     makeFullBag: () : CoreTile[] => {
         // Unshuffled to help with testing
-        let letters : Letter[] = ['A', 'B', 'C', 'D',  'E', 'F', 'I', 'I', 'I', 'I', 'I'];
+        let letters : Letter[] = ['A', 'B', 'C', '?', 
+            'D',  'E', 'F', '?', 
+            'G', 'H', 'I', 'J'];
         return letters.map(makeCoreTile).reverse();
     },
 
