@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {  squareID, SquareID } from "../../boards";
 import { sAssert } from "../../shared/assert";
-import { shuffle } from "../../shared/tools";
+import { sameJSON, shuffle } from "../../shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
@@ -95,24 +95,25 @@ export class ScrabbleData {
     move(arg: {from: SquareID,to: SquareID}){
         const from = tilePosition(arg.from);
         const to = tilePosition(arg.to);
+        if(sameJSON(from,to)) {
+            return;
+        }
 
         const br = this.boardAndRack;
-
         const fromLetter = br.getTile(from);
         const toLetter  = br.getTile(to)
 
-        if (to.rack) {
+        // Do nothing if attempting to move onto an inactive tile.
+        if (toLetter === null) {
+            br.setActiveTile(from, null);
+            br.setActiveTile(to, fromLetter);
+        } else if (to.rack) {
             br.setActiveTile(from, null);
             br.insertIntoRack(to, fromLetter);
-        } else  {
-            if (toLetter === null) {
-                br.setActiveTile(from, null);
-                br.setActiveTile(to, fromLetter);
-            } else if(br.isActive(to)) {
-                br.setActiveTile(from, null);
-                br.addToRack(toLetter);
-                br.setActiveTile(to, fromLetter);
-            }
+        } else if (br.isActive(to)) {
+            br.setActiveTile(from, null);
+            br.addToRack(toLetter);
+            br.setActiveTile(to, fromLetter);
         }
 
         this.setState();
