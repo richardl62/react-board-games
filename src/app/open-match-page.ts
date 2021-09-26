@@ -19,13 +19,11 @@ export function getOfflineMatchLink(nPlayers: number, persistentState: boolean):
 interface OpenMatchPageArgs {
   game: AppGame;
   nPlayers: number;
-  matchID?: string;
   setWaiting: (arg: boolean) => void;
   setError: (arg: Error) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function openOnlineMatchPage({ game, nPlayers, matchID, setWaiting, setError }: OpenMatchPageArgs): void {
+export function openOnlineMatchPage({ game, nPlayers, setWaiting, setError }: OpenMatchPageArgs): void {
 
   const doOpen = (matchID: MatchID) => {
     const url = new URL(window.location.href);

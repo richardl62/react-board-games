@@ -55,10 +55,7 @@ function Board(props: BoardProps<G>): JSX.Element {
       {props.allJoined && (<div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>
         <button type="button" onClick={(() => moves.add(-1))}>-1</button>
-        <button type="button" onClick={
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          () => events.endTurn!()
-        }>End Turn</button>
+        <button type="button" onClick={() => events.endTurn!()}>End Turn</button>
         <div>{G.data.count}</div>
       </div>)}
     </div>

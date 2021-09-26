@@ -9,8 +9,7 @@ import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 /**
  * This BoardProps is an extention of BgioBoardProps Bgio BoardProps.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export interface BoardProps<G={}> extends BgioBoardProps<G> {
+export interface BoardProps<G=unknown> extends BgioBoardProps<G> {
   playerData: PlayerDataDictionary;
   allJoined: boolean;
   allReady: boolean;

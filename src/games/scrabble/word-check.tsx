@@ -20,19 +20,18 @@ export function WordChecker(): JSX.Element {
   const [word, setEnteredWord] = useState("");
   const [valid, setValid] = useState<boolean | 'unknown'>('unknown');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onWordChange = (e: any) => {
+  const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawWord = e.target.value;
     const word = rawWord.replace(/[^A-Za-z]/gi, '');
     setEnteredWord(word);
     setValid('unknown');
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setValid(isLegalWord(word));
     e.preventDefault();
   };
+
 
   return (
     <form onSubmit={onSubmit}>

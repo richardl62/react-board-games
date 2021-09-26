@@ -1,5 +1,6 @@
 // Get values that can be set in the url.
 // If not set, give default value.
+import { sAssert } from "../shared/assert";
 import { AppGame, MatchID } from "../shared/types";
 
 const usp = new URLSearchParams(window.location.search);
@@ -19,9 +20,9 @@ function getAndDeleteFlag(key: string) : boolean {
   if (falsey.includes(str)) {
     return false;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (truthy.includes(str!)) {
+  
+  sAssert(str);
+  if (truthy.includes(str)) {
     return true;
   }
 

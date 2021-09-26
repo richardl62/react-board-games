@@ -22,8 +22,7 @@ interface HomePageProps {
   games: Array<AppGame>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function gameLinkElement(game: AppGame, index: number): JSX.Element {
+function gameLinkElement(game: AppGame): JSX.Element {
   const key = (n: number) => game.name + n;
   const to = {
     pathname: UrlParams.gamePath(game),

@@ -170,8 +170,6 @@ export class ScrabbleData {
                 const old = rack[ri];
                 sAssert(old, "Attempt to swap non-existant tile");
                 this.bag.push(old);
-
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 rack[ri] = this.bag.shift()!;
             }
         }

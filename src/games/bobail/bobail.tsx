@@ -37,8 +37,7 @@ const initialState = {
 
 type G = typeof initialState;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function BobailBoard({ G, moves }: BoardProps<G>): JSX.Element {
+function BobailBoard({ G }: BoardProps<G>): JSX.Element {
 
     const pieces = nestedArrayMap(G.pieces, name => {
         const p = name && <Piece pieceName={name} />;

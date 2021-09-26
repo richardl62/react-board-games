@@ -36,8 +36,7 @@ function makeSquareDef(value: number): SquareDef {
   return { value: value };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function SwapSquares({ G, moves, events, reset }: BoardProps<G>): JSX.Element {
+function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
   const onReset = () => {
     moves.reset();
   }
@@ -88,8 +87,8 @@ export const swapSquares: AppGame = {
   maxPlayers: 1,
 
   moves: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    start: (G: G, ctx: Ctx, sq: SquareID) => undefined,
+
+    start: () => undefined,
 
     end: (G: G, ctx: Ctx, from: SquareID, to: SquareID | null) => {
       if (to && !sameJSON(from, to)) {
@@ -101,8 +100,7 @@ export const swapSquares: AppGame = {
 
     // Using the BGIO supplied reset function lead to server errros.
     // TO DO: Understand why this happened;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    reset: (G: G, ctx: Ctx) => {
+    reset: (G: G /*, ctx: Ctx*/) => {
       for (let row = 0; row < G.squares.length; ++row) {
         for (let col = 0; col < G.squares[row].length; ++col) {
           G.squares[row][col].value = initialValues[row][col];
