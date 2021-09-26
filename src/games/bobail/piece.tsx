@@ -17,7 +17,7 @@ interface Props {
     pieceName: string;
 }
 
-export function Piece({ pieceName }: Props) {
+export function Piece({ pieceName }: Props): JSX.Element {
 
     const color = colors[pieceName];
 

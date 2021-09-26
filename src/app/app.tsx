@@ -22,7 +22,8 @@ interface HomePageProps {
   games: Array<AppGame>;
 }
 
-function gameLinkElement(game: AppGame, index: number) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function gameLinkElement(game: AppGame, index: number): JSX.Element {
   const key = (n: number) => game.name + n;
   const to = {
     pathname: UrlParams.gamePath(game),
@@ -69,7 +70,7 @@ function gameRoute(game: AppGame) {
 /**
  * Games App.
  */
-function App() {
+function App(): JSX.Element {
   useEffect(() => {
     document.title = 'Games'
   });

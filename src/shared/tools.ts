@@ -2,6 +2,7 @@
 /** Check is an array of arrays is reactangular in the sense of all rows 
  * having the same length.  Returns true for empty array.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isRectangular(arr: any[][]): boolean {
   for (let row = 1; row < arr.length; ++row) {
     if (arr[row].length !== arr[0].length) {
@@ -54,6 +55,7 @@ export function nestedArrayMap<T, MappedT>(
  *  or elements supplied as undefined.
 */
 export function applyDefaults<T, D>(values: T, defaults: D): T & D {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = { ...values };
   for (const propName in defaults) {
     if (result[propName] === undefined) {

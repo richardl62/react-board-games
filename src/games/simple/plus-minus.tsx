@@ -41,7 +41,7 @@ function PlayerData(props: BoardProps<G>) {
   </div>
 }
 
-function Board(props: BoardProps<G>) {
+function Board(props: BoardProps<G>): JSX.Element {
 
   if (!props.allJoined) {
     return <WaitingForPlayers {...props} />
@@ -55,7 +55,10 @@ function Board(props: BoardProps<G>) {
       {props.allJoined && (<div>
         <button type="button" onClick={(() => moves.add(1))}>+1</button>
         <button type="button" onClick={(() => moves.add(-1))}>-1</button>
-        <button type="button" onClick={() => events.endTurn!()}>End Turn</button>
+        <button type="button" onClick={
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          () => events.endTurn!()
+        }>End Turn</button>
         <div>{G.data.count}</div>
       </div>)}
     </div>

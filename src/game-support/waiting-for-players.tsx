@@ -36,7 +36,7 @@ function statusText(status: PlayerData['status']) : string {
     }
 }
 
-export function WaitingForPlayers(props: BoardProps) {
+export function WaitingForPlayers(props: BoardProps): JSX.Element {
 
     const playerElements = (id: string) => {
         const {status, name} = props.playerData[id];

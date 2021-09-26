@@ -33,7 +33,7 @@ export function StartMatchOptions(
   {
     game: { minPlayers, maxPlayers }, 
     optionsCallback: startMatch
-  }: StartMatchProps) {
+  }: StartMatchProps): JSX.Element {
 
   const defaultNumPlayers = Math.max(minPlayers, 2);
   const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);

@@ -3,7 +3,7 @@ import { AppGame, MatchID } from "../shared/types";
 
 
 
-export function getOfflineMatchLink(nPlayers: number, persistentState: boolean) {
+export function getOfflineMatchLink(nPlayers: number, persistentState: boolean): string {
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
   searchParams.set('offline', '1');
@@ -24,7 +24,8 @@ interface OpenMatchPageArgs {
   setError: (arg: Error) => void;
 }
 
-export function openOnlineMatchPage({ game, nPlayers, matchID, setWaiting, setError }: OpenMatchPageArgs) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function openOnlineMatchPage({ game, nPlayers, matchID, setWaiting, setError }: OpenMatchPageArgs): void {
 
   const doOpen = (matchID: MatchID) => {
     const url = new URL(window.location.href);

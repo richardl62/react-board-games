@@ -21,7 +21,7 @@ const Legend = styled.div`
   left: 30px;
 `;
 
-export function TestDebugBox({ children }: { children: ReactNode; }) {
+export function TestDebugBox({ children }: { children: ReactNode; }): JSX.Element {
   return (
     <Box>
       <Legend>Test/debug</Legend>

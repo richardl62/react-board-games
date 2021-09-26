@@ -18,7 +18,7 @@ function King({ isBlack }: KingProps) {
     />);
 }
 
-interface DraughtsProps {
+export interface DraughtsProps {
     pieceName: string;
 }
 

@@ -1,5 +1,5 @@
 import { AppGame } from "../../shared/types";
-import { Piece } from "./piece";
+import { DraughtsProps, Piece } from "./piece";
 
 interface DraughtProps {
     name: string,

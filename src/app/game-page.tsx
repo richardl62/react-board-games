@@ -43,7 +43,7 @@ interface GamePageProps {
   offline: {nPlayers: number, persist: boolean} | null;
 }
 
-function GamePage({game, matchID, offline}: GamePageProps) {
+function GamePage({game, matchID, offline}: GamePageProps): JSX.Element | null {
   const [waiting, setWaiting] = useState(false);
   const [error, setError] = useState<Error|null>(null);
   const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);

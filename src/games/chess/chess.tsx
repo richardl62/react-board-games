@@ -53,6 +53,7 @@ function OffBoard({ squareInteraction, rowName }: OffBoardProps) {
   //const {G, moves} = bgioProps;
   const pieces = offBoardPieces[rowName];
   const boardPieces = pieces.map(name =>
+    // eslint-disable-next-line react/jsx-key
     <Piece pieceName={name} />
   );
 

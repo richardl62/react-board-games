@@ -2,7 +2,7 @@ import React  from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions, SquareID } from '../../boards';
+import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions } from '../../boards';
 import { nestedArrayMap } from '../../shared/tools';
 import { AppGame, BoardProps } from '../../shared/types';
 import { bb, Piece, pl1, pl2 } from './piece';
@@ -47,7 +47,7 @@ function BobailBoard({ G, moves }: BoardProps<G>): JSX.Element {
 
     const moveFunctions: MoveFunctions = {
         dragType: () => DragType.move,
-        onMoveEnd: (from: SquareID, to: SquareID | null) => {},
+        onMoveEnd: (/*from: SquareID, to: SquareID | null*/) => undefined,
     };
 
     const boardProps = makeBoardProps({

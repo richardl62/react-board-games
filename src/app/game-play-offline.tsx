@@ -15,7 +15,7 @@ function localClientGame(game: AppGame, props: BgioBoardProps) {
   return game.board(makeBoardProps(props));
 }
 
-export function GamePlayOffline({ game, nPlayers: numPlayers, persist}: GamePlayLocalProps) {
+export function GamePlayOffline({ game, nPlayers: numPlayers, persist}: GamePlayLocalProps): JSX.Element {
   useEffect(() => {
     document.title = game.displayName
   });
