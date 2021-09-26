@@ -79,7 +79,7 @@ const simple: ScrabbleConfig = {
 
     makeFullBag: () : CoreTile[] => {
         // Unshuffled to help with testing
-        let letters : Letter[] = ['A', 'B', 'C', '?', 
+        const letters : Letter[] = ['A', 'B', 'C', '?', 
             'D',  'E', 'F', '?', 
             'G', 'H', 'I', 'J'];
         return letters.map(makeCoreTile).reverse();

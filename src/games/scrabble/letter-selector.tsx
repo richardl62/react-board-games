@@ -19,7 +19,7 @@ const StyledLetterChooser = styled.div`
 interface LetterSelectorProps {
   recordSelection: (l: Letter) => void
 }
-export function LetterSelector({recordSelection} : LetterSelectorProps) {
+export function LetterSelector({recordSelection} : LetterSelectorProps): JSX.Element {
   return (<StyledLetterChooser>
     {letters.map(l => <div key={l} onClick={()=>recordSelection(l)}>
         {l}

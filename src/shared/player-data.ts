@@ -46,8 +46,8 @@ function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData
 
 export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
  
-  let playerData : PlayerDataDictionary = {};
-  for(let id in props.ctx.playOrder) {
+  const playerData : PlayerDataDictionary = {};
+  for(const id in props.ctx.playOrder) {
     playerData[id] = makePlayerDataElem(props, id);
   }
 

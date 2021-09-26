@@ -10,7 +10,7 @@ interface RowCol {
     col: number;
 }
 
-export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: ScrabbleConfig) {
+export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: ScrabbleConfig): number {
     let score = 0;
     let wordMult = 1;
 

@@ -31,7 +31,7 @@ Object.freeze(letterScores);
 
 sAssert(Object.keys(letterScores).length === 27, "Problem with setup");
 
-export function letterScore(letter: Letter) {
+export function letterScore(letter: Letter): number {
     return letterScores[letter];
 }
 
@@ -43,7 +43,7 @@ export const standardLetterSet = (()=>{
         [blank]: 2,
     };
 
-    let bag: Array<Letter> = [];
+    const bag: Array<Letter> = [];
     let letter: Letter;
     for (letter in dist) {
         const count = dist[letter];

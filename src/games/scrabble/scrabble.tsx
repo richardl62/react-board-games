@@ -25,7 +25,7 @@ const Game = styled.div`
   `;
 
   
-export function ScrabbleBoard(props_: ScrabbleBoardProps) {
+export function ScrabbleBoard(props_: ScrabbleBoardProps): JSX.Element {
   const scrabbleData = useScrabbleData(props_);
   const handleError = useErrorHandler()
 

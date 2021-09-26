@@ -19,7 +19,7 @@ export function makeCoreTile(letter: Letter) : CoreTile {
     }
 }
 
-export function tileScore(tile: CoreTile) {
+export function tileScore(tile: CoreTile): number {
     return (tile.isBlank) ? letterScore(blank) : letterScore(tile.letter);
 }
 

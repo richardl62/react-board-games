@@ -52,7 +52,7 @@ export function getWord(
     ) : string 
 
     {
-    let letters = positions.map(rc => {
+    const letters = positions.map(rc => {
         const sq = board[rc.row][rc.col];
         sAssert(sq);
         return sq.letter;
@@ -63,8 +63,8 @@ export function getWord(
 
 
 
-export function addToRack(rack: Rack, tile: CoreTile) {
-    let emptyIndex = rack.findIndex(t => t === null);
+export function addToRack(rack: Rack, tile: CoreTile): void {
+    const emptyIndex = rack.findIndex(t => t === null);
     sAssert(emptyIndex >= 0, "Attempt to add to full rack");
 
     // Black tiles lose any user defined value when returned to the rack.
@@ -72,7 +72,7 @@ export function addToRack(rack: Rack, tile: CoreTile) {
 }
 
 /* move blank spaces to the end */
-export function compactRack(rack: Rack) {
+export function compactRack(rack: Rack): void {
     let setPos = 0;
     for(let readPos = 0; readPos < rack.length; ++readPos) {
         if(rack[readPos]) {
@@ -85,7 +85,7 @@ export function compactRack(rack: Rack) {
     }
 }
 
-export function canSwapTiles(G: GameData) {
+export function canSwapTiles(G: GameData): boolean {
     const rackSize = Object.values(G.playerData)[0].playableTiles.length;
     return G.bag.length >= rackSize;
 }

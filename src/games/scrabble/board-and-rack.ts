@@ -63,11 +63,11 @@ export class BoardAndRack {
     private board: BoardData;
     private rack: Rack;
 
-    resetBoard(board: BoardData) {
+    resetBoard(board: BoardData): void {
         this.board = board.map(row => [...row]);
     }
 
-    resetRack(rack: Rack) {
+    resetRack(rack: Rack): void {
         this.rack = [...rack];
     }
 
@@ -79,7 +79,7 @@ export class BoardAndRack {
         }
     }
 
-    setActiveTile(tp: TilePosition, tile: CoreTile | null) {
+    setActiveTile(tp: TilePosition, tile: CoreTile | null): void {
         if (tp.rack) {
             this.rack[tp.rack.pos] = tile;
         } else {
@@ -99,13 +99,13 @@ export class BoardAndRack {
         }
     }
 
-    addToRack(tile: CoreTile) {
+    addToRack(tile: CoreTile): void {
         const emptySquare = this.rack.findIndex(l => l === null);
         sAssert(emptySquare >= 0, "Problem adding tile to rack");
         this.setRackTile(tile, emptySquare);
     }
 
-    insertIntoRack(tp: TilePosition, tile: CoreTile | null) {
+    insertIntoRack(tp: TilePosition, tile: CoreTile | null): void {
         sAssert(tp.rack);
         const pos = tp.rack.pos;
         

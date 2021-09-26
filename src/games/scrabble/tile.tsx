@@ -37,7 +37,7 @@ interface TileProps {
     markAsMoveable?: boolean;
 }
 
-export function Tile({ tile, markAsMoveable }: TileProps) {
+export function Tile({ tile, markAsMoveable }: TileProps): JSX.Element {
     const score = tileScore(tile);
     return (
         <StyledLetter>

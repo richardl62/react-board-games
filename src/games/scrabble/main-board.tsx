@@ -15,7 +15,7 @@ interface MainBoardProps {
 
 
 
-export function MainBoard({ board, squareInteraction, config }: MainBoardProps) {
+export function MainBoard({ board, squareInteraction, config }: MainBoardProps): JSX.Element {
 
   const tiles = nestedArrayMap(board, sd => {
     if (!sd) return null;

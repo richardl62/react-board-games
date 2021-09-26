@@ -90,7 +90,7 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
     const { score, words, illegalWords } = wordsAndScore;
 
 
-    let result: TurnControlData = {};
+    const result: TurnControlData = {};
 
     result.score = score;
 

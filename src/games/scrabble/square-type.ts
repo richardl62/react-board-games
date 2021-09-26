@@ -5,7 +5,7 @@ export enum SquareType {
     doubleLetter,
     tripleLetter,
     simple,
-};
+}
 
 export function multipliers(st: SquareType) : {letter: number, word: number}
 {

@@ -28,7 +28,7 @@ interface RackProps {
   scrabbleData: ScrabbleData;
 }
 
-export function RackEtc(props: RackProps) {
+export function RackEtc(props: RackProps): JSX.Element {
   const {squareInteraction, swapTiles, scrabbleData } = props;
   const hasTilesOut = tilesOut(scrabbleData.board);
   const coreTiles = props.rack;
@@ -45,7 +45,7 @@ export function RackEtc(props: RackProps) {
     return {
       onClick: () => {
         sAssert(selectedForSwap);
-        let newSwappable = [...selectedForSwap];
+        const newSwappable = [...selectedForSwap];
         newSwappable[sq.col] = !newSwappable[sq.col];
         setSelectedForSwap(newSwappable);
       }
@@ -55,7 +55,7 @@ export function RackEtc(props: RackProps) {
   const boardProps = makeBoardProps({
     pieces: [tiles],
 
-    squareBackground: (siq: SquareID) => {return {color: "white", text:""}},
+    squareBackground: () => {return {color: "white", text:""}},
     externalBorders: true,
     internalBorders: true,
     squareSize: squareSize,
@@ -124,5 +124,5 @@ export function RackEtc(props: RackProps) {
 
     </StyledRackEtc>
     );
-  };
+  }
 }

@@ -9,6 +9,7 @@ import { BoardData } from "./game-data";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
 import { CoreTile } from "./core-tile";
 import { blank, Letter } from "./letters";
+import { ScrabbleConfig } from "./scrabble-config";
 
 export type { Rack };
 
@@ -45,21 +46,38 @@ export class ScrabbleData {
     private bag: CoreTile[];
 
     private get moves() : ClientMoves {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return this.props.moves as any;
     }
 
-    get board() { return this.boardAndRack.getBoard() };
-    get rack() { return this.boardAndRack.getRack(); }
-    get playOrder() { return this.props.ctx.playOrder }
-    get playerID() { 
-        sAssert(this.props.playerID); 
+    get board(): BoardData {
+        return this.boardAndRack.getBoard()
+    }
+
+    get rack(): Rack {
+        return this.boardAndRack.getRack();
+    }
+
+    get playOrder(): string[] {
+        return this.props.ctx.playOrder
+    }
+
+    get playerID(): string {
+        sAssert(this.props.playerID);
         return this.props.playerID;
     }
-    get currentPlayer() {
+
+    get currentPlayer(): string {
         return this.props.ctx.currentPlayer;
     }
-    get allJoined() { return this.props.allJoined; }
-    get config() {return this.props.config;}
+
+    get allJoined(): boolean {
+        return this.props.allJoined;
+    }
+
+    get config() : ScrabbleConfig {
+        return this.props.config;
+    }
 
     get isMyTurn() : boolean {
         return this.props.playerID === this.currentPlayer;
@@ -92,7 +110,7 @@ export class ScrabbleData {
         return this.boardAndRack.isActive(tilePosition(sq));
     }
 
-    move(arg: {from: SquareID,to: SquareID}){
+    move(arg: {from: SquareID,to: SquareID}) : void {
         const from = tilePosition(arg.from);
         const to = tilePosition(arg.to);
         if(sameJSON(from,to)) {
@@ -119,10 +137,10 @@ export class ScrabbleData {
         this.setState();
     }
 
-    recallRack() {
+    recallRack(): void {
         for (let row = 0; row < this.board.length; ++row) {
             for (let col = 0; col < this.board[row].length; ++col) {
-                let tile = this.board[row][col];
+                const tile = this.board[row][col];
                 if (tile?.active) {
                     addToRack(this.rack, tile);
                     this.board[row][col] = null;
@@ -132,7 +150,7 @@ export class ScrabbleData {
         this.setState();
     }
 
-    shuffleRack(){
+    shuffleRack(): void {
         shuffle(this.rack);
         compactRack(this.rack);
         this.setState(); // Inefficient as board has not changes.
@@ -144,7 +162,7 @@ export class ScrabbleData {
      * (The true elements of toSwap must correspond to non-null elememts 
      * of the rack).
      */
-    swapTiles(toSwap: boolean[]) {
+    swapTiles(toSwap: boolean[]): void {
         const rack = this.boardAndRack.getRack();
 
         for (let ri = 0; ri < toSwap.length; ++ri) {
@@ -152,6 +170,8 @@ export class ScrabbleData {
                 const old = rack[ri];
                 sAssert(old, "Attempt to swap non-existant tile");
                 this.bag.push(old);
+
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 rack[ri] = this.bag.shift()!;
             }
         }
@@ -159,8 +179,8 @@ export class ScrabbleData {
         shuffle(this.bag);
     }
 
-    endTurn(score: number) {
-        let rack = this.boardAndRack.getRack();
+    endTurn(score: number): void {
+        const rack = this.boardAndRack.getRack();
         for(let ri = 0; ri < rack.length; ++ri) {
             if(!rack[ri]) {
                 rack[ri] = this.bag.pop() || null;
@@ -189,7 +209,7 @@ export class ScrabbleData {
         return null;
     }
     
-    setBlank(id: SquareID, letter: Letter) {
+    setBlank(id: SquareID, letter: Letter): void  {
         sAssert(!onRack(id));
 
         const sq = this.board[id.row][id.col];
@@ -197,7 +217,7 @@ export class ScrabbleData {
         sq.letter = letter;
 
         this.setState();
-    };
+    }
 
     private setState() {
         this.boardState[1](this.board);
@@ -215,7 +235,6 @@ export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData {
     useEffect(()=>{
         boardState[1](props.G.board);
         rackState[1](playableTiles)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.G.board, playableTiles]);
 
     return new ScrabbleData(props, boardState, rackState);

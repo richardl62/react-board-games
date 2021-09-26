@@ -16,10 +16,11 @@ function Validity({ valid }: { valid: boolean; }) {
   </ValidityMessage>;
 }
 
-export function WordChecker() {
+export function WordChecker(): JSX.Element {
   const [word, setEnteredWord] = useState("");
   const [valid, setValid] = useState<boolean | 'unknown'>('unknown');
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onWordChange = (e: any) => {
     const rawWord = e.target.value;
     const word = rawWord.replace(/[^A-Za-z]/gi, '');
@@ -27,6 +28,7 @@ export function WordChecker() {
     setValid('unknown');
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (e: any) => {
     setValid(isLegalWord(word));
     e.preventDefault();

@@ -20,4 +20,4 @@ export function makeAppGame(config: ScrabbleConfig) : AppGame
       />
     }
     
-  };
+  }

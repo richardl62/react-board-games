@@ -23,7 +23,7 @@ const StyledIllegalWords = styled.div`
 
 
 /** 'Dumb' class that does the formatting for TurnControl */
-export function TurnControl({scrabbleData} :  {scrabbleData: ScrabbleData}) {
+export function TurnControl({scrabbleData} :  {scrabbleData: ScrabbleData}): JSX.Element {
 
   const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(scrabbleData);
   const doButtonText = illegalWords ?
@@ -40,7 +40,7 @@ export function TurnControl({scrabbleData} :  {scrabbleData: ScrabbleData}) {
       {illegalWords &&
         <StyledIllegalWords>
           Illegal Words:
-          {illegalWords!.map(w => <span key={w}>{w.toLowerCase()}</span>)}
+          {illegalWords.map(w => <span key={w}>{w.toLowerCase()}</span>)}
         </StyledIllegalWords>
       }
 

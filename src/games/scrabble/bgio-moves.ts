@@ -7,7 +7,7 @@ interface setBoardRandAndScoreParam {
     rack: (CoreTile | null)[];
     bag: CoreTile[];
     score: number;
-};
+}
 
 const setBoardRandAndScore: Move<GameData> = (G, ctx,
     { board, rack, bag, score }: setBoardRandAndScoreParam
@@ -33,4 +33,4 @@ export const bgioMoves = {
 
 export interface ClientMoves {
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
-};
+}

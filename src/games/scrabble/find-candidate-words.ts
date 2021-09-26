@@ -1,5 +1,5 @@
 import { sAssert } from "../../shared/assert";
-import { BoardData } from "./game-data";
+import { BoardData, TileData } from "./game-data";
 
 export interface RowCol {
     row: number;
@@ -45,7 +45,7 @@ function sameRowCol(positions: RowCol[], direction: Direction) : boolean {
 
 export function findActiveLetters(board: BoardData) : RowCol[] 
 {
-    let active: RowCol[] = [];
+    const active: RowCol[] = [];
 
     for (let row = 0; row < board.length; ++row) {
         for (let col = 0; col < board[row].length; ++col) {
@@ -69,7 +69,7 @@ export function findActiveLetters(board: BoardData) : RowCol[]
  * This is a help for findWordsContaining.
  */
 function findAdjancentIndices(
-    values: any[],
+    values: (TileData|null)[],
 
     /** Must be in numerical order */
     indices: number[],
@@ -84,7 +84,7 @@ function findAdjancentIndices(
         --start;
     }
 
-    let result = [];
+    const result = [];
     for(let ind = start; usableIndex(ind); ++ind) {
         result.push(ind);
     }
@@ -149,12 +149,12 @@ function findCandidateWordsDirected(
         return null;
     }
 
-    let mainWord = findWordsContaining(positions, board, primaryDirection);
+    const mainWord = findWordsContaining(positions, board, primaryDirection);
     if (!mainWord) {
         return null;
     }
  
-    let words = [mainWord];
+    const words = [mainWord];
 
     positions.forEach(rc => {
         const word = findWordsContaining([rc], board,

@@ -38,10 +38,10 @@ export interface GameData {
 
 
 export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
-    let bag = config.makeFullBag(); 
+    const bag = config.makeFullBag(); 
 
     const rack = () => {
-        let tiles : CoreTile[] = [];
+        const tiles : CoreTile[] = [];
         for (let i = 0; i < config.rackSize; ++i) {
             const tile = bag.pop();
             sAssert(tile, "Too few tiles for initial setup");
@@ -51,7 +51,7 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
         return tiles;
     }
 
-    let playerData: PlayerDataDictionary = {};
+    const playerData: PlayerDataDictionary = {};
     for (let p = 0; p < ctx.numPlayers; ++p) {
         const playerID = p.toString(); //Kludge?
         playerData[playerID] = {

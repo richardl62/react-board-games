@@ -14,10 +14,10 @@ const PlayerScore=styled.div<{current: boolean}>`
 `;
 
 // To do: Think of a better name
-export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}) {
+export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}): JSX.Element {
 
 
-    let scoreElems = scrabbleData.playOrder.map(pid => {
+    const scoreElems = scrabbleData.playOrder.map(pid => {
         const score = scrabbleData.score(pid);
         const name = scrabbleData.name(pid)
 
