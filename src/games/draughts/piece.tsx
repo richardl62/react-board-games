@@ -22,10 +22,10 @@ interface DraughtsProps {
     pieceName: string;
 }
 
-function Piece({ pieceName }: DraughtsProps) {
+function Piece({ pieceName }: DraughtsProps): JSX.Element {
 
     const isBlack = pieceName.toLowerCase() === 'b';
-    const isKing = pieceName === pieceName.toUpperCase();;
+    const isKing = pieceName === pieceName.toUpperCase();
 
     return (
         isKing ? <King isBlack={isBlack} /> :

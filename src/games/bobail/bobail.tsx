@@ -37,7 +37,8 @@ const initialState = {
 
 type G = typeof initialState;
 
-function BobailBoard({ G, moves }: BoardProps<G>) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function BobailBoard({ G, moves }: BoardProps<G>): JSX.Element {
 
     const pieces = nestedArrayMap(G.pieces, name => {
         const p = name && <Piece pieceName={name} />;
@@ -46,7 +47,7 @@ function BobailBoard({ G, moves }: BoardProps<G>) {
 
     const moveFunctions: MoveFunctions = {
         dragType: () => DragType.move,
-        onMoveEnd: (from: SquareID, to: SquareID | null) => { },
+        onMoveEnd: (from: SquareID, to: SquareID | null) => {},
     };
 
     const boardProps = makeBoardProps({
@@ -63,7 +64,7 @@ function BobailBoard({ G, moves }: BoardProps<G>) {
     return (<DndProvider backend={HTML5Backend}>
         <Board {...boardProps} />
     </DndProvider>)
-};
+}
 
 export const bobail: AppGame =
 {

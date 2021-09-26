@@ -17,12 +17,12 @@ const WarningsDiv = styled.div`
 /** Show warnings, if any, about general (non-game-specifiy) issues.
  * Currently, this the only warning is players being off line.
  */
-export function GameWarnings(props: BoardProps) {
+export function GameWarnings(props: BoardProps): JSX.Element | null {
 
 
-    let warnings: string[] = [];
+    const warnings: string[] = [];
 
-    for(let pId in props.playerData) {
+    for(const pId in props.playerData) {
         const {name, status } = props.playerData[pId];
         if(status === 'offline') {
             warnings.push(`${name} is offline`);
@@ -39,4 +39,4 @@ export function GameWarnings(props: BoardProps) {
             {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
     )   
-};
+}

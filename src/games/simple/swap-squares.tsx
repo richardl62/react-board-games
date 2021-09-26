@@ -24,7 +24,7 @@ export interface SquareDef {
 
 interface G {
   squares: Array<Array<SquareDef>>;
-};
+}
 
 const initialValues = [
   [1, 2, 3],
@@ -36,7 +36,7 @@ function makeSquareDef(value: number): SquareDef {
   return { value: value };
 }
 
-function SwapSquares({ G, moves, events, reset }: BoardProps<G>) {
+function SwapSquares({ G, moves, events, reset }: BoardProps<G>): JSX.Element {
   const onReset = () => {
     moves.reset();
   }

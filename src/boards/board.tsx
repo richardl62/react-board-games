@@ -32,7 +32,7 @@ const StyledGrid = styled.div<{
     border: ${props => props.borderWidth} solid ${props => props.backgroundColor};
 `;
 
-function rowCol(array: Array<Array<any>>) {
+function rowCol(array: Array<Array<BoardElement>>): { nRows: number; nCols: number; } {
     return {
         nRows: array.length,
         nCols: array[0].length,
@@ -48,7 +48,7 @@ export interface BoardProps extends BoardStyle {
     boardID: string;
 }
 
-export function Board(props: BoardProps) {
+export function Board(props: BoardProps): JSX.Element {
     const defaultProps = {
         borderLabels: false,
         reverseRows: false,
@@ -69,7 +69,7 @@ export function Board(props: BoardProps) {
     const { nRows, nCols } = rowCol(inputElems);
 
     // elems will include border elements and squares.
-    let elems: Array<Array<JSX.Element>> = [];
+    const elems: Array<Array<JSX.Element>> = [];
     for (let row = 0; row < nRows; ++row) {
         elems[row] = [];
         for (let col = 0; col < nCols; ++col) {
@@ -106,7 +106,7 @@ export function Board(props: BoardProps) {
     if (borderLabels) {
         // Add top/bottom rows
         const makeRow = (keyStart: string) => {
-            let elems = [];
+            const elems = [];
             for (let col = 0; col < nCols; ++col) {
                 const label = String.fromCharCode(65 + col);
                 elems[col] = borderElement(label, keyStart);

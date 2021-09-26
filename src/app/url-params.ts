@@ -20,6 +20,7 @@ function getAndDeleteFlag(key: string) : boolean {
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (truthy.includes(str!)) {
     return true;
   }
@@ -63,10 +64,10 @@ if (usp.toString()) {
   console.log("Unrecongised url parameters", usp.toString())
 }
 
-export function gamePath(game: AppGame) {
+export function gamePath(game: AppGame): string {
   return '/' + game.name;
 }
-export function lobbyServer() { 
+export function lobbyServer(): string { 
   const url = new URL(window.location.href);
   let result;
   if(server) {
@@ -74,7 +75,7 @@ export function lobbyServer() {
   } else {
     if(url.hostname === 'localhost' && url.port === '3000') {
       url.port = '8000'; // kludge
-    };
+    }
     result = url.origin;
   }
   

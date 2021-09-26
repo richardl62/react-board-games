@@ -12,7 +12,7 @@ interface StyledSquareProps {
     borderColor: string;
     showBorder: ShowBorder;
     size: string;
-};
+}
 
 const backgroundColor = (props: StyledSquareProps, hovering: boolean) => {
     const showBorder = props.showBorder === true || 
@@ -87,7 +87,7 @@ export enum DragType {
     move,
     copy,
     disable,
-};
+}
 
 export interface SquareInteraction {
     onClick?: () => void;
@@ -107,7 +107,7 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
     label: SquareID;
 }
 
-export function Square(props: SquareProps) {
+export function Square(props: SquareProps): JSX.Element {
     const { children, background, showHover,
             highlight, label, onClick,
             onDrop, size 
@@ -124,9 +124,9 @@ export function Square(props: SquareProps) {
         },
 
         item: () => {
-            if( dragType !== DragType.disable ) {
-            	return label;
-             }
+            if (dragType !== DragType.disable) {
+                return label;
+            }
         },
         
     }),[label])
@@ -159,7 +159,7 @@ export function Square(props: SquareProps) {
     }
 
     // To do: Use ReactDnD to implement copy vs drag.
-    let hidden = isDragging && dragType === DragType.move;
+    const hidden = isDragging && dragType === DragType.move;
     return (
         <StyledSquare
             ref={dropRef}

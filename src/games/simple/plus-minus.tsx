@@ -12,7 +12,7 @@ interface G {
     count: number;
   }
   dummy: string;
-};
+}
 
 const Name = styled.span<{ toPlay: boolean }>`
   text-decoration: ${props => props.toPlay ? 'underline' : 'none'}

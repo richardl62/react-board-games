@@ -9,7 +9,13 @@ interface DraughtProps {
 }
 
 export //TEMPORARY KLUDGE
-function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
+function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): {
+    displayName: string; minPlayers: number; maxPlayers: number;
+    //setup: () => makeGridGameState(pieces),
+    offBoardPieces: { top: string[]; bottom: string[]; };
+    //onMove: moveFunction,
+    boardStyle: { checkered: boolean; labels: boolean; }; renderPiece: ({ pieceName }: DraughtsProps) => JSX.Element;
+} {
 
     const startingPiece = (row: number, col: number) => {
         let name = null;
@@ -27,7 +33,7 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps) {
         return name;
     }
 
-    let pieces = Array(nRows);
+    const pieces = Array(nRows);
     for (let row = 0; row < nRows; ++row) {
         pieces[row] = Array(nCols);
         for (let col = 0; col < nCols; ++col) {

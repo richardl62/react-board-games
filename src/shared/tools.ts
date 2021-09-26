@@ -2,7 +2,7 @@
 /** Check is an array of arrays is reactangular in the sense of all rows 
  * having the same length.  Returns true for empty array.
  */
-export function isRectangular(arr: any[][]) {
+export function isRectangular(arr: any[][]): boolean {
   for (let row = 1; row < arr.length; ++row) {
     if (arr[row].length !== arr[0].length) {
       return false;
@@ -18,7 +18,7 @@ export function nestedArrayMap<T, MappedT>(
   func: (elem: T, indices: [number, number]) => MappedT,
 ): Array<Array<MappedT>> {
 
-  let result: Array<Array<MappedT>> = [];
+  const result: Array<Array<MappedT>> = [];
 
   for (let ind1 = 0; ind1 < array.length; ++ind1) {
     result[ind1] = [];
@@ -54,8 +54,8 @@ export function nestedArrayMap<T, MappedT>(
  *  or elements supplied as undefined.
 */
 export function applyDefaults<T, D>(values: T, defaults: D): T & D {
-  let result: any = { ...values };
-  for (let propName in defaults) {
+  const result: any = { ...values };
+  for (const propName in defaults) {
     if (result[propName] === undefined) {
       result[propName] = defaults[propName];
     }

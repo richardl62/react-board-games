@@ -21,7 +21,7 @@ export function makeBoardProps<G>(bgioProps: BgioBoardProps<G>): BoardProps<G> {
 
   let allJoined = true;
   let allReady = true;
-  for (let playerID in playerData) {
+  for (const playerID in playerData) {
     const pd = playerData[playerID];
     if (pd.status !== "ready") {
       allReady = false;

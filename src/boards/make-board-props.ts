@@ -36,7 +36,7 @@ interface MakeBoardPropsParam {
 
 export function makeBoardProps(props: MakeBoardPropsParam): BoardProps {
   const { pieces, squareSize, boardID, squareInteraction, moveStart } = props;
-  let elements: Array<Array<BoardElement>> = [];
+  const elements: Array<Array<BoardElement>> = [];
   for (let row = 0; row < pieces.length; ++row) {
     elements[row] = [];
     for (let col = 0; col < pieces[row].length; ++col) {
