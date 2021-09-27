@@ -1,8 +1,12 @@
 import { sAssert } from "../../shared/assert";
 import { BoardData, TileData } from "./game-data";
 
+/** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
+    /** Row number */
     row: number;
+
+    /** Column number */
     col: number;
 }
 

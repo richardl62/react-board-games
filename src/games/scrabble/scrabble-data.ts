@@ -23,6 +23,9 @@ function tilePosition(sq: SquareID) : TilePosition {
     }
 }
 
+/**
+ * Data and functions to support Scrabble
+ */
 export class ScrabbleData {
     constructor(
         props: ScrabbleBoardProps, 
