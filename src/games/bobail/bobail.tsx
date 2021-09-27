@@ -1,13 +1,13 @@
-import React  from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import styled from 'styled-components';
-import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions } from '../../boards';
-import { nestedArrayMap } from '../../shared/tools';
-import { AppGame, BoardProps } from '../../shared/types';
-import { bb, Piece, pl1, pl2 } from './piece';
+import React  from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import styled from "styled-components";
+import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions } from "../../boards";
+import { nestedArrayMap } from "../../shared/tools";
+import { AppGame, BoardProps } from "../../shared/types";
+import { bb, Piece, pl1, pl2 } from "./piece";
 
-const squareSize = '50px';
+const squareSize = "50px";
 
 const Square = styled.div`
     width: ${squareSize};
@@ -51,24 +51,24 @@ function BobailBoard({ G }: BoardProps<G>): JSX.Element {
 
     const boardProps = makeBoardProps({
         pieces: pieces,
-        squareBackground: 'white',
+        squareBackground: "white",
         internalBorders: true,
         externalBorders: true,
         squareSize: squareSize,
-        boardID: 'bobail',
+        boardID: "bobail",
         squareInteraction: squareInteractionFunc(moveFunctions),
         moveStart: null, //clickDragState.start
     });
 
     return (<DndProvider backend={HTML5Backend}>
         <Board {...boardProps} />
-    </DndProvider>)
+    </DndProvider>);
 }
 
 export const bobail: AppGame =
 {
-    name: 'bobail',
-    displayName: 'Bobail',
+    name: "bobail",
+    displayName: "Bobail",
 
     minPlayers: 1,
     maxPlayers: 1,

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
 // Passing in text is KLUDGE
 interface Props {
@@ -12,8 +12,8 @@ const Counter: FC<Props> = ({ color, text, textColor }: Props) => {
     const innerText = () => {
         const style = { color: textColor ? textColor : undefined };
 
-        return <div style={style}>{text}</div>
-    }
+        return <div style={style}>{text}</div>;
+    };
 
     // KLUDGE? Define the style here rather than in a css file as
     // css files caused problems with the heroku server. (No doubt
@@ -32,14 +32,14 @@ const Counter: FC<Props> = ({ color, text, textColor }: Props) => {
 
         fontSize: "200%",
         fontWeight: 900,
-    }
+    };
 
     return (
         <div style={style}>
             {text ? innerText() : null}
         </div>
     );
-}
+};
 
 export { Counter };
 

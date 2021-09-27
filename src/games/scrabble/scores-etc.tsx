@@ -10,7 +10,7 @@ const StyledScoresEtc=styled.div`
 `;
 
 const PlayerScore=styled.div<{current: boolean}>`
-    text-decoration: ${props => props.current ? 'underline' : 'none'};
+    text-decoration: ${props => props.current ? "underline" : "none"};
 `;
 
 // To do: Think of a better name
@@ -19,11 +19,11 @@ export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}): JSX.Ele
 
     const scoreElems = scrabbleData.playOrder.map(pid => {
         const score = scrabbleData.score(pid);
-        const name = scrabbleData.name(pid)
+        const name = scrabbleData.name(pid);
 
         let displayName = name;
         if (pid === scrabbleData.playerID) {
-            displayName += " (you)"
+            displayName += " (you)";
         }
         return (
             <PlayerScore key={name} current={pid === scrabbleData.currentPlayer} >
@@ -37,5 +37,5 @@ export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}): JSX.Ele
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
             <GameWarnings {...scrabbleData.getProps()}/>
         </div>
-    )
+    );
 }

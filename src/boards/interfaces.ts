@@ -1,19 +1,19 @@
 export const defaultColors = {
-    boardBackground: 'rgb(100,0,0)',
-    boardBorderLabels: 'white',
+    boardBackground: "rgb(100,0,0)",
+    boardBorderLabels: "white",
 
     /** Background color for plain (non-checkered) boards */
-    square: 'white',
+    square: "white",
     
     /** Background color for checkered boards */
-    blackSquare: 'rgb(165,42,42)',
+    blackSquare: "rgb(165,42,42)",
     /** Background color for checkered boards */
-    whiteSquare: 'rgb(255,248,220)',
+    whiteSquare: "rgb(255,248,220)",
 
-    moveStart: 'gold',
+    moveStart: "gold",
 
-    squareHover: 'rgb(200 200 100)',
-    squareHighlight: 'rgb(83 243 10)', // bright green
+    squareHover: "rgb(200 200 100)",
+    squareHighlight: "rgb(83 243 10)", // bright green
 };
 
 export interface SquareID {
@@ -24,11 +24,11 @@ export interface SquareID {
 
 export function squareID(row: number, col: number, boardID: string) : SquareID {
     return {
-      row: row,
-      col: col,
-      boardID: boardID,
-    }
-  }
+        row: row,
+        col: col,
+        boardID: boardID,
+    };
+}
 
 export interface SquareBackgroundProps {
     color: string

@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { BoardProps } from '../shared/types';
-import { GameWarnings } from './show-warning';
+import React from "react";
+import styled from "styled-components";
+import { BoardProps } from "../shared/types";
+import { GameWarnings } from "./show-warning";
 
 const Name = styled.span`
     font-weight: bold;
@@ -22,17 +22,17 @@ const PlayerDataGrid = styled.div`
     column-gap: 2em;
     row-gap: 0.5em;
     margin-bottom: 0.5em;
-`
-type PlayerData = BoardProps['playerData'][0];
+`;
+type PlayerData = BoardProps["playerData"][0];
 
-function statusText(status: PlayerData['status']) : string {
+function statusText(status: PlayerData["status"]) : string {
     switch(status) {
-        case 'not joined':
-            return '';
-        case 'ready':
-            return 'Joined';
-        case 'offline':
-            return 'Offline';
+    case "not joined":
+        return "";
+    case "ready":
+        return "Joined";
+    case "offline":
+        return "Offline";
     }
 }
 
@@ -40,13 +40,13 @@ export function WaitingForPlayers(props: BoardProps): JSX.Element {
 
     const playerElements = (id: string) => {
         const {status, name} = props.playerData[id];
-        const StatusElem = (status==='offline') ? WarningStatus : StandardStatus;
+        const StatusElem = (status==="offline") ? WarningStatus : StandardStatus;
     
         return [
-            <Name key={'n-'+name} >{name}</Name>,
-            <StatusElem key={'s-'+name} >{statusText(status)}</StatusElem>
+            <Name key={"n-"+name} >{name}</Name>,
+            <StatusElem key={"s-"+name} >{statusText(status)}</StatusElem>
         ];
-    }
+    };
 
     return (
         <div>

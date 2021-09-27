@@ -17,29 +17,29 @@ interface MainBoardProps {
 
 export function MainBoard({ board, squareInteraction, config }: MainBoardProps): JSX.Element {
 
-  const tiles = nestedArrayMap(board, sd => {
-    if (!sd) return null;
-    const markAsMoveable = sd.active;
-    return <Tile tile={sd} markAsMoveable={markAsMoveable} />
-  });
+    const tiles = nestedArrayMap(board, sd => {
+        if (!sd) return null;
+        const markAsMoveable = sd.active;
+        return <Tile tile={sd} markAsMoveable={markAsMoveable} />;
+    });
 
-  const squareColors = nestedArrayMap(
-    config.boardLayout,
-    scrabbleSquareBackground
-  );
+    const squareColors = nestedArrayMap(
+        config.boardLayout,
+        scrabbleSquareBackground
+    );
 
-  const boardProps = makeBoardProps({
-    pieces: tiles,
+    const boardProps = makeBoardProps({
+        pieces: tiles,
 
-    squareBackground: sq => squareColors[sq.row][sq.col],
-    externalBorders: true,
-    internalBorders: true,
-    squareSize: squareSize,
+        squareBackground: sq => squareColors[sq.row][sq.col],
+        externalBorders: true,
+        internalBorders: true,
+        squareSize: squareSize,
 
-    boardID: boardIDs.main,
-    squareInteraction: squareInteraction,
-    moveStart: null, //clickDragState.start,
-  });
+        boardID: boardIDs.main,
+        squareInteraction: squareInteraction,
+        moveStart: null, //clickDragState.start,
+    });
 
-  return <Board {...boardProps} />;
+    return <Board {...boardProps} />;
 }

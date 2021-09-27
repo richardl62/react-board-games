@@ -34,8 +34,8 @@ export interface ScrabbleConfig {
 
 
 const standard : ScrabbleConfig = {
-    name: 'scrabble',
-    displayName: 'Scrabble',
+    name: "scrabble",
+    displayName: "Scrabble",
     minPlayers: 1,
     maxPlayers: 4, 
 
@@ -62,7 +62,7 @@ const standard : ScrabbleConfig = {
     ],
 
     rackSize: 7,
-}
+};
 Object.freeze(standard);
 
 
@@ -71,17 +71,17 @@ standard.boardLayout.forEach(row => sAssert(row.length === 15));
 
 
 const simple: ScrabbleConfig = {
-    name: 'scrabble-simple',
-    displayName: 'Simple Scrabble (for testing)',
+    name: "scrabble-simple",
+    displayName: "Simple Scrabble (for testing)",
     minPlayers: 1,
     maxPlayers: 4,
     rackSize: 4,
 
     makeFullBag: () : CoreTile[] => {
         // Unshuffled to help with testing
-        const letters : Letter[] = ['A', 'B', 'C', '?', 
-            'D',  'E', 'F', '?', 
-            'G', 'H', 'I', 'J'];
+        const letters : Letter[] = ["A", "B", "C", "?", 
+            "D",  "E", "F", "?", 
+            "G", "H", "I", "J"];
         return letters.map(makeCoreTile).reverse();
     },
 
@@ -94,7 +94,7 @@ const simple: ScrabbleConfig = {
 
     ],
 
-}
+};
 Object.freeze(simple);
 
 export const configs = [standard, simple];

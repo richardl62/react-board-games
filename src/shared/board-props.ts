@@ -17,24 +17,24 @@ export interface BoardProps<G=unknown> extends BgioBoardProps<G> {
 
 export function makeBoardProps<G>(bgioProps: BgioBoardProps<G>): BoardProps<G> {
 
-  const playerData = makePlayerData(bgioProps)
+    const playerData = makePlayerData(bgioProps);
 
-  let allJoined = true;
-  let allReady = true;
-  for (const playerID in playerData) {
-    const pd = playerData[playerID];
-    if (pd.status !== "ready") {
-      allReady = false;
+    let allJoined = true;
+    let allReady = true;
+    for (const playerID in playerData) {
+        const pd = playerData[playerID];
+        if (pd.status !== "ready") {
+            allReady = false;
+        }
+        if (pd.status === "not joined") {
+            allJoined = false;
+        }
     }
-    if (pd.status === "not joined") {
-      allJoined = false;
-    }
-  }
 
-  return {
-    ...bgioProps,
-    playerData: playerData,
-    allJoined: allJoined,
-    allReady: allReady,
-  };
+    return {
+        ...bgioProps,
+        playerData: playerData,
+        allJoined: allJoined,
+        allReady: allReady,
+    };
 }

@@ -23,15 +23,15 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): {
         const isBlackSquare = (row + col) % 2 === 1; //Kludge?
         if (isBlackSquare) {
             if (row < nRowsOfPieces) {
-                name = 'w';
+                name = "w";
             }
             if (nRows - row <= nRowsOfPieces) {
-                name = 'b';
+                name = "b";
             }
         }
 
         return name;
-    }
+    };
 
     const pieces = Array(nRows);
     for (let row = 0; row < nRows; ++row) {
@@ -50,8 +50,8 @@ function draughts({ name, nRows, nCols, nRowsOfPieces }: DraughtProps): {
         //setup: () => makeGridGameState(pieces),
 
         offBoardPieces: {
-            top: ['w', 'W'],
-            bottom: ['b', 'B'],
+            top: ["w", "W"],
+            bottom: ["b", "B"],
         },
 
         //onMove: moveFunction,

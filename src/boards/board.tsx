@@ -1,14 +1,14 @@
-import React, { ReactNode } from 'react';
-import styled from 'styled-components';
-import { sAssert } from '../shared/assert';
-import { applyDefaults, isRectangular } from '../shared/tools';
+import React, { ReactNode } from "react";
+import styled from "styled-components";
+import { sAssert } from "../shared/assert";
+import { applyDefaults, isRectangular } from "../shared/tools";
 import { BoardStyle, defaultColors } from "./interfaces";
-import { Square, SquareProps } from './internal/square';
+import { Square, SquareProps } from "./internal/square";
 
 const Corner = styled.div<{ width: string }>`
     width: ${props => props.width};
     height: ${props => props.width};
-`
+`;
 
 const BorderElement = styled.div<{ color: string }>`
     color: ${props => props.color};
@@ -36,10 +36,10 @@ function rowCol(array: Array<Array<BoardElement>>): { nRows: number; nCols: numb
     return {
         nRows: array.length,
         nCols: array[0].length,
-    }
+    };
 }
 
-export interface BoardElement extends Omit<SquareProps, 'children' | 'label'> {
+export interface BoardElement extends Omit<SquareProps, "children" | "label"> {
     piece: ReactNode;
 }
 
@@ -52,13 +52,13 @@ export function Board(props: BoardProps): JSX.Element {
     const defaultProps = {
         borderLabels: false,
         reverseRows: false,
-        gridGap: 'none',
-        borderWidth: 'none',
+        gridGap: "none",
+        borderWidth: "none",
         colors: {
             background: defaultColors.boardBackground,
             labels: defaultColors.boardBorderLabels,
         },
-    }
+    };
 
     const { elements: inputElems, borderLabels, reverseRows, gridGap, 
         borderWidth, colors, boardID} =
@@ -80,7 +80,7 @@ export function Board(props: BoardProps): JSX.Element {
                     label={{ row: row, col: col, boardID: boardID }} 
                     {...sq}>{sq.piece}
                 </Square>
-            )
+            );
         }
     }
 
@@ -89,7 +89,7 @@ export function Board(props: BoardProps): JSX.Element {
         return <BorderElement color={colors.labels}
             key={keyStart + label}
         >{label}</BorderElement>;
-    }
+    };
 
     if (borderLabels) {
         // Add side labels.
@@ -111,19 +111,19 @@ export function Board(props: BoardProps): JSX.Element {
                 const label = String.fromCharCode(65 + col);
                 elems[col] = borderElement(label, keyStart);
             }
-            elems.unshift(<Corner width={borderWidth} key={keyStart + 'left'} />)
-            elems.push(<Corner width={borderWidth} key={keyStart + 'Right'} />)
+            elems.unshift(<Corner width={borderWidth} key={keyStart + "left"} />);
+            elems.push(<Corner width={borderWidth} key={keyStart + "Right"} />);
             return elems;
-        }
-        elems.unshift(makeRow("topMargin"))
-        elems.push(makeRow("bottonMargin"))
+        };
+        elems.unshift(makeRow("topMargin"));
+        elems.push(makeRow("bottonMargin"));
     }
 
     return (
         <StyledGrid
             nCols={elems[0].length}
             gridGap={gridGap}
-            borderWidth={borderLabels ? '0' : borderWidth}
+            borderWidth={borderLabels ? "0" : borderWidth}
             backgroundColor={colors.background}
         >
             {elems}
@@ -131,5 +131,5 @@ export function Board(props: BoardProps): JSX.Element {
     );
 }
 
-export { DragType } from './internal/square';
-export type { SquareInteraction } from './internal/square';
+export { DragType } from "./internal/square";
+export type { SquareInteraction } from "./internal/square";

@@ -9,15 +9,15 @@ import { ScrabbleConfig } from "./scrabble-config";
 export function makeAppGame(config: ScrabbleConfig) : AppGame
 {
     return {
-    ...config,
+        ...config,
   
-    setup: (ctx: Ctx) => startingGameData(ctx, config),
+        setup: (ctx: Ctx) => startingGameData(ctx, config),
   
-    moves: bgioMoves,
+        moves: bgioMoves,
   
-    board: (props: BoardProps<GameData>) => <ScrabbleBoard
-        {...props} config={config}
-      />
-    }
+        board: (props: BoardProps<GameData>) => <ScrabbleBoard
+            {...props} config={config}
+        />
+    };
     
-  }
+}

@@ -1,6 +1,6 @@
 
-import { sameJSON } from '../../shared/tools';
-import { pl1, pl2, bb } from './piece';
+import { sameJSON } from "../../shared/tools";
+import { pl1, pl2, bb } from "./piece";
 
 interface RowCol {
     row: number;
@@ -38,7 +38,7 @@ function setLegalMovesBobail(
         }
     }
 }
-;
+
 function setLegalMovesPieceDirected(
     from: RowCol,
     moveControl: MoveControl<BobailState>,
@@ -122,7 +122,7 @@ export function onClick(pos_: PiecePosition, moveControl: MoveControl<BobailStat
     // If a bad square has been clicked do nothing. 
     if (!moveControl.legalMove(pos) && !reclick) {
         console.log("Bad square clicked - click ingored");
-        return new MoveResult('continue');
+        return new MoveResult("continue");
     }
 
 
@@ -137,7 +137,7 @@ export function onClick(pos_: PiecePosition, moveControl: MoveControl<BobailStat
         moveControl.movePiece(moveControl.selectedSquare, pos);
         moveControl.selectedSquare = null;
 
-        let gameState = moveControl.gameSpecificState;
+        const gameState = moveControl.gameSpecificState;
         gameState.moveBobailNext = !gameState.moveBobailNext;
         moveControl.gameSpecificState = gameState;
 
@@ -165,5 +165,5 @@ export function onClick(pos_: PiecePosition, moveControl: MoveControl<BobailStat
         return new MoveResult({ winner: winner });
     }
 
-    return new MoveResult(turnOver ? 'endOfTurn' : 'continue');
+    return new MoveResult(turnOver ? "endOfTurn" : "continue");
 }

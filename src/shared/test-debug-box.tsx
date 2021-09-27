@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode } from "react";
+import styled from "styled-components";
 
-const padding = '5px';
-const legendFontSize = '15px';
+const padding = "5px";
+const legendFontSize = "15px";
 
 const Box = styled.div`
   position: relative;
@@ -22,10 +22,10 @@ const Legend = styled.div`
 `;
 
 export function TestDebugBox({ children }: { children: ReactNode; }): JSX.Element {
-  return (
-    <Box>
-      <Legend>Test/debug</Legend>
-      {children}
-    </Box>
-  );
+    return (
+        <Box>
+            <Legend>Test/debug</Legend>
+            {children}
+        </Box>
+    );
 }

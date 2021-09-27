@@ -25,31 +25,31 @@ const StyledIllegalWords = styled.div`
 /** 'Dumb' class that does the formatting for TurnControl */
 export function TurnControl({scrabbleData} :  {scrabbleData: ScrabbleData}): JSX.Element {
 
-  const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(scrabbleData);
-  const doButtonText = illegalWords ?
-    'Done (permitting illegal words)' :
-    'Done'
+    const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(scrabbleData);
+    const doButtonText = illegalWords ?
+        "Done (permitting illegal words)" :
+        "Done"
     ;
 
-  if(doSetBlank) {
-    return <LetterSelector recordSelection={doSetBlank} />
-  }
+    if(doSetBlank) {
+        return <LetterSelector recordSelection={doSetBlank} />;
+    }
 
-  return (
-    <div>
-      {illegalWords &&
+    return (
+        <div>
+            {illegalWords &&
         <StyledIllegalWords>
           Illegal Words:
-          {illegalWords.map(w => <span key={w}>{w.toLowerCase()}</span>)}
+            {illegalWords.map(w => <span key={w}>{w.toLowerCase()}</span>)}
         </StyledIllegalWords>
-      }
+            }
 
-      <StyledScoreLine>
-        {score && <span>{'Score this turn: ' + score}</span>}
-        {onPass && <button onClick={onPass}>Pass</button>}
-        {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
-        {onDone && <button onClick={onDone}> {doButtonText} </button>}
-      </StyledScoreLine>
-    </div>
-  );
+            <StyledScoreLine>
+                {score && <span>{"Score this turn: " + score}</span>}
+                {onPass && <button onClick={onPass}>Pass</button>}
+                {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
+                {onDone && <button onClick={onDone}> {doButtonText} </button>}
+            </StyledScoreLine>
+        </div>
+    );
 }

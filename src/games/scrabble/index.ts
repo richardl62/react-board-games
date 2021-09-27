@@ -1,4 +1,4 @@
-import { configs } from './scrabble-config'
+import { configs } from "./scrabble-config";
 import { makeAppGame } from "./app-game";
 
 const games = configs.map(makeAppGame);

@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { ErrorBoundary } from 'react-error-boundary';
-import styled from 'styled-components';
-import App from './app';
+import React from "react";
+import ReactDOM from "react-dom";
+import { ErrorBoundary } from "react-error-boundary";
+import styled from "styled-components";
+import App from "./app";
 
 const ErrorFallbackStyled=styled.div`
   font-size: large;
@@ -26,36 +26,36 @@ const ErrorStack=styled.div`
 `;
 
 function ErrorFallback({ error }: { error: Error }) {
-  return (
-    <ErrorFallbackStyled>
-      <ErrorMessage>
-        <span>Internal error:</span>
-        <span>{error.message}</span>
-      </ErrorMessage>
+    return (
+        <ErrorFallbackStyled>
+            <ErrorMessage>
+                <span>Internal error:</span>
+                <span>{error.message}</span>
+            </ErrorMessage>
 
-      <div>
-        <span>{'If you are lucky, refreshing will help '}</span>
-        <button onClick={()=>window.location.reload()}>Refresh</button>
-      </div>
+            <div>
+                <span>{"If you are lucky, refreshing will help "}</span>
+                <button onClick={()=>window.location.reload()}>Refresh</button>
+            </div>
 
-      {error.stack &&
+            {error.stack &&
         <div>
-          <div>Gory details:</div>
-          <ErrorStack>{error.stack}</ErrorStack> 
+            <div>Gory details:</div>
+            <ErrorStack>{error.stack}</ErrorStack> 
         </div>
-      }
+            }
      
-    </ErrorFallbackStyled>
-  )
+        </ErrorFallbackStyled>
+    );
 }
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-    >
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+        >
+            <App />
+        </ErrorBoundary>
+    </React.StrictMode>,
+    document.getElementById("root")
 );

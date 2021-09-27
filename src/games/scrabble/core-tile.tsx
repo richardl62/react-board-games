@@ -16,7 +16,7 @@ export function makeCoreTile(letter: Letter) : CoreTile {
     return {
         letter:letter,
         isBlank: letter === blank,
-    }
+    };
 }
 
 export function tileScore(tile: CoreTile): number {

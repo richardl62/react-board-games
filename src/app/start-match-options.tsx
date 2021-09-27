@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { AppGame } from '../shared/types';
-import { TestDebugBox } from '../shared/test-debug-box';
-import { getOfflineMatchLink } from './open-match-page';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { AppGame } from "../shared/types";
+import { TestDebugBox } from "../shared/test-debug-box";
+import { getOfflineMatchLink } from "./open-match-page";
 
 const OuterDiv = styled.div`
   display: inline-flex;
@@ -30,48 +30,48 @@ interface StartMatchProps {
 }
 
 export function StartMatchOptions(
-  {
-    game: { minPlayers, maxPlayers }, 
-    optionsCallback: startMatch
-  }: StartMatchProps): JSX.Element {
+    {
+        game: { minPlayers, maxPlayers }, 
+        optionsCallback: startMatch
+    }: StartMatchProps): JSX.Element {
 
-  const defaultNumPlayers = Math.max(minPlayers, 2);
-  const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
-  const [persist, setPersist] = useState(false);
-  return (
-    <OuterDiv>
+    const defaultNumPlayers = Math.max(minPlayers, 2);
+    const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
+    const [persist, setPersist] = useState(false);
+    return (
+        <OuterDiv>
 
-      <div>
-        <label htmlFor='numPlayers'>
-          {`Number of players (${minPlayers}-${maxPlayers}):`}
-        </label>
+            <div>
+                <label htmlFor='numPlayers'>
+                    {`Number of players (${minPlayers}-${maxPlayers}):`}
+                </label>
 
-        <input type="number" name='numPlayers'
-          min={minPlayers} max={maxPlayers}
-          value={numPlayers}
-          onChange={(event) => setNumPlayers(Number(event.target.value))} />
-        <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: false })}>
+                <input type="number" name='numPlayers'
+                    min={minPlayers} max={maxPlayers}
+                    value={numPlayers}
+                    onChange={(event) => setNumPlayers(Number(event.target.value))} />
+                <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: false })}>
           Start Game
-        </button>
-      </div>
+                </button>
+            </div>
 
-      <TestDebugBox>
+            <TestDebugBox>
 
-        <OfflineLinkDiv>
-        <a href={getOfflineMatchLink(numPlayers, persist)}>Play offline</a>
+                <OfflineLinkDiv>
+                    <a href={getOfflineMatchLink(numPlayers, persist)}>Play offline</a>
         
-        <label>
+                    <label>
           Persistent Storage
-          <input
-            type="checkbox"
-            value={persist ? 1 : 0}
-            onChange={() => { setPersist(!persist) }}
-          />
-        </label>
-        </OfflineLinkDiv>
+                        <input
+                            type="checkbox"
+                            value={persist ? 1 : 0}
+                            onChange={() => { setPersist(!persist); }}
+                        />
+                    </label>
+                </OfflineLinkDiv>
 
-      </TestDebugBox>
+            </TestDebugBox>
 
-    </OuterDiv>
-  );
+        </OuterDiv>
+    );
 }

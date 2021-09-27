@@ -7,9 +7,9 @@ import { blank } from "./letters";
 
 type Rack = (CoreTile|null)[];
 export const boardIDs = {
-    rack: 'rack',
-    main: 'main',
-}
+    rack: "rack",
+    main: "main",
+};
 
 function sanityCheck(sq: SquareID ) {
     if(sq.boardID === boardIDs.main) {
@@ -49,9 +49,9 @@ export function getWord(
 
     /** must refer to non-empty board positions */
     positions: RowCol[]
-    ) : string 
+) : string 
 
-    {
+{
     const letters = positions.map(rc => {
         const sq = board[rc.row][rc.col];
         sAssert(sq);

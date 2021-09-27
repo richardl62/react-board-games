@@ -20,9 +20,9 @@ interface LetterSelectorProps {
   recordSelection: (l: Letter) => void
 }
 export function LetterSelector({recordSelection} : LetterSelectorProps): JSX.Element {
-  return (<StyledLetterChooser>
-    {letters.map(l => <div key={l} onClick={()=>recordSelection(l)}>
-        {l}
-    </div>)}
-  </StyledLetterChooser>);
+    return (<StyledLetterChooser>
+        {letters.map(l => <div key={l} onClick={()=>recordSelection(l)}>
+            {l}
+        </div>)}
+    </StyledLetterChooser>);
 }

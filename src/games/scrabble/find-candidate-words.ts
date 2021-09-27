@@ -9,10 +9,10 @@ export interface RowCol {
 function rowCol(row: number, col: number) {
     return {row: row, col: col};
 }
-type Direction = 'row' | 'col';
+type Direction = "row" | "col";
 
 function otherDirection(dir : Direction) : Direction {
-    return dir === 'row' ? 'col' : 'row';
+    return dir === "row" ? "col" : "row";
 }
 
 
@@ -116,7 +116,7 @@ function findWordsContaining(
         return null;
     }
 
-    if (direction === 'row') {
+    if (direction === "row") {
         const row = positions[0].row;
         const array = board[row];
         const indices = positions.map(rc => rc.col);
@@ -126,7 +126,7 @@ function findWordsContaining(
         }
     } 
     
-    if (direction === 'col') {
+    if (direction === "col") {
         const col = positions[0].col;
         const array = board.map(row => row[col]);
         const indices = positions.map(rc => rc.row);
@@ -162,9 +162,9 @@ function findCandidateWordsDirected(
         );
 
         if (word) {
-            words.push(word)
+            words.push(word);
         }
-    })
+    });
     return words;
 }
 
@@ -179,6 +179,6 @@ export function findCandidateWords(
     active: RowCol[],
 ): RowCol[][] | null {
 
-    return findCandidateWordsDirected(board, active, 'row') ||
-        findCandidateWordsDirected(board, active, 'col')
+    return findCandidateWordsDirected(board, active, "row") ||
+        findCandidateWordsDirected(board, active, "col");
 }

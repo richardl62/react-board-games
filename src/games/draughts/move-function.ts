@@ -10,11 +10,11 @@ function findDiagonalPath(from: SquareID, to: SquareID) {
     const rowDiff = to.row - from.row;
     const colDiff = to.col - from.col;
     if(Math.abs(rowDiff) === Math.abs(colDiff)) {
-        let positions = [];
+        const positions = [];
 
         let {row, col} = from;
         while(row !== to.row) {
-            positions.push({row:row, col: col})
+            positions.push({row:row, col: col});
             row += step(rowDiff);
             col += step(colDiff);
         }

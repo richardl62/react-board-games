@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { BoardProps } from '../shared/types';
+import React from "react";
+import styled from "styled-components";
+import { BoardProps } from "../shared/types";
 
 const WarningsDiv = styled.div`
     display: inline;
@@ -24,7 +24,7 @@ export function GameWarnings(props: BoardProps): JSX.Element | null {
 
     for(const pId in props.playerData) {
         const {name, status } = props.playerData[pId];
-        if(status === 'offline') {
+        if(status === "offline") {
             warnings.push(`${name} is offline`);
         }
     }
@@ -38,5 +38,5 @@ export function GameWarnings(props: BoardProps): JSX.Element | null {
             <span key='-'>Warnings:</span>
             {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
-    )   
+    );   
 }

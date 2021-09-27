@@ -10,7 +10,7 @@ import { Tile } from "./tile";
 const StyledRackEtc = styled.div`
 display:inline-flex;
 gap: 1%;
-`
+`;
 
 const PreRack = styled.div`
 display: flex;
@@ -19,7 +19,7 @@ justify-content: flex-end;
 font: 2em;
 align-items: center;
 gap: 3%;
-`
+`;
 
 interface RackProps {
   squareInteraction: SquareInteractionFunc;
@@ -29,100 +29,100 @@ interface RackProps {
 }
 
 export function RackEtc(props: RackProps): JSX.Element {
-  const {squareInteraction, swapTiles, scrabbleData } = props;
-  const hasTilesOut = tilesOut(scrabbleData.board);
-  const coreTiles = props.rack;
-  const nTiles = coreTiles.length;
+    const {squareInteraction, swapTiles, scrabbleData } = props;
+    const hasTilesOut = tilesOut(scrabbleData.board);
+    const coreTiles = props.rack;
+    const nTiles = coreTiles.length;
 
-  // selectedForSwap is null if a swap is not in progress.
-  const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
+    // selectedForSwap is null if a swap is not in progress.
+    const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
 
-  const tiles = coreTiles.map((tile, index) => tile && <Tile tile={tile}
-    markAsMoveable={selectedForSwap !== null && selectedForSwap[index]}
+    const tiles = coreTiles.map((tile, index) => tile && <Tile tile={tile}
+        markAsMoveable={selectedForSwap !== null && selectedForSwap[index]}
     />);
 
-  const toggleSelectForSwap = (sq: SquareID) => {
-    return {
-      onClick: () => {
-        sAssert(selectedForSwap);
-        const newSwappable = [...selectedForSwap];
-        newSwappable[sq.col] = !newSwappable[sq.col];
-        setSelectedForSwap(newSwappable);
-      }
-    }
-  };
+    const toggleSelectForSwap = (sq: SquareID) => {
+        return {
+            onClick: () => {
+                sAssert(selectedForSwap);
+                const newSwappable = [...selectedForSwap];
+                newSwappable[sq.col] = !newSwappable[sq.col];
+                setSelectedForSwap(newSwappable);
+            }
+        };
+    };
 
-  const boardProps = makeBoardProps({
-    pieces: [tiles],
+    const boardProps = makeBoardProps({
+        pieces: [tiles],
 
-    squareBackground: () => {return {color: "white", text:""}},
-    externalBorders: true,
-    internalBorders: true,
-    squareSize: squareSize,
+        squareBackground: () => {return {color: "white", text:""};},
+        externalBorders: true,
+        internalBorders: true,
+        squareSize: squareSize,
   
-    boardID: boardIDs.rack,
+        boardID: boardIDs.rack,
 
-    squareInteraction: selectedForSwap ? toggleSelectForSwap : squareInteraction,
+        squareInteraction: selectedForSwap ? toggleSelectForSwap : squareInteraction,
 
-    moveStart: null, //clickDragState.start,
-  });
+        moveStart: null, //clickDragState.start,
+    });
 
-  if (selectedForSwap) {
-    sAssert(swapTiles);
+    if (selectedForSwap) {
+        sAssert(swapTiles);
 
-    const makeSwap = () => {
+        const makeSwap = () => {
 
-      setSelectedForSwap(null);
-      // KLUDGE?: Relies to selectedForSwap not being immediately changed by
-      // setSelectedForSwap.
-      swapTiles(selectedForSwap);
-    }
-    const cancelSwap = () => {
-      setSelectedForSwap(null);
-    }
+            setSelectedForSwap(null);
+            // KLUDGE?: Relies to selectedForSwap not being immediately changed by
+            // setSelectedForSwap.
+            swapTiles(selectedForSwap);
+        };
+        const cancelSwap = () => {
+            setSelectedForSwap(null);
+        };
     
-    return (
-      <StyledRackEtc>
-        <PreRack>
-           <span>Select times to swap </span>
-        </PreRack>
+        return (
+            <StyledRackEtc>
+                <PreRack>
+                    <span>Select times to swap </span>
+                </PreRack>
 
-        <Board {...boardProps} />
+                <Board {...boardProps} />
 
-        {selectedForSwap.includes(true) && 
+                {selectedForSwap.includes(true) && 
           <button onClick={makeSwap}>Make Swap</button> }
-        <button onClick={cancelSwap}>Cancel</button>
-      </StyledRackEtc>
-    )
-  } else {
+                <button onClick={cancelSwap}>Cancel</button>
+            </StyledRackEtc>
+        );
+    } else {
 
-    const doEnableSwap = () => {
-      sAssert(!selectedForSwap);
-      scrabbleData.recallRack();
-      setSelectedForSwap(Array(nTiles).fill(false));
-    }
+        const doEnableSwap = () => {
+            sAssert(!selectedForSwap);
+            scrabbleData.recallRack();
+            setSelectedForSwap(Array(nTiles).fill(false));
+        };
 
-    return (<StyledRackEtc>
-      <PreRack>
-        {hasTilesOut && <button onClick={() => scrabbleData.recallRack()}>Recall</button>}
-        <button
-          onClick={() => scrabbleData.shuffleRack()}
-        >
+        return (<StyledRackEtc>
+            <PreRack>
+                {hasTilesOut && <button onClick={() => scrabbleData.recallRack()}>Recall</button>}
+                <button
+                    onClick={() => scrabbleData.shuffleRack()}
+                >
           Shuffle
-        </button>
-      </PreRack>
+                </button>
+            </PreRack>
 
-      <Board {...boardProps} />
+            <Board {...boardProps} />
 
-      {scrabbleData.isMyTurn && 
+            {scrabbleData.isMyTurn && 
         <button 
-          onClick={doEnableSwap}
-          disabled={!swapTiles}
+            onClick={doEnableSwap}
+            disabled={!swapTiles}
         >
           Swap
         </button>}
 
-    </StyledRackEtc>
-    );
-  }
+        </StyledRackEtc>
+        );
+    }
 }

@@ -3,16 +3,16 @@ import { sAssert } from "../../shared/assert";
 /* For the purposed of the this file, blacks count as letters.
    (Is there a better term to exoress this?)  
 */
-export const blank = '?';
+export const blank = "?";
 
-export type Letter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' |
-    'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'S' |
-    'R' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' |
+export type Letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" |
+    "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "S" |
+    "R" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" |
     typeof blank;
 
-export const letters : Letter [] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-    'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'S',
-    'R', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+export const letters : Letter [] = ["A", "B", "C", "D", "E", "F", "G", "H", "I",
+    "J", "K", "L", "M", "N", "O", "P", "Q", "S",
+    "R", "T", "U", "V", "W", "X", "Y", "Z",
     blank];   
 Object.freeze(letters);
 
@@ -36,7 +36,7 @@ export function letterScore(letter: Letter): number {
 }
 
 export const standardLetterSet = (()=>{
-   const dist = {
+    const dist = {
         A: 9, B: 2, C: 2, D: 4, E: 12, F: 2, G: 3, H: 2,
         I: 9, J: 1, K: 1, L: 4, M: 2, N: 6, O: 8, P: 2,
         Q: 1, R: 6, S: 4, T: 6, U: 4, V: 2, W: 2, X: 1, Y: 2, Z: 1,
@@ -47,7 +47,7 @@ export const standardLetterSet = (()=>{
     let letter: Letter;
     for (letter in dist) {
         const count = dist[letter];
-        sAssert(count)
+        sAssert(count);
         for (let i = 0; i < count; ++i) {
             bag.push(letter);
         }

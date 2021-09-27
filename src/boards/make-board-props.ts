@@ -19,7 +19,7 @@ interface MakeBoardPropsParam {
   internalBorders: boolean;
 
   /** True means 'you pick the style'. */
-  externalBorders: boolean | 'labelled';
+  externalBorders: boolean | "labelled";
 
   squareSize: string;
 
@@ -35,41 +35,41 @@ interface MakeBoardPropsParam {
 }
 
 export function makeBoardProps(props: MakeBoardPropsParam): BoardProps {
-  const { pieces, squareSize, boardID, squareInteraction, moveStart } = props;
-  const elements: Array<Array<BoardElement>> = [];
-  for (let row = 0; row < pieces.length; ++row) {
-    elements[row] = [];
-    for (let col = 0; col < pieces[row].length; ++col) {
-      const sq = squareID(row, col, boardID);
-      const elem = {
-        piece: pieces[row][col],
-        showHover: true,
-        size: squareSize,
-        background: {
-          color: defaultColors.square,
-          text: "",
-        },
-        ...squareInteraction(sq),
-      }
+    const { pieces, squareSize, boardID, squareInteraction, moveStart } = props;
+    const elements: Array<Array<BoardElement>> = [];
+    for (let row = 0; row < pieces.length; ++row) {
+        elements[row] = [];
+        for (let col = 0; col < pieces[row].length; ++col) {
+            const sq = squareID(row, col, boardID);
+            const elem = {
+                piece: pieces[row][col],
+                showHover: true,
+                size: squareSize,
+                background: {
+                    color: defaultColors.square,
+                    text: "",
+                },
+                ...squareInteraction(sq),
+            };
 
-      elements[row][col] = elem;
+            elements[row][col] = elem;
+        }
     }
-  }
 
-  if (moveStart && moveStart.boardID === boardID) {
-    const { row, col } = moveStart;
-    elements[row][col].background.color = defaultColors.moveStart;
-  }
+    if (moveStart && moveStart.boardID === boardID) {
+        const { row, col } = moveStart;
+        elements[row][col].background.color = defaultColors.moveStart;
+    }
 
-  const boardProps: BoardProps = {
-    elements: elements,
-    boardID: boardID,
-  }
+    const boardProps: BoardProps = {
+        elements: elements,
+        boardID: boardID,
+    };
 
-  const style: BoardStyle = props; // KLUDGE?
-  setBoardStyle(boardProps, style);
+    const style: BoardStyle = props; // KLUDGE?
+    setBoardStyle(boardProps, style);
 
-  return boardProps;
+    return boardProps;
 }
 
 export { checkered };

@@ -1,12 +1,12 @@
-import React, { ReactNode } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
-import styled from 'styled-components';
-import { squareSize } from '../../games/scrabble/style';
-import { SquareStyle, defaultColors, SquareID } from '../interfaces';
+import React, { ReactNode } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import styled from "styled-components";
+import { squareSize } from "../../games/scrabble/style";
+import { SquareStyle, defaultColors, SquareID } from "../interfaces";
 
-const PIECE='piece';
+const PIECE="piece";
 
-type ShowBorder = true | false | 'onHover';
+type ShowBorder = true | false | "onHover";
 interface StyledSquareProps {
     backgroundColor: string;
     borderColor: string;
@@ -16,11 +16,11 @@ interface StyledSquareProps {
 
 const backgroundColor = (props: StyledSquareProps, hovering: boolean) => {
     const showBorder = props.showBorder === true || 
-        (props.showBorder === 'onHover' && hovering);
+        (props.showBorder === "onHover" && hovering);
 
 
     return showBorder ? props.borderColor : props.backgroundColor;
-}
+};
 
 const StyledSquare = styled.div<StyledSquareProps>`
     display: inline-flex;
@@ -64,8 +64,8 @@ const Element = styled.div<{hidden: boolean, isDraggedOver: boolean}>`
     width: 100%;
     height: 100%;
 
-    opacity: ${props => props.isDraggedOver ? '0.3' : '1'};
-    visibility: ${props => props.hidden ? 'hidden' : 'inherit'};
+    opacity: ${props => props.isDraggedOver ? "0.3" : "1"};
+    visibility: ${props => props.hidden ? "hidden" : "inherit"};
 
     z-index: 2;
 `;
@@ -82,7 +82,7 @@ const HighlightMarker = styled.div<{color:string}>`
     border-radius: 50%;
 
     background-color: ${props => props.color};  
-`
+`;
 export enum DragType {
     move,
     copy,
@@ -109,9 +109,9 @@ export interface SquareProps extends SquareStyle, SquareInteraction {
 
 export function Square(props: SquareProps): JSX.Element {
     const { children, background, showHover,
-            highlight, label, onClick,
-            onDrop, size 
-        } = props;
+        highlight, label, onClick,
+        onDrop, size 
+    } = props;
 
     const dragType : DragType = props.dragType ?? DragType.disable;
 
@@ -129,7 +129,7 @@ export function Square(props: SquareProps): JSX.Element {
             }
         },
         
-    }),[label])
+    }),[label]);
 
 
     const [ dropCollection, dropRef] = useDrop({
@@ -142,16 +142,16 @@ export function Square(props: SquareProps): JSX.Element {
         }),
     });
 
-    const highlightColor = typeof highlight === 'string'? highlight :
-      defaultColors.squareHighlight;
+    const highlightColor = typeof highlight === "string"? highlight :
+        defaultColors.squareHighlight;
 
     let showBorder : ShowBorder; 
     let borderColor: string;
-    if (typeof showHover === 'string') {
-        showBorder = 'onHover';
+    if (typeof showHover === "string") {
+        showBorder = "onHover";
         borderColor = showHover;
     } else if (showHover === true) {
-        showBorder = 'onHover';
+        showBorder = "onHover";
         borderColor = defaultColors.squareHover;
     } else {
         showBorder = false;        

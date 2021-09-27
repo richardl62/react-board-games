@@ -49,7 +49,7 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
         }
 
         return tiles;
-    }
+    };
 
     const playerData: PlayerDataDictionary = {};
     for (let p = 0; p < ctx.numPlayers; ++p) {

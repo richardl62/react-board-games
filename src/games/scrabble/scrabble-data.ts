@@ -28,14 +28,14 @@ export class ScrabbleData {
         props: ScrabbleBoardProps, 
         boardState: UseStateResult<BoardData>,
         rackState: UseStateResult<Rack>,
-        ) {
+    ) {
 
         sAssert(props.playerID);
         this.props = props;
         this.boardState = boardState;
         this.rackState = rackState;
 
-        this.boardAndRack = new BoardAndRack(boardState[0], rackState[0])
+        this.boardAndRack = new BoardAndRack(boardState[0], rackState[0]);
         this.bag = [...props.G.bag];
     }
 
@@ -51,7 +51,7 @@ export class ScrabbleData {
     }
 
     get board(): BoardData {
-        return this.boardAndRack.getBoard()
+        return this.boardAndRack.getBoard();
     }
 
     get rack(): Rack {
@@ -59,7 +59,7 @@ export class ScrabbleData {
     }
 
     get playOrder(): string[] {
-        return this.props.ctx.playOrder
+        return this.props.ctx.playOrder;
     }
 
     get playerID(): string {
@@ -119,7 +119,7 @@ export class ScrabbleData {
 
         const br = this.boardAndRack;
         const fromLetter = br.getTile(from);
-        const toLetter  = br.getTile(to)
+        const toLetter  = br.getTile(to);
 
         // Do nothing if attempting to move onto an inactive tile.
         if (toLetter === null) {
@@ -225,14 +225,14 @@ export class ScrabbleData {
 
 export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData {
     sAssert(props.playerID);
-    const playableTiles = props.G.playerData[props.playerID].playableTiles
+    const playableTiles = props.G.playerData[props.playerID].playableTiles;
 
     const boardState = useState<BoardData>([[]] /*KLUDGE: Any empty array, e.g. [], gives crashes*/);
     const rackState = useState<Rack>([]);
 
     useEffect(()=>{
         boardState[1](props.G.board);
-        rackState[1](playableTiles)
+        rackState[1](playableTiles);
     }, [props.G.board, playableTiles]);
 
     return new ScrabbleData(props, boardState, rackState);

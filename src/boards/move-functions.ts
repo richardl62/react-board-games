@@ -1,5 +1,5 @@
 import { SquareID } from "./interfaces";
-import { DragType, SquareInteraction } from './internal/square';
+import { DragType, SquareInteraction } from "./internal/square";
 
 export interface MoveFunctions {
     onClick?: (square: SquareID) => void;
@@ -20,27 +20,27 @@ export function squareInteractionFunc(
     
     // Not sure how useful this type specification is.
     // The idea is to make sure members are not forgotten.
-    ) : SquareInteractionFunc
+) : SquareInteractionFunc
 {
 
     const onClick = (sq: SquareID) => {
         moveFunctions.onClick?.(sq);
-    }
+    };
 
     const onDrop = (from: SquareID, to: SquareID) => {
         moveFunctions.onMoveEnd(from, to);
-    }
+    };
 
     const dragType = (from: SquareID) => { 
         return moveFunctions.dragType(from);
-    }
+    };
 
     return (sq: SquareID) :  Required<SquareInteraction> => {
         return {
             onClick: () => onClick(sq),
             dragType: dragType(sq),
             onDrop: (from: SquareID) => onDrop(from, sq),
-        }
+        };
     };
 
 }

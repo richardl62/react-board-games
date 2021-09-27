@@ -26,62 +26,62 @@ const Game = styled.div`
 
   
 export function ScrabbleBoard(props_: ScrabbleBoardProps): JSX.Element {
-  const scrabbleData = useScrabbleData(props_);
-  const handleError = useErrorHandler()
+    const scrabbleData = useScrabbleData(props_);
+    const handleError = useErrorHandler();
 
-  const moveFunctions = {
+    const moveFunctions = {
 
-    onMoveEnd: (from: SquareID, to: SquareID | null)=> {
-      if (to) {
-        try {
-          scrabbleData.move({from: from, to: to});
-        } catch(error) {
-          handleError(error);
-        }
-      }
-    },
+        onMoveEnd: (from: SquareID, to: SquareID | null)=> {
+            if (to) {
+                try {
+                    scrabbleData.move({from: from, to: to});
+                } catch(error) {
+                    handleError(error);
+                }
+            }
+        },
 
-    dragType: (sq: SquareID) => scrabbleData.canMove(sq) ? DragType.move : DragType.disable,
-  }
+        dragType: (sq: SquareID) => scrabbleData.canMove(sq) ? DragType.move : DragType.disable,
+    };
 
-  const squareInteraction = squareInteractionFunc(moveFunctions);
+    const squareInteraction = squareInteractionFunc(moveFunctions);
 
-  if(!scrabbleData.allJoined) {
-    <WaitingForPlayers {...scrabbleData.getProps()} />
-  }
+    if(!scrabbleData.allJoined) {
+        <WaitingForPlayers {...scrabbleData.getProps()} />;
+    }
 
-  const allowSwapping = scrabbleData.nTilesInBag >= scrabbleData.config.rackSize;
-  const doSwapTiles = (toSwap: boolean[]) => {
-    sAssert(allowSwapping);
-    scrabbleData.swapTiles(toSwap);
-    scrabbleData.endTurn(0);
-  };
+    const allowSwapping = scrabbleData.nTilesInBag >= scrabbleData.config.rackSize;
+    const doSwapTiles = (toSwap: boolean[]) => {
+        sAssert(allowSwapping);
+        scrabbleData.swapTiles(toSwap);
+        scrabbleData.endTurn(0);
+    };
 
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <Game>
-        <ScoresEtc scrabbleData={scrabbleData} />
-        <RackEtc
-          squareInteraction={squareInteraction}
-          rack={scrabbleData.rack}
-          swapTiles={allowSwapping ? doSwapTiles : undefined}
-          scrabbleData={scrabbleData}
-        />
-        <MainBoard
-          squareInteraction={squareInteraction}
-          board={scrabbleData.board}
-          config={scrabbleData.config}
-        />
-        <SpaceBetween>
-          <WordChecker/>
-          <div>
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <Game>
+                <ScoresEtc scrabbleData={scrabbleData} />
+                <RackEtc
+                    squareInteraction={squareInteraction}
+                    rack={scrabbleData.rack}
+                    swapTiles={allowSwapping ? doSwapTiles : undefined}
+                    scrabbleData={scrabbleData}
+                />
+                <MainBoard
+                    squareInteraction={squareInteraction}
+                    board={scrabbleData.board}
+                    config={scrabbleData.config}
+                />
+                <SpaceBetween>
+                    <WordChecker/>
+                    <div>
             Tiles in bag: <span>{scrabbleData.nTilesInBag}</span>
-          </div>
-        </SpaceBetween>
+                    </div>
+                </SpaceBetween>
 
-        <TurnControl scrabbleData={scrabbleData}/>
-      </Game>
-    </DndProvider>
-  )
+                <TurnControl scrabbleData={scrabbleData}/>
+            </Game>
+        </DndProvider>
+    );
 }
 

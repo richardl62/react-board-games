@@ -27,14 +27,14 @@ export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: Scra
         } else {
             score += tileScore(sq);
         }
-    })
+    });
 
     return score * wordMult;
 }
 
 export function scoreWords(board: BoardData, words: RowCol[][], scabbleConfig: ScrabbleConfig) : number {
     let score = 0;
-    words.forEach(word => {score += scoreWord(board, word, scabbleConfig)});
+    words.forEach(word => {score += scoreWord(board, word, scabbleConfig);});
 
     return score;
 }

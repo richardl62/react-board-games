@@ -1,6 +1,6 @@
 import { legalWordsRawString } from "./legal-word-raw-string";
 
-const legalWords = legalWordsRawString.split('\n');
+const legalWords = legalWordsRawString.split("\n");
 
 export function isLegalWord(word: string) : boolean {
     const revisedWord = word.trim().toLocaleLowerCase();

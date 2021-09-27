@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CoreTile, tileScore } from "./core-tile";
-import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style"
+import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style";
 
 const StyledLetter = styled.div`
     display:relative;
@@ -45,7 +45,7 @@ export function Tile({ tile, markAsMoveable }: TileProps): JSX.Element {
             <Score>{score}</Score>
             {markAsMoveable ? <Marker /> : null}
         </StyledLetter>
-    )
+    );
 }
 
 
