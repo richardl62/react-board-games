@@ -160,7 +160,7 @@ export class ScrabbleData {
     }
 
     /**
-     * @param toSwap Array of the same size as the rack.
+     * @param toSwap - Array of the same size as the rack.
      * Tiles are swapped if the correspoing element of toSwap is true.
      * (The true elements of toSwap must correspond to non-null elememts 
      * of the rack).

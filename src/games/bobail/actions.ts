@@ -7,8 +7,12 @@ interface RowCol {
     col: number;
 }
 
+// KLUDGE: For now suppress eslint enrors.  At some point, a better fix would be useful.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MoveControl<T> = T|any; //KLUDGE
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let MoveResult : any; //ctx: Ctx
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PiecePosition = any; //KLUDGE
 
 
@@ -109,7 +113,8 @@ function checkForWinner(
 
     return null;
 }
-export function onClick(pos_: PiecePosition, moveControl: MoveControl<BobailState>) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function onClick(pos_: PiecePosition, moveControl: MoveControl<BobailState>): any {
 
     if (pos_.row === undefined) {
         throw new Error("Offboard piece passed to onClick for bobail");

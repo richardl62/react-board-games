@@ -13,7 +13,9 @@ export interface MatchID {
   mid: string
 } 
 
-export interface AppGame<G = any> extends Game<G> {
+// TO DO: Try to avoid this use of 'any'.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface AppGame<G = any> extends Game<G> { 
     // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
   // display purposes.
   displayName: string;

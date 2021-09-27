@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8000;
 const frontEndAppBuildPath = path.resolve(__dirname, "../build");
 server.app.use(serve(frontEndAppBuildPath));
 
-server.run(PORT as any, () => {
+server.run(PORT as never, () => {
     server.app.use(
         async (ctx, next) => await serve(frontEndAppBuildPath)(
             Object.assign(ctx, { path: "index.html" }),
