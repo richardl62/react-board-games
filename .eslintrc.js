@@ -21,10 +21,12 @@ module.exports = {
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "eslint-plugin-tsdoc"
     ],
     "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
+        "tsdoc/syntax": "warn",
         "indent": [
             "error",
             4
