@@ -9,7 +9,7 @@ const OuterDiv = styled.div`
   flex-direction: column;
 `;
 
-const OfflineLinkDiv=styled.div`
+const OfflineLinkDiv = styled.div`
   label {
     margin-left: 8px;
   }
@@ -29,13 +29,24 @@ interface StartMatchProps {
   optionsCallback: (arg: MatchOptions) => void;
 }
 
+function snapToRange(val: number, low: number, high: number) : number {
+    if (val < low) {
+        return low;
+    }
+    if (val > high) {
+        return high;
+    }
+    return val;
+}
+
 export function StartMatchOptions(
     {
-        game: { minPlayers, maxPlayers }, 
+        game: { minPlayers, maxPlayers },
         optionsCallback: startMatch
     }: StartMatchProps): JSX.Element {
 
-    const defaultNumPlayers = Math.max(minPlayers, 2);
+    const defaultNumPlayers = snapToRange(2 /*arbitrary*/, minPlayers, maxPlayers);
+
     const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
     const [persist, setPersist] = useState(false);
     return (
@@ -49,9 +60,10 @@ export function StartMatchOptions(
                 <input type="number" name='numPlayers'
                     min={minPlayers} max={maxPlayers}
                     value={numPlayers}
-                    onChange={(event) => setNumPlayers(Number(event.target.value))} />
+                    onChange={(event) => setNumPlayers(Number(event.target.value))} 
+                />
                 <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: false })}>
-          Start Game
+                      Start Game
                 </button>
             </div>
 
@@ -59,9 +71,9 @@ export function StartMatchOptions(
 
                 <OfflineLinkDiv>
                     <a href={getOfflineMatchLink(numPlayers, persist)}>Play offline</a>
-        
+
                     <label>
-          Persistent Storage
+                        Persistent Storage
                         <input
                             type="checkbox"
                             value={persist ? 1 : 0}
