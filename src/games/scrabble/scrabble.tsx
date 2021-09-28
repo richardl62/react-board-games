@@ -3,7 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useErrorHandler } from "react-error-boundary";
 import styled from "styled-components";
-import { DragType, SquareID, squareInteractionFunc } from "game-support/boards";
+import { DragType, SquareID, squareInteractionFunc } from "game-support/deprecated/boards";
 import { WaitingForPlayers } from "game-support/waiting-for-players";
 import { sAssert } from "shared/assert";
 import { MainBoard } from "./main-board";

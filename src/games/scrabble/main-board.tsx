@@ -1,5 +1,5 @@
 import React from "react";
-import { Board, makeBoardProps, SquareInteractionFunc } from "game-support/boards";
+import { Board, makeBoardProps, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { nestedArrayMap } from "shared/tools";
 import { boardIDs } from "./game-actions";
 import { ScrabbleConfig } from "./scrabble-config";
