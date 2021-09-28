@@ -1,5 +1,5 @@
-import * as LobbyClient from "../shared/bgio";
-import { AppGame, MatchID } from "../shared/types";
+import * as LobbyClient from "shared/bgio";
+import { AppGame, MatchID } from "shared/types";
 
 
 

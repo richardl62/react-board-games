@@ -1,5 +1,5 @@
-import { SquareID } from "../../boards";
-import { sAssert } from "../../shared/assert";
+import { SquareID } from "boards";
+import { sAssert } from "shared/assert";
 import { GameData, BoardData } from "./game-data";
 import { RowCol } from "./find-candidate-words";
 import { CoreTile, makeCoreTile } from "./core-tile";

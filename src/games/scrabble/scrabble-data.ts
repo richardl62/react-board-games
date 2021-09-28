@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {  squareID, SquareID } from "../../boards";
-import { sAssert } from "../../shared/assert";
-import { sameJSON, shuffle } from "../../shared/tools";
+import {  squareID, SquareID } from "boards";
+import { sAssert } from "shared/assert";
+import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";

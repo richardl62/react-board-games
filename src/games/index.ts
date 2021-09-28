@@ -1,4 +1,4 @@
-import { AppGame } from "../shared/types";
+import { AppGame } from "shared/types";
 import bobail from "./bobail";
 import chess from "./chess";
 import draughts from "./draughts";

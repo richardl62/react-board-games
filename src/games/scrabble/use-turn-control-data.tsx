@@ -6,7 +6,7 @@ import { ScrabbleData } from "./scrabble-data";
 import { isLegalWord } from "./is-legal-word";
 import { useState } from "react";
 import { Letter } from "./letters";
-import { SquareID } from "../../boards";
+import { SquareID } from "boards";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();

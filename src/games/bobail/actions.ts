@@ -1,5 +1,5 @@
 
-import { sameJSON } from "../../shared/tools";
+import { sameJSON } from "shared/tools";
 import { pl1, pl2, bb } from "./piece";
 
 interface RowCol {

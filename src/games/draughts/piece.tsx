@@ -1,5 +1,5 @@
 import React from "react";
-import { Counter } from "../../game-support";
+import { Counter } from "game-support";
 
 function pieceColor(black: boolean) {
     return black ? "black" :

@@ -6,9 +6,9 @@ import styled from "styled-components";
 import {
     Board, makeBoardProps, squareInteractionFunc,
     MoveFunctions, SquareID, checkered, DragType
-} from "../../boards";
-import { nestedArrayMap, sameJSON } from "../../shared/tools";
-import { AppGame, BoardProps } from "../../shared/types";
+} from "boards";
+import { nestedArrayMap, sameJSON } from "shared/tools";
+import { AppGame, BoardProps } from "shared/types";
 
 const squareSize = "50px";
 

@@ -1,4 +1,4 @@
-import { BoardProps } from "../../shared/types";
+import { BoardProps } from "shared/types";
 import { GameData } from "./game-data";
 import { ScrabbleConfig } from "./scrabble-config";
 

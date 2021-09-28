@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import { sAssert } from "../shared/assert";
-import { applyDefaults, isRectangular } from "../shared/tools";
+import { sAssert } from "shared/assert";
+import { applyDefaults, isRectangular } from "shared/tools";
 import { BoardStyle, defaultColors } from "./interfaces";
 import { Square, SquareProps } from "./internal/square";
 

@@ -2,9 +2,9 @@ import React  from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions } from "../../boards";
-import { nestedArrayMap } from "../../shared/tools";
-import { AppGame, BoardProps } from "../../shared/types";
+import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions } from "boards";
+import { nestedArrayMap } from "shared/tools";
+import { AppGame, BoardProps } from "shared/types";
 import { bb, Piece, pl1, pl2 } from "./piece";
 
 const squareSize = "50px";

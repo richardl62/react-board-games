@@ -1,4 +1,4 @@
-import { SquareBackgroundProps } from "../../boards";
+import { SquareBackgroundProps } from "boards";
 import { SquareType } from "./square-type";
 
 export const squareSize = "30px";

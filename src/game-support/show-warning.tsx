@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { BoardProps } from "../shared/types";
+import { BoardProps } from "shared/types";
 
 const WarningsDiv = styled.div`
     display: inline;

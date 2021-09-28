@@ -20,7 +20,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "noEmit": false
+    "noEmit": false,
+    "baseUrl": "src"
   },
   "include": [
     "src"
