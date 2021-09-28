@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {  squareID, SquareID } from "boards";
+import {  squareID, SquareID } from "game-support/boards";
 import { sAssert } from "shared/assert";
 import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";

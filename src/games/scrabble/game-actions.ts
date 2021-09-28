@@ -1,4 +1,4 @@
-import { SquareID } from "boards";
+import { SquareID } from "game-support/boards";
 import { sAssert } from "shared/assert";
 import { GameData, BoardData } from "./game-data";
 import { RowCol } from "./find-candidate-words";

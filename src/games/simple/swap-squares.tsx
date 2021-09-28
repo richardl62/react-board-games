@@ -6,7 +6,7 @@ import styled from "styled-components";
 import {
     Board, makeBoardProps, squareInteractionFunc,
     MoveFunctions, SquareID, checkered, DragType
-} from "boards";
+} from "game-support/boards";
 import { nestedArrayMap, sameJSON } from "shared/tools";
 import { AppGame, BoardProps } from "shared/types";
 
