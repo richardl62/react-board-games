@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
-import { squareSize } from "../../games/scrabble/style";
 import { SquareStyle, defaultColors, SquareID } from "../interfaces";
 
 const PIECE="piece";
@@ -39,7 +38,7 @@ const StyledSquare = styled.div<StyledSquareProps>`
 `;
 
 /** KLUDGE: Helps with board margings and adds text  */
-const SquareHelper = styled.div<{ backgroundColor: string }>`
+const SquareHelper = styled.div<{ backgroundColor: string, size: string }>`
     position: absolute;
     top: 0;
     left: 0;
@@ -54,7 +53,7 @@ const SquareHelper = styled.div<{ backgroundColor: string }>`
     height: 80%;
     margin: 10%;
 
-    font-size: CALC(${squareSize} * 0.5);
+    font-size: CALC( ${props => props.backgroundColor} * 0.5);
     background-color: ${props => props.backgroundColor};
 
     z-index: 1;
@@ -171,7 +170,7 @@ export function Square(props: SquareProps): JSX.Element {
             //onClick={onClick && (() => onClick(label))}
             onClick={onClick && (() => onClick())}
         >
-            <SquareHelper backgroundColor={background.color}>
+            <SquareHelper backgroundColor={background.color} size={size}>
                 {background.text}
             </SquareHelper>
             <Element 
