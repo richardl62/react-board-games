@@ -74,7 +74,7 @@ function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
     );
 }
 
-export const swapSquares: AppGame = {
+const game: AppGame = {
     name: "swap-squares",
     displayName: "Swap Squares (for testing)",
 
@@ -111,3 +111,5 @@ export const swapSquares: AppGame = {
 
     board: SwapSquares,
 };
+
+export default [ game ];

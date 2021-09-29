@@ -62,7 +62,7 @@ function Board(props: BoardProps<G>): JSX.Element {
     );
 }
 
-export const plusminus: AppGame = {
+const game: AppGame = {
     name: "plusminus",
     displayName: "Plus Minus (for testing)",
 
@@ -80,10 +80,13 @@ export const plusminus: AppGame = {
     maxPlayers: 100,
 
     moves: {
-        add: (G: G, ctx: Ctx, value: number) => {
+        add: (G: G, ctx: Ctx, value: number): void => {
             G.data.count += value;
         },
     },
 
     board: Board,
 };
+
+export default [game];
+
