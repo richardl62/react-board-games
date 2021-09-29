@@ -1,72 +1,51 @@
 import React from "react";
-import { Ctx } from "boardgame.io";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import {
-    Board, makeBoardProps, squareInteractionFunc,
-    MoveFunctions, SquareID, checkered, DragType
-} from "game-support/deprecated/boards";
-import { nestedArrayMap, sameJSON } from "shared/tools";
 import { AppGame, BoardProps } from "shared/types";
-
+import { BoarderedGrid} from "game-support/boardered-grid";
 const squareSize = "50px";
 
 const Square = styled.div`
+  height: ${squareSize};
+  width: ${squareSize};
   font-size: calc(${squareSize} * 0.8); // KLUDGE
   text-align: center;
   margin: auto;
+  background-color: white;
 `;
 
-export interface SquareDef {
-  value: number;
-}
-
 interface G {
-  squares: Array<Array<SquareDef>>;
+  squares: number[];
 }
 
-const initialValues = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
+const initialSquares = [
+    1, 2, 3,
+    4, 5, 6,
+    7, 8, 9,
 ];
-
-function makeSquareDef(value: number): SquareDef {
-    return { value: value };
-}
+Object.freeze(initialSquares);
 
 function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
     const onReset = () => {
         moves.reset();
     };
 
-    const moveFunctions: MoveFunctions = {
-        onMoveEnd: moves.end,
-        dragType: () => DragType.move,
-    };
-    const elements = nestedArrayMap(G.squares, sq =>
-        <Square {...sq}>{sq.value}</Square>,
+    const squareElems : JSX.Element[] = G.squares.map((sq, index) =>
+        <Square key={index}>{sq}</Square>
     );
-
-    const boardProps = makeBoardProps({
-        pieces: elements,
-
-        squareBackground: checkered,
-        internalBorders: false,
-        externalBorders: "labelled",
-        squareSize: squareSize,
-
-        boardID: "swapSquares",
-        squareInteraction: squareInteractionFunc(moveFunctions),
-        //moveStart: clickDragState.start
-        moveStart: null, // For now
-    });
 
     return (
         <DndProvider backend={HTML5Backend}>
             <div>
-                <Board {...boardProps} />
+                <BoarderedGrid 
+                    nCols={3} 
+                    backgroundColor={"brown"} 
+                    gridGap={"3px"}
+                    borderWidth={"6px"}
+                >
+                    {squareElems}
+                </BoarderedGrid>
             </div>
 
             <button type='button' onClick={onReset}>Reset</button>
@@ -79,8 +58,7 @@ const game: AppGame = {
     displayName: "Swap Squares (for testing)",
 
     setup: (): G => {
-        const intialSquares = nestedArrayMap(initialValues, makeSquareDef);
-        return { squares: intialSquares };
+        return { squares: [...initialSquares] };
     },
 
     minPlayers: 1,
@@ -88,24 +66,20 @@ const game: AppGame = {
 
     moves: {
 
-        start: () => undefined,
+        // start: () => undefined,
 
-        end: (G: G, ctx: Ctx, from: SquareID, to: SquareID | null) => {
-            if (to && !sameJSON(from, to)) {
-                const tmp = G.squares[to.row][to.col];
-                G.squares[to.row][to.col] = G.squares[from.row][from.col];
-                G.squares[from.row][from.col] = tmp;
-            }
-        },
+        // end: (G: G, ctx: Ctx, from: SquareID, to: SquareID | null) => {
+        //     if (to && !sameJSON(from, to)) {
+        //         const tmp = G.squares[to.row][to.col];
+        //         G.squares[to.row][to.col] = G.squares[from.row][from.col];
+        //         G.squares[from.row][from.col] = tmp;
+        //     }
+        // },
 
         // Using the BGIO supplied reset function lead to server errros.
         // TO DO: Understand why this happened;
         reset: (G: G /*, ctx: Ctx*/) => {
-            for (let row = 0; row < G.squares.length; ++row) {
-                for (let col = 0; col < G.squares[row].length; ++col) {
-                    G.squares[row][col].value = initialValues[row][col];
-                }
-            }
+            G.squares = [...initialSquares];
         },
     },
 
