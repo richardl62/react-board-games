@@ -1,17 +1,9 @@
 import React from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import styled from "styled-components";
 import { AppGame, BoardProps } from "shared/types";
 import { BoarderedGrid} from "game-support/boardered-grid";
-import { PieceHolder, Border } from "game-support/piece-holder";
-const squareSize = "50px";
-
-const Background = styled.div<{color: string}>`
-  height: ${squareSize};
-  width: ${squareSize};
-  background-color: ${props => props.color};
-`;
+import { PieceHolder } from "game-support/piece-holder";
 
 
 interface G {
@@ -32,10 +24,17 @@ function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
 
     const squareElems : JSX.Element[] = G.squares.map((sq, index) =>
 
-        <PieceHolder key={index}>
-            <Background color="cornsilk" />
+        <PieceHolder
+            background={{color:"cornsilk"}} 
+            key={index}
+            hieght={"80px"}
+            width={"40px"}
+            border={{
+                color: index === 0 ? "yellow" : null,
+                hoverColor: "green"
+            }}
+        >
             <div>{"F"+sq}</div>
-            <Border color={index === 0 ? "green" : "cornsilk"} hoverColor="yellow" width="5px"/>
         </PieceHolder>  
     );
 
