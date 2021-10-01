@@ -4,16 +4,15 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { AppGame, BoardProps } from "shared/types";
 import { BoarderedGrid} from "game-support/boardered-grid";
+import { PieceHolder, Border } from "game-support/piece-holder";
 const squareSize = "50px";
 
-const Square = styled.div`
+const Background = styled.div<{color: string}>`
   height: ${squareSize};
   width: ${squareSize};
-  font-size: calc(${squareSize} * 0.8); // KLUDGE
-  text-align: center;
-  margin: auto;
-  background-color: white;
+  background-color: ${props => props.color};
 `;
+
 
 interface G {
   squares: number[];
@@ -32,7 +31,12 @@ function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
     };
 
     const squareElems : JSX.Element[] = G.squares.map((sq, index) =>
-        <Square key={index}>{sq}</Square>
+
+        <PieceHolder key={index}>
+            <Background color="cornsilk" />
+            <div>{"F"+sq}</div>
+            <Border color={index === 0 ? "green" : "cornsilk"} hoverColor="yellow" width="5px"/>
+        </PieceHolder>  
     );
 
     return (
