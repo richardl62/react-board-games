@@ -1,7 +1,17 @@
 import React, { ReactNode } from "react";
+import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
 
-// https://stackoverflow.com/questions/6780614/css-how-to-position-two-elements-on-top-of-each-other-without-specifying-a-hei
+const PIECE = "piece";
+
+type PieceID = Record<string, unknown>;
+
+export enum DragType {
+    move,
+    copy,
+    disable,
+}
+
 const Container = styled.div<{hieght: string, width: string, backgroundColor?: string | null}>`
     height: ${props=>props.hieght};
     width: ${props=>props.width};
@@ -45,8 +55,27 @@ export const Border = styled.div<{
     }
 `;
 
+export interface DragDropProps { 
+    /** Id of piece to drag. Used as parameter to onDrop.
+     * If omitted, the piece will not be draggable.
+     */
+    id?: PieceID;
+
+    /**
+     * The type of dragging: move, copy or none.
+     * 
+     * Default to move.
+     */
+    dragType?: DragType;
+
+    /* Function tp be called on drop.
+       If omitted, dragging to this location is disabled.
+    */
+    onDrop?: (arg: PieceID) => void;
+}
+
 /** Propeties for PieceHolder */
-interface Props {
+interface PieceHolderProps {
     /** Size of the PieceHolder.
      * The piece will be rendered in a div of this size.
      */ 
@@ -70,18 +99,55 @@ interface Props {
 
     /** The piece to be displayed. */
     children?: ReactNode;
+
+    onClick?: () => void;
+
+    /** Options for drag and drop 
+     * 
+     * Note: The child piece (rather than any background or foreground (i.e. the border) is dragged.
+    */
+    dragDrop?: DragDropProps;
 }
 
 /**
  * A good-enough class to contain pieces (or cards etc.) in most of these game.
  * Provides background, highlighting and move functionality.
  */
-export function PieceHolder(props: Props): JSX.Element {
+export function PieceHolder(props: PieceHolderProps): JSX.Element {
 
-    const { hieght, width, background, children, border } = props;
+    const { hieght, width, background, children, border, dragDrop } = props;
 
-    return <Container hieght={hieght} width={width} backgroundColor={background.color}>
-        {children}
+    const [/*{isDragging}*/, dragRef] = useDrag(() => ({
+        type: PIECE,
+        collect: monitor => {
+            return {
+                isDragging: Boolean(monitor.isDragging()),
+            };
+        },
+
+        item: () => {
+            if (dragDrop?.dragType !== DragType.disable) {
+                return dragDrop?.id;
+            }
+        },
+        
+    }));
+
+    const [ /*dropCollection*/, dropRef] = useDrop({
+        accept: PIECE,
+        drop: (from: PieceID) => dragDrop?.onDrop?.(from),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+            canDrop: !!monitor.canDrop(),
+            item: monitor.getItem(),
+        }),
+    });
+
+    
+    return <Container ref={dropRef} hieght={hieght} width={width} backgroundColor={background.color} >
+        <div ref={dragRef}>
+            {children}
+        </div>
         {border && <Border hieght={hieght} width={width} standardColor={border.color} hoverColor={border.hoverColor}/>}
     </Container>;
 }

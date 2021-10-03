@@ -3,8 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppGame, BoardProps } from "shared/types";
 import { BoarderedGrid} from "game-support/boardered-grid";
-import { PieceHolder } from "game-support/piece-holder";
-
+import { DragDropProps, PieceHolder } from "game-support/piece-holder";
 
 interface G {
   squares: number[];
@@ -17,25 +16,39 @@ const initialSquares = [
 ];
 Object.freeze(initialSquares);
 
+interface SquareProps {
+    value: number;
+    position: number;
+}
+
+function Square(props: SquareProps) : JSX.Element {
+    const {value, position} = props;
+    const dragDropProps: DragDropProps = {
+        id: {position: position},
+        onDrop: (arg: Record<string, unknown>) => console.log(`Drag from ${arg.position} to ${position}` ),
+    };
+
+    return <PieceHolder
+        background={{ color: "cornsilk" }}
+        hieght={"80px"}
+        width={"40px"}
+        border={{
+            color: position === 0 ? "yellow" : null,
+            hoverColor: "green"
+        }}
+        dragDrop={dragDropProps}
+    >
+        <div>{"F" + value}</div>
+    </PieceHolder>;  
+}
+
 function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
     const onReset = () => {
         moves.reset();
     };
 
-    const squareElems : JSX.Element[] = G.squares.map((sq, index) =>
-
-        <PieceHolder
-            background={{color:"cornsilk"}} 
-            key={index}
-            hieght={"80px"}
-            width={"40px"}
-            border={{
-                color: index === 0 ? "yellow" : null,
-                hoverColor: "green"
-            }}
-        >
-            <div>{"F"+sq}</div>
-        </PieceHolder>  
+    const squareElems = G.squares.map((sq, index) => 
+        <Square key={index} value={sq} position={index} />
     );
 
     return (
