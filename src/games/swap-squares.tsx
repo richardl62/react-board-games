@@ -32,7 +32,7 @@ function Square(props: SquareProps) : JSX.Element {
         background={{ color: "cornsilk" }}
         hieght={"80px"}
         width={"40px"}
-        border={{
+        borderColor={{
             color: position === 0 ? "yellow" : null,
             hoverColor: "green"
         }}
