@@ -3,7 +3,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppGame, BoardProps } from "shared/types";
 import { BoarderedGrid} from "game-support/boardered-grid";
-import { DragDropProps, PieceHolder } from "game-support/piece-holder";
+import { PieceHolder } from "game-support/piece-holder";
+import { DragDropProps } from "game-support/drag-drop";
 
 interface G {
   squares: number[];

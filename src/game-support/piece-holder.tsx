@@ -1,16 +1,7 @@
 import React, { ReactNode } from "react";
-import { useDrag, useDrop } from "react-dnd";
+
 import styled from "styled-components";
-
-const PIECE = "piece";
-
-type PieceID = Record<string, unknown>;
-
-export enum DragType {
-    move,
-    copy,
-    disable,
-}
+import { DragDropProps, useDrag, useDrop } from "./drag-drop";
 
 interface BorderColor {
     color?: string | null;
@@ -59,25 +50,6 @@ const Piece = styled.div`
 `;
 
 
-export interface DragDropProps { 
-    /** Id of piece to drag. Used as parameter to onDrop.
-     * If omitted, the piece will not be draggable.
-     */
-    id?: PieceID;
-
-    /**
-     * The type of dragging: move, copy or none.
-     * 
-     * Default to move.
-     */
-    dragType?: DragType;
-
-    /* Function tp be called on drop.
-       If omitted, dragging to this location is disabled.
-    */
-    onDrop?: (arg: PieceID) => void;
-}
-
 /** Propeties for PieceHolder */
 interface PieceHolderProps {
     /** Size of the PieceHolder.
@@ -116,31 +88,8 @@ export function PieceHolder(props: PieceHolderProps): JSX.Element {
 
     const { hieght, width, background, children, borderColor, dragDrop } = props;
 
-    const [/*{isDragging}*/, dragRef] = useDrag(() => ({
-        type: PIECE,
-        collect: monitor => {
-            return {
-                isDragging: Boolean(monitor.isDragging()),
-            };
-        },
-
-        item: () => {
-            if (dragDrop?.dragType !== DragType.disable) {
-                return dragDrop?.id;
-            }
-        },
-        
-    }));
-
-    const [ /*dropCollection*/, dropRef] = useDrop({
-        accept: PIECE,
-        drop: (from: PieceID) => dragDrop?.onDrop?.(from),
-        collect: (monitor) => ({
-            isOver: !!monitor.isOver(),
-            canDrop: !!monitor.canDrop(),
-            item: monitor.getItem(),
-        }),
-    });
+    const [, dragRef] = useDrag(dragDrop);
+    const [, dropRef] = useDrop(dragDrop);
 
     return <Container ref={dropRef} hieght={hieght} width={width} backgroundColor={background.color} borderColor={borderColor}>
         <Piece ref={dragRef}>
