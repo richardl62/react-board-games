@@ -1,10 +1,8 @@
 import React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppGame, BoardProps } from "shared/types";
 import { BoarderedGrid} from "game-support/boardered-grid";
 import { PieceHolder } from "game-support/piece-holder";
-import { DragDropProps } from "game-support/drag-drop";
+import { DndProvider } from "game-support/drag-drop";
 
 interface G {
   squares: number[];
@@ -24,8 +22,12 @@ interface SquareProps {
 
 function Square(props: SquareProps) : JSX.Element {
     const {value, position} = props;
-    const dragDropProps: DragDropProps = {
+    
+    const dragArg = {
         id: {position: position},
+    };
+
+    const dropArg = {
         onDrop: (arg: Record<string, unknown>) => console.log(`Drag from ${arg.position} to ${position}` ),
     };
 
@@ -37,7 +39,8 @@ function Square(props: SquareProps) : JSX.Element {
             color: position === 0 ? "yellow" : null,
             hoverColor: "green"
         }}
-        dragDrop={dragDropProps}
+        dragArg={dragArg}
+        dropArg={dropArg}
     >
         <div>{"F" + value}</div>
     </PieceHolder>;  
@@ -53,7 +56,7 @@ function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
     );
 
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider>
             <div>
                 <BoarderedGrid 
                     nCols={3} 

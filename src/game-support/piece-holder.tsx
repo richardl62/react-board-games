@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
 import styled from "styled-components";
-import { DragDropProps, useDrag, useDrop } from "./drag-drop";
+import { useDrag, UseDragArg, useDrop, UseDropArg } from "./drag-drop";
 
 interface BorderColor {
     color?: string | null;
@@ -77,7 +77,8 @@ interface PieceHolderProps {
      * 
      * Note: The child piece (rather than any background or foreground (i.e. the border) is dragged.
     */
-    dragDrop?: DragDropProps;
+    dragArg?: UseDragArg;
+    dropArg?: UseDropArg;
 }
 
 /**
@@ -86,10 +87,10 @@ interface PieceHolderProps {
  */
 export function PieceHolder(props: PieceHolderProps): JSX.Element {
 
-    const { hieght, width, background, children, borderColor, dragDrop } = props;
+    const { hieght, width, background, children, borderColor, dragArg, dropArg } = props;
 
-    const [, dragRef] = useDrag(dragDrop);
-    const [, dropRef] = useDrop(dragDrop);
+    const [, dragRef] = useDrag(dragArg);
+    const [, dropRef] = useDrop(dropArg);
 
     return <Container ref={dropRef} hieght={hieght} width={width} backgroundColor={background.color} borderColor={borderColor}>
         <Piece ref={dragRef}>
