@@ -1,8 +1,8 @@
 import React from "react";
-import { AppGame, BoardProps } from "shared/types";
-import { BoarderedGrid} from "game-support/boardered-grid";
-import { PieceHolder } from "game-support/piece-holder";
+import { BoarderedGrid } from "game-support/boardered-grid";
 import { DndProvider } from "game-support/drag-drop";
+import { DragDrop, DragType, PieceHolder } from "game-support/piece-holder";
+import { AppGame, BoardProps } from "shared/types";
 
 interface G {
   squares: number[];
@@ -22,13 +22,11 @@ interface SquareProps {
 
 function Square(props: SquareProps) : JSX.Element {
     const {value, position} = props;
-    
-    const dragArg = {
-        id: {position: position},
-    };
 
-    const dropArg = {
+    const dragDrop : DragDrop = {
+        id: position === 1 ? null : {position: position},
         onDrop: (arg: Record<string, unknown>) => console.log(`Drag from ${arg.position} to ${position}` ),
+        dragType: position === 0 ? DragType.copy : DragType.move,
     };
 
     return <PieceHolder
@@ -36,11 +34,10 @@ function Square(props: SquareProps) : JSX.Element {
         hieght={"80px"}
         width={"40px"}
         borderColor={{
-            color: position === 0 ? "yellow" : null,
+            color: position === 0 ? "yellow" : position === 1 ? "red" : null,
             hoverColor: "green"
         }}
-        dragArg={dragArg}
-        dropArg={dropArg}
+        dragDrop={dragDrop}
     >
         <div>{"F" + value}</div>
     </PieceHolder>;  

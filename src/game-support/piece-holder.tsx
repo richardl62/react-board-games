@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
-
 import styled from "styled-components";
-import { useDrag, UseDragArg, useDrop, UseDropArg } from "./drag-drop";
+import {useDrag, useDrop, PieceID } from "./drag-drop";
 
 interface BorderColor {
     color?: string | null;
@@ -49,6 +48,29 @@ const Piece = styled.div`
     z-index: 1;
 `;
 
+export enum DragType {
+    move,
+    copy,
+}
+
+export interface DragDrop { 
+    /** Id of piece to drag. Used as parameter to onDrop.
+     * If omitted, the piece will not be draggable.
+     */
+    id?: PieceID | null;
+
+    /**
+     * The type of dragging: move, copy or none.
+     * 
+     * Default to move.
+     */
+    dragType?: DragType;
+
+    /* Function tp be called on drop.
+       If omitted, dragging to this location is disabled.
+    */
+    onDrop?: (arg: PieceID) => void;
+}
 
 /** Propeties for PieceHolder */
 interface PieceHolderProps {
@@ -75,10 +97,11 @@ interface PieceHolderProps {
 
     /** Options for drag and drop 
      * 
+     * dragDrap.dragType defaults to move.
+     * 
      * Note: The child piece (rather than any background or foreground (i.e. the border) is dragged.
     */
-    dragArg?: UseDragArg;
-    dropArg?: UseDropArg;
+    dragDrop?: DragDrop;
 }
 
 /**
@@ -87,15 +110,18 @@ interface PieceHolderProps {
  */
 export function PieceHolder(props: PieceHolderProps): JSX.Element {
 
-    const { hieght, width, background, children, borderColor, dragArg, dropArg } = props;
+    const { hieght, width, background, children, borderColor, dragDrop } = props;
 
-    const [, dragRef] = useDrag(dragArg);
-    const [, dropRef] = useDrop(dropArg);
+    const [{isDragging}, dragRef] = useDrag(dragDrop?.id);
+    const [, dropRef] = useDrop(dragDrop?.onDrop);
+
+    const dragType = dragDrop?.dragType || DragType.move;
+    const hidePiece = isDragging && dragType === DragType.move;
 
     return <Container ref={dropRef} hieght={hieght} width={width} backgroundColor={background.color} borderColor={borderColor}>
-        <Piece ref={dragRef}>
+        {hidePiece || <Piece ref={dragRef}>
             {children}
-        </Piece>
+        </Piece>}
     </Container>;
 }
 

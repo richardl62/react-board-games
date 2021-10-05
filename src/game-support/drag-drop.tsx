@@ -11,30 +11,13 @@ export function DndProvider(props: {children: ReactNode}): JSX.Element {
     );
 }
 
+export type PieceID = Record<string, unknown>;
 
-type PieceID = Record<string, unknown>;
-
-export enum DragType {
-    move,
-    copy,
-    disable,
-}
-
-export interface UseDragArg { 
-    /** Id of piece to drag. Used as parameter to onDrop.
-     * If omitted, the piece will not be draggable.
-     */
-    id?: PieceID;
-
-    /**
-     * The type of dragging: move, copy or none.
-     * 
-     * Default to move.
-     */
-    dragType?: DragType;
-}
-
-export function useDrag(arg?: UseDragArg):
+/**
+ * Wrapper for react-dnd useDrag
+ * @param id - [Optional] ID of the piece that can be dragged. Drag is suppress if omitted.
+ */
+export function useDrag(id: PieceID | null | undefined):
      [{ isDragging: boolean; }, ReactDnd.ConnectDragSource, ReactDnd.ConnectDragPreview] 
 {
     return ReactDnd.useDrag(() => ({
@@ -45,24 +28,21 @@ export function useDrag(arg?: UseDragArg):
             };
         },
 
-        item: () => {
-            if (arg?.dragType !== DragType.disable) {
-                return arg?.id;
-            }
-        },
+        item: id && (() => id),
     }));
 }
 
-export interface UseDropArg { 
-    onDrop?: (arg: PieceID) => void;
-}
-
-export function useDrop(arg?: UseDropArg): 
+/**
+ * Wrapper for react-dnd onDrop
+ * @param onDrop - Function to call on drop.
+ * @returns 
+ */
+export function useDrop(onDrop?: (arg: PieceID) => void): 
     [{ isOver: boolean; canDrop: boolean; item: unknown; }, ReactDnd.ConnectDropTarget] 
 {
     return ReactDnd.useDrop({
         accept: PIECE,
-        drop: (from: PieceID) => arg?.onDrop?.(from),
+        drop: (from: PieceID) => onDrop?.(from),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop(),
