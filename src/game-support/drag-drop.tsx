@@ -13,11 +13,19 @@ export function DndProvider(props: {children: ReactNode}): JSX.Element {
 
 export type PieceID = Record<string, unknown>;
 
+interface UseDragArg {
+    /**
+     * Called at start of drag.  Returns the Piece ID, or null.
+     * If null, the drag is cancelled.
+     */
+    id: PieceID | null;
+    end?: () => void;
+}
 /**
  * Wrapper for react-dnd useDrag
- * @param id - [Optional] ID of the piece that can be dragged. Drag is suppress if omitted.
+ * @param arg - [Optional] ID of the piece that can be dragged. Drag is suppress if omitted.
  */
-export function useDrag(id: PieceID | null | undefined):
+export function useDrag(arg: UseDragArg):
      [{ isDragging: boolean; }, ReactDnd.ConnectDragSource, ReactDnd.ConnectDragPreview] 
 {
     return ReactDnd.useDrag(() => ({
@@ -27,8 +35,14 @@ export function useDrag(id: PieceID | null | undefined):
                 isDragging: Boolean(monitor.isDragging()),
             };
         },
-        item: () => id,
+        item: arg.id,
+        end: (endArg : unknown, monitor) => console.log("argDrag: from" , arg.id, "to ", monitor.getDropResult()),
     }));
+}
+
+interface UseDropArg {
+    onDrop?: (arg: PieceID) => void,
+    id: PieceID | null,
 }
 
 /**
@@ -36,12 +50,15 @@ export function useDrag(id: PieceID | null | undefined):
  * @param onDrop - Function to call on drop.
  * @returns 
  */
-export function useDrop(onDrop?: (arg: PieceID) => void): 
+export function useDrop(arg: UseDropArg): 
     [{ isOver: boolean; canDrop: boolean; item: unknown; }, ReactDnd.ConnectDropTarget] 
 {
     return ReactDnd.useDrop({
         accept: PIECE,
-        drop: (from: PieceID) => onDrop?.(from),
+        drop: (from: PieceID) => {
+            arg.onDrop && arg.onDrop(from);
+            return arg.id;
+        },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop(),

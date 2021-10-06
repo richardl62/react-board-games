@@ -112,8 +112,13 @@ export function PieceHolder(props: PieceHolderProps): JSX.Element {
 
     const { hieght, width, background, children, borderColor, dragDrop } = props;
 
-    const [{isDragging}, dragRef] = useDrag(dragDrop?.id);
-    const [, dropRef] = useDrop(dragDrop?.onDrop);
+    const id = dragDrop?.id || null;
+
+    const [{isDragging}, dragRef] = useDrag({id: id});
+    const [, dropRef] = useDrop({
+        onDrop: dragDrop?.onDrop,
+        id: id,
+    });
 
     const dragType = dragDrop?.dragType || DragType.move;
     const hidePiece = isDragging && dragType === DragType.move;
