@@ -1,8 +1,10 @@
 import React from "react";
 import { BoarderedGrid } from "game-support/boardered-grid";
 import { DndProvider } from "game-support/drag-drop";
-import { DragDrop, DragType, PieceHolder } from "game-support/piece-holder";
+import { DragDrop, PieceHolder } from "game-support/piece-holder";
 import { AppGame, BoardProps } from "shared/types";
+import { sAssert } from "shared/assert";
+import { Ctx } from "boardgame.io";
 
 interface G {
   squares: number[];
@@ -18,15 +20,19 @@ Object.freeze(initialSquares);
 interface SquareProps {
     value: number;
     position: number;
+
+    onMove: (from: number, to: number) => void;
 }
 
 function Square(props: SquareProps) : JSX.Element {
-    const {value, position} = props;
+    const {value, position, onMove} = props;
 
     const dragDrop : DragDrop = {
-        id: position === 1 ? null : {position: position},
-        onDrop: (arg: Record<string, unknown>) => console.log(`Drag from ${arg.position} to ${position}` ),
-        dragType: position === 0 ? DragType.copy : DragType.move,
+        id: {position: position},
+        onDrop: (arg: Record<string, unknown>) => {
+            sAssert(typeof arg.position === "number");
+            onMove(arg.position, position);
+        }
     };
 
     return <PieceHolder
@@ -34,12 +40,11 @@ function Square(props: SquareProps) : JSX.Element {
         hieght={"80px"}
         width={"40px"}
         borderColor={{
-            color: position === 0 ? "yellow" : position === 1 ? "red" : null,
-            hoverColor: "green"
+            hoverColor: "olive",
         }}
         dragDrop={dragDrop}
     >
-        <div>{"F" + value}</div>
+        <div>{value}</div>
     </PieceHolder>;  
 }
 
@@ -48,8 +53,12 @@ function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
         moves.reset();
     };
 
+    const onMove = (from: number, to: number) => {
+        moves.swap(from, to);
+    };
+
     const squareElems = G.squares.map((sq, index) => 
-        <Square key={index} value={sq} position={index} />
+        <Square key={index} value={sq} position={index} onMove={onMove} />
     );
 
     return (
@@ -82,16 +91,13 @@ const game: AppGame = {
     maxPlayers: 1,
 
     moves: {
-
-        // start: () => undefined,
-
-        // end: (G: G, ctx: Ctx, from: SquareID, to: SquareID | null) => {
-        //     if (to && !sameJSON(from, to)) {
-        //         const tmp = G.squares[to.row][to.col];
-        //         G.squares[to.row][to.col] = G.squares[from.row][from.col];
-        //         G.squares[from.row][from.col] = tmp;
-        //     }
-        // },
+        swap: (G: G, _ctx: Ctx, from: number, to: number) => {
+            if (from !== to) {
+                const tmp = G.squares[to];
+                G.squares[to] = G.squares[from];
+                G.squares[from] = tmp;
+            }
+        },
 
         // Using the BGIO supplied reset function lead to server errros.
         // TO DO: Understand why this happened;

@@ -27,8 +27,7 @@ export function useDrag(id: PieceID | null | undefined):
                 isDragging: Boolean(monitor.isDragging()),
             };
         },
-
-        item: id && (() => id),
+        item: () => id,
     }));
 }
 
