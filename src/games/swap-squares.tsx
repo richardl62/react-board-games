@@ -3,7 +3,6 @@ import { BoarderedGrid } from "game-support/boardered-grid";
 import { DndProvider } from "game-support/drag-drop";
 import { DragDrop, PieceHolder } from "game-support/piece-holder";
 import { AppGame, BoardProps } from "shared/types";
-import { sAssert } from "shared/assert";
 import { Ctx } from "boardgame.io";
 
 interface G {
@@ -24,16 +23,16 @@ interface SquareProps {
     onMove: (from: number, to: number) => void;
 }
 
+interface SquareID {
+    position: number;
+}
 function Square(props: SquareProps) : JSX.Element {
     const {value, position, onMove} = props;
 
-    const dragDrop : DragDrop = {
+    const dragDrop : DragDrop<SquareID> = {
         id: {position: position},
         end: ({drag, drop}) => {
-            sAssert(typeof drag.position === "number");
-
             if(drop) {
-                sAssert(typeof drop.position === "number");
                 onMove(drag.position, drop.position);
             }
         },

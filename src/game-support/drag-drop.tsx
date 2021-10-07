@@ -13,25 +13,31 @@ export function DndProvider(props: {children: ReactNode}): JSX.Element {
     );
 }
 
-export type DragDropID = Record<string, unknown>;
+type UnknownObject = Record<string, unknown>;
 
-interface UseDragArg {
+interface UseDragArg<ID> {
     /**
      * Called at start of drag.  Returns the Piece ID, or null.
      * If null, the drag is cancelled.
      */
-    id: DragDropID;
-    start?: (drag: DragDropID) => void,
-    end?: (ids: {drag: DragDropID, drop: DragDropID | null}) => void;
+    id: ID;
+    start?: (drag: ID) => void,
+    end?: (ids: {drag: ID, drop: ID | null}) => void;
 }
+
 /**
  * Wrapper for react-dnd useDrag
  * @param arg - [Optional] ID of the piece that can be dragged. Drag is suppress if omitted.
+ * 
+ * Warning: UseDrag And UseDrop should be give the same type parameter.
  */
-export function useDrag(arg?: UseDragArg | null):
+export function useDrag<ID = UnknownObject>(arg?: UseDragArg<ID> | null):
      [{ isDragging: boolean; }, ReactDnd.ConnectDragSource, ReactDnd.ConnectDragPreview] 
 {
     const {id, start, end} = arg || {};
+
+    // I tried to enforce this in typescript, but got stuck.
+    sAssert(id === undefined || typeof id === "object");
 
     return ReactDnd.useDrag(() => ({
         type: PIECE,
@@ -53,31 +59,33 @@ export function useDrag(arg?: UseDragArg | null):
             const dropID = monitor.getDropResult();
             sAssert(dropID === null || typeof dropID === "object");
             
-            end({drag: dragID as DragDropID, drop: dropID as DragDropID | null});
+            end({drag: dragID as ID, drop: dropID as ID | null});
         }),
     }));
 }
-
-interface UseDropArg {
-    id: DragDropID,
-    onDrop?: (arg: DragDropID) => void,
+interface UseDropArg<ID = UnknownObject> {
+    id: ID,
+    onDrop?: (arg: ID) => void,
 }
-
 /**
  * Wrapper for react-dnd onDrop
  * @param onDrop - Function to call on drop.
- * @returns 
+ * 
+ * Warning: UseDrag And UseDrop should be give the same type parameter.
  */
-export function useDrop(arg?: UseDropArg | null): 
+export function useDrop<ID = UnknownObject>(arg?: UseDropArg<ID> | null): 
     [{ isOver: boolean; canDrop: boolean; item: unknown; }, ReactDnd.ConnectDropTarget] 
 {
     const {id, onDrop} = arg || {};
+    
+    // I tried to enforce this in typescript, but got stuck.
+    sAssert(id === undefined || typeof id === "object");
 
     return ReactDnd.useDrop({
         accept: PIECE,
-        drop: (from: DragDropID) => {
+        drop: (from: UnknownObject) => {
             if(onDrop) {
-                onDrop(from);
+                onDrop(from as ID);
             }
             return id;
         },

@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import {useDrag, useDrop, DragDropID } from "./drag-drop";
+import {useDrag, useDrop } from "./drag-drop";
+
+type UnknownObject = Record<string, unknown>;
 
 interface BorderColor {
     color?: string | null;
@@ -48,10 +50,10 @@ const Piece = styled.div`
     z-index: 1;
 `;
 
-export interface DragDrop { 
+export interface DragDrop<ID = UnknownObject> { 
     /** Id of piece to drag. Used as parameter to onDrop.
      */
-    id: DragDropID;
+    id: ID;
 
     /**
      * Called at the start of the a drag.  
@@ -60,7 +62,7 @@ export interface DragDrop {
      * 
      * To Do: Consider adding a return type that could be used to cancel the drag.
      */
-    start?: (arg: DragDropID) => void;
+    start?: (arg: ID) => void;
 
     /**
      * Called at the start of the a drag.  
@@ -72,7 +74,7 @@ export interface DragDrop {
      * 
      * To Do: Consider adding a return type that could be used to cancel the drag.
      */
-    end?: (arg: {drag: DragDropID, drop: DragDropID | null}) => void;
+    end?: (arg: {drag: ID, drop: ID | null}) => void;
 
     /** Specify whether the original piece is hiden during the drag (so whether
      * the drag appears to move or copy the piece)
@@ -83,7 +85,7 @@ export interface DragDrop {
 }
 
 /** Propeties for PieceHolder */
-interface PieceHolderProps {
+interface PieceHolderProps<ID = UnknownObject> {
     /** Size of the PieceHolder.
      * The piece will be rendered in a div of this size.
      */ 
@@ -111,14 +113,14 @@ interface PieceHolderProps {
      * 
      * Note: The child piece (rather than any background or foreground (i.e. the border) is dragged.
     */
-    dragDrop?: DragDrop;
+    dragDrop?: DragDrop<ID>;
 }
 
 /**
  * A good-enough class to contain pieces (or cards etc.) in most of these game.
  * Provides background, highlighting and move functionality.
  */
-export function PieceHolder(props: PieceHolderProps): JSX.Element {
+export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JSX.Element {
 
     const { hieght, width, background, children, borderColor, dragDrop } = props;
 
