@@ -29,10 +29,14 @@ function Square(props: SquareProps) : JSX.Element {
 
     const dragDrop : DragDrop = {
         id: {position: position},
-        onDrop: (arg: Record<string, unknown>) => {
-            sAssert(typeof arg.position === "number");
-            onMove(arg.position, position);
-        }
+        end: ({drag, drop}) => {
+            sAssert(typeof drag.position === "number");
+
+            if(drop) {
+                sAssert(typeof drop.position === "number");
+                onMove(drag.position, drop.position);
+            }
+        },
     };
 
     return <PieceHolder

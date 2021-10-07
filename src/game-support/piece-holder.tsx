@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import {useDrag, useDrop, PieceID } from "./drag-drop";
+import {useDrag, useDrop, DragDropID } from "./drag-drop";
 
 interface BorderColor {
     color?: string | null;
@@ -48,28 +48,38 @@ const Piece = styled.div`
     z-index: 1;
 `;
 
-export enum DragType {
-    move,
-    copy,
-}
-
 export interface DragDrop { 
     /** Id of piece to drag. Used as parameter to onDrop.
-     * If omitted, the piece will not be draggable.
      */
-    id?: PieceID | null;
+    id: DragDropID;
 
     /**
-     * The type of dragging: move, copy or none.
+     * Called at the start of the a drag.  
      * 
-     * Default to move.
+     * 'arg' will be the id supplied in the object.
+     * 
+     * To Do: Consider adding a return type that could be used to cancel the drag.
      */
-    dragType?: DragType;
+    start?: (arg: DragDropID) => void;
 
-    /* Function tp be called on drop.
-       If omitted, dragging to this location is disabled.
-    */
-    onDrop?: (arg: PieceID) => void;
+    /**
+     * Called at the start of the a drag.  
+     * 
+     * 'arg' will be the id supplied in the object.
+     * 
+     * 'drop' will be the id of the place holder the object is dropped into, or 
+     * null if the drag fails (i.e. if the drag is to a non-droppable location).
+     * 
+     * To Do: Consider adding a return type that could be used to cancel the drag.
+     */
+    end?: (arg: {drag: DragDropID, drop: DragDropID | null}) => void;
+
+    /** Specify whether the original piece is hiden during the drag (so whether
+     * the drag appears to move or copy the piece)
+     * 
+     * The default is to hide. 
+     */
+    hide?: boolean;
 }
 
 /** Propeties for PieceHolder */
@@ -112,20 +122,18 @@ export function PieceHolder(props: PieceHolderProps): JSX.Element {
 
     const { hieght, width, background, children, borderColor, dragDrop } = props;
 
-    const id = dragDrop?.id || null;
+    const [{isDragging}, dragRef] = useDrag(dragDrop);
+    const [, dropRef] = useDrop(dragDrop);
 
-    const [{isDragging}, dragRef] = useDrag({id: id});
-    const [, dropRef] = useDrop({
-        onDrop: dragDrop?.onDrop,
-        id: id,
-    });
 
-    const dragType = dragDrop?.dragType || DragType.move;
-    const hidePiece = isDragging && dragType === DragType.move;
+    const hideDuringDrag = dragDrop?.hide !== false;
+    const hidePiece = isDragging && hideDuringDrag;
 
     return <Container ref={dropRef} hieght={hieght} width={width} backgroundColor={background.color} borderColor={borderColor}>
-        {hidePiece || <Piece ref={dragRef}>
-            {children}
+        {<Piece ref={dragRef}>
+            {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
+             by the piece being unmounted during the drag. */}
+            {hidePiece || children}
         </Piece>}
     </Container>;
 }
