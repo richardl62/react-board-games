@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
-import { boardIDs, tilesOut } from "./game-actions";
-import { ScrabbleData, Rack as RackType } from "./scrabble-data";
+import { boardIDs, tilesOut } from "./game-control";
+import { ScrabbleData, Rack as RackType } from "./game-control";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 

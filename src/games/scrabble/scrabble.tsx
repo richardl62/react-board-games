@@ -10,7 +10,7 @@ import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
 import { ScrabbleBoardProps } from "./scrabble-board-props";
-import { useScrabbleData } from "./scrabble-data";
+import { useScrabbleData } from "./game-control";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "game-support/show-warning";
-import { ScrabbleData } from "./scrabble-data";
+import { ScrabbleData } from "./game-control";
 
 const StyledScoresEtc=styled.div`
     display: flex;
