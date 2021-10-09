@@ -20,19 +20,6 @@ function otherDirection(dir : Direction) : Direction {
 }
 
 
-export function makeString(    
-    positions: RowCol[],
-    board: BoardData,
-) : string {
-
-    const letters = positions.map(rc => {
-        const td = board[rc.row][rc.col];
-        sAssert(td);
-        return td.letter;
-    });
-    return "".concat(...letters);
-}
-
 /** Check if all the positions have the same row (if
  *  direction === 'row') or column (if direction === 'col') 
  */
@@ -45,21 +32,6 @@ function sameRowCol(positions: RowCol[], direction: Direction) : boolean {
     }
 
     return true;
-}
-
-export function findActiveLetters(board: BoardData) : RowCol[] 
-{
-    const active: RowCol[] = [];
-
-    for (let row = 0; row < board.length; ++row) {
-        for (let col = 0; col < board[row].length; ++col) {
-            if (board[row][col]?.active) {
-                active.push(rowCol(row, col));
-            }
-        }
-    }
-
-    return active;
 }
 
 /** Return 'word indices' that included the input indices.

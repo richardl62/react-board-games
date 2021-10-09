@@ -1,8 +1,9 @@
 import { SquareID } from "game-support/deprecated/boards";
 import { useState } from "react";
 import { isLegalWord } from "shared/is-legal-word";
-import { findActiveLetters, findCandidateWords, RowCol } from "./find-candidate-words";
+import { findCandidateWords, RowCol } from "./find-candidate-words";
 import { getWord } from "./game-actions";
+import { BoardData } from "./game-data";
 import { Letter } from "./letters";
 import { scoreWords } from "./score-word";
 import { allLetterBonus } from "./scrabble-config";
@@ -18,6 +19,21 @@ interface WordsAndScore {
 
   /** For later convenience, use null rather than an empty array */
   illegalWords: string[] | null;
+}
+
+export function findActiveLetters(board: BoardData) : RowCol[] 
+{
+    const active: RowCol[] = [];
+
+    for (let row = 0; row < board.length; ++row) {
+        for (let col = 0; col < board[row].length; ++col) {
+            if (board[row][col]?.active) {
+                active.push({row: row, col: col});
+            }
+        }
+    }
+
+    return active;
 }
 
 function getWordsAndScore(scrabbleData: ScrabbleData, active: RowCol[]): WordsAndScore | null {
