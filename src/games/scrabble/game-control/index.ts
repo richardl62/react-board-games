@@ -5,5 +5,3 @@ export { bgioMoves } from "./bgio-moves";
 
 // KLUDGE? Should these exports be necessary?
 export { boardIDs, getWord, tilesOut } from "./game-actions";
-
-export type { Rack } from "./board-and-rack";

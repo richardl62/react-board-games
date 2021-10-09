@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { boardIDs, tilesOut } from "./game-control";
-import { ScrabbleData, Rack as RackType } from "./game-control";
+import { ScrabbleData } from "./game-control";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
+import { CoreTile } from "./core-tile";
 
 const StyledRackEtc = styled.div`
 display:inline-flex;
@@ -23,7 +24,7 @@ gap: 3%;
 
 interface RackProps {
   squareInteraction: SquareInteractionFunc;
-  rack: RackType;
+  rack: (CoreTile | null)[];
   swapTiles?: (toSwap: boolean[]) => void;
   scrabbleData: ScrabbleData;
 }
