@@ -1,12 +1,12 @@
-import { allLetterBonus } from "./scrabble-config";
+import { SquareID } from "game-support/deprecated/boards";
+import { useState } from "react";
+import { isLegalWord } from "shared/is-legal-word";
 import { findActiveLetters, findCandidateWords, RowCol } from "./find-candidate-words";
 import { getWord } from "./game-actions";
-import { scoreWords } from "./score-word";
-import { ScrabbleData } from "./scrabble-data";
-import { isLegalWord } from "./is-legal-word";
-import { useState } from "react";
 import { Letter } from "./letters";
-import { SquareID } from "game-support/deprecated/boards";
+import { scoreWords } from "./score-word";
+import { allLetterBonus } from "./scrabble-config";
+import { ScrabbleData } from "./scrabble-data";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();
