@@ -1,65 +1,11 @@
 import { SquareID } from "game-support/deprecated/boards";
 import { useState } from "react";
-import { isLegalWord } from "shared/is-legal-word";
-import { findCandidateWords, RowCol } from "./find-candidate-words";
-import { getWord } from "./game-control";
-import { BoardData } from "./game-data";
 import { Letter } from "./letters";
-import { scoreWords } from "./score-word";
-import { allLetterBonus } from "./scrabble-config";
-import { ScrabbleData } from "./game-control";
+import { ScrabbleData, getWordsAndScore, findActiveLetters } from "./game-control";
+
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();
-}
-
-interface WordsAndScore {
-  words: string[];
-  score: number;
-
-  /** For later convenience, use null rather than an empty array */
-  illegalWords: string[] | null;
-}
-
-export function findActiveLetters(board: BoardData) : RowCol[] 
-{
-    const active: RowCol[] = [];
-
-    for (let row = 0; row < board.length; ++row) {
-        for (let col = 0; col < board[row].length; ++col) {
-            if (board[row][col]?.active) {
-                active.push({row: row, col: col});
-            }
-        }
-    }
-
-    return active;
-}
-
-function getWordsAndScore(scrabbleData: ScrabbleData, active: RowCol[]): WordsAndScore | null {
-    const candidateWords = findCandidateWords(scrabbleData.board, active);
-
-    if (!candidateWords) {
-        return null;
-    }
-
-    const words = candidateWords.map(cw => getWord(scrabbleData.board, cw));
-  
-    let illegalWords : string[] | null = words.filter(wd => !isLegalWord(wd));
-    if(illegalWords.length === 0) {
-        illegalWords = null;
-    }
-
-    let score = scoreWords(scrabbleData.board, candidateWords, scrabbleData.config);
-    if (active.length === scrabbleData.config.rackSize) {
-        score += allLetterBonus;
-    }
-
-    return {
-        words: words,
-        illegalWords: illegalWords,
-        score: score,
-    };
 }
 
 export interface TurnControlData {
@@ -82,7 +28,7 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
   const [illegalWordsData, setIllegalWordsData] = useState<IllegalWordsData|null>(null);
   const [blankToSet, setBlankToSet] = useState<SquareID|null>(null);
 
-  const active = findActiveLetters(scrabbleData.board);
+  const active = findActiveLetters(scrabbleData);
   const wordsAndScore = getWordsAndScore(scrabbleData, active);
   const unsetBlank = scrabbleData.getUnsetBlack();
 

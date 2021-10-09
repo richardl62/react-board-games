@@ -1,5 +1,10 @@
 import { sAssert } from "shared/assert";
-import { BoardData, TileData } from "./game-data";
+import { isLegalWord } from "shared/is-legal-word";
+import { BoardData, TileData } from "../game-data";
+import { scoreWords } from "../score-word";
+import { allLetterBonus } from "../scrabble-config";
+import { getWord } from "./game-actions";
+import { ScrabbleData } from "./scrabble-data";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
@@ -150,11 +155,46 @@ function findCandidateWordsDirected(
  * 
  * null - The active letters are in invalid positions (e.g. they don't form all part of the same word).
 */
-export function findCandidateWords(
+function findCandidateWords(
     board: BoardData,
     active: RowCol[],
 ): RowCol[][] | null {
 
     return findCandidateWordsDirected(board, active, "row") ||
         findCandidateWordsDirected(board, active, "col");
+}
+
+
+interface WordsAndScore {
+    words: string[];
+    score: number;
+  
+    /** For later convenience, use null rather than an empty array */
+    illegalWords: string[] | null;
+  }
+
+export function getWordsAndScore(scrabbleData: ScrabbleData, active: RowCol[]): WordsAndScore | null {
+    const candidateWords = findCandidateWords(scrabbleData.board, active);
+
+    if (!candidateWords) {
+        return null;
+    }
+
+    const words = candidateWords.map(cw => getWord(scrabbleData.board, cw));
+  
+    let illegalWords : string[] | null = words.filter(wd => !isLegalWord(wd));
+    if(illegalWords.length === 0) {
+        illegalWords = null;
+    }
+
+    let score = scoreWords(scrabbleData.board, candidateWords, scrabbleData.config);
+    if (active.length === scrabbleData.config.rackSize) {
+        score += allLetterBonus;
+    }
+
+    return {
+        words: words,
+        illegalWords: illegalWords,
+        score: score,
+    };
 }

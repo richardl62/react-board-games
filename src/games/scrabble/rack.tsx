@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
-import { boardIDs, tilesOut } from "./game-control";
+import { boardIDs } from "./game-control";
 import { ScrabbleData } from "./game-control";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
@@ -31,7 +31,7 @@ interface RackProps {
 
 export function RackEtc(props: RackProps): JSX.Element {
     const {squareInteraction, swapTiles, scrabbleData } = props;
-    const hasTilesOut = tilesOut(scrabbleData.board);
+    const hasTilesOut = scrabbleData.tilesOut();
     const coreTiles = props.rack;
     const nTiles = coreTiles.length;
 

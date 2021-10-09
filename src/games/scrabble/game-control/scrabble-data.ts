@@ -89,10 +89,22 @@ export class ScrabbleData {
     get nTilesInBag() : number {
         return this.bag.length;
     }
+
+    /** 
+    * Report whether there are active tiles on the board.
+    * 
+    * Active tiles are those taken from the rack. 
+    *
+    * Note: For most of the game this is equivalent to checking if the rank has 
+    * gaps. But difference can occur at the end of the game when the bag is emtpy.
+    */
+    tilesOut(): boolean {
+        return !!this.board.find(row => row.find(sq => sq?.active));
+    }
+
     /** Limited use only 
      * Intened for use when using non-scrabble-specific utilities.
      */
-
     getProps() : ScrabbleBoardProps {
         return this.props;
     }

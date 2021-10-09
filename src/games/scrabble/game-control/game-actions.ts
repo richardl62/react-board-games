@@ -1,7 +1,7 @@
 import { SquareID } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { GameData, BoardData } from "../game-data";
-import { RowCol } from "../find-candidate-words";
+import { RowCol } from "./get-words-and-score";
 import { CoreTile, makeCoreTile } from "../core-tile";
 import { blank } from "../letters";
 
@@ -30,18 +30,6 @@ export function onRack(sq: SquareID | null): boolean {
     sAssert(sanityCheck(sq));
 
     return sq.boardID === boardIDs.rack;
-}
-
-/** 
-* Report whether there are active tiles on the board.
-* 
-* Active tiles are those taken from the rack. 
-*
-* Note: For most of the game this is equivalent to checking if the rank has 
-* gaps. But difference can occur at the end of the game when the bag is emtpy.
-*/
-export function tilesOut(board: BoardData) : boolean {
-    return !!board.find(row => row.find(sq=>sq?.active));
 }
 
 export function getWord(
