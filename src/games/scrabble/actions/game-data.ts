@@ -1,4 +1,3 @@
-import { Ctx } from "boardgame.io";
 import { sAssert } from "shared/assert";
 import { nestedArrayMap } from "shared/tools";
 import { ScrabbleConfig } from "../scrabble-config";
@@ -46,7 +45,7 @@ export function isGameData(arg: unknown) : boolean {
         typeof gd.turn === "number";
 }
 
-export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
+export function startingGameData(numPlayers: number, config: ScrabbleConfig): GameData {
     const bag = config.makeFullBag(); 
 
     const rack = () => {
@@ -61,7 +60,7 @@ export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
     };
 
     const playerData: PlayerDataDictionary = {};
-    for (let p = 0; p < ctx.numPlayers; ++p) {
+    for (let p = 0; p < numPlayers; ++p) {
         const playerID = p.toString(); //Kludge?
         playerData[playerID] = {
             playableTiles: rack(),

@@ -2,9 +2,9 @@ import { Ctx } from "boardgame.io";
 import React from "react";
 import { AppBoardProps } from "shared/app-board-props";
 import { AppGame } from "shared/types";
+import { bgioMoves, startingGameData, useActions } from "./actions";
 import { Board } from "./board";
-import { bgioMoves, useActions, startingGameData } from "./actions";
-import { ScrabbleConfig } from "./scrabble-config";
+import { configs, ScrabbleConfig } from "./scrabble-config";
 
 interface BoardWrapperProps {
     appBoardProps: AppBoardProps;
@@ -16,7 +16,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     return <Board actions={actions} />;
 }
 
-export function makeAppGame(config: ScrabbleConfig) : AppGame
+function makeAppGame(config: ScrabbleConfig) : AppGame
 {
     return {
         ...config,
@@ -30,3 +30,6 @@ export function makeAppGame(config: ScrabbleConfig) : AppGame
         />
     };
 }
+
+const games = configs.map(makeAppGame);
+export default games;
