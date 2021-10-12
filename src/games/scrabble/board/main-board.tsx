@@ -2,30 +2,25 @@ import React from "react";
 import { Board, makeBoardProps, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { nestedArrayMap } from "shared/tools";
 // KLUDGE? Should importing boardIDs be necessary?
-import { boardIDs } from "../game-control";
-import { ScrabbleConfig } from "../scrabble-config";
+import { Actions, boardIDs } from "../game-control";
 import { scrabbleSquareBackground, squareSize } from "./style";
 import { Tile } from "./tile";
-import { BoardData } from "../game-data";
 
 interface MainBoardProps {
-  squareInteraction: SquareInteractionFunc;
-  board: BoardData;
-  config: ScrabbleConfig;
+    actions: Actions;
+    squareInteraction: SquareInteractionFunc;
 }
 
+export function MainBoard({ actions, squareInteraction }: MainBoardProps): JSX.Element {
 
-
-export function MainBoard({ board, squareInteraction, config }: MainBoardProps): JSX.Element {
-
-    const tiles = nestedArrayMap(board, sd => {
+    const tiles = nestedArrayMap(actions.board, sd => {
         if (!sd) return null;
         const markAsMoveable = sd.active;
         return <Tile tile={sd} markAsMoveable={markAsMoveable} />;
     });
 
     const squareColors = nestedArrayMap(
-        config.boardLayout,
+        actions.config.boardLayout,
         scrabbleSquareBackground
     );
 

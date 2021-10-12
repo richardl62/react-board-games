@@ -9,12 +9,9 @@ import { sAssert } from "shared/assert";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
-import { useActions } from "../game-control";
+import { Actions } from "../game-control";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
-import { ScrabbleConfig } from "../scrabble-config";
-import { AppBoardProps } from "shared/app-board-props";
-import { GameData } from "../game-data";
 
 const SpaceBetween = styled.div`
   display: flex;
@@ -28,11 +25,10 @@ const Game = styled.div`
 
 
 interface ScrabbleBoardProps {
-    appBoardProps: AppBoardProps<GameData>;
-    config: ScrabbleConfig;
+    actions: Actions;
 }  
-export function ScrabbleBoard(props: ScrabbleBoardProps): JSX.Element {
-    const actions = useActions(props.appBoardProps, props.config);
+export function ScrabbleBoard({actions}: ScrabbleBoardProps): JSX.Element {
+
     const handleError = useErrorHandler();
 
     const moveFunctions = {
@@ -75,8 +71,7 @@ export function ScrabbleBoard(props: ScrabbleBoardProps): JSX.Element {
                 />
                 <MainBoard
                     squareInteraction={squareInteraction}
-                    board={actions.board}
-                    config={actions.config}
+                    actions={actions}
                 />
                 <SpaceBetween>
                     <WordChecker/>
