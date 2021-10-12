@@ -1,4 +1,4 @@
-import { blank, Letter, letterScore } from "../letters";
+import { blank, Letter, letterScore } from "../config";
 
 /**
  * letter: Letter to display. Also used to check for valid words.

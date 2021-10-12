@@ -2,7 +2,7 @@ import { sAssert } from "shared/assert";
 import { isLegalWord } from "shared/is-legal-word";
 import { BoardData, TileData } from "./game-data";
 import { scoreWords } from "./score-word";
-import { allLetterBonus } from "../scrabble-config";
+import { allLetterBonus } from "../config";
 import { getWord } from "./game-actions";
 import { Actions } from "./actions";
 

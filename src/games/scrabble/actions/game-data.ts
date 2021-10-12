@@ -1,8 +1,8 @@
 import { sAssert } from "shared/assert";
 import { nestedArrayMap } from "shared/tools";
-import { ScrabbleConfig } from "../scrabble-config";
-import { Letter } from "../letters";
-import { CoreTile } from "./core-tile";
+import { ScrabbleConfig } from "../config";
+import { Letter } from "../config";
+import { CoreTile, makeCoreTile } from "./core-tile";
 
 export interface TileData extends CoreTile {
 
@@ -46,7 +46,7 @@ export function isGameData(arg: unknown) : boolean {
 }
 
 export function startingGameData(numPlayers: number, config: ScrabbleConfig): GameData {
-    const bag = config.makeFullBag(); 
+    const bag = config.makeFullBag().map(makeCoreTile); 
 
     const rack = () => {
         const tiles : CoreTile[] = [];

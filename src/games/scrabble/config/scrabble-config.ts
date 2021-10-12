@@ -1,6 +1,5 @@
 import { sAssert } from "shared/assert";
 import { shuffle } from "shared/tools";
-import { CoreTile, makeCoreTile } from "./actions/core-tile";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 
@@ -12,7 +11,6 @@ const T = SquareType.tripleWord;
 const d = SquareType.doubleLetter;
 const t = SquareType.tripleLetter;
 const s = SquareType.simple;
-
 
 export interface ScrabbleConfig {
     name: string,
@@ -27,7 +25,7 @@ export interface ScrabbleConfig {
      * The bag in always shuffled after an exchange of tile (even when
      * this would be unhelpful for testing.)  Aug 2021
      */
-    makeFullBag : () => CoreTile[];
+    makeFullBag : () => Letter[];
     boardLayout: SquareType[][];
     rackSize: number;
 }
@@ -39,8 +37,8 @@ const standard : ScrabbleConfig = {
     minPlayers: 1,
     maxPlayers: 4, 
 
-    makeFullBag() : CoreTile[] {
-        return shuffle(standardLetterSet.map(makeCoreTile));
+    makeFullBag() : Letter[] {
+        return shuffle([...standardLetterSet]);
     },
 
     boardLayout: [
@@ -77,12 +75,13 @@ const simple: ScrabbleConfig = {
     maxPlayers: 4,
     rackSize: 4,
 
-    makeFullBag: () : CoreTile[] => {
+    makeFullBag: () : Letter[] => {
         // Unshuffled to help with testing
         const letters : Letter[] = ["A", "B", "C", "?", 
             "D",  "E", "F", "?", 
             "G", "H", "I", "J"];
-        return letters.map(makeCoreTile).reverse();
+
+        return letters.reverse();
     },
 
     boardLayout: [

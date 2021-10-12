@@ -1,4 +1,3 @@
-
 export enum SquareType {
     doubleWord,
     tripleWord,

@@ -4,7 +4,7 @@ import { AppBoardProps } from "shared/app-board-props";
 import { AppGame } from "shared/types";
 import { bgioMoves, startingGameData, useActions } from "./actions";
 import { Board } from "./board";
-import { configs, ScrabbleConfig } from "./scrabble-config";
+import { configs, ScrabbleConfig } from "./config";
 
 interface BoardWrapperProps {
     appBoardProps: AppBoardProps;

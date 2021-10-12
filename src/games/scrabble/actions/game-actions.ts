@@ -3,7 +3,7 @@ import { sAssert } from "shared/assert";
 import { GameData, BoardData } from "./game-data";
 import { RowCol } from "./get-words-and-score";
 import { CoreTile, makeCoreTile } from "./core-tile";
-import { blank } from "../letters";
+import { blank } from "../config";
 
 type Rack = (CoreTile|null)[];
 export const boardIDs = {

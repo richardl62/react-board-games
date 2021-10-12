@@ -1,5 +1,5 @@
 import { SquareBackgroundProps } from "game-support/deprecated/boards";
-import { SquareType } from "../square-type";
+import { SquareType } from "../config";
 
 export const squareSize = "30px";
 

@@ -1,7 +1,7 @@
 import { sAssert } from "shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData } from "./game-data";
-import { blank } from "../letters";
+import { blank } from "../config";
 
 export type Rack = (CoreTile | null)[];
 

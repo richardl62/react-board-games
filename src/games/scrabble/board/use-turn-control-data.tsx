@@ -1,6 +1,6 @@
 import { SquareID } from "game-support/deprecated/boards";
 import { useState } from "react";
-import { Letter } from "../letters";
+import { Letter } from "../config";
 import { Actions, getWordsAndScore, findActiveLetters } from "../actions";
 
 
