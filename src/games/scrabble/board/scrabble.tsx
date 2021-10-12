@@ -9,10 +9,12 @@ import { sAssert } from "shared/assert";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
-import { ScrabbleBoardProps } from "../scrabble-board-props";
 import { useScrabbleData } from "../game-control";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
+import { ScrabbleConfig } from "../scrabble-config";
+import { AppBoardProps } from "shared/app-board-props";
+import { GameData } from "../game-data";
 
 const SpaceBetween = styled.div`
   display: flex;
@@ -24,9 +26,13 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-  
-export function ScrabbleBoard(props_: ScrabbleBoardProps): JSX.Element {
-    const scrabbleData = useScrabbleData(props_);
+
+interface ScrabbleBoardProps {
+    appBoardProps: AppBoardProps<GameData>;
+    config: ScrabbleConfig;
+}  
+export function ScrabbleBoard(props: ScrabbleBoardProps): JSX.Element {
+    const scrabbleData = useScrabbleData(props.appBoardProps, props.config);
     const handleError = useErrorHandler();
 
     const moveFunctions = {

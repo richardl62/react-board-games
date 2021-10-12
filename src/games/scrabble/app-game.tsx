@@ -17,7 +17,7 @@ export function makeAppGame(config: ScrabbleConfig) : AppGame
         moves: bgioMoves,
   
         board: (props: AppBoardProps<GameData>) => <Board
-            {...props} config={config}
+            appBoardProps={props} config={config}
         />
     };
 }

@@ -5,11 +5,11 @@ import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
-import { BoardData } from "../game-data";
-import { ScrabbleBoardProps } from "../scrabble-board-props";
+import { BoardData, GameData } from "../game-data";
 import { CoreTile } from "../core-tile";
 import { blank, Letter } from "../letters";
 import { ScrabbleConfig } from "../scrabble-config";
+import { AppBoardProps } from "shared/app-board-props";
 
 export type { Rack };
 
@@ -28,13 +28,15 @@ function tilePosition(sq: SquareID) : TilePosition {
  */
 export class ScrabbleData {
     constructor(
-        props: ScrabbleBoardProps, 
+        props: AppBoardProps<GameData>, 
+        config: ScrabbleConfig,
         boardState: UseStateResult<BoardData>,
         rackState: UseStateResult<Rack>,
     ) {
 
         sAssert(props.playerID);
         this.props = props;
+        this.config = config;
         this.boardState = boardState;
         this.rackState = rackState;
 
@@ -42,7 +44,8 @@ export class ScrabbleData {
         this.bag = [...props.G.bag];
     }
 
-    private readonly props: ScrabbleBoardProps;
+    private readonly props: AppBoardProps<GameData>;
+    readonly config: ScrabbleConfig;
     private readonly boardState: UseStateResult<BoardData>;
     private readonly rackState: UseStateResult<Rack>;
     private boardAndRack: BoardAndRack;
@@ -78,10 +81,6 @@ export class ScrabbleData {
         return this.props.allJoined;
     }
 
-    get config() : ScrabbleConfig {
-        return this.props.config;
-    }
-
     get isMyTurn() : boolean {
         return this.props.playerID === this.currentPlayer;
     } 
@@ -105,7 +104,7 @@ export class ScrabbleData {
     /** Limited use only 
      * Intened for use when using non-scrabble-specific utilities.
      */
-    getProps() : ScrabbleBoardProps {
+    getProps() : AppBoardProps<GameData> {
         return this.props;
     }
 
@@ -238,7 +237,7 @@ export class ScrabbleData {
     }
 }
 
-export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData {
+export function useScrabbleData(props: AppBoardProps<GameData>, config: ScrabbleConfig) : ScrabbleData {
     sAssert(props.playerID);
     const playableTiles = props.G.playerData[props.playerID].playableTiles;
 
@@ -250,5 +249,5 @@ export function useScrabbleData(props: ScrabbleBoardProps) : ScrabbleData {
         rackState[1](playableTiles);
     }, [props.G.board, playableTiles]);
 
-    return new ScrabbleData(props, boardState, rackState);
+    return new ScrabbleData(props, config, boardState, rackState);
 }
