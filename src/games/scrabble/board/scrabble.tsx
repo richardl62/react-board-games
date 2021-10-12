@@ -9,7 +9,7 @@ import { sAssert } from "shared/assert";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
-import { Actions } from "../game-control";
+import { Actions } from "../actions";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 

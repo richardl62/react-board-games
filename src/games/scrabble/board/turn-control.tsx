@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { LetterSelector } from "./letter-selector";
-import { Actions } from "../game-control";
+import { Actions } from "../actions";
 import { useTurnControlData } from "./use-turn-control-data";
 
 export const StyledScoreLine = styled.div`

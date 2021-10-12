@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "game-support/show-warning";
-import { Actions } from "../game-control";
+import { Actions } from "../actions";
 
 const StyledScoresEtc=styled.div`
     display: flex;
