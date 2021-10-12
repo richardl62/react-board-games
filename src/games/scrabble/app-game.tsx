@@ -3,13 +3,12 @@ import React from "react";
 import { AppBoardProps } from "shared/app-board-props";
 import { AppGame } from "shared/types";
 import { Board } from "./board";
-import { bgioMoves, useActions } from "./game-control";
-import { GameData, startingGameData } from "./game-data";
+import { bgioMoves, useActions, GameData, startingGameData } from "./game-control";
 import { ScrabbleConfig } from "./scrabble-config";
 
 interface BoardWrapperProps {
     appBoardProps: AppBoardProps<GameData>;
-    config: ScrabbleConfig;
+    config: ScrabbleConfig
 }
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {

@@ -1,7 +1,7 @@
 
 import { sAssert } from "shared/assert";
 import { tileScore } from "../core-tile";
-import { BoardData } from "../game-data";
+import { BoardData } from "./game-data";
 import { ScrabbleConfig } from "../scrabble-config";
 import { multipliers } from "../square-type";
 

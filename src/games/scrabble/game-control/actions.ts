@@ -5,7 +5,7 @@ import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
-import { BoardData, GameData } from "../game-data";
+import { BoardData, GameData } from "./game-data";
 import { CoreTile } from "../core-tile";
 import { blank, Letter } from "../letters";
 import { ScrabbleConfig } from "../scrabble-config";
