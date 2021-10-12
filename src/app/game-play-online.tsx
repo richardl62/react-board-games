@@ -3,7 +3,7 @@ import { Client, BoardProps as BgioBoardProps } from "boardgame.io/react";
 import { SocketIO } from "boardgame.io/multiplayer";
 import { MatchID, Player, AppGame } from "shared/types";
 import * as UrlParams from "./url-params";
-import { makeBoardProps } from "shared/board-props";
+import { makeAppBoardProps } from "shared/app-board-props";
 
 interface GamePlayOnlineProps {
   game: AppGame;
@@ -20,7 +20,7 @@ export function GamePlayOnline({ game, matchID, player }: GamePlayOnlineProps): 
 
     const GameClient = Client({
         game: game,
-        board: (props: BgioBoardProps) => game.board(makeBoardProps(props)),
+        board: (props: BgioBoardProps) => game.board(makeAppBoardProps(props)),
         multiplayer: SocketIO({ server: server }),
 
         //numPlayers: matchOptions.nPlayers, - is this needed for multi-player and if so why?

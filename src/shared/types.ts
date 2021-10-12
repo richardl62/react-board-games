@@ -1,8 +1,8 @@
 import { Game } from "boardgame.io";
-import { BoardProps } from "./board-props";
-export type { BoardProps };
+import { AppBoardProps } from "./app-board-props";
+export type { AppBoardProps as BoardProps };
 
-export type MatchData = BoardProps["matchData"];
+export type MatchData = AppBoardProps["matchData"];
 
 export interface Player {
   id: string;
@@ -25,5 +25,5 @@ export interface AppGame<G = any> extends Game<G> {
 
   minPlayers: number,
   maxPlayers: number,
-  board: (props: BoardProps<G>) => JSX.Element;
+  board: (props: AppBoardProps<G>) => JSX.Element;
 }

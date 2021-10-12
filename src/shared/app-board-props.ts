@@ -1,21 +1,16 @@
 // NOTE/KLUDGE:  The matchData type supplied by boardgames.io seems not have
 // isConnected as an optional member. The code below is my way of add it.
 
-import { BoardProps as BgioBoardProps } from "./bgio-types";
+import { BoardProps } from "./bgio-types";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
-
-// 'G extends any = any' is copied from BoardProps. I don't see why it is better than 'any'.
-/**
- * This BoardProps is an extention of BgioBoardProps Bgio BoardProps.
- */
-export interface BoardProps<G=unknown> extends BgioBoardProps<G> {
+export interface AppBoardProps<G=unknown> extends BoardProps<G> {
   playerData: PlayerDataDictionary;
   allJoined: boolean;
   allReady: boolean;
 }
 
-export function makeBoardProps<G>(bgioProps: BgioBoardProps<G>): BoardProps<G> {
+export function makeAppBoardProps<G>(bgioProps: BoardProps<G>): AppBoardProps<G> {
 
     const playerData = makePlayerData(bgioProps);
 
