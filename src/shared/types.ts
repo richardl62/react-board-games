@@ -1,6 +1,5 @@
 import { Game } from "boardgame.io";
 import { AppBoardProps } from "./app-board-props";
-export type { AppBoardProps as BoardProps };
 
 export type MatchData = AppBoardProps["matchData"];
 
