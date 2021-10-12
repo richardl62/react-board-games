@@ -36,6 +36,15 @@ export interface GameData {
     turn: number;
 }
 
+/** Quick check that an object is (probably) a GameData. */
+export function isGameData(arg: unknown) : boolean {
+    const gd = arg as GameData;
+    return typeof gd === "object" && 
+        typeof gd.board === "object" &&
+        typeof gd.playerData === "object" &&
+        typeof gd.bag === "object" &&
+        typeof gd.turn === "number";
+}
 
 export function startingGameData(ctx: Ctx, config: ScrabbleConfig): GameData {
     const bag = config.makeFullBag(); 

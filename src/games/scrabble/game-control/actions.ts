@@ -5,7 +5,7 @@ import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
-import { BoardData, GameData } from "./game-data";
+import { BoardData, GameData, isGameData } from "./game-data";
 import { CoreTile } from "../core-tile";
 import { blank, Letter } from "../letters";
 import { ScrabbleConfig } from "../scrabble-config";
@@ -235,9 +235,17 @@ export class Actions {
     }
 }
 
-export function useActions(props: AppBoardProps<GameData>, config: ScrabbleConfig) : Actions {
-    sAssert(props.playerID);
-    const playableTiles = props.G.playerData[props.playerID].playableTiles;
+export function useActions(props_: 
+    AppBoardProps, config: ScrabbleConfig) : Actions 
+{
+    const props = props_ as AppBoardProps<GameData>;
+    sAssert(isGameData(props.G));
+
+    const playerID = props.playerID;
+    sAssert(playerID); // KLUDGE? - Not sure when it can be null.
+
+    // KLUDGE: Why is props_ needed here.
+    const playableTiles = props.G.playerData[playerID].playableTiles;
 
     const boardState = useState<BoardData>([[]] /*KLUDGE: Any empty array, e.g. [], gives crashes*/);
     const rackState = useState<Rack>([]);

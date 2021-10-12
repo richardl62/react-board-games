@@ -3,11 +3,11 @@ import React from "react";
 import { AppBoardProps } from "shared/app-board-props";
 import { AppGame } from "shared/types";
 import { Board } from "./board";
-import { bgioMoves, useActions, GameData, startingGameData } from "./game-control";
+import { bgioMoves, useActions, startingGameData } from "./game-control";
 import { ScrabbleConfig } from "./scrabble-config";
 
 interface BoardWrapperProps {
-    appBoardProps: AppBoardProps<GameData>;
+    appBoardProps: AppBoardProps;
     config: ScrabbleConfig
 }
 
@@ -25,7 +25,7 @@ export function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: AppBoardProps<GameData>) => <BoardWrapper
+        board: (props: AppBoardProps) => <BoardWrapper
             appBoardProps={props} config={config}
         />
     };
