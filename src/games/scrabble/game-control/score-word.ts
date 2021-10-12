@@ -1,16 +1,16 @@
 
 import { sAssert } from "shared/assert";
-import { tileScore } from "./core-tile";
-import { BoardData } from "./game-data";
-import { ScrabbleConfig } from "./scrabble-config";
-import { multipliers } from "./square-type";
+import { tileScore } from "../core-tile";
+import { BoardData } from "../game-data";
+import { ScrabbleConfig } from "../scrabble-config";
+import { multipliers } from "../square-type";
 
 interface RowCol {
     row: number;
     col: number;
 }
 
-export function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: ScrabbleConfig): number {
+function scoreWord(board: BoardData, word: RowCol[], scrabbleConfig: ScrabbleConfig): number {
     let score = 0;
     let wordMult = 1;
 
