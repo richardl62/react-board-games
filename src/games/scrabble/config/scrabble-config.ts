@@ -3,9 +3,6 @@ import { shuffle } from "shared/tools";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 
-// KLUDGE: See comment on letterScores
-export const allLetterBonus = 50;
-
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;
 const d = SquareType.doubleLetter;
@@ -28,8 +25,9 @@ export interface ScrabbleConfig {
     makeFullBag : () => Letter[];
     boardLayout: SquareType[][];
     rackSize: number;
-}
 
+    allLetterBonus: number,
+}
 
 const standard : ScrabbleConfig = {
     name: "scrabble",
@@ -60,6 +58,8 @@ const standard : ScrabbleConfig = {
     ],
 
     rackSize: 7,
+
+    allLetterBonus: 50,
 };
 Object.freeze(standard);
 
@@ -80,7 +80,7 @@ const simple: ScrabbleConfig = {
         const letters : Letter[] = ["A", "B", "C", "?", 
             "D",  "E", "F", "?", 
             "G", "H", "I", "J"];
-
+            
         return letters.reverse();
     },
 
@@ -93,6 +93,7 @@ const simple: ScrabbleConfig = {
 
     ],
 
+    allLetterBonus: 20,
 };
 Object.freeze(simple);
 
