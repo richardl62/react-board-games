@@ -1,6 +1,7 @@
 import React from "react";
+import { AppBoardProps } from "shared/app-board-props";
 import styled from "styled-components";
-import { BoardProps } from "shared/types";
+
 
 const WarningsDiv = styled.div`
     display: inline;
@@ -17,7 +18,7 @@ const WarningsDiv = styled.div`
 /** Show warnings, if any, about general (non-game-specifiy) issues.
  * Currently, this the only warning is players being off line.
  */
-export function GameWarnings(props: BoardProps): JSX.Element | null {
+export function GameWarnings(props: AppBoardProps): JSX.Element | null {
 
 
     const warnings: string[] = [];

@@ -2,8 +2,9 @@ import React from "react";
 import { BoarderedGrid } from "game-support/boardered-grid";
 import { DndProvider } from "game-support/drag-drop";
 import { DragDrop, PieceHolder } from "game-support/piece-holder";
-import { AppGame, BoardProps } from "shared/types";
+import { AppGame } from "shared/types";
 import { Ctx } from "boardgame.io";
+import { AppBoardProps } from "shared/app-board-props";
 
 interface G {
   squares: number[];
@@ -51,7 +52,7 @@ function Square(props: SquareProps) : JSX.Element {
     </PieceHolder>;  
 }
 
-function SwapSquares({ G, moves }: BoardProps<G>): JSX.Element {
+function SwapSquares({ G, moves }: AppBoardProps<G>): JSX.Element {
     const onReset = () => {
         moves.reset();
     };

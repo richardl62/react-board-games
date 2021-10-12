@@ -1,9 +1,10 @@
-import React from "react";
 import { Ctx } from "boardgame.io";
-import { AppGame, BoardProps } from "shared/types";
+import React from "react";
+import { AppBoardProps } from "shared/app-board-props";
+import { AppGame } from "shared/types";
+import { Board } from "./board";
 import { bgioMoves } from "./game-control";
 import { GameData, startingGameData } from "./game-data";
-import { Board } from "./board";
 import { ScrabbleConfig } from "./scrabble-config";
 
 export function makeAppGame(config: ScrabbleConfig) : AppGame
@@ -15,7 +16,7 @@ export function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: BoardProps<GameData>) => <Board
+        board: (props: AppBoardProps<GameData>) => <Board
             {...props} config={config}
         />
     };

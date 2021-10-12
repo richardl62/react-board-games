@@ -1,9 +1,10 @@
 import React from "react";
 import { Ctx } from "boardgame.io";
 import { GameWarnings } from "game-support/show-warning";
-import { AppGame, BoardProps } from "shared/types";
+import { AppGame } from "shared/types";
 import styled from "styled-components";
 import { WaitingForPlayers } from "game-support/waiting-for-players";
+import { AppBoardProps } from "shared/app-board-props";
 
 // Needlessly complex to help with testing. (Hmm, that seems to be contradict itself.)
 interface G {
@@ -17,7 +18,7 @@ interface G {
 const Name = styled.span<{ toPlay: boolean }>`
   text-decoration: ${props => props.toPlay ? "underline" : "none"}
 `;
-function PlayerData(props: BoardProps<G>) {
+function PlayerData(props: AppBoardProps<G>) {
     const playerSpan = (id: string) => {
         const { status, name } = props.playerData[id];
         const isActive = id === props.playerID;
@@ -41,7 +42,7 @@ function PlayerData(props: BoardProps<G>) {
     </div>;
 }
 
-function Board(props: BoardProps<G>): JSX.Element {
+function Board(props: AppBoardProps<G>): JSX.Element {
 
     if (!props.allJoined) {
         return <WaitingForPlayers {...props} />;
