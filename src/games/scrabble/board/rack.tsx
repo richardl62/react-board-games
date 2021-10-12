@@ -6,7 +6,7 @@ import { boardIDs } from "../actions";
 import { Actions } from "../actions";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
-import { CoreTile } from "../core-tile";
+import { CoreTile } from "../actions";
 
 const StyledRackEtc = styled.div`
 display:inline-flex;
