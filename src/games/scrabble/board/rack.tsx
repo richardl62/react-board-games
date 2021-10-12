@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { boardIDs } from "../game-control";
-import { ScrabbleData } from "../game-control";
+import { Actions } from "../game-control";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 import { CoreTile } from "../core-tile";
@@ -26,12 +26,12 @@ interface RackProps {
   squareInteraction: SquareInteractionFunc;
   rack: (CoreTile | null)[];
   swapTiles?: (toSwap: boolean[]) => void;
-  scrabbleData: ScrabbleData;
+  actions: Actions;
 }
 
 export function RackEtc(props: RackProps): JSX.Element {
-    const {squareInteraction, swapTiles, scrabbleData } = props;
-    const hasTilesOut = scrabbleData.tilesOut();
+    const {squareInteraction, swapTiles, actions } = props;
+    const hasTilesOut = actions.tilesOut();
     const coreTiles = props.rack;
     const nTiles = coreTiles.length;
 
@@ -99,15 +99,15 @@ export function RackEtc(props: RackProps): JSX.Element {
 
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
-            scrabbleData.recallRack();
+            actions.recallRack();
             setSelectedForSwap(Array(nTiles).fill(false));
         };
 
         return (<StyledRackEtc>
             <PreRack>
-                {hasTilesOut && <button onClick={() => scrabbleData.recallRack()}>Recall</button>}
+                {hasTilesOut && <button onClick={() => actions.recallRack()}>Recall</button>}
                 <button
-                    onClick={() => scrabbleData.shuffleRack()}
+                    onClick={() => actions.shuffleRack()}
                 >
           Shuffle
                 </button>
@@ -115,7 +115,7 @@ export function RackEtc(props: RackProps): JSX.Element {
 
             <Board {...boardProps} />
 
-            {scrabbleData.isMyTurn && 
+            {actions.isMyTurn && 
         <button 
             onClick={doEnableSwap}
             disabled={!swapTiles}

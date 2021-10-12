@@ -1,7 +1,7 @@
 import { SquareID } from "game-support/deprecated/boards";
 import { useState } from "react";
 import { Letter } from "../letters";
-import { ScrabbleData, getWordsAndScore, findActiveLetters } from "../game-control";
+import { Actions, getWordsAndScore, findActiveLetters } from "../game-control";
 
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
@@ -20,7 +20,7 @@ export interface TurnControlData {
 }
 
 
-export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData {
+export function useTurnControlData(actions: Actions): TurnControlData {
   interface IllegalWordsData {
     illegal: string[]; // Words to report
     all: string[]; // All words at time illegal words were recorded.
@@ -28,9 +28,9 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
   const [illegalWordsData, setIllegalWordsData] = useState<IllegalWordsData|null>(null);
   const [blankToSet, setBlankToSet] = useState<SquareID|null>(null);
 
-  const active = findActiveLetters(scrabbleData);
-  const wordsAndScore = getWordsAndScore(scrabbleData, active);
-  const unsetBlank = scrabbleData.getUnsetBlack();
+  const active = findActiveLetters(actions);
+  const wordsAndScore = getWordsAndScore(actions, active);
+  const unsetBlank = actions.getUnsetBlack();
 
   if(illegalWordsData) {
       // Clear the illegalWord
@@ -39,9 +39,9 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
       } 
   }
 
-  if (active.length === 0 && scrabbleData.isMyTurn) {
+  if (active.length === 0 && actions.isMyTurn) {
       return {
-          onPass: () => scrabbleData.endTurn(0),
+          onPass: () => actions.endTurn(0),
       };
   } else if (!wordsAndScore) {
       return {
@@ -66,14 +66,14 @@ export function useTurnControlData(scrabbleData: ScrabbleData): TurnControlData 
 
       if(blankToSet) {
           result.doSetBlank = (l: Letter) => {
-              scrabbleData.setBlank(blankToSet, l);
+              actions.setBlank(blankToSet, l);
               setBlankToSet(null);
           };
       }
 
-      if(scrabbleData.isMyTurn && !unsetBlank) {
+      if(actions.isMyTurn && !unsetBlank) {
           const uncheckedDone = () => {
-              scrabbleData.endTurn(score);
+              actions.endTurn(score);
               setIllegalWordsData(null);
           };
 

@@ -9,7 +9,7 @@ import { sAssert } from "shared/assert";
 import { MainBoard } from "./main-board";
 import { RackEtc } from "./rack";
 import { ScoresEtc } from "./scores-etc";
-import { useScrabbleData } from "../game-control";
+import { useActions } from "../game-control";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 import { ScrabbleConfig } from "../scrabble-config";
@@ -32,7 +32,7 @@ interface ScrabbleBoardProps {
     config: ScrabbleConfig;
 }  
 export function ScrabbleBoard(props: ScrabbleBoardProps): JSX.Element {
-    const scrabbleData = useScrabbleData(props.appBoardProps, props.config);
+    const actions = useActions(props.appBoardProps, props.config);
     const handleError = useErrorHandler();
 
     const moveFunctions = {
@@ -40,52 +40,52 @@ export function ScrabbleBoard(props: ScrabbleBoardProps): JSX.Element {
         onMoveEnd: (from: SquareID, to: SquareID | null)=> {
             if (to) {
                 try {
-                    scrabbleData.move({from: from, to: to});
+                    actions.move({from: from, to: to});
                 } catch(error) {
                     handleError(error);
                 }
             }
         },
 
-        dragType: (sq: SquareID) => scrabbleData.canMove(sq) ? DragType.move : DragType.disable,
+        dragType: (sq: SquareID) => actions.canMove(sq) ? DragType.move : DragType.disable,
     };
 
     const squareInteraction = squareInteractionFunc(moveFunctions);
 
-    if(!scrabbleData.allJoined) {
-        <WaitingForPlayers {...scrabbleData.getProps()} />;
+    if(!actions.allJoined) {
+        <WaitingForPlayers {...actions.getProps()} />;
     }
 
-    const allowSwapping = scrabbleData.nTilesInBag >= scrabbleData.config.rackSize;
+    const allowSwapping = actions.nTilesInBag >= actions.config.rackSize;
     const doSwapTiles = (toSwap: boolean[]) => {
         sAssert(allowSwapping);
-        scrabbleData.swapTiles(toSwap);
-        scrabbleData.endTurn(0);
+        actions.swapTiles(toSwap);
+        actions.endTurn(0);
     };
 
     return (
         <DndProvider backend={HTML5Backend}>
             <Game>
-                <ScoresEtc scrabbleData={scrabbleData} />
+                <ScoresEtc actions={actions} />
                 <RackEtc
                     squareInteraction={squareInteraction}
-                    rack={scrabbleData.rack}
+                    rack={actions.rack}
                     swapTiles={allowSwapping ? doSwapTiles : undefined}
-                    scrabbleData={scrabbleData}
+                    actions={actions}
                 />
                 <MainBoard
                     squareInteraction={squareInteraction}
-                    board={scrabbleData.board}
-                    config={scrabbleData.config}
+                    board={actions.board}
+                    config={actions.config}
                 />
                 <SpaceBetween>
                     <WordChecker/>
                     <div>
-            Tiles in bag: <span>{scrabbleData.nTilesInBag}</span>
+            Tiles in bag: <span>{actions.nTilesInBag}</span>
                     </div>
                 </SpaceBetween>
 
-                <TurnControl scrabbleData={scrabbleData}/>
+                <TurnControl actions={actions}/>
             </Game>
         </DndProvider>
     );

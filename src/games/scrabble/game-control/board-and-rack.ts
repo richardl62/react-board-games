@@ -49,7 +49,7 @@ function moveTilesDown(rack: Rack, posToClear: number): boolean {
 
 
 /** 
- * BoardAndRack is a helper class for ScrabbleData.  It provides function to update 
+ * BoardAndRack is a helper class for Actions.  It provides function to update 
  * (wait for it) a board and rank. It does not know anything about setting state 
  * or calling Bgio.
 */

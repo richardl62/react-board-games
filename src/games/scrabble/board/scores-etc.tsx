@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "game-support/show-warning";
-import { ScrabbleData } from "../game-control";
+import { Actions } from "../game-control";
 
 const StyledScoresEtc=styled.div`
     display: flex;
@@ -14,19 +14,19 @@ const PlayerScore=styled.div<{current: boolean}>`
 `;
 
 // To do: Think of a better name
-export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}): JSX.Element {
+export function ScoresEtc({actions}: {actions: Actions}): JSX.Element {
 
 
-    const scoreElems = scrabbleData.playOrder.map(pid => {
-        const score = scrabbleData.score(pid);
-        const name = scrabbleData.name(pid);
+    const scoreElems = actions.playOrder.map(pid => {
+        const score = actions.score(pid);
+        const name = actions.name(pid);
 
         let displayName = name;
-        if (pid === scrabbleData.playerID) {
+        if (pid === actions.playerID) {
             displayName += " (you)";
         }
         return (
-            <PlayerScore key={name} current={pid === scrabbleData.currentPlayer} >
+            <PlayerScore key={name} current={pid === actions.currentPlayer} >
                 {`${displayName}: ${score}`}
             </PlayerScore>
         );
@@ -35,7 +35,7 @@ export function ScoresEtc({scrabbleData}: {scrabbleData: ScrabbleData}): JSX.Ele
     return (
         <div>
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...scrabbleData.getProps()}/>
+            <GameWarnings {...actions.getProps()}/>
         </div>
     );
 }

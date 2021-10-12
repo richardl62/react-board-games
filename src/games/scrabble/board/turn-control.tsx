@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { LetterSelector } from "./letter-selector";
-import { ScrabbleData } from "../game-control";
+import { Actions } from "../game-control";
 import { useTurnControlData } from "./use-turn-control-data";
 
 export const StyledScoreLine = styled.div`
@@ -23,9 +23,9 @@ const StyledIllegalWords = styled.div`
 
 
 /** 'Dumb' class that does the formatting for TurnControl */
-export function TurnControl({scrabbleData} :  {scrabbleData: ScrabbleData}): JSX.Element {
+export function TurnControl({actions} :  {actions: Actions}): JSX.Element {
 
-    const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(scrabbleData);
+    const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(actions);
     const doButtonText = illegalWords ?
         "Done (permitting illegal words)" :
         "Done"

@@ -4,7 +4,7 @@ import { BoardData, TileData } from "../game-data";
 import { scoreWords } from "./score-word";
 import { allLetterBonus } from "../scrabble-config";
 import { getWord } from "./game-actions";
-import { ScrabbleData } from "./scrabble-data";
+import { Actions } from "./actions";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
@@ -173,22 +173,22 @@ interface WordsAndScore {
     illegalWords: string[] | null;
   }
 
-export function getWordsAndScore(scrabbleData: ScrabbleData, active: RowCol[]): WordsAndScore | null {
-    const candidateWords = findCandidateWords(scrabbleData.board, active);
+export function getWordsAndScore(actions: Actions, active: RowCol[]): WordsAndScore | null {
+    const candidateWords = findCandidateWords(actions.board, active);
 
     if (!candidateWords) {
         return null;
     }
 
-    const words = candidateWords.map(cw => getWord(scrabbleData.board, cw));
+    const words = candidateWords.map(cw => getWord(actions.board, cw));
   
     let illegalWords : string[] | null = words.filter(wd => !isLegalWord(wd));
     if(illegalWords.length === 0) {
         illegalWords = null;
     }
 
-    let score = scoreWords(scrabbleData.board, candidateWords, scrabbleData.config);
-    if (active.length === scrabbleData.config.rackSize) {
+    let score = scoreWords(actions.board, candidateWords, actions.config);
+    if (active.length === actions.config.rackSize) {
         score += allLetterBonus;
     }
 

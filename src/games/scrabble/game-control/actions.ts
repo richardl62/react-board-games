@@ -23,10 +23,8 @@ function tilePosition(sq: SquareID) : TilePosition {
     }
 }
 
-/**
- * Data and functions to support Scrabble
- */
-export class ScrabbleData {
+
+export class Actions {
     constructor(
         props: AppBoardProps<GameData>, 
         config: ScrabbleConfig,
@@ -237,7 +235,7 @@ export class ScrabbleData {
     }
 }
 
-export function useScrabbleData(props: AppBoardProps<GameData>, config: ScrabbleConfig) : ScrabbleData {
+export function useActions(props: AppBoardProps<GameData>, config: ScrabbleConfig) : Actions {
     sAssert(props.playerID);
     const playableTiles = props.G.playerData[props.playerID].playableTiles;
 
@@ -249,5 +247,5 @@ export function useScrabbleData(props: AppBoardProps<GameData>, config: Scrabble
         rackState[1](playableTiles);
     }, [props.G.board, playableTiles]);
 
-    return new ScrabbleData(props, config, boardState, rackState);
+    return new Actions(props, config, boardState, rackState);
 }
