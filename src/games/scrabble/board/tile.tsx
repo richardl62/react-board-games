@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { CoreTile, tileScore } from "../core-tile";
+import { CoreTile, tileScore } from "../actions";
 import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style";
 
 const StyledLetter = styled.div`

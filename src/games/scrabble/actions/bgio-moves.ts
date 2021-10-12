@@ -1,5 +1,5 @@
 import { Move } from "boardgame.io";
-import { CoreTile } from "../core-tile";
+import { CoreTile } from "./core-tile";
 import { BoardData, GameData } from "./game-data";
 
 interface setBoardRandAndScoreParam {

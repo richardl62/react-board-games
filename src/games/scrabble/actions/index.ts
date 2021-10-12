@@ -12,6 +12,8 @@ export { getWordsAndScore } from "./get-words-and-score";
 export { findActiveLetters } from "./find-active-letters";
 
 // KLUDGE? Should these exports be necessary?
+export type { CoreTile } from "./core-tile";
+export { tileScore } from "./core-tile";
+
+// KLUDGE? Should these exports be necessary?
 export { boardIDs } from "./game-actions";
-
-

@@ -1,6 +1,6 @@
 import { sAssert } from "shared/assert";
 import { shuffle } from "shared/tools";
-import { CoreTile, makeCoreTile } from "./core-tile";
+import { CoreTile, makeCoreTile } from "./actions/core-tile";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 

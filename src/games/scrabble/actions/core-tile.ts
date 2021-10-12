@@ -1,4 +1,4 @@
-import { blank, Letter, letterScore } from "./letters";
+import { blank, Letter, letterScore } from "../letters";
 
 /**
  * letter: Letter to display. Also used to check for valid words.
@@ -21,14 +21,4 @@ export function makeCoreTile(letter: Letter) : CoreTile {
 
 export function tileScore(tile: CoreTile): number {
     return (tile.isBlank) ? letterScore(blank) : letterScore(tile.letter);
-}
-
-/** If the tile is a blank, set its letter to 'blank'.
- * Return the (potentially modified) tile.
- */
-export function clearBlank(tile: CoreTile) : CoreTile {
-    if(tile.isBlank) {
-        tile.letter = blank;
-    }
-    return tile;
 }

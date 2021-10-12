@@ -3,7 +3,7 @@ import { sAssert } from "shared/assert";
 import { nestedArrayMap } from "shared/tools";
 import { ScrabbleConfig } from "../scrabble-config";
 import { Letter } from "../letters";
-import { CoreTile } from "../core-tile";
+import { CoreTile } from "./core-tile";
 
 export interface TileData extends CoreTile {
 
