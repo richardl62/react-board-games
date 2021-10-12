@@ -3,7 +3,7 @@ import { Ctx } from "boardgame.io";
 import { AppGame, BoardProps } from "shared/types";
 import { bgioMoves } from "./game-control";
 import { GameData, startingGameData } from "./game-data";
-import { ScrabbleBoard } from "./scrabble";
+import { Board } from "./board";
 import { ScrabbleConfig } from "./scrabble-config";
 
 export function makeAppGame(config: ScrabbleConfig) : AppGame
@@ -15,9 +15,8 @@ export function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: BoardProps<GameData>) => <ScrabbleBoard
+        board: (props: BoardProps<GameData>) => <Board
             {...props} config={config}
         />
     };
-    
 }

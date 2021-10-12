@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Letter, letters } from "./letters";
+import { Letter, letters } from "../letters";
 
 const StyledLetterChooser = styled.div`
   display: inline-grid;

@@ -1,7 +1,7 @@
 import { SquareID } from "game-support/deprecated/boards";
 import { useState } from "react";
-import { Letter } from "./letters";
-import { ScrabbleData, getWordsAndScore, findActiveLetters } from "./game-control";
+import { Letter } from "../letters";
+import { ScrabbleData, getWordsAndScore, findActiveLetters } from "../game-control";
 
 
 function sameWordList(words1: string[], words2: string[]) : boolean {

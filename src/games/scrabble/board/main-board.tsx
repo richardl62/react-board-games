@@ -2,11 +2,11 @@ import React from "react";
 import { Board, makeBoardProps, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { nestedArrayMap } from "shared/tools";
 // KLUDGE? Should importing boardIDs be necessary?
-import { boardIDs } from "./game-control";
-import { ScrabbleConfig } from "./scrabble-config";
+import { boardIDs } from "../game-control";
+import { ScrabbleConfig } from "../scrabble-config";
 import { scrabbleSquareBackground, squareSize } from "./style";
 import { Tile } from "./tile";
-import { BoardData } from "./game-data";
+import { BoardData } from "../game-data";
 
 interface MainBoardProps {
   squareInteraction: SquareInteractionFunc;
