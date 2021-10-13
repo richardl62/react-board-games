@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Board, makeBoardProps, SquareID, SquareInteractionFunc } from "game-support/deprecated/boards";
+import { Board, makeBoardProps, SquareID } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { boardIDs } from "../actions";
 import { Actions } from "../actions";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
-import { CoreTile } from "../actions";
+import { useSquareInteraction } from "./square-interaction";
 
 const StyledRackEtc = styled.div`
 display:inline-flex;
@@ -23,17 +23,23 @@ gap: 3%;
 `;
 
 interface RackProps {
-  squareInteraction: SquareInteractionFunc;
-  rack: (CoreTile | null)[];
-  swapTiles?: (toSwap: boolean[]) => void;
   actions: Actions;
 }
 
 export function RackEtc(props: RackProps): JSX.Element {
-    const {squareInteraction, swapTiles, actions } = props;
+    const {  actions } = props;
     const hasTilesOut = actions.tilesOut();
-    const coreTiles = props.rack;
+    const coreTiles = props.actions.rack;
     const nTiles = coreTiles.length;
+
+    const allowSwapping = actions.nTilesInBag >= actions.config.rackSize;
+    const swapTiles = (toSwap: boolean[]) => {
+        sAssert(allowSwapping);
+        actions.swapTiles(toSwap);
+        actions.endTurn(0);
+    };
+
+    const squareInteraction = useSquareInteraction(actions);
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
