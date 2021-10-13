@@ -236,7 +236,7 @@ export class Actions {
 }
 
 export function useActions(props_: 
-    AppBoardProps, config: ScrabbleConfig) : Actions 
+    AppBoardProps, config: ScrabbleConfig) : Actions
 {
     const props = props_ as AppBoardProps<GameData>;
     sAssert(isGameData(props.G));
@@ -244,16 +244,16 @@ export function useActions(props_:
     const playerID = props.playerID;
     sAssert(playerID); // KLUDGE? - Not sure when it can be null.
 
-    // KLUDGE: Why is props_ needed here.
-    const playableTiles = props.G.playerData[playerID].playableTiles;
+    const boardDefault = props.G.board;
+    const rackDefault = props.G.playerData[playerID].playableTiles;
 
-    const boardState = useState<BoardData>([[]] /*KLUDGE: Any empty array, e.g. [], gives crashes*/);
-    const rackState = useState<Rack>([]);
+    const boardState = useState<BoardData>(boardDefault);
+    const rackState = useState<Rack>(rackDefault);
 
     useEffect(()=>{
-        boardState[1](props.G.board);
-        rackState[1](playableTiles);
-    }, [props.G.board, playableTiles]);
+        boardState[1](boardDefault);
+        rackState[1](rackDefault);
+    }, [boardDefault, rackDefault]);
 
     return new Actions(props, config, boardState, rackState);
 }
