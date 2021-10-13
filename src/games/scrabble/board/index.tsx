@@ -23,7 +23,7 @@ const Game = styled.div`
 interface ScrabbleBoardProps {
     actions: Actions;
 }  
-export function ScrabbleBoard({actions}: ScrabbleBoardProps): JSX.Element {
+export function Board({actions}: ScrabbleBoardProps): JSX.Element {
 
     if(!actions.allJoined) {
         <WaitingForPlayers {...actions.getProps()} />;
