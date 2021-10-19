@@ -11,7 +11,13 @@ import { WordChecker } from "./word-check";
 
 const SpaceBetween = styled.div`
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
+  align-self: stretch;
+`;
+
+const Centered = styled.div`
+  display: flex;
+  align-self: center;
 `;
 
 const Game = styled.div`
@@ -22,7 +28,14 @@ const Game = styled.div`
 
 interface ScrabbleBoardProps {
     actions: Actions;
-}  
+} 
+
+export function BagInfo({actions}: ScrabbleBoardProps): JSX.Element {
+    return <div>
+        Tiles in bag: <span>{actions.nTilesInBag}</span>
+    </div>;
+}
+
 export function Board({actions}: ScrabbleBoardProps): JSX.Element {
 
     if(!actions.allJoined) {
@@ -34,12 +47,12 @@ export function Board({actions}: ScrabbleBoardProps): JSX.Element {
             <Game>
                 <ScoresEtc actions={actions} />
                 <RackEtc actions={actions} />
-                <MainBoard actions={actions} />
+                <Centered>
+                    <MainBoard actions={actions} />
+                </Centered>
                 <SpaceBetween>
                     <WordChecker/>
-                    <div>
-                        Tiles in bag: <span>{actions.nTilesInBag}</span>
-                    </div>
+                    <BagInfo actions={actions} />
                 </SpaceBetween>
 
                 <TurnControl actions={actions}/>
