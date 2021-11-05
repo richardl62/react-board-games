@@ -174,7 +174,12 @@ export class Actions {
      * (The true elements of toSwap must correspond to non-null elememts 
      * of the rack).
      */
+    get allowSwapping() : boolean {
+        return this.nTilesInBag >= this.config.rackSize;
+    } 
+    
     swapTiles(toSwap: boolean[]): void {
+        sAssert(this.allowSwapping);
         const rack = this.boardAndRack.getRack();
 
         for (let ri = 0; ri < toSwap.length; ++ri) {
@@ -187,6 +192,8 @@ export class Actions {
         }
         this.boardAndRack.resetRack(rack);
         shuffle(this.bag);
+
+        this.endTurn(0);
     }
 
     endTurn(score: number): void {

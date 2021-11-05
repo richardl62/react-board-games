@@ -32,13 +32,6 @@ export function RankAndControls(props: RackProps): JSX.Element {
     const coreTiles = props.actions.rack;
     const nTiles = coreTiles.length;
 
-    const allowSwapping = actions.nTilesInBag >= actions.config.rackSize;
-    const swapTiles = (toSwap: boolean[]) => {
-        sAssert(allowSwapping);
-        actions.swapTiles(toSwap);
-        actions.endTurn(0);
-    };
-
     const squareInteraction = useSquareInteraction(actions);
 
     // selectedForSwap is null if a swap is not in progress.
@@ -75,14 +68,13 @@ export function RankAndControls(props: RackProps): JSX.Element {
     });
 
     if (selectedForSwap) {
-        sAssert(swapTiles);
 
         const makeSwap = () => {
 
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            swapTiles(selectedForSwap);
+            actions.swapTiles(selectedForSwap);
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);
@@ -124,7 +116,6 @@ export function RankAndControls(props: RackProps): JSX.Element {
             {actions.isMyTurn && 
         <button 
             onClick={doEnableSwap}
-            disabled={!swapTiles}
         >
           Swap
         </button>}
