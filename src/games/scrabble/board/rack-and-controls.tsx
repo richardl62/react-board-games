@@ -26,7 +26,7 @@ interface RackProps {
   actions: Actions;
 }
 
-export function RackEtc(props: RackProps): JSX.Element {
+export function RankAndControls(props: RackProps): JSX.Element {
     const {  actions } = props;
     const hasTilesOut = actions.tilesOut();
     const coreTiles = props.actions.rack;
