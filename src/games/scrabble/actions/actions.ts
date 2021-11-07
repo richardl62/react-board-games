@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { sAssert } from "shared/assert";
 import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
@@ -18,15 +17,6 @@ export interface SquareID {
     boardID: string;
 }
 
-export function squareID(row: number, col: number, boardID: string) : SquareID {
-    return {
-        row: row,
-        col: col,
-        boardID: boardID,
-    };
-}
-
-type UseStateResult<S> =  [S, Dispatch<SetStateAction<S>>];
 
 function tilePosition(sq: SquareID) : TilePosition {
     if(onRack(sq)) {
@@ -36,29 +26,36 @@ function tilePosition(sq: SquareID) : TilePosition {
     }
 }
 
+/** Game state required for a particular players (so includes the rack only
+ * for that players).
+ */
+export interface PlayerGameState {
+    board: BoardData,
+    rack: Rack,
+}
 
 export class Actions {
     constructor(
         props: AppBoardProps<GameData>, 
         config: ScrabbleConfig,
-        boardState: UseStateResult<BoardData>,
-        rackState: UseStateResult<Rack>,
+        playerGameState: PlayerGameState,
+        setPlayerGameState: (arg: PlayerGameState) => void,
     ) {
 
         sAssert(props.playerID);
         this.props = props;
         this.config = config;
-        this.boardState = boardState;
-        this.rackState = rackState;
+        this.playerGameState = playerGameState;
+        this.setPlayerGameState = setPlayerGameState;
 
-        this.boardAndRack = new BoardAndRack(boardState[0], rackState[0]);
+        this.boardAndRack = new BoardAndRack(playerGameState.board, playerGameState.rack);
         this.bag = [...props.G.bag];
     }
 
     private readonly props: AppBoardProps<GameData>;
     readonly config: ScrabbleConfig;
-    private readonly boardState: UseStateResult<BoardData>;
-    private readonly rackState: UseStateResult<Rack>;
+    private playerGameState: PlayerGameState;
+    private readonly setPlayerGameState:  (arg: PlayerGameState) => void;
     private boardAndRack: BoardAndRack;
     private bag: CoreTile[];
 
@@ -231,7 +228,11 @@ export class Actions {
         for (let row = 0; row < this.board.length; ++row) {
             for (let col = 0; col < this.board[row].length; ++col) {
                 if(this.board[row][col]?.letter === blank) {
-                    return squareID(row, col, boardIDs.main);
+                    return {
+                        row: row,
+                        col: col,
+                        boardID: boardIDs.main,
+                    };
                 }
             }
         }
@@ -250,9 +251,9 @@ export class Actions {
     }
 
     private setState() {
-        this.boardState[1](this.board);
-        this.rackState[1](this.rack);
+        this.setPlayerGameState({
+            board: this.board,
+            rack: this.rack,
+        });
     }
 }
-
-

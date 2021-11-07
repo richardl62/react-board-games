@@ -4,9 +4,9 @@ import { Rack } from "./board-and-rack";
 import { BoardData, GameData, isGameData } from "./game-data";
 import { ScrabbleConfig } from "../config";
 import { AppBoardProps } from "shared/app-board-props";
-import { Actions } from "./actions";
+import { Actions, PlayerGameState } from "./actions";
 
-
+// Hmm. Should this be refactored to use useReduce?
 export function useActions(props_: AppBoardProps, config: ScrabbleConfig): Actions {
     const props = props_ as AppBoardProps<GameData>;
     sAssert(isGameData(props.G));
@@ -25,5 +25,15 @@ export function useActions(props_: AppBoardProps, config: ScrabbleConfig): Actio
         rackState[1](rackDefault);
     }, [boardDefault, rackDefault]);
 
-    return new Actions(props, config, boardState, rackState);
+    const state = {
+        board: boardState[0],
+        rack: rackState[0],
+    };
+
+    const setState = (state: PlayerGameState) => {
+        boardState[1](state.board);
+        rackState[1](state.rack);
+    };
+
+    return new Actions(props, config, state, setState);
 }
