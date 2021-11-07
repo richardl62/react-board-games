@@ -1,9 +1,9 @@
-import { SquareID } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { GameData, BoardData } from "./game-data";
 import { RowCol } from "./get-words-and-score";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { blank } from "../config";
+import { SquareID } from "./actions";
 
 type Rack = (CoreTile|null)[];
 export const boardIDs = {

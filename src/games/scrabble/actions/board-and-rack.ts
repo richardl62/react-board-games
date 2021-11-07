@@ -47,7 +47,6 @@ function moveTilesDown(rack: Rack, posToClear: number): boolean {
     return result;
 }
 
-
 /** 
  * BoardAndRack is a helper class for Actions.  It provides function to update 
  * (wait for it) a board and rank. It does not know anything about setting state 
@@ -55,7 +54,6 @@ function moveTilesDown(rack: Rack, posToClear: number): boolean {
 */
 export class BoardAndRack {
     constructor(board: BoardData, rack: Rack) {
-
         this.board = board.map(row => [...row]);
         this.rack = [...rack];
     }

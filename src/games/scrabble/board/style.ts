@@ -2,6 +2,7 @@ import { PieceHolderBackground } from "game-support/piece-holder";
 import { SquareType } from "../config";
 
 export const squareSize = "30px";
+
 export const boardBoarderSize = {
     internal: "2px",
     external: "4px",

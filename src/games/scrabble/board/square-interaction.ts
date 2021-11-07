@@ -1,6 +1,7 @@
-import { SquareID, DragType, squareInteractionFunc, SquareInteractionFunc } from "game-support/deprecated/boards";
+import { DragType, squareInteractionFunc, SquareInteractionFunc } from "game-support/deprecated/boards";
 import { useErrorHandler } from "react-error-boundary";
 import { Actions } from "../actions";
+import { SquareID } from "../actions/actions";
 
 export function useSquareInteraction(actions: Actions) : SquareInteractionFunc {
     const handleError = useErrorHandler();

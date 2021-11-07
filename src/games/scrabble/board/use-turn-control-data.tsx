@@ -1,8 +1,7 @@
-import { SquareID } from "game-support/deprecated/boards";
 import { useState } from "react";
 import { Letter } from "../config";
 import { Actions, getWordsAndScore, findActiveLetters } from "../actions";
-
+import { SquareID } from "../actions/actions";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();
@@ -18,7 +17,6 @@ export interface TurnControlData {
 
   onDone?: () => void;
 }
-
 
 export function useTurnControlData(actions: Actions): TurnControlData {
   interface IllegalWordsData {

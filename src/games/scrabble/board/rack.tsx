@@ -1,11 +1,12 @@
 import React from "react";
-import { Board, makeBoardProps, SquareID } from "game-support/deprecated/boards";
+import { Board, makeBoardProps } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { boardIDs } from "../actions";
 import { Actions } from "../actions";
 import { squareSize } from "./style";
 import { Tile } from "./tile";
 import { useSquareInteraction } from "./square-interaction";
+import { SquareID } from "../actions/actions";
 
 interface RackProps {
     actions: Actions;

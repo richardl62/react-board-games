@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {  squareID, SquareID } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
@@ -12,6 +11,20 @@ import { ScrabbleConfig } from "../config";
 import { AppBoardProps } from "shared/app-board-props";
 
 export type { Rack };
+
+export interface SquareID {
+    row: number;
+    col: number;
+    boardID: string;
+}
+
+export function squareID(row: number, col: number, boardID: string) : SquareID {
+    return {
+        row: row,
+        col: col,
+        boardID: boardID,
+    };
+}
 
 type UseStateResult<S> =  [S, Dispatch<SetStateAction<S>>];
 
