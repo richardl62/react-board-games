@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { sAssert } from "shared/assert";
 import { sameJSON, shuffle } from "shared/tools";
 import { ClientMoves } from "./bgio-moves";
 import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
-import { BoardData, GameData, isGameData } from "./game-data";
+import { BoardData, GameData } from "./game-data";
 import { CoreTile } from "./core-tile";
 import { blank, Letter } from "../config";
 import { ScrabbleConfig } from "../config";
@@ -255,25 +255,4 @@ export class Actions {
     }
 }
 
-export function useActions(props_: 
-    AppBoardProps, config: ScrabbleConfig) : Actions
-{
-    const props = props_ as AppBoardProps<GameData>;
-    sAssert(isGameData(props.G));
 
-    const playerID = props.playerID;
-    sAssert(playerID); // KLUDGE? - Not sure when it can be null.
-
-    const boardDefault = props.G.board;
-    const rackDefault = props.G.playerData[playerID].playableTiles;
-
-    const boardState = useState<BoardData>(boardDefault);
-    const rackState = useState<Rack>(rackDefault);
-
-    useEffect(()=>{
-        boardState[1](boardDefault);
-        rackState[1](rackDefault);
-    }, [boardDefault, rackDefault]);
-
-    return new Actions(props, config, boardState, rackState);
-}

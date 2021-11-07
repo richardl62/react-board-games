@@ -1,4 +1,6 @@
-export { Actions, useActions } from "./actions";
+export { Actions } from "./actions";
+
+export { useActions } from "./use-actions";
 
 export { startingGameData } from "./game-data";
 
