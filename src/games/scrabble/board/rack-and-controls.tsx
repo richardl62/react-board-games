@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Board, makeBoardProps, SquareID } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
-import { boardIDs } from "../actions";
 import { Actions } from "../actions";
-import { squareSize } from "./style";
-import { Tile } from "./tile";
-import { useSquareInteraction } from "./square-interaction";
+import { Rack } from "./rack";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -22,50 +18,19 @@ align-items: center;
 gap: 3%;
 `;
 
-interface RackProps {
+interface RackAndControlsProps {
     actions: Actions;
 }
 
-export function RackAndControls(props: RackProps): JSX.Element {
+export function RackAndControls(props: RackAndControlsProps): JSX.Element {
     const { actions } = props;
     const hasTilesOut = actions.tilesOut();
-    const coreTiles = props.actions.rack;
-    const nTiles = coreTiles.length;
-
-    const squareInteraction = useSquareInteraction(actions);
+    const nTiles =  props.actions.rack.length;
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
 
-    const tiles = coreTiles.map((tile, index) => tile && <Tile tile={tile}
-        markAsMoveable={selectedForSwap !== null && selectedForSwap[index]}
-    />);
 
-    const toggleSelectForSwap = (sq: SquareID) => {
-        return {
-            onClick: () => {
-                sAssert(selectedForSwap);
-                const newSwappable = [...selectedForSwap];
-                newSwappable[sq.col] = !newSwappable[sq.col];
-                setSelectedForSwap(newSwappable);
-            }
-        };
-    };
-
-    const boardProps = makeBoardProps({
-        pieces: [tiles],
-
-        squareBackground: () => { return { color: "white", text: "" }; },
-        externalBorders: true,
-        internalBorders: true,
-        squareSize: squareSize,
-
-        boardID: boardIDs.rack,
-
-        squareInteraction: selectedForSwap ? toggleSelectForSwap : squareInteraction,
-
-        moveStart: null, //clickDragState.start,
-    });
 
     if (selectedForSwap) {
 
@@ -86,7 +51,7 @@ export function RackAndControls(props: RackProps): JSX.Element {
                     <span>Select times to swap </span>
                 </PreRack>
 
-                <Board {...boardProps} />
+                <Rack actions={actions} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
                 {selectedForSwap.includes(true) &&
                     <button onClick={makeSwap}>Make Swap</button>}
@@ -111,7 +76,7 @@ export function RackAndControls(props: RackProps): JSX.Element {
                 </button>
             </PreRack>
 
-            <Board {...boardProps} />
+            <Rack actions={actions} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
             {actions.isMyTurn &&
                 <button
