@@ -13,11 +13,13 @@ interface BorderColor {
 const Container = styled.div<{
     hieght: string,
     width: string,
+    color?: string | null,
     backgroundColor?: string | null,
     borderColor?: BorderColor,
 }>`
     height: ${props=>props.hieght};
     width: ${props=>props.width};
+    color: ${props=>props.color || "none"};
     background-color: ${props=>props.backgroundColor || "none"};
 
     position: relative;
@@ -83,24 +85,29 @@ export interface DragDrop<ID = UnknownObject> {
      */
     hide?: boolean;
 }
+export interface PieceHolderBackground {
+    color: string,
+    text?: string,
+    textColor?: string,
+}
 
 /** Propeties for PieceHolder */
 interface PieceHolderProps<ID = UnknownObject> {
-    /** Size of the PieceHolder.
-     * The piece will be rendered in a div of this size.
-     */ 
-    hieght: string;
-    width: string;
+    style: {
+        /** Size of the PieceHolder.
+         * The piece will be rendered in a div of this size.
+         */
+        hieght: string;
+        width: string;
 
-    /** Background color. (In future more general background my me allowed */
-    background: {color: string}
-
-
-    /** 
-     * For now at least, the size of the border is a hard-coded fraction of the size 
-     * supplied in this interface.
-     */
-    borderColor?: BorderColor;
+        /** Background color. (In future more general background my me allowed */
+        background: PieceHolderBackground;
+        /** 
+         * For now at least, the size of the border is a hard-coded fraction of the size 
+         * supplied in this interface.
+         */
+        borderColor?: BorderColor;
+    };
 
     /** The piece to be displayed. */
     children?: ReactNode;
@@ -122,7 +129,8 @@ interface PieceHolderProps<ID = UnknownObject> {
  */
 export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JSX.Element {
 
-    const { hieght, width, background, children, borderColor, dragDrop } = props;
+    const { style, children, onClick, dragDrop } = props;
+    const { hieght, width, background, borderColor } = style;
 
     const [{isDragging}, dragRef] = useDrag(dragDrop);
     const [, dropRef] = useDrop(dragDrop);
@@ -131,7 +139,16 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
     const hideDuringDrag = dragDrop?.hide !== false;
     const hidePiece = isDragging && hideDuringDrag;
 
-    return <Container ref={dropRef} hieght={hieght} width={width} backgroundColor={background.color} borderColor={borderColor}>
+    return <Container ref={dropRef} 
+        hieght={hieght} 
+        width={width} 
+        color={background?.textColor}
+        backgroundColor={background?.color}
+        borderColor={borderColor}
+
+        onClick={onClick}
+    >
+        {background.text}
         {<Piece ref={dragRef}>
             {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
              by the piece being unmounted during the drag. */}

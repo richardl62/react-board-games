@@ -39,13 +39,17 @@ function Square(props: SquareProps) : JSX.Element {
         },
     };
 
-    return <PieceHolder
-        background={{ color: "cornsilk" }}
-        hieght={"80px"}
-        width={"40px"}
-        borderColor={{
+    const style={
+        background: { color: "cornsilk" },
+        hieght: "80px",
+        width: "40px",
+        borderColor: {
             hoverColor: "olive",
-        }}
+        },
+    };
+
+    return <PieceHolder
+        style={style}
         dragDrop={dragDrop}
     >
         <div>{value}</div>

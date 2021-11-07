@@ -8,7 +8,7 @@ import { squareSize } from "./style";
 import { Tile } from "./tile";
 import { useSquareInteraction } from "./square-interaction";
 
-const StyledRackEtc = styled.div`
+const StyledRackAndControls = styled.div`
 display:inline-flex;
 gap: 1%;
 `;
@@ -23,11 +23,11 @@ gap: 3%;
 `;
 
 interface RackProps {
-  actions: Actions;
+    actions: Actions;
 }
 
-export function RankAndControls(props: RackProps): JSX.Element {
-    const {  actions } = props;
+export function RackAndControls(props: RackProps): JSX.Element {
+    const { actions } = props;
     const hasTilesOut = actions.tilesOut();
     const coreTiles = props.actions.rack;
     const nTiles = coreTiles.length;
@@ -55,11 +55,11 @@ export function RankAndControls(props: RackProps): JSX.Element {
     const boardProps = makeBoardProps({
         pieces: [tiles],
 
-        squareBackground: () => {return {color: "white", text:""};},
+        squareBackground: () => { return { color: "white", text: "" }; },
         externalBorders: true,
         internalBorders: true,
         squareSize: squareSize,
-  
+
         boardID: boardIDs.rack,
 
         squareInteraction: selectedForSwap ? toggleSelectForSwap : squareInteraction,
@@ -79,19 +79,19 @@ export function RankAndControls(props: RackProps): JSX.Element {
         const cancelSwap = () => {
             setSelectedForSwap(null);
         };
-    
+
         return (
-            <StyledRackEtc>
+            <StyledRackAndControls>
                 <PreRack>
                     <span>Select times to swap </span>
                 </PreRack>
 
                 <Board {...boardProps} />
 
-                {selectedForSwap.includes(true) && 
-          <button onClick={makeSwap}>Make Swap</button> }
+                {selectedForSwap.includes(true) &&
+                    <button onClick={makeSwap}>Make Swap</button>}
                 <button onClick={cancelSwap}>Cancel</button>
-            </StyledRackEtc>
+            </StyledRackAndControls>
         );
     } else {
 
@@ -101,26 +101,26 @@ export function RankAndControls(props: RackProps): JSX.Element {
             setSelectedForSwap(Array(nTiles).fill(false));
         };
 
-        return (<StyledRackEtc>
+        return (<StyledRackAndControls>
             <PreRack>
                 {hasTilesOut && <button onClick={() => actions.recallRack()}>Recall</button>}
                 <button
                     onClick={() => actions.shuffleRack()}
                 >
-          Shuffle
+                    Shuffle
                 </button>
             </PreRack>
 
             <Board {...boardProps} />
 
-            {actions.isMyTurn && 
-        <button 
-            onClick={doEnableSwap}
-        >
-          Swap
-        </button>}
+            {actions.isMyTurn &&
+                <button
+                    onClick={doEnableSwap}
+                >
+                    Swap
+                </button>}
 
-        </StyledRackEtc>
+        </StyledRackAndControls>
         );
     }
 }

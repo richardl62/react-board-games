@@ -1,9 +1,18 @@
-import { SquareBackgroundProps } from "game-support/deprecated/boards";
+import { PieceHolderBackground } from "game-support/piece-holder";
 import { SquareType } from "../config";
 
 export const squareSize = "30px";
+export const boardBoarderSize = {
+    internal: "2px",
+    external: "4px",
+};
 
-export function scrabbleSquareBackground(type: SquareType) : SquareBackgroundProps {
+export const tileBackgroundColor = "brown";
+export const tileTextColor = "white";
+export const moveableTileBorder = `yellow solid calc(${squareSize} * 0.1)`;
+
+
+export function squareBackground(type: SquareType) : PieceHolderBackground {
     let color;
     let text;
     switch(type) {
@@ -29,9 +38,5 @@ export function scrabbleSquareBackground(type: SquareType) : SquareBackgroundPro
         break;
     }
 
-    return {color:color, text: text};
+    return {color:color, text: text, textColor: "black"};
 }
-
-export const tileBackgroundColor = "brown";
-export const tileTextColor = "white";
-export const moveableTileBorder = `yellow solid calc(${squareSize} * 0.1)`;

@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import { Actions } from "../actions";
 import { MainBoard } from "./main-board";
-import { RankAndControls } from "./rack-and-controls";
+import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
@@ -46,7 +46,7 @@ export function Board({actions}: ScrabbleBoardProps): JSX.Element {
         <DndProvider>
             <Game>
                 <ScoresEtc actions={actions} />
-                <RankAndControls actions={actions} />
+                <RackAndControls actions={actions} />
                 <Centered>
                     <MainBoard actions={actions} />
                 </Centered>

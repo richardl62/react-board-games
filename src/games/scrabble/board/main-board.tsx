@@ -3,7 +3,7 @@ import { Board, makeBoardProps } from "game-support/deprecated/boards";
 import { nestedArrayMap } from "shared/tools";
 // KLUDGE? Should importing boardIDs be necessary?
 import { Actions, boardIDs } from "../actions";
-import { scrabbleSquareBackground, squareSize } from "./style";
+import { squareBackground, squareSize } from "./style";
 import { Tile } from "./tile";
 import { useSquareInteraction } from "./square-interaction";
 
@@ -23,7 +23,7 @@ export function MainBoard({ actions }: MainBoardProps): JSX.Element {
 
     const squareColors = nestedArrayMap(
         actions.config.boardLayout,
-        scrabbleSquareBackground
+        squareBackground
     );
 
     const boardProps = makeBoardProps({
