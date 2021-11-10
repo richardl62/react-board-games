@@ -11,7 +11,10 @@ export function useSquareInteraction(actions: Actions) : SquareInteractionFunc {
         onMoveEnd: (from: SquareID, to: SquareID | null) => {
             if (to) {
                 try {
-                    actions.move({ from: from, to: to });
+                    actions.dispatch({
+                        type: "move",
+                        data: { from: from, to: to },
+                    });
                 } catch (error) {
                     handleError(error);
                 }

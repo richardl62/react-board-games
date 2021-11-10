@@ -1,8 +1,10 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
+import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
 import { AppGame } from "shared/types";
 import { bgioMoves, startingGameData, useActions } from "./actions";
+import { GameData, isGameData } from "./actions/game-data";
 import { Board } from "./board";
 import { configs, ScrabbleConfig } from "./config";
 
@@ -12,8 +14,11 @@ interface BoardWrapperProps {
 }
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const actions = useActions(props.appBoardProps, props.config);
-    return <Board actions={actions} />;
+    const gameDataProps = props.appBoardProps as GeneralGameProps<GameData>;
+    sAssert(isGameData(gameDataProps.G));
+    
+    const actions = useActions(gameDataProps, props.config);
+    return actions ? <Board actions={actions} /> : <h1>Waiting for update</h1>;
 }
 
 function makeAppGame(config: ScrabbleConfig) : AppGame

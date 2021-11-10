@@ -33,6 +33,9 @@ export interface GameData {
     playerData: PlayerDataDictionary; 
     bag: CoreTile[];
     turn: number;
+
+    /** Any move that changes game data will also increase timestamp */
+    timestamp: number;
 }
 
 /** Quick check that an object is (probably) a GameData. */
@@ -42,7 +45,8 @@ export function isGameData(arg: unknown) : boolean {
         typeof gd.board === "object" &&
         typeof gd.playerData === "object" &&
         typeof gd.bag === "object" &&
-        typeof gd.turn === "number";
+        typeof gd.turn === "number" &&
+        typeof gd.timestamp === "number";
 }
 
 export function startingGameData(numPlayers: number, config: ScrabbleConfig): GameData {
@@ -73,5 +77,6 @@ export function startingGameData(numPlayers: number, config: ScrabbleConfig): Ga
         playerData: playerData,
         bag: bag,
         turn: 0,
+        timestamp: 0,
     };
 }

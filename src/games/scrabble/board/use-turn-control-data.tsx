@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Letter } from "../config";
 import { Actions, getWordsAndScore, findActiveLetters } from "../actions";
-import { SquareID } from "../actions/actions";
+import { findUnsetBlack, SquareID } from "../actions/actions";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();
@@ -28,7 +28,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
   const active = findActiveLetters(actions);
   const wordsAndScore = getWordsAndScore(actions, active);
-  const unsetBlank = actions.getUnsetBlack();
+  const unsetBlank = findUnsetBlack(actions.board);
 
   if(illegalWordsData) {
       // Clear the illegalWord
@@ -64,7 +64,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
       if(blankToSet) {
           result.doSetBlank = (l: Letter) => {
-              actions.setBlank(blankToSet, l);
+              actions.dispatch({ type: "setBlank", data: {id: blankToSet, letter: l}});
               setBlankToSet(null);
           };
       }

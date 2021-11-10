@@ -1,14 +1,11 @@
 import { sAssert } from "shared/assert";
-import { GeneralGameProps } from "shared/general-game-props";
-import { shuffle } from "shared/tools";
-import { blank, Letter, ScrabbleConfig } from "../config";
-import { ClientMoves } from "./bgio-moves";
-import { BoardAndRack, Rack } from "./board-and-rack";
-import { CoreTile } from "./core-tile";
-import { boardIDs, onRack } from "./game-actions";
+import { boardIDs } from "./game-actions";
 import { BoardData, GameData } from "./game-data";
-
-export type { Rack };
+import { blank, Letter } from "../config";
+import { ScrabbleConfig } from "../config";
+import { Dispatch } from "react";
+import { Rack } from "./board-and-rack";
+import { GeneralGameProps } from "shared/general-game-props";
 
 export interface SquareID {
     row: number;
@@ -16,88 +13,83 @@ export interface SquareID {
     boardID: string;
 }
 
-/** Game state required for a particular players (so includes the rack only
- * for that players).
- */
-export interface PlayerGameState {
-    board: BoardData,
-    rack: Rack,
-}
+export type ActionType =
+    | { type: "move", data: {from: SquareID,to: SquareID}}
+    | { type: "recallRack" }
+    | { type: "shuffleRack" }
+    | { type: "setBlank", data: {id: SquareID, letter: Letter}}
+    | { type: "swapTiles", data: boolean[] }
+    | { type: "bgioStateChange", data: GeneralGameProps<GameData> }
+;
 
 export class Actions {
     constructor(
-        props: GeneralGameProps<GameData>, 
+        generalProps: GeneralGameProps, 
         config: ScrabbleConfig,
-        playerGameState: PlayerGameState,
-        setPlayerGameState: (arg: PlayerGameState) => void,
+        board: BoardData,
+        rack: Rack,
+        nTilesInBag: number,
+        dispatch: Dispatch<ActionType>,
     ) {
-        this.generalProps = props;
+        this.generalProps = generalProps;
         this.config = config;
-        this.setPlayerGameState = setPlayerGameState;
-
-        this.boardAndRack = new BoardAndRack(playerGameState.board, playerGameState.rack);
-        this.bag = [...props.G.bag];
+        this.board = board;
+        this.rack = rack;
+        this.nTilesInBag = nTilesInBag,
+        this.dispatch = dispatch;
     }
 
-    readonly generalProps: GeneralGameProps<GameData>;
+    // Clients should not access the game data, i.e. bgioProps.G
+    readonly generalProps: GeneralGameProps;
+
     readonly config: ScrabbleConfig;
-    private readonly setPlayerGameState:  (arg: PlayerGameState) => void;
-    private boardAndRack: BoardAndRack;
-    private bag: CoreTile[];
+    readonly dispatch:  Dispatch<ActionType>
 
-    private get moves() : ClientMoves {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return this.generalProps.moves as any;
+    readonly board: BoardData;
+    readonly rack: Rack;
+    readonly nTilesInBag: number;
+
+    get playOrder(): string[] {
+        return this.generalProps.ctx.playOrder;
     }
 
-    get board(): BoardData {
-        return this.boardAndRack.getBoard();
+    get playerID(): string {
+        sAssert(this.generalProps.playerID);
+        return this.generalProps.playerID;
     }
 
-    get rack(): Rack {
-        return this.boardAndRack.getRack();
+    get currentPlayer(): string {
+        return this.generalProps.ctx.currentPlayer;
     }
 
-    get nTilesInBag() : number {
-        return this.bag.length;
+    get allJoined(): boolean {
+        return this.generalProps.allJoined;
     }
 
-    /** 
-    * Report whether there are active tiles on the board.
-    * 
-    * Active tiles are those taken from the rack. 
-    *
-    * Note: For most of the game this is equivalent to checking if the rank has 
-    * gaps. But difference can occur at the end of the game when the bag is emtpy.
-    */
-    tilesOut(): boolean {
-        return !!this.board.find(row => row.find(sq => sq?.active));
-    }
+    get isMyTurn() : boolean {
+        return this.generalProps.playerID === this.currentPlayer;
+    } 
 
-    score(pid: string) : number {
-        const playerData = this.generalProps.G.playerData[pid];
+    name(pid: string) : string {
+        const playerData = this.generalProps.playerData[pid];
         sAssert(playerData);
-        return playerData.score;
+        return playerData.name;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canMove(sq: SquareID) : boolean {
-        return this.boardAndRack.canMove(sq);
+        console.warn("Actions.canMove is not implemented");
+        return true;
+        //return this.boardAndRack.isActive(tilePosition(sq));
     }
-
-    move(arg: {from: SquareID,to: SquareID}) : void {
-        this.boardAndRack.move(arg);
-
-        this.setState();
-    }
-
-    recallRack(): void {
-        this.boardAndRack.recallRack();
-        this.setState();
-    }
-
-    shuffleRack(): void {
-        this.boardAndRack.shuffleRack();
-        this.setState(); // Inefficient as board has not changes.
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    score(pid: string) : number {
+        console.warn("Actions.score is not implemented");
+        return -1;
+    //     const playerData = this.bgioProps.G.playerData[pid];
+    //     sAssert(playerData);
+    //     return playerData.score;
     }
 
     /**
@@ -110,72 +102,37 @@ export class Actions {
         return this.nTilesInBag >= this.config.rackSize;
     } 
     
-    swapTiles(toSwap: boolean[]): void {
-        sAssert(this.allowSwapping);
-        const rack = this.boardAndRack.getRack();
-
-        for (let ri = 0; ri < toSwap.length; ++ri) {
-            if(toSwap[ri]) {
-                const old = rack[ri];
-                sAssert(old, "Attempt to swap non-existant tile");
-                this.bag.push(old);
-                rack[ri] = this.bag.shift()!;
-            }
-        }
-        this.boardAndRack.resetRack(rack);
-        shuffle(this.bag);
-
-        this.endTurn(0);
-    }
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     endTurn(score: number): void {
-        const rack = this.boardAndRack.getRack();
-        for(let ri = 0; ri < rack.length; ++ri) {
-            if(!rack[ri]) {
-                rack[ri] = this.bag.pop() || null;
+        throw new Error("not yet implemented");
+    }
+}
+
+
+/** 
+* Report whether there are active tiles on the board.
+* 
+* Active tiles are those taken from the rack. 
+*
+* Note: For most of the game this is equivalent to checking if the rank has 
+* gaps. But difference can occur at the end of the game when the bag is emtpy.
+*/
+export function tilesOut(board: BoardData): boolean {
+    return !!board.find(row => row.find(sq => sq?.active));
+}
+
+export function findUnsetBlack(board: BoardData): SquareID | null {
+    for (let row = 0; row < board.length; ++row) {
+        for (let col = 0; col < board[row].length; ++col) {
+            if(board[row][col]?.letter === blank) {
+                return {
+                    row: row,
+                    col: col,
+                    boardID: boardIDs.main,
+                };
             }
         }
-        this.moves.setBoardRandAndScore({
-            score: score,
-            rack: this.boardAndRack.getRack(),
-            board: this.boardAndRack.getBoard(),
-            bag: this.bag,
-        });
-
-        sAssert(this.generalProps.events.endTurn);
-        this.generalProps.events.endTurn();
     }
 
-    getUnsetBlack(): SquareID | null {
-        for (let row = 0; row < this.board.length; ++row) {
-            for (let col = 0; col < this.board[row].length; ++col) {
-                if(this.board[row][col]?.letter === blank) {
-                    return {
-                        row: row,
-                        col: col,
-                        boardID: boardIDs.main,
-                    };
-                }
-            }
-        }
-
-        return null;
-    }
-    
-    setBlank(id: SquareID, letter: Letter): void  {
-        sAssert(!onRack(id));
-
-        const sq = this.board[id.row][id.col];
-        sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
-        sq.letter = letter;
-
-        this.setState();
-    }
-
-    private setState() {
-        this.setPlayerGameState({
-            board: this.board,
-            rack: this.rack,
-        });
-    }
+    return null;
 }

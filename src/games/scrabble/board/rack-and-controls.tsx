@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "shared/assert";
 import { Actions } from "../actions";
 import { Rack } from "./rack";
+import { tilesOut } from "../actions/actions";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -24,8 +25,8 @@ interface RackAndControlsProps {
 
 export function RackAndControls(props: RackAndControlsProps): JSX.Element {
     const { actions } = props;
-    const hasTilesOut = actions.tilesOut();
-    const nTiles =  props.actions.rack.length;
+    const hasTilesOut = tilesOut(actions.board);
+    const nTiles =  actions.rack.length;
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -39,7 +40,10 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            actions.swapTiles(selectedForSwap);
+            actions.dispatch({
+                type: "swapTiles",
+                data: selectedForSwap,
+            });
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);
@@ -62,15 +66,18 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
 
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
-            actions.recallRack();
+            actions.dispatch({type: "recallRack"});
             setSelectedForSwap(Array(nTiles).fill(false));
         };
 
+        const recallRack = () =>  actions.dispatch({type: "recallRack"});
+        const shuffleRack = () =>  actions.dispatch({type: "shuffleRack"});
+
         return (<StyledRackAndControls>
             <PreRack>
-                {hasTilesOut && <button onClick={() => actions.recallRack()}>Recall</button>}
+                {hasTilesOut && <button onClick={recallRack}>Recall</button>}
                 <button
-                    onClick={() => actions.shuffleRack()}
+                    onClick={shuffleRack}
                 >
                     Shuffle
                 </button>
@@ -78,7 +85,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
 
             <Rack actions={actions} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
-            {actions.generalProps.isMyTurn &&
+            {actions.isMyTurn &&
                 <button
                     disabled={!actions.allowSwapping}
                     onClick={doEnableSwap}

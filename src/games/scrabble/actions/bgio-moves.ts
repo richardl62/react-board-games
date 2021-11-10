@@ -25,6 +25,7 @@ const setBoardRandAndScore: Move<GameData> = (G, ctx,
     ));
 
     G.turn++;
+    G.timestamp++;
 };
 
 export const bgioMoves = {
