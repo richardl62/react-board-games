@@ -41,9 +41,7 @@ export class Actions {
         playerGameState: PlayerGameState,
         setPlayerGameState: (arg: PlayerGameState) => void,
     ) {
-
-        sAssert(props.playerID);
-        this.props = props;
+        this.bgioProps = props;
         this.config = config;
         this.playerGameState = playerGameState;
         this.setPlayerGameState = setPlayerGameState;
@@ -52,7 +50,7 @@ export class Actions {
         this.bag = [...props.G.bag];
     }
 
-    private readonly props: AppBoardProps<GameData>;
+    readonly bgioProps: AppBoardProps<GameData>;
     readonly config: ScrabbleConfig;
     private playerGameState: PlayerGameState;
     private readonly setPlayerGameState:  (arg: PlayerGameState) => void;
@@ -61,7 +59,7 @@ export class Actions {
 
     private get moves() : ClientMoves {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return this.props.moves as any;
+        return this.bgioProps.moves as any;
     }
 
     get board(): BoardData {
@@ -71,27 +69,6 @@ export class Actions {
     get rack(): Rack {
         return this.boardAndRack.getRack();
     }
-
-    get playOrder(): string[] {
-        return this.props.ctx.playOrder;
-    }
-
-    get playerID(): string {
-        sAssert(this.props.playerID);
-        return this.props.playerID;
-    }
-
-    get currentPlayer(): string {
-        return this.props.ctx.currentPlayer;
-    }
-
-    get allJoined(): boolean {
-        return this.props.allJoined;
-    }
-
-    get isMyTurn() : boolean {
-        return this.props.playerID === this.currentPlayer;
-    } 
 
     get nTilesInBag() : number {
         return this.bag.length;
@@ -109,21 +86,8 @@ export class Actions {
         return !!this.board.find(row => row.find(sq => sq?.active));
     }
 
-    /** Limited use only 
-     * Intened for use when using non-scrabble-specific utilities.
-     */
-    getProps() : AppBoardProps<GameData> {
-        return this.props;
-    }
-
-    name(pid: string) : string {
-        const playerData = this.props.playerData[pid];
-        sAssert(playerData);
-        return playerData.name;
-    }
-
-    score(pid: string = this.playerID) : number {
-        const playerData = this.props.G.playerData[pid];
+    score(pid: string) : number {
+        const playerData = this.bgioProps.G.playerData[pid];
         sAssert(playerData);
         return playerData.score;
     }
@@ -220,8 +184,8 @@ export class Actions {
             bag: this.bag,
         });
 
-        sAssert(this.props.events.endTurn);
-        this.props.events.endTurn();
+        sAssert(this.bgioProps.events.endTurn);
+        this.bgioProps.events.endTurn();
     }
 
     getUnsetBlack(): SquareID | null {
