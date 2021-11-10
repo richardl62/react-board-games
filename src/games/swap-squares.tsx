@@ -4,7 +4,7 @@ import { DndProvider } from "game-support/drag-drop";
 import { DragDrop, PieceHolder } from "game-support/piece-holder";
 import { AppGame } from "shared/types";
 import { Ctx } from "boardgame.io";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 
 interface G {
   squares: number[];
@@ -56,7 +56,7 @@ function Square(props: SquareProps) : JSX.Element {
     </PieceHolder>;  
 }
 
-function SwapSquares({ G, moves }: AppBoardProps<G>): JSX.Element {
+function SwapSquares({ G, moves }: GeneralGameProps<G>): JSX.Element {
     const onReset = () => {
         moves.reset();
     };

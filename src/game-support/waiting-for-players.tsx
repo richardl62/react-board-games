@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 import styled from "styled-components";
 import { GameWarnings } from "./show-warning";
 
@@ -23,7 +23,7 @@ const PlayerDataGrid = styled.div`
     row-gap: 0.5em;
     margin-bottom: 0.5em;
 `;
-type PlayerData = AppBoardProps["playerData"][0];
+type PlayerData = GeneralGameProps["playerData"][0];
 
 function statusText(status: PlayerData["status"]) : string {
     switch(status) {
@@ -36,7 +36,7 @@ function statusText(status: PlayerData["status"]) : string {
     }
 }
 
-export function WaitingForPlayers(props: AppBoardProps): JSX.Element {
+export function WaitingForPlayers(props: GeneralGameProps): JSX.Element {
 
     const playerElements = (id: string) => {
         const {status, name} = props.playerData[id];

@@ -12,7 +12,7 @@ import { sAssert } from "shared/assert";
 import { nestedArrayMap, sameJSON } from "shared/tools";
 import { AppGame } from "shared/types";
 import { Piece } from "./piece";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 
 const squareSize = "50px";
 
@@ -102,7 +102,7 @@ function MainBoard({ squareInteraction, pieces }: MainBoardProps) {
     return <Board {...boardProps} />;
 }
 
-function ChessBoard(props: AppBoardProps<G>) {
+function ChessBoard(props: GeneralGameProps<G>) {
     const { G, moves } = props;
 
     const moveFunctions: MoveFunctions = {

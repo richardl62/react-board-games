@@ -6,7 +6,7 @@ import { Board, DragType, makeBoardProps, squareInteractionFunc, MoveFunctions }
 import { nestedArrayMap } from "shared/tools";
 import { AppGame } from "shared/types";
 import { bb, Piece, pl1, pl2 } from "./piece";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 
 const squareSize = "50px";
 
@@ -38,7 +38,7 @@ const initialState = {
 
 type G = typeof initialState;
 
-function BobailBoard({ G }: AppBoardProps<G>): JSX.Element {
+function BobailBoard({ G }: GeneralGameProps<G>): JSX.Element {
 
     const pieces = nestedArrayMap(G.pieces, name => {
         const p = name && <Piece pieceName={name} />;

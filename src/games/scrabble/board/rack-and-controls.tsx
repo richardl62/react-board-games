@@ -78,7 +78,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
 
             <Rack actions={actions} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
-            {actions.bgioProps.isMyTurn &&
+            {actions.generalProps.isMyTurn &&
                 <button
                     onClick={doEnableSwap}
                 >

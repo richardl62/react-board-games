@@ -7,7 +7,7 @@ import { BoardData, GameData } from "./game-data";
 import { CoreTile } from "./core-tile";
 import { blank, Letter } from "../config";
 import { ScrabbleConfig } from "../config";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 
 export type { Rack };
 
@@ -36,30 +36,28 @@ export interface PlayerGameState {
 
 export class Actions {
     constructor(
-        props: AppBoardProps<GameData>, 
+        props: GeneralGameProps<GameData>, 
         config: ScrabbleConfig,
         playerGameState: PlayerGameState,
         setPlayerGameState: (arg: PlayerGameState) => void,
     ) {
-        this.bgioProps = props;
+        this.generalProps = props;
         this.config = config;
-        this.playerGameState = playerGameState;
         this.setPlayerGameState = setPlayerGameState;
 
         this.boardAndRack = new BoardAndRack(playerGameState.board, playerGameState.rack);
         this.bag = [...props.G.bag];
     }
 
-    readonly bgioProps: AppBoardProps<GameData>;
+    readonly generalProps: GeneralGameProps<GameData>;
     readonly config: ScrabbleConfig;
-    private playerGameState: PlayerGameState;
     private readonly setPlayerGameState:  (arg: PlayerGameState) => void;
     private boardAndRack: BoardAndRack;
     private bag: CoreTile[];
 
     private get moves() : ClientMoves {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return this.bgioProps.moves as any;
+        return this.generalProps.moves as any;
     }
 
     get board(): BoardData {
@@ -87,7 +85,7 @@ export class Actions {
     }
 
     score(pid: string) : number {
-        const playerData = this.bgioProps.G.playerData[pid];
+        const playerData = this.generalProps.G.playerData[pid];
         sAssert(playerData);
         return playerData.score;
     }
@@ -184,8 +182,8 @@ export class Actions {
             bag: this.bag,
         });
 
-        sAssert(this.bgioProps.events.endTurn);
-        this.bgioProps.events.endTurn();
+        sAssert(this.generalProps.events.endTurn);
+        this.generalProps.events.endTurn();
     }
 
     getUnsetBlack(): SquareID | null {

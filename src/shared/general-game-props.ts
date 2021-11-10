@@ -5,7 +5,10 @@ import { sAssert } from "./assert";
 import { BoardProps } from "./bgio-types";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
-export interface AppBoardProps<G = unknown> extends BoardProps<G> {
+/**
+ * Properties that are shared by all games. (This is a wrapper for BGIO BoardProps.)
+ */
+export interface GeneralGameProps<G = unknown> extends BoardProps<G> {
     playerData: PlayerDataDictionary;
     allJoined: boolean;
     allReady: boolean;
@@ -20,7 +23,7 @@ export interface AppBoardProps<G = unknown> extends BoardProps<G> {
     name: (pid: string) => string;
 }
 
-export function makeAppBoardProps<G>(bgioProps: BoardProps<G>): AppBoardProps<G> {
+export function makeGeneralGameProps<G>(bgioProps: BoardProps<G>): GeneralGameProps<G> {
 
     const playerData = makePlayerData(bgioProps);
 

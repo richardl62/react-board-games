@@ -17,16 +17,16 @@ const PlayerScore=styled.div<{current: boolean}>`
 export function ScoresEtc({actions}: {actions: Actions}): JSX.Element {
 
 
-    const scoreElems = actions.bgioProps.playOrder.map(pid => {
+    const scoreElems = actions.generalProps.playOrder.map(pid => {
         const score = actions.score(pid);
-        const name = actions.bgioProps.name(pid);
+        const name = actions.generalProps.name(pid);
 
         let displayName = name;
-        if (pid === actions.bgioProps.playerID) {
+        if (pid === actions.generalProps.playerID) {
             displayName += " (you)";
         }
         return (
-            <PlayerScore key={name} current={pid === actions.bgioProps.currentPlayer} >
+            <PlayerScore key={name} current={pid === actions.generalProps.currentPlayer} >
                 {`${displayName}: ${score}`}
             </PlayerScore>
         );
@@ -35,7 +35,7 @@ export function ScoresEtc({actions}: {actions: Actions}): JSX.Element {
     return (
         <div>
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...actions.bgioProps}/>
+            <GameWarnings {...actions.generalProps}/>
         </div>
     );
 }

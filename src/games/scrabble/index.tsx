@@ -1,13 +1,13 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 import { AppGame } from "shared/types";
 import { bgioMoves, startingGameData, useActions } from "./actions";
 import { Board } from "./board";
 import { configs, ScrabbleConfig } from "./config";
 
 interface BoardWrapperProps {
-    appBoardProps: AppBoardProps;
+    appBoardProps: GeneralGameProps;
     config: ScrabbleConfig
 }
 
@@ -25,7 +25,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: AppBoardProps) => <BoardWrapper
+        board: (props: GeneralGameProps) => <BoardWrapper
             appBoardProps={props} config={config}
         />
     };

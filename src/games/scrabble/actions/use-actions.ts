@@ -3,12 +3,12 @@ import { sAssert } from "shared/assert";
 import { Rack } from "./board-and-rack";
 import { BoardData, GameData, isGameData } from "./game-data";
 import { ScrabbleConfig } from "../config";
-import { AppBoardProps } from "shared/app-board-props";
+import { GeneralGameProps } from "shared/general-game-props";
 import { Actions, PlayerGameState } from "./actions";
 
 // Hmm. Should this be refactored to use useReduce?
-export function useActions(props_: AppBoardProps, config: ScrabbleConfig): Actions {
-    const props = props_ as AppBoardProps<GameData>;
+export function useActions(props_: GeneralGameProps, config: ScrabbleConfig): Actions {
+    const props = props_ as GeneralGameProps<GameData>;
     sAssert(isGameData(props.G));
 
     const playerID = props.playerID;

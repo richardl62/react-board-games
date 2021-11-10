@@ -37,7 +37,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
       } 
   }
 
-  if (active.length === 0 && actions.bgioProps.isMyTurn) {
+  if (active.length === 0 && actions.generalProps.isMyTurn) {
       return {
           onPass: () => actions.endTurn(0),
       };
@@ -69,7 +69,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
           };
       }
 
-      if(actions.bgioProps.isMyTurn && !unsetBlank) {
+      if(actions.generalProps.isMyTurn && !unsetBlank) {
           const uncheckedDone = () => {
               actions.endTurn(score);
               setIllegalWordsData(null);
