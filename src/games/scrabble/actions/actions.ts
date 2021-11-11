@@ -4,8 +4,10 @@ import { BoardData, GameData } from "./game-data";
 import { blank, Letter } from "../config";
 import { ScrabbleConfig } from "../config";
 import { Dispatch } from "react";
-import { Rack } from "./board-and-rack";
+import { BoardAndRack, Rack } from "./board-and-rack";
 import { GeneralGameProps } from "shared/general-game-props";
+import { CoreTile } from "./core-tile";
+import { ClientMoves } from "./bgio-moves";
 
 export interface SquareID {
     row: number;
@@ -13,41 +15,42 @@ export interface SquareID {
     boardID: string;
 }
 
+export interface GameState {
+    board: BoardData,
+    rack: Rack,
+    bag: CoreTile[],
+} 
+
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
     | { type: "recallRack" }
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
     | { type: "swapTiles", data: boolean[] }
+    | { type: "bgioStateChangePending" }
     | { type: "bgioStateChange", data: GeneralGameProps<GameData> }
 ;
 
 export class Actions {
     constructor(
-        generalProps: GeneralGameProps, 
+        generalProps: GeneralGameProps<GameData>, 
         config: ScrabbleConfig,
-        board: BoardData,
-        rack: Rack,
-        nTilesInBag: number,
+        gameState: GameState,
         dispatch: Dispatch<ActionType>,
     ) {
         this.generalProps = generalProps;
         this.config = config;
-        this.board = board;
-        this.rack = rack;
-        this.nTilesInBag = nTilesInBag,
+        this.gameState = gameState,
         this.dispatch = dispatch;
     }
 
     // Clients should not access the game data, i.e. bgioProps.G
-    readonly generalProps: GeneralGameProps;
+    readonly generalProps: GeneralGameProps<GameData>;
 
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
 
-    readonly board: BoardData;
-    readonly rack: Rack;
-    readonly nTilesInBag: number;
+    private readonly gameState: GameState;
 
     get playOrder(): string[] {
         return this.generalProps.ctx.playOrder;
@@ -70,6 +73,14 @@ export class Actions {
         return this.generalProps.playerID === this.currentPlayer;
     } 
 
+    get board() : BoardData {
+        return this.gameState.board;
+    }
+
+    get rack() : Rack {
+        return this.gameState.rack;
+    }
+
     name(pid: string) : string {
         const playerData = this.generalProps.playerData[pid];
         sAssert(playerData);
@@ -78,18 +89,19 @@ export class Actions {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canMove(sq: SquareID) : boolean {
-        console.warn("Actions.canMove is not implemented");
-        return true;
-        //return this.boardAndRack.isActive(tilePosition(sq));
+        //KLUDGE:  Very inefficient.
+        const br = new BoardAndRack(this.gameState.board, this.gameState.rack);
+        return br.canMove(sq);
     }
     
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     score(pid: string) : number {
-        console.warn("Actions.score is not implemented");
-        return -1;
-    //     const playerData = this.bgioProps.G.playerData[pid];
-    //     sAssert(playerData);
-    //     return playerData.score;
+        const playerData = this.generalProps.G.playerData[pid];
+        sAssert(playerData);
+        return playerData.score;
+    }
+
+    get nTilesInBag() : number {
+        return this.gameState.bag.length;
     }
 
     /**
@@ -101,10 +113,30 @@ export class Actions {
     get allowSwapping() : boolean {
         return this.nTilesInBag >= this.config.rackSize;
     } 
+
+    private get bgioMoves() : ClientMoves {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return this.generalProps.moves as any;
+    }
     
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     endTurn(score: number): void {
-        throw new Error("not yet implemented");
+        const rack = [...this.gameState.rack];
+        const bag = [...this.gameState.bag];
+        for(let ri = 0; ri < rack.length; ++ri) {
+            if(!rack[ri]) {
+                rack[ri] = bag.pop() || null;
+            }
+        }
+
+        this.bgioMoves.setBoardRandAndScore({
+            score: score,
+            rack: rack,
+            board: this.gameState.board,
+            bag: bag,
+        });
+
+        sAssert(this.generalProps.events.endTurn);
+        this.generalProps.events.endTurn();
     }
 }
 

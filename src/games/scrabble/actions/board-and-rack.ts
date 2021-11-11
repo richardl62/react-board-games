@@ -1,7 +1,7 @@
 import { sAssert } from "shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData } from "./game-data";
-import { blank } from "../config";
+import { blank, Letter } from "../config";
 import { SquareID } from "game-support/deprecated/boards";
 import { sameJSON, shuffle } from "shared/tools";
 import { addToRack, compactRack, onRack } from "./game-actions";
@@ -70,14 +70,6 @@ export class BoardAndRack {
 
     private board: BoardData;
     private rack: Rack;
-
-    resetBoard(board: BoardData): void {
-        this.board = board.map(row => [...row]);
-    }
-
-    resetRack(rack: Rack): void {
-        this.rack = [...rack];
-    }
 
     getTile(tp: TilePosition): CoreTile | null {
         if (tp.rack) {
@@ -194,5 +186,26 @@ export class BoardAndRack {
     shuffleRack(): void {
         shuffle(this.rack);
         compactRack(this.rack);
+    }
+    
+    setBlack(id: SquareID, letter: Letter) : void {
+        sAssert(!onRack(id));
+
+        const sq = this.board[id.row][id.col];
+        sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
+        sq.letter = letter;
+    }
+
+    swapTiles(toSwap: boolean[], bag: CoreTile[]): void {
+
+        for (let ri = 0; ri < toSwap.length; ++ri) {
+            if(toSwap[ri]) {
+                const old = this.rack[ri];
+                sAssert(old, "Attempt to swap non-existant tile");
+                bag.push(old);
+                this.rack[ri] = bag.shift()!;
+            }
+        }
+        shuffle(bag);
     }
 }
