@@ -2,6 +2,9 @@ import { sAssert } from "shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData } from "./game-data";
 import { blank } from "../config";
+import { SquareID } from "game-support/deprecated/boards";
+import { sameJSON, shuffle } from "shared/tools";
+import { addToRack, compactRack, onRack } from "./game-actions";
 
 export type Rack = (CoreTile | null)[];
 
@@ -15,7 +18,14 @@ export type TilePosition =
         board: {row: number; col: number;}
     };
 
-
+function tilePosition(sq: SquareID): TilePosition {
+    if (onRack(sq)) {
+        return { rack: { pos: sq.col } };
+    } else {
+        return { board: sq };
+    }
+}
+    
 function moveTilesUp(rack: Rack, posToClear: number) : boolean {
     let posOfGap = null;
     for(let pos = posToClear; pos <= rack.length; ++pos) {
@@ -139,5 +149,50 @@ export class BoardAndRack {
 
     getRackFromState(): Rack {
         return this.rack;
+    }
+
+    canMove(sq: SquareID) : boolean {
+        return this.isActive(tilePosition(sq));
+    }
+
+    move(arg: {from: SquareID,to: SquareID}) : void {
+        const from = tilePosition(arg.from);
+        const to = tilePosition(arg.to);
+        if(sameJSON(from,to)) {
+            return;
+        }
+
+        const fromLetter = this.getTile(from);
+        const toLetter  = this.getTile(to);
+
+        // Do nothing if attempting to move onto an inactive tile.
+        if (toLetter === null) {
+            this.setActiveTile(from, null);
+            this.setActiveTile(to, fromLetter);
+        } else if (to.rack) {
+            this.setActiveTile(from, null);
+            this.insertIntoRack(to, fromLetter);
+        } else if (this.isActive(to)) {
+            this.setActiveTile(from, null);
+            this.addToRack(toLetter);
+            this.setActiveTile(to, fromLetter);
+        }
+    }
+
+    recallRack(): void {
+        for (let row = 0; row < this.board.length; ++row) {
+            for (let col = 0; col < this.board[row].length; ++col) {
+                const tile = this.board[row][col];
+                if (tile?.active) {
+                    addToRack(this.rack, tile);
+                    this.board[row][col] = null;
+                }
+            }
+        }
+    }
+
+    shuffleRack(): void {
+        shuffle(this.rack);
+        compactRack(this.rack);
     }
 }

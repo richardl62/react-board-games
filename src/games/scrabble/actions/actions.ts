@@ -1,13 +1,12 @@
 import { sAssert } from "shared/assert";
-import { sameJSON, shuffle } from "shared/tools";
-import { ClientMoves } from "./bgio-moves";
-import { BoardAndRack, Rack, TilePosition } from "./board-and-rack";
-import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
-import { BoardData, GameData } from "./game-data";
-import { CoreTile } from "./core-tile";
-import { blank, Letter } from "../config";
-import { ScrabbleConfig } from "../config";
 import { GeneralGameProps } from "shared/general-game-props";
+import { shuffle } from "shared/tools";
+import { blank, Letter, ScrabbleConfig } from "../config";
+import { ClientMoves } from "./bgio-moves";
+import { BoardAndRack, Rack } from "./board-and-rack";
+import { CoreTile } from "./core-tile";
+import { boardIDs, onRack } from "./game-actions";
+import { BoardData, GameData } from "./game-data";
 
 export type { Rack };
 
@@ -15,15 +14,6 @@ export interface SquareID {
     row: number;
     col: number;
     boardID: string;
-}
-
-
-function tilePosition(sq: SquareID) : TilePosition {
-    if(onRack(sq)) {
-        return {rack: {pos: sq.col}};
-    } else {
-        return {board: sq};
-    }
 }
 
 /** Game state required for a particular players (so includes the rack only
@@ -91,52 +81,22 @@ export class Actions {
     }
 
     canMove(sq: SquareID) : boolean {
-        return this.boardAndRack.isActive(tilePosition(sq));
+        return this.boardAndRack.canMove(sq);
     }
 
     move(arg: {from: SquareID,to: SquareID}) : void {
-        const from = tilePosition(arg.from);
-        const to = tilePosition(arg.to);
-        if(sameJSON(from,to)) {
-            return;
-        }
-
-        const br = this.boardAndRack;
-        const fromLetter = br.getTile(from);
-        const toLetter  = br.getTile(to);
-
-        // Do nothing if attempting to move onto an inactive tile.
-        if (toLetter === null) {
-            br.setActiveTile(from, null);
-            br.setActiveTile(to, fromLetter);
-        } else if (to.rack) {
-            br.setActiveTile(from, null);
-            br.insertIntoRack(to, fromLetter);
-        } else if (br.isActive(to)) {
-            br.setActiveTile(from, null);
-            br.addToRack(toLetter);
-            br.setActiveTile(to, fromLetter);
-        }
+        this.boardAndRack.move(arg);
 
         this.setState();
     }
 
     recallRack(): void {
-        for (let row = 0; row < this.board.length; ++row) {
-            for (let col = 0; col < this.board[row].length; ++col) {
-                const tile = this.board[row][col];
-                if (tile?.active) {
-                    addToRack(this.rack, tile);
-                    this.board[row][col] = null;
-                }
-            }
-        }
+        this.boardAndRack.recallRack();
         this.setState();
     }
 
     shuffleRack(): void {
-        shuffle(this.rack);
-        compactRack(this.rack);
+        this.boardAndRack.shuffleRack();
         this.setState(); // Inefficient as board has not changes.
     }
 
