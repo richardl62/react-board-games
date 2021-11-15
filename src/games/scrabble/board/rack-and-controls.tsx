@@ -44,6 +44,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
                 type: "swapTiles",
                 data: selectedForSwap,
             });
+            actions.endTurn( 0 );
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);

@@ -27,8 +27,7 @@ export type ActionType =
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
     | { type: "swapTiles", data: boolean[] }
-    | { type: "bgioStateChangePending" }
-    | { type: "bgioStateChange", data: GeneralGameProps<GameData> }
+    | { type: "bgioStateChange", data: GameState }
 ;
 
 export class Actions {
@@ -81,6 +80,11 @@ export class Actions {
         return this.gameState.rack;
     }
 
+    private get bag() : CoreTile[] {
+        return this.gameState.bag;
+    }
+
+
     name(pid: string) : string {
         const playerData = this.generalProps.playerData[pid];
         sAssert(playerData);
@@ -118,23 +122,22 @@ export class Actions {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return this.generalProps.moves as any;
     }
-    
-    endTurn(score: number): void {
-        const rack = [...this.gameState.rack];
-        const bag = [...this.gameState.bag];
-        for(let ri = 0; ri < rack.length; ++ri) {
+
+    endTurn(score: number) : void {
+        const rack = [...this.rack];
+        const bag = [...this.bag];
+        for (let ri = 0; ri < rack.length; ++ri) {
             if(!rack[ri]) {
                 rack[ri] = bag.pop() || null;
             }
         }
-
+    
         this.bgioMoves.setBoardRandAndScore({
             score: score,
             rack: rack,
-            board: this.gameState.board,
+            board: this.board,
             bag: bag,
-        });
-
+        });    
         sAssert(this.generalProps.events.endTurn);
         this.generalProps.events.endTurn();
     }

@@ -7,46 +7,25 @@ import { ActionType } from "./actions";
 import { BoardAndRack } from "./board-and-rack";
 import { GameData } from "./game-data";
 
-
-interface ReducerState {
-    gameState?: GameState,
-    bgioTimestamp: number;
-} 
-
-function getReducerState(props: GeneralGameProps<GameData>): ReducerState {
+function getGameState(props: GeneralGameProps<GameData>): GameState {
     const playerID = props.playerID;
     sAssert(playerID); // KLUDGE? - Not sure when it can be null.
 
     return {
-        gameState: {
-            board: props.G.board,
-            rack: props.G.playerData[playerID].playableTiles,
-            bag: props.G.bag,
-        },
-        bgioTimestamp: props.G.timestamp,
+        board: props.G.board,
+        rack: props.G.playerData[playerID].playableTiles,
+        bag: props.G.bag,
     };
 }
 
-// | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-// | { type: "swapTiles", data: boolean[] }
-
-function reducer(state : ReducerState, action: ActionType) : ReducerState {
-
-    if(action.type === "bgioStateChangePending") {
-        return {
-            bgioTimestamp: state.bgioTimestamp,
-        };
-    }
+function reducer(state : GameState, action: ActionType) : GameState {
 
     if(action.type === "bgioStateChange") {
-        const newState = getReducerState(action.data);
-        return newState;
+        return action.data;
     }
 
-    sAssert(state.gameState, "Move made while state undefined (most likely bgio move is pending)");
-        
-    const br = new BoardAndRack(state.gameState.board, state.gameState.rack);
-    let bag = state.gameState.bag;
+    const br = new BoardAndRack(state.board, state.rack);
+    let bag = state.bag;
 
     if(action.type === "move") {
         br.move(action.data);
@@ -63,46 +42,43 @@ function reducer(state : ReducerState, action: ActionType) : ReducerState {
         console.warn("Unrecognised action in reducer:", action);
     }
     return {
-        gameState: {
-            board: br.getBoard(),
-            rack: br.getRack(),
-            bag: bag,
-        },
-        bgioTimestamp: state.bgioTimestamp,
+        board: br.getBoard(),
+        rack: br.getRack(),
+        bag: bag,
     };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleConfig): Actions | null {
     
-    const stateFromBgio = getReducerState(props);
-    const [state, dispatch] = useReducer(reducer, stateFromBgio );
+    const stateFromBgio = getGameState(props);
+    const bgioTimestamp = props.G.timestamp;
 
+    const [state, dispatch] = useReducer(reducer, stateFromBgio );
+    const lastBgioTimestamp = useRef(bgioTimestamp);
     const callCount = useRef(0);
     callCount.current++;
 
-    const gameState = state.gameState;
-    if(!gameState) {
-        return null;
+    if(bgioTimestamp !== lastBgioTimestamp.current) {
+        sAssert(bgioTimestamp > lastBgioTimestamp.current);
+        lastBgioTimestamp.current = bgioTimestamp;
+
+        dispatch({ 
+            type: "bgioStateChange", 
+            data: stateFromBgio,
+        });
+
     }
+
 
     // const rackLettersState = gameState.rack.map(ct => ct && ct.letter);
     // const rackLettersBgio = stateFromBgio.gameState.rack.map(ct => ct && ct.letter);
-    // console.log(`useActions(${callCount.current})`,
+    // console.log(`useActions(${callCount.current})`
     //     `state(${state.bgioTimestamp}): `, ...rackLettersState,
     //     `bgio(${props.G.timestamp}): `, ...rackLettersBgio,
     // );
-    
-    if(state.bgioTimestamp !== props.G.timestamp) {
-        sAssert(state.bgioTimestamp < props.G.timestamp);
-        
-        dispatch({ 
-            type: "bgioStateChange", 
-            data: props,
-        });
 
-        return null;
-    }
+    
 
     // if(state.rack[0] === null && state.rack[1] === null) {
     //     console.log("Found double null at start of rack: call count", callCount.current );
@@ -110,7 +86,7 @@ export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleCo
     return new Actions(
         props,
         config,
-        gameState,
+        state,
         dispatch,
     );
 }
