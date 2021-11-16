@@ -1,15 +1,15 @@
-// NOTE/KLUDGE:  The matchData type supplied by boardgames.io seems not have
-// isConnected as an optional member. The code below is my way of add it.
+// This file gives a work-around for an apparent bug in a Bgio type defition.
 
 import { BoardProps as BoardProps_} from "boardgame.io/react";
 
 type MatchDataElem_ = Required<BoardProps_>["matchData"][0]; 
 
+// The Bgio supplied version of MatchDataElem does not have
+// isConnected as an optional elemeent.
 export interface MatchDataElem extends MatchDataElem_{
     isConnected?: boolean;
 } 
 
-// 'G extends any = any' is copied from Bgio. I don't see why it is better than 'any'.
 export interface BoardProps<G=unknown> extends BoardProps_<G> {
     matchData?: Array<MatchDataElem>;
 }
