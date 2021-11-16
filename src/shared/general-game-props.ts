@@ -6,7 +6,7 @@ import { BoardProps } from "./bgio-types";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
 /**
- * Properties that are shared by all games. (This is a wrapper for BGIO BoardProps.)
+ * Game properties.  (A wrapper for BGIO BoardProps.)
  */
 export interface GeneralGameProps<G = unknown> extends BoardProps<G> {
     playerData: PlayerDataDictionary;
@@ -24,7 +24,7 @@ export interface GeneralGameProps<G = unknown> extends BoardProps<G> {
 }
 
 export function makeGeneralGameProps<G>(bgioProps: BoardProps<G>): GeneralGameProps<G> {
-
+ 
     const playerData = makePlayerData(bgioProps);
 
     let allJoined = true;

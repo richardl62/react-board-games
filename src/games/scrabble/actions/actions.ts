@@ -37,27 +37,6 @@ export class Actions {
 
     private readonly gameState: GameState;
 
-    get playOrder(): string[] {
-        return this.generalProps.ctx.playOrder;
-    }
-
-    get playerID(): string {
-        sAssert(this.generalProps.playerID);
-        return this.generalProps.playerID;
-    }
-
-    get currentPlayer(): string {
-        return this.generalProps.ctx.currentPlayer;
-    }
-
-    get allJoined(): boolean {
-        return this.generalProps.allJoined;
-    }
-
-    get isMyTurn() : boolean {
-        return this.generalProps.playerID === this.currentPlayer;
-    } 
-
     get board() : BoardData {
         return this.gameState.board;
     }
