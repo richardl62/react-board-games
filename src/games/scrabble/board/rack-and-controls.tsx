@@ -40,11 +40,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            actions.dispatch({
-                type: "swapTiles",
-                data: selectedForSwap,
-            });
-            actions.endTurn( 0 );
+            actions.swapTiles(selectedForSwap);
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);

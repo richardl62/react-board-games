@@ -195,17 +195,4 @@ export class BoardAndRack {
         sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
         sq.letter = letter;
     }
-
-    swapTiles(toSwap: boolean[], bag: CoreTile[]): void {
-
-        for (let ri = 0; ri < toSwap.length; ++ri) {
-            if(toSwap[ri]) {
-                const old = this.rack[ri];
-                sAssert(old, "Attempt to swap non-existant tile");
-                bag.push(old);
-                this.rack[ri] = bag.shift()!;
-            }
-        }
-        shuffle(bag);
-    }
 }

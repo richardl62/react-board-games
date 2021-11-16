@@ -8,6 +8,7 @@ import { BoardAndRack, Rack } from "./board-and-rack";
 import { GeneralGameProps } from "shared/general-game-props";
 import { CoreTile } from "./core-tile";
 import { ClientMoves } from "./bgio-moves";
+import { shuffle } from "shared/tools";
 
 export interface SquareID {
     row: number;
@@ -26,7 +27,6 @@ export type ActionType =
     | { type: "recallRack" }
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-    | { type: "swapTiles", data: boolean[] }
     | { type: "bgioStateChange", data: GameState }
 ;
 
@@ -135,6 +135,29 @@ export class Actions {
         this.bgioMoves.setBoardRandAndScore({
             score: score,
             rack: rack,
+            board: this.board,
+            bag: bag,
+        });    
+        sAssert(this.generalProps.events.endTurn);
+        this.generalProps.events.endTurn();
+    }
+
+    swapTiles(toSwap: boolean[]) : void {
+        const bag = [...this.bag];
+
+        for (let ri = 0; ri < toSwap.length; ++ri) {
+            if (toSwap[ri]) {
+                const old = this.rack[ri];
+                sAssert(old, "Attempt to swap non-existant tile");
+                bag.push(old);
+                this.rack[ri] = bag.shift()!;
+            }
+        }
+        shuffle(bag);
+        
+        this.bgioMoves.setBoardRandAndScore({
+            score: 0,
+            rack: this.rack,
             board: this.board,
             bag: bag,
         });    

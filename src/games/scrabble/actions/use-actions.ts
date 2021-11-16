@@ -1,4 +1,4 @@
-import { useReducer, useRef } from "react";
+import { useReducer, useState } from "react";
 import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
 import { Actions, GameState } from "./actions";
@@ -25,7 +25,6 @@ function reducer(state : GameState, action: ActionType) : GameState {
     }
 
     const br = new BoardAndRack(state.board, state.rack);
-    let bag = state.bag;
 
     if(action.type === "move") {
         br.move(action.data);
@@ -33,35 +32,34 @@ function reducer(state : GameState, action: ActionType) : GameState {
         br.recallRack();
     } else if(action.type === "shuffleRack") {
         br.shuffleRack();
-    } else if(action.type === "swapTiles") {
-        bag = [...bag];
-        br.swapTiles(action.data, bag);
     } else if(action.type === "setBlank") {
         br.setBlack(action.data.id, action.data.letter);
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
     return {
+        ...state,
         board: br.getBoard(),
         rack: br.getRack(),
-        bag: bag,
+
     };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleConfig): Actions | null {
     
     const stateFromBgio = getGameState(props);
     const bgioTimestamp = props.G.timestamp;
 
     const [state, dispatch] = useReducer(reducer, stateFromBgio );
-    const lastBgioTimestamp = useRef(bgioTimestamp);
-    const callCount = useRef(0);
-    callCount.current++;
+    const [lastBgioTimestamp, setLastBgioTimestamp] = useState(bgioTimestamp);
 
-    if(bgioTimestamp !== lastBgioTimestamp.current) {
-        sAssert(bgioTimestamp > lastBgioTimestamp.current);
-        lastBgioTimestamp.current = bgioTimestamp;
+    if(bgioTimestamp !== lastBgioTimestamp) {
+        sAssert(bgioTimestamp > lastBgioTimestamp);
+
+        // Note to self: At one point, the timestamp was reduced useRef rather that useState. 
+        // But then a change in bgio state did not cause a (visible) re-render. I didn't
+        // understand why not.
+        setLastBgioTimestamp(bgioTimestamp);
 
         dispatch({ 
             type: "bgioStateChange", 
@@ -69,20 +67,6 @@ export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleCo
         });
 
     }
-
-
-    // const rackLettersState = gameState.rack.map(ct => ct && ct.letter);
-    // const rackLettersBgio = stateFromBgio.gameState.rack.map(ct => ct && ct.letter);
-    // console.log(`useActions(${callCount.current})`
-    //     `state(${state.bgioTimestamp}): `, ...rackLettersState,
-    //     `bgio(${props.G.timestamp}): `, ...rackLettersBgio,
-    // );
-
-    
-
-    // if(state.rack[0] === null && state.rack[1] === null) {
-    //     console.log("Found double null at start of rack: call count", callCount.current );
-    // }
     return new Actions(
         props,
         config,
