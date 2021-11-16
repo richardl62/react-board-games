@@ -1,35 +1,20 @@
+import { Dispatch } from "react";
 import { sAssert } from "shared/assert";
+import { GeneralGameProps } from "shared/general-game-props";
+import { shuffle } from "shared/tools";
+import { blank, ScrabbleConfig } from "../config";
+import { ClientMoves } from "./bgio-moves";
+import { BoardAndRack, Rack } from "./board-and-rack";
+import { CoreTile } from "./core-tile";
 import { boardIDs } from "./game-actions";
 import { BoardData, GameData } from "./game-data";
-import { blank, Letter } from "../config";
-import { ScrabbleConfig } from "../config";
-import { Dispatch } from "react";
-import { BoardAndRack, Rack } from "./board-and-rack";
-import { GeneralGameProps } from "shared/general-game-props";
-import { CoreTile } from "./core-tile";
-import { ClientMoves } from "./bgio-moves";
-import { shuffle } from "shared/tools";
+import { ActionType, GameState } from "./game-state-reducer";
 
 export interface SquareID {
     row: number;
     col: number;
     boardID: string;
 }
-
-export interface GameState {
-    board: BoardData,
-    rack: Rack,
-    bag: CoreTile[],
-    externalTimestamp: number,
-} 
-
-export type ActionType =
-    | { type: "move", data: {from: SquareID,to: SquareID}}
-    | { type: "recallRack" }
-    | { type: "shuffleRack" }
-    | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-    | { type: "externalStateChange", data: GameState }
-;
 
 export class Actions {
     constructor(
