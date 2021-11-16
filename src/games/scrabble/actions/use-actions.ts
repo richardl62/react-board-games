@@ -15,21 +15,17 @@ function getGameState(props: GeneralGameProps<GameData>): GameState {
         board: props.G.board,
         rack: props.G.playerData[playerID].playableTiles,
         bag: props.G.bag,
-        bgioTimestamp: props.G.timestamp,
+        externalTimestamp: props.G.timestamp,
     };
 }
 
 function reducer(state : GameState, action: ActionType) : GameState {
 
-    if(action.type === "noop") {
-        return state;
-    }
+    if(action.type === "externalStateChange") {
+        const externalState = action.data;
 
-    if(action.type === "bgioStateChange") {
-        const currentBgioState = action.data;
-
-        sAssert(currentBgioState.bgioTimestamp > state.bgioTimestamp);
-        return currentBgioState;
+        sAssert(externalState.externalTimestamp > state.externalTimestamp);
+        return externalState;
     }
 
     const br = new BoardAndRack(state.board, state.rack);
@@ -45,25 +41,22 @@ function reducer(state : GameState, action: ActionType) : GameState {
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
+    
     return {
         ...state,
         board: br.getBoard(),
         rack: br.getRack(),
-
     };
 }
 
-export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleConfig): Actions | null {
+export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleConfig): Actions {
     
-    const stateFromBgio = getGameState(props);
-    const [state, dispatch] = useReducer(reducer, stateFromBgio );
+    const [state, dispatch] = useReducer(reducer, props, getGameState );
 
-    const bgioTimestamp = props.G.timestamp;
-
-    if (bgioTimestamp !== state.bgioTimestamp) {
+    if (props.G.timestamp !== state.externalTimestamp) {
         dispatch({
-            type: "bgioStateChange",
-            data: stateFromBgio,
+            type: "externalStateChange",
+            data: getGameState(props),
         });
     } 
 

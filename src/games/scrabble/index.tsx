@@ -18,7 +18,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     sAssert(isGameData(gameDataProps.G));
     
     const actions = useActions(gameDataProps, props.config);
-    return actions ? <Board actions={actions} /> : <h1>Waiting for update</h1>;
+    return <Board actions={actions} />;
 }
 
 function makeAppGame(config: ScrabbleConfig) : AppGame
