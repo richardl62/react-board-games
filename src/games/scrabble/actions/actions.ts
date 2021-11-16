@@ -20,9 +20,11 @@ export interface GameState {
     board: BoardData,
     rack: Rack,
     bag: CoreTile[],
+    bgioTimestamp: number,
 } 
 
 export type ActionType =
+    | { type: "noop" }
     | { type: "move", data: {from: SquareID,to: SquareID}}
     | { type: "recallRack" }
     | { type: "shuffleRack" }

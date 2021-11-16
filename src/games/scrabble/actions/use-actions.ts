@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
 import { Actions, GameState } from "./actions";
@@ -15,13 +15,21 @@ function getGameState(props: GeneralGameProps<GameData>): GameState {
         board: props.G.board,
         rack: props.G.playerData[playerID].playableTiles,
         bag: props.G.bag,
+        bgioTimestamp: props.G.timestamp,
     };
 }
 
 function reducer(state : GameState, action: ActionType) : GameState {
 
+    if(action.type === "noop") {
+        return state;
+    }
+
     if(action.type === "bgioStateChange") {
-        return action.data;
+        const currentBgioState = action.data;
+
+        sAssert(currentBgioState.bgioTimestamp > state.bgioTimestamp);
+        return currentBgioState;
     }
 
     const br = new BoardAndRack(state.board, state.rack);
@@ -48,25 +56,17 @@ function reducer(state : GameState, action: ActionType) : GameState {
 export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleConfig): Actions | null {
     
     const stateFromBgio = getGameState(props);
+    const [state, dispatch] = useReducer(reducer, stateFromBgio );
+
     const bgioTimestamp = props.G.timestamp;
 
-    const [state, dispatch] = useReducer(reducer, stateFromBgio );
-    const [lastBgioTimestamp, setLastBgioTimestamp] = useState(bgioTimestamp);
-
-    if(bgioTimestamp !== lastBgioTimestamp) {
-        sAssert(bgioTimestamp > lastBgioTimestamp);
-
-        // Note to self: At one point, the timestamp was reduced useRef rather that useState. 
-        // But then a change in bgio state did not cause a (visible) re-render. I didn't
-        // understand why not.
-        setLastBgioTimestamp(bgioTimestamp);
-
-        dispatch({ 
-            type: "bgioStateChange", 
+    if (bgioTimestamp !== state.bgioTimestamp) {
+        dispatch({
+            type: "bgioStateChange",
             data: stateFromBgio,
         });
+    } 
 
-    }
     return new Actions(
         props,
         config,
