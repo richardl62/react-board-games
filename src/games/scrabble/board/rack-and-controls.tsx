@@ -4,6 +4,7 @@ import { sAssert } from "shared/assert";
 import { Actions } from "../actions";
 import { Rack } from "./rack";
 import { tilesOut } from "../actions/actions";
+import { swapTiles } from "../actions/bgio-moves";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -40,7 +41,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            actions.swapTiles(selectedForSwap);
+            swapTiles(actions,selectedForSwap);
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);

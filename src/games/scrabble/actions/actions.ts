@@ -1,9 +1,7 @@
 import { Dispatch } from "react";
 import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
-import { shuffle } from "shared/tools";
 import { blank, ScrabbleConfig } from "../config";
-import { ClientMoves } from "./bgio-moves";
 import { boardIDs } from "./game-actions";
 import { BoardData, GameData } from "./game-data";
 import { ActionType, GameState } from "./game-state-reducer";
@@ -34,12 +32,6 @@ export class Actions {
     readonly dispatch:  Dispatch<ActionType>
 
     readonly gameState: GameState;
-
-    name(pid: string) : string {
-        const playerData = this.generalProps.playerData[pid];
-        sAssert(playerData);
-        return playerData.name;
-    }
     
     score(pid: string) : number {
         const playerData = this.generalProps.G.playerData[pid];
@@ -47,54 +39,6 @@ export class Actions {
         return playerData.score;
     }
 
-
-
-    private get bgioMoves() : ClientMoves {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return this.generalProps.moves as any;
-    }
-
-    endTurn(score: number) : void {
-        const rack = [...this.gameState.rack];
-        const bag = [...this.gameState.bag];
-        for (let ri = 0; ri < rack.length; ++ri) {
-            if(!rack[ri]) {
-                rack[ri] = bag.pop() || null;
-            }
-        }
-    
-        this.bgioMoves.setBoardRandAndScore({
-            score: score,
-            rack: rack,
-            board: this.gameState.board,
-            bag: bag,
-        });    
-        sAssert(this.generalProps.events.endTurn);
-        this.generalProps.events.endTurn();
-    }
-
-    swapTiles(toSwap: boolean[]) : void {
-        const bag = [...this.gameState.bag];
-
-        for (let ri = 0; ri < toSwap.length; ++ri) {
-            if (toSwap[ri]) {
-                const old = this.gameState.rack[ri];
-                sAssert(old, "Attempt to swap non-existant tile");
-                bag.push(old);
-                this.gameState.rack[ri] = bag.shift()!;
-            }
-        }
-        shuffle(bag);
-        
-        this.bgioMoves.setBoardRandAndScore({
-            score: 0,
-            rack: this.gameState.rack,
-            board: this.gameState.board,
-            bag: bag,
-        });    
-        sAssert(this.generalProps.events.endTurn);
-        this.generalProps.events.endTurn();
-    }
 }
 
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Letter } from "../config";
 import { Actions, getWordsAndScore, findActiveLetters } from "../actions";
 import { findUnsetBlack, SquareID } from "../actions/actions";
+import { endTurn } from "../actions/bgio-moves";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();
@@ -39,7 +40,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
   if (active.length === 0 && actions.generalProps.isMyTurn) {
       return {
-          onPass: () => actions.endTurn(0),
+          onPass: () => endTurn(actions, 0),
       };
   } else if (!wordsAndScore) {
       return {
@@ -71,7 +72,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
       if(actions.generalProps.isMyTurn && !unsetBlank) {
           const uncheckedDone = () => {
-              actions.endTurn(score);
+              endTurn(actions, score);
               setIllegalWordsData(null);
           };
 
