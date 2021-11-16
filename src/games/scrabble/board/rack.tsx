@@ -1,11 +1,10 @@
 import React from "react";
-import { Board, makeBoardProps } from "game-support/deprecated/boards";
+import { Actions, boardIDs } from "../actions";
+import { boardBoarderColor, boardBoarderSize } from "./style";
+import { BoarderedGrid } from "game-support/boardered-grid";
+import { SquareType } from "../config";
+import { TileHolder } from "./tile-holder";
 import { sAssert } from "shared/assert";
-import { boardIDs } from "../actions";
-import { Actions } from "../actions";
-import { squareSize } from "./style";
-import { Tile } from "./tile";
-import { useSquareInteraction } from "./square-interaction";
 import { SquareID } from "../actions/actions";
 
 interface RackProps {
@@ -16,39 +15,46 @@ interface RackProps {
 
 export function Rack(props: RackProps): JSX.Element {
     const { actions, selected, setSelected } = props;
-    
-    const squareInteraction = useSquareInteraction(actions);
 
     const coreTiles = props.actions.rack;
-    const tiles = coreTiles.map((tile, index) => tile && <Tile tile={tile}
-        markAsMoveable={selected !== null && selected[index]}
-    />);
 
-    const toggleSelectForSwap = (sq: SquareID) => {
-        return {
-            onClick: () => {
-                sAssert(selected);
-                const newSwappable = [...selected];
-                newSwappable[sq.col] = !newSwappable[sq.col];
-                setSelected(newSwappable);
-            }
-        };
+    const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
+        if(drop) {
+            actions.dispatch({
+                type: "move",
+                data: {from: drag, to: drop}
+            });
+        }
     };
 
-    const boardProps = makeBoardProps({
-        pieces: [tiles],
+    const toggleSelect = (index: number) => {
+        sAssert(selected);
+        const newSwappable = [...selected];
+        newSwappable[index] = !newSwappable[index];
+        setSelected(newSwappable);
+    };
 
-        squareBackground: () => { return { color: "white", text: "" }; },
-        externalBorders: true,
-        internalBorders: true,
-        squareSize: squareSize,
+    const elems = coreTiles.map((tile, index) => <TileHolder
+        key={index}
 
-        boardID: boardIDs.rack,
+        tile={tile}
+        squareType={SquareType.simple}
 
-        squareInteraction: selected ? toggleSelectForSwap : squareInteraction,
+        squareID={{ row: 0, col: index, boardID: boardIDs.rack }}
 
-        moveStart: null, //clickDragState.start,
-    });
+        onDragEnd={selected ? undefined : onDragEnd}
+        onClick={selected? ()=>toggleSelect(index) : undefined}
 
-    return <Board {...boardProps} />;
+        highlight={Boolean(selected && selected[index])}
+        showHover={false}
+    />);
+
+    return <BoarderedGrid
+        nCols={coreTiles.length}
+        backgroundColor={boardBoarderColor}
+        gridGap={boardBoarderSize.internal}
+        borderWidth={boardBoarderSize.external}
+    >
+        {elems}
+    </BoarderedGrid>;
 }

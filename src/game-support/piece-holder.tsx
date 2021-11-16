@@ -9,13 +9,11 @@ interface BorderColor {
     hoverColor?: string | null;
 }
 
-
 const Container = styled.div<{
     hieght: string,
     width: string,
     color?: string | null,
     backgroundColor?: string | null,
-    borderColor?: BorderColor,
 }>`
     height: ${props=>props.hieght};
     width: ${props=>props.width};
@@ -24,18 +22,47 @@ const Container = styled.div<{
 
     position: relative;
     z-index: 0;
+`;
+
+function nonHoverBorderColor(bc?: BorderColor) : string {
+    if(bc?.color) {
+        return bc.color;
+    }
+
+    return "transparent";
+}
+
+function hoverBorderColor(bc?: BorderColor) : string {
+    if(bc?.hoverColor) {
+        return bc.hoverColor;
+    }
+
+    return nonHoverBorderColor(bc);
+}
+
+const Border = styled.div<{
+    hieght: string,
+    width: string,
+    borderColor?: BorderColor,
+}>`
+    height: ${props=>props.hieght};
+    width: ${props=>props.width};
+    color: ${props=>props.color || "none"};
+
+    position: absolute;
+    top:0;
+    left:0;
+
+    z-index: 2;
 
     border-style: solid;
     border-width: CALC(${props => props.hieght} * 0.1) CALC(${props => props.width} * 0.1);
 
-    // Quick and dirty handling of undefined color.
-    border-color: ${props => props.borderColor?.color || "rgba(0,0,0,0)"};
+
+    border-color: ${props => nonHoverBorderColor(props.borderColor)};
 
     :hover {
-        // Quick and very dirty handling of undefined color.
-        border-color: ${props => props.borderColor?.hoverColor 
-            || props.borderColor?.color 
-            || "rgba(0,0,0,0)"};
+        border-color: ${props => hoverBorderColor(props.borderColor)};
     }
 `;
 
@@ -91,23 +118,25 @@ export interface PieceHolderBackground {
     textColor?: string,
 }
 
+export interface PieceHolderStyle {
+    /** Size of the PieceHolder.
+     * The piece will be rendered in a div of this size.
+     */
+    hieght: string;
+    width: string;
+
+    /** Background color. (In future more general background my me allowed */
+    background: PieceHolderBackground;
+    /** 
+     * For now at least, the size of the border is a hard-coded fraction of the size 
+     * supplied in this interface.
+     */
+    borderColor?: BorderColor;
+}
+
 /** Propeties for PieceHolder */
 interface PieceHolderProps<ID = UnknownObject> {
-    style: {
-        /** Size of the PieceHolder.
-         * The piece will be rendered in a div of this size.
-         */
-        hieght: string;
-        width: string;
-
-        /** Background color. (In future more general background my me allowed */
-        background: PieceHolderBackground;
-        /** 
-         * For now at least, the size of the border is a hard-coded fraction of the size 
-         * supplied in this interface.
-         */
-        borderColor?: BorderColor;
-    };
+    style: PieceHolderStyle;
 
     /** The piece to be displayed. */
     children?: ReactNode;
@@ -139,21 +168,32 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
     const hideDuringDrag = dragDrop?.hide !== false;
     const hidePiece = isDragging && hideDuringDrag;
 
-    return <Container ref={dropRef} 
-        hieght={hieght} 
-        width={width} 
+    return <Container ref={dropRef}
+        hieght={hieght}
+        width={width}
         color={background?.textColor}
         backgroundColor={background?.color}
-        borderColor={borderColor}
-
         onClick={onClick}
     >
         {background.text}
-        {<Piece ref={dragRef}>
-            {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
+
+        {/* KLUDGE: Drag the piece and the border.  This is done because the border is on
+            top of the piece (to make it visible), and without kludge the border would block the drag.    
+        */}
+        <div ref={dragRef}>
+            <Piece >
+                {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
              by the piece being unmounted during the drag. */}
-            {hidePiece || children}
-        </Piece>}
+                {hidePiece || children}
+            </Piece>
+
+            <Border
+                hieght={hieght}
+                width={width}
+                borderColor={borderColor}
+            />
+        </div>
+        
     </Container>;
 }
 

@@ -1,7 +1,7 @@
-import { SquareID } from "game-support/deprecated/boards";
 import { sAssert } from "shared/assert";
 import { CoreTile } from ".";
 import { Letter } from "../config";
+import { SquareID } from "./actions";
 import { Rack, BoardAndRack } from "./board-and-rack";
 import { BoardData } from "./game-data";
 

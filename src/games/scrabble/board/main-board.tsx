@@ -1,43 +1,57 @@
+import { BoarderedGrid } from "game-support/boardered-grid";
 import React from "react";
-import { Board, makeBoardProps } from "game-support/deprecated/boards";
-import { nestedArrayMap } from "shared/tools";
-// KLUDGE? Should importing boardIDs be necessary?
 import { Actions, boardIDs } from "../actions";
-import { squareBackground, squareSize } from "./style";
-import { Tile } from "./tile";
-import { useSquareInteraction } from "./square-interaction";
+import { SquareID } from "../actions/actions";
+import { boardBoarderColor, boardBoarderSize } from "./style";
+import { TileHolder } from "./tile-holder";
 
 interface MainBoardProps {
     actions: Actions;
 }
 
 export function MainBoard({ actions }: MainBoardProps): JSX.Element {
+    const tiles = actions.board;
 
-    const squareInteraction = useSquareInteraction(actions);
+    const nRows = tiles.length;
+    const nCols = tiles[0].length;
 
-    const tiles = nestedArrayMap(actions.board, sd => {
-        if (!sd) return null;
-        const markAsMoveable = sd.active;
-        return <Tile tile={sd} markAsMoveable={markAsMoveable} />;
-    });
+    const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
+        if(drop) {
+            actions.dispatch({
+                type: "move",
+                data: {from: drag, to: drop}
+            });
+        }
+    };
 
-    const squareColors = nestedArrayMap(
-        actions.config.boardLayout,
-        squareBackground
-    );
+    const elems = [];
+    for(let row = 0; row < nRows; ++row) {
+        for(let col = 0; col < nCols; ++col) {
+            const tile = actions.board[row][col];
 
-    const boardProps = makeBoardProps({
-        pieces: tiles,
+            elems.push(
+                <TileHolder
+                    key={[row,col].toString()}
 
-        squareBackground: sq => squareColors[sq.row][sq.col],
-        externalBorders: true,
-        internalBorders: true,
-        squareSize: squareSize,
+                    tile={tile}
+                    squareType={actions.config.boardLayout[row][col]}
 
-        boardID: boardIDs.main,
-        squareInteraction: squareInteraction,
-        moveStart: null, //clickDragState.start,
-    });
+                    squareID={{row:row, col:col, boardID: boardIDs.main}}
+                    onDragEnd={onDragEnd}
 
-    return <Board {...boardProps} />;
+                    highlight={Boolean(tile?.active)}
+                    showHover={true}
+                />
+            );
+        }
+    } 
+
+    return <BoarderedGrid
+        nCols={nCols}
+        backgroundColor={boardBoarderColor}
+        gridGap={boardBoarderSize.internal}
+        borderWidth={boardBoarderSize.external}
+    >
+        {elems}
+    </BoarderedGrid>;
 }

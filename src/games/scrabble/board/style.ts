@@ -9,8 +9,11 @@ export const boardBoarderSize = {
 };
 
 export const tileBackgroundColor = "brown";
+export const boardBoarderColor = "rgb(100,0,0)";
+
 export const tileTextColor = "white";
-export const moveableTileBorder = `yellow solid calc(${squareSize} * 0.1)`;
+export const hightlightBorderColor = "yellow";
+export const hoverBorderColor = "rgb(200 200 100)"; // Muddy green
 
 
 export function squareBackground(type: SquareType) : PieceHolderBackground {

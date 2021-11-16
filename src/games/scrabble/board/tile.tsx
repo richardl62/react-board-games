@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CoreTile, tileScore } from "../actions";
-import { moveableTileBorder, squareSize, tileBackgroundColor, tileTextColor } from "./style";
+import { squareSize, tileBackgroundColor, tileTextColor } from "./style";
 
 const StyledLetter = styled.div`
     display:relative;
@@ -20,32 +20,16 @@ const Score = styled.span`
     top: 20%;
 `;
 
-const Marker = styled.div`
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    border: ${moveableTileBorder};
-    width: 100%;
-    height: 100%;
-`;
-
 interface TileProps {
     tile: CoreTile;
-    // True for titles that should marked as moveable.
-    // (This is used for titles on the board that were played during the current
-    // turn.)
-    markAsMoveable?: boolean;
 }
 
-export function Tile({ tile, markAsMoveable }: TileProps): JSX.Element {
+export function Tile({ tile }: TileProps): JSX.Element {
     const score = tileScore(tile);
     return (
         <StyledLetter>
             {tile.letter}
             <Score>{score}</Score>
-            {markAsMoveable ? <Marker /> : null}
         </StyledLetter>
     );
 }
-
-

@@ -2,9 +2,9 @@ import { sAssert } from "shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData } from "./game-data";
 import { blank, Letter } from "../config";
-import { SquareID } from "game-support/deprecated/boards";
 import { sameJSON, shuffle } from "shared/tools";
 import { addToRack, compactRack, onRack } from "./game-actions";
+import { SquareID } from "./actions";
 
 export type Rack = (CoreTile | null)[];
 
