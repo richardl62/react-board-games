@@ -25,8 +25,8 @@ interface RackAndControlsProps {
 
 export function RackAndControls(props: RackAndControlsProps): JSX.Element {
     const { actions } = props;
-    const hasTilesOut = tilesOut(actions.board);
-    const nTiles =  actions.rack.length;
+    const hasTilesOut = tilesOut(actions.gameState.board);
+    const nTiles =  actions.gameState.rack.length;
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -61,6 +61,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
         );
     } else {
 
+        const allowSwapping = actions.gameState.bag.length >= actions.gameState.rack.length;
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
             actions.dispatch({type: "recallRack"});
@@ -84,7 +85,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
 
             {actions.generalProps.isMyTurn &&
                 <button
-                    disabled={!actions.allowSwapping}
+                    disabled={!allowSwapping}
                     onClick={doEnableSwap}
                 >
                     Swap

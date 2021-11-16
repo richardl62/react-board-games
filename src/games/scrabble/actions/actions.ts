@@ -4,8 +4,6 @@ import { GeneralGameProps } from "shared/general-game-props";
 import { shuffle } from "shared/tools";
 import { blank, ScrabbleConfig } from "../config";
 import { ClientMoves } from "./bgio-moves";
-import { Rack } from "./board-and-rack";
-import { CoreTile } from "./core-tile";
 import { boardIDs } from "./game-actions";
 import { BoardData, GameData } from "./game-data";
 import { ActionType, GameState } from "./game-state-reducer";
@@ -35,20 +33,7 @@ export class Actions {
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
 
-    private readonly gameState: GameState;
-
-    get board() : BoardData {
-        return this.gameState.board;
-    }
-
-    get rack() : Rack {
-        return this.gameState.rack;
-    }
-
-    private get bag() : CoreTile[] {
-        return this.gameState.bag;
-    }
-
+    readonly gameState: GameState;
 
     name(pid: string) : string {
         const playerData = this.generalProps.playerData[pid];
@@ -62,19 +47,7 @@ export class Actions {
         return playerData.score;
     }
 
-    get nTilesInBag() : number {
-        return this.gameState.bag.length;
-    }
 
-    /**
-     * @param toSwap - Array of the same size as the rack.
-     * Tiles are swapped if the correspoing element of toSwap is true.
-     * (The true elements of toSwap must correspond to non-null elememts 
-     * of the rack).
-     */
-    get allowSwapping() : boolean {
-        return this.nTilesInBag >= this.config.rackSize;
-    } 
 
     private get bgioMoves() : ClientMoves {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,8 +55,8 @@ export class Actions {
     }
 
     endTurn(score: number) : void {
-        const rack = [...this.rack];
-        const bag = [...this.bag];
+        const rack = [...this.gameState.rack];
+        const bag = [...this.gameState.bag];
         for (let ri = 0; ri < rack.length; ++ri) {
             if(!rack[ri]) {
                 rack[ri] = bag.pop() || null;
@@ -93,7 +66,7 @@ export class Actions {
         this.bgioMoves.setBoardRandAndScore({
             score: score,
             rack: rack,
-            board: this.board,
+            board: this.gameState.board,
             bag: bag,
         });    
         sAssert(this.generalProps.events.endTurn);
@@ -101,22 +74,22 @@ export class Actions {
     }
 
     swapTiles(toSwap: boolean[]) : void {
-        const bag = [...this.bag];
+        const bag = [...this.gameState.bag];
 
         for (let ri = 0; ri < toSwap.length; ++ri) {
             if (toSwap[ri]) {
-                const old = this.rack[ri];
+                const old = this.gameState.rack[ri];
                 sAssert(old, "Attempt to swap non-existant tile");
                 bag.push(old);
-                this.rack[ri] = bag.shift()!;
+                this.gameState.rack[ri] = bag.shift()!;
             }
         }
         shuffle(bag);
         
         this.bgioMoves.setBoardRandAndScore({
             score: 0,
-            rack: this.rack,
-            board: this.board,
+            rack: this.gameState.rack,
+            board: this.gameState.board,
             bag: bag,
         });    
         sAssert(this.generalProps.events.endTurn);
