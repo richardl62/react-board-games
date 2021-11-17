@@ -1,7 +1,7 @@
 import { sAssert } from "shared/assert";
 import { Letter } from "../config";
-import { SquareID } from "./actions";
 import { BoardAndRack } from "./board-and-rack";
+import { SquareID } from "./game-actions";
 import { LocalGameState } from "./local-game-state";
 
 export type ActionType =

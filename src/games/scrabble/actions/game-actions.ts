@@ -3,7 +3,12 @@ import { GlobalGameState, BoardData } from "./global-game-state";
 import { RowCol } from "./get-words-and-score";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { blank } from "../config";
-import { SquareID } from "./actions";
+
+export interface SquareID {
+    row: number;
+    col: number;
+    boardID: string;
+}
 
 type Rack = (CoreTile|null)[];
 export const boardIDs = {

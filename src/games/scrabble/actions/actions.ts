@@ -5,13 +5,6 @@ import { GlobalGameState } from "./global-game-state";
 import { ActionType, localGameStateReducer } from "./local-game-state-reducer";
 import { LocalGameState, getLocalGameState } from "./local-game-state";
 
-
-export interface SquareID {
-    row: number;
-    col: number;
-    boardID: string;
-}
-
 export class Actions {
     constructor(
         bgioProps: BgioGameProps<GlobalGameState>, 

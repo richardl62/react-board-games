@@ -1,7 +1,6 @@
 import { BoarderedGrid } from "game-support/boardered-grid";
 import React from "react";
-import { Actions, boardIDs } from "../actions";
-import { SquareID } from "../actions/actions";
+import { Actions, boardIDs, SquareID } from "../actions";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { TileHolder } from "./tile-holder";
 

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Letter } from "../config";
-import { Actions, getWordsAndScore, findActiveLetters } from "../actions";
-import { SquareID } from "../actions/actions";
+import { Actions, getWordsAndScore, findActiveLetters, SquareID } from "../actions";
 import { endTurn } from "../actions/bgio-moves";
 import { findUnsetBlack } from "../actions/board-and-rack";
 

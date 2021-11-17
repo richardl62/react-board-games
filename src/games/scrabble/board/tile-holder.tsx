@@ -2,7 +2,7 @@ import React from "react";
 import { DragDrop, PieceHolder, PieceHolderStyle } from "game-support/piece-holder";
 import { squareSize, squareBackground, hoverBorderColor, hightlightBorderColor } from "./style";
 import { Tile } from "./tile";
-import { SquareID } from "../actions/actions";
+import { SquareID } from "../actions";
 import { SquareType } from "../config";
 import { CoreTile } from "../actions";
 
