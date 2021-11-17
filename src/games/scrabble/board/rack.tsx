@@ -42,6 +42,8 @@ export function Rack(props: RackProps): JSX.Element {
 
         squareID={{ row: 0, col: index, boardID: boardIDs.rack }}
 
+        draggable={true}
+
         onDragEnd={selected ? undefined : onDragEnd}
         onClick={selected? ()=>toggleSelect(index) : undefined}
 

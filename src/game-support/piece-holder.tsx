@@ -84,12 +84,11 @@ export interface DragDrop<ID = UnknownObject> {
      */
     id: ID;
 
+    draggable: boolean;
     /**
      * Called at the start of the a drag.  
      * 
      * 'arg' will be the id supplied in the object.
-     * 
-     * To Do: Consider adding a return type that could be used to cancel the drag.
      */
     start?: (arg: ID) => void;
 
@@ -160,6 +159,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
 
     const { style, children, onClick, dragDrop } = props;
     const { hieght, width, background, borderColor } = style;
+    const draggable = dragDrop ? dragDrop.draggable : false;
 
     const [{isDragging}, dragRef] = useDrag(dragDrop);
     const [, dropRef] = useDrop(dragDrop);
@@ -180,7 +180,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
         {/* KLUDGE: Drag the piece and the border.  This is done because the border is on
             top of the piece (to make it visible), and without kludge the border would block the drag.    
         */}
-        <div ref={dragRef}>
+        <div ref={draggable ? dragRef : undefined}>
             <Piece >
                 {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
              by the piece being unmounted during the drag. */}

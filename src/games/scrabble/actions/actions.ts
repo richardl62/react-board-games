@@ -4,7 +4,7 @@ import { GeneralGameProps } from "shared/general-game-props";
 import { shuffle } from "shared/tools";
 import { blank, ScrabbleConfig } from "../config";
 import { ClientMoves } from "./bgio-moves";
-import { BoardAndRack, Rack } from "./board-and-rack";
+import { Rack } from "./board-and-rack";
 import { CoreTile } from "./core-tile";
 import { boardIDs } from "./game-actions";
 import { BoardData, GameData } from "./game-data";
@@ -54,13 +54,6 @@ export class Actions {
         const playerData = this.generalProps.playerData[pid];
         sAssert(playerData);
         return playerData.name;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    canMove(sq: SquareID) : boolean {
-        //KLUDGE:  Very inefficient.
-        const br = new BoardAndRack(this.gameState.board, this.gameState.rack);
-        return br.canMove(sq);
     }
     
     score(pid: string) : number {

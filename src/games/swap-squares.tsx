@@ -32,6 +32,7 @@ function Square(props: SquareProps) : JSX.Element {
 
     const dragDrop : DragDrop<SquareID> = {
         id: {position: position},
+        draggable: true,
         end: ({drag, drop}) => {
             if(drop) {
                 onMove(drag.position, drop.position);

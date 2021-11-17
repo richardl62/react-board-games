@@ -143,10 +143,6 @@ export class BoardAndRack {
         return this.rack;
     }
 
-    canMove(sq: SquareID) : boolean {
-        return this.isActive(tilePosition(sq));
-    }
-
     move(arg: {from: SquareID,to: SquareID}) : void {
         const from = tilePosition(arg.from);
         const to = tilePosition(arg.to);

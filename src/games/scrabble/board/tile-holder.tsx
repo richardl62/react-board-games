@@ -16,6 +16,7 @@ interface TileHolderProps {
     highlight: boolean;
     showHover: boolean;
 
+    draggable:  boolean;
     onDragEnd?: (arg: {drag: SquareID, drop: SquareID | null}) => void;
     onClick?: () => void;
 }
@@ -23,10 +24,11 @@ interface TileHolderProps {
 
 export function TileHolder(props: TileHolderProps): JSX.Element {
 
-    const {tile, squareType, squareID, highlight, showHover, onDragEnd, onClick } = props;
+    const {tile, squareType, squareID, highlight, showHover, draggable, onDragEnd, onClick } = props;
 
     const dragDrop : DragDrop<SquareID> = {
         id: squareID,
+        draggable: draggable,
         end: onDragEnd,
     };
 
