@@ -1,9 +1,10 @@
 import { Move } from "boardgame.io";
 import { sAssert } from "shared/assert";
+import { BgioGameProps } from "shared/bgio-game-props";
 import { shuffle } from "shared/tools";
-import { Actions } from "./actions";
 import { CoreTile } from "./core-tile";
 import { BoardData, GlobalGameState } from "./global-game-state";
+import { LocalGameState } from "./local-game-state";
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
@@ -39,49 +40,49 @@ interface ClientMoves {
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
 }
 
-function clientMoves(actions: Actions) : ClientMoves {
+function clientMoves(bgioProps: BgioGameProps) : ClientMoves {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return actions.bgioProps.moves as any;
+    return bgioProps.moves as any;
 }
 
-export function endTurn(actions: Actions, score: number) : void {
-    const rack = [...actions.localState.rack];
-    const bag = [...actions.localState.bag];
+export function endTurn(localState: LocalGameState, bgioProps: BgioGameProps, score: number) : void {
+    const rack = [...localState.rack];
+    const bag = [...localState.bag];
     for (let ri = 0; ri < rack.length; ++ri) {
         if(!rack[ri]) {
             rack[ri] = bag.pop() || null;
         }
     }
 
-    clientMoves(actions).setBoardRandAndScore({
+    clientMoves(bgioProps).setBoardRandAndScore({
         score: score,
         rack: rack,
-        board: actions.localState.board,
+        board: localState.board,
         bag: bag,
     });    
-    sAssert(actions.bgioProps.events.endTurn);
-    actions.bgioProps.events.endTurn();
+    sAssert(bgioProps.events.endTurn);
+    bgioProps.events.endTurn();
 }
 
-export function swapTiles(actions: Actions, toSwap: boolean[]) : void {
-    const bag = [...actions.localState.bag];
+export function swapTiles(localState: LocalGameState, bgioProps: BgioGameProps, toSwap: boolean[]) : void {
+    const bag = [...localState.bag];
 
     for (let ri = 0; ri < toSwap.length; ++ri) {
         if (toSwap[ri]) {
-            const old = actions.localState.rack[ri];
+            const old = localState.rack[ri];
             sAssert(old, "Attempt to swap non-existant tile");
             bag.push(old);
-            actions.localState.rack[ri] = bag.shift()!;
+            localState.rack[ri] = bag.shift()!;
         }
     }
     shuffle(bag);
     
-    clientMoves(actions).setBoardRandAndScore({
+    clientMoves(bgioProps).setBoardRandAndScore({
         score: 0,
-        rack: actions.localState.rack,
-        board: actions.localState.board,
+        rack: localState.rack,
+        board: localState.board,
         bag: bag,
     });    
-    sAssert(actions.bgioProps.events.endTurn);
-    actions.bgioProps.events.endTurn();
+    sAssert(bgioProps.events.endTurn);
+    bgioProps.events.endTurn();
 }

@@ -27,8 +27,8 @@ export function useTurnControlData(actions: Actions): TurnControlData {
   const [illegalWordsData, setIllegalWordsData] = useState<IllegalWordsData|null>(null);
   const [blankToSet, setBlankToSet] = useState<SquareID|null>(null);
 
-  const active = findActiveLetters(actions);
-  const wordsAndScore = getWordsAndScore(actions, active);
+  const active = findActiveLetters(actions.localState);
+  const wordsAndScore = getWordsAndScore(actions.localState, actions.config, active);
   const unsetBlank = findUnsetBlack(actions.localState.board);
 
   if(illegalWordsData) {
@@ -40,7 +40,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
   if (active.length === 0 && actions.bgioProps.isMyTurn) {
       return {
-          onPass: () => endTurn(actions, 0),
+          onPass: () => endTurn(actions.localState, actions.bgioProps, 0),
       };
   } else if (!wordsAndScore) {
       return {
@@ -72,7 +72,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
       if(actions.bgioProps.isMyTurn && !unsetBlank) {
           const uncheckedDone = () => {
-              endTurn(actions, score);
+              endTurn(actions.localState, actions.bgioProps, score);
               setIllegalWordsData(null);
           };
 

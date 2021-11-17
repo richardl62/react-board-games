@@ -56,7 +56,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            swapTiles(actions,selectedForSwap);
+            swapTiles(actions.localState, actions.bgioProps, selectedForSwap);
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);

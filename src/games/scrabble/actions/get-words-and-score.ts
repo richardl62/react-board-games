@@ -3,7 +3,8 @@ import { isLegalWord } from "shared/is-legal-word";
 import { BoardData, TileData } from "./global-game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
-import { Actions } from "./actions";
+import { LocalGameState } from "./local-game-state";
+import { ScrabbleConfig } from "../config";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
@@ -172,23 +173,23 @@ interface WordsAndScore {
     illegalWords: string[] | null;
   }
 
-export function getWordsAndScore(actions: Actions, active: RowCol[]): WordsAndScore | null {
-    const candidateWords = findCandidateWords(actions.localState.board, active);
+export function getWordsAndScore(localState: LocalGameState, config: ScrabbleConfig, active: RowCol[]): WordsAndScore | null {
+    const candidateWords = findCandidateWords(localState.board, active);
 
     if (!candidateWords) {
         return null;
     }
 
-    const words = candidateWords.map(cw => getWord(actions.localState.board, cw));
+    const words = candidateWords.map(cw => getWord(localState.board, cw));
   
     let illegalWords : string[] | null = words.filter(wd => !isLegalWord(wd));
     if(illegalWords.length === 0) {
         illegalWords = null;
     }
 
-    let score = scoreWords(actions.localState.board, candidateWords, actions.config);
-    if (active.length === actions.config.rackSize) {
-        score += actions.config.allLetterBonus;
+    let score = scoreWords(localState.board, candidateWords, config);
+    if (active.length === config.rackSize) {
+        score += config.allLetterBonus;
     }
 
     return {
