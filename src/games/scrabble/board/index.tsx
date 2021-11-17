@@ -32,7 +32,7 @@ interface ScrabbleBoardProps {
 
 export function BagInfo({actions}: ScrabbleBoardProps): JSX.Element {
     return <div>
-        Tiles in bag: <span>{actions.gameState.bag.length}</span>
+        Tiles in bag: <span>{actions.localState.bag.length}</span>
     </div>;
 }
 

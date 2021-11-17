@@ -2,7 +2,7 @@ import { Dispatch, useReducer } from "react";
 import { GeneralGameProps } from "shared/general-game-props";
 import { ScrabbleConfig } from "../config";
 import { GlobalGameState } from "./global-game-state";
-import { ActionType, gameDataReducer, getLocalGameState, LocalGameData } from "./game-state-reducer";
+import { ActionType, localGameStateReducer, getLocalGameState, LocalGameState } from "./local-game-state-reducer";
 
 
 export interface SquareID {
@@ -15,12 +15,12 @@ export class Actions {
     constructor(
         generalProps: GeneralGameProps<GlobalGameState>, 
         config: ScrabbleConfig,
-        gameState: LocalGameData,
+        localState: LocalGameState,
         dispatch: Dispatch<ActionType>,
     ) {
         this.generalProps = generalProps;
         this.config = config;
-        this.gameState = gameState,
+        this.localState = localState,
         this.dispatch = dispatch;
     }
 
@@ -30,13 +30,13 @@ export class Actions {
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
 
-    readonly gameState: LocalGameData;
+    readonly localState: LocalGameState;
 }
 
 
 export function useActions(props: GeneralGameProps<GlobalGameState>, config: ScrabbleConfig): Actions {
     
-    const [state, dispatch] = useReducer(gameDataReducer, props, getLocalGameState );
+    const [state, dispatch] = useReducer(localGameStateReducer, props, getLocalGameState );
 
     if (props.G.timestamp !== state.externalTimestamp) {
         dispatch({

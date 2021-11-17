@@ -5,7 +5,7 @@ import { Actions } from "./actions";
 export function findActiveLetters(actions: Actions): RowCol[] {
     const active: RowCol[] = [];
 
-    const board = actions.gameState.board;
+    const board = actions.localState.board;
     for (let row = 0; row < board.length; ++row) {
         for (let col = 0; col < board[row].length; ++col) {
             if (board[row][col]?.active) {

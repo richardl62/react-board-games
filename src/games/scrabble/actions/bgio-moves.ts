@@ -45,8 +45,8 @@ function clientMoves(actions: Actions) : ClientMoves {
 }
 
 export function endTurn(actions: Actions, score: number) : void {
-    const rack = [...actions.gameState.rack];
-    const bag = [...actions.gameState.bag];
+    const rack = [...actions.localState.rack];
+    const bag = [...actions.localState.bag];
     for (let ri = 0; ri < rack.length; ++ri) {
         if(!rack[ri]) {
             rack[ri] = bag.pop() || null;
@@ -56,7 +56,7 @@ export function endTurn(actions: Actions, score: number) : void {
     clientMoves(actions).setBoardRandAndScore({
         score: score,
         rack: rack,
-        board: actions.gameState.board,
+        board: actions.localState.board,
         bag: bag,
     });    
     sAssert(actions.generalProps.events.endTurn);
@@ -64,22 +64,22 @@ export function endTurn(actions: Actions, score: number) : void {
 }
 
 export function swapTiles(actions: Actions, toSwap: boolean[]) : void {
-    const bag = [...actions.gameState.bag];
+    const bag = [...actions.localState.bag];
 
     for (let ri = 0; ri < toSwap.length; ++ri) {
         if (toSwap[ri]) {
-            const old = actions.gameState.rack[ri];
+            const old = actions.localState.rack[ri];
             sAssert(old, "Attempt to swap non-existant tile");
             bag.push(old);
-            actions.gameState.rack[ri] = bag.shift()!;
+            actions.localState.rack[ri] = bag.shift()!;
         }
     }
     shuffle(bag);
     
     clientMoves(actions).setBoardRandAndScore({
         score: 0,
-        rack: actions.gameState.rack,
-        board: actions.gameState.board,
+        rack: actions.localState.rack,
+        board: actions.localState.board,
         bag: bag,
     });    
     sAssert(actions.generalProps.events.endTurn);

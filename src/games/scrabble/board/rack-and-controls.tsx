@@ -41,8 +41,8 @@ function tilesOut(board: BoardData): boolean {
 export function RackAndControls(props: RackAndControlsProps): JSX.Element {
     const { actions } = props;
 
-    const hasTilesOut = tilesOut(actions.gameState.board);
-    const nTiles =  actions.gameState.rack.length;
+    const hasTilesOut = tilesOut(actions.localState.board);
+    const nTiles =  actions.localState.rack.length;
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -77,7 +77,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
         );
     } else {
 
-        const allowSwapping = actions.gameState.bag.length >= actions.gameState.rack.length;
+        const allowSwapping = actions.localState.bag.length >= actions.localState.rack.length;
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
             actions.dispatch({type: "recallRack"});

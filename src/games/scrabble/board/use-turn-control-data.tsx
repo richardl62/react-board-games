@@ -30,7 +30,7 @@ export function useTurnControlData(actions: Actions): TurnControlData {
 
   const active = findActiveLetters(actions);
   const wordsAndScore = getWordsAndScore(actions, active);
-  const unsetBlank = findUnsetBlack(actions.gameState.board);
+  const unsetBlank = findUnsetBlack(actions.localState.board);
 
   if(illegalWordsData) {
       // Clear the illegalWord

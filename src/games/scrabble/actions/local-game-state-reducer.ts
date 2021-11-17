@@ -6,7 +6,7 @@ import { SquareID } from "./actions";
 import { Rack, BoardAndRack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
 
-export interface LocalGameData {
+export interface LocalGameState {
     board: BoardData,
     rack: Rack,
     bag: CoreTile[],
@@ -15,7 +15,7 @@ export interface LocalGameData {
     externalTimestamp: number,
 } 
 
-export function getLocalGameState(props: GeneralGameProps<GlobalGameState>): LocalGameData {
+export function getLocalGameState(props: GeneralGameProps<GlobalGameState>): LocalGameState {
     const playerID = props.playerID;
     sAssert(playerID); // KLUDGE? - Not sure when it can be null.
 
@@ -40,10 +40,10 @@ export type ActionType =
     | { type: "recallRack" }
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-    | { type: "externalStateChange", data: LocalGameData }
+    | { type: "externalStateChange", data: LocalGameState }
 ;
 
-export function gameDataReducer(state : LocalGameData, action: ActionType) : LocalGameData {
+export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
 
     if(action.type === "externalStateChange") {
         const externalState = action.data;

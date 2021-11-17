@@ -173,20 +173,20 @@ interface WordsAndScore {
   }
 
 export function getWordsAndScore(actions: Actions, active: RowCol[]): WordsAndScore | null {
-    const candidateWords = findCandidateWords(actions.gameState.board, active);
+    const candidateWords = findCandidateWords(actions.localState.board, active);
 
     if (!candidateWords) {
         return null;
     }
 
-    const words = candidateWords.map(cw => getWord(actions.gameState.board, cw));
+    const words = candidateWords.map(cw => getWord(actions.localState.board, cw));
   
     let illegalWords : string[] | null = words.filter(wd => !isLegalWord(wd));
     if(illegalWords.length === 0) {
         illegalWords = null;
     }
 
-    let score = scoreWords(actions.gameState.board, candidateWords, actions.config);
+    let score = scoreWords(actions.localState.board, candidateWords, actions.config);
     if (active.length === actions.config.rackSize) {
         score += actions.config.allLetterBonus;
     }
