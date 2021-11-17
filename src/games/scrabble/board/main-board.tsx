@@ -24,25 +24,6 @@ export function MainBoard({ actions }: MainBoardProps): JSX.Element {
         }
     };
 
-    // const draggableFunc = (row: number, col: number) => {
-    //     return () => {
-    //         const tile = actions.board[row][col];
-    //         if (tile) {
-    //             if (tile.active) {
-    //                 return true;
-    //             } else {
-    //                 return false;
-    //             }
-    //         } else {
-    //             if (row === 0 && col === 2) {
-    //                 return true; // SHOULD BE FALSE.
-    //             } else {
-    //                 return true; // SHOULD BE FALSE.
-    //             }
-    //         }
-    //     };
-    // };
-    
     const elems = [];
     for(let row = 0; row < nRows; ++row) {
         for(let col = 0; col < nCols; ++col) {
