@@ -1,5 +1,5 @@
 import { sAssert } from "shared/assert";
-import { GeneralGameData, BoardData } from "./general-game-data";
+import { GlobalGameState, BoardData } from "./global-game-state";
 import { RowCol } from "./get-words-and-score";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { blank } from "../config";
@@ -73,7 +73,7 @@ export function compactRack(rack: Rack): void {
     }
 }
 
-export function canSwapTiles(G: GeneralGameData): boolean {
+export function canSwapTiles(G: GlobalGameState): boolean {
     const rackSize = Object.values(G.playerData)[0].playableTiles.length;
     return G.bag.length >= rackSize;
 }

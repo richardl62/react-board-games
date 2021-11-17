@@ -2,9 +2,9 @@ import { Dispatch, useReducer } from "react";
 import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
 import { ScrabbleConfig } from "../config";
-import { BoardAndRack } from "./board-and-rack";
-import { GeneralGameData } from "./general-game-data";
-import { ActionType, GameState, gameStateReducer, getGameState } from "./game-state-reducer";
+import { GlobalGameState } from "./global-game-state";
+import { ActionType, gameDataReducer, getLocalGameState, LocalGameData } from "./game-state-reducer";
+
 
 export interface SquareID {
     row: number;
@@ -14,9 +14,9 @@ export interface SquareID {
 
 export class Actions {
     constructor(
-        generalProps: GeneralGameProps<GeneralGameData>, 
+        generalProps: GeneralGameProps<GlobalGameState>, 
         config: ScrabbleConfig,
-        gameState: GameState,
+        gameState: LocalGameData,
         dispatch: Dispatch<ActionType>,
     ) {
         this.generalProps = generalProps;
@@ -26,12 +26,12 @@ export class Actions {
     }
 
     // Clients should not access the game data, i.e. bgioProps.G
-    readonly generalProps: GeneralGameProps<GeneralGameData>;
+    readonly generalProps: GeneralGameProps<GlobalGameState>;
 
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
 
-    readonly gameState: GameState;
+    readonly gameState: LocalGameData;
     
     score(pid: string) : number {
         const playerData = this.generalProps.G.playerData[pid];
@@ -41,14 +41,14 @@ export class Actions {
 }
 
 
-export function useActions(props: GeneralGameProps<GeneralGameData>, config: ScrabbleConfig): Actions {
+export function useActions(props: GeneralGameProps<GlobalGameState>, config: ScrabbleConfig): Actions {
     
-    const [state, dispatch] = useReducer(gameStateReducer, props, getGameState );
+    const [state, dispatch] = useReducer(gameDataReducer, props, getLocalGameState );
 
     if (props.G.timestamp !== state.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getGameState(props),
+            data: getLocalGameState(props),
         });
     } 
 

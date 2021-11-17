@@ -29,7 +29,7 @@ export interface GamePlayerData {
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
 /** Data recorded and shared via BGIO */
-export interface GeneralGameData {
+export interface GlobalGameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: CoreTile[];
@@ -40,8 +40,8 @@ export interface GeneralGameData {
 }
 
 /** Quick check that an object is (probably) a GameData. */
-export function isGameData(arg: unknown) : boolean {
-    const gd = arg as GeneralGameData;
+export function isGlobalGameState(arg: unknown) : boolean {
+    const gd = arg as GlobalGameState;
     return typeof gd === "object" && 
         typeof gd.board === "object" &&
         typeof gd.playerData === "object" &&
@@ -50,7 +50,7 @@ export function isGameData(arg: unknown) : boolean {
         typeof gd.timestamp === "number";
 }
 
-export function startingGameData(numPlayers: number, config: ScrabbleConfig): GeneralGameData {
+export function startingGlobalGameState(numPlayers: number, config: ScrabbleConfig): GlobalGameState {
     const bag = config.makeFullBag().map(makeCoreTile); 
 
     const rack = () => {

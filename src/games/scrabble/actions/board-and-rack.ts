@@ -1,6 +1,6 @@
 import { sAssert } from "shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
-import { BoardData } from "./general-game-data";
+import { BoardData } from "./global-game-state";
 import { blank, Letter } from "../config";
 import { sameJSON, shuffle } from "shared/tools";
 import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";

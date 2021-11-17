@@ -1,6 +1,7 @@
 export { Actions, useActions } from "./actions";
 
-export { startingGameData } from "./general-game-data";
+export { isGlobalGameState, startingGlobalGameState as startingGeneralGameState } from "./global-game-state";
+export type { GlobalGameState as GeneralGameState } from "./global-game-state";
 
 // bgioMoves is exported only for use in making the AppGames. 
 export { bgioMoves } from "./bgio-moves";
