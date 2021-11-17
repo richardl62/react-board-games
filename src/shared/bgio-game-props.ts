@@ -8,7 +8,7 @@ import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 /**
  * Game properties.  (A wrapper for BGIO BoardProps.)
  */
-export interface GeneralGameProps<G = unknown> extends BoardProps<G> {
+export interface BgioGameProps<G = unknown> extends BoardProps<G> {
     playerData: PlayerDataDictionary;
     allJoined: boolean;
     allReady: boolean;
@@ -23,7 +23,7 @@ export interface GeneralGameProps<G = unknown> extends BoardProps<G> {
     name: (pid: string) => string;
 }
 
-export function makeGeneralGameProps<G>(bgioProps: BoardProps<G>): GeneralGameProps<G> {
+export function makeGeneralGameProps<G>(bgioProps: BoardProps<G>): BgioGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
 

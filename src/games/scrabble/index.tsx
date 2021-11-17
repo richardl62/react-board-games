@@ -1,19 +1,19 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
 import { sAssert } from "shared/assert";
-import { GeneralGameProps } from "shared/general-game-props";
+import { BgioGameProps } from "shared/bgio-game-props";
 import { AppGame } from "shared/types";
 import { GeneralGameState, isGlobalGameState, startingGeneralGameState, bgioMoves, useActions } from "./actions";
 import { Board } from "./board";
 import { configs, ScrabbleConfig } from "./config";
 
 interface BoardWrapperProps {
-    appBoardProps: GeneralGameProps;
+    appBoardProps: BgioGameProps;
     config: ScrabbleConfig
 }
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const gameDataProps = props.appBoardProps as GeneralGameProps<GeneralGameState>;
+    const gameDataProps = props.appBoardProps as BgioGameProps<GeneralGameState>;
     sAssert(isGlobalGameState(gameDataProps.G));
     
     const actions = useActions(gameDataProps, props.config);
@@ -29,7 +29,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: GeneralGameProps) => <BoardWrapper
+        board: (props: BgioGameProps) => <BoardWrapper
             appBoardProps={props} config={config}
         />
     };

@@ -1,5 +1,5 @@
 import { Dispatch, useReducer } from "react";
-import { GeneralGameProps } from "shared/general-game-props";
+import { BgioGameProps } from "shared/bgio-game-props";
 import { ScrabbleConfig } from "../config";
 import { GlobalGameState } from "./global-game-state";
 import { ActionType, localGameStateReducer } from "./local-game-state-reducer";
@@ -14,19 +14,19 @@ export interface SquareID {
 
 export class Actions {
     constructor(
-        generalProps: GeneralGameProps<GlobalGameState>, 
+        bgioProps: BgioGameProps<GlobalGameState>, 
         config: ScrabbleConfig,
         localState: LocalGameState,
         dispatch: Dispatch<ActionType>,
     ) {
-        this.generalProps = generalProps;
+        this.bgioProps = bgioProps;
         this.config = config;
         this.localState = localState,
         this.dispatch = dispatch;
     }
 
     // Clients should not access the game data, i.e. bgioProps.G
-    readonly generalProps: GeneralGameProps<GlobalGameState>;
+    readonly bgioProps: BgioGameProps<GlobalGameState>;
 
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
@@ -35,7 +35,7 @@ export class Actions {
 }
 
 
-export function useActions(props: GeneralGameProps<GlobalGameState>, config: ScrabbleConfig): Actions {
+export function useActions(props: BgioGameProps<GlobalGameState>, config: ScrabbleConfig): Actions {
     
     const [state, dispatch] = useReducer(localGameStateReducer, props, getLocalGameState );
 

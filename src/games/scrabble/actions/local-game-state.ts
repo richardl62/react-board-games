@@ -1,5 +1,5 @@
 import { sAssert } from "shared/assert";
-import { GeneralGameProps } from "shared/general-game-props";
+import { BgioGameProps } from "shared/bgio-game-props";
 import { CoreTile } from ".";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
@@ -14,7 +14,7 @@ export interface LocalGameState {
     externalTimestamp: number;
 }
 
-export function getLocalGameState(props: GeneralGameProps<GlobalGameState>): LocalGameState {
+export function getLocalGameState(props: BgioGameProps<GlobalGameState>): LocalGameState {
     const playerID = props.playerID;
     sAssert(playerID); // KLUDGE? - Not sure when it can be null.
 

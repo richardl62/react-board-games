@@ -38,8 +38,8 @@ export function BagInfo({actions}: ScrabbleBoardProps): JSX.Element {
 
 export function Board({actions}: ScrabbleBoardProps): JSX.Element {
 
-    if(!actions.generalProps.allJoined) {
-        <WaitingForPlayers {...actions.generalProps} />;
+    if(!actions.bgioProps.allJoined) {
+        <WaitingForPlayers {...actions.bgioProps} />;
     }
 
     return (

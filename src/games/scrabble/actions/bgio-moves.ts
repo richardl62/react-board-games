@@ -41,7 +41,7 @@ interface ClientMoves {
 
 function clientMoves(actions: Actions) : ClientMoves {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return actions.generalProps.moves as any;
+    return actions.bgioProps.moves as any;
 }
 
 export function endTurn(actions: Actions, score: number) : void {
@@ -59,8 +59,8 @@ export function endTurn(actions: Actions, score: number) : void {
         board: actions.localState.board,
         bag: bag,
     });    
-    sAssert(actions.generalProps.events.endTurn);
-    actions.generalProps.events.endTurn();
+    sAssert(actions.bgioProps.events.endTurn);
+    actions.bgioProps.events.endTurn();
 }
 
 export function swapTiles(actions: Actions, toSwap: boolean[]) : void {
@@ -82,6 +82,6 @@ export function swapTiles(actions: Actions, toSwap: boolean[]) : void {
         board: actions.localState.board,
         bag: bag,
     });    
-    sAssert(actions.generalProps.events.endTurn);
-    actions.generalProps.events.endTurn();
+    sAssert(actions.bgioProps.events.endTurn);
+    actions.bgioProps.events.endTurn();
 }

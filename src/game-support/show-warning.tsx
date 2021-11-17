@@ -1,5 +1,5 @@
 import React from "react";
-import { GeneralGameProps } from "shared/general-game-props";
+import { BgioGameProps } from "shared/bgio-game-props";
 import styled from "styled-components";
 
 
@@ -18,7 +18,7 @@ const WarningsDiv = styled.div`
 /** Show warnings, if any, about general (non-game-specifiy) issues.
  * Currently, this the only warning is players being off line.
  */
-export function GameWarnings(props: GeneralGameProps): JSX.Element | null {
+export function GameWarnings(props: BgioGameProps): JSX.Element | null {
 
 
     const warnings: string[] = [];
