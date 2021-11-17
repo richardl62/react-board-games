@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { sAssert } from "shared/assert";
 import { Actions } from "../actions";
 import { Rack } from "./rack";
-import { tilesOut } from "../actions/actions";
 import { swapTiles } from "../actions/bgio-moves";
+import { BoardData } from "../actions/game-data";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -24,8 +24,23 @@ interface RackAndControlsProps {
     actions: Actions;
 }
 
+/** 
+* Report whether there are active tiles on the board.
+* 
+* Active tiles are those taken from the rack. 
+*
+* Note: For most of the game this is equivalent to checking if the rank has 
+* gaps. But difference can occur at the end of the game when the bag is emtpy.
+*
+* TO DO:  Consider making this part of BoardAndRack.
+*/
+function tilesOut(board: BoardData): boolean {
+    return !!board.find(row => row.find(sq => sq?.active));
+}
+
 export function RackAndControls(props: RackAndControlsProps): JSX.Element {
     const { actions } = props;
+
     const hasTilesOut = tilesOut(actions.gameState.board);
     const nTiles =  actions.gameState.rack.length;
 

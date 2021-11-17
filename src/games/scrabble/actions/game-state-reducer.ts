@@ -1,9 +1,10 @@
 import { sAssert } from "shared/assert";
+import { GeneralGameProps } from "shared/general-game-props";
 import { CoreTile } from ".";
 import { Letter } from "../config";
 import { SquareID } from "./actions";
 import { Rack, BoardAndRack } from "./board-and-rack";
-import { BoardData } from "./game-data";
+import { BoardData, GameData } from "./game-data";
 
 export interface GameState {
     board: BoardData,
@@ -11,6 +12,18 @@ export interface GameState {
     bag: CoreTile[],
     externalTimestamp: number,
 } 
+
+export function getGameState(props: GeneralGameProps<GameData>): GameState {
+    const playerID = props.playerID;
+    sAssert(playerID); // KLUDGE? - Not sure when it can be null.
+
+    return {
+        board: props.G.board,
+        rack: props.G.playerData[playerID].playableTiles,
+        bag: props.G.bag,
+        externalTimestamp: props.G.timestamp,
+    };
+}
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}

@@ -1,10 +1,9 @@
-import { Dispatch } from "react";
+import { Dispatch, useReducer } from "react";
 import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
-import { blank, ScrabbleConfig } from "../config";
-import { boardIDs } from "./game-actions";
-import { BoardData, GameData } from "./game-data";
-import { ActionType, GameState } from "./game-state-reducer";
+import { ScrabbleConfig } from "../config";
+import { GameData } from "./game-data";
+import { ActionType, GameState, gameStateReducer, getGameState } from "./game-state-reducer";
 
 export interface SquareID {
     row: number;
@@ -38,34 +37,24 @@ export class Actions {
         sAssert(playerData);
         return playerData.score;
     }
-
 }
 
 
-/** 
-* Report whether there are active tiles on the board.
-* 
-* Active tiles are those taken from the rack. 
-*
-* Note: For most of the game this is equivalent to checking if the rank has 
-* gaps. But difference can occur at the end of the game when the bag is emtpy.
-*/
-export function tilesOut(board: BoardData): boolean {
-    return !!board.find(row => row.find(sq => sq?.active));
-}
+export function useActions(props: GeneralGameProps<GameData>, config: ScrabbleConfig): Actions {
+    
+    const [state, dispatch] = useReducer(gameStateReducer, props, getGameState );
 
-export function findUnsetBlack(board: BoardData): SquareID | null {
-    for (let row = 0; row < board.length; ++row) {
-        for (let col = 0; col < board[row].length; ++col) {
-            if(board[row][col]?.letter === blank) {
-                return {
-                    row: row,
-                    col: col,
-                    boardID: boardIDs.main,
-                };
-            }
-        }
-    }
+    if (props.G.timestamp !== state.externalTimestamp) {
+        dispatch({
+            type: "externalStateChange",
+            data: getGameState(props),
+        });
+    } 
 
-    return null;
+    return new Actions(
+        props,
+        config,
+        state,
+        dispatch,
+    );
 }

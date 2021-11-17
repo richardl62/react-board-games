@@ -3,7 +3,7 @@ import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData } from "./game-data";
 import { blank, Letter } from "../config";
 import { sameJSON, shuffle } from "shared/tools";
-import { addToRack, compactRack, onRack } from "./game-actions";
+import { addToRack, boardIDs, compactRack, onRack } from "./game-actions";
 import { SquareID } from "./actions";
 
 export type Rack = (CoreTile | null)[];
@@ -191,4 +191,22 @@ export class BoardAndRack {
         sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
         sq.letter = letter;
     }
+}
+
+
+/* TO DO:  Consider making this part of BoardAndRack. */
+export function findUnsetBlack(board: BoardData): SquareID | null {
+    for (let row = 0; row < board.length; ++row) {
+        for (let col = 0; col < board[row].length; ++col) {
+            if(board[row][col]?.letter === blank) {
+                return {
+                    row: row,
+                    col: col,
+                    boardID: boardIDs.main,
+                };
+            }
+        }
+    }
+
+    return null;
 }
