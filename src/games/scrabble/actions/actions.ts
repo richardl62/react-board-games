@@ -5,21 +5,9 @@ import { GlobalGameState } from "./global-game-state";
 import { ActionType, localGameStateReducer } from "./local-game-state-reducer";
 import { LocalGameState, getLocalGameState } from "./local-game-state";
 
-export class Actions {
-    constructor(
-        bgioProps: BgioGameProps<GlobalGameState>, 
-        config: ScrabbleConfig,
-        localState: LocalGameState,
-        dispatch: Dispatch<ActionType>,
-    ) {
-        this.bgioProps = bgioProps;
-        this.config = config;
-        this.localState = localState,
-        this.dispatch = dispatch;
-    }
-
+export interface Actions {
     // Clients should not access the game data, i.e. bgioProps.G
-    readonly bgioProps: BgioGameProps<GlobalGameState>;
+    readonly bgioProps: BgioGameProps<GlobalGameState>,
 
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
@@ -39,10 +27,10 @@ export function useActions(props: BgioGameProps<GlobalGameState>, config: Scrabb
         });
     } 
 
-    return new Actions(
-        props,
-        config,
-        state,
-        dispatch,
-    );
+    return {
+        bgioProps: props,
+        config: config,
+        dispatch: dispatch,
+        localState: state,
+    };
 }
