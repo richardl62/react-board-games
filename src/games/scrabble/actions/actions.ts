@@ -2,7 +2,8 @@ import { Dispatch, useReducer } from "react";
 import { GeneralGameProps } from "shared/general-game-props";
 import { ScrabbleConfig } from "../config";
 import { GlobalGameState } from "./global-game-state";
-import { ActionType, localGameStateReducer, getLocalGameState, LocalGameState } from "./local-game-state-reducer";
+import { ActionType, localGameStateReducer } from "./local-game-state-reducer";
+import { LocalGameState, getLocalGameState } from "./local-game-state";
 
 
 export interface SquareID {
