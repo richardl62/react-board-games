@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { LetterSelector } from "./letter-selector";
-import { Actions } from "../actions";
+import { ActionsXXX } from "./actions-xxx";
 import { useTurnControlData } from "./use-turn-control-data";
 
 export const StyledScoreLine = styled.div`
@@ -23,7 +23,7 @@ const StyledIllegalWords = styled.div`
 
 
 /** 'Dumb' class that does the formatting for TurnControl */
-export function TurnControl({actions} :  {actions: Actions}): JSX.Element {
+export function TurnControl({actions} :  {actions: ActionsXXX}): JSX.Element {
 
     const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(actions);
     const doButtonText = illegalWords ?

@@ -1,12 +1,13 @@
 import React from "react";
-import { Actions, boardIDs, SquareID } from "../actions";
+import { boardIDs, SquareID } from "../actions";
+import { ActionsXXX } from "./actions-xxx";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "game-support/boardered-grid";
 import { SquareType } from "../config";
 import { TileHolder } from "./tile-holder";
 import { sAssert } from "shared/assert";
 interface RackProps {
-    actions: Actions;
+    actions: ActionsXXX;
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;
 }

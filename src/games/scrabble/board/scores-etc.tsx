@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "game-support/show-warning";
-import { Actions } from "../actions";
+import { ActionsXXX } from "./actions-xxx";
 
 const StyledScoresEtc=styled.div`
     display: flex;
@@ -14,7 +14,7 @@ const PlayerScore=styled.div<{current: boolean}>`
 `;
 
 // To do: Think of a better name
-export function ScoresEtc({actions}: {actions: Actions}): JSX.Element {
+export function ScoresEtc({actions}: {actions: ActionsXXX}): JSX.Element {
 
 
     const scoreElems = actions.bgioProps.playOrder.map(pid => {

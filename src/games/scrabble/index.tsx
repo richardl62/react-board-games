@@ -3,8 +3,9 @@ import React from "react";
 import { sAssert } from "shared/assert";
 import { BgioGameProps } from "shared/bgio-game-props";
 import { AppGame } from "shared/types";
-import { GeneralGameState, isGlobalGameState, startingGeneralGameState, bgioMoves, useActions } from "./actions";
+import { GeneralGameState, isGlobalGameState, startingGeneralGameState, bgioMoves } from "./actions";
 import { Board } from "./board";
+import { useActions } from "./board/actions-xxx";
 import { configs, ScrabbleConfig } from "./config";
 
 interface BoardWrapperProps {

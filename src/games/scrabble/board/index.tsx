@@ -2,7 +2,7 @@ import { DndProvider } from "game-support/drag-drop";
 import { WaitingForPlayers } from "game-support/waiting-for-players";
 import React from "react";
 import styled from "styled-components";
-import { Actions } from "../actions";
+import { ActionsXXX } from "./actions-xxx";
 import { MainBoard } from "./main-board";
 import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
@@ -27,7 +27,7 @@ const Game = styled.div`
   `;
 
 interface ScrabbleBoardProps {
-    actions: Actions;
+    actions: ActionsXXX;
 } 
 
 export function BagInfo({actions}: ScrabbleBoardProps): JSX.Element {

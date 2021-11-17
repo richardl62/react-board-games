@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "shared/assert";
-import { Actions } from "../actions";
 import { Rack } from "./rack";
 import { swapTiles } from "../actions/bgio-moves";
 import { BoardData } from "../actions/global-game-state";
+import { ActionsXXX } from "./actions-xxx";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -21,7 +21,7 @@ gap: 3%;
 `;
 
 interface RackAndControlsProps {
-    actions: Actions;
+    actions: ActionsXXX;
 }
 
 /** 
