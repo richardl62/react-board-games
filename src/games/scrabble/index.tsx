@@ -4,7 +4,7 @@ import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
 import { AppGame } from "shared/types";
 import { bgioMoves, startingGameData, useActions } from "./actions";
-import { GameData, isGameData } from "./actions/game-data";
+import { GeneralGameData, isGameData } from "./actions/general-game-data";
 import { Board } from "./board";
 import { configs, ScrabbleConfig } from "./config";
 
@@ -14,7 +14,7 @@ interface BoardWrapperProps {
 }
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const gameDataProps = props.appBoardProps as GeneralGameProps<GameData>;
+    const gameDataProps = props.appBoardProps as GeneralGameProps<GeneralGameData>;
     sAssert(isGameData(gameDataProps.G));
     
     const actions = useActions(gameDataProps, props.config);

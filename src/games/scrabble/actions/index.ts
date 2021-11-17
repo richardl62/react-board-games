@@ -1,6 +1,6 @@
 export { Actions, useActions } from "./actions";
 
-export { startingGameData } from "./game-data";
+export { startingGameData } from "./general-game-data";
 
 // bgioMoves is exported only for use in making the AppGames. 
 export { bgioMoves } from "./bgio-moves";

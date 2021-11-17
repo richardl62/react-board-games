@@ -3,7 +3,7 @@ import { sAssert } from "shared/assert";
 import { shuffle } from "shared/tools";
 import { Actions } from "./actions";
 import { CoreTile } from "./core-tile";
-import { BoardData, GameData } from "./game-data";
+import { BoardData, GeneralGameData } from "./general-game-data";
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
@@ -12,7 +12,7 @@ interface setBoardRandAndScoreParam {
     score: number;
 }
 
-const setBoardRandAndScore: Move<GameData> = (G, ctx,
+const setBoardRandAndScore: Move<GeneralGameData> = (G, ctx,
     { board, rack, bag, score }: setBoardRandAndScoreParam
 ) => {
 

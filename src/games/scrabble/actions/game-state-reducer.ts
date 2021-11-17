@@ -4,7 +4,7 @@ import { CoreTile } from ".";
 import { Letter } from "../config";
 import { SquareID } from "./actions";
 import { Rack, BoardAndRack } from "./board-and-rack";
-import { BoardData, GameData } from "./game-data";
+import { BoardData, GeneralGameData } from "./general-game-data";
 
 export interface GameState {
     board: BoardData,
@@ -13,7 +13,7 @@ export interface GameState {
     externalTimestamp: number,
 } 
 
-export function getGameState(props: GeneralGameProps<GameData>): GameState {
+export function getGameState(props: GeneralGameProps<GeneralGameData>): GameState {
     const playerID = props.playerID;
     sAssert(playerID); // KLUDGE? - Not sure when it can be null.
 

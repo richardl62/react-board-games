@@ -4,7 +4,7 @@ import { sAssert } from "shared/assert";
 import { Actions } from "../actions";
 import { Rack } from "./rack";
 import { swapTiles } from "../actions/bgio-moves";
-import { BoardData } from "../actions/game-data";
+import { BoardData } from "../actions/general-game-data";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
