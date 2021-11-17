@@ -18,8 +18,9 @@ export function ScoresEtc({actions}: {actions: Actions}): JSX.Element {
 
 
     const scoreElems = actions.generalProps.playOrder.map(pid => {
-        const score = actions.score(pid);
         const name = actions.generalProps.name(pid);
+
+        const score = actions.gameState.playerData[pid].score;
 
         let displayName = name;
         if (pid === actions.generalProps.playerID) {

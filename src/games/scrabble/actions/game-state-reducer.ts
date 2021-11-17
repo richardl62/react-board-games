@@ -10,6 +10,8 @@ export interface LocalGameData {
     board: BoardData,
     rack: Rack,
     bag: CoreTile[],
+
+    playerData: GlobalGameState["playerData"],
     externalTimestamp: number,
 } 
 
@@ -21,6 +23,14 @@ export function getLocalGameState(props: GeneralGameProps<GlobalGameState>): Loc
         board: props.G.board,
         rack: props.G.playerData[playerID].playableTiles,
         bag: props.G.bag,
+        
+        /** KLUDGE?: Intended only to allow players scores to be seen. 
+         * But also gives access to racks.
+        */
+        playerData: props.G.playerData,
+        
+        /** Incremented when any of the state above is changed (and prehaps at
+         * other times). */
         externalTimestamp: props.G.timestamp,
     };
 }

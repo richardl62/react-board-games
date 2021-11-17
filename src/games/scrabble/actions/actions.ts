@@ -1,5 +1,4 @@
 import { Dispatch, useReducer } from "react";
-import { sAssert } from "shared/assert";
 import { GeneralGameProps } from "shared/general-game-props";
 import { ScrabbleConfig } from "../config";
 import { GlobalGameState } from "./global-game-state";
@@ -32,12 +31,6 @@ export class Actions {
     readonly dispatch:  Dispatch<ActionType>
 
     readonly gameState: LocalGameData;
-    
-    score(pid: string) : number {
-        const playerData = this.generalProps.G.playerData[pid];
-        sAssert(playerData);
-        return playerData.score;
-    }
 }
 
 
