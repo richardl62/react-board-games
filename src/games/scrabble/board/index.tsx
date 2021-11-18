@@ -26,36 +26,33 @@ const Game = styled.div`
   gap: 5px;
   `;
 
-interface ScrabbleBoardProps {
-    xxx: GameProps;
-} 
 
-export function BagInfo({xxx}: ScrabbleBoardProps): JSX.Element {
+export function BagInfo(props: GameProps): JSX.Element {
     return <div>
-        Tiles in bag: <span>{xxx.localState.bag.length}</span>
+        Tiles in bag: <span>{props.localState.bag.length}</span>
     </div>;
 }
 
-export function Board({xxx}: ScrabbleBoardProps): JSX.Element {
+export function Board(props: GameProps): JSX.Element {
 
-    if(!xxx.bgioProps.allJoined) {
-        <WaitingForPlayers {...xxx.bgioProps} />;
+    if(!props.bgioProps.allJoined) {
+        <WaitingForPlayers {...props.bgioProps} />;
     }
 
     return (
         <DndProvider>
             <Game>
-                <ScoresEtc xxx={xxx} />
-                <RackAndControls xxx={xxx} />
+                <ScoresEtc {...props} />
+                <RackAndControls {...props} />
                 <Centered>
-                    <MainBoard xxx={xxx} />
+                    <MainBoard {...props} />
                 </Centered>
                 <SpaceBetween>
                     <WordChecker/>
-                    <BagInfo xxx={xxx} />
+                    <BagInfo {...props} />
                 </SpaceBetween>
 
-                <TurnControl xxx={xxx}/>
+                <TurnControl {...props}/>
             </Game>
         </DndProvider>
     );

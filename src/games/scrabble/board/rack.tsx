@@ -6,20 +6,19 @@ import { BoarderedGrid } from "game-support/boardered-grid";
 import { SquareType } from "../config";
 import { TileHolder } from "./tile-holder";
 import { sAssert } from "shared/assert";
-interface RackProps {
-    xxx: GameProps;
+interface RackProps extends GameProps {
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;
 }
 
 export function Rack(props: RackProps): JSX.Element {
-    const { xxx, selected, setSelected } = props;
+    const { selected, setSelected } = props;
 
-    const coreTiles = props.xxx.localState.rack;
+    const coreTiles = props.localState.rack;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {
-            xxx.dispatch({
+            props.dispatch({
                 type: "move",
                 data: {from: drag, to: drop}
             });

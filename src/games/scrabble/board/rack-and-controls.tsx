@@ -20,10 +20,6 @@ align-items: center;
 gap: 3%;
 `;
 
-interface RackAndControlsProps {
-    xxx: GameProps;
-}
-
 /** 
 * Report whether there are active tiles on the board.
 * 
@@ -38,11 +34,10 @@ function tilesOut(board: BoardData): boolean {
     return !!board.find(row => row.find(sq => sq?.active));
 }
 
-export function RackAndControls(props: RackAndControlsProps): JSX.Element {
-    const { xxx } = props;
+export function RackAndControls(props: GameProps): JSX.Element {
 
-    const hasTilesOut = tilesOut(xxx.localState.board);
-    const nTiles =  xxx.localState.rack.length;
+    const hasTilesOut = tilesOut(props.localState.board);
+    const nTiles =  props.localState.rack.length;
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -56,7 +51,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            swapTiles(xxx.localState, xxx.bgioProps, selectedForSwap);
+            swapTiles(props.localState, props.bgioProps, selectedForSwap);
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);
@@ -68,7 +63,7 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
                     <span>Select times to swap </span>
                 </PreRack>
 
-                <Rack xxx={xxx} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
+                <Rack {...props} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
                 {selectedForSwap.includes(true) &&
                     <button onClick={makeSwap}>Make Swap</button>}
@@ -77,15 +72,15 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
         );
     } else {
 
-        const allowSwapping = xxx.localState.bag.length >= xxx.localState.rack.length;
+        const allowSwapping = props.localState.bag.length >= props.localState.rack.length;
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
-            xxx.dispatch({type: "recallRack"});
+            props.dispatch({type: "recallRack"});
             setSelectedForSwap(Array(nTiles).fill(false));
         };
 
-        const recallRack = () =>  xxx.dispatch({type: "recallRack"});
-        const shuffleRack = () =>  xxx.dispatch({type: "shuffleRack"});
+        const recallRack = () =>  props.dispatch({type: "recallRack"});
+        const shuffleRack = () =>  props.dispatch({type: "shuffleRack"});
 
         return (<StyledRackAndControls>
             <PreRack>
@@ -97,9 +92,9 @@ export function RackAndControls(props: RackAndControlsProps): JSX.Element {
                 </button>
             </PreRack>
 
-            <Rack xxx={xxx} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
+            <Rack {...props} selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
-            {xxx.bgioProps.isMyTurn &&
+            {props.bgioProps.isMyTurn &&
                 <button
                     disabled={!allowSwapping}
                     onClick={doEnableSwap}
