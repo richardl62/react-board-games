@@ -7,19 +7,19 @@ import { SquareType } from "../config";
 import { TileHolder } from "./tile-holder";
 import { sAssert } from "shared/assert";
 interface RackProps {
-    actions: GameProps;
+    xxx: GameProps;
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;
 }
 
 export function Rack(props: RackProps): JSX.Element {
-    const { actions, selected, setSelected } = props;
+    const { xxx, selected, setSelected } = props;
 
-    const coreTiles = props.actions.localState.rack;
+    const coreTiles = props.xxx.localState.rack;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {
-            actions.dispatch({
+            xxx.dispatch({
                 type: "move",
                 data: {from: drag, to: drop}
             });

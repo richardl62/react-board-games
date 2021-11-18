@@ -20,7 +20,7 @@ export interface TurnControlData {
   onDone?: () => void;
 }
 
-export function useTurnControlData(actions: GameProps): TurnControlData {
+export function useTurnControlData(xxx: GameProps): TurnControlData {
   interface IllegalWordsData {
     illegal: string[]; // Words to report
     all: string[]; // All words at time illegal words were recorded.
@@ -28,9 +28,9 @@ export function useTurnControlData(actions: GameProps): TurnControlData {
   const [illegalWordsData, setIllegalWordsData] = useState<IllegalWordsData|null>(null);
   const [blankToSet, setBlankToSet] = useState<SquareID|null>(null);
 
-  const active = findActiveLetters(actions.localState);
-  const wordsAndScore = getWordsAndScore(actions.localState, actions.config, active);
-  const unsetBlank = findUnsetBlack(actions.localState.board);
+  const active = findActiveLetters(xxx.localState);
+  const wordsAndScore = getWordsAndScore(xxx.localState, xxx.config, active);
+  const unsetBlank = findUnsetBlack(xxx.localState.board);
 
   if(illegalWordsData) {
       // Clear the illegalWord
@@ -39,9 +39,9 @@ export function useTurnControlData(actions: GameProps): TurnControlData {
       } 
   }
 
-  if (active.length === 0 && actions.bgioProps.isMyTurn) {
+  if (active.length === 0 && xxx.bgioProps.isMyTurn) {
       return {
-          onPass: () => endTurn(actions.localState, actions.bgioProps, 0),
+          onPass: () => endTurn(xxx.localState, xxx.bgioProps, 0),
       };
   } else if (!wordsAndScore) {
       return {
@@ -66,14 +66,14 @@ export function useTurnControlData(actions: GameProps): TurnControlData {
 
       if(blankToSet) {
           result.doSetBlank = (l: Letter) => {
-              actions.dispatch({ type: "setBlank", data: {id: blankToSet, letter: l}});
+              xxx.dispatch({ type: "setBlank", data: {id: blankToSet, letter: l}});
               setBlankToSet(null);
           };
       }
 
-      if(actions.bgioProps.isMyTurn && !unsetBlank) {
+      if(xxx.bgioProps.isMyTurn && !unsetBlank) {
           const uncheckedDone = () => {
-              endTurn(actions.localState, actions.bgioProps, score);
+              endTurn(xxx.localState, xxx.bgioProps, score);
               setIllegalWordsData(null);
           };
 

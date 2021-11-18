@@ -6,18 +6,18 @@ import { boardBoarderColor, boardBoarderSize } from "./style";
 import { TileHolder } from "./tile-holder";
 
 interface MainBoardProps {
-    actions: GameProps;
+    xxx: GameProps;
 }
 
-export function MainBoard({ actions }: MainBoardProps): JSX.Element {
-    const tiles = actions.localState.board;
+export function MainBoard({ xxx }: MainBoardProps): JSX.Element {
+    const tiles = xxx.localState.board;
 
     const nRows = tiles.length;
     const nCols = tiles[0].length;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {
-            actions.dispatch({
+            xxx.dispatch({
                 type: "move",
                 data: {from: drag, to: drop}
             });
@@ -27,7 +27,7 @@ export function MainBoard({ actions }: MainBoardProps): JSX.Element {
     const elems = [];
     for(let row = 0; row < nRows; ++row) {
         for(let col = 0; col < nCols; ++col) {
-            const tile = actions.localState.board[row][col];
+            const tile = xxx.localState.board[row][col];
             const active = Boolean(tile?.active);
 
             elems.push(
@@ -35,7 +35,7 @@ export function MainBoard({ actions }: MainBoardProps): JSX.Element {
                     key={[row,col].toString()}
 
                     tile={tile}
-                    squareType={actions.config.boardLayout[row][col]}
+                    squareType={xxx.config.boardLayout[row][col]}
 
                     draggable={active}
 

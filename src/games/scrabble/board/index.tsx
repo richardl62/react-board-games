@@ -27,35 +27,35 @@ const Game = styled.div`
   `;
 
 interface ScrabbleBoardProps {
-    actions: GameProps;
+    xxx: GameProps;
 } 
 
-export function BagInfo({actions}: ScrabbleBoardProps): JSX.Element {
+export function BagInfo({xxx}: ScrabbleBoardProps): JSX.Element {
     return <div>
-        Tiles in bag: <span>{actions.localState.bag.length}</span>
+        Tiles in bag: <span>{xxx.localState.bag.length}</span>
     </div>;
 }
 
-export function Board({actions}: ScrabbleBoardProps): JSX.Element {
+export function Board({xxx}: ScrabbleBoardProps): JSX.Element {
 
-    if(!actions.bgioProps.allJoined) {
-        <WaitingForPlayers {...actions.bgioProps} />;
+    if(!xxx.bgioProps.allJoined) {
+        <WaitingForPlayers {...xxx.bgioProps} />;
     }
 
     return (
         <DndProvider>
             <Game>
-                <ScoresEtc actions={actions} />
-                <RackAndControls actions={actions} />
+                <ScoresEtc xxx={xxx} />
+                <RackAndControls xxx={xxx} />
                 <Centered>
-                    <MainBoard actions={actions} />
+                    <MainBoard xxx={xxx} />
                 </Centered>
                 <SpaceBetween>
                     <WordChecker/>
-                    <BagInfo actions={actions} />
+                    <BagInfo xxx={xxx} />
                 </SpaceBetween>
 
-                <TurnControl actions={actions}/>
+                <TurnControl xxx={xxx}/>
             </Game>
         </DndProvider>
     );

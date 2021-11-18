@@ -23,9 +23,9 @@ const StyledIllegalWords = styled.div`
 
 
 /** 'Dumb' class that does the formatting for TurnControl */
-export function TurnControl({actions} :  {actions: GameProps}): JSX.Element {
+export function TurnControl({xxx} :  {xxx: GameProps}): JSX.Element {
 
-    const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(actions);
+    const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData(xxx);
     const doButtonText = illegalWords ?
         "Done (permitting illegal words)" :
         "Done"

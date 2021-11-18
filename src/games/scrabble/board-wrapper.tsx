@@ -25,12 +25,12 @@ export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         });
     } 
 
-    const actions = {
+    const xxx = {
         bgioProps: bgioProps,
         config: props.config,
         dispatch: dispatch,
         localState: state,
     };
 
-    return <Board actions={actions} />;
+    return <Board xxx={xxx} />;
 }
