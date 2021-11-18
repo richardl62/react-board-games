@@ -1,12 +1,12 @@
 import { BoarderedGrid } from "game-support/boardered-grid";
 import React from "react";
 import { boardIDs, SquareID } from "../actions";
-import { ActionsXXX } from "./actions-xxx";
+import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { TileHolder } from "./tile-holder";
 
 interface MainBoardProps {
-    actions: ActionsXXX;
+    actions: GameProps;
 }
 
 export function MainBoard({ actions }: MainBoardProps): JSX.Element {

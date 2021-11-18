@@ -5,7 +5,7 @@ import { LocalGameState } from "../actions/local-game-state";
 import { ActionType } from "../actions/local-game-state-reducer";
 import { ScrabbleConfig } from "../config";
 
-export interface ActionsXXX { // To do - think of better name
+export interface GameProps { // To do - think of better name
     // Clients should not access the game data, i.e. bgioProps.G
     readonly bgioProps: BgioGameProps<GlobalGameState>,
 

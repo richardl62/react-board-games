@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../actions";
-import { ActionsXXX } from "./actions-xxx";
+import { GameProps } from "./game-props";
 import { endTurn } from "../actions/bgio-moves";
 import { findUnsetBlack } from "../actions/board-and-rack";
 
@@ -20,7 +20,7 @@ export interface TurnControlData {
   onDone?: () => void;
 }
 
-export function useTurnControlData(actions: ActionsXXX): TurnControlData {
+export function useTurnControlData(actions: GameProps): TurnControlData {
   interface IllegalWordsData {
     illegal: string[]; // Words to report
     all: string[]; // All words at time illegal words were recorded.

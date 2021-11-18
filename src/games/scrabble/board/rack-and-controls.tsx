@@ -4,7 +4,7 @@ import { sAssert } from "shared/assert";
 import { Rack } from "./rack";
 import { swapTiles } from "../actions/bgio-moves";
 import { BoardData } from "../actions/global-game-state";
-import { ActionsXXX } from "./actions-xxx";
+import { GameProps } from "./game-props";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -21,7 +21,7 @@ gap: 3%;
 `;
 
 interface RackAndControlsProps {
-    actions: ActionsXXX;
+    actions: GameProps;
 }
 
 /** 
