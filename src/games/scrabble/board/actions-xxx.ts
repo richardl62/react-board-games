@@ -1,9 +1,9 @@
-import { Dispatch, useReducer } from "react";
+import { Dispatch } from "react";
 import { BgioGameProps } from "shared/bgio-game-props";
-import { ScrabbleConfig } from "../config";
 import { GlobalGameState } from "../actions/global-game-state";
-import { ActionType, localGameStateReducer } from "../actions/local-game-state-reducer";
-import { LocalGameState, getLocalGameState } from "../actions/local-game-state";
+import { LocalGameState } from "../actions/local-game-state";
+import { ActionType } from "../actions/local-game-state-reducer";
+import { ScrabbleConfig } from "../config";
 
 export interface ActionsXXX { // To do - think of better name
     // Clients should not access the game data, i.e. bgioProps.G
@@ -13,24 +13,4 @@ export interface ActionsXXX { // To do - think of better name
     readonly dispatch:  Dispatch<ActionType>
 
     readonly localState: LocalGameState;
-}
-
-
-export function useActions(props: BgioGameProps<GlobalGameState>, config: ScrabbleConfig): ActionsXXX {
-    
-    const [state, dispatch] = useReducer(localGameStateReducer, props, getLocalGameState );
-
-    if (props.G.timestamp !== state.externalTimestamp) {
-        dispatch({
-            type: "externalStateChange",
-            data: getLocalGameState(props),
-        });
-    } 
-
-    return {
-        bgioProps: props,
-        config: config,
-        dispatch: dispatch,
-        localState: state,
-    };
 }
