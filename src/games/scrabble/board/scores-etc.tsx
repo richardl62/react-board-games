@@ -20,7 +20,7 @@ export function ScoresEtc(props: GameProps): JSX.Element {
     const scoreElems = props.bgioProps.playOrder.map(pid => {
         const name = props.bgioProps.name(pid);
 
-        const score = props.localState.playerData[pid].score;
+        const score = props.playerData[pid].score;
 
         let displayName = name;
         if (pid === props.bgioProps.playerID) {

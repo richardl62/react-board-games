@@ -26,9 +26,9 @@ export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     } 
 
     return <Board
+        {...state}
         bgioProps={bgioProps}
         config={props.config}
         dispatch={dispatch}
-        localState={state} 
     />;
 }

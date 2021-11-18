@@ -36,8 +36,8 @@ function tilesOut(board: BoardData): boolean {
 
 export function RackAndControls(props: GameProps): JSX.Element {
 
-    const hasTilesOut = tilesOut(props.localState.board);
-    const nTiles =  props.localState.rack.length;
+    const hasTilesOut = tilesOut(props.board);
+    const nTiles =  props.rack.length;
 
     // selectedForSwap is null if a swap is not in progress.
     const [selectedForSwap, setSelectedForSwap] = useState<boolean[] | null>(null);
@@ -51,7 +51,7 @@ export function RackAndControls(props: GameProps): JSX.Element {
             setSelectedForSwap(null);
             // KLUDGE?: Relies to selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            swapTiles(props.localState, props.bgioProps, selectedForSwap);
+            swapTiles(props, props.bgioProps, selectedForSwap);
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);
@@ -72,7 +72,7 @@ export function RackAndControls(props: GameProps): JSX.Element {
         );
     } else {
 
-        const allowSwapping = props.localState.bag.length >= props.localState.rack.length;
+        const allowSwapping = props.bag.length >= props.rack.length;
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
             props.dispatch({type: "recallRack"});

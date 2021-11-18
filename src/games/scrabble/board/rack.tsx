@@ -14,7 +14,7 @@ interface RackProps extends GameProps {
 export function Rack(props: RackProps): JSX.Element {
     const { selected, setSelected } = props;
 
-    const coreTiles = props.localState.rack;
+    const coreTiles = props.rack;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {

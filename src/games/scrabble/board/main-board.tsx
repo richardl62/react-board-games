@@ -6,7 +6,7 @@ import { boardBoarderColor, boardBoarderSize } from "./style";
 import { TileHolder } from "./tile-holder";
 
 export function MainBoard(props: GameProps): JSX.Element {
-    const tiles = props.localState.board;
+    const tiles = props.board;
 
     const nRows = tiles.length;
     const nCols = tiles[0].length;
@@ -23,7 +23,7 @@ export function MainBoard(props: GameProps): JSX.Element {
     const elems = [];
     for(let row = 0; row < nRows; ++row) {
         for(let col = 0; col < nCols; ++col) {
-            const tile = props.localState.board[row][col];
+            const tile = props.board[row][col];
             const active = Boolean(tile?.active);
 
             elems.push(

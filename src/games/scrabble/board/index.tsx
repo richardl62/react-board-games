@@ -29,7 +29,7 @@ const Game = styled.div`
 
 export function BagInfo(props: GameProps): JSX.Element {
     return <div>
-        Tiles in bag: <span>{props.localState.bag.length}</span>
+        Tiles in bag: <span>{props.bag.length}</span>
     </div>;
 }
 
