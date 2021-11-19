@@ -1,6 +1,6 @@
 import { sAssert } from "shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
-import { BoardData } from "./global-game-state";
+import { BoardData, TileData } from "./global-game-state";
 import { blank, Letter } from "../config";
 import { sameJSON, shuffle } from "shared/tools";
 import { addToRack, boardIDs, compactRack, onRack, SquareID } from "./game-actions";
@@ -69,6 +69,11 @@ export class BoardAndRack {
 
     private board: BoardData;
     private rack: Rack;
+
+    evalBoard(row : number, col: number) : TileData | null | undefined {
+        const r = this.board[row];
+        return r ? r[col] : undefined;
+    } 
 
     getTile(tp: TilePosition): CoreTile | null {
         if (tp.rack) {
@@ -167,8 +172,27 @@ export class BoardAndRack {
     }
 
     clickMove({start, rackPos} : {start: ClickMoveStart, rackPos: number}) : void {
-        this.setActiveTile({board: start}, this.rack[rackPos]);
-        this.rack[rackPos] = null;
+        let { row, col } = start;
+
+        if( start.direction === "right") {
+            while(this.evalBoard(row,col)) {
+                col++;
+            }
+        } else {
+            while(this.evalBoard(row,col)) {
+                row++;
+            }
+        }
+
+        if( this.evalBoard(row,col) === undefined ) {
+            // [row][col] off the board. Do nothing in this case.
+        } else {
+            this.setActiveTile(
+                {board: {row: row, col: col}},
+                this.rack[rackPos]
+            );
+            this.rack[rackPos] = null;
+        }
     }
 
     recallRack(): void {
