@@ -3,7 +3,8 @@ import React from "react";
 import { boardIDs, SquareID } from "../actions";
 import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
-import { TileHolder } from "./tile-holder";
+import { BoardSquare } from "./board-square";
+import { Tile } from "./tile";
 
 export function MainBoard(props: GameProps): JSX.Element {
     const tiles = props.board;
@@ -26,11 +27,12 @@ export function MainBoard(props: GameProps): JSX.Element {
             const tile = props.board[row][col];
             const active = Boolean(tile?.active);
 
+            const content = tile && <Tile tile={tile} />;
             elems.push(
-                <TileHolder
+                <BoardSquare
                     key={[row,col].toString()}
 
-                    tile={tile}
+                    content={content}
                     squareType={props.config.boardLayout[row][col]}
 
                     draggable={active}

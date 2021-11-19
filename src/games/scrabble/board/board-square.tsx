@@ -1,13 +1,11 @@
 import React from "react";
 import { DragDrop, PieceHolder, PieceHolderStyle } from "game-support/piece-holder";
 import { squareSize, squareBackground, hoverBorderColor, hightlightBorderColor } from "./style";
-import { Tile } from "./tile";
 import { SquareID } from "../actions";
 import { SquareType } from "../config";
-import { CoreTile } from "../actions";
 
-interface TileHolderProps {
-    tile: CoreTile | null;
+interface BoardSquareProps {
+    content: JSX.Element | null;
 
     squareType: SquareType;
 
@@ -22,9 +20,9 @@ interface TileHolderProps {
 }
 
 
-export function TileHolder(props: TileHolderProps): JSX.Element {
+export function BoardSquare(props: BoardSquareProps): JSX.Element {
 
-    const {tile, squareType, squareID, highlight, showHover, draggable, onDragEnd, onClick } = props;
+    const {content, squareType, squareID, highlight, showHover, draggable, onDragEnd, onClick } = props;
 
     const dragDrop : DragDrop<SquareID> = {
         id: squareID,
@@ -49,6 +47,6 @@ export function TileHolder(props: TileHolderProps): JSX.Element {
         dragDrop={dragDrop}
         onClick={onClick}
     >
-        {tile && <Tile tile={tile} />}
+        {content}
     </PieceHolder>;
 }

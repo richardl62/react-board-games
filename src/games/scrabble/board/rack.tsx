@@ -4,8 +4,9 @@ import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "game-support/boardered-grid";
 import { SquareType } from "../config";
-import { TileHolder } from "./tile-holder";
+import { BoardSquare } from "./board-square";
 import { sAssert } from "shared/assert";
+import { Tile } from "./tile";
 interface RackProps extends GameProps {
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;
@@ -32,22 +33,26 @@ export function Rack(props: RackProps): JSX.Element {
         setSelected(newSwappable);
     };
 
-    const elems = coreTiles.map((tile, index) => <TileHolder
-        key={index}
+    const elems = coreTiles.map((tile, index) => {
+        
+        const content = tile && <Tile tile={tile} />;
+        return <BoardSquare
+            key={index}
 
-        tile={tile}
-        squareType={SquareType.simple}
+            content={content}
+            squareType={SquareType.simple}
 
-        squareID={{ row: 0, col: index, boardID: boardIDs.rack }}
+            squareID={{ row: 0, col: index, boardID: boardIDs.rack }}
 
-        draggable={true}
+            draggable={true}
 
-        onDragEnd={selected ? undefined : onDragEnd}
-        onClick={selected? ()=>toggleSelect(index) : undefined}
+            onDragEnd={selected ? undefined : onDragEnd}
+            onClick={selected ? () => toggleSelect(index) : undefined}
 
-        highlight={Boolean(selected && selected[index])}
-        showHover={false}
-    />);
+            highlight={Boolean(selected && selected[index])}
+            showHover={false}
+        />;
+    });
 
     return <BoarderedGrid
         nCols={coreTiles.length}
