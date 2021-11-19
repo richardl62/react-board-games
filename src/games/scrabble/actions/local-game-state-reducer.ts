@@ -2,7 +2,7 @@ import { sAssert } from "shared/assert";
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
-import { LocalGameState } from "./local-game-state";
+import { ClickMoveDirection, ClickMoveStart, LocalGameState } from "./local-game-state";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
@@ -10,6 +10,7 @@ export type ActionType =
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
     | { type: "externalStateChange", data: LocalGameState }
+    | { type: "setClickMoveStart", data: {row: number, col: number} }
 ;
 
 export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
@@ -22,8 +23,14 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
     }
 
     const br = new BoardAndRack(state.board, state.rack);
+    
+    let clickMoveStart = state.clickMoveStart;
 
-    if(action.type === "move") {
+    if(action.type === "setClickMoveStart") {
+        const {row, col} = action.data;
+        clickMoveStart = newClickMoveState(row, col, clickMoveStart);
+    } else if(action.type === "move") {
+        clickMoveStart = null;
         br.move(action.data);
     } else if(action.type === "recallRack") {
         br.recallRack();
@@ -39,5 +46,20 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         ...state,
         board: br.getBoard(),
         rack: br.getRack(),
+        clickMoveStart: clickMoveStart,
     };
 }
+function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | null): ClickMoveStart {
+    let direction : ClickMoveDirection;
+    if (oldCMS && oldCMS.row === row && oldCMS.col === col ) {
+        // The previously selected square and be re-selected. This implies that the direction
+        // should be toggled.
+        direction = (oldCMS.direction === "right") ? "down" : "right";
+    } else {
+        // A new square had been picked so choice a default direction.
+        direction = "right";
+    }
+
+    return {row: row, col: col, direction: direction };
+}
+

@@ -5,7 +5,8 @@ import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
 
 export type ClickMoveDirection = "right" | "down";
-interface ClickMoveStart {
+
+export interface ClickMoveStart {
     row: number;
     col: number;
     direction: ClickMoveDirection;
