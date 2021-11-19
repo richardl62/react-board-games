@@ -11,6 +11,7 @@ export type ActionType =
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
     | { type: "externalStateChange", data: LocalGameState }
     | { type: "setClickMoveStart", data: {row: number, col: number} }
+    | { type: "clickMove", data: {rackPos: number}}
 ;
 
 export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
@@ -32,6 +33,12 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
     } else if(action.type === "move") {
         clickMoveStart = null;
         br.move(action.data);
+    } else if(action.type === "clickMove") {
+        if( state.clickMoveStart ) {
+            br.clickMove({start: state.clickMoveStart, rackPos: action.data.rackPos});
+        } else {
+            console.warn("Attempted clickMove when start is not set");
+        }
     } else if(action.type === "recallRack") {
         br.recallRack();
     } else if(action.type === "shuffleRack") {

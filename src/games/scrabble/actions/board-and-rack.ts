@@ -4,6 +4,7 @@ import { BoardData } from "./global-game-state";
 import { blank, Letter } from "../config";
 import { sameJSON, shuffle } from "shared/tools";
 import { addToRack, boardIDs, compactRack, onRack, SquareID } from "./game-actions";
+import { ClickMoveStart } from "./local-game-state";
 
 export type Rack = (CoreTile | null)[];
 
@@ -163,6 +164,11 @@ export class BoardAndRack {
             this.addToRack(toLetter);
             this.setActiveTile(to, fromLetter);
         }
+    }
+
+    clickMove({start, rackPos} : {start: ClickMoveStart, rackPos: number}) : void {
+        this.setActiveTile({board: start}, this.rack[rackPos]);
+        this.rack[rackPos] = null;
     }
 
     recallRack(): void {

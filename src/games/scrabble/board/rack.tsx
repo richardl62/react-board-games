@@ -33,9 +33,23 @@ export function Rack(props: RackProps): JSX.Element {
         setSelected(newSwappable);
     };
 
+
+
+
     const elems = coreTiles.map((tile, index) => {
         
         const content = tile && <Tile tile={tile} />;
+
+        let onClick;
+        if(selected) {
+            onClick = () => toggleSelect(index); 
+        } else if (props.clickMoveStart && props.rack[index]) {
+            onClick = () => props.dispatch({
+                type: "clickMove", 
+                data: {rackPos: index}
+            });
+        }
+
         return <BoardSquare
             key={index}
 
@@ -47,7 +61,7 @@ export function Rack(props: RackProps): JSX.Element {
             draggable={true}
 
             onDragEnd={selected ? undefined : onDragEnd}
-            onClick={selected ? () => toggleSelect(index) : undefined}
+            onClick={onClick}
 
             highlight={Boolean(selected && selected[index])}
             showHover={false}

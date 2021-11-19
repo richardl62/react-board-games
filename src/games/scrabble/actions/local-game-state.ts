@@ -32,7 +32,7 @@ export function getLocalGameState(props: BgioGameProps<GlobalGameState>): LocalG
         board: props.G.board,
         rack: props.G.playerData[playerID].playableTiles,
 
-        clickMoveStart: {row: 1, col:1, direction: "down" }, // Temporary kludge
+        clickMoveStart: null,
         bag: props.G.bag,
         
         /** KLUDGE?: Intended only to allow players scores to be seen. 
