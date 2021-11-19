@@ -5,12 +5,13 @@ import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";
 import { Tile } from "./tile";
+import { match } from "assert";
+import { ClickMoveMarker } from "./click-move-marker";
 
 export function MainBoard(props: GameProps): JSX.Element {
-    const tiles = props.board;
-
-    const nRows = tiles.length;
-    const nCols = tiles[0].length;
+    const { board, clickMoveStart } = props;
+    const nRows = board.length;
+    const nCols = board[0].length;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {
@@ -27,7 +28,13 @@ export function MainBoard(props: GameProps): JSX.Element {
             const tile = props.board[row][col];
             const active = Boolean(tile?.active);
 
-            const content = tile && <Tile tile={tile} />;
+            let content = null;
+            if ( tile ) {
+                content = <Tile tile={tile} />;
+            } else if (clickMoveStart?.row === row && clickMoveStart?.col === col) {
+                content = <ClickMoveMarker direction={clickMoveStart.direction} />;
+            }
+
             elems.push(
                 <BoardSquare
                     key={[row,col].toString()}

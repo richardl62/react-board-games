@@ -4,10 +4,19 @@ import { CoreTile } from ".";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
 
+export type ClickMoveDirection = "right" | "down";
+interface ClickMoveStart {
+    row: number;
+    col: number;
+    direction: ClickMoveDirection;
+} 
 
 export interface LocalGameState {
     board: BoardData;
     rack: Rack;
+
+    clickMoveStart: ClickMoveStart | null;
+
     bag: CoreTile[];
 
     playerData: GlobalGameState["playerData"];
@@ -21,6 +30,8 @@ export function getLocalGameState(props: BgioGameProps<GlobalGameState>): LocalG
     return {
         board: props.G.board,
         rack: props.G.playerData[playerID].playableTiles,
+
+        clickMoveStart: {row: 1, col:1, direction: "down" }, // Temporary kludge
         bag: props.G.bag,
         
         /** KLUDGE?: Intended only to allow players scores to be seen. 
