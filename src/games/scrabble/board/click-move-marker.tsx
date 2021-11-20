@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { ClickMoveDirection } from "../actions/local-game-state";
+import { squareSize } from "./style";
+import {ReactComponent as Arrow} from "./216093_right_arrow_icon.svg";
+const OuterDiv = styled.div<{rotation: string}>`
 
-const ArrowDiv = styled.div`
-    height: 100%;
-    width: 100%;
-    
-    font-size: 100%;
-    font-weight: 900;
+    transform:rotate(${props => props.rotation});         /* Standard syntax */
+    height: ${squareSize};
+    width: ${squareSize};
 `;
 
 interface ClickMoveMarkerProps {
@@ -15,6 +15,8 @@ interface ClickMoveMarkerProps {
 }
 
 export function ClickMoveMarker(props: ClickMoveMarkerProps) : JSX.Element {
-    return props.direction === "right" ?
-        <ArrowDiv>&rarr;</ArrowDiv> : <ArrowDiv>&darr;</ArrowDiv>;
+    console.log(props);
+    return <OuterDiv rotation={props.direction === "down" ? "90deg" : "none" } >
+        <Arrow  height={"100%"}  width={"100%"}/>
+    </OuterDiv>;
 }
