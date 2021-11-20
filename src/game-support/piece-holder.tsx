@@ -15,6 +15,10 @@ const Container = styled.div<{
     color?: string | null,
     backgroundColor?: string | null,
 }>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     height: ${props=>props.hieght};
     width: ${props=>props.width};
     color: ${props=>props.color || "none"};
