@@ -1,12 +1,20 @@
 // Adapted from https://boardgame.io/documentation/#/deployment?id=heroku
-import { Server } from "boardgame.io/server";
+import { Server, Origins } from "boardgame.io/server";
 import path from "path";
 import serve from "koa-static";
 import { games } from "./games";
 
 console.log("Starting games server");
 
-const server = Server({ games: games });
+const server = Server({ 
+    games: games,
+    origins: [
+        // Allow your game site to connect.
+        "https://richards-board-games.herokuapp.com",
+        // Allow localhost to connect, except when NODE_ENV is 'production'.
+        Origins.LOCALHOST_IN_DEVELOPMENT
+    ],
+});
 const PORT = process.env.PORT || 8000;
 
 // Build path relative to the server.js file
