@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { isLegalWord } from "shared/is-legal-word";
+import { isLegalWord } from "../../../shared/is-legal-word";
 
 const WordInput = styled.input`
   margin-right: 0.2em;

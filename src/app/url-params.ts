@@ -1,7 +1,7 @@
 // Get values that can be set in the url.
 // If not set, give default value.
-import { sAssert } from "shared/assert";
-import { AppGame, MatchID } from "shared/types";
+import { sAssert } from "../shared/assert";
+import { AppGame, MatchID } from "../shared/types";
 
 const usp = new URLSearchParams(window.location.search);
 

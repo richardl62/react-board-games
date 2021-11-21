@@ -1,5 +1,5 @@
-import { sAssert } from "shared/assert";
-import { nestedArrayMap } from "shared/tools";
+import { sAssert } from "../../../shared/assert";
+import { nestedArrayMap } from "../../../shared/tools";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { CoreTile, makeCoreTile } from "./core-tile";

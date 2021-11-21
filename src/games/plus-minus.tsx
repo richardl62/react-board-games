@@ -1,10 +1,10 @@
 import React from "react";
 import { Ctx } from "boardgame.io";
-import { GameWarnings } from "game-support/show-warning";
-import { AppGame } from "shared/types";
+import { GameWarnings } from "../game-support/show-warning";
+import { AppGame } from "../shared/types";
 import styled from "styled-components";
-import { WaitingForPlayers } from "game-support/waiting-for-players";
-import { BgioGameProps } from "shared/bgio-game-props";
+import { WaitingForPlayers } from "../game-support/waiting-for-players";
+import { BgioGameProps } from "../shared/bgio-game-props";
 
 // Needlessly complex to help with testing. (Hmm, that seems to be contradict itself.)
 interface G {

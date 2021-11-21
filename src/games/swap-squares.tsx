@@ -1,10 +1,10 @@
 import React from "react";
-import { BoarderedGrid } from "game-support/boardered-grid";
-import { DndProvider } from "game-support/drag-drop";
-import { DragDrop, PieceHolder } from "game-support/piece-holder";
-import { AppGame } from "shared/types";
+import { BoarderedGrid } from "../game-support/boardered-grid";
+import { DndProvider } from "../game-support/drag-drop";
+import { DragDrop, PieceHolder } from "../game-support/piece-holder";
+import { AppGame } from "../shared/types";
 import { Ctx } from "boardgame.io";
-import { BgioGameProps } from "shared/bgio-game-props";
+import { BgioGameProps } from "../shared/bgio-game-props";
 
 interface G {
   squares: number[];

@@ -1,5 +1,5 @@
 import React from "react";
-import { BgioGameProps } from "shared/bgio-game-props";
+import { BgioGameProps } from "../shared/bgio-game-props";
 import styled from "styled-components";
 import { GameWarnings } from "./show-warning";
 

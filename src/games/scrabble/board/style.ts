@@ -1,4 +1,4 @@
-import { PieceHolderBackground } from "game-support/piece-holder";
+import { PieceHolderBackground } from "../../../game-support/piece-holder";
 import { SquareType } from "../config";
 
 export const squareSize = "30px";

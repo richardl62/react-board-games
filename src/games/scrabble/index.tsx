@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
-import { BgioGameProps } from "shared/bgio-game-props";
-import { AppGame } from "shared/types";
+import { BgioGameProps } from "../../shared/bgio-game-props";
+import { AppGame } from "../../shared/types";
 import { startingGeneralGameState, bgioMoves } from "./actions";
 import { BoardWrapper } from "./board-wrapper";
 import { configs, ScrabbleConfig } from "./config";

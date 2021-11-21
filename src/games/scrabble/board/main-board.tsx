@@ -1,4 +1,4 @@
-import { BoarderedGrid } from "game-support/boardered-grid";
+import { BoarderedGrid } from "../../../game-support/boardered-grid";
 import React from "react";
 import { boardIDs, SquareID } from "../actions";
 import { GameProps } from "./game-props";

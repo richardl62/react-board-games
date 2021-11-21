@@ -1,7 +1,7 @@
 import { Move } from "boardgame.io";
-import { sAssert } from "shared/assert";
-import { BgioGameProps } from "shared/bgio-game-props";
-import { shuffle } from "shared/tools";
+import { sAssert } from "../../../shared/assert";
+import { BgioGameProps } from "../../../shared/bgio-game-props";
+import { shuffle } from "../../../shared/tools";
 import { CoreTile } from "./core-tile";
 import { BoardData, GlobalGameState } from "./global-game-state";
 import { LocalGameState } from "./local-game-state";

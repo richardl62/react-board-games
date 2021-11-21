@@ -1,4 +1,4 @@
-import { sAssert } from "shared/assert";
+import { sAssert } from "../../../shared/assert";
 import { GlobalGameState, BoardData } from "./global-game-state";
 import { RowCol } from "./get-words-and-score";
 import { CoreTile, makeCoreTile } from "./core-tile";

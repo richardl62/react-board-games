@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { sAssert } from "shared/assert";
+import { sAssert } from "../../../shared/assert";
 import { Rack } from "./rack";
 import { swapTiles } from "../actions/bgio-moves";
 import { BoardData } from "../actions/global-game-state";

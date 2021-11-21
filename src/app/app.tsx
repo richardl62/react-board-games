@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import { games as appGames } from "games";
-import { AppGame } from "shared/types";
+import { games as appGames } from "../games";
+import { AppGame } from "../shared/types";
 import "./app.css";
 import { GamePage } from "./game-page";
 import * as UrlParams from "./url-params";

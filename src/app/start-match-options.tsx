@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AppGame } from "shared/types";
-import { TestDebugBox } from "shared/test-debug-box";
+import { AppGame } from "../shared/types";
+import { TestDebugBox } from "../shared/test-debug-box";
 import { getOfflineMatchLink } from "./open-match-page";
 
 const OuterDiv = styled.div`

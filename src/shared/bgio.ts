@@ -1,7 +1,7 @@
 import { LobbyAPI } from "boardgame.io";
 import { LobbyClient } from "boardgame.io/client";
-import { lobbyServer } from "app/url-params";
-import { unnamedPlayer } from "game-support";
+import { lobbyServer } from "../app/url-params";
+import { unnamedPlayer } from "../game-support";
 import { AppGame, MatchID, Player } from "./types";
 
 type MatchInfo = LobbyAPI.Match;

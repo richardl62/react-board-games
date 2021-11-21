@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
-import { AppGame } from "shared/types";
+import { AppGame } from "../shared/types";
 import * as UrlParams from "./url-params";
-import { makeGeneralGameProps } from "shared/bgio-game-props";
+import { makeGeneralGameProps } from "../shared/bgio-game-props";
 
 interface GamePlayLocalProps {
   game: AppGame;

@@ -1,5 +1,5 @@
-import { sAssert } from "shared/assert";
-import { BgioGameProps } from "shared/bgio-game-props";
+import { sAssert } from "../../../shared/assert";
+import { BgioGameProps } from "../../../shared/bgio-game-props";
 import { CoreTile } from ".";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";

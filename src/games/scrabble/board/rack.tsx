@@ -2,10 +2,10 @@ import React from "react";
 import { boardIDs, SquareID } from "../actions";
 import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
-import { BoarderedGrid } from "game-support/boardered-grid";
+import { BoarderedGrid } from "../../../game-support/boardered-grid";
 import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
-import { sAssert } from "shared/assert";
+import { sAssert } from "../../../shared/assert";
 import { Tile } from "./tile";
 interface RackProps extends GameProps {
     selected: boolean[] | null;

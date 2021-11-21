@@ -1,5 +1,5 @@
-import { DndProvider } from "game-support/drag-drop";
-import { WaitingForPlayers } from "game-support/waiting-for-players";
+import { DndProvider } from "../../../game-support/drag-drop";
+import { WaitingForPlayers } from "../../../game-support/waiting-for-players";
 import React from "react";
 import styled from "styled-components";
 import { GameProps } from "./game-props";

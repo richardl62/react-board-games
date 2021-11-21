@@ -1,4 +1,4 @@
-import { sAssert } from "shared/assert";
+import { sAssert } from "../../../shared/assert";
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";

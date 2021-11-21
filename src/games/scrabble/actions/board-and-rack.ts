@@ -1,8 +1,8 @@
-import { sAssert } from "shared/assert";
+import { sAssert } from "../../../shared/assert";
 import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData, TileData } from "./global-game-state";
 import { blank, Letter } from "../config";
-import { sameJSON, shuffle } from "shared/tools";
+import { sameJSON, shuffle } from "../../../shared/tools";
 import { addToRack, boardIDs, compactRack, onRack, SquareID } from "./game-actions";
 import { ClickMoveStart } from "./local-game-state";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GameWarnings } from "game-support/show-warning";
+import { GameWarnings } from "../../../game-support/show-warning";
 import { GameProps } from "./game-props";
 
 const StyledScoresEtc=styled.div`

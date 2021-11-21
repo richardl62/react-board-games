@@ -1,5 +1,5 @@
-import { sAssert } from "shared/assert";
-import { shuffle } from "shared/tools";
+import { sAssert } from "../../../shared/assert";
+import { shuffle } from "../../../shared/tools";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 

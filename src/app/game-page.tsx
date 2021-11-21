@@ -1,7 +1,7 @@
 import React, { ReactChild, useState } from "react";
-import { sAssert } from "shared/assert";
-import * as Bgio from "shared/bgio";
-import { AppGame, MatchID, Player } from "shared/types";
+import { sAssert } from "../shared/assert";
+import * as Bgio from "../shared/bgio";
+import { AppGame, MatchID, Player } from "../shared/types";
 import { GamePlayOffline } from "./game-play-offline";
 import { GamePlayOnline } from "./game-play-online";
 import { getStoredPlayer, setStoredPlayer } from "./local-storage";

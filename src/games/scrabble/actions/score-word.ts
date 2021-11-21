@@ -1,4 +1,4 @@
-import { sAssert } from "shared/assert";
+import { sAssert } from "../../../shared/assert";
 import { tileScore } from "./core-tile";
 import { BoardData } from "./global-game-state";
 import { ScrabbleConfig, multipliers } from "../config";

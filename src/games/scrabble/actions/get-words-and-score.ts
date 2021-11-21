@@ -1,5 +1,5 @@
-import { sAssert } from "shared/assert";
-import { isLegalWord } from "shared/is-legal-word";
+import { sAssert } from "../../../shared/assert";
+import { isLegalWord } from "../../../shared/is-legal-word";
 import { BoardData, TileData } from "./global-game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
