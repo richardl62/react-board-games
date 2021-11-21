@@ -4,9 +4,10 @@ import * as Bgio from "../shared/bgio";
 import { AppGame, MatchID, Player } from "../shared/types";
 import { GamePlayOffline } from "./game-play-offline";
 import { GamePlayOnline } from "./game-play-online";
-import { getStoredPlayer, setStoredPlayer } from "./local-storage";
 import { openOnlineMatchPage } from "./open-match-page";
 import { MatchOptions, StartMatchOptions } from "./start-match-options";
+import { addPlayerToHref } from "./url-params";
+
 
 interface GetPlayerNameProps {
   children: ReactChild;
@@ -41,13 +42,14 @@ interface GamePageProps {
   game: AppGame;
   matchID: MatchID | null;
   offline: {nPlayers: number, persist: boolean} | null;
+  player: Player | null;
 }
 
-function GamePage({game, matchID, offline}: GamePageProps): JSX.Element | null {
+function GamePage({game, matchID, player, offline}: GamePageProps): JSX.Element | null {
     const [waiting, setWaiting] = useState(false);
     const [error, setError] = useState<Error|null>(null);
     const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);
-    const [player, setPlayer] = useState<Player|null>(matchID && getStoredPlayer(matchID));
+
 
     const joinGame = (name: string) => {
         sAssert(matchID);
@@ -55,9 +57,8 @@ function GamePage({game, matchID, offline}: GamePageProps): JSX.Element | null {
 
         Bgio.joinMatch(game, matchID, name)
             .then(player => {
-                setStoredPlayer(matchID, player);
-                setPlayer(player);
-                setWaiting(false);
+                const newHref = addPlayerToHref(player);
+                window.location.href = newHref;
             })
             .catch(setError);
     };
@@ -71,7 +72,7 @@ function GamePage({game, matchID, offline}: GamePageProps): JSX.Element | null {
     }
 
     if (matchID && !player) {
-        return <GetPlayerName nameCallback={joinGame}>Join As</GetPlayerName>;
+        return <GetPlayerName nameCallback={joinGame}>Join</GetPlayerName>;
     }
 
     if(offline) {

@@ -1,7 +1,7 @@
 // Get values that can be set in the url.
 // If not set, give default value.
 import { sAssert } from "../shared/assert";
-import { AppGame, MatchID } from "../shared/types";
+import { AppGame, MatchID, Player } from "../shared/types";
 
 const usp = new URLSearchParams(window.location.search);
 
@@ -60,9 +60,39 @@ if(getAndDeleteFlag("offline")){
     }
 }
 
+function getAndDeletePlayer() : Player | null {
+    const pid = getAndDelete("pid");
+    const credentials = getAndDelete("credentials");
+
+    if(pid && credentials) {
+        return {
+            id: pid,
+            credentials: credentials,
+        };
+    }
+
+    if(pid || credentials) {
+        console.log("URL has one but not both of player id and credentials");
+    }
+
+    return null;
+}
+
+export const player = getAndDeletePlayer();
+
   
 if (usp.toString()) {
     console.log("Unrecongised url parameters", usp.toString());
+}
+
+export function addPlayerToHref(player: Player) : string {
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    searchParams.set("pid", player.id);
+    searchParams.set("credentials", player.credentials);
+    url.search = searchParams.toString();
+
+    return  url.href;
 }
 
 export function gamePath(game: AppGame): string {
