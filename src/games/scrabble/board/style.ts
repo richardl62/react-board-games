@@ -16,6 +16,7 @@ export const hightlightBorderColor = "yellow";
 export const hoverBorderColor = "rgb(200 200 100)"; // Muddy green
 
 
+
 export function squareBackground(type: SquareType) : PieceHolderBackground {
     let color;
     let text;

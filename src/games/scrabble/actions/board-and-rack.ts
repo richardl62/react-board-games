@@ -71,6 +71,7 @@ export class BoardAndRack {
     private rack: Rack;
 
     evalBoard(row : number, col: number) : TileData | null | undefined {
+        this.rack[1] = null;
         const r = this.board[row];
         return r ? r[col] : undefined;
     } 
@@ -85,7 +86,7 @@ export class BoardAndRack {
 
     setActiveTile(tp: TilePosition, tile: CoreTile | null): void {
         if (tp.rack) {
-            this.rack[tp.rack.pos] = tile;
+            this.setRackTile(tile, tp.rack.pos);
         } else {
             this.board[tp.board.row][tp.board.col] = tile && {
                 ...tile,
