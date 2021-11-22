@@ -71,7 +71,6 @@ export class BoardAndRack {
     private rack: Rack;
 
     evalBoard(row : number, col: number) : TileData | null | undefined {
-        this.rack[1] = null;
         const r = this.board[row];
         return r ? r[col] : undefined;
     } 
