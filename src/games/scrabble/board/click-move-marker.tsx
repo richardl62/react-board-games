@@ -29,7 +29,6 @@ interface ClickMoveMarkerProps {
 }
 
 export function ClickMoveMarker(props: ClickMoveMarkerProps) : JSX.Element {
-    console.log(props);
     return <OuterDiv rotation={props.direction === "down" ? "90deg" : "none" } >
         <ArrowHead />
     </OuterDiv>;
