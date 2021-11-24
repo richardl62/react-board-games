@@ -2,9 +2,9 @@ import { sAssert } from "../../../shared/assert";
 import { nestedArrayMap } from "../../../shared/tools";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
-import { CoreTile } from "./core-tile";
+import { ExtendedLetter } from "./extended-letter";
 
-export interface TileData extends CoreTile {
+export interface TileData extends ExtendedLetter {
 
     /** movable in the current turn.  Rack tiles are always active. */
     active: boolean;

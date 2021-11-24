@@ -7,18 +7,18 @@ import { blank, Letter, letterScore } from "../config";
  * Note: letter === blank implies that the user has not selected a value (or that
  * a previously selected value was cleared.) 
 */
-export interface CoreTile {
+export interface ExtendedLetter {
     letter: Letter;
     isBlank: boolean;
 }
 
-export function makeCoreTile(letter: Letter) : CoreTile {
+export function makeExtendedLetter(letter: Letter) : ExtendedLetter {
     return {
         letter:letter,
         isBlank: letter === blank,
     };
 }
 
-export function tileScore(tile: CoreTile): number {
+export function tileScore(tile: ExtendedLetter): number {
     return (tile.isBlank) ? letterScore(blank) : letterScore(tile.letter);
 }

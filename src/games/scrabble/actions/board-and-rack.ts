@@ -1,5 +1,5 @@
 import { sAssert } from "../../../shared/assert";
-import { CoreTile, makeCoreTile } from "./core-tile";
+import { ExtendedLetter, makeExtendedLetter } from "./extended-letter";
 import { BoardData, TileData } from "./global-game-state";
 import { blank, Letter } from "../config";
 import { sameJSON, shuffle } from "../../../shared/tools";
@@ -75,49 +75,49 @@ export class BoardAndRack {
         return r ? r[col] : undefined;
     } 
 
-    getTile(tp: TilePosition): CoreTile | null {
+    getExtendedLetter(tp: TilePosition): ExtendedLetter | null {
         if (tp.rack) {
             const letter = this.rack[tp.rack.pos];
-            return letter && makeCoreTile(letter);
+            return letter && makeExtendedLetter(letter);
         } else {
             return this.board[tp.board.row][tp.board.col];
         }
     }
 
-    setActiveTile(tp: TilePosition, tile: CoreTile | null): void {
+    setActiveTile(tp: TilePosition, letter: ExtendedLetter | null): void {
         if (tp.rack) {
-            this.setRackTile(tile, tp.rack.pos);
+            this.setRackTile(letter, tp.rack.pos);
         } else {
-            this.board[tp.board.row][tp.board.col] = tile && {
-                ...tile,
+            this.board[tp.board.row][tp.board.col] = letter && {
+                ...letter,
                 active: true,
             };
         }
     }
 
-    private setRackTile(tile: CoreTile | null, pos: number) {
+    private setRackTile(letter: ExtendedLetter | null, pos: number) {
         // User suppled values for blanks are cleared when in rack.
-        if (tile == null) {
+        if (letter == null) {
             this.rack[pos] = null;
-        } else if(tile.isBlank) {
+        } else if(letter.isBlank) {
             this.rack[pos] = blank;
         } else {
-            this.rack[pos] = tile.letter;
+            this.rack[pos] = letter.letter;
         }
     }
 
-    addToRack(tile: CoreTile): void {
+    addToRack(letter: ExtendedLetter): void {
         const emptySquare = this.rack.findIndex(l => l === null);
         sAssert(emptySquare >= 0, "Problem adding tile to rack");
-        this.setRackTile(tile, emptySquare);
+        this.setRackTile(letter, emptySquare);
     }
 
-    insertIntoRack(tp: TilePosition, tile: CoreTile | null): void {
+    insertIntoRack(tp: TilePosition, letter: ExtendedLetter | null): void {
         sAssert(tp.rack);
         const pos = tp.rack.pos;
         
         if(moveTilesDown(this.rack, pos) || moveTilesUp(this.rack, pos)) {
-            this.setRackTile(tile, pos);
+            this.setRackTile(letter, pos);
         } else {
             throw new Error("attempt to insert into full rack");
         }
@@ -157,8 +157,8 @@ export class BoardAndRack {
             return;
         }
 
-        const fromLetter = this.getTile(from);
-        const toLetter  = this.getTile(to);
+        const fromLetter = this.getExtendedLetter(from);
+        const toLetter  = this.getExtendedLetter(to);
 
         // Do nothing if attempting to move onto an inactive tile.
         if (toLetter === null) {
@@ -193,7 +193,7 @@ export class BoardAndRack {
             const rackLetter = this.rack[rackPos];
             this.setActiveTile(
                 {board: {row: row, col: col}},
-                rackLetter && makeCoreTile(rackLetter),
+                rackLetter && makeExtendedLetter(rackLetter),
             );
             this.rack[rackPos] = null;
         }

@@ -1,7 +1,7 @@
 import { sAssert } from "../../../shared/assert";
 import { GlobalGameState, BoardData } from "./global-game-state";
 import { RowCol } from "./get-words-and-score";
-import { CoreTile } from "./core-tile";
+import { ExtendedLetter } from "./extended-letter";
 import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 
@@ -56,7 +56,7 @@ export function getWord(
 
 
 
-export function addToRack(rack: Rack, tile: CoreTile): void {
+export function addToRack(rack: Rack, tile: ExtendedLetter): void {
     const emptyIndex = rack.findIndex(t => t === null);
     sAssert(emptyIndex >= 0, "Attempt to add to full rack");
 

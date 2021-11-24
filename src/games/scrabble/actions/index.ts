@@ -7,8 +7,8 @@ export { bgioMoves } from "./bgio-moves";
 export { getWordsAndScore } from "./get-words-and-score";
 export { findActiveLetters } from "./find-active-letters";
 
-export type { CoreTile } from "./core-tile";
-export { tileScore } from "./core-tile";
+export type { ExtendedLetter as CoreTile } from "./extended-letter";
+export { tileScore } from "./extended-letter";
 
 export { boardIDs } from "./game-actions";
 export type { SquareID } from "./game-actions";

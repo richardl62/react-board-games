@@ -7,7 +7,7 @@ import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../shared/assert";
 import { Tile } from "./tile";
-import { makeCoreTile } from "../actions/core-tile";
+import { makeExtendedLetter } from "../actions/extended-letter";
 interface RackProps extends GameProps {
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;
@@ -39,7 +39,7 @@ export function Rack(props: RackProps): JSX.Element {
 
     const elems = coreTiles.map((tile, index) => {
         
-        const content = tile && <Tile tile={makeCoreTile(tile)} />;
+        const content = tile && <Tile tile={makeExtendedLetter(tile)} />;
 
         let onClick;
         if(selected) {
