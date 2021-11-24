@@ -2,7 +2,7 @@ import { sAssert } from "../../../shared/assert";
 import { nestedArrayMap } from "../../../shared/tools";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
-import { CoreTile, makeCoreTile } from "./core-tile";
+import { CoreTile } from "./core-tile";
 
 export interface TileData extends CoreTile {
 
@@ -17,7 +17,7 @@ export function getLetter(sd : TileData | null) : Letter | null {
 export type BoardData = (TileData | null)[][];
 
 export interface GamePlayerData {
-    rack: (CoreTile|null)[];
+    rack: (Letter|null)[];
     score: number;
 }
 
@@ -63,7 +63,7 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
     for (let p = 0; p < numPlayers; ++p) {
         const playerID = p.toString(); //Kludge?
         playerData[playerID] = {
-            rack: rack().map(makeCoreTile),
+            rack: rack(),
             score: 0,
         };
     }

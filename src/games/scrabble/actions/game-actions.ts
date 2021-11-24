@@ -1,8 +1,9 @@
 import { sAssert } from "../../../shared/assert";
 import { GlobalGameState, BoardData } from "./global-game-state";
 import { RowCol } from "./get-words-and-score";
-import { CoreTile, makeCoreTile } from "./core-tile";
+import { CoreTile } from "./core-tile";
 import { blank } from "../config";
+import { Rack } from "./board-and-rack";
 
 export interface SquareID {
     row: number;
@@ -10,7 +11,6 @@ export interface SquareID {
     boardID: string;
 }
 
-type Rack = (CoreTile|null)[];
 export const boardIDs = {
     rack: "rack",
     main: "main",
@@ -61,7 +61,7 @@ export function addToRack(rack: Rack, tile: CoreTile): void {
     sAssert(emptyIndex >= 0, "Attempt to add to full rack");
 
     // Black tiles lose any user defined value when returned to the rack.
-    rack[emptyIndex] = tile.isBlank? makeCoreTile(blank) : tile; 
+    rack[emptyIndex] = tile.isBlank ? blank : tile.letter; 
 }
 
 /* move blank spaces to the end */

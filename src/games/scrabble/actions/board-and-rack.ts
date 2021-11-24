@@ -6,7 +6,7 @@ import { sameJSON, shuffle } from "../../../shared/tools";
 import { addToRack, boardIDs, compactRack, onRack, SquareID } from "./game-actions";
 import { ClickMoveStart } from "./local-game-state";
 
-export type Rack = (CoreTile | null)[];
+export type Rack = (Letter | null)[];
 
 export type TilePosition = 
     {
@@ -77,7 +77,8 @@ export class BoardAndRack {
 
     getTile(tp: TilePosition): CoreTile | null {
         if (tp.rack) {
-            return this.rack[tp.rack.pos];
+            const letter = this.rack[tp.rack.pos];
+            return letter && makeCoreTile(letter);
         } else {
             return this.board[tp.board.row][tp.board.col];
         }
@@ -96,10 +97,12 @@ export class BoardAndRack {
 
     private setRackTile(tile: CoreTile | null, pos: number) {
         // User suppled values for blanks are cleared when in rack.
-        if(tile?.isBlank) {
-            this.rack[pos] = makeCoreTile(blank);
+        if (tile == null) {
+            this.rack[pos] = null;
+        } else if(tile.isBlank) {
+            this.rack[pos] = blank;
         } else {
-            this.rack[pos] = tile;
+            this.rack[pos] = tile.letter;
         }
     }
 
@@ -187,9 +190,10 @@ export class BoardAndRack {
         if( this.evalBoard(row,col) === undefined ) {
             // [row][col] off the board. Do nothing in this case.
         } else {
+            const rackLetter = this.rack[rackPos];
             this.setActiveTile(
                 {board: {row: row, col: col}},
-                this.rack[rackPos]
+                rackLetter && makeCoreTile(rackLetter),
             );
             this.rack[rackPos] = null;
         }
