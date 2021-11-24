@@ -30,7 +30,7 @@ export function getLocalGameState(props: BgioGameProps<GlobalGameState>): LocalG
 
     return {
         board: props.G.board,
-        rack: props.G.playerData[playerID].playableTiles,
+        rack: props.G.playerData[playerID].rack,
 
         clickMoveStart: null,
         bag: props.G.bag,

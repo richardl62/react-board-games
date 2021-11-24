@@ -17,12 +17,7 @@ export function getLetter(sd : TileData | null) : Letter | null {
 export type BoardData = (TileData | null)[][];
 
 export interface GamePlayerData {
-    /**
-     * playable tiles are those either on the rack or that have been moved
-     * off the rack onto the board, but are still available for moving (i.e
-     * have not yet been permanently added as part of the turn.)
-     */
-    playableTiles: (CoreTile|null)[];
+    rack: (CoreTile|null)[];
     score: number;
 }
 
@@ -68,7 +63,7 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
     for (let p = 0; p < numPlayers; ++p) {
         const playerID = p.toString(); //Kludge?
         playerData[playerID] = {
-            playableTiles: rack().map(makeCoreTile),
+            rack: rack().map(makeCoreTile),
             score: 0,
         };
     }

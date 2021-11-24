@@ -19,7 +19,7 @@ const setBoardRandAndScore: Move<GlobalGameState> = (G, ctx,
 ) => {
 
     G.bag = bag;
-    G.playerData[ctx.currentPlayer].playableTiles = rack;
+    G.playerData[ctx.currentPlayer].rack = rack;
     G.playerData[ctx.currentPlayer].score += score;
 
     // KLUDGE: 'active' does not really belong server side
