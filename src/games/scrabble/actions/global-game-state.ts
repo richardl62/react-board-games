@@ -32,7 +32,7 @@ type PlayerDataDictionary = {[id: string] : GamePlayerData};
 export interface GlobalGameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
-    bag: CoreTile[];
+    bag: Letter[];
     turn: number;
 
     /** Any move that changes game data will also increase timestamp */
@@ -51,10 +51,10 @@ export function isGlobalGameState(arg: unknown) : boolean {
 }
 
 export function startingGlobalGameState(numPlayers: number, config: ScrabbleConfig): GlobalGameState {
-    const bag = config.makeFullBag().map(makeCoreTile); 
+    const bag = config.makeFullBag(); 
 
     const rack = () => {
-        const tiles : CoreTile[] = [];
+        const tiles : Letter[] = [];
         for (let i = 0; i < config.rackSize; ++i) {
             const tile = bag.pop();
             sAssert(tile, "Too few tiles for initial setup");
@@ -68,7 +68,7 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
     for (let p = 0; p < numPlayers; ++p) {
         const playerID = p.toString(); //Kludge?
         playerData[playerID] = {
-            playableTiles: rack(),
+            playableTiles: rack().map(makeCoreTile),
             score: 0,
         };
     }

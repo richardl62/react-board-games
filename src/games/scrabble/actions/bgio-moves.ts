@@ -2,14 +2,15 @@ import { Move } from "boardgame.io";
 import { sAssert } from "../../../shared/assert";
 import { BgioGameProps } from "../../../shared/bgio-game-props";
 import { shuffle } from "../../../shared/tools";
-import { CoreTile } from "./core-tile";
+import { Letter } from "../config";
+import { CoreTile, makeCoreTile } from "./core-tile";
 import { BoardData, GlobalGameState } from "./global-game-state";
 import { LocalGameState } from "./local-game-state";
 
 interface setBoardRandAndScoreParam {
     board: BoardData;
     rack: (CoreTile | null)[];
-    bag: CoreTile[];
+    bag: Letter[];
     score: number;
 }
 
@@ -50,7 +51,8 @@ export function endTurn(localState: LocalGameState, bgioProps: BgioGameProps, sc
     const bag = [...localState.bag];
     for (let ri = 0; ri < rack.length; ++ri) {
         if(!rack[ri]) {
-            rack[ri] = bag.pop() || null;
+            const letter = bag.pop();
+            rack[ri] = letter ? makeCoreTile(letter) : null;
         }
     }
 
@@ -71,8 +73,8 @@ export function swapTiles(localState: LocalGameState, bgioProps: BgioGameProps, 
         if (toSwap[ri]) {
             const old = localState.rack[ri];
             sAssert(old, "Attempt to swap non-existant tile");
-            bag.push(old);
-            localState.rack[ri] = bag.shift()!;
+            bag.push(old.letter);
+            localState.rack[ri] = makeCoreTile(bag.shift()!);
         }
     }
     shuffle(bag);

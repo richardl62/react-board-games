@@ -1,6 +1,6 @@
 import { sAssert } from "../../../shared/assert";
 import { BgioGameProps } from "../../../shared/bgio-game-props";
-import { CoreTile } from ".";
+import { Letter } from "../config";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
 
@@ -18,7 +18,7 @@ export interface LocalGameState {
 
     clickMoveStart: ClickMoveStart | null;
 
-    bag: CoreTile[];
+    bag: Letter[];
 
     playerData: GlobalGameState["playerData"];
     externalTimestamp: number;

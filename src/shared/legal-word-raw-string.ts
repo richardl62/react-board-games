@@ -1,4 +1,4 @@
-// wordList downloaded from https://www.wordgamedictionary.com/sowpods/download/.txt
+// wordList downloaded from https://www.wordgamedictionary.com/sowpods/download/
 export const legalWordsRawString = `aa
 aah
 aahed
