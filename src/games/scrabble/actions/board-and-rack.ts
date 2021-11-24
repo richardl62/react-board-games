@@ -1,6 +1,6 @@
 import { sAssert } from "../../../shared/assert";
 import { ExtendedLetter, makeExtendedLetter } from "./extended-letter";
-import { BoardData, TileData } from "./global-game-state";
+import { BoardData, BoardSquareData } from "./global-game-state";
 import { blank, Letter } from "../config";
 import { sameJSON, shuffle } from "../../../shared/tools";
 import { addToRack, boardIDs, compactRack, onRack, SquareID } from "./game-actions";
@@ -70,7 +70,7 @@ export class BoardAndRack {
     private board: BoardData;
     private rack: Rack;
 
-    evalBoard(row : number, col: number) : TileData | null | undefined {
+    evalBoard(row : number, col: number) : BoardSquareData | null | undefined {
         const r = this.board[row];
         return r ? r[col] : undefined;
     } 

@@ -1,6 +1,6 @@
 import { sAssert } from "../../../shared/assert";
 import { isLegalWord } from "../../../shared/is-legal-word";
-import { BoardData, TileData } from "./global-game-state";
+import { BoardData, BoardSquareData } from "./global-game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { LocalGameState } from "./local-game-state";
@@ -50,7 +50,7 @@ function sameRowCol(positions: RowCol[], direction: Direction) : boolean {
  * This is a help for findWordsContaining.
  */
 function findAdjancentIndices(
-    values: (TileData|null)[],
+    values: (BoardSquareData|null)[],
 
     /** Must be in numerical order */
     indices: number[],

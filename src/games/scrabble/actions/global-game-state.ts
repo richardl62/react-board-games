@@ -4,17 +4,17 @@ import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "./extended-letter";
 
-export interface TileData extends ExtendedLetter {
+export interface BoardSquareData extends ExtendedLetter {
 
     /** movable in the current turn.  Rack tiles are always active. */
     active: boolean;
 }
 
-export function getLetter(sd : TileData | null) : Letter | null {
+export function getLetter(sd : BoardSquareData | null) : Letter | null {
     return sd && sd.letter;
 }
 
-export type BoardData = (TileData | null)[][];
+export type BoardData = (BoardSquareData | null)[][];
 
 export interface GamePlayerData {
     rack: (Letter|null)[];
