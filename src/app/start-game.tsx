@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AppGame } from "../shared/types";
 import { TestDebugBox } from "../shared/test-debug-box";
 import { getOfflineMatchLink } from "./open-match-page";
-
+import { openOnlineMatchPage } from "./open-match-page";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -36,19 +36,37 @@ export interface StartGameOptions {
 
 interface StartGameProps {
   game: AppGame;
-  optionsCallback: (arg: StartGameOptions) => void;
 }
 
-export function StartGame(
-    {
-        game: { minPlayers, maxPlayers },
-        optionsCallback: startMatch
-    }: StartGameProps): JSX.Element {
+
+interface Status {
+    waiting?: true;
+    error?: Error;
+}
+export function StartGame({ game }: StartGameProps): JSX.Element {
+    const { minPlayers, maxPlayers } = game;
 
     const defaultNumPlayers = snapToRange(2 /*arbitrary*/, minPlayers, maxPlayers);
 
     const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
     const [persist, setPersist] = useState(false);
+    const [status, setStatus] = useState<Status>({});
+
+    const startGame = () => openOnlineMatchPage({
+        game:game, 
+        nPlayers: numPlayers,
+        setWaiting: () => setStatus({waiting: true}),
+        setError: (err) => setStatus({error: err}),
+    });
+
+    if( status.error ) {
+        return <h3>{`ERROR: ${status.error.message}`}</h3>;
+    }
+
+    if ( status.waiting ) {
+        return <p>waiting ...</p>;
+    }
+
     return (
         <OuterDiv>
 
@@ -62,7 +80,7 @@ export function StartGame(
                     value={numPlayers}
                     onChange={(event) => setNumPlayers(Number(event.target.value))} 
                 />
-                <button type="button" onClick={() => startMatch({ nPlayers: numPlayers, local: false })}>
+                <button type="button" onClick={() => startGame()}>
                       Start Game
                 </button>
             </div>

@@ -4,8 +4,7 @@ import * as Bgio from "../shared/bgio";
 import { AppGame, MatchID, Player } from "../shared/types";
 import { GamePlayOffline } from "./game-play-offline";
 import { GamePlayOnline } from "./game-play-online";
-import { openOnlineMatchPage } from "./open-match-page";
-import { StartGameOptions, StartGame } from "./start-game";
+import { StartGame } from "./start-game";
 import { addPlayerToHref } from "./url-params";
 
 
@@ -48,7 +47,6 @@ interface GamePageProps {
 function GamePage({game, matchID, player, offline}: GamePageProps): JSX.Element | null {
     const [waiting, setWaiting] = useState(false);
     const [error, setError] = useState<Error|null>(null);
-    const [matchOptions, setMatchOptions] = useState<StartGameOptions|null>(null);
 
 
     const joinGame = (name: string) => {
@@ -83,15 +81,8 @@ function GamePage({game, matchID, player, offline}: GamePageProps): JSX.Element 
         return  <GamePlayOnline game={game} matchID={matchID} player={player} />;
     }
 
-    if (!matchOptions) {
-        return <StartGame game={game} optionsCallback={setMatchOptions} />;
-    }
 
-
-    openOnlineMatchPage({...matchOptions, game:game, setWaiting: setWaiting, setError: setError});
-
-    // If this is reached for more than a few seconds something has gone wrong<
-    return null;
+    return <StartGame game={game}  />;
 }
 
 export { GamePage };
