@@ -5,7 +5,7 @@ import { AppGame, MatchID, Player } from "../shared/types";
 import { GamePlayOffline } from "./game-play-offline";
 import { GamePlayOnline } from "./game-play-online";
 import { openOnlineMatchPage } from "./open-match-page";
-import { MatchOptions, StartMatchOptions } from "./start-match-options";
+import { StartGameOptions, StartGame } from "./start-game";
 import { addPlayerToHref } from "./url-params";
 
 
@@ -48,7 +48,7 @@ interface GamePageProps {
 function GamePage({game, matchID, player, offline}: GamePageProps): JSX.Element | null {
     const [waiting, setWaiting] = useState(false);
     const [error, setError] = useState<Error|null>(null);
-    const [matchOptions, setMatchOptions] = useState<MatchOptions|null>(null);
+    const [matchOptions, setMatchOptions] = useState<StartGameOptions|null>(null);
 
 
     const joinGame = (name: string) => {
@@ -84,7 +84,7 @@ function GamePage({game, matchID, player, offline}: GamePageProps): JSX.Element 
     }
 
     if (!matchOptions) {
-        return <StartMatchOptions game={game} optionsCallback={setMatchOptions} />;
+        return <StartGame game={game} optionsCallback={setMatchOptions} />;
     }
 
 

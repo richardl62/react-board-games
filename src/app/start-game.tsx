@@ -19,16 +19,6 @@ const OfflineLinkDiv = styled.div`
   }
 `;
 
-export interface MatchOptions {
-  local: boolean;
-  nPlayers: number;
-}
-
-interface StartMatchProps {
-  game: AppGame;
-  optionsCallback: (arg: MatchOptions) => void;
-}
-
 function snapToRange(val: number, low: number, high: number) : number {
     if (val < low) {
         return low;
@@ -39,11 +29,21 @@ function snapToRange(val: number, low: number, high: number) : number {
     return val;
 }
 
-export function StartMatchOptions(
+export interface StartGameOptions {
+  local: boolean;
+  nPlayers: number;
+}
+
+interface StartGameProps {
+  game: AppGame;
+  optionsCallback: (arg: StartGameOptions) => void;
+}
+
+export function StartGame(
     {
         game: { minPlayers, maxPlayers },
         optionsCallback: startMatch
-    }: StartMatchProps): JSX.Element {
+    }: StartGameProps): JSX.Element {
 
     const defaultNumPlayers = snapToRange(2 /*arbitrary*/, minPlayers, maxPlayers);
 
