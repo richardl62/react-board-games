@@ -14,14 +14,16 @@ export interface BoardWrapperProps {
 
 export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const bgioProps = props.appBoardProps as BgioGameProps<GeneralGameState>;
-    sAssert(isGlobalGameState(bgioProps.G));
+    sAssert(isGlobalGameState(bgioProps.G), "Game state appears to be invalid");
 
-    const [state, dispatch] = useReducer(localGameStateReducer, bgioProps, getLocalGameState );
+    const [state, dispatch] = useReducer(localGameStateReducer, bgioProps, 
+        props => getLocalGameState(props.G, props.playerID) 
+    );
 
     if (bgioProps.G.timestamp !== state.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getLocalGameState(bgioProps),
+            data: getLocalGameState(bgioProps.G, bgioProps.playerID),
         });
     } 
 

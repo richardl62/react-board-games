@@ -1,5 +1,4 @@
 import { sAssert } from "../../../shared/assert";
-import { BgioGameProps } from "../../../shared/bgio-game-props";
 import { Letter } from "../config";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
@@ -24,24 +23,25 @@ export interface LocalGameState {
     externalTimestamp: number;
 }
 
-export function getLocalGameState(props: BgioGameProps<GlobalGameState>): LocalGameState {
-    const playerID = props.playerID;
-    sAssert(playerID); // KLUDGE? - Not sure when it can be null.
+export function getLocalGameState(G: GlobalGameState, playerID: string): LocalGameState {
+    // KLUDGE? - Not sure when playerID can be null.
+    sAssert(playerID && G.playerData[playerID], "Player ID appears to be invalid");
 
+    const rack = G.playerData[playerID].rack;
     return {
-        board: props.G.board,
-        rack: props.G.playerData[playerID].rack,
+        board: G.board,
+        rack: rack,
 
         clickMoveStart: null,
-        bag: props.G.bag,
+        bag: G.bag,
         
         /** KLUDGE?: Intended only to allow players scores to be seen. 
-         * But also gives access to racks.
+         * But also gives access to racks.s
         */
-        playerData: props.G.playerData,
+        playerData: G.playerData,
         
         /** Incremented when any of the state above is changed (and prehaps at
          * other times). */
-        externalTimestamp: props.G.timestamp,
+        externalTimestamp: G.timestamp,
     };
 }

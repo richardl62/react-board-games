@@ -34,6 +34,23 @@ export interface GlobalGameState {
     timestamp: number;
 }
 
+function isPlayerData(playerData: GamePlayerData) {
+    return Array.isArray(playerData.rack) &&
+        typeof playerData.score === "number";
+}
+
+function isPlayerDataDictionary(playerDataDict: PlayerDataDictionary) {
+    for (const pid in playerDataDict) {
+        if( isNaN(parseInt(pid)) ){
+            console.warn(`In PlayerData, pid "${pid}" is not an integer`);
+        }
+        if( !isPlayerData(playerDataDict[pid]) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
 /** Quick check that an object is (probably) a GameData. */
 export function isGlobalGameState(arg: unknown) : boolean {
     const gd = arg as GlobalGameState;
@@ -42,7 +59,8 @@ export function isGlobalGameState(arg: unknown) : boolean {
         typeof gd.playerData === "object" &&
         typeof gd.bag === "object" &&
         typeof gd.turn === "number" &&
-        typeof gd.timestamp === "number";
+        typeof gd.timestamp === "number" &&
+        isPlayerDataDictionary(gd.playerData);
 }
 
 export function startingGlobalGameState(numPlayers: number, config: ScrabbleConfig): GlobalGameState {
