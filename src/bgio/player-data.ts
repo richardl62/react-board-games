@@ -1,4 +1,4 @@
-import { sAssert } from "./assert";
+import { sAssert } from "../shared/assert";
 import { BoardProps as BgioBoardProps } from "./bgio-types";
 export const unnamedPlayer = "_Unnamed Player_";  // Why is this needed?
 

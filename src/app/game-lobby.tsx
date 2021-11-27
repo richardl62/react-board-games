@@ -1,5 +1,5 @@
 import React, { ReactChild, useState } from "react";
-import * as Bgio from "../shared/bgio";
+import * as Bgio from "../bgio/bgio";
 import { AppGame, MatchID } from "../shared/types";
 import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 import { addPlayerToHref } from "./url-params";

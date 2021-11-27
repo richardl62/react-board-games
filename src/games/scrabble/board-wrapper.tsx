@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { sAssert } from "../../shared/assert";
-import { BgioGameProps } from "../../shared/bgio-game-props";
+import { BgioGameProps } from "../../bgio/bgio-game-props";
 import { GeneralGameState, isGlobalGameState } from "./actions";
 import { getLocalGameState } from "./actions/local-game-state";
 import { localGameStateReducer } from "./actions/local-game-state-reducer";

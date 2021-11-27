@@ -1,7 +1,5 @@
-import * as LobbyClient from "../shared/bgio";
+import * as LobbyClient from "../bgio/bgio";
 import { AppGame, MatchID } from "../shared/types";
-
-
 
 export function getOfflineMatchLink(nPlayers: number, persistentState: boolean): string {
     const url = new URL(window.location.href);

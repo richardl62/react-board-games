@@ -1,5 +1,5 @@
 import { Game } from "boardgame.io";
-import { BgioGameProps } from "./bgio-game-props";
+import { BgioGameProps } from "../bgio/bgio-game-props";
 
 export type MatchData = BgioGameProps["matchData"];
 

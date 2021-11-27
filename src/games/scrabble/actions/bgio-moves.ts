@@ -1,6 +1,6 @@
 import { Move } from "boardgame.io";
 import { sAssert } from "../../../shared/assert";
-import { BgioGameProps } from "../../../shared/bgio-game-props";
+import { BgioGameProps } from "../../../bgio/bgio-game-props";
 import { shuffle } from "../../../shared/tools";
 import { Letter } from "../config";
 import { BoardData, GlobalGameState } from "./global-game-state";

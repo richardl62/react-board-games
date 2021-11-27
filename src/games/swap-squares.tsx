@@ -4,7 +4,7 @@ import { DndProvider } from "../game-support/drag-drop";
 import { DragDrop, PieceHolder } from "../game-support/piece-holder";
 import { AppGame } from "../shared/types";
 import { Ctx } from "boardgame.io";
-import { BgioGameProps } from "../shared/bgio-game-props";
+import { BgioGameProps } from "../bgio/bgio-game-props";
 
 interface G {
   squares: number[];
