@@ -1,6 +1,7 @@
 import React, { ReactChild, useState } from "react";
 import * as Bgio from "../shared/bgio";
 import { AppGame, MatchID } from "../shared/types";
+import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 import { addPlayerToHref } from "./url-params";
 
 interface GetPlayerNameProps {
@@ -40,26 +41,24 @@ interface GameLobbyProps {
 export function GameLobby(props: GameLobbyProps): JSX.Element {
     const { game, matchID } = props;
 
-    const [waiting, setWaiting] = useState(false);
-    const [error, setError] = useState<Error|null>(null);
+    const [ waitingOrError, setWaitingOrError ] = useWaitingOrError();
 
-    if (error) {
-        return <div>{`Error starting game (${error.message})`}</div>;
-    }
-
-    if (waiting) {
-        return <div>Waiting for server ...</div>;
+    if (waitingOrError) {
+        return <WaitingOrError status={waitingOrError}
+            waitingMessage="hurry up"
+            errorMessage="Bah!"
+        />;
     }
 
     const joinGame = (name: string) => {
-        setWaiting(true);
+        setWaitingOrError("waiting");
 
         Bgio.joinMatch(game, matchID, name)
             .then(player => {
                 const newHref = addPlayerToHref(player);
                 window.location.href = newHref;
             })
-            .catch(setError);
+            .catch(setWaitingOrError);
     };
 
     return <GetPlayerName nameCallback={joinGame}>Join</GetPlayerName>;

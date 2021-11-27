@@ -4,6 +4,7 @@ import { AppGame } from "../shared/types";
 import { TestDebugBox } from "../shared/test-debug-box";
 import { getOfflineMatchLink } from "./open-match-page";
 import { openOnlineMatchPage } from "./open-match-page";
+import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -39,10 +40,6 @@ interface StartGameProps {
 }
 
 
-interface Status {
-    waiting?: true;
-    error?: Error;
-}
 export function StartGame({ game }: StartGameProps): JSX.Element {
     const { minPlayers, maxPlayers } = game;
 
@@ -50,21 +47,19 @@ export function StartGame({ game }: StartGameProps): JSX.Element {
 
     const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
     const [persist, setPersist] = useState(false);
-    const [status, setStatus] = useState<Status>({});
+    const [waitingOrError, setWaitingOrError] = useWaitingOrError();
 
     const startGame = () => openOnlineMatchPage({
         game:game, 
         nPlayers: numPlayers,
-        setWaiting: () => setStatus({waiting: true}),
-        setError: (err) => setStatus({error: err}),
+        setWaiting: () => setWaitingOrError("waiting"),
+        setError: setWaitingOrError,
     });
 
-    if( status.error ) {
-        return <h3>{`ERROR: ${status.error.message}`}</h3>;
-    }
-
-    if ( status.waiting ) {
-        return <p>waiting ...</p>;
+    if (waitingOrError) {
+        return <WaitingOrError status={waitingOrError}
+            waitingMessage="waiting for server"
+        />;
     }
 
     return (
