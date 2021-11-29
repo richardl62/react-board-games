@@ -4,7 +4,7 @@ import { GameWarnings } from "../game-support/show-warning";
 import { AppGame } from "../shared/types";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../game-support/waiting-for-players";
-import { BgioGameProps } from "../bgio";
+import { WrappedGameProps } from "../bgio";
 
 // Needlessly complex to help with testing. (Hmm, that seems to be contradict itself.)
 interface G {
@@ -18,7 +18,7 @@ interface G {
 const Name = styled.span<{ toPlay: boolean }>`
   text-decoration: ${props => props.toPlay ? "underline" : "none"}
 `;
-function PlayerData(props: BgioGameProps<G>) {
+function PlayerData(props: WrappedGameProps<G>) {
     const playerSpan = (id: string) => {
         const { status, name } = props.playerData[id];
         const isActive = id === props.playerID;
@@ -42,7 +42,7 @@ function PlayerData(props: BgioGameProps<G>) {
     </div>;
 }
 
-function Board(props: BgioGameProps<G>): JSX.Element {
+function Board(props: WrappedGameProps<G>): JSX.Element {
 
     if (!props.allJoined) {
         return <WaitingForPlayers {...props} />;

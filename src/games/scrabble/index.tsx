@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
-import { BgioGameProps } from "../../bgio";
+import { WrappedGameProps } from "../../bgio";
 import { AppGame } from "../../shared/types";
 import { startingGeneralGameState, bgioMoves } from "./actions";
 import { BoardWrapper } from "./board-wrapper";
@@ -16,7 +16,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: BgioGameProps) => <BoardWrapper
+        board: (props: WrappedGameProps) => <BoardWrapper
             appBoardProps={props} config={config}
         />
     };

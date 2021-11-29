@@ -1,4 +1,4 @@
 export type { BoardProps } from "./board-props";
-export type { BgioGameProps } from "./bgio-game-props";
-export { makeBgioGameProps } from "./bgio-game-props";
+export type { WrappedGameProps } from "./wrapped-game-props";
+export { makeWrappedGameProps } from "./wrapped-game-props";
 export { createMatch, joinMatch } from "./lobby-tools";

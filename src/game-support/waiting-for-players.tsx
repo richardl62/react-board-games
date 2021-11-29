@@ -1,5 +1,5 @@
 import React from "react";
-import { BgioGameProps } from "../bgio";
+import { WrappedGameProps } from "../bgio";
 import styled from "styled-components";
 import { GameWarnings } from "./show-warning";
 
@@ -23,7 +23,7 @@ const PlayerDataGrid = styled.div`
     row-gap: 0.5em;
     margin-bottom: 0.5em;
 `;
-type PlayerData = BgioGameProps["playerData"][0];
+type PlayerData = WrappedGameProps["playerData"][0];
 
 function statusText(status: PlayerData["status"]) : string {
     switch(status) {
@@ -36,7 +36,7 @@ function statusText(status: PlayerData["status"]) : string {
     }
 }
 
-export function WaitingForPlayers(props: BgioGameProps): JSX.Element {
+export function WaitingForPlayers(props: WrappedGameProps): JSX.Element {
 
     const playerElements = (id: string) => {
         const {status, name} = props.playerData[id];

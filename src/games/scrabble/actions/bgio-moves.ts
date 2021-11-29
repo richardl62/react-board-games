@@ -1,6 +1,6 @@
 import { Move } from "boardgame.io";
 import { sAssert } from "../../../shared/assert";
-import { BgioGameProps } from "../../../bgio";
+import { WrappedGameProps } from "../../../bgio";
 import { shuffle } from "../../../shared/tools";
 import { Letter } from "../config";
 import { BoardData, GlobalGameState } from "./global-game-state";
@@ -40,12 +40,12 @@ interface ClientMoves {
     setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
 }
 
-function clientMoves(bgioProps: BgioGameProps) : ClientMoves {
+function clientMoves(bgioProps: WrappedGameProps) : ClientMoves {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return bgioProps.moves as any;
 }
 
-export function endTurn(localState: LocalGameState, bgioProps: BgioGameProps, score: number) : void {
+export function endTurn(localState: LocalGameState, bgioProps: WrappedGameProps, score: number) : void {
     const rack = [...localState.rack];
     const bag = [...localState.bag];
     for (let ri = 0; ri < rack.length; ++ri) {
@@ -65,7 +65,7 @@ export function endTurn(localState: LocalGameState, bgioProps: BgioGameProps, sc
     bgioProps.events.endTurn();
 }
 
-export function swapTiles(localState: LocalGameState, bgioProps: BgioGameProps, toSwap: boolean[]) : void {
+export function swapTiles(localState: LocalGameState, bgioProps: WrappedGameProps, toSwap: boolean[]) : void {
     const bag = [...localState.bag];
 
     for (let ri = 0; ri < toSwap.length; ++ri) {

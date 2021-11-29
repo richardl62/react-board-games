@@ -1,7 +1,7 @@
 import { Game } from "boardgame.io";
-import { BgioGameProps } from "../bgio";
+import { WrappedGameProps } from "../bgio";
 
-export type MatchData = BgioGameProps["matchData"];
+export type MatchData = WrappedGameProps["matchData"];
 
 export interface Player {
   id: string;
@@ -24,5 +24,5 @@ export interface AppGame<G = any> extends Game<G> {
 
   minPlayers: number,
   maxPlayers: number,
-  board: (props: BgioGameProps<G>) => JSX.Element;
+  board: (props: WrappedGameProps<G>) => JSX.Element;
 }
