@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
-import { BgioGameProps } from "../../bgio/bgio-game-props";
+import { BgioGameProps } from "../../bgio";
 import { AppGame } from "../../shared/types";
 import { startingGeneralGameState, bgioMoves } from "./actions";
 import { BoardWrapper } from "./board-wrapper";

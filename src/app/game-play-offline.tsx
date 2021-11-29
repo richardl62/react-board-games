@@ -3,7 +3,7 @@ import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
 import { AppGame } from "../shared/types";
 import * as UrlParams from "./url-params";
-import { makeGeneralGameProps } from "../bgio/bgio-game-props";
+import { makeBgioGameProps } from "../bgio";
 
 interface GamePlayLocalProps {
   game: AppGame;
@@ -12,7 +12,7 @@ interface GamePlayLocalProps {
 }
 
 function localClientGame(game: AppGame, props: BgioBoardProps) {
-    return game.board(makeGeneralGameProps(props));
+    return game.board(makeBgioGameProps(props));
 }
 
 export function GamePlayOffline({ game, nPlayers: numPlayers, persist}: GamePlayLocalProps): JSX.Element {

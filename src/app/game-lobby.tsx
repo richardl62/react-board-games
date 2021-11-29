@@ -1,5 +1,5 @@
 import React, { ReactChild, useState } from "react";
-import * as Bgio from "../bgio/bgio";
+import { joinMatch } from "../bgio";
 import { AppGame, MatchID } from "../shared/types";
 import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 import { addPlayerToHref } from "./url-params";
@@ -53,7 +53,7 @@ export function GameLobby(props: GameLobbyProps): JSX.Element {
     const joinGame = (name: string) => {
         setWaitingOrError("waiting");
 
-        Bgio.joinMatch(game, matchID, name)
+        joinMatch(game, matchID, name)
             .then(player => {
                 const newHref = addPlayerToHref(player);
                 window.location.href = newHref;

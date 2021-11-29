@@ -2,7 +2,7 @@
 // isConnected as an optional member. The code below is my way of add it.
 
 import { sAssert } from "../shared/assert";
-import { BoardProps } from "./bgio-types";
+import { BoardProps } from "./board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
 /**
@@ -23,7 +23,7 @@ export interface BgioGameProps<G = unknown> extends BoardProps<G> {
     name: (pid: string) => string;
 }
 
-export function makeGeneralGameProps<G>(bgioProps: BoardProps<G>): BgioGameProps<G> {
+export function makeBgioGameProps<G>(bgioProps: BoardProps<G>): BgioGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
 
@@ -53,7 +53,6 @@ export function makeGeneralGameProps<G>(bgioProps: BoardProps<G>): BgioGameProps
         name: (pid: string) => {
             return playerData[pid].name;
         }
-
     };
 
     return obj;

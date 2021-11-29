@@ -1,10 +1,7 @@
-import { LobbyAPI } from "boardgame.io";
 import { LobbyClient } from "boardgame.io/client";
 import { lobbyServer } from "../app/url-params";
-import { unnamedPlayer } from "../game-support";
 import { AppGame, MatchID, Player } from "../shared/types";
-
-type MatchInfo = LobbyAPI.Match;
+import { unnamedPlayer } from "./player-data";
 
 function lobbyClient() {
     return new LobbyClient({ server: lobbyServer() });
@@ -14,10 +11,6 @@ export async function createMatch(game: AppGame, numPlayers: number): Promise<Ma
     const p = lobbyClient().createMatch(game.name, { numPlayers: numPlayers });
     const m = await p;
     return { mid: m.matchID };
-}
-
-export function getActiveMatch(game: AppGame, matchID: MatchID): Promise<MatchInfo> {
-    return lobbyClient().getMatch(game.name, matchID.mid);
 }
 
 export async function joinMatch(game: AppGame, matchID: MatchID, name: string | null = null): Promise<Player> {
@@ -41,8 +34,4 @@ export async function joinMatch(game: AppGame, matchID: MatchID, name: string | 
         id: playerID,
         credentials: joinMatchResult.playerCredentials,
     };
-}
-
-export function numPlayers(game: AppGame, matchID: MatchID): Promise<number> {
-    return lobbyClient().getMatch(game.name, matchID.mid).then(mi => mi.players.length);
 }
