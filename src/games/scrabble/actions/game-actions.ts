@@ -137,3 +137,10 @@ export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGamePro
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }
+
+export function passMove(bgioProps: ScabbbleGameProps) : void {
+    addHistory(bgioProps, {pass: true});
+
+    sAssert(bgioProps.events.endTurn);
+    bgioProps.events.endTurn();
+}
