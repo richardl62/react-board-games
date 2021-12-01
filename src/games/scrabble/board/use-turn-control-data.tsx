@@ -3,7 +3,8 @@ import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../actions";
 import { GameProps } from "./game-props";
 import { findUnsetBlack } from "../actions/board-and-rack";
-import { endTurn, passMove } from "../actions/game-actions";
+import { playWord, passMove } from "../actions/game-actions";
+import { PlayedWordInfo } from "../actions/global-game-state";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();
@@ -72,8 +73,15 @@ export function useTurnControlData(props: GameProps): TurnControlData {
       }
 
       if(props.bgioProps.isMyTurn && !unsetBlank) {
+
           const uncheckedDone = () => {
-              endTurn(props, props.bgioProps, score);
+              const info: PlayedWordInfo = {
+                  word: "abcedfg",
+                  inWordList: !illegalWords,
+                  score: score,
+              };
+
+              playWord(props, props.bgioProps, info);
               setIllegalWordsData(null);
           };
 

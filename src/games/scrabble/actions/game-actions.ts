@@ -5,7 +5,7 @@ import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData, GlobalGameState, MoveHistoryElement } from "./global-game-state";
+import { BoardData, GlobalGameState, MoveHistoryElement, PlayedWordInfo } from "./global-game-state";
 import { LocalGameState } from "./local-game-state";
 import { ScabbbleGameProps } from "../board/game-props";
 
@@ -92,7 +92,9 @@ function addHistory(bgioProps: ScabbbleGameProps, elem: Omit<MoveHistoryElement,
     bgioProps.moves.addHistory({...elem, name:name});   
 }
 
-export function endTurn(localState: LocalGameState, bgioProps: ScabbbleGameProps, score: number) : void {
+export function playWord(localState: LocalGameState, bgioProps: ScabbbleGameProps, 
+    playedWordinfo: PlayedWordInfo) : void {
+
     const rack = [...localState.rack];
     const bag = [...localState.bag];
     for (let ri = 0; ri < rack.length; ++ri) {
@@ -103,12 +105,14 @@ export function endTurn(localState: LocalGameState, bgioProps: ScabbbleGameProps
     }
 
     bgioProps.moves.setBoardRandAndScore({
-        score: score,
+        score: playedWordinfo.score,
         rack: rack,
         board: localState.board,
         bag: bag,
     });
-    addHistory(bgioProps, {score: score});    
+
+    addHistory(bgioProps, playedWordinfo);    
+    
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }

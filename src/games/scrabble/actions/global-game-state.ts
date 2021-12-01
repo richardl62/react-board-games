@@ -23,15 +23,19 @@ export interface GamePlayerData {
 
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
-export interface MoveHistoryElement {
+export interface PlayedWordInfo {
+    word: string;
+    score: number;
+    inWordList: boolean;
+}
+
+// Hmm. This could be improved by ensureing that exactly one of PlayedWordInfo,
+// pass and swapTiles in set.
+export interface MoveHistoryElement extends Partial<PlayedWordInfo> {
     name: string;
     
     pass?: true;
     swapTiles?: true;
-
-    word?: string;
-    score?: number;
-    inWordList?: boolean;
 }
 
 
