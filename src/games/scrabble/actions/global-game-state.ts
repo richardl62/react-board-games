@@ -23,15 +23,16 @@ export interface GamePlayerData {
 
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
-export interface PlayedWordInfo {
-    word: string;
+export interface PlayedWordsInfo {
+    words: string[];
     score: number;
-    inWordList: boolean;
+    
+    illegalWords: string[];
 }
 
 // Hmm. This could be improved by ensureing that exactly one of PlayedWordInfo,
 // pass and swapTiles in set.
-export interface MoveHistoryElement extends Partial<PlayedWordInfo> {
+export interface MoveHistoryElement extends Partial<PlayedWordsInfo> {
     name: string;
     
     pass?: true;
@@ -112,31 +113,31 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
         turn: 0,
         timestamp: 0,
 
-        moveHistory: dummyMoveHistory(),
+        moveHistory: initialMoveHistory,
     };
 }
-function dummyMoveHistory(): MoveHistoryElement[] {
-    return [
-        {
-            name: "Richard",
-            word: "fred",
-            score: 20,
-            inWordList: true,
-        },
-        {
-            name: "Other",
-            word: "xyz",
-            score: 45,
-            inWordList: false,
-        },
-        {
-            name: "Richard",
-            pass: true,
-        },
-        {
-            name: "Other",
-            swapTiles: true,
-        }
-    ];
-}
+
+const initialMoveHistory : MoveHistoryElement[] = [
+    // {
+    //     name: "Richard",
+    //     words: ["fudge"],
+    //     illegalWords: [],
+    //     score: 20,
+
+    // },
+    // {
+    //     name: "Other",
+    //     words: ["toffee", "xyz"],
+    //     illegalWords: ["xyz"],
+    //     score: 45,
+    // },
+    // {
+    //     name: "Richard",
+    //     pass: true,
+    // },
+    // {
+    //     name: "Other",
+    //     swapTiles: true,
+    // }
+];
 

@@ -5,7 +5,7 @@ import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData, GlobalGameState, MoveHistoryElement, PlayedWordInfo } from "./global-game-state";
+import { BoardData, GlobalGameState, MoveHistoryElement, PlayedWordsInfo } from "./global-game-state";
 import { LocalGameState } from "./local-game-state";
 import { ScabbbleGameProps } from "../board/game-props";
 
@@ -93,7 +93,7 @@ function addHistory(bgioProps: ScabbbleGameProps, elem: Omit<MoveHistoryElement,
 }
 
 export function playWord(localState: LocalGameState, bgioProps: ScabbbleGameProps, 
-    playedWordinfo: PlayedWordInfo) : void {
+    playedWordinfo: PlayedWordsInfo) : void {
 
     const rack = [...localState.rack];
     const bag = [...localState.bag];
@@ -112,7 +112,7 @@ export function playWord(localState: LocalGameState, bgioProps: ScabbbleGameProp
     });
 
     addHistory(bgioProps, playedWordinfo);    
-    
+
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }
