@@ -2,17 +2,15 @@ import { Move } from "boardgame.io";
 import { Letter } from "../config";
 import { BoardData, GlobalGameState, MoveHistoryElement } from "./global-game-state";
 
-interface setBoardRandAndScoreParam {
+interface SetBoardRandAndScoreParam {
     board: BoardData;
     rack: (Letter | null)[];
     bag: Letter[];
     score: number;
-
-    historyElement: MoveHistoryElement;
 }
 
 const setBoardRandAndScore: Move<GlobalGameState> = (G, ctx,
-    { board, rack, bag, score, historyElement }: setBoardRandAndScoreParam
+    { board, rack, bag, score }: SetBoardRandAndScoreParam
 ) => {
 
     G.bag = bag;
@@ -28,14 +26,22 @@ const setBoardRandAndScore: Move<GlobalGameState> = (G, ctx,
 
     G.turn++;
     G.timestamp++;
+};
+
+type AddHistoryParam = MoveHistoryElement;
+const addHistory: Move<GlobalGameState> = (G, ctx,
+    historyElement : AddHistoryParam
+) => {
 
     G.moveHistory.push(historyElement);
 };
 
 export const bgioMoves = {
     setBoardRandAndScore: setBoardRandAndScore,
+    addHistory: addHistory,
 };
 
 export interface ClientMoves {
-    setBoardRandAndScore: (arg: setBoardRandAndScoreParam) => void;
+    setBoardRandAndScore: (arg: SetBoardRandAndScoreParam) => void;
+    addHistory: (arg: AddHistoryParam) => void;
 }

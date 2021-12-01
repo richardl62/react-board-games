@@ -102,8 +102,8 @@ export function endTurn(localState: LocalGameState, bgioProps: ScabbbleGameProps
         rack: rack,
         board: localState.board,
         bag: bag,
-        historyElement: {name: "someone", score: score}
-    });    
+    });
+    bgioProps.moves.addHistory({name: "someone", score: score});    
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }
@@ -126,8 +126,9 @@ export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGamePro
         rack: localState.rack,
         board: localState.board,
         bag: bag,
-        historyElement: {name: "someone", swapTiles: true},
-    });    
+    }); 
+
+    bgioProps.moves.addHistory({name: "someone",  swapTiles: true});       
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }
