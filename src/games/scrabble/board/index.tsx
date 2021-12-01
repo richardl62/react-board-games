@@ -1,37 +1,19 @@
-import { DndProvider } from "../../../game-support/drag-drop";
 import { WaitingForPlayers } from "../../../game-support/waiting-for-players";
 import React from "react";
 import styled from "styled-components";
 import { GameProps } from "./game-props";
-import { MainBoard } from "./main-board";
-import { RackAndControls } from "./rack-and-controls";
-import { ScoresEtc } from "./scores-etc";
-import { TurnControl } from "./turn-control";
-import { WordChecker } from "./word-check";
-
-const SpaceBetween = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-self: stretch;
-`;
-
-const Centered = styled.div`
-  display: flex;
-  align-self: center;
-`;
+import { MoveHistory } from "./move-history";
+import { MainGameArea } from "./main-game-area";
 
 const Game = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  gap: 5px;
-  `;
+    display: flex;
+    align-items: start;
 
-
-export function BagInfo(props: GameProps): JSX.Element {
-    return <div>
-        Tiles in bag: <span>{props.bag.length}</span>
-    </div>;
-}
+    >:nth-of-type(2) { 
+        margin-left: 20px;
+        margin-top: 70px;  // KLUDGE
+    }
+`;
 
 export function Board(props: GameProps): JSX.Element {
 
@@ -39,22 +21,13 @@ export function Board(props: GameProps): JSX.Element {
         <WaitingForPlayers {...props.bgioProps} />;
     }
 
-    return (
-        <DndProvider>
-            <Game>
-                <ScoresEtc {...props} />
-                <RackAndControls {...props} />
-                <Centered>
-                    <MainBoard {...props} />
-                </Centered>
-                <SpaceBetween>
-                    <WordChecker/>
-                    <BagInfo {...props} />
-                </SpaceBetween>
+    const moveHistory = props.bgioProps.G.moveHistory;
 
-                <TurnControl {...props}/>
-            </Game>
-        </DndProvider>
+    return (
+        <Game>
+            <MainGameArea {...props} />
+            <MoveHistory moveHistory={moveHistory} />
+        </Game>
     );
 }
 

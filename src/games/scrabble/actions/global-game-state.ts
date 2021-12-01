@@ -23,12 +23,27 @@ export interface GamePlayerData {
 
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
+export interface MoveHistoryElement {
+    name: string;
+    
+    pass?: true;
+    swapTiles?: true;
+
+    word?: string;
+    score?: number;
+    inWordList?: boolean;
+}
+
+
+
 /** Data recorded and shared via BGIO */
 export interface GlobalGameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
     turn: number;
+
+    moveHistory: MoveHistoryElement[];
 
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
@@ -92,5 +107,32 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
         bag: bag,
         turn: 0,
         timestamp: 0,
+
+        moveHistory: dummyMoveHistory(),
     };
 }
+function dummyMoveHistory(): MoveHistoryElement[] {
+    return [
+        {
+            name: "Richard",
+            word: "fred",
+            score: 20,
+            inWordList: true,
+        },
+        {
+            name: "Other",
+            word: "xyz",
+            score: 45,
+            inWordList: false,
+        },
+        {
+            name: "Richard",
+            pass: true,
+        },
+        {
+            name: "Other",
+            swapTiles: true,
+        }
+    ];
+}
+
