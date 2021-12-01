@@ -5,7 +5,7 @@ import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData, GlobalGameState } from "./global-game-state";
+import { BoardData, GlobalGameState, MoveHistoryElement } from "./global-game-state";
 import { LocalGameState } from "./local-game-state";
 import { ScabbbleGameProps } from "../board/game-props";
 
@@ -87,6 +87,11 @@ export function canSwapTiles(G: GlobalGameState): boolean {
     return G.bag.length >= rackSize;
 }
 
+function addHistory(bgioProps: ScabbbleGameProps, elem: Omit<MoveHistoryElement, "name">) {
+    const name = bgioProps.name(bgioProps.currentPlayer);
+    bgioProps.moves.addHistory({...elem, name:name});   
+}
+
 export function endTurn(localState: LocalGameState, bgioProps: ScabbbleGameProps, score: number) : void {
     const rack = [...localState.rack];
     const bag = [...localState.bag];
@@ -103,7 +108,7 @@ export function endTurn(localState: LocalGameState, bgioProps: ScabbbleGameProps
         board: localState.board,
         bag: bag,
     });
-    bgioProps.moves.addHistory({name: "someone", score: score});    
+    addHistory(bgioProps, {score: score});    
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }
@@ -128,7 +133,7 @@ export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGamePro
         bag: bag,
     }); 
 
-    bgioProps.moves.addHistory({name: "someone",  swapTiles: true});       
+    addHistory(bgioProps, {swapTiles: true});       
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }
