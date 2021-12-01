@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../actions";
 import { GameProps } from "./game-props";
-import { endTurn } from "../actions/bgio-moves";
 import { findUnsetBlack } from "../actions/board-and-rack";
+import { endTurn } from "../actions/game-actions";
 
 function sameWordList(words1: string[], words2: string[]) : boolean {
     return words1.join() === words2.join();

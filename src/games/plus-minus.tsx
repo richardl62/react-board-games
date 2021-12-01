@@ -5,6 +5,7 @@ import { AppGame } from "../shared/types";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../game-support/waiting-for-players";
 import { WrappedGameProps } from "../bgio";
+import { DefaultMovesType } from "../bgio/wrapped-game-props";
 
 // Needlessly complex to help with testing. (Hmm, that seems to be contradict itself.)
 interface G {
@@ -42,7 +43,7 @@ function PlayerData(props: WrappedGameProps<G>) {
     </div>;
 }
 
-function Board(props: WrappedGameProps<G>): JSX.Element {
+function Board(props: WrappedGameProps<G,DefaultMovesType/*KLUDGE*/>): JSX.Element {
 
     if (!props.allJoined) {
         return <WaitingForPlayers {...props} />;

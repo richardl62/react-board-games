@@ -24,5 +24,6 @@ export interface AppGame<G = any> extends Game<G> {
 
   minPlayers: number,
   maxPlayers: number,
-  board: (props: WrappedGameProps<G>) => JSX.Element;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  board: (props: WrappedGameProps<G, any>) => JSX.Element;
 }

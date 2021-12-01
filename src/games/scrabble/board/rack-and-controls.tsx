@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../shared/assert";
 import { Rack } from "./rack";
-import { swapTiles } from "../actions/bgio-moves";
 import { BoardData } from "../actions/global-game-state";
 import { GameProps } from "./game-props";
+import { swapTiles } from "../actions/game-actions";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;

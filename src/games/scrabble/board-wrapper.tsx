@@ -1,11 +1,12 @@
 import React, { useReducer } from "react";
 import { sAssert } from "../../shared/assert";
 import { WrappedGameProps } from "../../bgio";
-import { GeneralGameState, isGlobalGameState } from "./actions";
+import { isGlobalGameState } from "./actions";
 import { getLocalGameState } from "./actions/local-game-state";
 import { localGameStateReducer } from "./actions/local-game-state-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
+import { ScabbbleGameProps } from "./board/game-props";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -13,7 +14,7 @@ export interface BoardWrapperProps {
 }
 
 export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const bgioProps = props.appBoardProps as WrappedGameProps<GeneralGameState>;
+    const bgioProps = props.appBoardProps as unknown as ScabbbleGameProps;
     sAssert(isGlobalGameState(bgioProps.G), "Game state appears to be invalid");
 
     const [state, dispatch] = useReducer(localGameStateReducer, bgioProps, 

@@ -5,6 +5,7 @@ import { DragDrop, PieceHolder } from "../game-support/piece-holder";
 import { AppGame } from "../shared/types";
 import { Ctx } from "boardgame.io";
 import { WrappedGameProps } from "../bgio";
+import { DefaultMovesType } from "../bgio/wrapped-game-props";
 
 interface G {
   squares: number[];
@@ -57,7 +58,7 @@ function Square(props: SquareProps) : JSX.Element {
     </PieceHolder>;  
 }
 
-function SwapSquares({ G, moves }: WrappedGameProps<G>): JSX.Element {
+function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE*/>): JSX.Element {
     const onReset = () => {
         moves.reset();
     };

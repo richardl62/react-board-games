@@ -1,9 +1,13 @@
 import { sAssert } from "../../../shared/assert";
-import { GlobalGameState, BoardData } from "./global-game-state";
-import { RowCol } from "./get-words-and-score";
-import { ExtendedLetter } from "./extended-letter";
+import { shuffle } from "../../../shared/tools";
 import { blank } from "../config";
+
 import { Rack } from "./board-and-rack";
+import { ExtendedLetter } from "./extended-letter";
+import { RowCol } from "./get-words-and-score";
+import { BoardData, GlobalGameState } from "./global-game-state";
+import { LocalGameState } from "./local-game-state";
+import { ScabbbleGameProps } from "../board/game-props";
 
 export interface SquareID {
     row: number;
@@ -81,4 +85,47 @@ export function compactRack(rack: Rack): void {
 export function canSwapTiles(G: GlobalGameState): boolean {
     const rackSize = Object.values(G.playerData)[0].rack.length;
     return G.bag.length >= rackSize;
+}
+
+export function endTurn(localState: LocalGameState, bgioProps: ScabbbleGameProps, score: number) : void {
+    const rack = [...localState.rack];
+    const bag = [...localState.bag];
+    for (let ri = 0; ri < rack.length; ++ri) {
+        if(!rack[ri]) {
+            const letter = bag.pop();
+            rack[ri] = letter || null;
+        }
+    }
+
+    bgioProps.moves.setBoardRandAndScore({
+        score: score,
+        rack: rack,
+        board: localState.board,
+        bag: bag,
+    });    
+    sAssert(bgioProps.events.endTurn);
+    bgioProps.events.endTurn();
+}
+
+export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGameProps, toSwap: boolean[]) : void {
+    const bag = [...localState.bag];
+
+    for (let ri = 0; ri < toSwap.length; ++ri) {
+        if (toSwap[ri]) {
+            const old = localState.rack[ri];
+            sAssert(old, "Attempt to swap non-existant tile");
+            bag.push(old);
+            localState.rack[ri] = bag.shift()!;
+        }
+    }
+    shuffle(bag);
+    
+    bgioProps.moves.setBoardRandAndScore({
+        score: 0,
+        rack: localState.rack,
+        board: localState.board,
+        bag: bag,
+    });    
+    sAssert(bgioProps.events.endTurn);
+    bgioProps.events.endTurn();
 }

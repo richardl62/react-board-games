@@ -6,9 +6,21 @@ import { BoardProps } from "./board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
 /**
+ * Bgio type definition of 'moves'.
+ *
+ * Intended from limited use in, for example, quick prototypes.
+ */
+
+export type DefaultMovesType = BoardProps["moves"]; 
+
+/**
  * Game properties.  (A wrapper for BGIO BoardProps.)
  */
-export interface WrappedGameProps<G = unknown> extends BoardProps<G> {
+export interface WrappedGameProps<G = unknown, Moves=unknown> 
+    extends Omit<BoardProps<G>, "moves"> {
+    
+    moves: Moves;
+
     playerData: PlayerDataDictionary;
     allJoined: boolean;
     allReady: boolean;
@@ -21,6 +33,7 @@ export interface WrappedGameProps<G = unknown> extends BoardProps<G> {
     isMyTurn: boolean;
 
     name: (pid: string) => string;
+
 }
 
 export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
