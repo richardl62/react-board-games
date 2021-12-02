@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { games as appGames } from "../games";
 import { AppGame } from "../shared/types";
 import "./app.css";
-import { GamePage } from "./game-page";
-import * as UrlParams from "./url-params";
+import { gameComponent } from "./game-component";
+import { gamePath } from "./url-params";
 
 const GameLinksStyled = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ interface HomePageProps {
 function gameLinkElement(game: AppGame): JSX.Element {
     const key = (n: number) => game.name + n;
     const to = {
-        pathname: UrlParams.gamePath(game),
+        pathname: gamePath(game),
         search: window.location.search,
     };
     return <Link key={key(3)} to={to}>{game.displayName}</Link>;
@@ -58,19 +58,6 @@ function PageNotFound(props: HomePageProps) {
     );
 }
 
-function gameRoute(game: AppGame) {
-    const path = UrlParams.gamePath(game);
-
-    const component = () => <GamePage 
-        game={game} 
-        matchID={UrlParams.matchID}
-        offline={UrlParams.offline}
-        player={UrlParams.player}
-    />;
-
-    return (<Route key={path} exact path={path} component={component} />);
-}
-
 /**
  * Games App.
  */
@@ -85,7 +72,13 @@ function App(): JSX.Element {
         <BrowserRouter>
             <Switch>
                 <Route key="/" exact path="/" component={renderHomePage} />
-                {appGames.map(gameRoute)}
+
+                {appGames.map(appGame => <Route
+                    key={appGame.name}
+                    path={gamePath(appGame)} exact
+                    component={() => gameComponent(appGame)}
+                />)}
+
                 <Route key="pageNotFound" component={renderPageNotFound} />
             </Switch>
         </BrowserRouter>
