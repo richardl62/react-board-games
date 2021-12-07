@@ -36,7 +36,7 @@ export interface MoveHistoryElement extends Partial<PlayedWordsInfo> {
     name: string;
     
     pass?: true;
-    swapTiles?: true;
+    nTilesSwapped?: number;
 }
 
 

@@ -120,12 +120,14 @@ export function playWord(localState: LocalGameState, bgioProps: ScabbbleGameProp
 export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGameProps, toSwap: boolean[]) : void {
     const bag = [...localState.bag];
 
+    let nSwapped = 0;    
     for (let ri = 0; ri < toSwap.length; ++ri) {
         if (toSwap[ri]) {
             const old = localState.rack[ri];
             sAssert(old, "Attempt to swap non-existant tile");
             bag.push(old);
             localState.rack[ri] = bag.shift()!;
+            ++nSwapped;
         }
     }
     shuffle(bag);
@@ -137,7 +139,7 @@ export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGamePro
         bag: bag,
     }); 
 
-    addHistory(bgioProps, {swapTiles: true});       
+    addHistory(bgioProps, {nTilesSwapped: nSwapped});       
     sAssert(bgioProps.events.endTurn);
     bgioProps.events.endTurn();
 }

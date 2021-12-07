@@ -10,7 +10,7 @@ const StyledMoveHistory = styled.div`
     display: grid;
     grid-template-columns: auto auto;
     font-family: helvetica;
-    font-size: 14px;
+    font-size: 12px;
 `;
 
 const Word = styled.span`
@@ -61,8 +61,8 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
         return <div>Passed</div>;
     }
 
-    if(elem.swapTiles) {
-        return <div>Swapped tiles</div>;
+    if(elem.nTilesSwapped) {
+        return <div>{`Swapped ${elem.nTilesSwapped} tiles`}</div>;
     }
 
     const {words, illegalWords, score} = elem;
