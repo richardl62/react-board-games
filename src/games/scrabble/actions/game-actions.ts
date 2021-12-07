@@ -5,7 +5,8 @@ import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData, GlobalGameState, MoveHistoryElement, PlayedWordsInfo } from "./global-game-state";
+import { BoardData, GlobalGameState } from "./global-game-state";
+import { MoveHistoryElement, PlayedWordsInfo } from "./move-hstory";
 import { LocalGameState } from "./local-game-state";
 import { ScabbbleGameProps } from "../board/game-props";
 

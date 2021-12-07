@@ -1,6 +1,7 @@
 import { Move } from "boardgame.io";
 import { Letter } from "../config";
-import { BoardData, GlobalGameState, MoveHistoryElement } from "./global-game-state";
+import { BoardData, GlobalGameState } from "./global-game-state";
+import { MoveHistoryElement } from "./move-hstory";
 
 interface SetBoardRandAndScoreParam {
     board: BoardData;

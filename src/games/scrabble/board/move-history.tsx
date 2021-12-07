@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { MoveHistoryElement } from "../actions/global-game-state";
+import { MoveHistoryElement } from "../actions/move-hstory";
 
 const Name = styled.div`
     font-weight: bold;

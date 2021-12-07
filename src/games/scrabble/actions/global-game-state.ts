@@ -3,6 +3,7 @@ import { nestedArrayMap } from "../../../shared/tools";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "./extended-letter";
+import { MoveHistoryElement } from "./move-hstory";
 
 export interface BoardSquareData extends ExtendedLetter {
 
@@ -22,24 +23,6 @@ export interface GamePlayerData {
 }
 
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
-
-export interface PlayedWordsInfo {
-    words: string[];
-    score: number;
-    
-    illegalWords: string[];
-}
-
-// Hmm. This could be improved by ensureing that exactly one of PlayedWordInfo,
-// pass and swapTiles in set.
-export interface MoveHistoryElement extends Partial<PlayedWordsInfo> {
-    name: string;
-    
-    pass?: true;
-    nTilesSwapped?: number;
-}
-
-
 
 /** Data recorded and shared via BGIO */
 export interface GlobalGameState {
