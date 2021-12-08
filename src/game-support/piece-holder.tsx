@@ -28,6 +28,11 @@ const Container = styled.div<{
     z-index: 0;
 `;
 
+const FullSize = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
 function nonHoverBorderColor(bc?: BorderColor) : string {
     if(bc?.color) {
         return bc.color;
@@ -184,7 +189,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
         {/* KLUDGE: Drag the piece and the border.  This is done because the border is on
             top of the piece (to make it visible), and without kludge the border would block the drag.    
         */}
-        <div ref={draggable ? dragRef : undefined}>
+        <FullSize ref={draggable ? dragRef : undefined}>
             <Piece >
                 {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
              by the piece being unmounted during the drag. */}
@@ -196,7 +201,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
                 width={width}
                 borderColor={borderColor}
             />
-        </div>
+        </FullSize>
         
     </Container>;
 }
