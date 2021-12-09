@@ -112,7 +112,7 @@ export class BoardAndRack {
         this.setRackTile(letter, emptySquare);
     }
 
-    insertIntoRack(tp: TilePosition, letter: ExtendedLetter | null): void {
+    insertIntoRack(tp: TilePosition, letter: ExtendedLetter): void {
         sAssert(tp.rack);
         const pos = tp.rack.pos;
         
@@ -150,6 +150,12 @@ export class BoardAndRack {
         return this.rack;
     }
 
+    /** 
+     * Moves should be from an active square to an empty or active square.
+     * This function does nothing if thid rule is broken. (The rule might
+     * 'legitimately' be broken if the board is update due to another player's
+     * move during a drag.)
+     */
     move(arg: {from: SquareID,to: SquareID}) : void {
         const from = tilePosition(arg.from);
         const to = tilePosition(arg.to);
@@ -160,17 +166,35 @@ export class BoardAndRack {
         const fromLetter = this.getExtendedLetter(from);
         const toLetter  = this.getExtendedLetter(to);
 
-        // Do nothing if attempting to move onto an inactive tile.
+        
+        if(fromLetter === null) {
+            console.warn("Attempt to move from a empty square");
+            return;
+        }
+
+        if(!this.isActive(from)) {
+            console.warn("Attempt to move from a non-active square");
+            return;
+        }
+
         if (toLetter === null) {
             this.setActiveTile(from, null);
             this.setActiveTile(to, fromLetter);
         } else if (to.rack) {
-            this.setActiveTile(from, null);
-            this.insertIntoRack(to, fromLetter);
-        } else if (this.isActive(to)) {
+            if(this.rackIsFull && !from.rack ) {
+                // Hmm. As far as I can see something would have to go badly wrong
+                // for this to arise.
+                console.warn("Attempt to move tile onto a full rack");
+            } else {
+                this.setActiveTile(from, null);
+                this.insertIntoRack(to, fromLetter);
+            }
+        } else if (to.board && this.isActive(to)) {
             this.setActiveTile(from, null);
             this.addToRack(toLetter);
             this.setActiveTile(to, fromLetter);
+        } else {
+            console.warn("Attempt to make illegal move");
         }
     }
 
@@ -233,6 +257,10 @@ export class BoardAndRack {
         }
 
         return nTiles;
+    }
+
+    get rackIsFull() : boolean {
+        return this.nTilesInRack === this.rack.length;
     }
 
     activeTilesOnBoard(): SquareID [] {
