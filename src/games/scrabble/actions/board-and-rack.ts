@@ -172,6 +172,10 @@ export class BoardAndRack {
             this.addToRack(toLetter);
             this.setActiveTile(to, fromLetter);
         }
+
+        if(!this.sanityCheck()) {
+            alert("Sanity check failed after move");
+        }
     }
 
     clickMove({start, rackPos} : {start: ClickMoveStart, rackPos: number}) : void {
@@ -196,6 +200,10 @@ export class BoardAndRack {
                 rackLetter && makeExtendedLetter(rackLetter),
             );
             this.rack[rackPos] = null;
+        }
+
+        if(!this.sanityCheck()) {
+            alert("Sanity check failed after click move");
         }
     }
 
@@ -222,6 +230,36 @@ export class BoardAndRack {
         const sq = this.board[id.row][id.col];
         sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
         sq.letter = letter;
+    }
+
+    get nTilesInRack() : number {
+        let nTiles = 0;
+        for(const elem of this.rack) {
+            if(elem) {
+                ++nTiles;
+            }
+        }
+
+        return nTiles;
+    }
+
+    sanityCheck() : boolean {
+        const nGapsInRack = this.rack.length - this.nTilesInRack;
+
+        let nActiveOnBoard = 0;
+        for (const row of this.board) {
+            for (const elem of row) {
+                if (elem && elem.active) {
+                    ++nActiveOnBoard;
+                }
+            }
+        }
+
+        console.log(`${nGapsInRack} gaps in rack - ${nActiveOnBoard} active tiles on board`);
+        
+        // It is possible to have nGapsInRack > nActiveOnBoard when the bag
+        // is empty and so the rack was not refilled after the previous move.
+        return nGapsInRack <= nActiveOnBoard;
     }
 }
 
