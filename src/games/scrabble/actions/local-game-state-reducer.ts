@@ -49,6 +49,20 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         console.warn("Unrecognised action in reducer:", action);
     }
     
+    // Do a sanity check
+    const nGapsInRack = state.rack.length - br.nTilesInRack;
+    const nActiveOnBoard = br.activeTilesOnBoard().length;
+
+    const ok = nGapsInRack === nActiveOnBoard ||
+        (state.bag.length === 0 && nGapsInRack > nActiveOnBoard);
+    
+    // Temporary
+    console.log(`${action.type}: ${nGapsInRack} gaps in rack - ${nActiveOnBoard} active tiles on board`);
+    if(!ok) {
+        alert("Sanity check failued after " + action.type);
+        throw new Error("Sanity check failued after " + action.type);
+    }
+
     return {
         ...state,
         board: br.getBoard(),
