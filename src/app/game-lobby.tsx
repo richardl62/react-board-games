@@ -44,10 +44,7 @@ export function GameLobby(props: GameLobbyProps): JSX.Element {
     const [ waitingOrError, setWaitingOrError ] = useWaitingOrError();
 
     if (waitingOrError) {
-        return <WaitingOrError status={waitingOrError}
-            waitingMessage="hurry up"
-            errorMessage="Bah!"
-        />;
+        return <WaitingOrError status={waitingOrError} />;
     }
 
     const joinGame = (name: string) => {
