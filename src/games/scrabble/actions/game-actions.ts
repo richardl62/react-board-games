@@ -16,6 +16,12 @@ export interface SquareID {
     boardID: string;
 }
 
+export function sameSquareID(sid1: SquareID, sid2: SquareID) : boolean {
+    return sid1.row === sid2.row &&
+        sid1.col === sid2.col &&
+        sid1.boardID === sid2.boardID;
+}
+
 export const boardIDs = {
     rack: "rack",
     main: "main",

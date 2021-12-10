@@ -2,8 +2,8 @@ import { sAssert } from "../../../shared/assert";
 import { ExtendedLetter, makeExtendedLetter } from "./extended-letter";
 import { BoardData, BoardSquareData } from "./global-game-state";
 import { blank, Letter } from "../config";
-import { sameJSON, shuffle } from "../../../shared/tools";
-import { addToRack, boardIDs, compactRack, onRack, SquareID } from "./game-actions";
+import { shuffle } from "../../../shared/tools";
+import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
 import { ClickMoveStart } from "./local-game-state";
 
 export type Rack = (Letter | null)[];
@@ -157,16 +157,17 @@ export class BoardAndRack {
      * move during a drag.)
      */
     move(arg: {from: SquareID,to: SquareID}) : void {
+
         const from = tilePosition(arg.from);
         const to = tilePosition(arg.to);
-        if(sameJSON(from,to)) {
-            return;
-        }
 
         const fromLetter = this.getExtendedLetter(from);
         const toLetter  = this.getExtendedLetter(to);
 
-        
+        if(sameSquareID(arg.from, arg.to)) {
+            return;
+        }
+
         if(fromLetter === null) {
             console.warn("Attempt to move from a empty square");
             return;
