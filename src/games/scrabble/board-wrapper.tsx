@@ -14,23 +14,23 @@ export interface BoardWrapperProps {
 }
 
 export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const bgioProps = props.appBoardProps as unknown as ScabbbleGameProps;
-    sAssert(isGlobalGameState(bgioProps.G), "Game state appears to be invalid");
+    const scrabbleGameProps = props.appBoardProps as unknown as ScabbbleGameProps;
+    sAssert(isGlobalGameState(scrabbleGameProps.G), "Game state appears to be invalid");
 
-    const [state, dispatch] = useReducer(localGameStateReducer, bgioProps, 
-        props => getLocalGameState(props.G, props.playerID) 
+    const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
+        getLocalGameState
     );
 
-    if (bgioProps.G.timestamp !== state.externalTimestamp) {
+    if (scrabbleGameProps.G.timestamp !== state.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getLocalGameState(bgioProps.G, bgioProps.playerID),
+            data: getLocalGameState(scrabbleGameProps),
         });
     } 
 
     return <Board
         {...state}
-        bgioProps={bgioProps}
+        bgioProps={scrabbleGameProps}
         config={props.config}
         dispatch={dispatch}
     />;

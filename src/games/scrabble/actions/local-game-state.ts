@@ -1,4 +1,5 @@
 import { sAssert } from "../../../shared/assert";
+import { ScabbbleGameProps } from "../board/game-props";
 import { Letter } from "../config";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
@@ -23,7 +24,9 @@ export interface LocalGameState {
     externalTimestamp: number;
 }
 
-export function getLocalGameState(G: GlobalGameState, playerID: string): LocalGameState {
+export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps): LocalGameState {
+    const {G, playerID } = scrabbleGameProps;
+
     // KLUDGE? - Not sure when playerID can be null.
     sAssert(playerID && G.playerData[playerID], "Player ID appears to be invalid");
 
