@@ -1,6 +1,7 @@
 import { sAssert } from "../../../shared/assert";
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
+import { sanityCheck } from "./sanity-check-local-state";
 import { SquareID } from "./game-actions";
 import { ClickMoveDirection, ClickMoveStart, LocalGameState } from "./local-game-state";
 
@@ -49,27 +50,21 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         console.warn("Unrecognised action in reducer:", action);
     }
     
-    // Do a sanity check
-    const nGapsInRack = state.rack.length - br.nTilesInRack;
-    const nActiveOnBoard = br.activeTilesOnBoard().length;
-
-    const ok = nGapsInRack === nActiveOnBoard ||
-        (state.bag.length === 0 && nGapsInRack > nActiveOnBoard);
-    
-    // Temporary
-    console.log(`${action.type}: ${nGapsInRack} gaps in rack - ${nActiveOnBoard} active tiles on board`);
-    if(!ok) {
-        alert("Sanity check failued after " + action.type);
-        throw new Error("Sanity check failued after " + action.type);
-    }
-
-    return {
+    const newState = {
         ...state,
         board: br.getBoard(),
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
     };
+
+    const sanityProblem = sanityCheck(newState);
+    if(sanityProblem) {
+        alert(sanityProblem);
+    }
+
+    return newState;
 }
+
 function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | null): ClickMoveStart {
     let direction : ClickMoveDirection;
     if (oldCMS && oldCMS.row === row && oldCMS.col === col ) {
@@ -83,4 +78,5 @@ function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | nu
 
     return {row: row, col: col, direction: direction };
 }
+
 

@@ -18,13 +18,13 @@ export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     sAssert(isGlobalGameState(scrabbleGameProps.G), "Game state appears to be invalid");
 
     const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
-        getLocalGameState
+        scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config)
     );
 
     if (scrabbleGameProps.G.timestamp !== state.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getLocalGameState(scrabbleGameProps),
+            data: getLocalGameState(scrabbleGameProps, props.config),
         });
     } 
 

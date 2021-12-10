@@ -1,6 +1,6 @@
 import { sAssert } from "../../../shared/assert";
 import { ScabbbleGameProps } from "../board/game-props";
-import { Letter } from "../config";
+import { Letter, ScrabbleConfig } from "../config";
 import { Rack } from "./board-and-rack";
 import { BoardData, GlobalGameState } from "./global-game-state";
 
@@ -22,9 +22,13 @@ export interface LocalGameState {
 
     playerData: GlobalGameState["playerData"];
     externalTimestamp: number;
+
+    // KLUDGE? This is (at time of writing) the members below only in sanity checks.
+    scrabbleGameProps: ScabbbleGameProps;
+    config: ScrabbleConfig;
 }
 
-export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps): LocalGameState {
+export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig): LocalGameState {
     const {G, playerID } = scrabbleGameProps;
 
     // KLUDGE? - Not sure when playerID can be null.
@@ -39,12 +43,16 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps): LocalGa
         bag: G.bag,
         
         /** KLUDGE?: Intended only to allow players scores to be seen. 
-         * But also gives access to racks.s
+         * But also gives access to racks
         */
         playerData: G.playerData,
         
         /** Incremented when any of the state above is changed (and prehaps at
          * other times). */
         externalTimestamp: G.timestamp,
+
+        /* KLUDGE?: See comment on type definition */
+        scrabbleGameProps: scrabbleGameProps,
+        config: config,
     };
 }
