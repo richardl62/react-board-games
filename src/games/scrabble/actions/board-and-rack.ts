@@ -195,7 +195,7 @@ export class BoardAndRack {
             this.addToRack(toLetter);
             this.setActiveTile(to, fromLetter);
         } else {
-            console.warn("Attempt to make illegal move");
+            console.warn("Attempt a non-empty and non-active square");
         }
     }
 
