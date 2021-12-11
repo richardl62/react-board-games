@@ -67,6 +67,8 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
 
     const {words, illegalWords, score} = elem;
 
+    // Use 'score !=== undefined' as it is technically possible for a word to
+    // score 0.
     if(words && illegalWords && score !== undefined) {
         const illegal = (word: string) => illegalWords.includes(word);
         return <div>
