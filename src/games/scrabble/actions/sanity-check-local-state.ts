@@ -1,3 +1,4 @@
+import { nNonNull } from "../../../shared/tools";
 import { LocalGameState } from "./local-game-state";
 
 /** Return a short-ish string describing problems found or null if no problem was found.
@@ -30,14 +31,4 @@ function countTiles(state: LocalGameState): number {
         `bag ${bag} - total ${total}`);
 
     return total;
-}
-
-function nNonNull<T>(array: T[]) {
-    let count = 0;
-    for (const val of array) {
-        if (val !== null) {
-            ++count;
-        }
-    }
-    return count;
 }
