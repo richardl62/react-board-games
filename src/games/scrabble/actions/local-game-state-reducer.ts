@@ -65,18 +65,19 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
     return newState;
 }
 
-function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | null): ClickMoveStart {
-    let direction : ClickMoveDirection;
+function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | null): ClickMoveStart | null {
+    let direction : ClickMoveDirection | null;
+
+    // If the same square is clicked multiple times, the arrow cycles
+    // in the order right, down, none.
     if (oldCMS && oldCMS.row === row && oldCMS.col === col ) {
-        // The previously selected square and be re-selected. This implies that the direction
-        // should be toggled.
-        direction = (oldCMS.direction === "right") ? "down" : "right";
+        direction = (oldCMS.direction === "right") ? "down" : null;
     } else {
-        // A new square had been picked so choice a default direction.
+        // A new square has been picked so choice the default direction.
         direction = "right";
     }
 
-    return {row: row, col: col, direction: direction };
+    return direction && {row: row, col: col, direction: direction };
 }
 
 
