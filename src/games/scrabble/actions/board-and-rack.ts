@@ -169,12 +169,12 @@ export class BoardAndRack {
         }
 
         if(fromLetter === null) {
-            console.warn("Attempt to move from a empty square");
+            // Attempt to move from a empty square
             return;
         }
 
         if(!this.isActive(from)) {
-            console.warn("Attempt to move from a non-active square");
+            // Attempt to move from a non-active square
             return;
         }
 
@@ -195,7 +195,7 @@ export class BoardAndRack {
             this.addToRack(toLetter);
             this.setActiveTile(to, fromLetter);
         } else {
-            console.warn("Attempt a non-empty and non-active square");
+            // Attempt a non-empty and non-active square
         }
     }
 

@@ -26,7 +26,7 @@ function getAndDeleteFlag(key: string) : boolean {
         return true;
     }
 
-    console.log(`Bad value for URL boolean ${key}: ${str}`);
+    console.warn(`Bad value for URL boolean ${key}: ${str}`);
     return false; // Well, why not?
 
 }
@@ -56,7 +56,7 @@ if(getAndDeleteFlag("offline")){
             persist: getAndDeleteFlag("persist"),
         };
     } else {
-        console.log("URL param 'np' is missing (required for offline game)");
+        console.warn("URL param 'np' is missing (required for offline game)");
     }
 }
 
@@ -72,7 +72,7 @@ function getAndDeletePlayer() : Player | null {
     }
 
     if(pid || credentials) {
-        console.log("URL has one but not both of player id and credentials");
+        console.warn("URL has one but not both of player id and credentials");
     }
 
     return null;
@@ -82,7 +82,7 @@ export const player = getAndDeletePlayer();
 
   
 if (usp.toString()) {
-    console.log("Unrecongised url parameters", usp.toString());
+    console.warn("Unrecongised url parameters", usp.toString());
 }
 
 export function addPlayerToHref(player: Player) : string {

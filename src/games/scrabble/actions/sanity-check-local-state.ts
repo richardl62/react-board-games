@@ -24,11 +24,5 @@ function countTiles(state: LocalGameState): number {
 
     const board = nNonNull(state.board.flat()); // inefficient.
     const bag = state.bag.length;
-
-    const total = racks + board + bag;
-
-    console.log(`Num of tiles: racks ${racks} - board ${board} - ` +
-        `bag ${bag} - total ${total}`);
-
-    return total;
+    return racks + board + bag;
 }
