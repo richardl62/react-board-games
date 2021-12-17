@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import { joinMatch } from "../bgio";
 import { AppGame, MatchID } from "../shared/types";
+import { WaitingOrError, waitingOrError } from "../shared/waiting-or-error";
 import { addPlayerToHref } from "./url-params";
 
 interface GameLobbyProps {
@@ -23,12 +24,8 @@ export function GameLobby(props: GameLobbyProps): JSX.Element {
         })
     );
 
-    if(joinGameCallback.loading) {
-        return <div>Loading</div>;
-    }
-
-    if(joinGameCallback.error) {
-        return <div>{`ERROR: ${joinGameCallback.error.message}`}</div>;
+    if(waitingOrError(joinGameCallback)) {
+        return <WaitingOrError status={joinGameCallback} />;
     }
 
     return <div>

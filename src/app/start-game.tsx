@@ -5,6 +5,7 @@ import { TestDebugBox } from "../shared/test-debug-box";
 import * as LobbyClient from "../bgio";
 import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 import { useAsyncCallback } from "react-async-hook";
+import { waitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -46,9 +47,11 @@ export function StartGame({ game }: StartGameProps): JSX.Element {
         LobbyClient.createMatch(game, numPlayers).then(openOnlineMatchPage)
     );
 
-    if(asyncCreateMatch.loading) {
-        return <div>Loading</div>;
+    console.log(asyncCreateMatch);
+    if(waitingOrError(asyncCreateMatch)) {
+        return <WaitingOrError status={asyncCreateMatch} />;
     }
+
 
     if(asyncCreateMatch.error) {
         return <div>{`ERROR: ${asyncCreateMatch.error.message}`}</div>;

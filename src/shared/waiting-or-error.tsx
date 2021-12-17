@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-
-export type WaitingOrErrorStatus = "waiting" | Error | null;
 
 const Waiting = styled.div`
     font-size: large;
@@ -12,32 +10,36 @@ const ErrorMessage = styled.div`
     span:first-child {
         font-weight: bold;
         color: red;
+        margin-right: 0.5em;
     }
 `;
 
+interface AsyncStatus {
+    loading?: boolean; // 'loading' rather than 'waiting' to suit useAsync.
+    error?: Error;
+}
+
 interface WaitingOrErrorProps {
-    status: WaitingOrErrorStatus;
-    waitingMessage?: string;
-    errorMessage?: string;
+    status: AsyncStatus;
+}
+
+export function waitingOrError(status: AsyncStatus) : boolean {
+    return Boolean(status.loading || status.error );
 }
 
 export function WaitingOrError(props: WaitingOrErrorProps) : JSX.Element | null {
-    if(props.status === "waiting") {
-        return <Waiting>{props.waitingMessage || "Waiting ..."} </Waiting>;
+    const { loading, error } = props.status;
+
+    if(loading) {
+        return <Waiting>Waiting...</Waiting>;
     }
     
-    if(props.status instanceof Error) {
-        const msg = props.errorMessage || "Error";
+    if(error) {
         return <ErrorMessage>
-            <span>{`${msg}: `}</span>
-            <span>{props.status.message}</span>
+            <span>Error:</span>
+            <span>{error.message}</span>
         </ErrorMessage>;
     }
 
     return null;
 }
-
-export function useWaitingOrError(): [WaitingOrErrorStatus, React.Dispatch<React.SetStateAction<WaitingOrErrorStatus>>] {
-    return useState<WaitingOrErrorStatus>(null);
-}
-
