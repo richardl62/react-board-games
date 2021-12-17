@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AppGame, MatchID } from "../shared/types";
+import { AppGame } from "../shared/types";
 import { TestDebugBox } from "../shared/test-debug-box";
 import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 import * as LobbyClient from "../bgio";
-import { getOfflineMatchLink } from "./url-params";
+import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -30,39 +30,9 @@ function snapToRange(val: number, low: number, high: number) : number {
     return val;
 }
 
-interface OpenMatchPageArgs {
-    game: AppGame;
-    nPlayers: number;
-    setWaiting: (arg: boolean) => void;
-    setError: (arg: Error) => void;
-  }
-  
-function openOnlineMatchPage({ game, nPlayers, setWaiting, setError }: OpenMatchPageArgs): void {
-
-    const doOpen = (matchID: MatchID) => {
-        const url = new URL(window.location.href);
-        const searchParams = new URLSearchParams(url.search);
-        searchParams.set("match-id", matchID.mid);
-        url.search = searchParams.toString();
-
-        window.location.href = url.href;
-    };
-
-    setWaiting(true);
-    LobbyClient.createMatch(game, nPlayers)
-        .then(doOpen)
-        .catch(setError);
-}
-
-export interface StartGameOptions {
-  local: boolean;
-  nPlayers: number;
-}
-
 interface StartGameProps {
   game: AppGame;
 }
-
 
 export function StartGame({ game }: StartGameProps): JSX.Element {
     const { minPlayers, maxPlayers } = game;
@@ -73,12 +43,13 @@ export function StartGame({ game }: StartGameProps): JSX.Element {
     const [persist, setPersist] = useState(false);
     const [waitingOrError, setWaitingOrError] = useWaitingOrError();
 
-    const startGame = () => openOnlineMatchPage({
-        game:game, 
-        nPlayers: numPlayers,
-        setWaiting: () => setWaitingOrError("waiting"),
-        setError: setWaitingOrError,
-    });
+    const startGame = () => {
+        setWaitingOrError("waiting");
+
+        LobbyClient.createMatch(game, numPlayers)
+            .then(openOnlineMatchPage)
+            .catch(setWaitingOrError);
+    };
 
     if (waitingOrError) {
         return <WaitingOrError status={waitingOrError}

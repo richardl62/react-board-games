@@ -124,3 +124,14 @@ export function getOfflineMatchLink(nPlayers: number, persistentState: boolean):
 
     return url.href;
 }
+
+  
+export function openOnlineMatchPage(matchID: MatchID): void {
+
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    searchParams.set("match-id", matchID.mid);
+    url.search = searchParams.toString();
+
+    window.location.href = url.href;
+}
