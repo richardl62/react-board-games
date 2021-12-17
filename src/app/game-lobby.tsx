@@ -1,63 +1,51 @@
-import React, { ReactChild, useState } from "react";
+import React, { useState } from "react";
+import { useAsyncCallback } from "react-async-hook";
 import { joinMatch } from "../bgio";
 import { AppGame, MatchID } from "../shared/types";
-import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 import { addPlayerToHref } from "./url-params";
-
-interface GetPlayerNameProps {
-    children: ReactChild;
-    nameCallback: (arg: string) => void;
-}
-
-function GetPlayerName({ children: child, nameCallback }: GetPlayerNameProps) {
-
-    const [name, setName] = useState<string>("");
-    return (
-        <div>
-            <div>
-                <label>Name</label>
-                <input
-                    value={name}
-                    placeholder='Player name'
-                    onInput={e => setName(e.currentTarget.value)}
-                />
-
-                <button
-                    type="button"
-                    onClick={() => nameCallback(name)}
-                >
-                    {child}
-                </button>
-
-            </div>
-        </div>);
-}
 
 interface GameLobbyProps {
     game: AppGame;
     matchID: MatchID;
-
 }
+
+/**
+ * For now at least, GameLobby just allows a player to join
+ */
 export function GameLobby(props: GameLobbyProps): JSX.Element {
     const { game, matchID } = props;
+    const [name, setName] = useState<string>("");
+    
+    const joinGameCallback = useAsyncCallback(() =>
+        joinMatch(game, matchID, name).then(player => {
+            const newHref = addPlayerToHref(player);
+            window.location.href = newHref;
+        })
+    );
 
-    const [ waitingOrError, setWaitingOrError ] = useWaitingOrError();
-
-    if (waitingOrError) {
-        return <WaitingOrError status={waitingOrError} />;
+    if(joinGameCallback.loading) {
+        return <div>Loading</div>;
     }
 
-    const joinGame = (name: string) => {
-        setWaitingOrError("waiting");
+    if(joinGameCallback.error) {
+        return <div>{`ERROR: ${joinGameCallback.error.message}`}</div>;
+    }
 
-        joinMatch(game, matchID, name)
-            .then(player => {
-                const newHref = addPlayerToHref(player);
-                window.location.href = newHref;
-            })
-            .catch(setWaitingOrError);
-    };
+    return <div>
+        <label>Name</label>
+        <input
+            value={name}
+            placeholder='Player name'
+            onInput={e => setName(e.currentTarget.value)}
+        />
 
-    return <GetPlayerName nameCallback={joinGame}>Join</GetPlayerName>;
+        <button
+            type="button"
+            onClick={joinGameCallback.execute}
+            disabled={joinGameCallback.loading}
+        >
+            Join
+        </button>
+    </div>;
 }
   
