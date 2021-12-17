@@ -31,7 +31,6 @@ function getAndDeleteFlag(key: string) : boolean {
 
 }
 
-
 const ppb = getAndDelete("ppb");
 export const playersPerBrowser = ppb ? parseInt(ppb) : 1;
 
@@ -113,3 +112,15 @@ export function lobbyServer(): string {
     return result;
 }
 
+export function getOfflineMatchLink(nPlayers: number, persistentState: boolean): string {
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    searchParams.set("offline", "1");
+    searchParams.set("np", nPlayers.toString());
+    if(persistentState) {
+        searchParams.set("persist", "1");
+    }
+    url.search = searchParams.toString();
+
+    return url.href;
+}
