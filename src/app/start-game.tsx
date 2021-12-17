@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { AppGame } from "../shared/types";
 import { TestDebugBox } from "../shared/test-debug-box";
-import { useWaitingOrError, WaitingOrError } from "../shared/waiting-or-error";
 import * as LobbyClient from "../bgio";
 import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
+import { useAsyncCallback } from "react-async-hook";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -41,25 +41,21 @@ export function StartGame({ game }: StartGameProps): JSX.Element {
 
     const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
     const [persist, setPersist] = useState(false);
-    const [waitingOrError, setWaitingOrError] = useWaitingOrError();
 
-    const startGame = () => {
-        setWaitingOrError("waiting");
+    const asyncCreateMatch = useAsyncCallback(() =>
+        LobbyClient.createMatch(game, numPlayers).then(openOnlineMatchPage)
+    );
 
-        LobbyClient.createMatch(game, numPlayers)
-            .then(openOnlineMatchPage)
-            .catch(setWaitingOrError);
-    };
+    if(asyncCreateMatch.loading) {
+        return <div>Loading</div>;
+    }
 
-    if (waitingOrError) {
-        return <WaitingOrError status={waitingOrError}
-            waitingMessage="waiting for server"
-        />;
+    if(asyncCreateMatch.error) {
+        return <div>{`ERROR: ${asyncCreateMatch.error.message}`}</div>;
     }
 
     return (
         <OuterDiv>
-
             <div>
                 <label htmlFor='numPlayers'>
                     {`Number of players (${minPlayers}-${maxPlayers}):`}
@@ -70,7 +66,7 @@ export function StartGame({ game }: StartGameProps): JSX.Element {
                     value={numPlayers}
                     onChange={(event) => setNumPlayers(Number(event.target.value))} 
                 />
-                <button type="button" onClick={() => startGame()}>
+                <button type="button" onClick={asyncCreateMatch.execute} disabled={asyncCreateMatch.loading}>
                       Start Game
                 </button>
             </div>
