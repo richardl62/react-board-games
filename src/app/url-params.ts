@@ -92,9 +92,16 @@ if (usp.toString()) {
     console.warn("Unrecongised url parameters", usp.toString());
 }
 
-export function addPlayerToHref(matchID: MatchID, player: Player) : string {
+export function addPlayerToHref(newMatchID: MatchID, player: Player) : string {
+    if(matchID && matchID.mid !== newMatchID.mid) {
+        console.warn("MatchID supplied to addPlayerToHref is not consistent with URL parameter:",
+            newMatchID, matchID
+        );
+    }
+
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
+    searchParams.set(keys.matchID, newMatchID.mid);
     searchParams.set(keys.pid, player.id);
     searchParams.set(keys.credentials, player.credentials);
     url.search = searchParams.toString();
