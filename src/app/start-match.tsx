@@ -35,7 +35,7 @@ interface StartGameProps {
   game: AppGame;
 }
 
-export function StartGame({ game }: StartGameProps): JSX.Element {
+export function StartMatch({ game }: StartGameProps): JSX.Element {
     const { minPlayers, maxPlayers } = game;
 
     const defaultNumPlayers = snapToRange(2 /*arbitrary*/, minPlayers, maxPlayers);

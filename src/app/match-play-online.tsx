@@ -11,7 +11,7 @@ interface GamePlayOnlineProps {
   player: Player;
 }
 
-export function GamePlayOnline({ game, matchID, player }: GamePlayOnlineProps): JSX.Element {
+export function MatchPlayOnline({ game, matchID, player }: GamePlayOnlineProps): JSX.Element {
     useEffect(() => {
         document.title = game.displayName;
     });

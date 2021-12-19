@@ -13,7 +13,7 @@ interface GameLobbyProps {
 /**
  * For now at least, GameLobby just allows a player to join
  */
-export function GameLobby(props: GameLobbyProps): JSX.Element {
+export function MatchLobby(props: GameLobbyProps): JSX.Element {
     const { game, matchID } = props;
     const [name, setName] = useState<string>("");
     

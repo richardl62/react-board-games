@@ -1,9 +1,9 @@
 import React from "react";
 import { AppGame } from "../shared/types";
-import { GameLobby } from "./game-lobby";
-import { GamePlayOffline } from "./game-play-offline";
-import { GamePlayOnline } from "./game-play-online";
-import { StartGame } from "./start-game";
+import { MatchLobby } from "./match-lobby";
+import { MatchPlayOffline } from "./match-play-offline";
+import { MatchPlayOnline } from "./match-play-online";
+import { StartMatch } from "./start-match";
 import * as UrlParams from "./url-params";
 
 
@@ -12,22 +12,22 @@ export function gameComponent(game : AppGame): JSX.Element {
     const {matchID, offline, player} = UrlParams;
 
     if (offline) {
-        return <GamePlayOffline game={game} {...offline} />;
+        return <MatchPlayOffline game={game} {...offline} />;
+    }
+
+    if ( player && matchID ) {
+        return <MatchPlayOnline game={game} matchID={matchID} player={player} />;
     }
 
     if ( player && !matchID ) {
         alert("Unexpected URL parameters");
     }
 
-    if( !matchID ) {
-        return <StartGame game={game} />;
+    if( matchID ) {
+        return <MatchLobby game={game} matchID={matchID} />;
     }
 
-    if ( !player ) {
-        return <GameLobby game={game} matchID={matchID} />;
-    }
-
-    return <GamePlayOnline game={game} matchID={matchID} player={player} />;
+    return <StartMatch game={game}/>;
 }
 
 
