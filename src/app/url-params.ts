@@ -3,6 +3,17 @@
 import { sAssert } from "../shared/assert";
 import { AppGame, MatchID, Player } from "../shared/types";
 
+const keys = {
+    credentials: "cred",
+    debugPanel: "debug-panel",
+    matchID: "id",
+    nPlayers: "np",
+    offline: "offline",
+    persist: "persist",
+    pid: "pid",
+    server: "server",
+};
+
 const usp = new URLSearchParams(window.location.search);
 
 const getAndDelete = (key: string) => {
@@ -31,15 +42,12 @@ function getAndDeleteFlag(key: string) : boolean {
 
 }
 
-const ppb = getAndDelete("ppb");
-export const playersPerBrowser = ppb ? parseInt(ppb) : 1;
+export const bgioDebugPanel = getAndDeleteFlag(keys.debugPanel);
 
-export const bgioDebugPanel = getAndDeleteFlag("debug-panel");
-
-const matchID_ = getAndDelete("match-id");
+const matchID_ = getAndDelete(keys.matchID);
 export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
-const server = getAndDelete("server");
+const server = getAndDelete(keys.server);
 
 export interface OfflineGameData {
   nPlayers:number;
@@ -47,21 +55,21 @@ export interface OfflineGameData {
 }
 
 export let offline : null | OfflineGameData= null;
-if(getAndDeleteFlag("offline")){
-    const np_ = getAndDelete("np");
-    if(np_){
+if(getAndDeleteFlag(keys.offline)){
+    const numPlayers = getAndDelete(keys.nPlayers);
+    if(numPlayers){
         offline = {
-            nPlayers: parseInt(np_),
-            persist: getAndDeleteFlag("persist"),
+            nPlayers: parseInt(numPlayers),
+            persist: getAndDeleteFlag(keys.persist),
         };
     } else {
-        console.warn("URL param 'np' is missing (required for offline game)");
+        console.warn("URL does to specify number of players (required for offline game)");
     }
 }
 
 function getAndDeletePlayer() : Player | null {
-    const pid = getAndDelete("pid");
-    const credentials = getAndDelete("credentials");
+    const pid = getAndDelete(keys.pid);
+    const credentials = getAndDelete(keys.credentials);
 
     if(pid && credentials) {
         return {
@@ -87,8 +95,8 @@ if (usp.toString()) {
 export function addPlayerToHref(player: Player) : string {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
-    searchParams.set("pid", player.id);
-    searchParams.set("credentials", player.credentials);
+    searchParams.set(keys.pid, player.id);
+    searchParams.set(keys.credentials, player.credentials);
     url.search = searchParams.toString();
 
     return  url.href;
@@ -115,10 +123,10 @@ export function lobbyServer(): string {
 export function getOfflineMatchLink(nPlayers: number, persistentState: boolean): string {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
-    searchParams.set("offline", "1");
-    searchParams.set("np", nPlayers.toString());
+    searchParams.set(keys.offline, "1");
+    searchParams.set(keys.nPlayers, nPlayers.toString());
     if(persistentState) {
-        searchParams.set("persist", "1");
+        searchParams.set(keys.persist, "1");
     }
     url.search = searchParams.toString();
 
@@ -130,7 +138,7 @@ export function openOnlineMatchPage(matchID: MatchID): void {
 
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
-    searchParams.set("match-id", matchID.mid);
+    searchParams.set(keys.matchID, matchID.mid);
     url.search = searchParams.toString();
 
     window.location.href = url.href;

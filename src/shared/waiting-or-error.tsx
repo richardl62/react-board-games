@@ -19,24 +19,33 @@ interface AsyncStatus {
     error?: Error;
 }
 
-interface WaitingOrErrorProps {
-    status: AsyncStatus;
-}
-
 export function waitingOrError(status: AsyncStatus) : boolean {
     return Boolean(status.loading || status.error );
 }
 
+interface WaitingOrErrorProps {
+    status: AsyncStatus;
+    /** Optional name of activity. Used in error and waiting messages */ 
+    activity?: string;
+}
+
 export function WaitingOrError(props: WaitingOrErrorProps) : JSX.Element | null {
-    const { loading, error } = props.status;
+    const { status: {loading, error}, activity } = props;
 
     if(loading) {
-        return <Waiting>Waiting...</Waiting>;
+        const text = (activity || "waiting") + "...";
+        return <Waiting>{text}</Waiting>;
     }
     
     if(error) {
+        let initialText = "Error";
+        if(activity) {
+            initialText += " " + activity;
+        }
+        initialText+=":";
+
         return <ErrorMessage>
-            <span>Error:</span>
+            <span>{initialText}</span>
             <span>{error.message}</span>
         </ErrorMessage>;
     }
