@@ -5,13 +5,13 @@ import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from "./url-params";
 import { makeWrappedGameProps } from "../bgio";
 
-interface GamePlayOnlineProps {
+interface MatchPlayOnlineProps {
   game: AppGame;
   matchID: MatchID;
   player: Player;
 }
 
-export function MatchPlayOnline({ game, matchID, player }: GamePlayOnlineProps): JSX.Element {
+export function MatchPlayOnline({ game, matchID, player }: MatchPlayOnlineProps): JSX.Element {
     useEffect(() => {
         document.title = game.displayName;
     });

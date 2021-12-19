@@ -5,7 +5,7 @@ import { AppGame, MatchID } from "../shared/types";
 import { WaitingOrError, waitingOrError } from "../shared/waiting-or-error";
 import { addPlayerToHref } from "./url-params";
 
-interface GameLobbyProps {
+interface MatchLobbyProps {
     game: AppGame;
     matchID: MatchID;
 }
@@ -13,7 +13,7 @@ interface GameLobbyProps {
 /**
  * For now at least, GameLobby just allows a player to join
  */
-export function MatchLobby(props: GameLobbyProps): JSX.Element {
+export function MatchLobby(props: MatchLobbyProps): JSX.Element {
     const { game, matchID } = props;
     const [name, setName] = useState<string>("");
     
