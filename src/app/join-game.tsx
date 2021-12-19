@@ -19,13 +19,13 @@ export function JoinGame(props: JoinGameProps): JSX.Element {
     
     const joinGameCallback = useAsyncCallback(() =>
         joinMatch(game, matchID, name).then(player => {
-            const newHref = addPlayerToHref(player);
+            const newHref = addPlayerToHref(matchID, player);
             window.location.href = newHref;
         })
     );
 
     if(waitingOrError(joinGameCallback)) {
-        return <WaitingOrError status={joinGameCallback} />;
+        return <WaitingOrError status={joinGameCallback} activity="joining game"/>;
     }
 
     return <div>

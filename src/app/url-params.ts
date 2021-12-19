@@ -92,7 +92,7 @@ if (usp.toString()) {
     console.warn("Unrecongised url parameters", usp.toString());
 }
 
-export function addPlayerToHref(player: Player) : string {
+export function addPlayerToHref(matchID: MatchID, player: Player) : string {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
     searchParams.set(keys.pid, player.id);

@@ -47,9 +47,8 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
         LobbyClient.createMatch(game, numPlayers).then(openOnlineMatchPage)
     );
 
-    console.log(asyncCreateMatch);
     if(waitingOrError(asyncCreateMatch)) {
-        return <WaitingOrError status={asyncCreateMatch} />;
+        return <WaitingOrError status={asyncCreateMatch} activity="starting match"/>;
     }
 
 
