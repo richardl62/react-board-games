@@ -1,6 +1,5 @@
 import { sAssert } from "../shared/assert";
 import { BoardProps as BgioBoardProps } from "./board-props";
-export const unnamedPlayer = "_Unnamed Player_";  // Why is this needed?
 
 export interface PlayerData {
   name: string;
@@ -38,7 +37,7 @@ function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData
     }
 
     return {
-        name: (md.name === unnamedPlayer) ? defaultPlayerName(playerIndex) : md.name,
+        name: md.name,
         status: md.isConnected ? "ready" : "offline"
     };
 
