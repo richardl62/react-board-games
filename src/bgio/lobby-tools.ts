@@ -25,12 +25,11 @@ export async function joinMatch(game: AppGame, matchID: MatchID, name: string | 
         }
     }
 
-    const playerID = players[index].id.toString();
-
     const joinMatchResult = await lobbyClient.joinMatch(game.name, matchID.mid,
-        { playerID: playerID, playerName: name || "unnamed"});
+        {playerName: name || "unnamed"} );
 
     const credentials = joinMatchResult.playerCredentials;
+    const playerID = joinMatchResult.playerID;
 
     if(!name) {
         const playerNumber = parseInt(playerID) + 1;
