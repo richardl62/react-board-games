@@ -29,10 +29,9 @@ export function JoinGame(props: JoinGameProps): JSX.Element {
     }
 
     return <div>
-        <label>Name</label>
         <input
             value={name}
-            placeholder='Player name'
+            placeholder='Your name'
             onInput={e => setName(e.currentTarget.value)}
         />
 

@@ -1,18 +1,10 @@
 import { LobbyAPI } from "boardgame.io";
 import React from "react";
 import { useAsync } from "react-async-hook";
-import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
 import { AppGame, MatchID } from "../shared/types";
 import { WaitingOrError } from "../shared/waiting-or-error";
 import { JoinGame } from "./join-game";
-
-const MatchHeader = styled.div`
-    margin-bottom: 5px;
-    span:first-of-type {
-        margin-right: 1em;
-    }    
-`;
 
 type PlayerInfo = LobbyAPI.Match["players"][0];
 interface PlayerInfoProps {
@@ -21,8 +13,13 @@ interface PlayerInfoProps {
 
 function PlayerInfo(props: PlayerInfoProps) : JSX.Element {
     const { name, isConnected } = props.playerInfo;
+
+    if(!name) {
+        return <div>{"<available>"}</div>;
+    }
+
     return <div> 
-        <span>{`Player: ${name}`}</span>
+        <span>{name}</span>
         {!isConnected && <span> (not conected)</span>}
     </div>;
 }
@@ -37,23 +34,20 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const matchID = { mid: matchID_ };
 
     const playerElems = [];
+    let gameFull = true;
     for(const playerInfo of players) {
-        if(playerInfo.name) {
-            playerElems.push(<PlayerInfo key={playerInfo.name} playerInfo={playerInfo}/>);
+        if(!playerInfo.name) {
+            gameFull = false;
         }
+        playerElems.push(<PlayerInfo key={playerInfo.name} playerInfo={playerInfo}/>);
     }
-    const nNotJoined = players.length - playerElems.length;  
+
 
     return <div>
-        <MatchHeader>
-            <span>{game.displayName}</span> 
-            <span>match: ${matchID.mid}</span>
-        </MatchHeader>
-
         {playerElems}
 
-        {nNotJoined > 0 && <div>{`${nNotJoined} more player(s) expected`}</div>}
-        {nNotJoined > 0 && <JoinGame game={game} matchID={matchID} />}
+
+        {!gameFull && <JoinGame game={game} matchID={matchID} />}
     </div>;
 }
 

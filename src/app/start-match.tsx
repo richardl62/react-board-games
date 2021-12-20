@@ -69,7 +69,7 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
                     onChange={(event) => setNumPlayers(Number(event.target.value))} 
                 />
                 <button type="button" onClick={asyncCreateMatch.execute} disabled={asyncCreateMatch.loading}>
-                      Start Game
+                     New Game
                 </button>
             </div>
 
