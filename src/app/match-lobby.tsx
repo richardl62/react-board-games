@@ -14,6 +14,19 @@ const MatchHeader = styled.div`
     }    
 `;
 
+type PlayerInfo = LobbyAPI.Match["players"][0];
+interface PlayerInfoProps {
+    playerInfo: PlayerInfo;
+}
+
+function PlayerInfo(props: PlayerInfoProps) : JSX.Element {
+    const { name, isConnected } = props.playerInfo;
+    return <div> 
+        <span>{`Player: ${name}`}</span>
+        {!isConnected && <span> (not conected)</span>}
+    </div>;
+}
+
 interface MatchLobbyWithApiInfoProps {
     game: AppGame;
     match: LobbyAPI.Match;
@@ -23,18 +36,24 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const { game, match: { players, matchID: matchID_ } } = props;
     const matchID = { mid: matchID_ };
 
+    const playerElems = [];
+    for(const playerInfo of players) {
+        if(playerInfo.name) {
+            playerElems.push(<PlayerInfo key={playerInfo.name} playerInfo={playerInfo}/>);
+        }
+    }
+    const nNotJoined = players.length - playerElems.length;  
+
     return <div>
         <MatchHeader>
             <span>{game.displayName}</span> 
             <span>match: ${matchID.mid}</span>
-            
         </MatchHeader>
-        <div>{`${players.length} players expected`}</div>
-        {players.map(player=>
-            <div key={player.name}>{`Player: ${player.name}`}</div>
-        )}
 
-        <JoinGame game={game} matchID={matchID} />
+        {playerElems}
+
+        {nNotJoined > 0 && <div>{`${nNotJoined} more player(s) expected`}</div>}
+        {nNotJoined > 0 && <JoinGame game={game} matchID={matchID} />}
     </div>;
 }
 
