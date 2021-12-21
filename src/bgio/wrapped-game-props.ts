@@ -23,7 +23,7 @@ export interface WrappedGameProps<G = unknown, Moves=unknown>
 
     playerData: PlayerDataDictionary;
     allJoined: boolean;
-    allReady: boolean;
+    allConnected: boolean;
 
     playOrder: string[];
     playerID: string;
@@ -41,11 +41,11 @@ export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGamePr
     const playerData = makePlayerData(bgioProps);
 
     let allJoined = true;
-    let allReady = true;
+    let allConnected = true;
     for (const playerID in playerData) {
         const pd = playerData[playerID];
-        if (pd.status !== "ready") {
-            allReady = false;
+        if (pd.status !== "connected") {
+            allConnected = false;
         }
         if (pd.status === "not joined") {
             allJoined = false;
@@ -58,7 +58,7 @@ export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGamePr
         ...bgioProps,
         playerData: playerData,
         allJoined: allJoined,
-        allReady: allReady,
+        allConnected: allConnected,
         playOrder: bgioProps.ctx.playOrder,
         playerID: bgioProps.playerID,
         currentPlayer: bgioProps.ctx.currentPlayer,

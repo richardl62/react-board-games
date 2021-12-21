@@ -3,7 +3,7 @@ import { BoardProps as BgioBoardProps } from "./board-props";
 
 export interface PlayerData {
   name: string;
-  status: "ready" | "not joined" | "offline";
+  status: "connected" | "not joined" | "notConnected";
 }
 
 export type PlayerDataDictionary = {[arg: string] : PlayerData};
@@ -22,7 +22,7 @@ function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData
     // This seems to be an offline game
         return {
             name: defaultPlayerName(playerIndex),
-            status: "ready",
+            status: "connected",
         };
     }
 
@@ -38,7 +38,7 @@ function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData
 
     return {
         name: md.name,
-        status: md.isConnected ? "ready" : "offline"
+        status: md.isConnected ? "connected" : "notConnected"
     };
 
 }

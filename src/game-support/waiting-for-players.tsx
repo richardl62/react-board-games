@@ -29,10 +29,10 @@ function statusText(status: PlayerData["status"]) : string {
     switch(status) {
     case "not joined":
         return "";
-    case "ready":
-        return "Joined";
-    case "offline":
-        return "Offline";
+    case "connected":
+        return "";
+    case "notConnected":
+        return "not connected";
     }
 }
 
@@ -40,7 +40,7 @@ export function WaitingForPlayers(props: WrappedGameProps): JSX.Element {
 
     const playerElements = (id: string) => {
         const {status, name} = props.playerData[id];
-        const StatusElem = (status==="offline") ? WarningStatus : StandardStatus;
+        const StatusElem = (status==="notConnected") ? WarningStatus : StandardStatus;
     
         return [
             <Name key={"n-"+name} >{name}</Name>,

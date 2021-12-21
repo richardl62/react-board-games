@@ -31,7 +31,7 @@ function PlayerData(props: WrappedGameProps<G>) {
                     {name + (isActive ? " (you)" : "")}
                 </Name>
                 <span>
-                    {(status !== "ready") && ` (${status})`}
+                    {(status !== "connected") && ` (${status})`}
                     {" - "}
                 </span>
             </span>

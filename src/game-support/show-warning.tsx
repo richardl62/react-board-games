@@ -25,8 +25,8 @@ export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
 
     for(const pId in props.playerData) {
         const {name, status } = props.playerData[pId];
-        if(status === "offline") {
-            warnings.push(`${name} is offline`);
+        if(status === "notConnected") {
+            warnings.push(`${name} is not connected`);
         }
     }
 
