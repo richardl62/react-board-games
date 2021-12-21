@@ -19,6 +19,14 @@ const MissingPlayer=styled.div`
     color: grey;
 `;
 
+const NotConnected=styled.div`
+    color: red;
+`;
+
+const JoinGameDiv=styled.div`
+    margin-top: 8px;
+`;
+
 interface MatchLobbyWithApiInfoProps {
     game: AppGame;
     match: LobbyAPI.Match;
@@ -30,21 +38,29 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
 
     const names = [];
     let gameFull = true;
+    let allConnected = true;
     for(const index in players) {
-        const { name } = players[index];
+        const { name, isConnected } = players[index];
         const key = name+index; // Kludge?
-        if(name) {
-            names.push(<span key={key}>{name}</span>);
-        } else {
+        if(!name) {
             gameFull = false;
+            names.push(<MissingPlayer>{`<Player${index}>`}</MissingPlayer>);
+        } else if (!isConnected) {
+            names.push(<NotConnected key={key}>{name}</NotConnected>);
+            allConnected = false;
+        } else if (name) {
             names.push(<MissingPlayer>{`<Player${index}>`}</MissingPlayer>);
         }
     }
 
     return <div>
         <Names>{names}</Names>
+        {!allConnected && <div>Highlighted players are not connected</div>}
 
-        {!gameFull && <JoinGame game={game} matchID={matchID} />}
+        {!gameFull && 
+        <JoinGameDiv>
+            <JoinGame game={game} matchID={matchID} />
+        </JoinGameDiv>}
     </div>;
 }
 
