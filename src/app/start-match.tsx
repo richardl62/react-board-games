@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { AppGame } from "../shared/types";
-import { TestDebugBox } from "../shared/test-debug-box";
+import { BoxWithLegend } from "../shared/box-with-legend";
 import * as LobbyClient from "../bgio";
 import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 import { useAsyncCallback } from "react-async-hook";
@@ -58,7 +58,8 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
 
     return (
         <OuterDiv>
-            <div>
+            <BoxWithLegend legend="Start New Game">
+
                 <label htmlFor='numPlayers'>
                     {`Number of players (${minPlayers}-${maxPlayers}):`}
                 </label>
@@ -71,9 +72,9 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
                 <button type="button" onClick={asyncCreateMatch.execute} disabled={asyncCreateMatch.loading}>
                      New Game
                 </button>
-            </div>
+            </BoxWithLegend>
 
-            <TestDebugBox>
+            <BoxWithLegend legend="Test/Debug">
 
                 <OfflineLinkDiv>
                     <a href={getOfflineMatchLink(numPlayers, persist)}>Play offline</a>
@@ -88,7 +89,7 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
                     </label>
                 </OfflineLinkDiv>
 
-            </TestDebugBox>
+            </BoxWithLegend>
 
         </OuterDiv>
     );

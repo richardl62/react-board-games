@@ -1,28 +1,19 @@
 import { LobbyAPI } from "boardgame.io";
 import React from "react";
 import { useAsync } from "react-async-hook";
+import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
 import { AppGame, MatchID } from "../shared/types";
 import { WaitingOrError } from "../shared/waiting-or-error";
 import { JoinGame } from "./join-game";
 
-type PlayerInfo = LobbyAPI.Match["players"][0];
-interface PlayerInfoProps {
-    playerInfo: PlayerInfo;
-}
-
-function PlayerInfo(props: PlayerInfoProps) : JSX.Element {
-    const { name, isConnected } = props.playerInfo;
-
-    if(!name) {
-        return <div>{"<available>"}</div>;
+const Names = styled.div`
+    display: flex;
+    /* justify-content: space-between; */
+    > *:not(:first-child) {
+        margin-left: 5px;
     }
-
-    return <div> 
-        <span>{name}</span>
-        {!isConnected && <span> (not conected)</span>}
-    </div>;
-}
+`;
 
 interface MatchLobbyWithApiInfoProps {
     game: AppGame;
@@ -33,18 +24,20 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const { game, match: { players, matchID: matchID_ } } = props;
     const matchID = { mid: matchID_ };
 
-    const playerElems = [];
+    const names = [];
     let gameFull = true;
-    for(const playerInfo of players) {
-        if(!playerInfo.name) {
+    for(const index in players) {
+        let { name } = players[index];
+        if(!name) {
             gameFull = false;
+            name = "<available>";
         }
-        playerElems.push(<PlayerInfo key={playerInfo.name} playerInfo={playerInfo}/>);
+        names.push(<span key={name+index}>{name}</span>);
     }
 
 
     return <div>
-        {playerElems}
+        <Names>{names}</Names>
 
 
         {!gameFull && <JoinGame game={game} matchID={matchID} />}

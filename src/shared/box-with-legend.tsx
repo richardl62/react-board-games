@@ -21,10 +21,16 @@ const Legend = styled.div`
   left: 30px;
 `;
 
-export function TestDebugBox({ children }: { children: ReactNode; }): JSX.Element {
+// Hmm.  This could be improved.  Or would it be better to use fieldset instead?
+interface BoxWithLegendProps {
+  legend: string;
+  children: ReactNode
+}
+export function BoxWithLegend(props: BoxWithLegendProps): JSX.Element {
+    const { legend, children } = props;
     return (
         <Box>
-            <Legend>Test/debug</Legend>
+            <Legend>{legend}</Legend>
             {children}
         </Box>
     );
