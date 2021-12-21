@@ -15,6 +15,10 @@ const Names = styled.div`
     }
 `;
 
+const MissingPlayer=styled.div`
+    color: grey;
+`;
+
 interface MatchLobbyWithApiInfoProps {
     game: AppGame;
     match: LobbyAPI.Match;
@@ -27,18 +31,18 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const names = [];
     let gameFull = true;
     for(const index in players) {
-        let { name } = players[index];
-        if(!name) {
+        const { name } = players[index];
+        const key = name+index; // Kludge?
+        if(name) {
+            names.push(<span key={key}>{name}</span>);
+        } else {
             gameFull = false;
-            name = "<available>";
+            names.push(<MissingPlayer>{`<Player${index}>`}</MissingPlayer>);
         }
-        names.push(<span key={name+index}>{name}</span>);
     }
-
 
     return <div>
         <Names>{names}</Names>
-
 
         {!gameFull && <JoinGame game={game} matchID={matchID} />}
     </div>;
