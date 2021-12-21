@@ -28,11 +28,21 @@ export function JoinGame(props: JoinGameProps): JSX.Element {
         return <WaitingOrError status={joinGameCallback} activity="joining game"/>;
     }
 
+    const doSetName = (str: string) => {
+        const filtered = str.replace(/\s/g, "");
+        console.log(str, filtered);
+        setName(filtered);
+    };
+
+    const maxLength = 12;
     return <div>
         <input
+            type="text"
+            title={`Upto ${maxLength} characters which must not be spaces`}
+            maxLength={maxLength}
             value={name}
             placeholder='Your name'
-            onInput={e => setName(e.currentTarget.value)}
+            onInput={e => doSetName(e.currentTarget.value)}
         />
 
         <button

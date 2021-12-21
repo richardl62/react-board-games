@@ -39,7 +39,7 @@ export async function joinMatch(game: AppGame, matchID: MatchID, name: string | 
         await lobbyClient.updatePlayer(game.name, matchID.mid, {
             playerID: playerID,
             credentials: credentials,
-            newName: `Player ${playerNumber}`,
+            newName: `Player${playerNumber}`,
         });
     }
 
