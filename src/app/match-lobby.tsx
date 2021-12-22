@@ -1,9 +1,10 @@
 import { LobbyAPI } from "boardgame.io";
-import React from "react";
+import React, { ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
 import { nonJoinedPlayerName } from "../bgio/player-data";
+import { BoxWithLegend } from "../shared/box-with-legend";
 import { AppGame, MatchID } from "../shared/types";
 import { WaitingOrError } from "../shared/waiting-or-error";
 import { JoinGame } from "./join-game";
@@ -16,13 +17,35 @@ const Names = styled.div`
     }
 `;
 
-const NotConnected=styled.div`
-    color: red;
+const NotConnectedDiv = styled.div`
+    > *:first-child {
+        color: red;
+    }
+
+    > *:not(:first-child) {
+        margin-left: 0.25em;
+    }
 `;
 
-const JoinGameDiv=styled.div`
-    margin-top: 8px;
+interface NotConnectedProps {
+    children: ReactNode;
+}
+
+const MatchLobbyDiv = styled.div`
+    > *:last-child {
+        margin-top: 8px;
+    }
 `;
+
+function NotConnected(props: NotConnectedProps) {
+    const { children } = props;
+    return <NotConnectedDiv>
+        <span>Warning:</span>
+        {children}
+        <span>is not connected</span>
+    </NotConnectedDiv>;
+
+}
 
 interface MatchLobbyWithApiInfoProps {
     game: AppGame;
@@ -33,32 +56,35 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const { game, match: { players, matchID: matchID_ } } = props;
     const matchID = { mid: matchID_ };
 
-    const names = [];
+    const allNames = [];
+    const notConnected = [];
     let gameFull = true;
-    let allConnected = true;
+
     for(const index in players) {
         const { name, isConnected } = players[index];
+
         const key = name+index; // Kludge?
+        const elem = <span key={key}>{name || nonJoinedPlayerName}</span>;
+        allNames.push(elem);
+
         if(!name) {
             gameFull = false;
-            names.push(<div>{nonJoinedPlayerName}</div>);
         } else if (!isConnected) {
-            names.push(<NotConnected key={key}>{name}</NotConnected>);
-            allConnected = false;
-        } else if (name) {
-            names.push(<div>{name}</div>);
+            notConnected.push(elem);
         }
     }
 
-    return <div>
-        <Names>{names}</Names>
-        {!allConnected && <div>Highlighted players are not connected</div>}
+    return <BoxWithLegend legend="Existing Game">
+        <MatchLobbyDiv>
+            <Names><span>Players:</span> {allNames}</Names>
+            {notConnected.length > 0 && <NotConnected>{notConnected}</NotConnected>}
 
-        {!gameFull && 
-        <JoinGameDiv>
-            <JoinGame game={game} matchID={matchID} />
-        </JoinGameDiv>}
-    </div>;
+            {gameFull ?
+                <div>All players have joined</div> :
+                <JoinGame game={game} matchID={matchID} gameFull={gameFull} />
+            }
+        </MatchLobbyDiv>
+    </BoxWithLegend>;
 }
 
 interface MatchLobbyProps {

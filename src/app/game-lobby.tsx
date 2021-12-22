@@ -2,7 +2,6 @@ import React from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
-import { BoxWithLegend } from "../shared/box-with-legend";
 import { AppGame } from "../shared/types";
 import { WaitingOrError } from "../shared/waiting-or-error";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
@@ -24,9 +23,7 @@ export function GameLobby(props: GameLobbyProps): JSX.Element {
     return <GameLobbyDiv>
         <WaitingOrError status={asyncMatchList} activity="getting list of matches" />
         {matches && matches.map(match =>
-            <BoxWithLegend key={match.matchID} legend="Existing Game">
-                <MatchLobbyWithApiInfo game={game} match={match} />
-            </BoxWithLegend>
+            <MatchLobbyWithApiInfo key={match.matchID} game={game} match={match} />
         )}
 
         <StartMatch game={game} />

@@ -8,13 +8,14 @@ import { addPlayerToHref } from "./url-params";
 interface JoinGameProps {
     game: AppGame;
     matchID: MatchID;
+    gameFull: boolean;
 }
 
 /**
  * For now at least, GameLobby just allows a player to join
  */
 export function JoinGame(props: JoinGameProps): JSX.Element {
-    const { game, matchID } = props;
+    const { game, matchID, gameFull } = props;
     const [name, setName] = useState<string>("");
     
     const joinGameCallback = useAsyncCallback(() =>
@@ -42,13 +43,14 @@ export function JoinGame(props: JoinGameProps): JSX.Element {
             maxLength={maxLength}
             value={name}
             placeholder='Your name'
+            disabled={gameFull}
             onInput={e => doSetName(e.currentTarget.value)}
         />
 
         <button
             type="button"
             onClick={joinGameCallback.execute}
-            disabled={joinGameCallback.loading}
+            disabled={joinGameCallback.loading || gameFull}
         >
             Join
         </button>
