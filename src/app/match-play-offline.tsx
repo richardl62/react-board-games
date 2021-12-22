@@ -3,7 +3,8 @@ import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
 import { AppGame } from "../shared/types";
 import * as UrlParams from "./url-params";
-import { makeWrappedGameProps } from "../bgio";
+import { GameBoard } from "./game-board";
+
 
 interface MatchPlayLocalProps {
   game: AppGame;
@@ -11,9 +12,6 @@ interface MatchPlayLocalProps {
   persist: boolean;
 }
 
-function localClientGame(game: AppGame, props: BgioBoardProps) {
-    return game.board(makeWrappedGameProps(props));
-}
 
 export function MatchPlayOffline({ game, nPlayers: numPlayers, persist}: MatchPlayLocalProps): JSX.Element {
     useEffect(() => {
@@ -22,7 +20,7 @@ export function MatchPlayOffline({ game, nPlayers: numPlayers, persist}: MatchPl
 
     const GameClient = Client({
         game: game,
-        board: (props: BgioBoardProps) => localClientGame(game, props),
+        board: (props: BgioBoardProps) => <GameBoard game={game} bgioProps={props} />,
         multiplayer: Local({persist:persist}),
         numPlayers: numPlayers,
         debug: UrlParams.bgioDebugPanel,
