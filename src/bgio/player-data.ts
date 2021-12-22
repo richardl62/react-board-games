@@ -1,5 +1,7 @@
 import { sAssert } from "../shared/assert";
-import { BoardProps as BgioBoardProps } from "./board-props";
+import { BoardProps as BgioBoardProps, MatchDataElem } from "./board-props";
+
+export const nonJoinedPlayerName = "<available>";
 
 export interface PlayerData {
   name: string;
@@ -8,30 +10,18 @@ export interface PlayerData {
 
 export type PlayerDataDictionary = {[arg: string] : PlayerData};
 
-function defaultPlayerName(index: number) {
-    return `Player ${index + 1}`;
-}
-
-function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData {
+function makePlayerDataElem(matchData: MatchDataElem[], playerID: string, numPlayers: number): PlayerData {
     const playerIndex = parseInt(playerID);
-    sAssert(!isNaN(playerIndex) && playerIndex >= 0 && playerIndex < props.ctx.numPlayers,
+    sAssert(!isNaN(playerIndex) && playerIndex >= 0 && playerIndex < numPlayers,
         `Unexpected player ID: "${playerID}"`
     );
 
-    if (!props.matchData) {
-    // This seems to be an offline game
-        return {
-            name: defaultPlayerName(playerIndex),
-            status: "connected",
-        };
-    }
-
-    const md = props.matchData.find(md => md.id === playerIndex);
+    const md = matchData.find(md => md.id === playerIndex);
     sAssert(md, `Cannot find player data for ID ${playerID}`);
   
     if (!md.name) {
         return {
-            name: defaultPlayerName(playerIndex),
+            name: nonJoinedPlayerName,
             status: "not joined",
         };
     }
@@ -44,10 +34,16 @@ function makePlayerDataElem(props: BgioBoardProps, playerID: string): PlayerData
 }
 
 export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
- 
+    
+    const matchData = props.matchData;
+    if(!matchData) {
+        console.warn("Bgio match data is null");
+        return {};
+    }
+    
     const playerData : PlayerDataDictionary = {};
     for(const id in props.ctx.playOrder) {
-        playerData[id] = makePlayerDataElem(props, id);
+        playerData[id] = makePlayerDataElem(matchData, id, props.ctx.numPlayers);
     }
 
     return playerData;

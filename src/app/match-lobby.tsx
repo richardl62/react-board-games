@@ -3,6 +3,7 @@ import React from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
+import { nonJoinedPlayerName } from "../bgio/player-data";
 import { AppGame, MatchID } from "../shared/types";
 import { WaitingOrError } from "../shared/waiting-or-error";
 import { JoinGame } from "./join-game";
@@ -13,10 +14,6 @@ const Names = styled.div`
     > *:not(:first-child) {
         margin-left: 5px;
     }
-`;
-
-const MissingPlayer=styled.div`
-    color: grey;
 `;
 
 const NotConnected=styled.div`
@@ -44,12 +41,12 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
         const key = name+index; // Kludge?
         if(!name) {
             gameFull = false;
-            names.push(<MissingPlayer>{`<Player${index}>`}</MissingPlayer>);
+            names.push(<div>{nonJoinedPlayerName}</div>);
         } else if (!isConnected) {
             names.push(<NotConnected key={key}>{name}</NotConnected>);
             allConnected = false;
         } else if (name) {
-            names.push(<MissingPlayer>{`<Player${index}>`}</MissingPlayer>);
+            names.push(<div>{name}</div>);
         }
     }
 
