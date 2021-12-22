@@ -5,8 +5,7 @@ const Waiting = styled.div`
     font-size: large;
 `;
 
-const ErrorMessage = styled.div`
-    font-size: x-large;
+const ErrorMessage = styled(Waiting)`
     span:first-child {
         font-weight: bold;
         color: red;
