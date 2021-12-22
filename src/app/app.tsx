@@ -62,6 +62,7 @@ function PageNotFound(props: HomePageProps) {
  * Games App.
  */
 function App(): JSX.Element {
+    
     useEffect(() => {
         document.title = "Games";
     });

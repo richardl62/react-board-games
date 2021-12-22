@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Client, BoardProps as BgioBoardProps } from "boardgame.io/react";
 import { SocketIO } from "boardgame.io/multiplayer";
 import { MatchID, Player, AppGame } from "../shared/types";
 import * as UrlParams from "./url-params";
-import { GameBoard } from "../bgio";
+import { GameBoard } from "./game-board";
 
 interface MatchPlayOnlineProps {
   game: AppGame;
@@ -12,10 +12,6 @@ interface MatchPlayOnlineProps {
 }
 
 export function MatchPlayOnline({ game, matchID, player }: MatchPlayOnlineProps): JSX.Element {
-    useEffect(() => {
-        document.title = game.displayName;
-    });
-
     const server = UrlParams.lobbyServer();
 
     const GameClient = Client({

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
 import { AppGame } from "../shared/types";
@@ -14,9 +14,6 @@ interface MatchPlayLocalProps {
 
 
 export function MatchPlayOffline({ game, nPlayers: numPlayers, persist}: MatchPlayLocalProps): JSX.Element {
-    useEffect(() => {
-        document.title = game.displayName;
-    });
 
     const GameClient = Client({
         game: game,
