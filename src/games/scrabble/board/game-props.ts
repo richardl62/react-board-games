@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { WrappedGameProps } from "../../../bgio";
 import { GeneralGameState } from "../actions";
-import { ClientMoves } from "../actions/global-game-moves";
+import { ClientMoves } from "../actions/bgio-moves";
 import { LocalGameState } from "../actions/local-game-state";
 import { ActionType } from "../actions/local-game-state-reducer";
 import { ScrabbleConfig } from "../config";

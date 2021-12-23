@@ -2,7 +2,7 @@ export { isGlobalGameState, startingGlobalGameState as startingGeneralGameState 
 export type { GlobalGameState as GeneralGameState } from "./global-game-state";
 
 // bgioMoves is exported only for use in making an AppGame. 
-export { bgioMoves } from "./global-game-moves";
+export { bgioMoves } from "./bgio-moves";
 
 export { getWordsAndScore } from "./get-words-and-score";
 export { findActiveLetters } from "./find-active-letters";
