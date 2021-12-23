@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { MoveHistoryElement } from "../actions/move-hstory";
+import { MoveHistoryElement, WordsPlayedInfo } from "../actions/move-hstory";
 
 const Name = styled.div`
     font-weight: bold;
@@ -37,7 +37,7 @@ export function MoveHistory(props: MoveHistoryProps): JSX.Element {
 
     const { moveHistory } = props;
 
-    const hasIllegalWords = moveHistory.find(elem => elem.illegalWords && elem.illegalWords.length > 0);
+    const hasIllegalWords = moveHistory.find(elem => elem.wordsPlayed && elem.wordsPlayed.illegalWords.length > 0);
     return <div>
         <StyledMoveHistory>
             {moveHistory.map((elem, index) =>
@@ -51,12 +51,31 @@ export function MoveHistory(props: MoveHistoryProps): JSX.Element {
     </div>;
 }
 
+interface WordPlayedProps {
+    wordPlayed: WordsPlayedInfo;
+}
+
+function WordPlayed(props: WordPlayedProps) {
+    const {words, illegalWords, score} = props.wordPlayed;
+        
+    const illegal = (word: string) => illegalWords.includes(word);
+    return <div>
+        <span>Played</span>
+        {words.map((word, index) => {
+            const Elem = illegal(word) ? IllegalWord : Word;
+            return <Elem key={index}>{word}</Elem>;
+        })}
+        <Word>{`for ${score}`}</Word>
+    </div>;
+}
+
 interface TurnDescriptionProps {
     elem: MoveHistoryElement;
 }
 
 function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
     const { elem } = props;
+
     if(elem.pass) {
         return <div>Passed</div>;
     }
@@ -65,20 +84,11 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
         return <div>{`Swapped ${elem.nTilesSwapped} tiles`}</div>;
     }
 
-    const {words, illegalWords, score} = elem;
 
     // Use 'score !=== undefined' as it is technically possible for a word to
     // score 0.
-    if(words && illegalWords && score !== undefined) {
-        const illegal = (word: string) => illegalWords.includes(word);
-        return <div>
-            <span>Played</span>
-            {words.map((word, index) => {
-                const Elem = illegal(word) ? IllegalWord : Word;
-                return <Elem key={index}>{word}</Elem>;
-            })}
-            <Word>{`for ${score}`}</Word>
-        </div>;
+    if(elem.wordsPlayed) {
+        return <WordPlayed wordPlayed={elem.wordsPlayed} />;
     }
         
     return <div>Problem with turn description</div>;

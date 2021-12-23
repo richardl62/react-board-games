@@ -6,7 +6,7 @@ import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
 import { BoardData, GlobalGameState } from "./global-game-state";
-import { MoveHistoryElement, PlayedWordsInfo } from "./move-hstory";
+import { MoveHistoryElement, WordsPlayedInfo } from "./move-hstory";
 import { LocalGameState } from "./local-game-state";
 import { ScabbbleGameProps } from "../board/game-props";
 
@@ -99,8 +99,8 @@ function addHistory(bgioProps: ScabbbleGameProps, elem: Omit<MoveHistoryElement,
     bgioProps.moves.addHistory({...elem, name:name});   
 }
 
-export function playWord(localState: LocalGameState, bgioProps: ScabbbleGameProps, 
-    playedWordinfo: PlayedWordsInfo) : void {
+export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
+    playedWordinfo: WordsPlayedInfo) : void {
 
     const rack = [...localState.rack];
     const bag = [...localState.bag];
@@ -111,17 +111,17 @@ export function playWord(localState: LocalGameState, bgioProps: ScabbbleGameProp
         }
     }
 
-    bgioProps.moves.setBoardRandAndScore({
+    gameProps.moves.setBoardRandAndScore({
         score: playedWordinfo.score,
         rack: rack,
         board: localState.board,
         bag: bag,
     });
 
-    addHistory(bgioProps, playedWordinfo);    
+    addHistory(gameProps, {wordsPlayed: playedWordinfo});    
 
-    sAssert(bgioProps.events.endTurn);
-    bgioProps.events.endTurn();
+    sAssert(gameProps.events.endTurn);
+    gameProps.events.endTurn();
 }
 
 export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGameProps, toSwap: boolean[]) : void {
@@ -151,9 +151,10 @@ export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGamePro
     bgioProps.events.endTurn();
 }
 
-export function passMove(bgioProps: ScabbbleGameProps) : void {
-    addHistory(bgioProps, {pass: true});
+export function passMove(gameProps: ScabbbleGameProps) : void {
+    addHistory(gameProps, {pass: true});
 
-    sAssert(bgioProps.events.endTurn);
-    bgioProps.events.endTurn();
+    sAssert(gameProps.events.endTurn);
+    gameProps.events.endTurn();
 }
+
