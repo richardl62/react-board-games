@@ -19,4 +19,8 @@ export interface MoveHistoryElement {
         pid: string;
         nSwapped: number;
     };
+    
+    scoresAdjusted?: {[id: string]: number};
+
+    gameOver?: {winners: string[]}; // id of winner(s);
 }

@@ -1,6 +1,6 @@
 import { sAssert } from "../../../shared/assert";
-import { shuffle } from "../../../shared/tools";
-import { blank } from "../config";
+import { nNonNull, shuffle } from "../../../shared/tools";
+import { blank, Letter, letterScore } from "../config";
 
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
@@ -166,3 +166,59 @@ export function passMove(gameProps: ScabbbleGameProps) : void {
     gameProps.events.endTurn();
 }
 
+function letterValue(rack: (Letter | null)[]) {
+    let value = 0;
+    for (const l of rack) {
+        if (l) {
+            value += letterScore(l);
+        }
+    }
+
+    return value;
+}
+
+function findWinners(scores: {[id: string] : number} ) : string[] {
+    let maxScore = -99999;
+    for(const id in scores) {
+        maxScore = Math.max(maxScore, scores[id]);
+    }
+
+    const winners = [];
+    for(const id in scores) {
+        if(scores[id] === maxScore) {
+            winners.push(id);
+        }
+    }
+    return winners;
+}
+
+export function gameEndScoreAdjustments(state: LocalGameState) : void {
+    const scoreAdjustement : {[id: string] : number} = {};
+    let totalRackScores = 0;
+
+    const gameProps = state.scrabbleGameProps;
+    const playerData = gameProps.G.playerData;
+    for(const pid in playerData) {
+        const rackScore = letterValue(playerData[pid].rack);
+        totalRackScores += rackScore;
+
+        scoreAdjustement[pid] = -rackScore;
+    }
+
+    for(const pid in playerData) {
+        if(nNonNull(playerData[pid].rack) === 0) {
+            scoreAdjustement[pid] = totalRackScores;
+        }
+    }
+
+    gameProps.moves.addHistory({scoresAdjusted: scoreAdjustement});
+
+    const newScores : {[id: string] : number} = {};
+    for(const pid in playerData) {
+        newScores[pid] = playerData[pid].score + scoreAdjustement[pid];
+    }
+    
+    state.scrabbleGameProps.moves.setScores(scoreAdjustement);
+
+    gameProps.moves.addHistory({gameOver: {winners: findWinners(newScores)}} );
+}

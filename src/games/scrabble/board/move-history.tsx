@@ -49,6 +49,58 @@ function WordPlayed(props: WordPlayedProps) {
     </div>;
 }
 
+interface ScoreAdjustmentsProps {
+    adjustments: {[id: string]: number};
+}
+
+function ScoreAdjustments(props: ScoreAdjustmentsProps) {
+    const { adjustments } = props;
+    const { name } = useScrabbleContext().bgioProps;
+
+    // preprocessed is use to help with adding commas.
+    const preprocessed = [];
+    for(const id in adjustments) {
+        if(adjustments[id] !== 0) {
+            preprocessed.push({id: id, adjustment: adjustments[id]});
+        }
+    }
+    
+    const elems = [];
+    for(let index = 0; index < preprocessed.length; ++index) {
+        const {id, adjustment} = preprocessed[index];
+ 
+        const sign = adjustment > 0 ? "+" : "";
+        let text = `${name(id)}: ${sign}${adjustment}`;
+        if(index < preprocessed.length - 1) {
+            text += ", ";
+        }
+        elems.push(<span>{text}</span>);
+    }
+
+    return <div>
+        <FirstSpan>Scores adjusted: </FirstSpan>
+        {elems}
+    </div>;
+}
+
+interface WinnersProps {
+    winners: string[];
+}
+
+function GameOver(props: WinnersProps) {
+    const { winners } = props;
+    const { name } = useScrabbleContext().bgioProps;
+    if(winners.length === 1) {
+
+        return <div>
+            <FirstSpan>Winner:</FirstSpan>
+            <span>{name(winners[0])}</span>
+        </div>;
+    } else {
+        return <FirstSpan>DRAW</FirstSpan>;
+    }
+}
+
 interface TurnDescriptionProps {
     elem: MoveHistoryElement;
 }
@@ -74,6 +126,14 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
             <FirstSpan>{name(elem.pass.pid)}</FirstSpan>
             <span>passed</span>
         </div>;
+    }
+
+    if(elem.scoresAdjusted) {
+        return <ScoreAdjustments adjustments={elem.scoresAdjusted} />;
+    }
+        
+    if(elem.gameOver) {
+        return <GameOver winners={elem.gameOver.winners} />;
     }
 
     return <div>Problem with turn description</div>;

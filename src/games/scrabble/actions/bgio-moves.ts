@@ -33,16 +33,32 @@ type AddHistoryParam = MoveHistoryElement;
 const addHistory: Move<GlobalGameState> = (G, ctx,
     historyElement : AddHistoryParam
 ) => {
-
     G.moveHistory.push(historyElement);
+};
+
+type SetScoresParam =  {[id: string] : number};
+const setScores: Move<GlobalGameState> = (G, ctx, 
+    adjustments : SetScoresParam
+) => {
+    try {
+        for(const id in adjustments) {
+            G.playerData[id].score += adjustments[id];
+        }
+    } catch(e) {
+        console.log("Expection thrown in adjustScores:", e);
+    }
+    
+    G.timestamp++;
 };
 
 export const bgioMoves = {
     setBoardRandAndScore: setBoardRandAndScore,
     addHistory: addHistory,
+    setScores: setScores,
 };
 
 export interface ClientMoves {
     setBoardRandAndScore: (arg: SetBoardRandAndScoreParam) => void;
     addHistory: (arg: AddHistoryParam) => void;
+    setScores: (arg: SetScoresParam) => void;
 }
