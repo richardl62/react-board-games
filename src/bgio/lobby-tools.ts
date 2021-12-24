@@ -2,6 +2,14 @@ import { LobbyClient } from "boardgame.io/client";
 import { lobbyServer } from "../app/url-params";
 import { AppGame, MatchID, Player } from "../shared/types";
 
+export function defaultPlayerName(playerID: string): string {
+    const playerNumber = parseInt(playerID);
+    if (isNaN(playerNumber)) {
+        console.warn(`Player ID "${playerID}" is not a number`);
+    }
+    return `Player${playerNumber+1}`;
+}
+
 export function makeLobbyClient() : LobbyClient {
     return new LobbyClient({ server: lobbyServer() });
 }
@@ -32,14 +40,10 @@ export async function joinMatch(game: AppGame, matchID: MatchID, name: string | 
     const playerID = joinMatchResult.playerID;
 
     if(!name) {
-        const playerNumber = parseInt(playerID) + 1;
-        if(isNaN(playerNumber)) {
-            console.warn(`Player ID "${playerID}" is not a number`);
-        }
         await lobbyClient.updatePlayer(game.name, matchID.mid, {
             playerID: playerID,
             credentials: credentials,
-            newName: `Player${playerNumber}`,
+            newName: defaultPlayerName(playerID),
         });
     }
 
