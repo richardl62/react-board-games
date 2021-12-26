@@ -1,9 +1,9 @@
 import { WaitingForPlayers } from "../../../game-support/waiting-for-players";
 import React from "react";
 import styled from "styled-components";
-import { GameProps } from "./game-props";
 import { MoveHistory } from "./move-history";
 import { MainGameArea } from "./main-game-area";
+import { useScrabbleContext } from "../scrabble-context";
 
 const Game = styled.div`
     display: flex;
@@ -15,17 +15,18 @@ const Game = styled.div`
     }
 `;
 
-export function Board(props: GameProps): JSX.Element {
+export function Board(): JSX.Element {
+    const context = useScrabbleContext();
 
-    if(!props.bgioProps.allJoined) {
-        <WaitingForPlayers {...props.bgioProps} />;
+    if(!context.bgioProps.allJoined) {
+        <WaitingForPlayers {...context.bgioProps} />;
     }
 
-    const moveHistory = props.bgioProps.G.moveHistory;
+    const moveHistory = context.bgioProps.G.moveHistory;
 
     return (
         <Game>
-            <MainGameArea {...props} />
+            <MainGameArea />
             <MoveHistory moveHistory={moveHistory} />
         </Game>
     );

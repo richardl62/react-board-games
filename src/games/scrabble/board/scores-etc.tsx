@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../../game-support/show-warning";
 import { nNonNull } from "../../../shared/tools";
-import { GameProps } from "./game-props";
+import { useScrabbleContext } from "../scrabble-context";
 
 const StyledScoresEtc=styled.div`
     display: flex;
@@ -19,27 +19,27 @@ const NumTilesInRack=styled.span`
 `;
 
 // To do: Think of a better name
-export function ScoresEtc(props: GameProps): JSX.Element {
+export function ScoresEtc(): JSX.Element {
+    const context = useScrabbleContext();
 
-
-    const scoreElems = props.bgioProps.playOrder.map(pid => {
-        const name = props.bgioProps.name(pid);
-        const score = props.playerData[pid].score;
-        const nInRack = nNonNull(props.playerData[pid].rack);
+    const scoreElems = context.bgioProps.playOrder.map(pid => {
+        const name = context.bgioProps.name(pid);
+        const score = context.playerData[pid].score;
+        const nInRack = nNonNull(context.playerData[pid].rack);
 
         let displayName = name;
-        if (pid === props.bgioProps.playerID) {
+        if (pid === context.bgioProps.playerID) {
             displayName += " (you)";
         }
         
         let nInRackText = "";
-        if(pid !== props.bgioProps.playerID && props.bag.length === 0) {
+        if(pid !== context.bgioProps.playerID && context.bag.length === 0) {
             nInRackText = ` (${nInRack} tiles in rack) `;
         }
 
         return (
             <div key={name} >
-                <PlayerScore current={pid === props.bgioProps.currentPlayer} >
+                <PlayerScore current={pid === context.bgioProps.currentPlayer} >
                     {`${displayName}: ${score}`}
                 </PlayerScore>
                 <NumTilesInRack>{nInRackText}</NumTilesInRack>
@@ -50,7 +50,7 @@ export function ScoresEtc(props: GameProps): JSX.Element {
     return (
         <div>
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...props.bgioProps}/>
+            <GameWarnings {...context.bgioProps}/>
         </div>
     );
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import { boardIDs, SquareID } from "../actions";
-import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "../../../game-support/boardered-grid";
 import { SquareType } from "../config";
@@ -8,19 +7,21 @@ import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../shared/assert";
 import { Tile } from "./tile";
 import { makeExtendedLetter } from "../actions/extended-letter";
-interface RackProps extends GameProps {
+import { useScrabbleContext } from "../scrabble-context";
+interface RackProps {
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;
 }
 
 export function Rack(props: RackProps): JSX.Element {
     const { selected, setSelected } = props;
+    const context = useScrabbleContext();
 
-    const coreTiles = props.rack;
+    const coreTiles = context.rack;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {
-            props.dispatch({
+            context.dispatch({
                 type: "move",
                 data: {from: drag, to: drop}
             });
@@ -34,9 +35,6 @@ export function Rack(props: RackProps): JSX.Element {
         setSelected(newSwappable);
     };
 
-
-
-
     const elems = coreTiles.map((tile, index) => {
         
         const content = tile && <Tile tile={makeExtendedLetter(tile)} />;
@@ -44,8 +42,8 @@ export function Rack(props: RackProps): JSX.Element {
         let onClick;
         if(selected) {
             onClick = () => toggleSelect(index); 
-        } else if (props.clickMoveStart && props.rack[index]) {
-            onClick = () => props.dispatch({
+        } else if (context.clickMoveStart && context.rack[index]) {
+            onClick = () => context.dispatch({
                 type: "clickMove", 
                 data: {rackPos: index}
             });

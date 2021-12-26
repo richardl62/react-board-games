@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { DndProvider } from "../../../game-support/drag-drop";
-import { GameProps } from "./game-props";
+import { useScrabbleContext } from "../scrabble-context";
 import { MainBoard } from "./main-board";
 import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
@@ -26,26 +26,28 @@ export const Game = styled.div`
   gap: 5px;
   `;
 
-export function BagInfo(props: GameProps): JSX.Element {
+export function BagInfo(): JSX.Element {
+    const context = useScrabbleContext();
+
     return <div>
-        Tiles in bag: <span>{props.bag.length}</span>
+        Tiles in bag: <span>{context.bag.length}</span>
     </div>;
 }
 
-export function MainGameArea(props: GameProps): JSX.Element {
+export function MainGameArea(): JSX.Element {
     return <DndProvider>
         <Game>
-            <ScoresEtc {...props} />
-            <RackAndControls {...props} />
+            <ScoresEtc/>
+            <RackAndControls/>
             <Centered>
-                <MainBoard {...props} />
+                <MainBoard/>
             </Centered>
             <SpaceBetween>
                 <WordChecker />
-                <BagInfo {...props} />
+                <BagInfo/>
             </SpaceBetween>
 
-            <TurnControl {...props} />
+            <TurnControl/>
         </Game>
     </DndProvider>;
 }

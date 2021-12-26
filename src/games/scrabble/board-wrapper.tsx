@@ -6,7 +6,8 @@ import { getLocalGameState } from "./actions/local-game-state";
 import { localGameStateReducer } from "./actions/local-game-state-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
-import { ScabbbleGameProps } from "./board/game-props";
+import { ScrabbleContext, ScabbbleGameProps } from "./board/game-props";
+import { ReactScrabbleContext } from "./scrabble-context";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -28,10 +29,14 @@ export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         });
     } 
 
-    return <Board
-        {...state}
-        bgioProps={scrabbleGameProps}
-        config={props.config}
-        dispatch={dispatch}
-    />;
+    const gameProps: ScrabbleContext = {
+        ...state,
+        bgioProps: scrabbleGameProps,
+        config: props.config,
+        dispatch: dispatch,
+    };
+
+    return <ReactScrabbleContext.Provider value={gameProps }>
+        <Board />
+    </ReactScrabbleContext.Provider>;
 }

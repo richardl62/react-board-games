@@ -1,20 +1,20 @@
 import { BoarderedGrid } from "../../../game-support/boardered-grid";
 import React from "react";
 import { boardIDs, SquareID } from "../actions";
-import { GameProps } from "./game-props";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";
 import { Tile } from "./tile";
 import { ClickMoveMarker } from "./click-move-marker";
+import { useScrabbleContext } from "../scrabble-context";
 
-export function MainBoard(props: GameProps): JSX.Element {
-    const { board, clickMoveStart, dispatch } = props;
+export function MainBoard(): JSX.Element {
+    const { board, clickMoveStart, config, dispatch } = useScrabbleContext();
     const nRows = board.length;
     const nCols = board[0].length;
 
     const onDragEnd = ({drag, drop}: {drag: SquareID, drop: SquareID | null}) => {
         if(drop) {
-            props.dispatch({
+            dispatch({
                 type: "move",
                 data: {from: drag, to: drop}
             });
@@ -24,7 +24,7 @@ export function MainBoard(props: GameProps): JSX.Element {
     const elems = [];
     for(let row = 0; row < nRows; ++row) {
         for(let col = 0; col < nCols; ++col) {
-            const tile = props.board[row][col];
+            const tile = board[row][col];
             const active = Boolean(tile?.active);
 
             let content = null;
@@ -47,7 +47,7 @@ export function MainBoard(props: GameProps): JSX.Element {
                     key={[row,col].toString()}
 
                     content={content}
-                    squareType={props.config.boardLayout[row][col]}
+                    squareType={config.boardLayout[row][col]}
 
                     draggable={active}
 

@@ -8,7 +8,7 @@ import { ScrabbleConfig } from "../config";
 
 export type ScabbbleGameProps = WrappedGameProps<GeneralGameState, ClientMoves>;
 
-export interface GameProps extends LocalGameState {
+export interface ScrabbleContext extends LocalGameState {
     readonly bgioProps: ScabbbleGameProps,
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>
