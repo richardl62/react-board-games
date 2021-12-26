@@ -6,7 +6,7 @@ import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
 import { BoardData, GlobalGameState } from "./global-game-state";
-import { MoveHistoryElement, WordsPlayedInfo } from "./move-hstory";
+import { WordsPlayedInfo } from "./move-hstory";
 import { LocalGameState } from "./local-game-state";
 import { ScabbbleGameProps } from "../board/game-props";
 
@@ -94,13 +94,8 @@ export function canSwapTiles(G: GlobalGameState): boolean {
     return G.bag.length >= rackSize;
 }
 
-function addHistory(bgioProps: ScabbbleGameProps, elem: Omit<MoveHistoryElement, "name">) {
-    const name = bgioProps.name(bgioProps.currentPlayer);
-    bgioProps.moves.addHistory({...elem, name:name});   
-}
-
 export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
-    playedWordinfo: WordsPlayedInfo) : void {
+    playedWordinfo: Omit<WordsPlayedInfo,"player">) : void {
 
     const rack = [...localState.rack];
     const bag = [...localState.bag];
@@ -118,13 +113,18 @@ export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProp
         bag: bag,
     });
 
-    addHistory(gameProps, {wordsPlayed: playedWordinfo});    
+    const info = {
+        ...playedWordinfo,
+        player: gameProps.name(gameProps.currentPlayer),
+    };
+
+    gameProps.moves.addHistory({wordsPlayed: info});    
 
     sAssert(gameProps.events.endTurn);
     gameProps.events.endTurn();
 }
 
-export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGameProps, toSwap: boolean[]) : void {
+export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGameProps, toSwap: boolean[]) : void {
     const bag = [...localState.bag];
 
     let nSwapped = 0;    
@@ -139,20 +139,28 @@ export function swapTiles(localState: LocalGameState, bgioProps: ScabbbleGamePro
     }
     shuffle(bag);
     
-    bgioProps.moves.setBoardRandAndScore({
+    gameProps.moves.setBoardRandAndScore({
         score: 0,
         rack: localState.rack,
         board: localState.board,
         bag: bag,
     }); 
 
-    addHistory(bgioProps, {nTilesSwapped: nSwapped});       
-    sAssert(bgioProps.events.endTurn);
-    bgioProps.events.endTurn();
+    const info = {
+        player: gameProps.name(gameProps.currentPlayer),
+        nSwapped: nSwapped,
+    };
+    gameProps.moves.addHistory({tilesSwapped: info});       
+    sAssert(gameProps.events.endTurn);
+    gameProps.events.endTurn();
 }
 
 export function passMove(gameProps: ScabbbleGameProps) : void {
-    addHistory(gameProps, {pass: true});
+
+    const info = {
+        player: gameProps.name(gameProps.currentPlayer),
+    };
+    gameProps.moves.addHistory({pass: info});
 
     sAssert(gameProps.events.endTurn);
     gameProps.events.endTurn();

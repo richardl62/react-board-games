@@ -2,13 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { MoveHistoryElement, WordsPlayedInfo } from "../actions/move-hstory";
 
-const Name = styled.div`
+const FirstSpan = styled.span`
     font-weight: bold;
     padding-right: 0.5em;
 `;
+
 const StyledMoveHistory = styled.div`
-    display: grid;
-    grid-template-columns: auto auto;
     font-family: helvetica;
     font-size: 12px;
 `;
@@ -29,37 +28,16 @@ const Message = styled.div`
     margin-top: 6px;
 `;
 
-interface MoveHistoryProps {
-    moveHistory: MoveHistoryElement [];
-}
-
-export function MoveHistory(props: MoveHistoryProps): JSX.Element {
-
-    const { moveHistory } = props;
-
-    const hasIllegalWords = moveHistory.find(elem => elem.wordsPlayed && elem.wordsPlayed.illegalWords.length > 0);
-    return <div>
-        <StyledMoveHistory>
-            {moveHistory.map((elem, index) =>
-                [
-                    <Name key={"n" + index}>{elem.name + ": "}</Name>,
-                    <TurnDescription key={"t" + index} elem={elem} />
-                ]
-            )}
-        </StyledMoveHistory>
-        {hasIllegalWords && <Message>Illegal words are highlighted</Message>}
-    </div>;
-}
-
 interface WordPlayedProps {
     wordPlayed: WordsPlayedInfo;
 }
 
 function WordPlayed(props: WordPlayedProps) {
-    const {words, illegalWords, score} = props.wordPlayed;
+    const {player, words, illegalWords, score} = props.wordPlayed;
         
     const illegal = (word: string) => illegalWords.includes(word);
     return <div>
+        <FirstSpan>{player}</FirstSpan>
         <span>Played</span>
         {words.map((word, index) => {
             const Elem = illegal(word) ? IllegalWord : Word;
@@ -76,21 +54,45 @@ interface TurnDescriptionProps {
 function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
     const { elem } = props;
 
-    if(elem.pass) {
-        return <div>Passed</div>;
-    }
-
-    if(elem.nTilesSwapped) {
-        return <div>{`Swapped ${elem.nTilesSwapped} tiles`}</div>;
-    }
-
-
-    // Use 'score !=== undefined' as it is technically possible for a word to
-    // score 0.
     if(elem.wordsPlayed) {
         return <WordPlayed wordPlayed={elem.wordsPlayed} />;
     }
-        
-    return <div>Problem with turn description</div>;
 
+    if(elem.tilesSwapped ) {
+        const { player, nSwapped} = elem.tilesSwapped;
+        return <div>
+            <FirstSpan>{player}</FirstSpan>
+            <span>{`swapped ${nSwapped} tiles`}</span>
+        </div>;
+    }
+
+    if(elem.pass) {
+        return <div>
+            <FirstSpan>{elem.pass.player}</FirstSpan>
+            <span>passed</span>
+        </div>;
+    }
+
+    return <div>Problem with turn description</div>;
+}
+
+interface MoveHistoryProps {
+    moveHistory: MoveHistoryElement [];
+}
+
+export function MoveHistory(props: MoveHistoryProps): JSX.Element {
+
+    const { moveHistory } = props;
+
+    const hasIllegalWords = moveHistory.find(elem => elem.wordsPlayed && elem.wordsPlayed.illegalWords.length > 0);
+    return <div>
+        <StyledMoveHistory>
+            {moveHistory.map((elem, index) =>
+                [
+                    <TurnDescription key={"t" + index} elem={elem} />
+                ]
+            )}
+        </StyledMoveHistory>
+        {hasIllegalWords && <Message>Illegal words are highlighted</Message>}
+    </div>;
 }
