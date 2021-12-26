@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { DndProvider } from "../../../game-support/drag-drop";
-import { useScrabbleContext } from "../scrabble-context";
+import { useScrabbleContext } from "./scrabble-context";
 import { MainBoard } from "./main-board";
 import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";

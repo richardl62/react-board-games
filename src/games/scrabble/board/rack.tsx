@@ -7,7 +7,7 @@ import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../shared/assert";
 import { Tile } from "./tile";
 import { makeExtendedLetter } from "../actions/extended-letter";
-import { useScrabbleContext } from "../scrabble-context";
+import { useScrabbleContext } from "./scrabble-context";
 interface RackProps {
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;

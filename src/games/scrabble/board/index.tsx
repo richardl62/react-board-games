@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { MoveHistory } from "./move-history";
 import { MainGameArea } from "./main-game-area";
-import { useScrabbleContext } from "../scrabble-context";
+import { useScrabbleContext } from "./scrabble-context";
 
 const Game = styled.div`
     display: flex;

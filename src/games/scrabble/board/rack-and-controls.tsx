@@ -4,7 +4,7 @@ import { sAssert } from "../../../shared/assert";
 import { Rack } from "./rack";
 import { BoardData } from "../actions/global-game-state";
 import { swapTiles } from "../actions/game-actions";
-import { useScrabbleContext } from "../scrabble-context";
+import { useScrabbleContext } from "./scrabble-context";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;

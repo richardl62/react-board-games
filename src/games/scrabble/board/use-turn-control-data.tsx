@@ -3,7 +3,7 @@ import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../actions";
 import { findUnsetBlack } from "../actions/board-and-rack";
 import { playWord, passMove } from "../actions/game-actions";
-import { useScrabbleContext } from "../scrabble-context";
+import { useScrabbleContext } from "./scrabble-context";
 
 function sameWordList(words1: string[], words2: string[]): boolean {
     return words1.join() === words2.join();

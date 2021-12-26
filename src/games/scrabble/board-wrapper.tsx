@@ -6,8 +6,8 @@ import { getLocalGameState } from "./actions/local-game-state";
 import { localGameStateReducer } from "./actions/local-game-state-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
-import { ScrabbleContext, ScabbbleGameProps } from "./board/game-props";
-import { ReactScrabbleContext } from "./scrabble-context";
+import { ScabbbleGameProps } from "./board/game-props";
+import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;

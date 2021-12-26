@@ -5,7 +5,7 @@ import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";
 import { Tile } from "./tile";
 import { ClickMoveMarker } from "./click-move-marker";
-import { useScrabbleContext } from "../scrabble-context";
+import { useScrabbleContext } from "./scrabble-context";
 
 export function MainBoard(): JSX.Element {
     const { board, clickMoveStart, config, dispatch } = useScrabbleContext();
