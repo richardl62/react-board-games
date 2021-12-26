@@ -2,7 +2,7 @@
 // pass and swapTiles in set.
 
 export interface WordsPlayedInfo {
-    player: string;
+    pid: string;
 
     words: string[];
     score: number;
@@ -13,10 +13,10 @@ export interface WordsPlayedInfo {
 export interface MoveHistoryElement {
     wordsPlayed?: WordsPlayedInfo;
 
-    pass?: {player: string};
+    pass?: {pid: string};
 
     tilesSwapped?: {
-        player: string;
+        pid: string;
         nSwapped: number;
     };
 }

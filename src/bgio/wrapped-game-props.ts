@@ -64,6 +64,11 @@ export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGamePr
         currentPlayer: bgioProps.ctx.currentPlayer,
         isMyTurn: bgioProps.playerID === bgioProps.ctx.currentPlayer,
         name: (pid: string) => {
+            const pd = playerData[pid];
+            if(!pd) {
+                console.error("Invalid player id:", pid);
+                return "<unknown>";
+            }
             return playerData[pid].name;
         }
     };

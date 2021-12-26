@@ -95,7 +95,7 @@ export function canSwapTiles(G: GlobalGameState): boolean {
 }
 
 export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
-    playedWordinfo: Omit<WordsPlayedInfo,"player">) : void {
+    playedWordinfo: Omit<WordsPlayedInfo,"pid">) : void {
 
     const rack = [...localState.rack];
     const bag = [...localState.bag];
@@ -115,7 +115,7 @@ export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProp
 
     const info = {
         ...playedWordinfo,
-        player: gameProps.name(gameProps.currentPlayer),
+        pid: gameProps.currentPlayer,
     };
 
     gameProps.moves.addHistory({wordsPlayed: info});    
@@ -147,7 +147,7 @@ export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGamePro
     }); 
 
     const info = {
-        player: gameProps.name(gameProps.currentPlayer),
+        pid: gameProps.currentPlayer,
         nSwapped: nSwapped,
     };
     gameProps.moves.addHistory({tilesSwapped: info});       
@@ -158,7 +158,7 @@ export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGamePro
 export function passMove(gameProps: ScabbbleGameProps) : void {
 
     const info = {
-        player: gameProps.name(gameProps.currentPlayer),
+        pid: gameProps.name(gameProps.currentPlayer),
     };
     gameProps.moves.addHistory({pass: info});
 
