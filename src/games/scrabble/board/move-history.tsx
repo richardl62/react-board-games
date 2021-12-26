@@ -74,7 +74,7 @@ function ScoreAdjustments(props: ScoreAdjustmentsProps) {
         if(index < preprocessed.length - 1) {
             text += ", ";
         }
-        elems.push(<span>{text}</span>);
+        elems.push(<span key={id}>{text}</span>);
     }
 
     return <div>

@@ -36,9 +36,9 @@ const addHistory: Move<GlobalGameState> = (G, ctx,
     G.moveHistory.push(historyElement);
 };
 
-type SetScoresParam =  {[id: string] : number};
-const setScores: Move<GlobalGameState> = (G, ctx, 
-    adjustments : SetScoresParam
+type AdjustParam =  {[id: string] : number};
+const adjustScores: Move<GlobalGameState> = (G, ctx, 
+    adjustments : AdjustParam
 ) => {
     try {
         for(const id in adjustments) {
@@ -54,11 +54,11 @@ const setScores: Move<GlobalGameState> = (G, ctx,
 export const bgioMoves = {
     setBoardRandAndScore: setBoardRandAndScore,
     addHistory: addHistory,
-    setScores: setScores,
+    adjustScores: adjustScores,
 };
 
 export interface ClientMoves {
     setBoardRandAndScore: (arg: SetBoardRandAndScoreParam) => void;
     addHistory: (arg: AddHistoryParam) => void;
-    setScores: (arg: SetScoresParam) => void;
+    adjustScores: (arg: AdjustParam) => void;
 }

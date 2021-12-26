@@ -94,36 +94,6 @@ export function canSwapTiles(G: GlobalGameState): boolean {
     return G.bag.length >= rackSize;
 }
 
-export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
-    playedWordinfo: Omit<WordsPlayedInfo,"pid">) : void {
-
-    const rack = [...localState.rack];
-    const bag = [...localState.bag];
-    for (let ri = 0; ri < rack.length; ++ri) {
-        if(!rack[ri]) {
-            const letter = bag.pop();
-            rack[ri] = letter || null;
-        }
-    }
-
-    gameProps.moves.setBoardRandAndScore({
-        score: playedWordinfo.score,
-        rack: rack,
-        board: localState.board,
-        bag: bag,
-    });
-
-    const info = {
-        ...playedWordinfo,
-        pid: gameProps.currentPlayer,
-    };
-
-    gameProps.moves.addHistory({wordsPlayed: info});    
-
-    sAssert(gameProps.events.endTurn);
-    gameProps.events.endTurn();
-}
-
 export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGameProps, toSwap: boolean[]) : void {
     const bag = [...localState.bag];
 
@@ -192,24 +162,22 @@ function findWinners(scores: {[id: string] : number} ) : string[] {
     return winners;
 }
 
-export function gameEndScoreAdjustments(state: LocalGameState) : void {
+export function gameEndActions(state: LocalGameState, playerOutPid: string) : void {
     const scoreAdjustement : {[id: string] : number} = {};
     let totalRackScores = 0;
 
     const gameProps = state.scrabbleGameProps;
     const playerData = gameProps.G.playerData;
-    for(const pid in playerData) {
-        const rackScore = letterValue(playerData[pid].rack);
-        totalRackScores += rackScore;
-
-        scoreAdjustement[pid] = -rackScore;
-    }
-
-    for(const pid in playerData) {
-        if(nNonNull(playerData[pid].rack) === 0) {
-            scoreAdjustement[pid] = totalRackScores;
+    for (const pid in playerData) {
+        if (playerOutPid) {
+            const rackScore = letterValue(playerData[pid].rack);
+            totalRackScores += rackScore;
+            scoreAdjustement[pid] = -rackScore;
         }
     }
+
+    scoreAdjustement[playerOutPid] = totalRackScores;
+    state.scrabbleGameProps.moves.adjustScores(scoreAdjustement);
 
     gameProps.moves.addHistory({scoresAdjusted: scoreAdjustement});
 
@@ -217,8 +185,40 @@ export function gameEndScoreAdjustments(state: LocalGameState) : void {
     for(const pid in playerData) {
         newScores[pid] = playerData[pid].score + scoreAdjustement[pid];
     }
-    
-    state.scrabbleGameProps.moves.setScores(scoreAdjustement);
 
     gameProps.moves.addHistory({gameOver: {winners: findWinners(newScores)}} );
+}
+
+export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
+    playedWordinfo: Omit<WordsPlayedInfo,"pid">) : void {
+
+    const rack = [...localState.rack];
+    const bag = [...localState.bag];
+    for (let ri = 0; ri < rack.length; ++ri) {
+        if(!rack[ri]) {
+            const letter = bag.pop();
+            rack[ri] = letter || null;
+        }
+    }
+
+    gameProps.moves.setBoardRandAndScore({
+        score: playedWordinfo.score,
+        rack: rack,
+        board: localState.board,
+        bag: bag,
+    });
+
+    const info = {
+        ...playedWordinfo,
+        pid: gameProps.currentPlayer,
+    };
+
+    gameProps.moves.addHistory({wordsPlayed: info});  
+    
+    if(nNonNull(rack) === 0 && bag.length === 0) {
+        gameEndActions(localState,  gameProps.currentPlayer);
+    }
+
+    sAssert(gameProps.events.endTurn);
+    gameProps.events.endTurn();
 }
