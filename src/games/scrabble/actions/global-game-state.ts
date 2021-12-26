@@ -33,6 +33,9 @@ export interface GlobalGameState {
 
     moveHistory: MoveHistoryElement[];
 
+    // More than one Id implies there was a draw.
+    winnerIds: string[] | null;
+
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
 }
@@ -95,6 +98,7 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
         bag: bag,
         turn: 0,
         timestamp: 0,
+        winnerIds: null,
 
         moveHistory: initialMoveHistory,
     };

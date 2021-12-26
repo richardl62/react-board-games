@@ -186,7 +186,9 @@ export function gameEndActions(state: LocalGameState, playerOutPid: string) : vo
         newScores[pid] = playerData[pid].score + scoreAdjustement[pid];
     }
 
-    gameProps.moves.addHistory({gameOver: {winners: findWinners(newScores)}} );
+    const winners = findWinners(newScores);
+    gameProps.moves.setWinners({ids: winners} );
+    gameProps.moves.addHistory({gameOver: {winners: winners}} );
 }
 
 export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
@@ -215,7 +217,9 @@ export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProp
 
     gameProps.moves.addHistory({wordsPlayed: info});  
     
-    if(nNonNull(rack) === 0 && bag.length === 0) {
+    // Play can continue after a winner has been declared, but end game
+    // actions should happen only once.
+    if(nNonNull(rack) === 0 && bag.length === 0 && !gameProps.G.winnerIds) {
         gameEndActions(localState,  gameProps.currentPlayer);
     }
 

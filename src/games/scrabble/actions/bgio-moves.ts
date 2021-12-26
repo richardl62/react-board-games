@@ -29,6 +29,13 @@ const setBoardRandAndScore: Move<GlobalGameState> = (G, ctx,
     G.timestamp++;
 };
 
+type SetWinnerParam =  {ids : string[]};
+const setWinners: Move<GlobalGameState> = (G, ctx,
+    {ids} : SetWinnerParam
+) => {
+    G.winnerIds = ids;
+};
+
 type AddHistoryParam = MoveHistoryElement;
 const addHistory: Move<GlobalGameState> = (G, ctx,
     historyElement : AddHistoryParam
@@ -55,10 +62,12 @@ export const bgioMoves = {
     setBoardRandAndScore: setBoardRandAndScore,
     addHistory: addHistory,
     adjustScores: adjustScores,
+    setWinners: setWinners,
 };
 
 export interface ClientMoves {
     setBoardRandAndScore: (arg: SetBoardRandAndScoreParam) => void;
     addHistory: (arg: AddHistoryParam) => void;
     adjustScores: (arg: AdjustParam) => void;
+    setWinners: (arg: SetWinnerParam) => void;
 }
