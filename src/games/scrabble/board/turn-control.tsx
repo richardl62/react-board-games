@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { LetterSelector } from "./letter-selector";
 import { useTurnControlData } from "./use-turn-control-data";
-import { gameEndActions } from "../actions/game-actions";
-import { useScrabbleContext } from "./scrabble-context";
 
 export const StyledScoreLine = styled.div`
   display: flex; 
@@ -25,7 +23,6 @@ const StyledIllegalWords = styled.div`
 
 /** 'Dumb' class that does the formatting for TurnControl */
 export function TurnControl(): JSX.Element {
-    const context = useScrabbleContext();
     const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData();
     const doButtonText = illegalWords ?
         "Done (permitting illegal words)" :
@@ -35,9 +32,6 @@ export function TurnControl(): JSX.Element {
     if(doSetBlank) {
         return <LetterSelector recordSelection={doSetBlank} />;
     }
-
-    const onEndGame = () =>
-        gameEndActions(context, context.bgioProps.currentPlayer);
 
     return (
         <div>
@@ -50,7 +44,6 @@ export function TurnControl(): JSX.Element {
 
             <StyledScoreLine>
                 {score && <span>{"Score this turn: " + score}</span>}
-                <button onClick={onEndGame}>End Game</button>
                 {onPass && <button onClick={onPass}>Pass</button>}
                 {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
                 {onDone && <button onClick={onDone}> {doButtonText} </button>}

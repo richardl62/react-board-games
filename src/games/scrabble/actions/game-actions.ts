@@ -162,7 +162,7 @@ function findWinners(scores: {[id: string] : number} ) : string[] {
     return winners;
 }
 
-export function gameEndActions(state: LocalGameState, playerOutPid: string) : void {
+function gameEndActions(state: LocalGameState, playerOutPid: string) : void {
     const scoreAdjustement : {[id: string] : number} = {};
     let totalRackScores = 0;
 
