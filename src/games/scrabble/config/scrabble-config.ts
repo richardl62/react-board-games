@@ -77,9 +77,8 @@ const simple: ScrabbleConfig = {
 
     makeFullBag: () : Letter[] => {
         // Unshuffled to help with testing
-        const letters : Letter[] = ["A", "B", "C", "?", 
-            "D",  "E", "F", "?", 
-            "G", "H", "I", "J"];
+        const letters : Letter[] = ["W", "O", "R", "D", 
+            "D",  "A", "T", "E"];
             
         return letters.reverse();
     },
