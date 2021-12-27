@@ -91,7 +91,8 @@ function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE
 
 const game: AppGame = {
     name: "swap-squares",
-    displayName: "Swap Squares (for testing)",
+    displayName: "Swap Squares",
+    category: "test",
 
     setup: (): G => {
         return { squares: [...initialSquares] };

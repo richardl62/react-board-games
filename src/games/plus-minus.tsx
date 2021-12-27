@@ -66,7 +66,8 @@ function Board(props: WrappedGameProps<G,DefaultMovesType/*KLUDGE*/>): JSX.Eleme
 
 const game: AppGame = {
     name: "plusminus",
-    displayName: "Plus Minus (for testing)",
+    displayName: "Plus Minus",
+    category: "test",
 
     setup: (): G => {
         return {

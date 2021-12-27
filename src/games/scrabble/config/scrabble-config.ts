@@ -1,5 +1,6 @@
 import { sAssert } from "../../../shared/assert";
 import { shuffle } from "../../../shared/tools";
+import { AppGame } from "../../../shared/types";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 
@@ -12,6 +13,7 @@ const s = SquareType.simple;
 export interface ScrabbleConfig {
     name: string,
     displayName: string,
+    category: AppGame["category"],
     minPlayers: number,
     maxPlayers: number, 
     
@@ -32,6 +34,7 @@ export interface ScrabbleConfig {
 const standard : ScrabbleConfig = {
     name: "scrabble",
     displayName: "Scrabble",
+    category: "standard",
     minPlayers: 1,
     maxPlayers: 4, 
 
@@ -70,7 +73,8 @@ standard.boardLayout.forEach(row => sAssert(row.length === 15));
 
 const simple: ScrabbleConfig = {
     name: "scrabble-simple",
-    displayName: "Simple Scrabble (for testing)",
+    displayName: "Simple Scrabble",
+    category: "test",
     minPlayers: 1,
     maxPlayers: 4,
     rackSize: 4,
