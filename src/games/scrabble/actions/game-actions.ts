@@ -128,7 +128,7 @@ export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGamePro
 export function passMove(gameProps: ScabbbleGameProps) : void {
 
     const info = {
-        pid: gameProps.name(gameProps.currentPlayer),
+        pid: gameProps.currentPlayer,
     };
     gameProps.moves.addHistory({pass: info});
 
@@ -169,7 +169,7 @@ function gameEndActions(state: LocalGameState, playerOutPid: string) : void {
     const gameProps = state.scrabbleGameProps;
     const playerData = gameProps.G.playerData;
     for (const pid in playerData) {
-        if (playerOutPid) {
+        if (pid !== playerOutPid) {
             const rackScore = letterValue(playerData[pid].rack);
             totalRackScores += rackScore;
             scoreAdjustement[pid] = -rackScore;

@@ -78,7 +78,7 @@ function ScoreAdjustments(props: ScoreAdjustmentsProps) {
     }
 
     return <div>
-        <FirstSpan>Scores adjusted: </FirstSpan>
+        <FirstSpan>Scores adjusted</FirstSpan>
         {elems}
     </div>;
 }
@@ -93,7 +93,7 @@ function GameOver(props: WinnersProps) {
     if(winners.length === 1) {
 
         return <div>
-            <FirstSpan>Winner:</FirstSpan>
+            <FirstSpan>Winner</FirstSpan>
             <span>{name(winners[0])}</span>
         </div>;
     } else {

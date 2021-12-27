@@ -45,7 +45,6 @@ function isOffline(props: BgioBoardProps) : boolean {
 }
 
 export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
-    console.log("makePlayerData", props.matchID, props);
     const matchData = props.matchData;
     if(!matchData) {
         console.warn("Bgio match data is null");
