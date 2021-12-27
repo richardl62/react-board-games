@@ -7,9 +7,19 @@ import "./app.css";
 import { gameComponent } from "./game-component";
 import { gamePath } from "./url-params";
 
-const GameLinksStyled = styled.div`
-  display: flex;
-  flex-direction: column;
+const HomePageStyles = styled.div`
+    h1 {
+        font-size: 14pt;
+
+        font-weight: bold;
+    }
+    
+    h2 {
+        margin-top: 6px;
+        font-size: 12pt;
+
+        font-weight: bold;
+    }
 `;
 
 const ErrorMessage = styled.div`
@@ -18,44 +28,61 @@ const ErrorMessage = styled.div`
   margin-bottom: 0.5em;
 `;
 
-interface HomePageProps {
-  games: Array<AppGame>;
-}
+interface LinkListProps {
+    games: Array<AppGame>;
+    category: AppGame["category"];
+  }
+  
+function LinkList(props: LinkListProps) {
+    const { games, category } =  props;
+    const selectedGames =  games.filter(appGame => appGame.category === category);
 
-function gameLinkElement(game: AppGame): JSX.Element {
-    const key = (n: number) => game.name + n;
-    const to = {
-        pathname: gamePath(game),
-        search: window.location.search,
+    const link = (game: AppGame) => {
+        const to = {
+            pathname: gamePath(game),
+            search: window.location.search,
+        };
+
+        return <li key={game.name}>
+            <Link to={to}>{game.displayName}</Link>
+        </li>;
     };
-    return <Link key={key(3)} to={to}>{game.displayName}</Link>;
+
+    return <ul>
+        {selectedGames.map(link)}
+    </ul>;
 }
 
+interface HomePageProps {
+    games: Array<AppGame>;
+}
+  
 function GameLinks({ games }: HomePageProps) {
+
     return (
-        <GameLinksStyled>
-            {games.map(gameLinkElement)}
-        </GameLinksStyled>
+        <div>
+            <h2>Standard</h2>
+            <LinkList games={games} category="standard" />
+            <h2>Test/Debug</h2>
+            <LinkList games={games} category="test" />
+        </div>
     );
 }
 
 function HomePage(props: HomePageProps) {
-    return (
-        <div>
-            <h2>Available Games</h2>
-            <GameLinks {...props} />
-        </div>
-    );
+    return <HomePageStyles>
+        <h2>Available Games</h2>
+        <GameLinks {...props} />
+    </HomePageStyles>;
 }
 
 function PageNotFound(props: HomePageProps) {
-    return (
-        <div>
-            <ErrorMessage>404: Page Not Found</ErrorMessage>
-            <div>You could try one of these links:</div>
-            <GameLinks {...props} />
-        </div>
-    );
+    return <HomePageStyles>
+        <ErrorMessage>404: Page Not Found</ErrorMessage>
+        <div>You could try one of these links:</div>
+        <GameLinks {...props} />
+    </HomePageStyles>;
+         
 }
 
 /**
