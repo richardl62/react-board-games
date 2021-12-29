@@ -10,15 +10,13 @@ import { gamePath } from "./url-params";
 const HomePageStyles = styled.div`
     h1 {
         font-size: 14pt;
-
         font-weight: bold;
     }
     
     h2 {
         margin-top: 6px;
         font-size: 12pt;
-
-        font-weight: bold;
+        font-weight: 600;
     }
 `;
 
@@ -71,7 +69,7 @@ function GameLinks({ games }: HomePageProps) {
 
 function HomePage(props: HomePageProps) {
     return <HomePageStyles>
-        <h2>Available Games</h2>
+        <h1>Available Games</h1>
         <GameLinks {...props} />
     </HomePageStyles>;
 }
