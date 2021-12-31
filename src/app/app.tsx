@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { games as appGames } from "../games";
-import { AppGame } from "../shared/types";
+import { AppGame, GameCategory } from "../shared/types";
 import "./app.css";
 import { gameComponent } from "./game-component";
 import { gamePath } from "./url-params";
@@ -28,10 +28,10 @@ const ErrorMessage = styled.div`
 
 interface LinkListProps {
     games: Array<AppGame>;
-    category: AppGame["category"];
+    category: GameCategory;
   }
   
-function LinkList(props: LinkListProps) {
+function CategoryLinks(props: LinkListProps) {
     const { games, category } =  props;
     const selectedGames =  games.filter(appGame => appGame.category === category);
 
@@ -46,9 +46,16 @@ function LinkList(props: LinkListProps) {
         </li>;
     };
 
-    return <ul>
-        {selectedGames.map(link)}
-    </ul>;
+    if(selectedGames.length === 0) {
+        return null;
+    }
+
+    return <>
+        <h2>{category}</h2>
+        <ul>
+            {selectedGames.map(link)}
+        </ul>
+    </>;
 }
 
 interface HomePageProps {
@@ -56,13 +63,11 @@ interface HomePageProps {
 }
   
 function GameLinks({ games }: HomePageProps) {
-
     return (
         <div>
-            <h2>Standard</h2>
-            <LinkList games={games} category="standard" />
-            <h2>Test/Debug</h2>
-            <LinkList games={games} category="test" />
+            {Object.values(GameCategory).map((category : GameCategory) =>
+                <CategoryLinks key={category} games={games} category={category} />
+            )}
         </div>
     );
 }

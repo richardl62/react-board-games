@@ -2,7 +2,7 @@ import React from "react";
 import { BoarderedGrid } from "../game-support/boardered-grid";
 import { DndProvider } from "../game-support/drag-drop";
 import { DragDrop, PieceHolder } from "../game-support/piece-holder";
-import { AppGame } from "../shared/types";
+import { AppGame, GameCategory } from "../shared/types";
 import { Ctx } from "boardgame.io";
 import { WrappedGameProps } from "../bgio";
 import { DefaultMovesType } from "../bgio/wrapped-game-props";
@@ -92,7 +92,7 @@ function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE
 const game: AppGame = {
     name: "swap-squares",
     displayName: "Swap Squares",
-    category: "test",
+    category: GameCategory.test,
 
     setup: (): G => {
         return { squares: [...initialSquares] };

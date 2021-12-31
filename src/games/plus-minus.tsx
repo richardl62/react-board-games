@@ -1,7 +1,7 @@
 import React from "react";
 import { Ctx } from "boardgame.io";
 import { GameWarnings } from "../game-support/show-warning";
-import { AppGame } from "../shared/types";
+import { AppGame, GameCategory } from "../shared/types";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../game-support/waiting-for-players";
 import { WrappedGameProps } from "../bgio";
@@ -67,7 +67,7 @@ function Board(props: WrappedGameProps<G,DefaultMovesType/*KLUDGE*/>): JSX.Eleme
 const game: AppGame = {
     name: "plusminus",
     displayName: "Plus Minus",
-    category: "test",
+    category: GameCategory.test,
 
     setup: (): G => {
         return {
