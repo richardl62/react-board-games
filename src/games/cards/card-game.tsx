@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { deck, CardSVG, Card } from "./card";
+import { deck, CardSVG, cardName } from "./card";
 
 const CardDisplay = styled.div`
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+
+    grid-template-columns: repeat(4, auto);
+
 
     > * {
         padding: 2px;
@@ -12,9 +14,9 @@ const CardDisplay = styled.div`
 `;
 
 export function CardGame() : JSX.Element {
-    const cards = deck();
-    const key = (card: Card) => card.rank+card.suit;
+    const cards = deck({jokers:true});
+
     return <CardDisplay>
-        {cards.map(card => <CardSVG key={key(card)} card={card}/>)}
+        {cards.map(card => <CardSVG key={cardName(card)} card={card}/>)}
     </CardDisplay>;
 }
