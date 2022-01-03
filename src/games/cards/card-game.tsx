@@ -1,22 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { deck, CardSVG, cardName } from "./card";
+import { CardSVG } from "./card";
+
 
 const CardDisplay = styled.div`
-    display: grid;
-
-    grid-template-columns: repeat(4, auto);
-
-
-    > * {
-        padding: 2px;
-    }
 `;
 
 export function CardGame() : JSX.Element {
-    const cards = deck({jokers:true});
-
     return <CardDisplay>
-        {cards.map(card => <CardSVG key={cardName(card)} card={card}/>)}
+        <CardSVG card={{rank: "A", suit: "S"}} />
+        <CardSVG card={{rank: "A", suit: "H"}} />
+        <CardSVG showBack={true} />
+        <CardSVG showBack={"red"} />
+        <CardSVG card={{rank: "A", suit: "H"}} showBack={"black"} />
     </CardDisplay>;
 }

@@ -55,7 +55,7 @@ import { ReactComponent as CardTC } from "./images/TC.svg";
 import { ReactComponent as CardTD } from "./images/TD.svg";
 import { ReactComponent as CardTH } from "./images/TH.svg";
 import { ReactComponent as CardTS } from "./images/TS.svg";
-import { Card } from "./card";
+import { Card, CardBack } from "./types";
 import { sAssert } from "../../shared/assert";
 
 function getCardComponentByFileName(name: string) {
@@ -120,7 +120,7 @@ function getCardComponentByFileName(name: string) {
 }
 
 export function getCardComponent(card: Card) : React.FunctionComponent<React.SVGProps<SVGSVGElement> & {
-    title?: string | undefined;
+    title?: string;
 }> {
     const { rank, suit, joker } = card;
 
@@ -133,5 +133,13 @@ export function getCardComponent(card: Card) : React.FunctionComponent<React.SVG
         const rankLetter = rank === "10" ? "T" : rank; 
         fileName = rankLetter+suit;
     }
+    return getCardComponentByFileName(fileName);
+}
+
+export function getCardBackComponent(cardBack: CardBack) : React.FunctionComponent<React.SVGProps<SVGSVGElement> & {
+    title?: string;
+}> {
+    const fileName = cardBack === "black" ? "1B" : "2B";
+
     return getCardComponentByFileName(fileName);
 }
