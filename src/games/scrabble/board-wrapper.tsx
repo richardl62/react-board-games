@@ -14,7 +14,7 @@ export interface BoardWrapperProps {
     config: ScrabbleConfig
 }
 
-export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
+function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const scrabbleGameProps = props.appBoardProps as unknown as ScabbbleGameProps;
     sAssert(isGlobalGameState(scrabbleGameProps.G), "Game state appears to be invalid");
 
@@ -40,3 +40,5 @@ export function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         <Board />
     </ReactScrabbleContext.Provider>;
 }
+
+export default BoardWrapper;

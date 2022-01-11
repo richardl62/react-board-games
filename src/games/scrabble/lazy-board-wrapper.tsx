@@ -1,0 +1,19 @@
+import React, { Suspense } from "react";
+import { WrappedGameProps } from "../../bgio";
+import { ScrabbleConfig } from "./config";
+
+const BoardWrapper = React.lazy(() => import("./board-wrapper"));
+
+export interface LazyBoardWrapperProps {
+    appBoardProps: WrappedGameProps;
+    config: ScrabbleConfig
+}
+
+// Use Lazy/Suspense here rather than directly in BoardWrapper.
+// This avoids some loading that would otherwise occur due to the imports used
+// for board wrapper.
+export function LazyBoardWrapper(props: LazyBoardWrapperProps): JSX.Element {
+    return <Suspense fallback={<div>Loading...</div>}>
+        <BoardWrapper {...props} />
+    </Suspense>;
+}
