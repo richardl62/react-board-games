@@ -6,9 +6,10 @@ import { ScabbbleGameProps } from "./game-props";
 import { ScrabbleConfig } from "../config";
 
 export interface ScrabbleContext extends LocalGameState {
-    readonly bgioProps: ScabbbleGameProps,
+    readonly bgioProps: ScabbbleGameProps;
     readonly config: ScrabbleConfig;
-    readonly dispatch:  Dispatch<ActionType>
+    readonly dispatch:  Dispatch<ActionType>;
+    readonly isLegalWord: (word: string) => boolean;
 }
 
 export const ReactScrabbleContext = React.createContext<ScrabbleContext|null>(null);

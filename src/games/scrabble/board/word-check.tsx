@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { isLegalWord } from "../../../shared/is-legal-word";
+import { useScrabbleContext } from "./scrabble-context";
 
 const WordInput = styled.input`
   margin-right: 0.2em;
@@ -19,6 +19,7 @@ function Validity({ valid }: { valid: boolean; }) {
 export function WordChecker(): JSX.Element {
     const [word, setEnteredWord] = useState("");
     const [valid, setValid] = useState<boolean | "unknown">("unknown");
+    const context = useScrabbleContext();
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const rawWord = e.target.value;
@@ -28,7 +29,7 @@ export function WordChecker(): JSX.Element {
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        setValid(isLegalWord(word));
+        setValid(context.isLegalWord(word));
         e.preventDefault();
     };
 

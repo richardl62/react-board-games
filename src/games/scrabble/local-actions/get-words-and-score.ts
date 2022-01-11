@@ -1,10 +1,8 @@
 import { sAssert } from "../../../shared/assert";
-import { isLegalWord } from "../../../shared/is-legal-word";
 import { BoardData, BoardSquareData } from "../global-actions/global-game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
-import { LocalGameState } from "./local-game-state";
-import { ScrabbleConfig } from "../config";
+import { ScrabbleContext } from "../board/scrabble-context";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
@@ -173,21 +171,22 @@ interface WordsAndScore {
     illegalWords: string[] | null;
   }
 
-export function getWordsAndScore(localState: LocalGameState, config: ScrabbleConfig, active: RowCol[]): WordsAndScore | null {
-    const candidateWords = findCandidateWords(localState.board, active);
+export function getWordsAndScore(context: ScrabbleContext, active: RowCol[]): WordsAndScore | null {
+    const candidateWords = findCandidateWords(context.board, active);
+    const config = context.config;
 
     if (!candidateWords) {
         return null;
     }
 
-    const words = candidateWords.map(cw => getWord(localState.board, cw));
+    const words = candidateWords.map(cw => getWord(context.board, cw));
   
-    let illegalWords : string[] | null = words.filter(wd => !isLegalWord(wd));
+    let illegalWords : string[] | null = words.filter(wd => !context.isLegalWord(wd));
     if(illegalWords.length === 0) {
         illegalWords = null;
     }
 
-    let score = scoreWords(localState.board, candidateWords, config);
+    let score = scoreWords(context.board, candidateWords, config);
     if (active.length === config.rackSize) {
         score += config.allLetterBonus;
     }

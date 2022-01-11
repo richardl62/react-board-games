@@ -8,6 +8,7 @@ import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
 import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
 import { isGlobalGameState } from "./global-actions";
+import { isLegalWord } from "../../shared/is-legal-word";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -34,6 +35,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         bgioProps: scrabbleGameProps,
         config: props.config,
         dispatch: dispatch,
+        isLegalWord: isLegalWord,
     };
 
     return <ReactScrabbleContext.Provider value={gameProps }>

@@ -30,7 +30,7 @@ export function useTurnControlData(): TurnControlData {
     const [blankToSet, setBlankToSet] = useState<SquareID | null>(null);
 
     const active = findActiveLetters(context);
-    const wordsAndScore = getWordsAndScore(context, context.config, active);
+    const wordsAndScore = getWordsAndScore(context, active);
     const unsetBlank = findUnsetBlack(context.board);
 
     if (illegalWordsData) {
