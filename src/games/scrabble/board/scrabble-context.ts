@@ -1,7 +1,7 @@
 import React, { Dispatch } from "react";
 import { sAssert } from "../../../shared/assert";
-import { LocalGameState } from "../actions/local-game-state";
-import { ActionType } from "../actions/local-game-state-reducer";
+import { LocalGameState } from "../local-actions/local-game-state";
+import { ActionType } from "../local-actions/local-game-state-reducer";
 import { ScabbbleGameProps } from "./game-props";
 import { ScrabbleConfig } from "../config";
 

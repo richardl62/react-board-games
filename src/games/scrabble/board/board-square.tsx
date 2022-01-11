@@ -1,7 +1,7 @@
 import React from "react";
 import { DragDrop, PieceHolder, PieceHolderStyle } from "../../../game-support/piece-holder";
 import { squareSize, squareBackground, hoverBorderColor, hightlightBorderColor } from "./style";
-import { SquareID } from "../actions";
+import { SquareID } from "../local-actions";
 import { SquareType } from "../config";
 
 interface BoardSquareProps {

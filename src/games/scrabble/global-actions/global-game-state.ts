@@ -2,7 +2,7 @@ import { sAssert } from "../../../shared/assert";
 import { nestedArrayMap } from "../../../shared/tools";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
-import { ExtendedLetter } from "../actions/extended-letter";
+import { ExtendedLetter } from "../local-actions/extended-letter";
 import { MoveHistoryElement } from "./move-hstory";
 
 export interface BoardSquareData extends ExtendedLetter {

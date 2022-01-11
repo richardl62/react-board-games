@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "../../../shared/assert";
 import { Rack } from "./rack";
 import { BoardData } from "../global-actions/global-game-state";
-import { swapTiles } from "../actions/game-actions";
+import { swapTiles } from "../local-actions/game-actions";
 import { useScrabbleContext } from "./scrabble-context";
 
 const StyledRackAndControls = styled.div`

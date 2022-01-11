@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ClickMoveDirection } from "../actions/local-game-state";
+import { ClickMoveDirection } from "../local-actions/local-game-state";
 import { squareSize } from "./style";
 const OuterDiv = styled.div<{rotation: string}>`
     display: flex;

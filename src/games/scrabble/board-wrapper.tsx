@@ -1,8 +1,8 @@
 import React, { useReducer } from "react";
 import { sAssert } from "../../shared/assert";
 import { WrappedGameProps } from "../../bgio";
-import { getLocalGameState } from "./actions/local-game-state";
-import { localGameStateReducer } from "./actions/local-game-state-reducer";
+import { getLocalGameState } from "./local-actions/local-game-state";
+import { localGameStateReducer } from "./local-actions/local-game-state-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
