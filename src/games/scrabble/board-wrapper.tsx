@@ -1,13 +1,13 @@
 import React, { useReducer } from "react";
 import { sAssert } from "../../shared/assert";
 import { WrappedGameProps } from "../../bgio";
-import { isGlobalGameState } from "./actions";
 import { getLocalGameState } from "./actions/local-game-state";
 import { localGameStateReducer } from "./actions/local-game-state-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
 import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
+import { isGlobalGameState } from "./global-actions";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
