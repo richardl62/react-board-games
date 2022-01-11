@@ -8,7 +8,7 @@ import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
 import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
 import { isGlobalGameState } from "./global-actions";
-import { getWordChecker } from "../../shared/get-word-checker";
+import { getWordChecker } from "./get-word-checker";
 import { useAsync } from "react-async-hook";
 import { WaitingOrError } from "../../shared/waiting-or-error";
 
