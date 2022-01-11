@@ -2,7 +2,7 @@ import { sAssert } from "../../../shared/assert";
 import { ScabbbleGameProps } from "../board/game-props";
 import { Letter, ScrabbleConfig } from "../config";
 import { Rack } from "./board-and-rack";
-import { BoardData, GlobalGameState } from "./global-game-state";
+import { BoardData, GlobalGameState } from "../global-actions/global-game-state";
 
 export type ClickMoveDirection = "right" | "down";
 

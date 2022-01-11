@@ -1,6 +1,6 @@
 import { sAssert } from "../../../shared/assert";
 import { ExtendedLetter, makeExtendedLetter } from "./extended-letter";
-import { BoardData, BoardSquareData } from "./global-game-state";
+import { BoardData, BoardSquareData } from "../global-actions/global-game-state";
 import { blank, Letter } from "../config";
 import { shuffle } from "../../../shared/tools";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";

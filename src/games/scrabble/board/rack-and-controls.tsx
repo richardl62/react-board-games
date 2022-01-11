@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../shared/assert";
 import { Rack } from "./rack";
-import { BoardData } from "../actions/global-game-state";
+import { BoardData } from "../global-actions/global-game-state";
 import { swapTiles } from "../actions/game-actions";
 import { useScrabbleContext } from "./scrabble-context";
 
