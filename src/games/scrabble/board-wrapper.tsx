@@ -8,7 +8,9 @@ import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
 import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
 import { isGlobalGameState } from "./global-actions";
-import { isLegalWord } from "../../shared/is-legal-word";
+import { getWordChecker } from "../../shared/get-word-checker";
+import { useAsync } from "react-async-hook";
+import { WaitingOrError } from "../../shared/waiting-or-error";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -22,6 +24,13 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
         scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config)
     );
+
+    const asyncWordChecker = useAsync(getWordChecker, []);
+
+    const isLegalWord = asyncWordChecker.result;
+    if(!isLegalWord) {
+        return <WaitingOrError status={asyncWordChecker} activity="loading dictionary" />;
+    }
 
     if (scrabbleGameProps.G.timestamp !== state.externalTimestamp) {
         dispatch({
