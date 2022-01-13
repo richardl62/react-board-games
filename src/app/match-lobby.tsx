@@ -6,7 +6,7 @@ import { makeLobbyClient } from "../bgio/lobby-tools";
 import { nonJoinedPlayerName } from "../bgio/player-data";
 import { BoxWithLegend } from "../shared/box-with-legend";
 import { AppGame, MatchID } from "../shared/types";
-import { WaitingOrError } from "../shared/waiting-or-error";
+import { AsyncStatus } from "../shared/async-status";
 import { JoinGame } from "./join-game";
 
 const Names = styled.div`
@@ -105,5 +105,5 @@ export function MatchLobby(props: MatchLobbyProps): JSX.Element {
 
     return match ? 
         <MatchLobbyWithApiInfo game={game} match={match} /> : 
-        <WaitingOrError status={asyncMatch} activity="getting match details"/>;
+        <AsyncStatus status={asyncMatch} activity="getting match details"/>;
 }

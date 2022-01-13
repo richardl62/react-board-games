@@ -5,7 +5,7 @@ import { BoxWithLegend } from "../shared/box-with-legend";
 import * as LobbyClient from "../bgio";
 import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 import { useAsyncCallback } from "react-async-hook";
-import { waitingOrError, WaitingOrError } from "../shared/waiting-or-error";
+import { loadingOrError, LoadingOrError } from "../shared/async-status";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -47,13 +47,8 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
         LobbyClient.createMatch(game, numPlayers).then(openOnlineMatchPage)
     );
 
-    if(waitingOrError(asyncCreateMatch)) {
-        return <WaitingOrError status={asyncCreateMatch} activity="starting match"/>;
-    }
-
-
-    if(asyncCreateMatch.error) {
-        return <div>{`ERROR: ${asyncCreateMatch.error.message}`}</div>;
+    if(loadingOrError(asyncCreateMatch)) {
+        return <LoadingOrError status={asyncCreateMatch} activity="starting match"/>;
     }
 
     return (
