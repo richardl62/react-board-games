@@ -43,7 +43,7 @@ export function AsyncStatus(props: AsyncStatusProps) : JSX.Element {
     if(nSet === 0) {
         // The status appears to be the result of an useAsyncCallback which has 
         // not yet been triggerd
-        message = "not stated";
+        message = "operation not started";
     }
 
     return <Message>

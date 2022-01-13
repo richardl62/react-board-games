@@ -20,7 +20,7 @@ function makeWordChecker(wordList: string) : WordChecker {
 export async function getWordChecker(): Promise<WordChecker> {
     const response = await fetch(wordListURL);
     if(!response.ok) {
-        throw `Error fetching dictionary: ${response.status} ${response.statusText}`;
+        throw new Error(`${response.status} ${response.statusText}`);
     }
     const text = await response.text();
     return makeWordChecker(text);

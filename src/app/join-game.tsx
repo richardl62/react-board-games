@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import { joinMatch } from "../bgio";
 import { AppGame, MatchID } from "../shared/types";
-import { AsyncStatus } from "../shared/async-status";
+import { AsyncStatus, loadingOrError } from "../shared/async-status";
 import { addPlayerToHref } from "./url-params";
 
 interface JoinGameProps {
@@ -25,8 +25,8 @@ export function JoinGame(props: JoinGameProps): JSX.Element {
         })
     );
 
-    if(!joinGameCallback.result) {
-        return <AsyncStatus status={joinGameCallback} activity="joining game"/>;
+    if (loadingOrError(joinGameCallback)) {
+        return <AsyncStatus status={joinGameCallback} activity="joining game" />;
     }
 
     const doSetName = (str: string) => {
