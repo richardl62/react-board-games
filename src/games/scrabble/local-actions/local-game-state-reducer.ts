@@ -13,6 +13,7 @@ export type ActionType =
     | { type: "externalStateChange", data: LocalGameState }
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
+    | { type: "keydown", data: {key: string}}
 ;
 
 export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
@@ -36,9 +37,16 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         br.move(action.data);
     } else if(action.type === "clickMove") {
         if( state.clickMoveStart ) {
-            br.clickMove({start: state.clickMoveStart, rackPos: action.data.rackPos});
+            br.moveFromRack({start: state.clickMoveStart, rackPos: action.data.rackPos});
         } else {
             console.warn("Attempted clickMove when start is not set");
+        }
+    } else if(action.type === "keydown") {
+        if( state.clickMoveStart ) {
+            const rackPos = br.findInRack(action.data.key);
+            if (rackPos !== null) {
+                br.moveFromRack({start: state.clickMoveStart, rackPos: rackPos});
+            }
         }
     } else if(action.type === "recallRack") {
         br.recallRack();

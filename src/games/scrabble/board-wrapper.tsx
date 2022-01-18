@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { sAssert } from "../../shared/assert";
 import { WrappedGameProps } from "../../bgio";
 import { getLocalGameState } from "./local-actions/local-game-state";
@@ -24,6 +24,17 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
         scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config)
     );
+
+    const downHandler = (event: KeyboardEvent) => dispatch({ type: "keydown", data: {key: event.key}});
+
+    // Add event listeners
+    useEffect(() => {
+        window.addEventListener("keydown", downHandler);
+        // Remove event listeners on cleanup
+        return () => {
+            window.removeEventListener("keydown", downHandler);
+        };
+    }, []); // Empty array ensures that effect is only run on mount and unmount
 
     const asyncWordChecker = useAsync(getWordChecker, []);
 
