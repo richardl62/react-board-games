@@ -14,6 +14,7 @@ export type ActionType =
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
+    | { type: "allowSounds", data: {allow: boolean}}
 ;
 
 export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
@@ -28,6 +29,7 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
     const br = new BoardAndRack(state.board, state.rack);
     
     let clickMoveStart = state.clickMoveStart;
+    let soundsAllowed = state.soundsAllowed;
 
     if(action.type === "setClickMoveStart") {
         const {row, col} = action.data;
@@ -54,6 +56,8 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         br.shuffleRack();
     } else if(action.type === "setBlank") {
         br.setBlack(action.data.id, action.data.letter);
+    } else if(action.type === "allowSounds") {
+        soundsAllowed = action.data.allow;
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
@@ -63,6 +67,7 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         board: br.getBoard(),
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
+        soundsAllowed: soundsAllowed,
     };
 
     const sanityProblem = sanityCheck(newState);

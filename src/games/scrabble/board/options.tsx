@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useScrabbleContext } from "./scrabble-context";
 
 const OptionsDiv = styled.div`
     display: flex;
@@ -11,9 +12,17 @@ const OptionsDiv = styled.div`
 `;
 
 export function Options() : JSX.Element {
-    const  [ checked, setChecked ] = useState(false);
+    const { soundsAllowed, dispatch } = useScrabbleContext();
+
+    const onClick = () => {
+        dispatch({
+            type: "allowSounds", 
+            data: {allow: !soundsAllowed}
+        });
+    };
+
     return <OptionsDiv>
-        <input type="checkbox" id="sounds" onClick={()=>setChecked(!checked)} checked={checked} />
+        <input type="checkbox" id="sounds" onClick={onClick} checked={soundsAllowed} />
         <label htmlFor="sounds">sounds</label>
     </OptionsDiv>;
 }

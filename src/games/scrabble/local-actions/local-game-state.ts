@@ -26,9 +26,13 @@ export interface LocalGameState {
     // KLUDGE? This is (at time of writing) the members below only in sanity checks.
     scrabbleGameProps: ScabbbleGameProps;
     config: ScrabbleConfig;
+
+    soundsAllowed: boolean;
 }
 
-export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig): LocalGameState {
+export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig,
+    {soundsAllowed} : {soundsAllowed: boolean}): LocalGameState
+{
     const {G, playerID } = scrabbleGameProps;
 
     // KLUDGE? - Not sure when playerID can be null.
@@ -54,5 +58,7 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: 
         /* KLUDGE?: See comment on type definition */
         scrabbleGameProps: scrabbleGameProps,
         config: config,
+
+        soundsAllowed: soundsAllowed,
     };
 }

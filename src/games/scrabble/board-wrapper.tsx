@@ -23,7 +23,8 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     sAssert(isGlobalGameState(scrabbleGameProps.G), "Game state appears to be invalid");
 
     const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
-        scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config)
+        scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config, 
+            {soundsAllowed: false})
     );
 
     const downHandler = (event: KeyboardEvent) => dispatch({ type: "keydown", data: {key: event.key}});
@@ -47,10 +48,13 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     if (scrabbleGameProps.G.timestamp !== state.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getLocalGameState(scrabbleGameProps, props.config),
+            data: getLocalGameState(scrabbleGameProps, props.config,
+                {soundsAllowed: state.soundsAllowed}),
         });
 
-        beep();
+        if(state.soundsAllowed) {
+            beep();
+        }
     } 
 
     const gameProps: ScrabbleContext = {
