@@ -7,6 +7,7 @@ import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
+import { Options } from "./options";
 
 
 export const SpaceBetween = styled.div`
@@ -37,6 +38,7 @@ export function BagInfo(): JSX.Element {
 export function MainGameArea(): JSX.Element {
     return <DndProvider>
         <Game>
+            <Options />
             <ScoresEtc/>
             <RackAndControls/>
             <Centered>
