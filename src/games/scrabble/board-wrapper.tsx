@@ -11,6 +11,7 @@ import { isGlobalGameState } from "./global-actions";
 import { getWordChecker } from "./get-word-checker";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../shared/async-status";
+import { beep } from "./sounds";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -48,6 +49,8 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
             type: "externalStateChange",
             data: getLocalGameState(scrabbleGameProps, props.config),
         });
+
+        beep();
     } 
 
     const gameProps: ScrabbleContext = {
