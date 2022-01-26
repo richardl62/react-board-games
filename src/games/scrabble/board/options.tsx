@@ -14,7 +14,7 @@ const OptionsDiv = styled.div`
 export function Options() : JSX.Element {
     const { soundsAllowed, dispatch } = useScrabbleContext();
 
-    const onClick = () => {
+    const onChange = () => {
         dispatch({
             type: "allowSounds", 
             data: {allow: !soundsAllowed}
@@ -22,7 +22,7 @@ export function Options() : JSX.Element {
     };
 
     return <OptionsDiv>
-        <input type="checkbox" id="sounds" onClick={onClick} checked={soundsAllowed} />
+        <input type="checkbox" id="sounds" onChange={onChange} checked={soundsAllowed} />
         <label htmlFor="sounds">sounds</label>
     </OptionsDiv>;
 }
