@@ -10,24 +10,46 @@ import { WordChecker } from "./word-check";
 import { Options } from "./options";
 
 
-export const SpaceBetween = styled.div`
+const SpaceBetween = styled.div`
   display: flex;
   justify-content: space-between;
   align-self: stretch;
 `;
 
-export const Centered = styled.div`
+const Centered = styled.div`
   display: flex;
   align-self: center;
 `;
 
-export const Game = styled.div`
+const Game = styled.div`
   display: inline-flex;
   flex-direction: column;
   gap: 5px;
   `;
 
-export function BagInfo(): JSX.Element {
+const ErrorMessage = styled.div`
+    span:first-child {
+    font-weight: bold;
+    color: red;
+    margin-right: 0.5em;
+    }
+`;
+
+
+function ServerError(): JSX.Element | null {
+    const serverError = useScrabbleContext().bgioProps.G.serverError;
+    
+    if(!serverError) {
+        return null;
+    }
+
+    return <ErrorMessage> 
+        <span>Server Error:</span> 
+        <span>{serverError}</span>
+    </ErrorMessage>;
+}
+
+function BagInfo(): JSX.Element {
     const context = useScrabbleContext();
 
     return <div>
@@ -38,6 +60,7 @@ export function BagInfo(): JSX.Element {
 export function MainGameArea(): JSX.Element {
     return <DndProvider>
         <Game>
+            <ServerError />
             <Options />
             <ScoresEtc/>
             <RackAndControls/>

@@ -101,6 +101,17 @@ function GameOver(props: WinnersProps) {
     }
 }
 
+interface ServerErrorProps {
+    message: string;
+}
+
+function ServerError({message}: ServerErrorProps) {
+    return <div>
+        <FirstSpan>ServerError</FirstSpan>
+        <span>{message}</span>
+    </div>;
+}
+
 interface TurnDescriptionProps {
     elem: MoveHistoryElement;
 }
@@ -134,6 +145,10 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
         
     if(elem.gameOver) {
         return <GameOver winners={elem.gameOver.winners} />;
+    }
+
+    if(elem.serverError) {
+        return <ServerError message={elem.serverError.message} />;
     }
 
     return <div>Problem with turn description</div>;

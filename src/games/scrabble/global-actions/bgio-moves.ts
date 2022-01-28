@@ -13,7 +13,15 @@ type MoveFunc<P> = (G: GlobalGameState, ctx: Ctx, param: P) => void;
 
 function GameMove<P>(func: MoveFunc<P> ) : MoveFunc<P> {
     return (G, ctx, param) => {
-        func(G, ctx, param);
+        G.serverError = null;
+        try {
+            func(G, ctx, param);
+        } catch(error) {
+            const message = error instanceof Error ? error.message : 
+                "unknown error";
+            G.serverError = message;
+            G.moveHistory.push({serverError: {message: message}});
+        }
         G.timestamp++;
     };
 }

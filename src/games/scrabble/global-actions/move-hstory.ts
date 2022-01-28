@@ -23,4 +23,6 @@ export interface MoveHistoryElement {
     scoresAdjusted?: {[id: string]: number};
 
     gameOver?: {winners: string[]}; // id of winner(s);
+
+    serverError?: {message: string};
 }

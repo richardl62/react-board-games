@@ -37,6 +37,8 @@ export interface GlobalGameState {
 
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
+
+    serverError: string | null;
 }
 
 function isPlayerData(playerData: GamePlayerData) {
@@ -98,6 +100,8 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
         winnerIds: null,
 
         moveHistory: initialMoveHistory,
+
+        serverError: null,
     };
 }
 
