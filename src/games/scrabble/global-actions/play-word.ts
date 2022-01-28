@@ -16,15 +16,19 @@ export function playWord(G: GlobalGameState, ctx: Ctx,
     { board, rack: inputRack, playedWordinfo, score }: PlayWordParam
 ) : void
 {
-    const newRack = inputRack.map(l => {
-        if(l) 
-            return l;
+    const newBag = [...G.bag];
+    const newRack = [...inputRack];
+    
+    for(let ri = 0; ri < newRack.length; ++ri) {
+        if(!newRack[ri]) {
+            newRack[ri] = newBag.shift() || null;
+        }
+    }
 
-        return G.bag.shift() || null;
-
-    });
     G.playerData[ctx.currentPlayer].rack = newRack;
     G.playerData[ctx.currentPlayer].score += score;
+    G.bag = newBag;
+    console.log(newBag);
 
     // KLUDGE: 'active' does not really belong server side
     G.board = board.map(row => row.map(

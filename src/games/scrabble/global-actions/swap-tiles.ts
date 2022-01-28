@@ -19,29 +19,25 @@ export interface SwapTilesParam {
 } 
 
 export function swapTiles(G: GlobalGameState, ctx: Ctx, 
-    { rack: oldRack, toSwap }: SwapTilesParam
+    { rack: inputRack, toSwap }: SwapTilesParam
 ) : void {
 
-    const bag = G.bag;
-    G.bag = bag;
-
-    const newRack: Letter[] = [];
+    const newBag = [... G.bag];
+    const newRack: Letter[] = [...inputRack];
 
     let nSwapped = 0;    
-    for (let ri = 0; ri < oldRack.length; ++ri) {
+    for (let ri = 0; ri < newRack.length; ++ri) {
         if (toSwap[ri]) {
-            const old = oldRack[ri];
-            bag.push(old);
-            newRack[ri] = bag.shift()!;
+            newBag.push(newRack[ri]);
+            newRack[ri] = newBag.shift()!;
             ++nSwapped;
-        } else {
-            newRack[ri] = oldRack[ri];
         }
     }
-    shuffle(bag);
+    shuffle(newBag);
 
     G.playerData[ctx.currentPlayer].rack = newRack;
-
+    G.bag = newBag;
+    
     G.moveHistory.push({tilesSwapped: {
         pid: ctx.currentPlayer,
         nSwapped: nSwapped,

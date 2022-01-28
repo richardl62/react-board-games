@@ -113,19 +113,10 @@ export function passMove(gameProps: ScabbbleGameProps) : void {
 export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
     playedWordinfo: Omit<WordsPlayedInfo,"pid">) : void {
 
-    const rack = [...localState.rack];
-    const bag = [...localState.bag];
-    for (let ri = 0; ri < rack.length; ++ri) {
-        if(!rack[ri]) {
-            const letter = bag.pop();
-            rack[ri] = letter || null;
-        }
-    }
-
     gameProps.moves.playWord({
         score: playedWordinfo.score,
         playedWordinfo: playedWordinfo,
-        rack: rack,
+        rack: localState.rack,
         board: localState.board,
     });
 
