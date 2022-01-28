@@ -33,7 +33,7 @@ export function ScoresEtc(): JSX.Element {
         }
         
         let nInRackText = "";
-        if(pid !== context.bgioProps.playerID && context.bag.length === 0) {
+        if(pid !== context.bgioProps.playerID && context.nTilesInBag === 0) {
             nInRackText = ` (${nInRack} tiles in rack) `;
         }
 

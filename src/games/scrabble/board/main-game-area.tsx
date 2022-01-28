@@ -53,7 +53,7 @@ function BagInfo(): JSX.Element {
     const context = useScrabbleContext();
 
     return <div>
-        Tiles in bag: <span>{context.bag.length}</span>
+        Tiles in bag: <span>{context.nTilesInBag}</span>
     </div>;
 }
 

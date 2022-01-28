@@ -23,6 +23,6 @@ function countTiles(state: LocalGameState): number {
     }
 
     const board = nNonNull(state.board.flat()); // inefficient.
-    const bag = state.bag.length;
+    const bag = state.nTilesInBag;
     return racks + board + bag;
 }

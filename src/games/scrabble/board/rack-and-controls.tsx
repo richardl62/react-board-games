@@ -73,7 +73,7 @@ export function RackAndControls(): JSX.Element {
         );
     } else {
 
-        const allowSwapping = context.bag.length >= context.rack.length;
+        const allowSwapping = context.nTilesInBag >= context.rack.length;
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
             context.dispatch({type: "recallRack"});
