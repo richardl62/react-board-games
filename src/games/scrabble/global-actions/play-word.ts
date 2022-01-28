@@ -28,7 +28,6 @@ export function playWord(G: GlobalGameState, ctx: Ctx,
     G.playerData[ctx.currentPlayer].rack = newRack;
     G.playerData[ctx.currentPlayer].score += score;
     G.bag = newBag;
-    console.log(newBag);
 
     // KLUDGE: 'active' does not really belong server side
     G.board = board.map(row => row.map(
