@@ -1,6 +1,5 @@
 import { sAssert } from "../../../shared/assert";
-import { nNonNull, shuffle } from "../../../shared/tools";
-import { blank, Letter, letterScore } from "../config";
+import { blank } from "../config";
 
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
@@ -95,100 +94,20 @@ export function canSwapTiles(G: GlobalGameState): boolean {
 }
 
 export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGameProps, toSwap: boolean[]) : void {
-    const bag = [...localState.bag];
-
-    let nSwapped = 0;    
-    for (let ri = 0; ri < toSwap.length; ++ri) {
-        if (toSwap[ri]) {
-            const old = localState.rack[ri];
-            sAssert(old, "Attempt to swap non-existant tile");
-            bag.push(old);
-            localState.rack[ri] = bag.shift()!;
-            ++nSwapped;
-        }
-    }
-    shuffle(bag);
-    
-    gameProps.moves.setBoardRandAndScore({
-        score: 0,
-        rack: localState.rack,
-        board: localState.board,
-        bag: bag,
-    }); 
-
-    const info = {
-        pid: gameProps.currentPlayer,
-        nSwapped: nSwapped,
-    };
-    gameProps.moves.addHistory({tilesSwapped: info});       
+    const checkedRack = localState.rack.map(l => {
+        sAssert(l);
+        return l;
+    });
+    gameProps.moves.swapTiles({rack: checkedRack, toSwap: toSwap});       
     sAssert(gameProps.events.endTurn);
     gameProps.events.endTurn();
 }
 
 export function passMove(gameProps: ScabbbleGameProps) : void {
-
-    const info = {
-        pid: gameProps.currentPlayer,
-    };
-    gameProps.moves.addHistory({pass: info});
+    gameProps.moves.pass();
 
     sAssert(gameProps.events.endTurn);
     gameProps.events.endTurn();
-}
-
-function letterValue(rack: (Letter | null)[]) {
-    let value = 0;
-    for (const l of rack) {
-        if (l) {
-            value += letterScore(l);
-        }
-    }
-
-    return value;
-}
-
-function findWinners(scores: {[id: string] : number} ) : string[] {
-    let maxScore = -99999;
-    for(const id in scores) {
-        maxScore = Math.max(maxScore, scores[id]);
-    }
-
-    const winners = [];
-    for(const id in scores) {
-        if(scores[id] === maxScore) {
-            winners.push(id);
-        }
-    }
-    return winners;
-}
-
-function gameEndActions(state: LocalGameState, playerOutPid: string) : void {
-    const scoreAdjustement : {[id: string] : number} = {};
-    let totalRackScores = 0;
-
-    const gameProps = state.scrabbleGameProps;
-    const playerData = gameProps.G.playerData;
-    for (const pid in playerData) {
-        if (pid !== playerOutPid) {
-            const rackScore = letterValue(playerData[pid].rack);
-            totalRackScores += rackScore;
-            scoreAdjustement[pid] = -rackScore;
-        }
-    }
-
-    scoreAdjustement[playerOutPid] = totalRackScores;
-    state.scrabbleGameProps.moves.adjustScores(scoreAdjustement);
-
-    gameProps.moves.addHistory({scoresAdjusted: scoreAdjustement});
-
-    const newScores : {[id: string] : number} = {};
-    for(const pid in playerData) {
-        newScores[pid] = playerData[pid].score + scoreAdjustement[pid];
-    }
-
-    const winners = findWinners(newScores);
-    gameProps.moves.setWinners({ids: winners} );
-    gameProps.moves.addHistory({gameOver: {winners: winners}} );
 }
 
 export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
@@ -203,25 +122,12 @@ export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProp
         }
     }
 
-    gameProps.moves.setBoardRandAndScore({
+    gameProps.moves.playWord({
         score: playedWordinfo.score,
+        playedWordinfo: playedWordinfo,
         rack: rack,
         board: localState.board,
-        bag: bag,
     });
-
-    const info = {
-        ...playedWordinfo,
-        pid: gameProps.currentPlayer,
-    };
-
-    gameProps.moves.addHistory({wordsPlayed: info});  
-    
-    // Play can continue after a winner has been declared, but end game
-    // actions should happen only once.
-    if(nNonNull(rack) === 0 && bag.length === 0 && !gameProps.G.winnerIds) {
-        gameEndActions(localState,  gameProps.currentPlayer);
-    }
 
     sAssert(gameProps.events.endTurn);
     gameProps.events.endTurn();
