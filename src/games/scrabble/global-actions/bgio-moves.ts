@@ -8,7 +8,6 @@ type PassParm = void;
 const pass: Move<GlobalGameState> = (G, ctx) => {
     G.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 
-    G.turn++;
     G.timestamp++;
 };
 
@@ -56,7 +55,6 @@ const swapTiles: Move<GlobalGameState> = (G, ctx,
         nSwapped: nSwapped,
     }});
 
-    G.turn++;
     G.timestamp++;
 };
 
@@ -98,7 +96,6 @@ const playWord: Move<GlobalGameState> = (G, ctx,
         gameEndActions(G,  ctx.currentPlayer);
     }
 
-    G.turn++;
     G.timestamp++;
 };
 

@@ -29,7 +29,6 @@ export interface GlobalGameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
-    turn: number;
 
     moveHistory: MoveHistoryElement[];
 
@@ -64,7 +63,6 @@ export function isGlobalGameState(arg: unknown) : boolean {
         typeof gd.board === "object" &&
         typeof gd.playerData === "object" &&
         typeof gd.bag === "object" &&
-        typeof gd.turn === "number" &&
         typeof gd.timestamp === "number" &&
         isPlayerDataDictionary(gd.playerData);
 }
@@ -96,7 +94,6 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
         board: nestedArrayMap(config.boardLayout, () => null),
         playerData: playerData,
         bag: bag,
-        turn: 0,
         timestamp: 0,
         winnerIds: null,
 
