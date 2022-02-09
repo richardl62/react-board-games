@@ -1,2 +1,2 @@
-export { makeSimpleName } from "./misc";
-export { Counter } from "./counter";
+export { makeSimpleName } from "./make-simple-name";
+export { Counter } from "../utils/counter";

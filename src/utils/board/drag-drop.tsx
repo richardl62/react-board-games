@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import * as ReactDnd from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { sAssert } from "../utils/assert";
-import { sameJSON } from "../utils/same-json";
+import { sAssert } from "../assert";
+import { sameJSON } from "../same-json";
 const PIECE = "piece";
 
 export function DndProvider(props: {children: ReactNode}): JSX.Element {

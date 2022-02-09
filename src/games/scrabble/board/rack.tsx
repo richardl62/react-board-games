@@ -1,7 +1,7 @@
 import React from "react";
 import { boardIDs, SquareID } from "../local-actions";
 import { boardBoarderColor, boardBoarderSize } from "./style";
-import { BoarderedGrid } from "../../../game-support/boardered-grid";
+import { BoarderedGrid } from "../../../utils/board/boardered-grid";
 import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../utils/assert";
