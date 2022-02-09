@@ -1,7 +1,8 @@
 // Get values that can be set in the url.
 // If not set, give default value.
 import { sAssert } from "../utils/assert";
-import { AppGame, MatchID, Player } from "../utils/types";
+import { AppGame } from "../app-game";
+import { MatchID, Player } from "../bgio";
 
 const keys = {
     credentials: "cred",

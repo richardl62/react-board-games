@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
 import { shuffle } from "../../../utils/shuffle";
-import { AppGame, GameCategory } from "../../../utils/types";
+import { AppGame, GameCategory } from "../../../app-game";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 

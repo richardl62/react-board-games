@@ -1,6 +1,7 @@
 import { LobbyClient } from "boardgame.io/client";
 import { lobbyServer } from "../app/url-params";
-import { AppGame, MatchID, Player } from "../utils/types";
+import { MatchID, Player } from "./types";
+import { AppGame } from "../app-game";
 
 export function defaultPlayerName(playerID: string): string {
     const playerNumber = parseInt(playerID);

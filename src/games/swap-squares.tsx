@@ -2,7 +2,7 @@ import React from "react";
 import { BoarderedGrid } from "../game-support/boardered-grid";
 import { DndProvider } from "../game-support/drag-drop";
 import { DragDrop, PieceHolder } from "../game-support/piece-holder";
-import { AppGame, GameCategory } from "../utils/types";
+import { AppGame, GameCategory } from "../app-game";
 import { Ctx } from "boardgame.io";
 import { WrappedGameProps } from "../bgio";
 import { DefaultMovesType } from "../bgio/wrapped-game-props";

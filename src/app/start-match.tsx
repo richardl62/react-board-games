@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AppGame } from "../utils/types";
+import { AppGame } from "../app-game";
 import { BoxWithLegend } from "../utils/box-with-legend";
 import * as LobbyClient from "../bgio";
 import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";

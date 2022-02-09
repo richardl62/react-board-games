@@ -1,16 +1,5 @@
 import { Game } from "boardgame.io";
-import { WrappedGameProps } from "../bgio";
-
-export type MatchData = WrappedGameProps["matchData"];
-
-export interface Player {
-  id: string;
-  credentials: string;
-}
-
-export interface MatchID {
-  mid: string
-} 
+import { WrappedGameProps } from "./bgio";
 
 // The string values are uses as section headers when displaying the list of
 // games.

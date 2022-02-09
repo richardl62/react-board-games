@@ -2,7 +2,7 @@ import React from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
-import { AppGame } from "../utils/types";
+import { AppGame } from "../app-game";
 import { LoadingOrError } from "../utils/async-status";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";

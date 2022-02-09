@@ -1,7 +1,7 @@
 import React from "react";
 import { Ctx } from "boardgame.io";
 import { GameWarnings } from "../game-support/show-warning";
-import { AppGame, GameCategory } from "../utils/types";
+import { AppGame, GameCategory } from "../app-game";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../game-support/waiting-for-players";
 import { WrappedGameProps } from "../bgio";
