@@ -1,4 +1,4 @@
-import { WrappedGameProps } from "../../../bgio";
+import { WrappedGameProps } from "../../../app-game-support";
 import { GlobalGameState } from "../global-actions";
 import { ClientMoves } from "../global-actions/bgio-moves";
 

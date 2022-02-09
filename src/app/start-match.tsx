@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { AppGame } from "../app-game";
-import { BoxWithLegend } from "../utils/box-with-legend";
-import * as LobbyClient from "../bgio";
-import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 import { useAsyncCallback } from "react-async-hook";
+import styled from "styled-components";
+import { AppGame, createMatch } from "../app-game-support";
 import { loadingOrError, LoadingOrError } from "../utils/async-status";
+import { BoxWithLegend } from "../utils/box-with-legend";
+import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -44,7 +43,7 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
     const [persist, setPersist] = useState(false);
 
     const asyncCreateMatch = useAsyncCallback(() =>
-        LobbyClient.createMatch(game, numPlayers).then(openOnlineMatchPage)
+        createMatch(game, numPlayers).then(openOnlineMatchPage)
     );
 
     if(loadingOrError(asyncCreateMatch)) {

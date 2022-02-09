@@ -1,5 +1,5 @@
 import React from "react";
-import { WrappedGameProps } from "../bgio";
+import { WrappedGameProps } from ".";
 import styled from "styled-components";
 
 

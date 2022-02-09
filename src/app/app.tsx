@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import { AppGame, GameCategory } from "../app-game";
+import { AppGame, GameCategory } from "../app-game-support";
 import { games as appGames } from "../games";
 import "./app.css";
 import { gameComponent } from "./game-component";

@@ -1,11 +1,9 @@
+import { Ctx } from "boardgame.io";
 import React from "react";
+import { AppGame, DefaultMovesType, GameCategory, WrappedGameProps } from "../app-game-support";
 import { BoarderedGrid } from "../utils/board/boardered-grid";
 import { DndProvider } from "../utils/board/drag-drop";
 import { DragDrop, PieceHolder } from "../utils/board/piece-holder";
-import { AppGame, GameCategory } from "../app-game";
-import { Ctx } from "boardgame.io";
-import { WrappedGameProps } from "../bgio";
-import { DefaultMovesType } from "../bgio/wrapped-game-props";
 
 interface G {
   squares: number[];

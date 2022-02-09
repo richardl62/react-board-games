@@ -2,13 +2,10 @@ import { LobbyAPI } from "boardgame.io";
 import React, { ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
-import { makeLobbyClient } from "../bgio/lobby-tools";
-import { nonJoinedPlayerName } from "../bgio/player-data";
-import { BoxWithLegend } from "../utils/box-with-legend";
-import { AppGame } from "../app-game";
+import { AppGame, makeLobbyClient, MatchID, nonJoinedPlayerName } from "../app-game-support";
 import { AsyncStatus } from "../utils/async-status";
+import { BoxWithLegend } from "../utils/box-with-legend";
 import { JoinGame } from "./join-game";
-import { MatchID } from "../bgio";
 
 const Names = styled.div`
     display: flex;

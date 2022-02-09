@@ -1,4 +1,4 @@
-import { WaitingForPlayers } from "../../../game-support/waiting-for-players";
+import { WaitingForPlayers } from "../../../app-game-support";
 import React from "react";
 import styled from "styled-components";
 import { MoveHistory } from "./move-history";

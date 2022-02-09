@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GameWarnings } from "../../../game-support/show-warning";
+import { GameWarnings } from "../../../app-game-support";
 import { nNonNull } from "../../../utils/n-non-null";
 import { useScrabbleContext } from "./scrabble-context";
 

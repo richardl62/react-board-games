@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { sAssert } from "../../utils/assert";
-import { WrappedGameProps } from "../../bgio";
+import { WrappedGameProps } from "../../app-game-support";
 import { getLocalGameState } from "./local-actions/local-game-state";
 import { localGameStateReducer } from "./local-actions/local-game-state-reducer";
 import { Board } from "./board";

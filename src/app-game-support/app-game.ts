@@ -1,5 +1,5 @@
 import { Game } from "boardgame.io";
-import { WrappedGameProps } from "./bgio";
+import { WrappedGameProps } from ".";
 
 // The string values are uses as section headers when displaying the list of
 // games.

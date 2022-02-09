@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
-import { joinMatch, MatchID } from "../bgio";
-import { AppGame } from "../app-game";
+import { AppGame, joinMatch, MatchID } from "../app-game-support";
 import { AsyncStatus, loadingOrError } from "../utils/async-status";
 import { addPlayerToHref } from "./url-params";
 
