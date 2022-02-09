@@ -1,4 +1,5 @@
 //KLUDGE: There must be a better way to implement this.
+import { sAssert } from "../../utils/assert";
 import { ReactComponent as Card1B } from "./images/1B.svg";
 import { ReactComponent as Card1J } from "./images/1J.svg";
 import { ReactComponent as Card2B } from "./images/2B.svg";
@@ -56,7 +57,7 @@ import { ReactComponent as CardTD } from "./images/TD.svg";
 import { ReactComponent as CardTH } from "./images/TH.svg";
 import { ReactComponent as CardTS } from "./images/TS.svg";
 import { Card, CardBack } from "./types";
-import { sAssert } from "../../shared/assert";
+
 
 function getCardComponentByFileName(name: string) {
     if (name === "1B") return Card1B;

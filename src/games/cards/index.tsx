@@ -1,5 +1,6 @@
 import React from "react";
-import { AppGame, GameCategory } from "../../shared/types";
+import { AppGame, GameCategory } from "../../app-game-support";
+
 import { CardGame } from "./card-game";
 
 const game: AppGame = {
