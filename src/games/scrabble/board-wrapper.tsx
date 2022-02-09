@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { sAssert } from "../../shared/assert";
+import { sAssert } from "../../utils/assert";
 import { WrappedGameProps } from "../../bgio";
 import { getLocalGameState } from "./local-actions/local-game-state";
 import { localGameStateReducer } from "./local-actions/local-game-state-reducer";
@@ -10,7 +10,7 @@ import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context"
 import { isGlobalGameState } from "./global-actions";
 import { getWordChecker } from "./get-word-checker";
 import { useAsync } from "react-async-hook";
-import { AsyncStatus } from "../../shared/async-status";
+import { AsyncStatus } from "../../utils/async-status";
 import { beep } from "./sounds";
 
 export interface BoardWrapperProps {

@@ -1,5 +1,5 @@
 import React from "react";
-import { AppGame } from "../shared/types";
+import { AppGame } from "../utils/types";
 import { GameLobby } from "./game-lobby";
 import { MatchLobby } from "./match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";

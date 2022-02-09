@@ -4,7 +4,7 @@ import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "../../../game-support/boardered-grid";
 import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { Tile } from "./tile";
 import { makeExtendedLetter } from "../local-actions/extended-letter";
 import { useScrabbleContext } from "./scrabble-context";

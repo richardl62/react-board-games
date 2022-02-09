@@ -4,9 +4,9 @@ import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
 import { nonJoinedPlayerName } from "../bgio/player-data";
-import { BoxWithLegend } from "../shared/box-with-legend";
-import { AppGame, MatchID } from "../shared/types";
-import { AsyncStatus } from "../shared/async-status";
+import { BoxWithLegend } from "../utils/box-with-legend";
+import { AppGame, MatchID } from "../utils/types";
+import { AsyncStatus } from "../utils/async-status";
 import { JoinGame } from "./join-game";
 
 const Names = styled.div`

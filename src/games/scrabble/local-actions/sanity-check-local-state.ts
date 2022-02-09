@@ -1,4 +1,4 @@
-import { nNonNull } from "../../../shared/tools";
+import { nNonNull } from "../../../utils/tools";
 import { LocalGameState } from "./local-game-state";
 
 /** Return a short-ish string describing problems found or null if no problem was found.

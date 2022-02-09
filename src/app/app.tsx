@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { games as appGames } from "../games";
-import { AppGame, GameCategory } from "../shared/types";
+import { AppGame, GameCategory } from "../utils/types";
 import "./app.css";
 import { gameComponent } from "./game-component";
 import { gamePath } from "./url-params";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { Rack } from "./rack";
 import { BoardData } from "../global-actions/global-game-state";
 import { swapTiles } from "../local-actions/game-actions";

@@ -1,4 +1,4 @@
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { ScabbbleGameProps } from "../board/game-props";
 import { ScrabbleConfig } from "../config";
 import { Rack } from "./board-and-rack";

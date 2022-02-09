@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../../game-support/show-warning";
-import { nNonNull } from "../../../shared/tools";
+import { nNonNull } from "../../../utils/tools";
 import { useScrabbleContext } from "./scrabble-context";
 
 const StyledScoresEtc=styled.div`

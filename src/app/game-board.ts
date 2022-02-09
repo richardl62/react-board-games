@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 import { BoardProps } from "../bgio";
 import { makeWrappedGameProps, WrappedGameProps } from "../bgio/wrapped-game-props";
-import { AppGame } from "../shared/types";
+import { AppGame } from "../utils/types";
 
 
 function gameStatus(gameProps: WrappedGameProps) {

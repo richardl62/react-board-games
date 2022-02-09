@@ -1,4 +1,4 @@
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { blank } from "../config";
 
 import { Rack } from "./board-and-rack";

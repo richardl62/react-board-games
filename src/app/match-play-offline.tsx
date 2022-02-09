@@ -1,7 +1,7 @@
 import React from "react";
 import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
-import { AppGame } from "../shared/types";
+import { AppGame } from "../utils/types";
 import * as UrlParams from "./url-params";
 import { GameBoard } from "./game-board";
 

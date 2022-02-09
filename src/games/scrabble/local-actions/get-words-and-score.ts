@@ -1,4 +1,4 @@
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { BoardData, BoardSquareData } from "../global-actions/global-game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";

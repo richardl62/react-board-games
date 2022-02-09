@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AppGame } from "../shared/types";
-import { BoxWithLegend } from "../shared/box-with-legend";
+import { AppGame } from "../utils/types";
+import { BoxWithLegend } from "../utils/box-with-legend";
 import * as LobbyClient from "../bgio";
 import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
 import { useAsyncCallback } from "react-async-hook";
-import { loadingOrError, LoadingOrError } from "../shared/async-status";
+import { loadingOrError, LoadingOrError } from "../utils/async-status";
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;

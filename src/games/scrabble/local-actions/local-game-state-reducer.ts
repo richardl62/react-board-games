@@ -1,4 +1,4 @@
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { sanityCheck } from "./sanity-check-local-state";

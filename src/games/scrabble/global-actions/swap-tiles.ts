@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { GlobalGameState } from ".";
-import { shuffle } from "../../../shared/tools";
+import { shuffle } from "../../../utils/tools";
 import { Letter } from "../config";
 
 export interface SwapTilesParam {

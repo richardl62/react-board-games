@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import { sAssert } from "../../../shared/assert";
+import { sAssert } from "../../../utils/assert";
 import { LocalGameState } from "../local-actions/local-game-state";
 import { ActionType } from "../local-actions/local-game-state-reducer";
 import { ScabbbleGameProps } from "./game-props";

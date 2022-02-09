@@ -1,4 +1,4 @@
-import { sAssert } from "../shared/assert";
+import { sAssert } from "../utils/assert";
 import { BoardProps as BgioBoardProps, MatchDataElem } from "./board-props";
 import { defaultPlayerName } from "./lobby-tools";
 

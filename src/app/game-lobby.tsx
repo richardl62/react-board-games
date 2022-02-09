@@ -2,8 +2,8 @@ import React from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { makeLobbyClient } from "../bgio/lobby-tools";
-import { AppGame } from "../shared/types";
-import { LoadingOrError } from "../shared/async-status";
+import { AppGame } from "../utils/types";
+import { LoadingOrError } from "../utils/async-status";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";
 const GameLobbyDiv = styled.div`
