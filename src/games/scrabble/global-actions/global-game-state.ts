@@ -1,5 +1,5 @@
 import { sAssert } from "../../../utils/assert";
-import { nestedArrayMap } from "../../../utils/tools";
+import { nestedArrayMap } from "../../../utils/nested-array-map";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "../local-actions/extended-letter";

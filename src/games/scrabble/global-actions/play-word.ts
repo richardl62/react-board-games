@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { nNonNull } from "../../../utils/tools";
+import { nNonNull } from "../../../utils/n-non-null";
 import { Letter, letterScore } from "../config";
 import { BoardData, GlobalGameState } from "./global-game-state";
 import { WordsPlayedInfo } from "./move-hstory";
