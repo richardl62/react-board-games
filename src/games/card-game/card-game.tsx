@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { CardSVG } from "./card";
+import { CardSVG } from "../../utils/cards";
 
 
 const CardDisplay = styled.div`
