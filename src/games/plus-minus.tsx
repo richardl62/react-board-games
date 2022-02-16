@@ -53,7 +53,7 @@ function Board(props: WrappedGameProps<G,DefaultMovesType/*KLUDGE*/>): JSX.Eleme
             {props.allJoined && (<div>
                 <button type="button" onClick={(() => moves.add(1))}>+1</button>
                 <button type="button" onClick={(() => moves.add(-1))}>-1</button>
-                <button type="button" onClick={() => events.endTurn!()}>End Turn</button>
+                <button type="button" onClick={() => events.endTurn()}>End Turn</button>
                 <div>{G.data.count}</div>
             </div>)}
         </div>

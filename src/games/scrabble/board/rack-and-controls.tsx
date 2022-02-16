@@ -55,9 +55,7 @@ export function RackAndControls(): JSX.Element {
                 sAssert(l);
                 return l;
             });
-            context.bgioProps.moves.swapTiles({rack: checkedRack, toSwap: selectedForSwap});
-
-            sAssert(context.bgioProps.events.endTurn);
+            context.bgioProps.moves.swapTiles({rack: checkedRack, toSwap: selectedForSwap});           
             context.bgioProps.events.endTurn();
         };
         const cancelSwap = () => {

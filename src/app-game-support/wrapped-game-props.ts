@@ -13,13 +13,20 @@ import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 
 export type DefaultMovesType = BoardProps["moves"]; 
 
+type BgioEvents = BoardProps["events"];
+
+interface Events extends Omit<BgioEvents, "endTurn"> {
+    endTurn: Required<BgioEvents>["endTurn"];
+}
+
 /**
  * Game properties.  (A wrapper for BGIO BoardProps.)
  */
 export interface WrappedGameProps<G = unknown, Moves=unknown> 
-    extends Omit<BoardProps<G>, "moves"> {
+    extends Omit<BoardProps<G>, "moves" | "events"> {
     
     moves: Moves;
+    events: Events;
 
     playerData: PlayerDataDictionary;
     allJoined: boolean;
@@ -54,8 +61,15 @@ export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGamePr
 
     sAssert(bgioProps.playerID);
     
+    const bigoEvents = bgioProps.events;
+    const endTurn = bigoEvents.endTurn;
+    sAssert(endTurn);
+
+    const events : Events = {...bigoEvents, endTurn: endTurn}; 
+
     const obj = {
         ...bgioProps,
+        events: events,
         playerData: playerData,
         allJoined: allJoined,
         allConnected: allConnected,

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../local-actions";
 import { findUnsetBlack } from "../local-actions/board-and-rack";
@@ -44,8 +43,6 @@ export function useTurnControlData(): TurnControlData {
         return {
             onPass: () => {
                 context.bgioProps.moves.pass();
-
-                sAssert(context.bgioProps.events.endTurn);
                 context.bgioProps.events.endTurn();
             },
         };
@@ -92,7 +89,6 @@ export function useTurnControlData(): TurnControlData {
 
                 });
             
-                sAssert(context.bgioProps.events.endTurn);
                 context.bgioProps.events.endTurn();
 
                 setIllegalWordsData(null);
