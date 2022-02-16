@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { Rack } from "./rack";
 import { BoardData } from "../global-actions/global-game-state";
-import { swapTiles } from "../local-actions/game-actions";
 import { useScrabbleContext } from "./scrabble-context";
 
 const StyledRackAndControls = styled.div`
@@ -50,9 +49,16 @@ export function RackAndControls(): JSX.Element {
         const makeSwap = () => {
 
             setSelectedForSwap(null);
-            // KLUDGE?: Relies to selectedForSwap not being immediately changed by
+            // Note: Relies on selectedForSwap not being immediately changed by
             // setSelectedForSwap.
-            swapTiles(context, context.bgioProps, selectedForSwap);
+            const checkedRack = context.rack.map(l => {
+                sAssert(l);
+                return l;
+            });
+            context.bgioProps.moves.swapTiles({rack: checkedRack, toSwap: selectedForSwap});
+
+            sAssert(context.bgioProps.events.endTurn);
+            context.bgioProps.events.endTurn();
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);

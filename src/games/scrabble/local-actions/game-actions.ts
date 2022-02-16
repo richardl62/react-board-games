@@ -5,9 +5,6 @@ import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
 import { BoardData, GlobalGameState } from "../global-actions/global-game-state";
-import { WordsPlayedInfo } from "../global-actions/move-hstory";
-import { LocalGameState } from "./local-game-state";
-import { ScabbbleGameProps } from "../board/game-props";
 
 export interface SquareID {
     row: number;
@@ -91,35 +88,4 @@ export function compactRack(rack: Rack): void {
 export function canSwapTiles(G: GlobalGameState): boolean {
     const rackSize = Object.values(G.playerData)[0].rack.length;
     return G.bag.length >= rackSize;
-}
-
-export function swapTiles(localState: LocalGameState, gameProps: ScabbbleGameProps, toSwap: boolean[]) : void {
-    const checkedRack = localState.rack.map(l => {
-        sAssert(l);
-        return l;
-    });
-    gameProps.moves.swapTiles({rack: checkedRack, toSwap: toSwap});       
-    sAssert(gameProps.events.endTurn);
-    gameProps.events.endTurn();
-}
-
-export function passMove(gameProps: ScabbbleGameProps) : void {
-    gameProps.moves.pass();
-
-    sAssert(gameProps.events.endTurn);
-    gameProps.events.endTurn();
-}
-
-export function playWord(localState: LocalGameState, gameProps: ScabbbleGameProps, 
-    playedWordinfo: Omit<WordsPlayedInfo,"pid">) : void {
-
-    gameProps.moves.playWord({
-        score: playedWordinfo.score,
-        playedWordinfo: playedWordinfo,
-        rack: localState.rack,
-        board: localState.board,
-    });
-
-    sAssert(gameProps.events.endTurn);
-    gameProps.events.endTurn();
 }

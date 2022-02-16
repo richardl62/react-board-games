@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../local-actions";
 import { findUnsetBlack } from "../local-actions/board-and-rack";
-import { playWord, passMove } from "../local-actions/game-actions";
 import { useScrabbleContext } from "./scrabble-context";
 
 function sameWordList(words1: string[], words2: string[]): boolean {
@@ -42,7 +42,12 @@ export function useTurnControlData(): TurnControlData {
 
     if (active.length === 0 && context.bgioProps.isMyTurn) {
         return {
-            onPass: () => passMove(context.bgioProps),
+            onPass: () => {
+                context.bgioProps.moves.pass();
+
+                sAssert(context.bgioProps.events.endTurn);
+                context.bgioProps.events.endTurn();
+            },
         };
     } else if (!wordsAndScore) {
         return {
@@ -74,21 +79,34 @@ export function useTurnControlData(): TurnControlData {
 
         if (context.bgioProps.isMyTurn && !unsetBlank) {
 
-            const uncheckedDone = () => {
-                const illegalWords = wordsAndScore.illegalWords || [];
-                playWord(context, context.bgioProps, { ...wordsAndScore, illegalWords: illegalWords });
+            const playWord = () => {
+                
+                context.bgioProps.moves.playWord({
+                    board: context.board,
+                    rack: context.rack,
+                    score: wordsAndScore.score,
+                    playedWordinfo: {
+                        ...wordsAndScore,
+                        illegalWords: wordsAndScore.illegalWords || [],
+                    },
+
+                });
+            
+                sAssert(context.bgioProps.events.endTurn);
+                context.bgioProps.events.endTurn();
+
                 setIllegalWordsData(null);
             };
 
-            const checkedDone = () => {
+            const conditionalPlayWord = () => {
                 if (!illegalWords) {
-                    uncheckedDone();
+                    playWord();
                 } else {
                     setIllegalWordsData({ all: words, illegal: illegalWords });
                 }
             };
 
-            result.onDone = illegalWordsData ? uncheckedDone : checkedDone;
+            result.onDone = illegalWordsData ? playWord : conditionalPlayWord;
         }
 
         return result;
