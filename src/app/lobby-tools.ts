@@ -1,15 +1,6 @@
 import { LobbyClient } from "boardgame.io/client";
-import { lobbyServer } from "../app/url-params";
-import { MatchID, Player } from "./types";
-import { AppGame } from "./app-game";
-
-export function defaultPlayerName(playerID: string): string {
-    const playerNumber = parseInt(playerID);
-    if (isNaN(playerNumber)) {
-        console.warn(`Player ID "${playerID}" is not a number`);
-    }
-    return `Player${playerNumber+1}`;
-}
+import { AppGame, defaultPlayerName, MatchID, Player } from "../app-game-support";
+import { lobbyServer } from "./url-params";
 
 export function makeLobbyClient() : LobbyClient {
     return new LobbyClient({ server: lobbyServer() });
