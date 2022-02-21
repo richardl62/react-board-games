@@ -9,10 +9,9 @@ export enum GameCategory {
   test = "Test/Debug",
 }
 
-// TO DO: Try to avoid this use of 'any'.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface AppGame<G = any> extends Game<G> { 
-    // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Use for
+  // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
   // display purposes.
   displayName: string;
   category: GameCategory;
