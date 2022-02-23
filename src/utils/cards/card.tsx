@@ -4,7 +4,7 @@ import { getCardBackComponent, getCardComponent } from "./card-components";
 import { cardSize, defaultCardBack } from "./styles";
 import { Card, CardBack } from "./types";
 
-const EmptyCard = styled.div`
+export const EmptyCard = styled.div`
     display: inline flow;
     
     width: ${cardSize.width};  
@@ -15,7 +15,7 @@ const EmptyCard = styled.div`
 `;
 
 type CardProps = {
-    card?: Card;
+    card?: Card | null;
     showBack?: boolean | CardBack ;
 } 
 

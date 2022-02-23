@@ -1,11 +1,11 @@
 import React from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
 
-import { CardGame } from "./card-game";
+import { GameWrapper } from "./game-wrapper";
 
 const game: AppGame = {
-    name: "cards",
-    displayName: "Cards",
+    name: "Cribbage",
+    displayName: "Cribbage",
     category: GameCategory.development,
 
     setup: () => null,
@@ -16,7 +16,7 @@ const game: AppGame = {
     moves: {
     },
 
-    board: () => <CardGame/>,
+    board: () => <GameWrapper/>,
 };
 
 export default [ game ];
