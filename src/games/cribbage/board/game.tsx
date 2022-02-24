@@ -1,30 +1,40 @@
 import React from "react";
 import styled from "styled-components";
+import { sAssert } from "../../../utils/assert";
 import { useCribbageContext } from "../cribbage-context";
+import { Deck } from "./deck";
 import { Hand } from "./hand";
+import { Scores } from "./scores";
 
 
 const GameArea = styled.div`
+    display: inline flex;
+    div {
+        margin-right: 5px;
+    }
 `;
 
 export function Cribbage() : JSX.Element {
-    const {me, other } = useCribbageContext();
+    const context = useCribbageContext();
 
     return <GameArea>
-        
-        <Hand cards={other.hand} showBack />
-        <MidTable/>
-        <Hand cards={me.hand} />
+        <Deck/>
+
+        {context.settingBox && <SettingBox/>}
+          
+        <Scores/>
         
     </GameArea>;
 }
 
-function MidTable() {
-    const context = useCribbageContext();
+function SettingBox() {
+    const {me, other, settingBox } = useCribbageContext();
+    sAssert(settingBox);
 
-    if(context.settingBox) {
-        return <Hand cards={context.settingBox.inBox} showBack />;
-    }
+    return <div>
+        <Hand cards={other.hand} showBack />
+        <Hand cards={settingBox.inBox} showBack />
+        <Hand cards={me.hand} />
+    </div>;
 
-    return <div>Error: Did not find expected data</div>;
 }

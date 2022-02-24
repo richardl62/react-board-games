@@ -66,7 +66,7 @@ export const startingState: GameState = {
     },
 
     myBox: true,
-    cutCard: null,
+    cutCard: null, //{ rank: "7", suit: "D" },
 
     settingBox: {
         inBox: [{ rank: "4", suit: "C" }],
