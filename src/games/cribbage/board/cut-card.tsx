@@ -13,7 +13,7 @@ const DeckDiv = styled.div`
     }
 `;
 
-export function Deck() : JSX.Element {
+export function CutCard() : JSX.Element {
     const { cutCard } = useCribbageContext();
 
     if( cutCard ) {

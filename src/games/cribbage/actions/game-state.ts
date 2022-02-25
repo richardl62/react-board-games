@@ -25,7 +25,7 @@ export interface GameState {
 
     /* Info for different stages of game.  Exactly one will be set at all times.
     */
-    settingBox?: {
+    addingCardsToBox?: {
         inBox: Card[];
     }
 
@@ -34,7 +34,7 @@ export interface GameState {
         played: Card[];
     } 
 
-    scoring?: {
+    scoringHands?: {
         box: Card[];
     }
 }
@@ -68,7 +68,7 @@ export const startingState: GameState = {
     myBox: true,
     cutCard: null, //{ rank: "7", suit: "D" },
 
-    settingBox: {
+    addingCardsToBox: {
         inBox: [{ rank: "4", suit: "C" }],
     } 
 };

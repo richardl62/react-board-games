@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../utils/assert";
 import { useCribbageContext } from "../cribbage-context";
-import { Deck } from "./deck";
-import { Hand } from "./hand";
+import { CutCard } from "./cut-card";
 import { Scores } from "./scores";
+import { AddingCardsToBox as PuttingCardsIntoBox } from "./adding-cards-to-box";
+import { Pegging } from "./pegging";
+import { ScoringHands } from "./scoring-hands";
 
 
 const GameArea = styled.div`
@@ -18,23 +19,14 @@ export function Cribbage() : JSX.Element {
     const context = useCribbageContext();
 
     return <GameArea>
-        <Deck/>
+        <CutCard/>
 
-        {context.settingBox && <SettingBox/>}
+        {context.addingCardsToBox && <PuttingCardsIntoBox/>}
+        {context.pegging && <Pegging/>}
+        {context.scoringHands && <ScoringHands/>}
           
         <Scores/>
         
     </GameArea>;
 }
 
-function SettingBox() {
-    const {me, other, settingBox } = useCribbageContext();
-    sAssert(settingBox);
-
-    return <div>
-        <Hand cards={other.hand} showBack />
-        <Hand cards={settingBox.inBox} showBack />
-        <Hand cards={me.hand} />
-    </div>;
-
-}
