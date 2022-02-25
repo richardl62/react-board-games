@@ -31,7 +31,7 @@ export function BoardSquare(props: BoardSquareProps): JSX.Element {
     };
 
     const style : PieceHolderStyle = {
-        hieght: squareSize,
+        height: squareSize,
         width: squareSize,
 
         /** Background color. (In future more general background my me allowed */

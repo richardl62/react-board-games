@@ -10,7 +10,7 @@ interface BorderColor {
 }
 
 const Container = styled.div<{
-    hieght: string,
+    height: string,
     width: string,
     color?: string | null,
     backgroundColor?: string | null,
@@ -19,7 +19,7 @@ const Container = styled.div<{
     align-items: center;
     justify-content: center;
 
-    height: ${props=>props.hieght};
+    height: ${props=>props.height};
     width: ${props=>props.width};
     color: ${props=>props.color || "none"};
     background-color: ${props=>props.backgroundColor || "none"};
@@ -50,11 +50,11 @@ function hoverBorderColor(bc?: BorderColor) : string {
 }
 
 const Border = styled.div<{
-    hieght: string,
+    height: string,
     width: string,
     borderColor?: BorderColor,
 }>`
-    height: ${props=>props.hieght};
+    height: ${props=>props.height};
     width: ${props=>props.width};
     color: ${props=>props.color || "none"};
 
@@ -65,7 +65,7 @@ const Border = styled.div<{
     z-index: 2;
 
     border-style: solid;
-    border-width: CALC(${props => props.hieght} * 0.1) CALC(${props => props.width} * 0.1);
+    border-width: CALC(${props => props.height} * 0.1) CALC(${props => props.width} * 0.1);
 
 
     border-color: ${props => nonHoverBorderColor(props.borderColor)};
@@ -130,7 +130,7 @@ export interface PieceHolderStyle {
     /** Size of the PieceHolder.
      * The piece will be rendered in a div of this size.
      */
-    hieght: string;
+    height: string;
     width: string;
 
     /** Background color. (In future more general background my me allowed */
@@ -167,7 +167,7 @@ interface PieceHolderProps<ID = UnknownObject> {
 export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JSX.Element {
 
     const { style, children, onClick, dragDrop } = props;
-    const { hieght, width, background, borderColor } = style;
+    const { height, width, background, borderColor } = style;
     const draggable = dragDrop ? dragDrop.draggable : false;
 
     const [{isDragging}, dragRef] = useDrag(dragDrop);
@@ -178,7 +178,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
     const hidePiece = isDragging && hideDuringDrag;
 
     return <Container ref={dropRef}
-        hieght={hieght}
+        height={height}
         width={width}
         color={background?.textColor}
         backgroundColor={background?.color}
@@ -197,7 +197,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
             </Piece>
 
             <Border
-                hieght={hieght}
+                height={height}
                 width={width}
                 borderColor={borderColor}
             />

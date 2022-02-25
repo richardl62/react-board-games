@@ -41,7 +41,7 @@ function Square(props: SquareProps) : JSX.Element {
 
     const style={
         background: { color: "cornsilk" },
-        hieght: "80px",
+        height: "80px",
         width: "40px",
         borderColor: {
             hoverColor: "olive",
