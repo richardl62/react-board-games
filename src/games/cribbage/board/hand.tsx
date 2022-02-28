@@ -7,6 +7,12 @@ import { cardName } from "../../../utils/cards/types";
 
 type ShowBack = Parameters<typeof CardSVG>[0]["showBack"];
 
+interface CardID {
+    handID: string;
+    index: number;
+    card: Card | null;
+}
+
 const HandDiv = styled.div`
     display: flex;
 `;
@@ -17,7 +23,10 @@ interface Props {
     showBack?: ShowBack;
 }
 
+const handID = "hand";
+
 export function Hand(props: Props) : JSX.Element {
+    
     const { cards, showBack } = props;
 
     const style : PieceHolderStyle = {
@@ -25,24 +34,33 @@ export function Hand(props: Props) : JSX.Element {
         background: {color: "white"},
     };
 
-    const dragDrop : DragDrop = { 
-        /** Id of piece to drag. Used as parameter to onDrop.
-         */
-        id: {card: "card"},
-    
-        draggable: true,
-    
+    const dragDrop = (index: number) =>  {
+        const result: DragDrop<CardID> = {
+            /** Id of piece to drag. Used as parameter to onDrop.
+             */
+            id: {
+                handID: handID,
+                index: index,
+                card: cards[index],
+            },
 
-        end: arg => {
-            console.log("Drag", arg.drag, "drop", arg.drop);
-        }
+            draggable: true,
+
+
+            end: arg => {
+                console.log("Drag", arg.drag);
+                console.log("Drop", arg.drop);
+            }
+        };
+
+        return result;
     };
 
     return <HandDiv>
-        {cards.map(card => {
+        {cards.map((card,index) => {
             const key = card ? cardName(card) : "empty";
 
-            return <PieceHolder key={key} style={style} dragDrop={dragDrop} >
+            return <PieceHolder key={key} style={style} dragDrop={dragDrop(index)} >
                 <CardSVG  card={card} showBack={showBack} />
             </PieceHolder>; 
         })}
