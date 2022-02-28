@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { PieceHolder, PieceHolderStyle, DragDrop } from "../../../utils/board/piece-holder";
-import { Card, CardSVG } from "../../../utils/cards";
-import { cardSize } from "../../../utils/cards/styles";
-import { cardName } from "../../../utils/cards/types";
+import { PieceHolder, PieceHolderStyle, DragDrop } from "../board/piece-holder";
+import { Card, CardSVG } from ".";
+import { cardSize } from "./styles";
+import { cardName } from "./types";
 
 type ShowBack = Parameters<typeof CardSVG>[0]["showBack"];
 
-interface CardID {
+export interface CardID {
     handID: string;
     index: number;
     card: Card | null;
@@ -17,13 +17,17 @@ const HandDiv = styled.div`
     display: flex;
 `;
 
+export type OnDrop = Required<DragDrop<CardID>>["end"];
 interface Props {
     cards: (Card|null)[];
-
     showBack?: ShowBack;
-}
 
-const handID = "hand";
+    dragDrop?: {
+        handID: string,
+        draggable?: boolean,
+        onDrop?: OnDrop,
+    }
+}
 
 export function Hand(props: Props) : JSX.Element {
     
@@ -34,7 +38,13 @@ export function Hand(props: Props) : JSX.Element {
         background: {color: "white"},
     };
 
-    const dragDrop = (index: number) =>  {
+    const dragDropOptions = (index: number) =>  {
+        if(!props.dragDrop) {
+            return;
+        }
+
+        const { handID, draggable, onDrop} = props.dragDrop;
+
         const result: DragDrop<CardID> = {
             /** Id of piece to drag. Used as parameter to onDrop.
              */
@@ -44,13 +54,9 @@ export function Hand(props: Props) : JSX.Element {
                 card: cards[index],
             },
 
-            draggable: true,
+            draggable: Boolean(draggable),
 
-
-            end: arg => {
-                console.log("Drag", arg.drag);
-                console.log("Drop", arg.drop);
-            }
+            end: onDrop,
         };
 
         return result;
@@ -60,7 +66,7 @@ export function Hand(props: Props) : JSX.Element {
         {cards.map((card,index) => {
             const key = card ? cardName(card) : "empty";
 
-            return <PieceHolder key={key} style={style} dragDrop={dragDrop(index)} >
+            return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(index)} >
                 <CardSVG  card={card} showBack={showBack} />
             </PieceHolder>; 
         })}
