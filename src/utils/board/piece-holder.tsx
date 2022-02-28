@@ -89,25 +89,26 @@ const Piece = styled.div`
 `;
 
 export interface DragDrop<ID = UnknownObject> { 
-    /** Id of piece to drag. Used as parameter to onDrop.
-     */
+    /** Id of piece to drag. Used as parameter to start and end.*/
     id: ID;
 
+    /** Determine whether the piece is dragable */
     draggable: boolean;
-    /**
-     * Called at the start of the a drag.  
-     * 
-     * 'arg' will be the id supplied in the object.
-     */
-    start?: (arg: ID) => void;
 
     /**
      * Called at the start of the a drag.  
      * 
-     * 'arg' will be the id supplied in the object.
+     * 'id' will be the id supplied in this object.
+     */
+    start?: (id: ID) => void;
+
+    /**
+     * Called at the end of the a drag.  
      * 
-     * 'drop' will be the id of the place holder the object is dropped into, or 
-     * null if the drag fails (i.e. if the drag is to a non-droppable location).
+     * 'drag' will be the id supplied in this object.
+     * 
+     * 'drop' will be the id of the place holder the object that is dropped into,
+     * or null if the drag fails (i.e. if the drag is to a non-droppable location).
      * 
      * To Do: Consider adding a return type that could be used to cancel the drag.
      */
@@ -120,6 +121,7 @@ export interface DragDrop<ID = UnknownObject> {
      */
     hide?: boolean;
 }
+
 export interface PieceHolderBackground {
     color: string,
     text?: string,
@@ -133,9 +135,12 @@ export interface PieceHolderStyle {
     height: string;
     width: string;
 
-    /** Background color. (In future more general background my me allowed */
+    /** Background color. (In future more general background may be allowed */
     background: PieceHolderBackground;
+
     /** 
+     * Specify the colour of the border.
+     * 
      * For now at least, the size of the border is a hard-coded fraction of the size 
      * supplied in this interface.
      */
@@ -146,9 +151,6 @@ export interface PieceHolderStyle {
 interface PieceHolderProps<ID = UnknownObject> {
     style: PieceHolderStyle;
 
-    /** The piece to be displayed. */
-    children?: ReactNode;
-
     onClick?: () => void;
 
     /** Options for drag and drop 
@@ -158,6 +160,9 @@ interface PieceHolderProps<ID = UnknownObject> {
      * Note: The child piece (rather than any background or foreground (i.e. the border) is dragged.
     */
     dragDrop?: DragDrop<ID>;
+
+    /** The piece to be displayed. */
+    children?: ReactNode;
 }
 
 /**
@@ -186,8 +191,9 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
     >
         {background.text}
 
-        {/* KLUDGE: Drag the piece and the border.  This is done because the border is on
-            top of the piece (to make it visible), and without kludge the border would block the drag.    
+        {/* KLUDGE: Drag the piece and the border.  This is done because the 
+        border is on top of the piece (to make it visible), and without this
+        kludge the border would block the drag.    
         */}
         <FullSize ref={draggable ? dragRef : undefined}>
             <Piece >
