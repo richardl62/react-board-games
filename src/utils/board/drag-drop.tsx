@@ -25,6 +25,15 @@ interface UseDragArg<ID> {
     end?: (ids: {drag: ID, drop: ID | null}) => void;
 }
 
+/* Note on Drag/drop ID
+
+The IDs passed to useDrag and useDrop are wrapped as {id: user-supplied-id}
+before being passed to reactDnD. This allowed the id to be returned cleanly
+to client code.  (The ID obtained from useDrag contained some extraneous
+members. It looked as if reactDnD data was being merged into the ID object.) 
+*/
+
+
 /**
  * Wrapper for react-dnd useDrag
  * @param arg - [Optional] ID of the piece that can be dragged. Drag is suppress if omitted.
@@ -50,16 +59,24 @@ export function useDrag<ID = UnknownObject>(arg?: UseDragArg<ID> | null):
             if(id && start) { 
                 start(id); 
             }
-            return id;
+            // Wrap the id. See "Note on Drag/drop ID" above.
+            return {id: id};
         },
-        end: end && ((dragID : unknown, monitor) => {
-            sAssert(sameJSON(dragID, id));
+        end: end && ((dragID : {id: unknown}, monitor) => {
+            sAssert(sameJSON(dragID.id, id));
             sAssert(end); // why is this needed?
 
-            const dropID = monitor.getDropResult();
-            sAssert(dropID === null || typeof dropID === "object");
+            const dropResult = monitor.getDropResult();
+
+            let dropID = null;
+            if(dropResult) {
+                // Unwrap the id. See "Note on Drag/drop ID" above.
+                dropID  = (dropResult as {id : ID}).id;
+                sAssert(typeof dropID === "object");
+            }
             
-            end({drag: dragID as ID, drop: dropID as ID | null});
+            sAssert(id);
+            end({drag: id, drop: dropID});
         }),
     }));
 }
@@ -87,7 +104,9 @@ export function useDrop<ID = UnknownObject>(arg?: UseDropArg<ID> | null):
             if(onDrop) {
                 onDrop(from as ID);
             }
-            return id;
+
+            // Wrap the id. See "Note on Drag/drop ID" above.
+            return {id: id};
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
