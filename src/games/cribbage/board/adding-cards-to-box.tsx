@@ -27,6 +27,7 @@ export function AddingCardsToBox() : JSX.Element {
                 dragDrop={{
                     handID: "hand",
                     draggable: true,
+                    localReordering: true,
                 }}
             />
         </div>

@@ -20,6 +20,19 @@ interface Joker {
 
 export type Card = Joker | NonJoker;
 
+export function compareCards(c1: Card, c2: Card) : number {
+    if(c1.rank && c2.rank) {
+        return c1.rank.localeCompare(c2.rank)
+            || c1.suit.localeCompare(c2.suit);
+    }
+
+    if(c1.joker && c2.joker) {
+        return c1.joker - c2.joker;
+    }
+
+    return c1.joker ? 1 : -1;
+}
+
 export function suitName(suit: Suit) : string {
     if(suit === "C") {
         return "clubs";
