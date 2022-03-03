@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CardSVG } from ".";
 import { DragDrop, PieceHolder, PieceHolderStyle } from "../board/piece-holder";
 import { cardSize } from "./styles";
-import { Card, cardName } from "./types";
+import { Card } from "./types";
 
 type ShowBack = Parameters<typeof CardSVG>[0]["showBack"];
 
@@ -70,7 +70,9 @@ export function BasicHand(props: HandProps): JSX.Element {
 
     return <HandDiv>
         {cards.map((card, index) => {
-            const key = card ? cardName(card) : "empty";
+            // Using the card value (actually the name) as the key lead to bad
+            // results during the drag. I don't fully understand why.
+            const key = index;
 
             return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(props, index)}>
                 <CardSVG card={card} showBack={showBack} />

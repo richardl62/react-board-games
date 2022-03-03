@@ -69,9 +69,15 @@ export function Hand(props: HandProps) : JSX.Element {
     const newOnDrop: OnDrop = (arg) => {
         if(arg.drag.handID === dragDrop.handID) {
             if(arg.drop) {
-                const newCards = [...shuffledCards];
-                reorderFollowingDrag(newCards, arg.drag.index, arg.drop.index);
-                setShuffledCards(newCards);
+                const from = arg.drag.index;
+                const to = arg.drop.index;
+                // Passing a function is necessart to ensures that the reorder 
+                // uses the most recent state.
+                setShuffledCards(cards => {
+                    const newCards = [...cards];
+                    reorderFollowingDrag(newCards, from, to);
+                    return newCards;
+                });
             }
         } else if(dragDrop.onDrop) {
             dragDrop.onDrop(arg);
