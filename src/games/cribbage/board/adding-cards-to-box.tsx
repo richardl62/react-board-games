@@ -2,7 +2,7 @@ import React from "react";
 import { sAssert } from "../../../utils/assert";
 import { DndProvider } from "../../../utils/board/drag-drop";
 import { useCribbageContext } from "../cribbage-context";
-import { Hand, OnDrop } from "../../../utils/cards/hand";
+import { Hand, OnDrop } from "../../../utils/cards";
 
 export function AddingCardsToBox() : JSX.Element {
     const { me, other, addingCardsToBox } = useCribbageContext();

@@ -1,45 +1,17 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { PieceHolder, PieceHolderStyle, DragDrop } from "../board/piece-holder";
-import { Card, CardSVG } from ".";
-import { cardSize } from "./styles";
-import { cardName, compareCards } from "./types";
+import { BasicHand, HandProps, OnDrop } from "./basic-hand";
 
-type ShowBack = Parameters<typeof CardSVG>[0]["showBack"];
 
-export interface CardID {
-    handID: string;
-    index: number;
-    card: Card | null;
-}
-
-const HandDiv = styled.div`
-    display: flex;
-`;
-
-export type OnDrop = Required<DragDrop<CardID>>["end"];
-
-/** check if the arrays have the same values after sorting */
-function sameContent(cards1: (Card | null)[], cards2: (Card|null)[]) : boolean {
+/** Check if the arrays have the same values after sorting 
+ * (Implementation is inefficient)
+*/
+function sameContent<T>(cards1: T[], cards2: T[]) : boolean {
     if(cards1.length !== cards2.length) {
         return false;
     }
 
-    const compare = (c1: Card|null, c2: Card| null) => {
-        if (c1 === null && c2 === null)  {
-            return 0; 
-        }
-
-        if (c1 === null) {
-            return -1;
-        }
-
-        if (c2 === null) {
-            return 1;
-        }
-
-        return compareCards(c1, c2);
-    };
+    const compare = (c1: T, c2: T) => 
+        JSON.stringify(c1).localeCompare(JSON.stringify(c2));
     
     const sorted1=[...cards1].sort(compare);
     const sorted2=[...cards2].sort(compare);
@@ -53,64 +25,32 @@ function sameContent(cards1: (Card | null)[], cards2: (Card|null)[]) : boolean {
     return true;
 }
 
-interface HandProps {
-    cards: (Card|null)[];
-    showBack?: ShowBack;
+/** Reorder array elements to reflect a drag from 'from' to 'to'.
+ * 
+ *  Any element between 'from' and 'to' are shuffled up/down as appropriate
+ *  (i.e. towards 'from').
+ * 
+ *  The array is processed in place, and is then returned.
+ */
+function reorderFollowingDrag<T>(
+    array: T[],
+    from: number,
+    to: number,
+): T[] {
 
-    dragDrop?: {
-        /** ID string. Must be uniques amongst all hands */
-        handID: string,
-        draggable?: boolean,
-        onDrop?: OnDrop,
-
-        /** If true, drags within the deck will be handled locally */ 
-        localReordering?: boolean,
+    const dragged = array[from];
+    if(from < to) {
+        for(let i = from; i < to; ++i) {
+            array[i] = array[i+1];
+        }
+    } else if (from > to) {
+        for(let i = from; i > to; --i) {
+            array[i] = array[i-1];
+        }
     }
-}
+    array[to] = dragged;
 
-function dragDropOptions(props: HandProps, index: number) {
-    if (!props.dragDrop) {
-        return;
-    }
-
-    const { handID, draggable, onDrop } = props.dragDrop;
-
-    const result: DragDrop<CardID> = {
-        /** Id of piece to drag. Used as parameter to onDrop.
-         */
-        id: {
-            handID: handID,
-            index: index,
-            card: props.cards[index],
-        },
-
-        draggable: Boolean(draggable),
-
-        end: onDrop,
-    };
-
-    return result;
-}
-
-function UnshuffledHand(props: HandProps) : JSX.Element {
-    
-    const { cards, showBack } = props;
-
-    const style : PieceHolderStyle = {
-        ...cardSize, // for hieght and widht
-        background: {color: "white"},
-    };
-
-
-    return <HandDiv>
-        {cards.map((card,index) => {
-            const key = card ? cardName(card) : "empty";
-
-            return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(props, index)} >
-                <CardSVG  card={card} showBack={showBack} />
-            </PieceHolder>; 
-        })}
-    </HandDiv>;
+    return array;
 }
 
 export function Hand(props: HandProps) : JSX.Element {
@@ -119,7 +59,7 @@ export function Hand(props: HandProps) : JSX.Element {
     const { dragDrop } = props;
 
     if(!dragDrop?.localReordering ) {
-        return <UnshuffledHand {...props}/>;
+        return <BasicHand {...props}/>;
     }
 
     if(!sameContent(props.cards, shuffledCards)) {
@@ -129,39 +69,18 @@ export function Hand(props: HandProps) : JSX.Element {
     const newOnDrop: OnDrop = (arg) => {
         if(arg.drag.handID === dragDrop.handID) {
             if(arg.drop) {
-                setShuffledCards(doLocalDrag(shuffledCards, arg.drag.index, arg.drop.index));
+                const newCards = [...shuffledCards];
+                reorderFollowingDrag(newCards, arg.drag.index, arg.drop.index);
+                setShuffledCards(newCards);
             }
         } else if(dragDrop.onDrop) {
             dragDrop.onDrop(arg);
         }
     };
 
-    return <UnshuffledHand {...props}
+    return <BasicHand {...props}
         cards={shuffledCards}
         dragDrop={{...dragDrop, onDrop: newOnDrop}}    
     />;
-}
-
-
-function doLocalDrag(
-    cards_: (Card | null)[],
-    dragIndex: number,
-    dropIndex: number,
-): (Card | null)[] {
-    const cards = [...cards_];
-
-    const dragged = cards[dragIndex];
-    if(dragIndex < dropIndex) {
-        for(let i = dragIndex; i < dropIndex; ++i) {
-            cards[i] = cards[i+1];
-        }
-    } else if (dragIndex > dropIndex) {
-        for(let i = dragIndex; i > dropIndex; --i) {
-            cards[i] = cards[i-1];
-        }
-    }
-    cards[dropIndex] = dragged;
-
-    return cards;
 }
 
