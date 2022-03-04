@@ -1,92 +1,79 @@
-import React, { useState } from "react";
-import { BasicHand, HandProps, OnDrop } from "./basic-hand";
+import React from "react";
+import styled from "styled-components";
+import { CardSVG } from ".";
+import { DragDrop, PieceHolder, PieceHolderStyle } from "../board/piece-holder";
+import { cardSize } from "./styles";
+import { Card } from "./types";
 
+type ShowBack = Parameters<typeof CardSVG>[0]["showBack"];
 
-/** Check if the arrays have the same values after sorting 
- * (Implementation is inefficient)
-*/
-function sameContent<T>(cards1: T[], cards2: T[]) : boolean {
-    if(cards1.length !== cards2.length) {
-        return false;
-    }
-
-    const compare = (c1: T, c2: T) => 
-        JSON.stringify(c1).localeCompare(JSON.stringify(c2));
-    
-    const sorted1=[...cards1].sort(compare);
-    const sorted2=[...cards2].sort(compare);
-
-    for(let i = 0; i < sorted1.length; ++i) {
-        if(compare(sorted1[i], sorted2[i]) !== 0) {
-            return false;
-        }
-    }
-
-    return true;
+export interface CardID {
+    handID: string;
+    index: number;
+    card: Card | null;
 }
 
-/** Reorder array elements to reflect a drag from 'from' to 'to'.
- * 
- *  Any element between 'from' and 'to' are shuffled up/down as appropriate
- *  (i.e. towards 'from').
- * 
- *  The array is processed in place, and is then returned.
- */
-function reorderFollowingDrag<T>(
-    array: T[],
-    from: number,
-    to: number,
-): T[] {
+const HandDiv = styled.div`
+    display: flex;
+`;
 
-    const dragged = array[from];
-    if(from < to) {
-        for(let i = from; i < to; ++i) {
-            array[i] = array[i+1];
-        }
-    } else if (from > to) {
-        for(let i = from; i > to; --i) {
-            array[i] = array[i-1];
-        }
-    }
-    array[to] = dragged;
+export type OnDrop = Required<DragDrop<CardID>>["end"];
 
-    return array;
-}
-
-export function Hand(props: HandProps) : JSX.Element {
-    const [ shuffledCards, setShuffledCards ] = useState<HandProps["cards"]>(props.cards);
-
-    const { dragDrop } = props;
-
-    if(!dragDrop?.localReordering ) {
-        return <BasicHand {...props}/>;
+function dragDropOptions(props: HandProps, index: number) {
+    if (!props.dragDrop) {
+        return;
     }
 
-    if(!sameContent(props.cards, shuffledCards)) {
-        setShuffledCards(props.cards);
-    }
+    const { handID, draggable, onDrop } = props.dragDrop;
 
-    const newOnDrop: OnDrop = (arg) => {
-        if(arg.drag.handID === dragDrop.handID) {
-            if(arg.drop) {
-                const from = arg.drag.index;
-                const to = arg.drop.index;
-                // Passing a function is necessart to ensures that the reorder 
-                // uses the most recent state.
-                setShuffledCards(cards => {
-                    const newCards = [...cards];
-                    reorderFollowingDrag(newCards, from, to);
-                    return newCards;
-                });
-            }
-        } else if(dragDrop.onDrop) {
-            dragDrop.onDrop(arg);
-        }
+    const result: DragDrop<CardID> = {
+        /** Id of piece to drag. Used as parameter to onDrop.
+         */
+        id: {
+            handID: handID,
+            index: index,
+            card: props.cards[index],
+        },
+
+        draggable: Boolean(draggable),
+
+        end: onDrop,
     };
 
-    return <BasicHand {...props}
-        cards={shuffledCards}
-        dragDrop={{...dragDrop, onDrop: newOnDrop}}    
-    />;
+    return result;
 }
 
+export interface HandProps {
+    cards: (Card|null)[];
+    showBack?: ShowBack;
+
+    dragDrop?: {
+        /** ID string. Must be uniques amongst all hands */
+        handID: string,
+        draggable?: boolean,
+        onDrop?: OnDrop,
+    }
+}
+
+export function Hand(props: HandProps): JSX.Element {
+
+    const { cards, showBack } = props;
+
+    const style: PieceHolderStyle = {
+        ...cardSize,
+        background: { color: "white" },
+    };
+
+
+    return <HandDiv>
+        {cards.map((card, index) => {
+            // Using the card value (actually the name) as the key lead to bad
+            // results during the drag. I don't fully understand why.
+            const key = index;
+
+            return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(props, index)}>
+                <CardSVG card={card} showBack={showBack} />
+            </PieceHolder>;
+        })}
+    </HandDiv>;
+}

@@ -21,7 +21,13 @@ export interface GameState {
 
     myBox: boolean;
 
-    cutCard: Card | null;
+    // Kludge? The cut card is selected from the start but is shown only when
+    // a player 'cuts' the deck.
+    cutCard: {
+        card: Card;
+        visible: boolean;
+    };
+
 
     /* Info for different stages of game.  Exactly one will be set at all times.
     */
@@ -66,7 +72,10 @@ export const startingState: GameState = {
     },
 
     myBox: true,
-    cutCard: null, //{ rank: "7", suit: "D" },
+    cutCard: { 
+        card: {rank: "7", suit: "D" },
+        visible: false,
+    },
 
     addingCardsToBox: {
         inBox: [{ rank: "4", suit: "C" }],

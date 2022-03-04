@@ -14,14 +14,16 @@ const DeckDiv = styled.div`
 `;
 
 export function CutCard() : JSX.Element {
-    const { cutCard } = useCribbageContext();
+    const { cutCard, dispatch } = useCribbageContext();
 
-    if( cutCard ) {
-        return <CardSVG card={cutCard} />; 
+    if( cutCard.visible ) {
+        return <CardSVG card={cutCard.card} />; 
     }
-
+    const onClick = () => dispatch({type: "showCutCard"});
     return <DeckDiv>    
         <CardSVG showBack /> 
-        <button>Cut</button>
+        <button onClick={onClick}>
+            Cut
+        </button>
     </DeckDiv>;
 }

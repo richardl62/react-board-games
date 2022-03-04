@@ -1,36 +1,37 @@
 import React from "react";
 import { sAssert } from "../../../utils/assert";
-import { DndProvider } from "../../../utils/board/drag-drop";
 import { useCribbageContext } from "../cribbage-context";
 import { Hand, OnDrop } from "../../../utils/cards";
 
 export function AddingCardsToBox() : JSX.Element {
-    const { me, other, addingCardsToBox } = useCribbageContext();
+    const { me, other, addingCardsToBox, dispatch } = useCribbageContext();
     sAssert(addingCardsToBox);
 
     const { inBox } = addingCardsToBox;
 
-    const onDrop : OnDrop = arg => console.log("drag", arg.drag, "drop", arg.drop);
+    const onDrop : OnDrop = arg => {
+        const { drag, drop } = arg;
 
-    return <DndProvider>
-        <div>
-            <Hand cards={other.hand} showBack />
+        if(drop && drop.handID === "hand") {
+            dispatch({
+                type: "dragWithinHand", 
+                data: {from: drag.index, to: drop.index},
+            });
+        }
+    };
 
-            <Hand cards={inBox} showBack 
-                dragDrop={{
-                    handID: "box",
-                    onDrop: onDrop,
-                }}
-            />
+    return <div>
+        <Hand cards={other.hand} showBack />
 
-            <Hand cards={me.hand}
-                dragDrop={{
-                    handID: "hand",
-                    draggable: true,
-                    localReordering: true,
-                }}
-            />
-        </div>
-    </DndProvider>;
+        <Hand cards={inBox} showBack/>
+       
+        <Hand cards={me.hand}
+            dragDrop={{
+                handID: "hand",
+                draggable: true,
+                onDrop: onDrop,
+            }}
+        />
+    </div>;
 
 }

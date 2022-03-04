@@ -1,10 +1,15 @@
 import React from "react";
 import { sAssert } from "../../utils/assert";
+import { ActionType } from "./actions/reducer";
 import { GameState } from "./actions/game-state";
 
-export const ReactCribbageContext = React.createContext<GameState|null>(null);
+interface Context extends GameState {
+    dispatch: React.Dispatch<ActionType>;
+}
 
-export function useCribbageContext() : GameState {
+export const ReactCribbageContext = React.createContext<Context|null>(null);
+
+export function useCribbageContext() : Context {
     const context = React.useContext(ReactCribbageContext);
     sAssert(context);
 
