@@ -34,9 +34,7 @@ export function reducer(state : GameState, action: ActionType) : GameState {
         newState.me.hand.splice(from, 1);
 
         sAssert(newState.addingCardsToBox);
-        const box = newState.addingCardsToBox.inBox;
-        box.push(card);
-        
+        newState.box.push(card);
     
         return newState;
     }

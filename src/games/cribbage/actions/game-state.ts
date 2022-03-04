@@ -19,6 +19,8 @@ export interface GameState {
     me: PlayerData;
     other: PlayerData;
 
+    box: Card [];
+
     myBox: boolean;
 
     // Kludge? The cut card is selected from the start but is shown only when
@@ -31,9 +33,7 @@ export interface GameState {
 
     /* Info for different stages of game.  Exactly one will be set at all times.
     */
-    addingCardsToBox?: {
-        inBox: Card[];
-    }
+    addingCardsToBox?: true;
 
     pegging?: {
         meToPlay: boolean;
@@ -72,13 +72,13 @@ export const startingState: GameState = {
         scores: [],
     },
 
+    box: [],
+
     myBox: true,
     cutCard: { 
         card: {rank: "7", suit: "D" },
         visible: false,
     },
 
-    addingCardsToBox: {
-        inBox: [],
-    } 
+    addingCardsToBox: true,
 };

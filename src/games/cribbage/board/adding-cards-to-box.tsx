@@ -1,13 +1,10 @@
 import React from "react";
-import { sAssert } from "../../../utils/assert";
 import { useCribbageContext } from "../cribbage-context";
 import { Hand, OnDrop } from "../../../utils/cards";
 
 export function AddingCardsToBox() : JSX.Element {
-    const { me, other, addingCardsToBox, dispatch } = useCribbageContext();
-    sAssert(addingCardsToBox);
+    const { me, other, box, dispatch } = useCribbageContext();
 
-    const { inBox } = addingCardsToBox;
 
     const onDrop : OnDrop = arg => {
         const { drag, drop } = arg;
@@ -30,7 +27,7 @@ export function AddingCardsToBox() : JSX.Element {
     return <div>
         <Hand cards={other.hand} showBack />
 
-        <Hand cards={inBox}
+        <Hand cards={box}
             dropSpot={{psuedoHandId: "dropSpot"}}
         />
        
