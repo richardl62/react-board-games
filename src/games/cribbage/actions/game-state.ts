@@ -66,6 +66,7 @@ export const startingState: GameState = {
             { rank: "A", suit: "C" },
             { rank: "2", suit: "C" },
             { rank: "3", suit: "C" },
+            { rank: "4", suit: "C" }
         ],
 
         scores: [],
@@ -78,6 +79,6 @@ export const startingState: GameState = {
     },
 
     addingCardsToBox: {
-        inBox: [{ rank: "4", suit: "C" }],
+        inBox: [],
     } 
 };

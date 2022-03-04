@@ -1,10 +1,12 @@
+import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
 import { GameState } from "./game-state";
 
 
 export type ActionType =
     { type: "showCutCard"} |
-    { type: "dragWithinHand", data: {from: number, to: number} }
+    { type: "dragWithinHand", data: { from: number, to: number} } |
+    { type: "moveToBox", data: { from: number } }
 ;
 
 export function reducer(state : GameState, action: ActionType) : GameState {
@@ -21,6 +23,21 @@ export function reducer(state : GameState, action: ActionType) : GameState {
 
         const { from, to } = action.data;
         reorderFollowingDrag(newState.me.hand, from, to);
+        return newState;
+    }
+
+    if(action.type === "moveToBox") {
+        const newState = {...state};
+        const { from } = action.data; 
+
+        const card = newState.me.hand[from];
+        newState.me.hand.splice(from, 1);
+
+        sAssert(newState.addingCardsToBox);
+        const box = newState.addingCardsToBox.inBox;
+        box.push(card);
+        
+    
         return newState;
     }
 

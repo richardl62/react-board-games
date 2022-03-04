@@ -18,12 +18,21 @@ export function AddingCardsToBox() : JSX.Element {
                 data: {from: drag.index, to: drop.index},
             });
         }
+
+        if(drop && drop.handID === "dropSpot") {
+            dispatch({
+                type: "moveToBox", 
+                data: {from: drag.index},
+            });
+        }
     };
 
     return <div>
         <Hand cards={other.hand} showBack />
 
-        <Hand cards={inBox} showBack/>
+        <Hand cards={inBox}
+            dropSpot={{psuedoHandId: "dropSpot"}}
+        />
        
         <Hand cards={me.hand}
             dragDrop={{

@@ -52,28 +52,49 @@ export interface HandProps {
         handID: string,
         draggable?: boolean,
         onDrop?: OnDrop,
-    }
+    };
+
+    /** If set, a 'drop spot' is added at the end of the hand.
+        This is an empty card which if dropped into will trigger a call
+        t the given function. 
+    */
+    dropSpot?: {psuedoHandId: string}
 }
 
 export function Hand(props: HandProps): JSX.Element {
 
-    const { cards, showBack } = props;
+    const { cards, showBack, dropSpot } = props;
 
     const style: PieceHolderStyle = {
         ...cardSize,
         background: { color: "white" },
     };
 
+    const elems = cards.map((card, index) => {
+        const key = index; 
+        return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(props, index)}>
+            <CardSVG card={card} showBack={showBack} />
+        </PieceHolder>;
+    });
+    
+    if (dropSpot) {
+        const id: CardID = {
+            handID: dropSpot.psuedoHandId,
+            index: 0,
+            card: null,
+        };
 
-    return <HandDiv>
-        {cards.map((card, index) => {
-            // Using the card value (actually the name) as the key lead to bad
-            // results during the drag. I don't fully understand why.
-            const key = index;
 
-            return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(props, index)}>
-                <CardSVG card={card} showBack={showBack} />
-            </PieceHolder>;
-        })}
-    </HandDiv>;
+        const dragDrop: DragDrop<CardID> = {
+            id: id,
+            draggable: false,
+        };
+
+        const elem = <PieceHolder key={"dropSpot"} style={style} dragDrop={dragDrop}>
+            <CardSVG card={null} />
+        </PieceHolder>;
+        elems.push(elem);
+    }
+
+    return <HandDiv> {elems} </HandDiv>;
 }
