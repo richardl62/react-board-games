@@ -1,6 +1,6 @@
 import React from "react";
 import { sAssert } from "../../utils/assert";
-import { ActionType } from "./actions/reducer";
+import { ActionType } from "./actions/use-cribbage-reducer";
 import { GameState } from "./actions/game-state";
 
 interface Context extends GameState {
