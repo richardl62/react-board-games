@@ -19,46 +19,25 @@ const HandDiv = styled.div`
 
 export type OnDrop = Required<DragDrop<CardID>>["end"];
 
-function dragDropOptions(props: HandProps, index: number) {
-    if (!props.dragDrop) {
-        return;
-    }
-
-    const { handID, draggable, onDrop } = props.dragDrop;
-
-    const result: DragDrop<CardID> = {
-        /** Id of piece to drag. Used as parameter to onDrop.
-         */
-        id: {
-            handID: handID,
-            index: index,
-            card: props.cards[index],
-        },
-
-        draggable: Boolean(draggable),
-
-        end: onDrop,
-    };
-
-    return result;
-}
 
 export interface HandProps {
     cards: (Card|null)[];
     showBack?: ShowBack;
 
-    dragDrop?: {
-        /** ID string. Must be uniques amongst all hands */
-        handID: string,
-        draggable?: boolean,
-        onDrop?: OnDrop,
+    /** If set, cards are draggable */
+    draggable?: {
+        handID: string;
+        dragEnd: (arg: {from:CardID, to: CardID}) => void;
     };
+
+    /** If set, cards are drop targets */
+    dropable?: {handID: string};
 
     /** If set, a 'drop spot' is added at the end of the hand.
         This is an empty card which if dropped into will trigger a call
         t the given function. 
     */
-    dropSpot?: {psuedoHandId: string}
+    dropSpot?: {handId: string}
 }
 
 export function Hand(props: HandProps): JSX.Element {
@@ -72,14 +51,14 @@ export function Hand(props: HandProps): JSX.Element {
 
     const elems = cards.map((card, index) => {
         const key = index; 
-        return <PieceHolder key={key} style={style} dragDrop={dragDropOptions(props, index)}>
+        return <PieceHolder key={key} style={style} >
             <CardSVG card={card} showBack={showBack} />
         </PieceHolder>;
     });
     
     if (dropSpot) {
         const id: CardID = {
-            handID: dropSpot.psuedoHandId,
+            handID: dropSpot.handId,
             index: 0,
             card: null,
         };

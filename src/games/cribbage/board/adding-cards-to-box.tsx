@@ -1,25 +1,26 @@
 import React from "react";
 import { useCribbageContext } from "../cribbage-context";
-import { Hand, OnDrop } from "../../../utils/cards";
+import { Hand } from "../../../utils/cards";
 
+type DragEnd = Required<Parameters<typeof Hand>[0]>["draggable"]["dragEnd"]
 export function AddingCardsToBox() : JSX.Element {
     const { me, other, box, dispatch } = useCribbageContext();
 
 
-    const onDrop : OnDrop = arg => {
-        const { drag, drop } = arg;
+    const dragEnd : DragEnd = arg => {
+        const { from, to } = arg;
 
-        if(drop && drop.handID === "hand") {
+        if(to.handID === "hand") {
             dispatch({
                 type: "dragWithinHand", 
-                data: {from: drag.index, to: drop.index},
+                data: {from: from.index, to: to.index},
             });
         }
 
-        if(drop && drop.handID === "dropSpot") {
+        if(to.handID === "dropSpot") {
             dispatch({
                 type: "moveToBox", 
-                data: {from: drag.index},
+                data: {from: from.index},
             });
         }
     };
@@ -28,14 +29,13 @@ export function AddingCardsToBox() : JSX.Element {
         <Hand cards={other.hand} showBack />
 
         <Hand cards={box}
-            dropSpot={{psuedoHandId: "dropSpot"}}
+            dropSpot={{handId: "dropSpot"}}
         />
        
         <Hand cards={me.hand}
-            dragDrop={{
+            draggable={{
                 handID: "hand",
-                draggable: true,
-                onDrop: onDrop,
+                dragEnd: dragEnd,
             }}
         />
     </div>;
