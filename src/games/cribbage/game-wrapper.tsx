@@ -3,7 +3,8 @@ import { ReactCribbageContext } from "./cribbage-context";
 import { Cribbage } from "./board/game";
 import { startingState } from "./actions/game-state";
 import { reducer } from "./actions/reducer";
-import { DndProvider } from "../../utils/board/drag-drop";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 export function GameWrapper(): JSX.Element {
     const [state, dispatch] = useReducer(reducer, startingState);
@@ -13,7 +14,7 @@ export function GameWrapper(): JSX.Element {
     };
     return <ReactCribbageContext.Provider value={context}>
         
-        <DndProvider>
+        <DndProvider backend={HTML5Backend}>
             <Cribbage />
         </DndProvider>
 

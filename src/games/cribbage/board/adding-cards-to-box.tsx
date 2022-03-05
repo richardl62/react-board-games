@@ -37,6 +37,8 @@ export function AddingCardsToBox() : JSX.Element {
                 handID: "hand",
                 dragEnd: dragEnd,
             }}
+
+            droppable={{handID: "hand"}}
         />
     </div>;
 
