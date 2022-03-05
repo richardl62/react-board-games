@@ -1,78 +1,77 @@
 import React from "react";
 import styled from "styled-components";
 import { CardSVG } from ".";
-import { DragDrop, PieceHolder, PieceHolderStyle } from "../board/piece-holder";
-import { cardSize } from "./styles";
+import { CardDnD, CardID } from "./card-dnd";
+
 import { Card } from "./types";
 
 type ShowBack = Parameters<typeof CardSVG>[0]["showBack"];
-
-export interface CardID {
-    handID: string;
-    index: number;
-    card: Card | null;
-}
 
 const HandDiv = styled.div`
     display: flex;
 `;
 
-export type OnDrop = Required<DragDrop<CardID>>["end"];
-
+export const dropSpotIndex = -1;
 
 export interface HandProps {
     cards: (Card|null)[];
     showBack?: ShowBack;
 
-    /** If set, cards are draggable */
+    /** If set, the cards are draggable */
     draggable?: {
         handID: string;
         dragEnd: (arg: {from:CardID, to: CardID}) => void;
     };
 
-    /** If set, cards are drop targets */
-    dropable?: {handID: string};
+    /** If set, the cards are drop targets */
+    droppable?: {handID: string};
 
     /** If set, a 'drop spot' is added at the end of the hand.
-        This is an empty card which if dropped into will trigger a call
-        t the given function. 
+        This is an empty card which is a drop tanget with the given
+        handID and an index of dropSpotIndex. 
     */
     dropSpot?: {handId: string}
 }
 
 export function Hand(props: HandProps): JSX.Element {
 
-    const { cards, showBack, dropSpot } = props;
+    const { cards, showBack, draggable, droppable, dropSpot } = props;
 
-    const style: PieceHolderStyle = {
-        ...cardSize,
-        background: { color: "white" },
+    const makeDragEnd = (index: number) => {
+        if(draggable) {
+            const {handID, dragEnd} = draggable;
+
+            const thisID : CardID = {handID: handID, index: index};
+
+            return (dropID: CardID) => dragEnd({from: thisID, to: dropID});
+        }
+    };
+
+    const makeDropID = (index: number) => {
+        if( droppable ) {
+            const {handID} = droppable;
+
+            return {handID: handID, index: index};
+        }
     };
 
     const elems = cards.map((card, index) => {
         const key = index; 
-        return <PieceHolder key={key} style={style} >
-            <CardSVG card={card} showBack={showBack} />
-        </PieceHolder>;
+        return <CardDnD key={key} card={card} showBack={showBack}
+            dragEnd={makeDragEnd(index)}
+            dropID={makeDropID(index)}
+        />;
     });
     
     if (dropSpot) {
         const id: CardID = {
             handID: dropSpot.handId,
-            index: 0,
-            card: null,
+            index: dropSpotIndex,
         };
 
-
-        const dragDrop: DragDrop<CardID> = {
-            id: id,
-            draggable: false,
-        };
-
-        const elem = <PieceHolder key={"dropSpot"} style={style} dragDrop={dragDrop}>
-            <CardSVG card={null} />
-        </PieceHolder>;
-        elems.push(elem);
+        elems.push(
+            <CardDnD key={"dropSpot"} card={null} dropID={id} />
+        );
     }
 
     return <HandDiv> {elems} </HandDiv>;
