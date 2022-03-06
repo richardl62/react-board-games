@@ -1,6 +1,11 @@
 import React from "react";
 import { useCribbageContext } from "../cribbage-context";
 import { Hand } from "../../../utils/cards";
+import styled from "styled-components";
+
+const InlineFlex = styled.div`
+    display: inline-flex;
+`;
 
 type DragEnd = Required<Parameters<typeof Hand>[0]>["draggable"]["dragEnd"]
 export function AddingCardsToBox() : JSX.Element {
@@ -28,9 +33,11 @@ export function AddingCardsToBox() : JSX.Element {
     return <div>
         <Hand cards={other.hand} showBack />
 
-        <Hand cards={box}
-            dropSpot={{handId: "dropSpot"}}
-        />
+
+        <InlineFlex>
+            <Hand cards={box} />
+            <Hand cards={[null]} droppable={{handID: "dropSpot"}}/>
+        </InlineFlex>
        
         <Hand cards={me.hand}
             draggable={{

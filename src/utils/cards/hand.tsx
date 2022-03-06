@@ -25,17 +25,11 @@ export interface HandProps {
 
     /** If set, the cards are drop targets */
     droppable?: {handID: string};
-
-    /** If set, a 'drop spot' is added at the end of the hand.
-        This is an empty card which is a drop tanget with the given
-        handID and an index of dropSpotIndex. 
-    */
-    dropSpot?: {handId: string}
 }
 
 export function Hand(props: HandProps): JSX.Element {
 
-    const { cards, showBack, draggable, droppable, dropSpot } = props;
+    const { cards, showBack, draggable, droppable } = props;
 
     const makeDragEnd = (index: number) => {
         if(draggable) {
@@ -62,17 +56,6 @@ export function Hand(props: HandProps): JSX.Element {
             dropID={makeDropID(index)}
         />;
     });
-    
-    if (dropSpot) {
-        const id: CardID = {
-            handID: dropSpot.handId,
-            index: dropSpotIndex,
-        };
-
-        elems.push(
-            <CardDnD key={"dropSpot"} card={null} dropID={id} />
-        );
-    }
 
     return <HandDiv> {elems} </HandDiv>;
 }
