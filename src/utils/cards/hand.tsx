@@ -17,43 +17,36 @@ export interface HandProps {
     cards: (Card|null)[];
     showBack?: ShowBack;
 
-    /** If set, the cards are draggable */
-    draggable?: {
-        handID: string;
-        dragEnd: (arg: {from:CardID, to: CardID}) => void;
-    };
+    /** HandID must be set for the card to be draggable or dropTarget */
+    handID?: string;
+
+    dragEnd?: (arg: {from:CardID, to: CardID}) => void;
 
     /** If set, the cards are drop targets */
-    droppable?: {handID: string};
+    dropTarget?: boolean;
 }
 
 export function Hand(props: HandProps): JSX.Element {
 
-    const { cards, showBack, draggable, droppable } = props;
+    const { cards, showBack, handID, dragEnd, dropTarget } = props;
 
-    const makeDragEnd = (index: number) => {
-        if(draggable) {
-            const {handID, dragEnd} = draggable;
-
-            const thisID : CardID = {handID: handID, index: index};
-
-            return (dropID: CardID) => dragEnd({from: thisID, to: dropID});
-        }
-    };
-
-    const makeDropID = (index: number) => {
-        if( droppable ) {
-            const {handID} = droppable;
-
-            return {handID: handID, index: index};
-        }
-    };
 
     const elems = cards.map((card, index) => {
         const key = index; 
+        if(!handID) {
+            if(dropTarget || dragEnd) {
+                console.warn("Drop and/or drop option ignored as card ID was not given");
+            }
+
+            return <CardSVG key={key} card={card} showBack={showBack} />;
+        }
+
+        const cardID = {handID: handID, index: index};
+
         return <CardDnD key={key} card={card} showBack={showBack}
-            dragEnd={makeDragEnd(index)}
-            dropID={makeDropID(index)}
+            cardID={cardID}
+            dragEnd={dragEnd}
+            dropTarget={dropTarget}
         />;
     });
 

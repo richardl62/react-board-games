@@ -24,24 +24,23 @@ function isCardID(arg: unknown) : boolean {
 }
 
 interface CardDnDProps extends CardProps {
+    cardID: CardID;
+
+    dropTarget?: boolean;
+
     /** If set, the card is draggable with the given function being called
      *  the end if a sucessful drag (i.e. one which finished on a valid
      *  drop target.)
      */
-    dragEnd?: (arg: CardID) => void; 
-    
-    /** If set, the card is draggable with the given ID being pass to
-     *  the dragged cards 'dragEnd' function.
-     */
-    dropID?: CardID;
+     dragEnd?: (arg: {from:CardID, to: CardID}) => void;
 }
 
 export function CardDnD(props: CardDnDProps) : JSX.Element {
-    const { dragEnd, dropID} = props;
+    const { cardID, dropTarget, dragEnd } = props;
 
     const [, dragRef] = useDrag(() => ({
         type: playingCard,
-        item: dragEnd && true,
+        item: cardID,
         end: (item: unknown, monitor) => {
             sAssert(dragEnd);
             const dropResult = monitor.getDropResult();
@@ -52,18 +51,19 @@ export function CardDnD(props: CardDnDProps) : JSX.Element {
                 const dropID  = dropResult as CardID;
                 sAssert(isCardID(dropID));
             
-                dragEnd(dropID);
+                dragEnd({from: cardID, to: dropID});
             }
         },
-    }));
+    }), [cardID]);
 
     const [, dropRef] = useDrop(() => ({
         accept: playingCard,
-        drop: () => dropID,
-    }));
+        drop: () => cardID,
+    }), [cardID]);
 
-    return <InlineDiv ref={dropID && dropRef}>
-        <InlineDiv ref={dragEnd && dragRef}>
+
+    return <InlineDiv ref={dropTarget ? dropRef : undefined}>
+        <InlineDiv ref={dragEnd ? dragRef : undefined }>
             <CardSVG {...props} />
         </InlineDiv>
     </InlineDiv>;
