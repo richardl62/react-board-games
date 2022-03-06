@@ -10,17 +10,21 @@ export type ActionType =
     { type: "moveToBox", data: { from: number } }
 ;
 
+function deepCopyState(state: GameState) : GameState {
+    return JSON.parse(JSON.stringify(state));  // inefficient
+}
+
 function reducer(state: GameState, action: ActionType) : GameState {
     if (action.type === "showCutCard") {
-        const newState = { ...state };
-        newState.cutCard = { ...state.cutCard };
+        const newState = deepCopyState(state); // inefficient
+
         newState.cutCard.visible = true;
 
         return newState;
     }
 
     if (action.type === "dragWithinHand") {
-        const newState = { ...state };
+        const newState = deepCopyState(state); // inefficient
 
         const { from, to } = action.data;
         reorderFollowingDrag(newState.me.hand, from, to);
@@ -28,12 +32,13 @@ function reducer(state: GameState, action: ActionType) : GameState {
     }
 
     if (action.type === "moveToBox") {
-        const newState = { ...state };
+        const newState = deepCopyState(state); // inefficient
+
         const { from } = action.data;
 
         const card = newState.me.hand[from];
+        newState.me.hand = [...newState.me.hand];
         newState.me.hand.splice(from, 1);
-
         sAssert(newState.addingCardsToBox);
         newState.box.push(card);
 
