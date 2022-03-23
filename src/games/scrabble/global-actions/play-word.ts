@@ -59,16 +59,16 @@ function letterValue(rack: (Letter | null)[]) {
     return value;
 }
 
-function findWinners(scores: {[id: string] : number} ) : string[] {
+function findWinners(playerData: GlobalGameState["playerData"]) : string[] {
     let maxScore = -99999;
-    for(const id in scores) {
-        maxScore = Math.max(maxScore, scores[id]);
+    for(const pid in playerData) {
+        maxScore = Math.max(maxScore, playerData[pid].score);
     }
 
     const winners = [];
-    for(const id in scores) {
-        if(scores[id] === maxScore) {
-            winners.push(id);
+    for(const pid in playerData) {
+        if(playerData[pid].score === maxScore) {
+            winners.push(pid);
         }
     }
     return winners;
@@ -96,12 +96,7 @@ function gameEndActions(G: GlobalGameState, playerOutPid: string) : void {
 
     G.moveHistory.push({scoresAdjusted: scoreAdjustement});
 
-    const newScores : {[id: string] : number} = {};
-    for(const pid in playerData) {
-        newScores[pid] = playerData[pid].score + scoreAdjustement[pid];
-    }
-
-    const winners = findWinners(newScores);
-    G.winnerIds = findWinners(newScores);
+    const winners = findWinners(G.playerData);
+    G.winnerIds = winners;
     G.moveHistory.push({gameOver: {winners: winners}} );
 }
