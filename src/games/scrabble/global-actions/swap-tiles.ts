@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
-import { ServerData } from ".";
 import { shuffle } from "../../../utils/shuffle";
 import { Letter } from "../config";
+import { GameState } from "./game-state";
 
 export interface SwapTilesParam {
     /**
@@ -18,11 +18,10 @@ export interface SwapTilesParam {
     toSwap: boolean[];
 } 
 
-export function swapTiles(G: ServerData, ctx: Ctx, 
+export function swapTiles(state: GameState, ctx: Ctx, 
     { rack: inputRack, toSwap }: SwapTilesParam
 ) : void {
-
-    const newBag = [... G.state.bag];
+    const newBag = [... state.bag];
     const newRack: Letter[] = [...inputRack];
 
     let nSwapped = 0;    
@@ -35,10 +34,10 @@ export function swapTiles(G: ServerData, ctx: Ctx,
     }
     shuffle(newBag);
 
-    G.state.playerData[ctx.currentPlayer].rack = newRack;
-    G.state.bag = newBag;
+    state.playerData[ctx.currentPlayer].rack = newRack;
+    state.bag = newBag;
     
-    G.state.moveHistory.push({tilesSwapped: {
+    state.moveHistory.push({tilesSwapped: {
         pid: ctx.currentPlayer,
         nSwapped: nSwapped,
     }});

@@ -4,7 +4,11 @@ import { GameState, isGameState, startingGameState } from "./game-state";
 /** Data recorded and shared via BGIO */
 
 export interface ServerData {
-    state: GameState;
+    /** states avialable for undo/redo */
+    states: GameState[];
+
+    // Index into 'states'
+    currentState: number;
 
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
@@ -14,16 +18,18 @@ export interface ServerData {
 /** Quick check that an object is (probably) a GameData. */
 
 export function isServerData(arg: unknown): boolean {
-    const globalState = arg as ServerData;
-    return isGameState(globalState.state) &&
-        typeof globalState.timestamp === "number";
+    const serverData = arg as ServerData;
+    return Array.isArray(serverData.states) &&
+        typeof serverData.currentState === "number" &&
+        typeof serverData.timestamp === "number" &&
+        isGameState(serverData.states[0]);
 }
 
 export function startingServerData(numPlayers: number, config: ScrabbleConfig): ServerData {
 
     return {
-        state: startingGameState(numPlayers, config),
-
+        states: [startingGameState(numPlayers, config)],
+        currentState: 0,
         timestamp: 0,
         serverError: null,
     };

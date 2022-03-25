@@ -2,34 +2,37 @@ import { Ctx } from "boardgame.io";
 import { ServerData } from "./server-data";
 import { playWord, PlayWordParam } from "./play-word";
 import { swapTiles, SwapTilesParam } from "./swap-tiles";
+import { GameState } from "./game-state";
 
 type PassParam = void;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function pass(G: ServerData, ctx: Ctx, _param: PassParam) : void {
-    G.state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
+function pass(state: GameState, ctx: Ctx, _param: PassParam) : void {
+    state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 }
 
-type MoveFunc<P> = (G: ServerData, ctx: Ctx, param: P) => void;
+type SimpleMoveFunc<P> = (state: GameState, ctx: Ctx, param: P) => void;
+type WrappedMoveFunc<P> = (G: ServerData, ctx: Ctx, param: P) => void;
 
-function GameMove<P>(func: MoveFunc<P> ) : MoveFunc<P> {
+function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
     return (G, ctx, param) => {
+        const state = G.states[G.currentState];
         G.serverError = null;
         try {
-            func(G, ctx, param);
+            func(state, ctx, param);
         } catch(error) {
             const message = error instanceof Error ? error.message : 
                 "unknown error";
             G.serverError = message;
-            G.state.moveHistory.push({serverError: {message: message}});
+            state.moveHistory.push({serverError: {message: message}});
         }
         G.timestamp++;
     };
 }
 
 export const bgioMoves = {
-    playWord: GameMove(playWord),
-    swapTiles: GameMove(swapTiles),
-    pass: GameMove(pass),
+    playWord: wrappedMoveFunction(playWord),
+    swapTiles: wrappedMoveFunction(swapTiles),
+    pass: wrappedMoveFunction(pass),
 };
 
 export interface ClientMoves {

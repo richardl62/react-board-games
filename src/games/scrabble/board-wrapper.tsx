@@ -20,9 +20,10 @@ export interface BoardWrapperProps {
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const scrabbleGameProps = props.appBoardProps as unknown as ScabbbleGameProps;
-    sAssert(isServerData(scrabbleGameProps.G), "Game state appears to be invalid");
+    const G = scrabbleGameProps.G;
+    sAssert(isServerData(G), "Game state appears to be invalid");
 
-    const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
+    const [localState, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
         scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config, 
             {soundsAllowed: false})
     );
@@ -45,23 +46,25 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
     }
 
-    if (scrabbleGameProps.G.timestamp !== state.externalTimestamp) {
+    if (G.timestamp !== localState.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
             data: getLocalGameState(scrabbleGameProps, props.config,
-                {soundsAllowed: state.soundsAllowed}),
+                {soundsAllowed: localState.soundsAllowed}),
         });
 
-        if(state.soundsAllowed) {
+        if(localState.soundsAllowed) {
             beep();
         }
     } 
 
+    const gameState = G.states[G.currentState];
+
     const gameProps: ScrabbleContext = {
-        ...state,
+        ...localState,
         bgioProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
-        moveHistory: scrabbleGameProps.G.state.moveHistory,
-        serverError: scrabbleGameProps.G.serverError,
+        moveHistory: gameState.moveHistory,
+        serverError: G.serverError,
         config: props.config,
         dispatch: dispatch,
         isLegalWord: isLegalWord,

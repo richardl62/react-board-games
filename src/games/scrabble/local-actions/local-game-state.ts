@@ -2,8 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { ScabbbleGameProps } from "../board/game-props";
 import { ScrabbleConfig } from "../config";
 import { Rack } from "./board-and-rack";
-import { BoardData } from "../global-actions/game-state";
-import { ServerData } from "../global-actions/server-data";
+import { BoardData, GameState } from "../global-actions/game-state";
 
 export type ClickMoveDirection = "right" | "down";
 
@@ -20,7 +19,7 @@ export interface LocalGameState {
     clickMoveStart: ClickMoveStart | null;
 
     nTilesInBag: number;
-    playerData: ServerData["state"]["playerData"];
+    playerData: GameState["playerData"];
     externalTimestamp: number;
 
     // KLUDGE? This is (at time of writing) the members below only in sanity checks.
@@ -34,23 +33,24 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: 
     {soundsAllowed} : {soundsAllowed: boolean}): LocalGameState
 {
     const {G, playerID } = scrabbleGameProps;
+    const state = G.states[G.currentState];
 
     // KLUDGE? - Not sure when playerID can be null.
-    sAssert(playerID && G.state.playerData[playerID], "Player ID appears to be invalid");
+    sAssert(playerID && state.playerData[playerID], "Player ID appears to be invalid");
 
-    const rack = G.state.playerData[playerID].rack;
+    const rack = state.playerData[playerID].rack;
     return {
-        board: G.state.board,
+        board: state.board,
         rack: rack,
 
         clickMoveStart: null,
 
-        nTilesInBag: G.state.bag.length,
+        nTilesInBag: state.bag.length,
         
         /** KLUDGE?: Intended only to allow players scores to be seen. 
          * But also gives access to racks
         */
-        playerData: G.state.playerData,
+        playerData: state.playerData,
         
         /** Incremented when any of the state above is changed (and prehaps at
          * other times). */
