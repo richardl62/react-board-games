@@ -36,16 +36,6 @@ export interface GameState {
     winnerIds: string[] | null;
 }
 
-/** Data recorded and shared via BGIO */
-export interface ServerData {
-    state: GameState;
-
-    /** Any move that changes game data will also increase timestamp */
-    timestamp: number;
-
-    serverError: string | null;
-}
-
 function isPlayerData(playerData: GamePlayerData) {
     return Array.isArray(playerData.rack) &&
         typeof playerData.score === "number";
@@ -72,14 +62,7 @@ export function isGameState(arg: unknown) : boolean {
         isPlayerDataDictionary(state.playerData);
 }
 
-/** Quick check that an object is (probably) a GameData. */
-export function isServerData(arg: unknown) : boolean {
-    const globalState = arg as ServerData;
-    return isGameState(globalState.state) &&
-        typeof globalState.timestamp === "number";
-}
-
-export function startingServerData(numPlayers: number, config: ScrabbleConfig): ServerData {
+export function startingGameState(numPlayers: number, config: ScrabbleConfig): GameState {
     const bag = config.makeFullBag(); 
 
     const rack = () => {
@@ -103,41 +86,13 @@ export function startingServerData(numPlayers: number, config: ScrabbleConfig): 
     }
     
     return {
-        state: {
-            board: nestedArrayMap(config.boardLayout, () => null),
-            playerData: playerData,
-            bag: bag,
+        board: nestedArrayMap(config.boardLayout, () => null),
+        playerData: playerData,
+        bag: bag,
 
-            moveHistory: initialMoveHistory,
-            winnerIds: null,
-        },
-
-        timestamp: 0,
-        serverError: null,
+        moveHistory: [],
+        winnerIds: null,
     };
 }
 
-const initialMoveHistory : MoveHistoryElement[] = [
-    // {
-    //     name: "Richard",
-    //     words: ["fudge"],
-    //     illegalWords: [],
-    //     score: 20,
-
-    // },
-    // {
-    //     name: "Other",
-    //     words: ["toffee", "xyz"],
-    //     illegalWords: ["xyz"],
-    //     score: 45,
-    // },
-    // {
-    //     name: "Richard",
-    //     pass: true,
-    // },
-    // {
-    //     name: "Other",
-    //     swapTiles: true,
-    // }
-];
 

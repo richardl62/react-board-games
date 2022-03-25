@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { ServerData } from "./game-state";
+import { ServerData } from "./server-data";
 import { playWord, PlayWordParam } from "./play-word";
 import { swapTiles, SwapTilesParam } from "./swap-tiles";
 
