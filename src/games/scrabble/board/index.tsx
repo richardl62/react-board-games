@@ -22,7 +22,7 @@ export function Board(): JSX.Element {
         <WaitingForPlayers {...context.bgioProps} />;
     }
 
-    const moveHistory = context.bgioProps.G.moveHistory;
+    const moveHistory = context.bgioProps.G.state.moveHistory;
 
     return (
         <Game>

@@ -6,7 +6,7 @@ import { Letter } from "../config";
 export interface SwapTilesParam {
     /**
      * The rack before the swap.  This should be the same set of tiles
-     * as  G.playerData[ctx.currentPlayer].rack, but could be in a different
+     * as  G.state.playerData[ctx.currentPlayer].rack, but could be in a different
      * order.
      */
     rack: Letter[];
@@ -22,7 +22,7 @@ export function swapTiles(G: GlobalGameState, ctx: Ctx,
     { rack: inputRack, toSwap }: SwapTilesParam
 ) : void {
 
-    const newBag = [... G.bag];
+    const newBag = [... G.state.bag];
     const newRack: Letter[] = [...inputRack];
 
     let nSwapped = 0;    
@@ -35,10 +35,10 @@ export function swapTiles(G: GlobalGameState, ctx: Ctx,
     }
     shuffle(newBag);
 
-    G.playerData[ctx.currentPlayer].rack = newRack;
-    G.bag = newBag;
+    G.state.playerData[ctx.currentPlayer].rack = newRack;
+    G.state.bag = newBag;
     
-    G.moveHistory.push({tilesSwapped: {
+    G.state.moveHistory.push({tilesSwapped: {
         pid: ctx.currentPlayer,
         nSwapped: nSwapped,
     }});

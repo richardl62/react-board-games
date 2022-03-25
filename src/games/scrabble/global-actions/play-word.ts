@@ -16,7 +16,7 @@ export function playWord(G: GlobalGameState, ctx: Ctx,
     { board, rack: inputRack, playedWordinfo, score }: PlayWordParam
 ) : void
 {
-    const newBag = [...G.bag];
+    const newBag = [...G.state.bag];
     const newRack = [...inputRack];
     
     for(let ri = 0; ri < newRack.length; ++ri) {
@@ -25,12 +25,12 @@ export function playWord(G: GlobalGameState, ctx: Ctx,
         }
     }
 
-    G.playerData[ctx.currentPlayer].rack = newRack;
-    G.playerData[ctx.currentPlayer].score += score;
-    G.bag = newBag;
+    G.state.playerData[ctx.currentPlayer].rack = newRack;
+    G.state.playerData[ctx.currentPlayer].score += score;
+    G.state.bag = newBag;
 
     // KLUDGE: 'active' does not really belong server side
-    G.board = board.map(row => row.map(
+    G.state.board = board.map(row => row.map(
         sq => sq && { ...sq, active: false }
     ));
 
@@ -39,11 +39,11 @@ export function playWord(G: GlobalGameState, ctx: Ctx,
         pid: ctx.currentPlayer,
     };
 
-    G.moveHistory.push({wordsPlayed: info});  
+    G.state.moveHistory.push({wordsPlayed: info});  
     
     // Play can continue after a winner has been declared, but end game
     // actions should happen only once.
-    if(nNonNull(newRack) === 0 && G.bag.length === 0 && !G.winnerIds) {
+    if(nNonNull(newRack) === 0 && G.state.bag.length === 0 && !G.state.winnerIds) {
         gameEndActions(G,  ctx.currentPlayer);
     }
 }
@@ -59,7 +59,7 @@ function letterValue(rack: (Letter | null)[]) {
     return value;
 }
 
-function findWinners(playerData: GlobalGameState["playerData"]) : string[] {
+function findWinners(playerData: GlobalGameState["state"]["playerData"]) : string[] {
     let maxScore = -99999;
     for(const pid in playerData) {
         maxScore = Math.max(maxScore, playerData[pid].score);
@@ -79,7 +79,7 @@ function gameEndActions(G: GlobalGameState, playerOutPid: string) : void {
     const scoreAdjustement : {[id: string] : number} = {};
     let totalRackScores = 0;
 
-    const playerData = G.playerData;
+    const playerData = G.state.playerData;
     for (const pid in playerData) {
         if (pid !== playerOutPid) {
             const rackScore = letterValue(playerData[pid].rack);
@@ -91,12 +91,12 @@ function gameEndActions(G: GlobalGameState, playerOutPid: string) : void {
     scoreAdjustement[playerOutPid] = totalRackScores;
     
     for(const id in scoreAdjustement) {
-        G.playerData[id].score += scoreAdjustement[id];
+        G.state.playerData[id].score += scoreAdjustement[id];
     }
 
-    G.moveHistory.push({scoresAdjusted: scoreAdjustement});
+    G.state.moveHistory.push({scoresAdjusted: scoreAdjustement});
 
-    const winners = findWinners(G.playerData);
-    G.winnerIds = winners;
-    G.moveHistory.push({gameOver: {winners: winners}} );
+    const winners = findWinners(G.state.playerData);
+    G.state.winnerIds = winners;
+    G.state.moveHistory.push({gameOver: {winners: winners}} );
 }

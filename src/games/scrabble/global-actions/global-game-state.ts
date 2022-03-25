@@ -25,7 +25,7 @@ export interface GamePlayerData {
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
 /** Data recorded and shared via BGIO */
-export interface GlobalGameState {
+interface GameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
@@ -34,6 +34,11 @@ export interface GlobalGameState {
 
     // More than one Id implies there was a draw.
     winnerIds: string[] | null;
+}
+
+/** Data recorded and shared via BGIO */
+export interface GlobalGameState {
+    state: GameState;
 
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
@@ -58,15 +63,20 @@ function isPlayerDataDictionary(playerDataDict: PlayerDataDictionary) {
     return true;
 }
 
+export function isGameState(arg: unknown) : boolean {
+    const state = arg as GameState;
+    return typeof state === "object" && 
+        typeof state.board === "object" &&
+        typeof state.playerData === "object" &&
+        typeof state.bag === "object" &&
+        isPlayerDataDictionary(state.playerData);
+}
+
 /** Quick check that an object is (probably) a GameData. */
 export function isGlobalGameState(arg: unknown) : boolean {
-    const gd = arg as GlobalGameState;
-    return typeof gd === "object" && 
-        typeof gd.board === "object" &&
-        typeof gd.playerData === "object" &&
-        typeof gd.bag === "object" &&
-        typeof gd.timestamp === "number" &&
-        isPlayerDataDictionary(gd.playerData);
+    const globalState = arg as GlobalGameState;
+    return isGameState(globalState.state) &&
+        typeof globalState.timestamp === "number";
 }
 
 export function startingGlobalGameState(numPlayers: number, config: ScrabbleConfig): GlobalGameState {
@@ -93,14 +103,16 @@ export function startingGlobalGameState(numPlayers: number, config: ScrabbleConf
     }
     
     return {
-        board: nestedArrayMap(config.boardLayout, () => null),
-        playerData: playerData,
-        bag: bag,
+        state: {
+            board: nestedArrayMap(config.boardLayout, () => null),
+            playerData: playerData,
+            bag: bag,
+
+            moveHistory: initialMoveHistory,
+            winnerIds: null,
+        },
+
         timestamp: 0,
-        winnerIds: null,
-
-        moveHistory: initialMoveHistory,
-
         serverError: null,
     };
 }

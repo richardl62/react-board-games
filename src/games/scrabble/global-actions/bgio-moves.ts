@@ -6,7 +6,7 @@ import { swapTiles, SwapTilesParam } from "./swap-tiles";
 type PassParam = void;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function pass(G: GlobalGameState, ctx: Ctx, _param: PassParam) : void {
-    G.moveHistory.push({pass: { pid: ctx.currentPlayer}});
+    G.state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 }
 
 type MoveFunc<P> = (G: GlobalGameState, ctx: Ctx, param: P) => void;
@@ -20,7 +20,7 @@ function GameMove<P>(func: MoveFunc<P> ) : MoveFunc<P> {
             const message = error instanceof Error ? error.message : 
                 "unknown error";
             G.serverError = message;
-            G.moveHistory.push({serverError: {message: message}});
+            G.state.moveHistory.push({serverError: {message: message}});
         }
         G.timestamp++;
     };

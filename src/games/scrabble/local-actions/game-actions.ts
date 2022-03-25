@@ -86,6 +86,6 @@ export function compactRack(rack: Rack): void {
 }
 
 export function canSwapTiles(G: GlobalGameState): boolean {
-    const rackSize = Object.values(G.playerData)[0].rack.length;
-    return G.bag.length >= rackSize;
+    const rackSize = Object.values(G.state.playerData)[0].rack.length;
+    return G.state.bag.length >= rackSize;
 }

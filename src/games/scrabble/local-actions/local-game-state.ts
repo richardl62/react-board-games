@@ -19,7 +19,7 @@ export interface LocalGameState {
     clickMoveStart: ClickMoveStart | null;
 
     nTilesInBag: number;
-    playerData: GlobalGameState["playerData"];
+    playerData: GlobalGameState["state"]["playerData"];
     externalTimestamp: number;
 
     // KLUDGE? This is (at time of writing) the members below only in sanity checks.
@@ -35,21 +35,21 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: 
     const {G, playerID } = scrabbleGameProps;
 
     // KLUDGE? - Not sure when playerID can be null.
-    sAssert(playerID && G.playerData[playerID], "Player ID appears to be invalid");
+    sAssert(playerID && G.state.playerData[playerID], "Player ID appears to be invalid");
 
-    const rack = G.playerData[playerID].rack;
+    const rack = G.state.playerData[playerID].rack;
     return {
-        board: G.board,
+        board: G.state.board,
         rack: rack,
 
         clickMoveStart: null,
 
-        nTilesInBag: G.bag.length,
+        nTilesInBag: G.state.bag.length,
         
         /** KLUDGE?: Intended only to allow players scores to be seen. 
          * But also gives access to racks
         */
-        playerData: G.playerData,
+        playerData: G.state.playerData,
         
         /** Incremented when any of the state above is changed (and prehaps at
          * other times). */
