@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useScrabbleContext } from "./scrabble-context";
 
 const arrowHeight = "15px";
 const arrowColor = "darkred";
@@ -37,11 +38,15 @@ const Controls = styled.div`
 `;
 
 export function RewindControls() : JSX.Element {
+    const context = useScrabbleContext();
+    const setStateIndex = context.bgioProps.moves.setCurrentStateIndex;
+    
     return <Controls>
-        <Control onClick={()=>alert("clicked")}> <Block/><ArrowHeadLeft/><ArrowHeadLeft/> </Control>
-        <Control> <ArrowHeadLeft/> </Control>
-        <Control> <ArrowHeadRight/> </Control>
-        <Control> <ArrowHeadRight/><ArrowHeadRight/><Block/> </Control>
+        <Control onClick={()=>setStateIndex(0)}> <Block/><ArrowHeadLeft/><ArrowHeadLeft/> </Control>
+        <Control onClick={()=>setStateIndex(1)}> <ArrowHeadLeft/> </Control>
+        <Control onClick={()=>setStateIndex(2)}> <ArrowHeadRight/> </Control>
+        <Control onClick={()=>setStateIndex(3)}><ArrowHeadRight/><ArrowHeadRight/><Block/> </Control>
     </Controls>;
 }
+
 
