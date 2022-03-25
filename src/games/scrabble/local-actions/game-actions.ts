@@ -4,7 +4,7 @@ import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData, GlobalGameState } from "../global-actions/global-game-state";
+import { BoardData, ServerData } from "../global-actions/game-state";
 
 export interface SquareID {
     row: number;
@@ -85,7 +85,7 @@ export function compactRack(rack: Rack): void {
     }
 }
 
-export function canSwapTiles(G: GlobalGameState): boolean {
+export function canSwapTiles(G: ServerData): boolean {
     const rackSize = Object.values(G.state.playerData)[0].rack.length;
     return G.state.bag.length >= rackSize;
 }

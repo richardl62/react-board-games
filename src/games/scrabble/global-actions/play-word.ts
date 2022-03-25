@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { nNonNull } from "../../../utils/n-non-null";
 import { Letter, letterScore } from "../config";
-import { BoardData, GlobalGameState } from "./global-game-state";
+import { BoardData, ServerData } from "./game-state";
 import { WordsPlayedInfo } from "./move-hstory";
 
 
@@ -12,7 +12,7 @@ export interface PlayWordParam {
     score: number;
 } 
 
-export function playWord(G: GlobalGameState, ctx: Ctx,
+export function playWord(G: ServerData, ctx: Ctx,
     { board, rack: inputRack, playedWordinfo, score }: PlayWordParam
 ) : void
 {
@@ -59,7 +59,7 @@ function letterValue(rack: (Letter | null)[]) {
     return value;
 }
 
-function findWinners(playerData: GlobalGameState["state"]["playerData"]) : string[] {
+function findWinners(playerData: ServerData["state"]["playerData"]) : string[] {
     let maxScore = -99999;
     for(const pid in playerData) {
         maxScore = Math.max(maxScore, playerData[pid].score);
@@ -75,7 +75,7 @@ function findWinners(playerData: GlobalGameState["state"]["playerData"]) : strin
 }
 
 
-function gameEndActions(G: GlobalGameState, playerOutPid: string) : void {
+function gameEndActions(G: ServerData, playerOutPid: string) : void {
     const scoreAdjustement : {[id: string] : number} = {};
     let totalRackScores = 0;
 

@@ -1,15 +1,15 @@
 import { Ctx } from "boardgame.io";
-import { GlobalGameState } from "./global-game-state";
+import { ServerData } from "./game-state";
 import { playWord, PlayWordParam } from "./play-word";
 import { swapTiles, SwapTilesParam } from "./swap-tiles";
 
 type PassParam = void;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function pass(G: GlobalGameState, ctx: Ctx, _param: PassParam) : void {
+function pass(G: ServerData, ctx: Ctx, _param: PassParam) : void {
     G.state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 }
 
-type MoveFunc<P> = (G: GlobalGameState, ctx: Ctx, param: P) => void;
+type MoveFunc<P> = (G: ServerData, ctx: Ctx, param: P) => void;
 
 function GameMove<P>(func: MoveFunc<P> ) : MoveFunc<P> {
     return (G, ctx, param) => {

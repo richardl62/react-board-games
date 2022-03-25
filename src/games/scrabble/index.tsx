@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 import React from "react";
 import { AppGame, WrappedGameProps } from "../../app-game-support";
 import { configs, ScrabbleConfig } from "./config";
-import { bgioMoves, startingGlobalGameState } from "./global-actions";
+import { bgioMoves, startingServerData } from "./global-actions";
 import { LazyBoardWrapper } from "./lazy-board-wrapper";
 
 
@@ -11,7 +11,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
     return {
         ...config,
   
-        setup: (ctx: Ctx) => startingGlobalGameState(ctx.numPlayers, config),
+        setup: (ctx: Ctx) => startingServerData(ctx.numPlayers, config),
   
         moves: bgioMoves,
   

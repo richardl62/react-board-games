@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { ScabbbleGameProps } from "../board/game-props";
 import { ScrabbleConfig } from "../config";
 import { Rack } from "./board-and-rack";
-import { BoardData, GlobalGameState } from "../global-actions/global-game-state";
+import { BoardData, ServerData } from "../global-actions/game-state";
 
 export type ClickMoveDirection = "right" | "down";
 
@@ -19,7 +19,7 @@ export interface LocalGameState {
     clickMoveStart: ClickMoveStart | null;
 
     nTilesInBag: number;
-    playerData: GlobalGameState["state"]["playerData"];
+    playerData: ServerData["state"]["playerData"];
     externalTimestamp: number;
 
     // KLUDGE? This is (at time of writing) the members below only in sanity checks.

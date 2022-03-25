@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { GlobalGameState } from ".";
+import { ServerData } from ".";
 import { shuffle } from "../../../utils/shuffle";
 import { Letter } from "../config";
 
@@ -18,7 +18,7 @@ export interface SwapTilesParam {
     toSwap: boolean[];
 } 
 
-export function swapTiles(G: GlobalGameState, ctx: Ctx, 
+export function swapTiles(G: ServerData, ctx: Ctx, 
     { rack: inputRack, toSwap }: SwapTilesParam
 ) : void {
 

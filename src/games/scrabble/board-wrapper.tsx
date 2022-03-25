@@ -7,7 +7,7 @@ import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
 import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
-import { isGlobalGameState } from "./global-actions";
+import { isServerData } from "./global-actions";
 import { getWordChecker } from "../../utils/get-word-checker";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../utils/async-status";
@@ -20,7 +20,7 @@ export interface BoardWrapperProps {
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const scrabbleGameProps = props.appBoardProps as unknown as ScabbbleGameProps;
-    sAssert(isGlobalGameState(scrabbleGameProps.G), "Game state appears to be invalid");
+    sAssert(isServerData(scrabbleGameProps.G), "Game state appears to be invalid");
 
     const [state, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
         scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config, 

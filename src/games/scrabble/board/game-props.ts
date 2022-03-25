@@ -1,6 +1,6 @@
 import { WrappedGameProps } from "../../../app-game-support";
-import { GlobalGameState } from "../global-actions";
+import { ServerData } from "../global-actions";
 import { ClientMoves } from "../global-actions/bgio-moves";
 
-export type ScabbbleGameProps = WrappedGameProps<GlobalGameState, ClientMoves>;
+export type ScabbbleGameProps = WrappedGameProps<ServerData, ClientMoves>;
 

@@ -24,8 +24,8 @@ export interface GamePlayerData {
 
 type PlayerDataDictionary = {[id: string] : GamePlayerData};
 
-/** Data recorded and shared via BGIO */
-interface GameState {
+/** The state of the game at a particular point in history */
+export interface GameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
@@ -37,7 +37,7 @@ interface GameState {
 }
 
 /** Data recorded and shared via BGIO */
-export interface GlobalGameState {
+export interface ServerData {
     state: GameState;
 
     /** Any move that changes game data will also increase timestamp */
@@ -73,13 +73,13 @@ export function isGameState(arg: unknown) : boolean {
 }
 
 /** Quick check that an object is (probably) a GameData. */
-export function isGlobalGameState(arg: unknown) : boolean {
-    const globalState = arg as GlobalGameState;
+export function isServerData(arg: unknown) : boolean {
+    const globalState = arg as ServerData;
     return isGameState(globalState.state) &&
         typeof globalState.timestamp === "number";
 }
 
-export function startingGlobalGameState(numPlayers: number, config: ScrabbleConfig): GlobalGameState {
+export function startingServerData(numPlayers: number, config: ScrabbleConfig): ServerData {
     const bag = config.makeFullBag(); 
 
     const rack = () => {
