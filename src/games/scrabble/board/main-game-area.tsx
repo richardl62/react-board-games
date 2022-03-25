@@ -37,7 +37,7 @@ const ErrorMessage = styled.div`
 
 
 function ServerError(): JSX.Element | null {
-    const serverError = useScrabbleContext().bgioProps.G.serverError;
+    const serverError = useScrabbleContext().serverError;
     
     if(!serverError) {
         return null;

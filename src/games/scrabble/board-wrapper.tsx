@@ -59,7 +59,9 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
 
     const gameProps: ScrabbleContext = {
         ...state,
-        bgioProps: scrabbleGameProps,
+        bgioProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
+        moveHistory: scrabbleGameProps.G.state.moveHistory,
+        serverError: scrabbleGameProps.G.serverError,
         config: props.config,
         dispatch: dispatch,
         isLegalWord: isLegalWord,
