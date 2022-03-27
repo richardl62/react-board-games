@@ -27,7 +27,7 @@ const Block = styled.div`
     background-color: ${arrowColor};
 `;
 
-const Control = styled.div`
+const Control = styled.button`
     display: flex;
     margin-right: calc(${arrowHeight}*0.5);
 `;
@@ -39,13 +39,28 @@ const Controls = styled.div`
 
 export function RewindControls() : JSX.Element {
     const context = useScrabbleContext();
+    const { historyPosition, historyLength } = context;
     const setStateIndex = context.bgioProps.moves.setCurrentStateIndex;
-    
+
+    const atHistoryStart = historyPosition === 0;
+    const atHistoryEnd = historyPosition === historyLength - 1;
+
     return <Controls>
-        <Control onClick={()=>setStateIndex(0)}> <Block/><ArrowHeadLeft/><ArrowHeadLeft/> </Control>
-        <Control onClick={()=>setStateIndex(1)}> <ArrowHeadLeft/> </Control>
-        <Control onClick={()=>setStateIndex(2)}> <ArrowHeadRight/> </Control>
-        <Control onClick={()=>setStateIndex(3)}><ArrowHeadRight/><ArrowHeadRight/><Block/> </Control>
+        <Control onClick={()=>setStateIndex(0)} disabled={atHistoryStart}> 
+            <Block/><ArrowHeadLeft/><ArrowHeadLeft/> 
+        </Control>
+        
+        <Control onClick={()=>setStateIndex(historyPosition-1)} disabled={atHistoryStart}> 
+            <ArrowHeadLeft/> </Control>
+        
+        <Control onClick={()=>setStateIndex(historyPosition+1)} disabled={atHistoryEnd}> 
+            <ArrowHeadRight/>
+        </Control>
+ 
+        <Control onClick={()=>setStateIndex(historyLength-1)} disabled={atHistoryEnd}>
+            <ArrowHeadRight/><ArrowHeadRight/><Block/>
+        </Control>
+
     </Controls>;
 }
 

@@ -12,7 +12,11 @@ export interface ScrabbleContext extends LocalGameState {
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>;
     readonly isLegalWord: (word: string) => boolean;
+
+    readonly historyPosition: number;
+    readonly historyLength: number;
     readonly moveHistory: MoveHistoryElement[];
+
     readonly serverError: string | null;
 }
 
