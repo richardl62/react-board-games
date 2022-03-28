@@ -27,39 +27,53 @@ const Block = styled.div`
     background-color: ${arrowColor};
 `;
 
-const Control = styled.button`
-    display: flex;
+const HistoryButton = styled.button`
+  display: flex;
+`;
+
+const HistoryButtons = styled.div`
+  display: flex;
+  margin-top: calc(${arrowHeight}*0.5);
+  margin-bottom: calc(${arrowHeight}*0.2);
+
+  > *:not(:last-child) {
     margin-right: calc(${arrowHeight}*0.5);
+  }
 `;
 
 const Controls = styled.div`
-  display: flex;
-  margin-top: calc(${arrowHeight}*0.5);
+    display: flex;
+    flex-direction: column;
 `;
 
 export function RewindControls() : JSX.Element {
     const context = useScrabbleContext();
     const { historyPosition, historyLength } = context;
-    const setStateIndex = context.bgioProps.moves.setCurrentStateIndex;
+
+    const setHistoryPosition = (num: number) => {
+        context.dispatch({type: "setHistoryPosition", data: {position: num}});
+    };
 
     const atHistoryStart = historyPosition === 0;
     const atHistoryEnd = historyPosition === historyLength - 1;
 
     return <Controls>
-        <Control onClick={()=>setStateIndex(0)} disabled={atHistoryStart}> 
-            <Block/><ArrowHeadLeft/><ArrowHeadLeft/> 
-        </Control>
-        
-        <Control onClick={()=>setStateIndex(historyPosition-1)} disabled={atHistoryStart}> 
-            <ArrowHeadLeft/> </Control>
-        
-        <Control onClick={()=>setStateIndex(historyPosition+1)} disabled={atHistoryEnd}> 
-            <ArrowHeadRight/>
-        </Control>
- 
-        <Control onClick={()=>setStateIndex(historyLength-1)} disabled={atHistoryEnd}>
-            <ArrowHeadRight/><ArrowHeadRight/><Block/>
-        </Control>
+        <HistoryButtons>
+            <HistoryButton onClick={() => setHistoryPosition(0)} disabled={atHistoryStart}>
+                <Block /><ArrowHeadLeft /><ArrowHeadLeft />
+            </HistoryButton>
+
+            <HistoryButton onClick={() => setHistoryPosition(historyPosition - 1)} disabled={atHistoryStart}>
+                <ArrowHeadLeft /> </HistoryButton>
+
+            <HistoryButton onClick={() => setHistoryPosition(historyPosition + 1)} disabled={atHistoryEnd}>
+                <ArrowHeadRight />
+            </HistoryButton>
+
+            <HistoryButton onClick={() => setHistoryPosition(historyLength - 1)} disabled={atHistoryEnd}>
+                <ArrowHeadRight /><ArrowHeadRight /><Block />
+            </HistoryButton>
+        </HistoryButtons>
 
     </Controls>;
 }

@@ -14,8 +14,8 @@ export type ActionType =
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
-    | { type: "allowSounds", data: {allow: boolean}}
-;
+    | { type: "setShowRewindControls", data: {show: boolean}}
+    | { type: "setHistoryPosition", data: {position: number}}
 
 export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
 
@@ -29,7 +29,7 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
     const br = new BoardAndRack(state.board, state.rack);
     
     let clickMoveStart = state.clickMoveStart;
-    let soundsAllowed = state.soundsAllowed;
+    let showRewindControls = state.showRewindControls;
 
     if(action.type === "setClickMoveStart") {
         const {row, col} = action.data;
@@ -56,8 +56,8 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         br.shuffleRack();
     } else if(action.type === "setBlank") {
         br.setBlack(action.data.id, action.data.letter);
-    } else if(action.type === "allowSounds") {
-        soundsAllowed = action.data.allow;
+    } else if(action.type === "setShowRewindControls") {
+        showRewindControls = action.data.show;
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
@@ -67,7 +67,7 @@ export function localGameStateReducer(state : LocalGameState, action: ActionType
         board: br.getBoard(),
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
-        soundsAllowed: soundsAllowed,
+        showRewindControls: showRewindControls,
     };
 
     const sanityProblem = sanityCheck(newState);

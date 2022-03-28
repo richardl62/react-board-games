@@ -8,6 +8,7 @@ import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 import { Options } from "./options";
+import { EnableMoveHistoryToggle } from "./move-history";
 
 
 const SpaceBetween = styled.div`
@@ -73,6 +74,7 @@ export function MainGameArea(): JSX.Element {
             </SpaceBetween>
 
             <TurnControl/>
+            <EnableMoveHistoryToggle/>
         </Game>
     </DndProvider>;
 }

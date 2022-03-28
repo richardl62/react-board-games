@@ -26,11 +26,12 @@ export interface LocalGameState {
     scrabbleGameProps: ScabbbleGameProps;
     config: ScrabbleConfig;
 
-    soundsAllowed: boolean;
+    showRewindControls: boolean;
+    historyPosition: number;
 }
 
 export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig,
-    {soundsAllowed} : {soundsAllowed: boolean}): LocalGameState
+    {showRewindControls} : {showRewindControls: boolean}): LocalGameState
 {
     const {G, playerID } = scrabbleGameProps;
     const state = G.states[G.currentState];
@@ -60,6 +61,8 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: 
         scrabbleGameProps: scrabbleGameProps,
         config: config,
 
-        soundsAllowed: soundsAllowed,
+        showRewindControls: showRewindControls,
+        
+        historyPosition: G.states.length - 1,
     };
 }

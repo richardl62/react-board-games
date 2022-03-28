@@ -37,14 +37,15 @@ function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
     };
 }
 
-type SetCurrentStateIndexParam = number;
+type DeleteHistoryAfterParam = number;
 
-function setCurrentStateIndex(G: ServerData, ctx: Ctx, param: SetCurrentStateIndexParam) : void {
-    if(!Number. isInteger(param) || param < 0 || param >= G.states.length ) {
-        G.serverError = "Bad state index in undo/redo";
+// Warning: Protype only.  Does not set the next player.
+function deleteHistoryAfter(G: ServerData, ctx: Ctx, param: DeleteHistoryAfterParam) : void {
+    if(!Number. isInteger(param) || param < 0 || param > G.currentState ) {
+        G.serverError = "Bad state index in deleteHistoryAfter";
     } else {
         G.serverError = "";
-        G.currentState = param;
+        G.states = G.states.slice(0, param+1);
     }
     G.timestamp++;
 }
@@ -53,12 +54,16 @@ export const bgioMoves = {
     playWord: wrappedMoveFunction(playWord),
     swapTiles: wrappedMoveFunction(swapTiles),
     pass: wrappedMoveFunction(pass),
-    setCurrentStateIndex: setCurrentStateIndex,
+
+    // Warning: See implementation
+    deleteHistoryAfter: deleteHistoryAfter, 
 };
 
 export interface ClientMoves {
     playWord: (arg: PlayWordParam) => void;
     swapTiles: (arg: SwapTilesParam) => void;
     pass: (arg: PassParam) => void;
-    setCurrentStateIndex: (arg: SetCurrentStateIndexParam) => void;
+
+    // Warning: See implementation
+    deleteHistoryAfter: (arg: DeleteHistoryAfterParam) => void;
 }

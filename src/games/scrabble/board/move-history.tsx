@@ -159,9 +159,26 @@ interface MoveHistoryProps {
     moveHistory: MoveHistoryElement [];
 }
 
+export function EnableMoveHistoryToggle() : JSX.Element {
+    const context = useScrabbleContext();
+    const { showRewindControls } = context; 
+
+    const toggleRewindControls = () => {
+        context.dispatch({type: "setShowRewindControls", data: {show: !showRewindControls}});
+    };
+
+    return <div>
+        <label htmlFor="toggle"> Rewind controls (experimental)</label>
+        <input type="checkbox" checked={showRewindControls} onChange={toggleRewindControls}
+            name="toggle"
+        />
+    </div>;
+}
+
 export function MoveHistory(props: MoveHistoryProps): JSX.Element {
 
     const { moveHistory } = props;
+    const { showRewindControls } = useScrabbleContext();
 
     const hasIllegalWords = moveHistory.find(elem => elem.wordsPlayed && elem.wordsPlayed.illegalWords.length > 0);
     return <div>
@@ -173,6 +190,7 @@ export function MoveHistory(props: MoveHistoryProps): JSX.Element {
             )}
         </StyledMoveHistory>
         {hasIllegalWords && <Message>Illegal words are highlighted</Message>}
-        <RewindControls/>
+
+        {showRewindControls && <RewindControls/>}
     </div>;
 }
