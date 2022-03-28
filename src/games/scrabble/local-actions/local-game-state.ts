@@ -13,13 +13,15 @@ export interface ClickMoveStart {
 } 
 
 export interface LocalGameState {
-    gameStates: GameState[];
-    historyPosition: number;
-
     board: BoardData;
     rack: Rack;
     playerData: GameState["playerData"];
     nTilesInBag: number;
+}
+
+export interface ReducerState extends LocalGameState {
+    gameStates: GameState[];
+    historyPosition: number;
 
     clickMoveStart: ClickMoveStart | null;
     externalTimestamp: number;
@@ -32,7 +34,7 @@ export interface LocalGameState {
 }
 
 export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig,
-    {showRewindControls, historyPosition } : {showRewindControls: boolean, historyPosition: number}): LocalGameState
+    {showRewindControls, historyPosition } : {showRewindControls: boolean, historyPosition: number}): ReducerState
 {
     const {G, playerID } = scrabbleGameProps;
     const state = G.states[historyPosition];

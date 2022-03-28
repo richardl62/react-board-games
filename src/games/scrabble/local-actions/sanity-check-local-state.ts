@@ -1,9 +1,9 @@
 import { nNonNull } from "../../../utils/n-non-null";
-import { LocalGameState } from "./local-game-state";
+import { ReducerState } from "./local-game-state";
 
 /** Return a short-ish string describing problems found or null if no problem was found.
  */
-export function sanityCheck(state: LocalGameState): string | null {
+export function sanityCheck(state: ReducerState): string | null {
     // Sanity check
     const nTiles = countTiles(state);
     const nTilesExpected = state.config.makeFullBag().length; // inefficient
@@ -14,7 +14,7 @@ export function sanityCheck(state: LocalGameState): string | null {
     return null;
 }
 
-function countTiles(state: LocalGameState): number {
+function countTiles(state: ReducerState): number {
     let racks = nNonNull(state.rack);
     for (const playerID in state.playerData) {
         if (playerID !== state.scrabbleGameProps.playerID) {

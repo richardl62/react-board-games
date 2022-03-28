@@ -3,21 +3,21 @@ import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { sanityCheck } from "./sanity-check-local-state";
 import { SquareID } from "./game-actions";
-import { ClickMoveDirection, ClickMoveStart, LocalGameState } from "./local-game-state";
+import { ClickMoveDirection, ClickMoveStart, ReducerState } from "./local-game-state";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
     | { type: "recallRack" }
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-    | { type: "externalStateChange", data: LocalGameState }
+    | { type: "externalStateChange", data: ReducerState }
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
     | { type: "setShowRewindControls", data: {show: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
 
-export function localGameStateReducer(state : LocalGameState, action: ActionType) : LocalGameState {
+export function localGameStateReducer(state : ReducerState, action: ActionType) : ReducerState {
 
     if(action.type === "externalStateChange") {
         const externalState = action.data;
