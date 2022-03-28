@@ -18,18 +18,17 @@ export interface LocalGameState {
 
     board: BoardData;
     rack: Rack;
+    playerData: GameState["playerData"];
+    nTilesInBag: number;
 
     clickMoveStart: ClickMoveStart | null;
-
-    nTilesInBag: number;
-    playerData: GameState["playerData"];
     externalTimestamp: number;
 
-    // KLUDGE? This is (at time of writing) the members below only in sanity checks.
+    showRewindControls: boolean;
+
+    // KLUDGE? The members below are used only for sanity checks.
     scrabbleGameProps: ScabbbleGameProps;
     config: ScrabbleConfig;
-
-    showRewindControls: boolean;
 }
 
 export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig,
@@ -48,26 +47,19 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: 
 
         board: state.board,
         rack: rack,
+        nTilesInBag: state.bag.length,
+        playerData: state.playerData,
 
         clickMoveStart: null,
 
-        nTilesInBag: state.bag.length,
-        
-        /** KLUDGE?: Intended only to allow players scores to be seen. 
-         * But also gives access to racks
-        */
-        playerData: state.playerData,
-        
         /** Incremented when any of the state above is changed (and prehaps at
          * other times). */
         externalTimestamp: G.timestamp,
 
-        /* KLUDGE?: See comment on type definition */
+        showRewindControls: showRewindControls,
+
+        // KLUDGE? The members below are used only for sanity checks.
         scrabbleGameProps: scrabbleGameProps,
         config: config,
-
-        showRewindControls: showRewindControls,
-        
-
     };
 }
