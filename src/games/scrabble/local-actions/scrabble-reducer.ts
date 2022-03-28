@@ -1,9 +1,8 @@
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
-import { ClickMoveDirection, ClickMoveStart, ReducerState, sanityCheck } from "./reducer-state";
+import { ClickMoveDirection, ClickMoveStart, newReducerState, ReducerState, sanityCheck } from "./reducer-state";
 import { ScabbbleGameProps } from "../board/game-props";
-import { getLocalGameState } from "./local-game-state";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
@@ -22,25 +21,23 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     if(action.type === "externalStateChange") {
         // The code is an edited copy of initialReducerState 
         const scrabbleGameProps : ScabbbleGameProps = action.data;
-        const { states, timestamp } = scrabbleGameProps.G;
-        const historyPosition = states.length - 1;
-        
-        return {
-            ...state,
-
-            ...getLocalGameState(states[historyPosition], scrabbleGameProps.playerID),
-            
-            gameStates: states,
-            historyPosition: states.length-1,
-            externalTimestamp: timestamp,
-            scrabbleGameProps: scrabbleGameProps,
-        };
+        return newReducerState(scrabbleGameProps, state);
     }
+
+    if(action.type === "setHistoryPosition") {
+        return newReducerState(state.scrabbleGameProps, state, action.data.position);
+    }
+
+    if(action.type === "setShowRewindControls") {
+        // Reset history to lastest state (to allow moves to be made) when switching
+        // off rewind controls. KLUDGE: Also reset when switching the controls on.
+        const lastestHistoryState = newReducerState(state.scrabbleGameProps, state);
+        return {...lastestHistoryState, showRewindControls: action.data.show};
+    } 
 
     const br = new BoardAndRack(state.board, state.rack);
     
     let clickMoveStart = state.clickMoveStart;
-    let showRewindControls = state.showRewindControls;
 
     if(action.type === "setClickMoveStart") {
         const {row, col} = action.data;
@@ -67,18 +64,15 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         br.shuffleRack();
     } else if(action.type === "setBlank") {
         br.setBlack(action.data.id, action.data.letter);
-    } else if(action.type === "setShowRewindControls") {
-        showRewindControls = action.data.show;
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
-    
+
     const newState = {
         ...state,
         board: br.getBoard(),
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
-        showRewindControls: showRewindControls,
     };
 
     const sanityProblem = sanityCheck(newState);

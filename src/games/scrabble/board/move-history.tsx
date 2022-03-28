@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { MoveHistoryElement, WordsPlayedInfo } from "../global-actions/move-hstory";
-import { RewindControls } from "./rewind-controls";
 import { useScrabbleContext } from "./scrabble-context";
 
 const FirstSpan = styled.span`
@@ -178,7 +177,6 @@ export function EnableMoveHistoryToggle() : JSX.Element {
 export function MoveHistory(props: MoveHistoryProps): JSX.Element {
 
     const { moveHistory } = props;
-    const { showRewindControls } = useScrabbleContext();
 
     const hasIllegalWords = moveHistory.find(elem => elem.wordsPlayed && elem.wordsPlayed.illegalWords.length > 0);
     return <div>
@@ -190,7 +188,5 @@ export function MoveHistory(props: MoveHistoryProps): JSX.Element {
             )}
         </StyledMoveHistory>
         {hasIllegalWords && <Message>Illegal words are highlighted</Message>}
-
-        {showRewindControls && <RewindControls/>}
     </div>;
 }

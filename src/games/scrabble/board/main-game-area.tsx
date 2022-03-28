@@ -9,6 +9,7 @@ import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 import { Options } from "./options";
 import { EnableMoveHistoryToggle } from "./move-history";
+import { RewindControls } from "./rewind-controls";
 
 
 const SpaceBetween = styled.div`
@@ -59,6 +60,7 @@ function BagInfo(): JSX.Element {
 }
 
 export function MainGameArea(): JSX.Element {
+    const { showRewindControls } = useScrabbleContext();
     return <DndProvider>
         <Game>
             <ServerError />
@@ -73,7 +75,7 @@ export function MainGameArea(): JSX.Element {
                 <BagInfo/>
             </SpaceBetween>
 
-            <TurnControl/>
+            {showRewindControls ? <RewindControls/> : <TurnControl/> }
             <EnableMoveHistoryToggle/>
         </Game>
     </DndProvider>;

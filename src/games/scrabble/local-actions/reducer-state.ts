@@ -26,24 +26,43 @@ export interface ReducerState extends LocalGameState {
     config: ScrabbleConfig;
 }
 
+interface Extras {
+    clickMoveStart: ClickMoveStart | null;
+    showRewindControls: boolean;
+    config: ScrabbleConfig;
+}
+
 export function initialReducerState(
     scrabbleGameProps: ScabbbleGameProps,
     config: ScrabbleConfig,
 ): ReducerState {
-    // The code is an edited copy of the "externalStateChange" reducer action. 
-    const { states, timestamp } = scrabbleGameProps.G;
-    const historyPosition = states.length - 1;
-    return {
-        ...getLocalGameState(states[historyPosition], scrabbleGameProps.playerID),
-        gameStates: states,
-        historyPosition: states.length-1,
-        externalTimestamp: timestamp,
 
+    const extras : Extras = {
         clickMoveStart: null,
         showRewindControls: false,
-    
-        scrabbleGameProps: scrabbleGameProps,
         config: config,
+    };
+
+    return newReducerState(scrabbleGameProps, extras);
+}
+
+export function newReducerState(
+    scrabbleGameProps: ScabbbleGameProps,
+    extras: Extras,
+    historyPosition_?: number,
+): ReducerState {
+    const { states, timestamp } = scrabbleGameProps.G;
+    const historyPosition = historyPosition_ === undefined ? states.length-1 : historyPosition_;
+
+    return {
+        ...extras,
+        ...getLocalGameState(states[historyPosition], scrabbleGameProps.playerID),
+        
+        gameStates: states,
+        historyPosition: historyPosition,
+
+        externalTimestamp: timestamp,
+        scrabbleGameProps: scrabbleGameProps,
     };
 }
 
