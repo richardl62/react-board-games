@@ -11,7 +11,7 @@ import { isServerData } from "./global-actions";
 import { getWordChecker } from "../../utils/get-word-checker";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../utils/async-status";
-import { beep } from "./sounds";
+// import { beep } from "./sounds";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -25,7 +25,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
 
     const [localState, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
         scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config, 
-            {soundsAllowed: false})
+            {showRewindControls: false})
     );
 
     const downHandler = (event: KeyboardEvent) => dispatch({ type: "keydown", data: {key: event.key}});
@@ -49,13 +49,13 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     if (G.timestamp !== localState.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getLocalGameState(scrabbleGameProps, props.config,
-                {soundsAllowed: localState.soundsAllowed}),
+            data: getLocalGameState(scrabbleGameProps, props.config, 
+                {showRewindControls: localState.showRewindControls}),
         });
 
-        if(localState.soundsAllowed) {
-            beep();
-        }
+        // if(localState.soundsAllowed) {
+        //     beep();
+        // }
     } 
 
     const gameState = G.states[G.currentState];
