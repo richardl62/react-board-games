@@ -25,7 +25,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
 
     const [localState, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
         scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config, 
-            {showRewindControls: false})
+            {showRewindControls: false, historyPosition: 0})
     );
 
     const downHandler = (event: KeyboardEvent) => dispatch({ type: "keydown", data: {key: event.key}});
@@ -50,7 +50,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         dispatch({
             type: "externalStateChange",
             data: getLocalGameState(scrabbleGameProps, props.config, 
-                {showRewindControls: localState.showRewindControls}),
+                {...localState, historyPosition: G.states.length-1}),
         });
 
         // if(localState.soundsAllowed) {
@@ -58,7 +58,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         // }
     } 
 
-    const gameState = G.states[G.currentState];
+    const gameState = G.states[localState.historyPosition];
 
     const gameProps: ScrabbleContext = {
         ...localState,
@@ -68,7 +68,6 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         dispatch: dispatch,
         isLegalWord: isLegalWord,
 
-        historyPosition: G.currentState,
         historyLength: G.states.length,
         moveHistory: gameState.moveHistory,
     

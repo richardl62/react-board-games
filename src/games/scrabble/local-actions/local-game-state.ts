@@ -13,6 +13,9 @@ export interface ClickMoveStart {
 } 
 
 export interface LocalGameState {
+    gameStates: GameState[];
+    historyPosition: number;
+
     board: BoardData;
     rack: Rack;
 
@@ -27,20 +30,22 @@ export interface LocalGameState {
     config: ScrabbleConfig;
 
     showRewindControls: boolean;
-    historyPosition: number;
 }
 
 export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: ScrabbleConfig,
-    {showRewindControls} : {showRewindControls: boolean}): LocalGameState
+    {showRewindControls, historyPosition } : {showRewindControls: boolean, historyPosition: number}): LocalGameState
 {
     const {G, playerID } = scrabbleGameProps;
-    const state = G.states[G.currentState];
+    const state = G.states[historyPosition];
 
     // KLUDGE? - Not sure when playerID can be null.
     sAssert(playerID && state.playerData[playerID], "Player ID appears to be invalid");
 
     const rack = state.playerData[playerID].rack;
     return {
+        gameStates: G.states,
+        historyPosition: historyPosition,
+
         board: state.board,
         rack: rack,
 
@@ -63,6 +68,6 @@ export function getLocalGameState(scrabbleGameProps: ScabbbleGameProps, config: 
 
         showRewindControls: showRewindControls,
         
-        historyPosition: G.states.length - 1,
+
     };
 }

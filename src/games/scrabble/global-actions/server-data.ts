@@ -7,9 +7,6 @@ export interface ServerData {
     /** states avialable for undo/redo */
     states: GameState[];
 
-    // Index into 'states'
-    currentState: number;
-
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
 
@@ -20,7 +17,6 @@ export interface ServerData {
 export function isServerData(arg: unknown): boolean {
     const serverData = arg as ServerData;
     return Array.isArray(serverData.states) &&
-        typeof serverData.currentState === "number" &&
         typeof serverData.timestamp === "number" &&
         isGameState(serverData.states[0]);
 }
@@ -29,7 +25,6 @@ export function startingServerData(numPlayers: number, config: ScrabbleConfig): 
 
     return {
         states: [startingGameState(numPlayers, config)],
-        currentState: 0,
         timestamp: 0,
         serverError: null,
     };

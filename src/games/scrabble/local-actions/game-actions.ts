@@ -87,7 +87,7 @@ export function compactRack(rack: Rack): void {
 }
 
 export function canSwapTiles(G: ServerData): boolean {
-    const state = G.states[G.currentState];
+    const state = G.states[G.states.length-1];
     const rackSize = Object.values(state.playerData)[0].rack.length;
     return state.bag.length >= rackSize;
 }

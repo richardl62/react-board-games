@@ -16,23 +16,19 @@ type WrappedMoveFunc<P> = (G: ServerData, ctx: Ctx, param: P) => void;
 function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
     return (G, ctx, param) => {
         // KLUDGE/defensive - ensure copied state is fully independant.
-        const state: GameState = JSON.parse(JSON.stringify(G.states[G.currentState]));
-        if (G.currentState !== G.states.length - 1) {
-            G.serverError = "Move attempted with not at end of history";
-        } else {
-            G.serverError = null;
-            try {
-                func(state, ctx, param);
-                G.states.push(state);
-                G.currentState++;
-            } catch (error) {
-                const message = error instanceof Error ? error.message :
-                    "unknown error";
-                G.serverError = message;
-                state.moveHistory.push({ serverError: { message: message } });
-            }
+        const state: GameState = JSON.parse(JSON.stringify(G.states[G.states.length-1]));
 
+        G.serverError = null;
+        try {
+            func(state, ctx, param);
+            G.states.push(state);
+        } catch (error) {
+            const message = error instanceof Error ? error.message :
+                "unknown error";
+            G.serverError = message;
+            state.moveHistory.push({ serverError: { message: message } });
         }
+
         G.timestamp++;
     };
 }
@@ -41,7 +37,7 @@ type DeleteHistoryAfterParam = number;
 
 // Warning: Protype only.  Does not set the next player.
 function deleteHistoryAfter(G: ServerData, ctx: Ctx, param: DeleteHistoryAfterParam) : void {
-    if(!Number. isInteger(param) || param < 0 || param > G.currentState ) {
+    if(!Number. isInteger(param) || param < 0 || param >= G.states.length ) {
         G.serverError = "Bad state index in deleteHistoryAfter";
     } else {
         G.serverError = "";
