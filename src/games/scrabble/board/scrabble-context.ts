@@ -1,7 +1,7 @@
 import React, { Dispatch } from "react";
 import { sAssert } from "../../../utils/assert";
-import { ReducerState } from "../local-actions/local-game-state";
-import { ActionType } from "../local-actions/local-game-state-reducer";
+import { ReducerState } from "../local-actions/reducer-state";
+import { ActionType } from "../local-actions/scrabble-reducer";
 import { ScrabbleConfig } from "../config";
 import { WrappedGameProps } from "../../../app-game-support";
 import { MoveHistoryElement } from "../global-actions/move-hstory";

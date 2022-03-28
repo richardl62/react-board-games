@@ -1,8 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { sAssert } from "../../utils/assert";
 import { WrappedGameProps } from "../../app-game-support";
-import { getLocalGameState } from "./local-actions/local-game-state";
-import { localGameStateReducer } from "./local-actions/local-game-state-reducer";
+import { scrabbleReducer } from "./local-actions/scrabble-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
 import { ScabbbleGameProps } from "./board/game-props";
@@ -11,6 +10,7 @@ import { isServerData } from "./global-actions";
 import { getWordChecker } from "../../utils/get-word-checker";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../utils/async-status";
+import { initialReducerState } from "./local-actions/reducer-state";
 // import { beep } from "./sounds";
 
 export interface BoardWrapperProps {
@@ -23,9 +23,10 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const G = scrabbleGameProps.G;
     sAssert(isServerData(G), "Game state appears to be invalid");
 
-    const [localState, dispatch] = useReducer(localGameStateReducer, scrabbleGameProps, 
-        scrabbleGameProps => getLocalGameState(scrabbleGameProps, props.config, 
-            {showRewindControls: false, historyPosition: 0})
+    const { config } = props;
+
+    const [localState, dispatch] = useReducer(scrabbleReducer, 
+        initialReducerState(scrabbleGameProps, config)
     );
 
     const downHandler = (event: KeyboardEvent) => dispatch({ type: "keydown", data: {key: event.key}});
@@ -49,8 +50,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     if (G.timestamp !== localState.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: getLocalGameState(scrabbleGameProps, props.config, 
-                {...localState, historyPosition: G.states.length-1}),
+            data: scrabbleGameProps,
         });
 
         // if(localState.soundsAllowed) {

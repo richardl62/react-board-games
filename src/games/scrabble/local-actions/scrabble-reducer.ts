@@ -1,29 +1,40 @@
-import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
-import { sanityCheck } from "./sanity-check-local-state";
 import { SquareID } from "./game-actions";
-import { ClickMoveDirection, ClickMoveStart, ReducerState } from "./local-game-state";
+import { ClickMoveDirection, ClickMoveStart, ReducerState, sanityCheck } from "./reducer-state";
+import { ScabbbleGameProps } from "../board/game-props";
+import { getLocalGameState } from "./local-game-state";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
     | { type: "recallRack" }
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-    | { type: "externalStateChange", data: ReducerState }
+    | { type: "externalStateChange", data: ScabbbleGameProps }
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
     | { type: "setShowRewindControls", data: {show: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
 
-export function localGameStateReducer(state : ReducerState, action: ActionType) : ReducerState {
+export function scrabbleReducer(state : ReducerState, action: ActionType) : ReducerState {
 
     if(action.type === "externalStateChange") {
-        const externalState = action.data;
+        // The code is an edited copy of initialReducerState 
+        const scrabbleGameProps : ScabbbleGameProps = action.data;
+        const { states, timestamp } = scrabbleGameProps.G;
+        const historyPosition = states.length - 1;
+        
+        return {
+            ...state,
 
-        sAssert(externalState.externalTimestamp > state.externalTimestamp);
-        return externalState;
+            ...getLocalGameState(states[historyPosition], scrabbleGameProps.playerID),
+            
+            gameStates: states,
+            historyPosition: states.length-1,
+            externalTimestamp: timestamp,
+            scrabbleGameProps: scrabbleGameProps,
+        };
     }
 
     const br = new BoardAndRack(state.board, state.rack);
