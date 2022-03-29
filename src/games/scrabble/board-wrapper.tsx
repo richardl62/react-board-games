@@ -1,12 +1,10 @@
 import React, { useEffect, useReducer } from "react";
-import { sAssert } from "../../utils/assert";
 import { WrappedGameProps } from "../../app-game-support";
 import { scrabbleReducer } from "./local-actions/scrabble-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
 import { ScrabbleGameProps } from "./board/game-props";
-import { ReactScrabbleContext, ScrabbleContext } from "./board/scrabble-context";
-import { isServerData } from "./global-actions";
+import { makeScrabbleContext, ReactScrabbleContext} from "./board/scrabble-context";
 import { getWordChecker } from "../../utils/get-word-checker";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../utils/async-status";
@@ -20,16 +18,14 @@ export interface BoardWrapperProps {
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const scrabbleGameProps = props.appBoardProps as unknown as ScrabbleGameProps;
-    const G = scrabbleGameProps.G;
-    sAssert(isServerData(G), "Game state appears to be invalid");
-
     const { config } = props;
 
-    const [localState, dispatch] = useReducer(scrabbleReducer, 
+    const [reducerState, dispatch] = useReducer(scrabbleReducer, 
         initialReducerState(scrabbleGameProps, config)
     );
 
-    const downHandler = (event: KeyboardEvent) => dispatch({ type: "keydown", data: {key: event.key}});
+    const downHandler = (event: KeyboardEvent) => 
+        dispatch({ type: "keydown", data: {key: event.key}});
 
     // Add event listeners
     useEffect(() => {
@@ -47,7 +43,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
     }
 
-    if (G.timestamp !== localState.externalTimestamp) {
+    if (scrabbleGameProps.G.timestamp !== reducerState.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
             data: scrabbleGameProps,
@@ -58,23 +54,9 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         // }
     } 
 
-    const gameState = G.states[localState.historyPosition];
+    const context = makeScrabbleContext(scrabbleGameProps, config, reducerState, dispatch, isLegalWord);
 
-    const gameProps: ScrabbleContext = {
-        ...localState,
-        bgioProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
-
-        config: props.config,
-        dispatch: dispatch,
-        isLegalWord: isLegalWord,
-
-        historyLength: G.states.length,
-        moveHistory: gameState.moveHistory,
-    
-        serverError: G.serverError,
-    };
-
-    return <ReactScrabbleContext.Provider value={gameProps }>
+    return <ReactScrabbleContext.Provider value={context}>
         <Board />
     </ReactScrabbleContext.Provider>;
 }

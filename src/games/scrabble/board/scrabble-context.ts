@@ -6,6 +6,8 @@ import { ScrabbleConfig } from "../config";
 import { WrappedGameProps } from "../../../app-game-support";
 import { MoveHistoryElement } from "../global-actions/move-hstory";
 import { ClientMoves } from "../global-actions/bgio-moves";
+import { isServerData } from "../global-actions";
+import { ScrabbleGameProps } from "./game-props";
 
 export interface ScrabbleContext extends ReducerState {
     readonly bgioProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
@@ -29,3 +31,30 @@ export function useScrabbleContext() : ScrabbleContext {
     return context;
 }
 
+export function makeScrabbleContext(
+    scrabbleGameProps: ScrabbleGameProps,
+    config: ScrabbleConfig,
+    reducerState: ReducerState,
+    dispatch: React.Dispatch<ActionType>,
+    isLegalWord: (word: string) => boolean,
+) : ScrabbleContext {
+    const G = scrabbleGameProps.G;
+    sAssert(isServerData(G), "Game state appears to be invalid");
+
+    const gameState = G.states[reducerState.historyPosition];
+
+    return {
+        ...reducerState,
+        bgioProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
+
+        config: config,
+        dispatch: dispatch,
+
+        historyLength: G.states.length,
+        moveHistory: gameState.moveHistory,
+
+        isLegalWord: isLegalWord,
+    
+        serverError: G.serverError,
+    };
+}
