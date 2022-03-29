@@ -2,14 +2,14 @@ import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
 import { ClickMoveDirection, ClickMoveStart, newReducerState, ReducerState, sanityCheck } from "./reducer-state";
-import { ScabbbleGameProps } from "../board/game-props";
+import { ScrabbleGameProps } from "../board/game-props";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
     | { type: "recallRack" }
     | { type: "shuffleRack" }
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
-    | { type: "externalStateChange", data: ScabbbleGameProps }
+    | { type: "externalStateChange", data: ScrabbleGameProps }
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
@@ -20,7 +20,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
 
     if(action.type === "externalStateChange") {
         // The code is an edited copy of initialReducerState 
-        const scrabbleGameProps : ScabbbleGameProps = action.data;
+        const scrabbleGameProps : ScrabbleGameProps = action.data;
         return newReducerState(scrabbleGameProps, state);
     }
 

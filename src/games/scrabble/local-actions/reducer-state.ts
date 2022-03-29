@@ -1,5 +1,5 @@
 import { nNonNull } from "../../../utils/n-non-null";
-import { ScabbbleGameProps } from "../board/game-props";
+import { ScrabbleGameProps } from "../board/game-props";
 import { ScrabbleConfig } from "../config";
 import { GameState } from "../global-actions/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
@@ -22,7 +22,7 @@ export interface ReducerState extends LocalGameState {
     showRewindControls: boolean;
 
     // KLUDGE? The members below are used only for sanity checks.
-    scrabbleGameProps: ScabbbleGameProps;
+    scrabbleGameProps: ScrabbleGameProps;
     config: ScrabbleConfig;
 }
 
@@ -33,7 +33,7 @@ interface Extras {
 }
 
 export function initialReducerState(
-    scrabbleGameProps: ScabbbleGameProps,
+    scrabbleGameProps: ScrabbleGameProps,
     config: ScrabbleConfig,
 ): ReducerState {
 
@@ -47,7 +47,7 @@ export function initialReducerState(
 }
 
 export function newReducerState(
-    scrabbleGameProps: ScabbbleGameProps,
+    scrabbleGameProps: ScrabbleGameProps,
     extras: Extras,
     historyPosition_?: number,
 ): ReducerState {
