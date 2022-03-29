@@ -167,10 +167,9 @@ export function EnableMoveHistoryToggle() : JSX.Element {
     };
 
     return <div>
-        <label htmlFor="toggle"> Rewind controls (experimental)</label>
-        <input type="checkbox" checked={showRewindControls} onChange={toggleRewindControls}
-            name="toggle"
-        />
+        <label>{"Rewind controls "}
+            <input type="checkbox" checked={showRewindControls} onChange={toggleRewindControls} />
+        </label>
     </div>;
 }
 

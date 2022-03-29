@@ -39,13 +39,17 @@ export function useTurnControlData(): TurnControlData {
         }
     }
 
-    if (active.length === 0 && context.bgioProps.isMyTurn) {
-        return {
-            onPass: () => {
-                context.bgioProps.moves.pass();
-                context.bgioProps.events.endTurn();
-            },
-        };
+    if (active.length === 0) {
+        if (context.bgioProps.isMyTurn) {
+            return {
+                onPass: () => {
+                    context.bgioProps.moves.pass();
+                    context.bgioProps.events.endTurn();
+                },
+            };
+        } else {
+            return {};
+        }
     } else if (!wordsAndScore) {
         return {
             score: "-",

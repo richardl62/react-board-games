@@ -26,11 +26,6 @@ export function ScoresEtc(): JSX.Element {
         const name = context.bgioProps.name(pid);
         const score = context.playerData[pid].score;
         const nInRack = nNonNull(context.playerData[pid].rack);
-
-        let displayName = name;
-        if (pid === context.bgioProps.playerID) {
-            displayName += " (you)";
-        }
         
         let nInRackText = "";
         if(pid !== context.bgioProps.playerID && context.nTilesInBag === 0) {
@@ -40,7 +35,7 @@ export function ScoresEtc(): JSX.Element {
         return (
             <div key={name} >
                 <PlayerScore current={pid === context.bgioProps.currentPlayer} >
-                    {`${displayName}: ${score}`}
+                    {`${name}: ${score}`}
                 </PlayerScore>
                 <NumTilesInRack>{nInRackText}</NumTilesInRack>
             </div>
