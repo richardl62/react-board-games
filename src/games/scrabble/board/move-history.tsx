@@ -35,7 +35,7 @@ interface WordPlayedProps {
 
 function WordPlayed(props: WordPlayedProps) {
     const {pid, words, illegalWords, score} = props.wordPlayed;
-    const { name } = useScrabbleContext().bgioProps; 
+    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps; 
 
     const illegal = (word: string) => illegalWords.includes(word);
     return <div>
@@ -55,7 +55,7 @@ interface ScoreAdjustmentsProps {
 
 function ScoreAdjustments(props: ScoreAdjustmentsProps) {
     const { adjustments } = props;
-    const { name } = useScrabbleContext().bgioProps;
+    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps;
 
     // preprocessed is use to help with adding commas.
     const preprocessed = [];
@@ -89,7 +89,7 @@ interface WinnersProps {
 
 function GameOver(props: WinnersProps) {
     const { winners } = props;
-    const { name } = useScrabbleContext().bgioProps;
+    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps;
     if(winners.length === 1) {
 
         return <div>
@@ -118,7 +118,7 @@ interface TurnDescriptionProps {
 
 function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
     const { elem } = props;
-    const { name } = useScrabbleContext().bgioProps;
+    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps;
 
     if(elem.wordsPlayed) {
         return <WordPlayed wordPlayed={elem.wordsPlayed} />;

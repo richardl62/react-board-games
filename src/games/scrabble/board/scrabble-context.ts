@@ -10,7 +10,10 @@ import { isServerData } from "../global-actions";
 import { ScrabbleGameProps } from "./game-props";
 
 export interface ScrabbleContext extends ReducerState {
-    readonly bgioProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
+    readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
+    playerID: string;
+    currentPlayer: string;
+
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>;
     readonly isLegalWord: (word: string) => boolean;
@@ -43,9 +46,14 @@ export function makeScrabbleContext(
 
     const gameState = G.states[reducerState.historyPosition];
 
+    sAssert(scrabbleGameProps.playerID);
+
     return {
         ...reducerState,
-        bgioProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
+        wrappedGameProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
+
+        playerID: scrabbleGameProps.playerID,
+        currentPlayer: scrabbleGameProps.ctx.currentPlayer,
 
         config: config,
         dispatch: dispatch,

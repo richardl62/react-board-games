@@ -55,8 +55,8 @@ export function RackAndControls(): JSX.Element {
                 sAssert(l);
                 return l;
             });
-            context.bgioProps.moves.swapTiles({rack: checkedRack, toSwap: selectedForSwap});           
-            context.bgioProps.events.endTurn();
+            context.wrappedGameProps.moves.swapTiles({rack: checkedRack, toSwap: selectedForSwap});           
+            context.wrappedGameProps.events.endTurn();
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);
@@ -87,6 +87,8 @@ export function RackAndControls(): JSX.Element {
         const recallRack = () =>  context.dispatch({type: "recallRack"});
         const shuffleRack = () =>  context.dispatch({type: "shuffleRack"});
 
+        const isMyTurn = context.playerID === context.currentPlayer; 
+
         return (<StyledRackAndControls>
             <PreRack>
                 {hasTilesOut && <button onClick={recallRack}>Recall</button>}
@@ -99,7 +101,7 @@ export function RackAndControls(): JSX.Element {
 
             <Rack selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
-            {context.bgioProps.isMyTurn &&
+            {isMyTurn &&
                 <button
                     disabled={!allowSwapping}
                     onClick={doEnableSwap}

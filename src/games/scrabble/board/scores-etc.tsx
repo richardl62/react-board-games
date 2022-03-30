@@ -22,19 +22,19 @@ const NumTilesInRack=styled.span`
 export function ScoresEtc(): JSX.Element {
     const context = useScrabbleContext();
 
-    const scoreElems = context.bgioProps.playOrder.map(pid => {
-        const name = context.bgioProps.name(pid);
+    const scoreElems = context.wrappedGameProps.ctx.playOrder.map(pid => {
+        const name = context.wrappedGameProps.getPlayerName(pid);
         const score = context.playerData[pid].score;
         const nInRack = nNonNull(context.playerData[pid].rack);
         
         let nInRackText = "";
-        if(pid !== context.bgioProps.playerID && context.nTilesInBag === 0) {
+        if(pid !== context.wrappedGameProps.playerID && context.nTilesInBag === 0) {
             nInRackText = ` (${nInRack} tiles in rack) `;
         }
 
         return (
             <div key={name} >
-                <PlayerScore current={pid === context.bgioProps.currentPlayer} >
+                <PlayerScore current={pid === context.currentPlayer} >
                     {`${name}: ${score}`}
                 </PlayerScore>
                 <NumTilesInRack>{nInRackText}</NumTilesInRack>
@@ -45,7 +45,7 @@ export function ScoresEtc(): JSX.Element {
     return (
         <div>
             <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...context.bgioProps}/>
+            <GameWarnings {...context.wrappedGameProps}/>
         </div>
     );
 }

@@ -18,8 +18,8 @@ const Game = styled.div`
 export function Board(): JSX.Element {
     const context = useScrabbleContext();
 
-    if(!context.bgioProps.allJoined) {
-        <WaitingForPlayers {...context.bgioProps} />;
+    if(!context.wrappedGameProps.allJoined) {
+        <WaitingForPlayers {...context.wrappedGameProps} />;
     }
 
     return (

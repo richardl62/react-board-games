@@ -31,15 +31,10 @@ export interface WrappedGameProps<G = unknown, Moves=unknown>
     playerData: PlayerDataDictionary;
     allJoined: boolean;
     allConnected: boolean;
-
-    playOrder: string[];
-    playerID: string;
-
-    currentPlayer: string;
-
-    isMyTurn: boolean;
-
-    name: (pid: string) => string;
+    
+    /** Part of BGIO props, but here we assert it is non-null */
+    playerID: string; 
+    getPlayerName: (pid: string) => string;
 
 }
 
@@ -73,11 +68,8 @@ export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGamePr
         playerData: playerData,
         allJoined: allJoined,
         allConnected: allConnected,
-        playOrder: bgioProps.ctx.playOrder,
         playerID: bgioProps.playerID,
-        currentPlayer: bgioProps.ctx.currentPlayer,
-        isMyTurn: bgioProps.playerID === bgioProps.ctx.currentPlayer,
-        name: (pid: string) => {
+        getPlayerName: (pid: string) => {
             const pd = playerData[pid];
             if(!pd) {
                 console.error("Invalid player id:", pid);

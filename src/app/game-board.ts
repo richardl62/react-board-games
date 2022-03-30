@@ -9,7 +9,7 @@ function gameStatus(gameProps: WrappedGameProps) {
     if(!gameProps.allJoined) {
         return "Game not started";
     } else {
-        const player = gameProps.name(gameProps.currentPlayer);
+        const player = gameProps.getPlayerName(gameProps.ctx.currentPlayer);
         return `${player} to play`;
     }
 }

@@ -38,13 +38,13 @@ export function useTurnControlData(): TurnControlData {
             setIllegalWordsData(null);
         }
     }
-
+    const isMyTurn = context.playerID === context.currentPlayer; 
     if (active.length === 0) {
-        if (context.bgioProps.isMyTurn) {
+        if (isMyTurn) {
             return {
                 onPass: () => {
-                    context.bgioProps.moves.pass();
-                    context.bgioProps.events.endTurn();
+                    context.wrappedGameProps.moves.pass();
+                    context.wrappedGameProps.events.endTurn();
                 },
             };
         } else {
@@ -77,12 +77,12 @@ export function useTurnControlData(): TurnControlData {
                 setBlankToSet(null);
             };
         }
-
-        if (context.bgioProps.isMyTurn && !unsetBlank) {
+        const isMyTurn = context.playerID === context.currentPlayer; 
+        if (isMyTurn && !unsetBlank) {
 
             const playWord = () => {
                 
-                context.bgioProps.moves.playWord({
+                context.wrappedGameProps.moves.playWord({
                     board: context.board,
                     rack: context.rack,
                     score: wordsAndScore.score,
@@ -93,7 +93,7 @@ export function useTurnControlData(): TurnControlData {
 
                 });
             
-                context.bgioProps.events.endTurn();
+                context.wrappedGameProps.events.endTurn();
 
                 setIllegalWordsData(null);
             };
