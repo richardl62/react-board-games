@@ -4,6 +4,7 @@ import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "../local-actions/extended-letter";
 import { MoveHistoryElement } from "./move-hstory";
+import { Ctx } from "boardgame.io";
 
 export interface BoardSquareData extends ExtendedLetter {
 
@@ -29,6 +30,8 @@ export interface GameState {
     board: BoardData;
     playerData: PlayerDataDictionary; 
     bag: Letter[];
+
+    currentPlayer: string,
 
     moveHistory: MoveHistoryElement[];
 
@@ -62,7 +65,7 @@ export function isGameState(arg: unknown) : boolean {
         isPlayerDataDictionary(state.playerData);
 }
 
-export function startingGameState(numPlayers: number, config: ScrabbleConfig): GameState {
+export function startingGameState(ctx: Ctx, config: ScrabbleConfig): GameState {
     const bag = config.makeFullBag(); 
 
     const rack = () => {
@@ -77,7 +80,7 @@ export function startingGameState(numPlayers: number, config: ScrabbleConfig): G
     };
 
     const playerData: PlayerDataDictionary = {};
-    for (let p = 0; p < numPlayers; ++p) {
+    for (let p = 0; p < ctx.numPlayers; ++p) {
         const playerID = p.toString(); //Kludge?
         playerData[playerID] = {
             rack: rack(),
@@ -89,6 +92,8 @@ export function startingGameState(numPlayers: number, config: ScrabbleConfig): G
         board: nestedArrayMap(config.boardLayout, () => null),
         playerData: playerData,
         bag: bag,
+
+        currentPlayer: ctx.currentPlayer,
 
         moveHistory: [],
         winnerIds: null,

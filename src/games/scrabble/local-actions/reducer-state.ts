@@ -54,9 +54,16 @@ export function newReducerState(
     const historyPosition = simplifiedState.reviewGameHistory ? 
         simplifiedState.reviewGameHistory.historyPosition : states.length-1;
 
+    let playerID;
+    if(simplifiedState.reviewGameHistory) {
+        playerID = states[simplifiedState.reviewGameHistory.historyPosition].currentPlayer;
+    } else {
+        playerID = scrabbleGameProps.playerID;
+    }
+
     return {
         ...simplifiedState,
-        ...getLocalGameState(states[historyPosition], scrabbleGameProps.playerID),
+        ...getLocalGameState(states[historyPosition], playerID),
         
         gameStates: states,
 

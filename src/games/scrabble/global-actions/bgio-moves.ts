@@ -3,6 +3,7 @@ import { ServerData } from "./server-data";
 import { playWord, PlayWordParam } from "./play-word";
 import { swapTiles, SwapTilesParam } from "./swap-tiles";
 import { GameState } from "./game-state";
+import { sAssert } from "../../../utils/assert";
 
 type PassParam = void;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,20 +14,32 @@ function pass(state: GameState, ctx: Ctx, _param: PassParam) : void {
 type SimpleMoveFunc<P> = (state: GameState, ctx: Ctx, param: P) => void;
 type WrappedMoveFunc<P> = (G: ServerData, ctx: Ctx, param: P) => void;
 
+function nextPlayer(ctx: Ctx) {
+    const {currentPlayer, playOrder, playOrderPos} = ctx;
+    sAssert(currentPlayer === playOrder[playOrderPos]);
+
+    const next = (playOrderPos + 1) % playOrder.length;
+    return playOrder[next]; 
+}
+
 function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
     return (G, ctx, param) => {
-        // KLUDGE/defensive - ensure copied state is fully independant.
-        const state: GameState = JSON.parse(JSON.stringify(G.states[G.states.length-1]));
-
         G.serverError = null;
         try {
-            func(state, ctx, param);
-            G.states.push(state);
+            const currentState = G.states[G.states.length-1];
+            sAssert(currentState.currentPlayer === ctx.currentPlayer);
+            
+            // KLUDGE/defensive - ensure copied state is fully independant.
+            const newState: GameState = JSON.parse(JSON.stringify(currentState));
+            newState.currentPlayer = nextPlayer(ctx);
+            func(newState, ctx, param);
+
+            G.states.push(newState);
         } catch (error) {
             const message = error instanceof Error ? error.message :
                 "unknown error";
             G.serverError = message;
-            state.moveHistory.push({ serverError: { message: message } });
+            G.states[G.states.length-1].moveHistory.push({ serverError: { message: message } });
         }
 
         G.timestamp++;

@@ -1,3 +1,4 @@
+import { Ctx } from "boardgame.io";
 import { ScrabbleConfig } from "../config";
 import { GameState, isGameState, startingGameState } from "./game-state";
 
@@ -21,10 +22,10 @@ export function isServerData(arg: unknown): boolean {
         isGameState(serverData.states[0]);
 }
 
-export function startingServerData(numPlayers: number, config: ScrabbleConfig): ServerData {
+export function startingServerData(ctx: Ctx, config: ScrabbleConfig): ServerData {
 
     return {
-        states: [startingGameState(numPlayers, config)],
+        states: [startingGameState(ctx, config)],
         timestamp: 0,
         serverError: null,
     };

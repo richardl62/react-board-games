@@ -43,9 +43,19 @@ export function makeScrabbleContext(
     const G = scrabbleGameProps.G;
     sAssert(isServerData(G), "Game state appears to be invalid");
 
-    const historyPosition = reducerState.reviewGameHistory ? 
-        reducerState.reviewGameHistory.historyPosition : G.states.length - 1;
-    const moveHistory = G.states[historyPosition].moveHistory;
+    let playerID;
+    let currentPlayer;
+    let moveHistory;
+    if (reducerState.reviewGameHistory) {
+        const gameState = G.states[reducerState.reviewGameHistory.historyPosition];
+        currentPlayer = gameState.currentPlayer;
+        playerID = currentPlayer;
+        moveHistory = gameState.moveHistory;
+    } else {
+        playerID = scrabbleGameProps.playerID;
+        currentPlayer = scrabbleGameProps.ctx.currentPlayer;
+        moveHistory = G.states[G.states.length-1].moveHistory;
+    }
 
     sAssert(scrabbleGameProps.playerID);
 
@@ -53,8 +63,8 @@ export function makeScrabbleContext(
         ...reducerState,
         wrappedGameProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
 
-        playerID: scrabbleGameProps.playerID,
-        currentPlayer: scrabbleGameProps.ctx.currentPlayer,
+        playerID: playerID,
+        currentPlayer: currentPlayer,
 
         config: config,
         dispatch: dispatch,

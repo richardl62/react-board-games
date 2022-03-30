@@ -11,7 +11,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
     return {
         ...config,
   
-        setup: (ctx: Ctx) => startingServerData(ctx.numPlayers, config),
+        setup: (ctx: Ctx) => startingServerData(ctx, config),
   
         moves: bgioMoves,
   
