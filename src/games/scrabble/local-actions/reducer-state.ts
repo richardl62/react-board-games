@@ -14,22 +14,22 @@ export interface ClickMoveStart {
 
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];
-    historyPosition: number;
+
+    reviewGameHistory: {historyPosition: number} | false;
 
     clickMoveStart: ClickMoveStart | null;
-    externalTimestamp: number;
+    externalTimestamp: number
 
-    showRewindControls: boolean;
 
     // KLUDGE? The members below are used only for sanity checks.
     scrabbleGameProps: ScrabbleGameProps;
     config: ScrabbleConfig;
 }
 
-interface Extras {
-    clickMoveStart: ClickMoveStart | null;
-    showRewindControls: boolean;
-    config: ScrabbleConfig;
+interface SimplifedReducerState {
+    clickMoveStart: ReducerState["clickMoveStart"];
+    config: ReducerState["config"];
+    reviewGameHistory: ReducerState["reviewGameHistory"];
 }
 
 export function initialReducerState(
@@ -37,29 +37,28 @@ export function initialReducerState(
     config: ScrabbleConfig,
 ): ReducerState {
 
-    const extras : Extras = {
+    const simplifiedState : SimplifedReducerState = {
         clickMoveStart: null,
-        showRewindControls: false,
+        reviewGameHistory: false,
         config: config,
     };
 
-    return newReducerState(scrabbleGameProps, extras);
+    return newReducerState(scrabbleGameProps, simplifiedState);
 }
 
 export function newReducerState(
     scrabbleGameProps: ScrabbleGameProps,
-    extras: Extras,
-    historyPosition_?: number,
+    simplifiedState: SimplifedReducerState,
 ): ReducerState {
     const { states, timestamp } = scrabbleGameProps.G;
-    const historyPosition = historyPosition_ === undefined ? states.length-1 : historyPosition_;
+    const historyPosition = simplifiedState.reviewGameHistory ? 
+        simplifiedState.reviewGameHistory.historyPosition : states.length-1;
 
     return {
-        ...extras,
+        ...simplifiedState,
         ...getLocalGameState(states[historyPosition], scrabbleGameProps.playerID),
         
         gameStates: states,
-        historyPosition: historyPosition,
 
         externalTimestamp: timestamp,
         scrabbleGameProps: scrabbleGameProps,

@@ -18,7 +18,6 @@ export interface ScrabbleContext extends ReducerState {
     readonly dispatch:  Dispatch<ActionType>;
     readonly isLegalWord: (word: string) => boolean;
 
-    readonly historyPosition: number;
     readonly historyLength: number;
     readonly moveHistory: MoveHistoryElement[];
 
@@ -44,7 +43,9 @@ export function makeScrabbleContext(
     const G = scrabbleGameProps.G;
     sAssert(isServerData(G), "Game state appears to be invalid");
 
-    const gameState = G.states[reducerState.historyPosition];
+    const historyPosition = reducerState.reviewGameHistory ? 
+        reducerState.reviewGameHistory.historyPosition : G.states.length - 1;
+    const moveHistory = G.states[historyPosition].moveHistory;
 
     sAssert(scrabbleGameProps.playerID);
 
@@ -59,7 +60,7 @@ export function makeScrabbleContext(
         dispatch: dispatch,
 
         historyLength: G.states.length,
-        moveHistory: gameState.moveHistory,
+        moveHistory: moveHistory,
 
         isLegalWord: isLegalWord,
     

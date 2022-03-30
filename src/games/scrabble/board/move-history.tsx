@@ -160,15 +160,17 @@ interface MoveHistoryProps {
 
 export function EnableMoveHistoryToggle() : JSX.Element {
     const context = useScrabbleContext();
-    const { showRewindControls } = context; 
+    const { reviewGameHistory } = context; 
 
-    const toggleRewindControls = () => {
-        context.dispatch({type: "setShowRewindControls", data: {show: !showRewindControls}});
+    const gameHistoryEnabled = Boolean(reviewGameHistory);
+
+    const toggleGameHistoryEnabled = () => {
+        context.dispatch({type: "enableGameHistory", data: {enable: !gameHistoryEnabled}});
     };
 
     return <div>
-        <label>{"Rewind controls "}
-            <input type="checkbox" checked={showRewindControls} onChange={toggleRewindControls} />
+        <label>{"Review game history "}
+            <input type="checkbox" checked={gameHistoryEnabled} onChange={toggleGameHistoryEnabled} />
         </label>
     </div>;
 }

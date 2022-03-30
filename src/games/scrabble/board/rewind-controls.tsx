@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { sAssert } from "../../../utils/assert";
 import { useScrabbleContext } from "./scrabble-context";
 
 const arrowHeight = "15px";
@@ -48,7 +49,10 @@ const Controls = styled.div`
 
 export function RewindControls() : JSX.Element {
     const context = useScrabbleContext();
-    const { historyPosition, historyLength } = context;
+    const { reviewGameHistory, historyLength } = context;
+
+    sAssert(reviewGameHistory);
+    const { historyPosition } = reviewGameHistory;
 
     const setHistoryPosition = (num: number) => {
         context.dispatch({type: "setHistoryPosition", data: {position: num}});

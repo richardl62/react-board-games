@@ -13,7 +13,7 @@ export type ActionType =
     | { type: "setClickMoveStart", data: {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
-    | { type: "setShowRewindControls", data: {show: boolean}}
+    | { type: "enableGameHistory", data: {enable: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
 
 export function scrabbleReducer(state : ReducerState, action: ActionType) : ReducerState {
@@ -24,15 +24,20 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         return newReducerState(scrabbleGameProps, state);
     }
 
-    if(action.type === "setHistoryPosition") {
-        return newReducerState(state.scrabbleGameProps, state, action.data.position);
+    if (action.type === "setHistoryPosition") {
+        return newReducerState(state.scrabbleGameProps,
+            { ...state, reviewGameHistory: { historyPosition: action.data.position } }
+        );
     }
 
-    if(action.type === "setShowRewindControls") {
+    if(action.type === "enableGameHistory") {
         // Reset history to lastest state (to allow moves to be made) when switching
         // off rewind controls. KLUDGE: Also reset when switching the controls on.
-        const lastestHistoryState = newReducerState(state.scrabbleGameProps, state);
-        return {...lastestHistoryState, showRewindControls: action.data.show};
+        const reviewGameHistory = action.data.enable && 
+            {historyPosition: state.gameStates.length-1};
+
+        return newReducerState(state.scrabbleGameProps, 
+            {...state, reviewGameHistory: reviewGameHistory} );
     } 
 
     const br = new BoardAndRack(state.board, state.rack);
