@@ -15,6 +15,7 @@ export type ActionType =
     | { type: "keydown", data: {key: string}}
     | { type: "enableGameHistory", data: {enable: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
+    | { type: "focusInWordChecker", data: {focusIn: boolean}}
 
 export function scrabbleReducer(state : ReducerState, action: ActionType) : ReducerState {
 
@@ -40,6 +41,10 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
             {...state, reviewGameHistory: reviewGameHistory} );
     } 
 
+    if (action.type === "focusInWordChecker") {
+        return { ...state, focusInWordChecker: action.data.focusIn};
+    }
+
     const br = new BoardAndRack(state.board, state.rack);
     
     let clickMoveStart = state.clickMoveStart;
@@ -57,7 +62,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
             console.warn("Attempted clickMove when start is not set");
         }
     } else if(action.type === "keydown") {
-        if( state.clickMoveStart ) {
+        if( !state.focusInWordChecker && state.clickMoveStart ) {
             const rackPos = br.findInRack(action.data.key);
             if (rackPos !== null) {
                 br.moveFromRack({start: state.clickMoveStart, rackPos: rackPos});

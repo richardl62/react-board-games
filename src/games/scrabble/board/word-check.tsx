@@ -19,7 +19,7 @@ function Validity({ valid }: { valid: boolean; }) {
 export function WordChecker(): JSX.Element {
     const [word, setEnteredWord] = useState("");
     const [valid, setValid] = useState<boolean | "unknown">("unknown");
-    const context = useScrabbleContext();
+    const { dispatch, isLegalWord } = useScrabbleContext();
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const rawWord = e.target.value;
@@ -29,10 +29,13 @@ export function WordChecker(): JSX.Element {
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        setValid(context.isLegalWord(word));
+        setValid(isLegalWord(word));
         e.preventDefault();
     };
 
+    const focusIn = (arg: boolean) => {
+        dispatch({type: "focusInWordChecker", data: {focusIn: arg}});    
+    };
 
     return (
         <form onSubmit={onSubmit}>
@@ -42,7 +45,10 @@ export function WordChecker(): JSX.Element {
                 placeholder={"Word to check"}
                 value={word}
                 spellCheck={false}
-                onChange={onWordChange} />
+                onChange={onWordChange} 
+                onFocus={()=>focusIn(true)}
+                onBlur={()=>focusIn(false)}
+            />
 
             {valid === "unknown" ?
                 (word && <input type="submit" value="Check" />) :

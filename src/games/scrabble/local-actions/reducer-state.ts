@@ -15,16 +15,21 @@ export interface ClickMoveStart {
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];
 
-    reviewGameHistory: {historyPosition: number} | false;
-
-    clickMoveStart: ClickMoveStart | null;
-    externalTimestamp: number
-
-
     // KLUDGE? The members below are used only for sanity checks.
     scrabbleGameProps: ScrabbleGameProps;
     config: ScrabbleConfig;
+
+    externalTimestamp: number;
+
+    focusInWordChecker: boolean;
+
+    reviewGameHistory: { historyPosition: number } | false;
+
+    clickMoveStart: ClickMoveStart | null;
+
 }
+
+
 
 interface SimplifedReducerState {
     clickMoveStart: ReducerState["clickMoveStart"];
@@ -65,6 +70,7 @@ export function newReducerState(
     return {
         ...simplifiedState,
         ...getLocalGameState(states[historyPosition], playerID),
+        focusInWordChecker: false,
         
         gameStates: states,
 
