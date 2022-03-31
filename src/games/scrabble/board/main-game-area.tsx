@@ -60,7 +60,7 @@ function BagInfo(): JSX.Element {
 }
 
 export function MainGameArea(): JSX.Element {
-    const { reviewGameHistory } = useScrabbleContext();
+    const { reviewGameHistory, winnerIds } = useScrabbleContext();
     return <DndProvider>
         <Game>
             <ServerError />
@@ -76,7 +76,7 @@ export function MainGameArea(): JSX.Element {
             </SpaceBetween>
 
             {reviewGameHistory ? <RewindControls/> : <TurnControl/> }
-            <EnableMoveHistoryToggle/>
+            { winnerIds && <EnableMoveHistoryToggle/>}
         </Game>
     </DndProvider>;
 }

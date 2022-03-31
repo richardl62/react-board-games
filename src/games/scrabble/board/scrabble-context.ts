@@ -4,10 +4,10 @@ import { ReducerState } from "../local-actions/reducer-state";
 import { ActionType } from "../local-actions/scrabble-reducer";
 import { ScrabbleConfig } from "../config";
 import { WrappedGameProps } from "../../../app-game-support";
-import { MoveHistoryElement } from "../global-actions/move-hstory";
 import { ClientMoves } from "../global-actions/bgio-moves";
-import { isServerData } from "../global-actions";
+import { isServerData, ServerData } from "../global-actions";
 import { ScrabbleGameProps } from "./game-props";
+import { GameState } from "../global-actions/game-state";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
@@ -19,9 +19,11 @@ export interface ScrabbleContext extends ReducerState {
     readonly isLegalWord: (word: string) => boolean;
 
     readonly historyLength: number;
-    readonly moveHistory: MoveHistoryElement[];
+    readonly moveHistory: GameState["moveHistory"];
 
-    readonly serverError: string | null;
+    readonly winnerIds: GameState["winnerIds"],
+
+    readonly serverError: ServerData["serverError"];
 }
 
 export const ReactScrabbleContext = React.createContext<ScrabbleContext|null>(null);
@@ -43,6 +45,7 @@ export function makeScrabbleContext(
     const G = scrabbleGameProps.G;
     sAssert(isServerData(G), "Game state appears to be invalid");
 
+    const finalGameState = G.states[G.states.length-1];
     let playerID;
     let currentPlayer;
     let moveHistory;
@@ -54,7 +57,7 @@ export function makeScrabbleContext(
     } else {
         playerID = scrabbleGameProps.playerID;
         currentPlayer = scrabbleGameProps.ctx.currentPlayer;
-        moveHistory = G.states[G.states.length-1].moveHistory;
+        moveHistory = finalGameState.moveHistory;
     }
 
     sAssert(scrabbleGameProps.playerID);
@@ -73,6 +76,8 @@ export function makeScrabbleContext(
         moveHistory: moveHistory,
 
         isLegalWord: isLegalWord,
+
+        winnerIds: finalGameState.winnerIds,
     
         serverError: G.serverError,
     };
