@@ -56,6 +56,7 @@ export function newReducerState(
 
     let playerID;
     if(simplifiedState.reviewGameHistory) {
+        // View the game from the perspective of he current player
         playerID = states[simplifiedState.reviewGameHistory.historyPosition].currentPlayer;
     } else {
         playerID = scrabbleGameProps.playerID;

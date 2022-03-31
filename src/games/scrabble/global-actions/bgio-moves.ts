@@ -46,33 +46,14 @@ function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
     };
 }
 
-type DeleteHistoryAfterParam = number;
-
-// Warning: Protype only.  Does not set the next player.
-function deleteHistoryAfter(G: ServerData, ctx: Ctx, param: DeleteHistoryAfterParam) : void {
-    if(!Number. isInteger(param) || param < 0 || param >= G.states.length ) {
-        G.serverError = "Bad state index in deleteHistoryAfter";
-    } else {
-        G.serverError = "";
-        G.states = G.states.slice(0, param+1);
-    }
-    G.timestamp++;
-}
-
 export const bgioMoves = {
     playWord: wrappedMoveFunction(playWord),
     swapTiles: wrappedMoveFunction(swapTiles),
     pass: wrappedMoveFunction(pass),
-
-    // Warning: See implementation
-    deleteHistoryAfter: deleteHistoryAfter, 
 };
 
 export interface ClientMoves {
     playWord: (arg: PlayWordParam) => void;
     swapTiles: (arg: SwapTilesParam) => void;
     pass: (arg: PassParam) => void;
-
-    // Warning: See implementation
-    deleteHistoryAfter: (arg: DeleteHistoryAfterParam) => void;
 }
