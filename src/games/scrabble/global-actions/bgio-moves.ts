@@ -4,12 +4,12 @@ import { playWord, PlayWordParam } from "./play-word";
 import { swapTiles, SwapTilesParam } from "./swap-tiles";
 import { GameState } from "./game-state";
 import { sAssert } from "../../../utils/assert";
+import { checkForWinner } from "./check-for-winner";
 
 type PassParam = void;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function pass(state: GameState, ctx: Ctx, _param: PassParam) : void {
     state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
-    throw "Oops";
 }
 
 type SimpleMoveFunc<P> = (state: GameState, ctx: Ctx, param: P) => void;
@@ -36,6 +36,7 @@ function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
             func(newState, ctx, param);
 
             G.states.push(newState);
+            checkForWinner(newState, ctx);
 
             if (ctx.events) {
                 ctx.events.endTurn();
