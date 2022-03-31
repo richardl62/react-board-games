@@ -44,7 +44,6 @@ export function useTurnControlData(): TurnControlData {
             return {
                 onPass: () => {
                     context.wrappedGameProps.moves.pass();
-                    context.wrappedGameProps.events.endTurn();
                 },
             };
         } else {
@@ -93,8 +92,6 @@ export function useTurnControlData(): TurnControlData {
 
                 });
             
-                context.wrappedGameProps.events.endTurn();
-
                 setIllegalWordsData(null);
             };
 

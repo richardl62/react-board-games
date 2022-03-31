@@ -9,6 +9,7 @@ type PassParam = void;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function pass(state: GameState, ctx: Ctx, _param: PassParam) : void {
     state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
+    throw "Oops";
 }
 
 type SimpleMoveFunc<P> = (state: GameState, ctx: Ctx, param: P) => void;
@@ -35,6 +36,12 @@ function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
             func(newState, ctx, param);
 
             G.states.push(newState);
+
+            if (ctx.events) {
+                ctx.events.endTurn();
+            } else {
+                G.serverError = "Cannot end turn (internal error)";
+            }
         } catch (error) {
             const message = error instanceof Error ? error.message :
                 "unknown error";

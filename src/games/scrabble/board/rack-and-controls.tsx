@@ -56,7 +56,6 @@ export function RackAndControls(): JSX.Element {
                 return l;
             });
             context.wrappedGameProps.moves.swapTiles({rack: checkedRack, toSwap: selectedForSwap});           
-            context.wrappedGameProps.events.endTurn();
         };
         const cancelSwap = () => {
             setSelectedForSwap(null);
