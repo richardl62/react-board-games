@@ -4,10 +4,10 @@ import { ReducerState } from "../local-actions/reducer-state";
 import { ActionType } from "../local-actions/scrabble-reducer";
 import { ScrabbleConfig } from "../config";
 import { WrappedGameProps } from "../../../app-game-support";
-import { ClientMoves } from "../global-actions/bgio-moves";
-import { isServerData, ServerData } from "../global-actions";
+import { ClientMoves } from "../server-side/bgio-moves";
+import { isServerData, ServerData } from "../server-side";
 import { ScrabbleGameProps } from "./game-props";
-import { GameState } from "../global-actions/game-state";
+import { GameState } from "../server-side/game-state";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state

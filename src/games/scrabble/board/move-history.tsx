@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { MoveHistoryElement, WordsPlayedInfo } from "../global-actions/move-hstory";
+import { MoveHistoryElement, WordsPlayedInfo } from "../server-side/move-hstory";
 import { useScrabbleContext } from "./scrabble-context";
 
 const FirstSpan = styled.span`

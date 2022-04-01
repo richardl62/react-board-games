@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
 import { tileScore } from "./extended-letter";
-import { BoardData } from "../global-actions/game-state";
+import { BoardData } from "../server-side/game-state";
 import { ScrabbleConfig, multipliers } from "../config";
 
 interface RowCol {

@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 import React from "react";
 import { AppGame, WrappedGameProps } from "../../app-game-support";
 import { configs, ScrabbleConfig } from "./config";
-import { bgioMoves, startingServerData } from "./global-actions";
+import { bgioMoves, startingServerData } from "./server-side";
 import { LazyBoardWrapper } from "./lazy-board-wrapper";
 
 

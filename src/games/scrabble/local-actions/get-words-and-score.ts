@@ -1,5 +1,5 @@
 import { sAssert } from "../../../utils/assert";
-import { BoardData, BoardSquareData } from "../global-actions/game-state";
+import { BoardData, BoardSquareData } from "../server-side/game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { ScrabbleContext } from "../board/scrabble-context";

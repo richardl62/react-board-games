@@ -4,8 +4,8 @@ import { blank } from "../config";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "./extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData } from "../global-actions/game-state";
-import { ServerData } from "../global-actions/server-data";
+import { BoardData } from "../server-side/game-state";
+import { ServerData } from "../server-side/server-data";
 
 export interface SquareID {
     row: number;

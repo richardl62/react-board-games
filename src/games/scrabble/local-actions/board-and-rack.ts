@@ -3,7 +3,7 @@ import { ExtendedLetter, makeExtendedLetter } from "./extended-letter";
 import { blank, Letter } from "../config";
 import { shuffle } from "../../../utils/shuffle";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
-import { BoardData, BoardSquareData } from "../global-actions/game-state";
+import { BoardData, BoardSquareData } from "../server-side/game-state";
 import { ClickMoveStart } from "./reducer-state";
 
 export type Rack = (Letter | null)[];

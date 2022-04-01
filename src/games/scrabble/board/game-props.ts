@@ -1,6 +1,6 @@
 import { WrappedGameProps } from "../../../app-game-support";
-import { ServerData } from "../global-actions";
-import { ClientMoves } from "../global-actions/bgio-moves";
+import { ServerData } from "../server-side";
+import { ClientMoves } from "../server-side/bgio-moves";
 
 export type ScrabbleGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
