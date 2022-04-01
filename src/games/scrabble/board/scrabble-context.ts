@@ -1,7 +1,7 @@
 import React, { Dispatch } from "react";
 import { sAssert } from "../../../utils/assert";
-import { ReducerState } from "../local-actions/reducer-state";
-import { ActionType } from "../local-actions/scrabble-reducer";
+import { ReducerState } from "../client-side-actions/reducer-state";
+import { ActionType } from "../client-side-actions/scrabble-reducer";
 import { ScrabbleConfig } from "../config";
 import { WrappedGameProps } from "../../../app-game-support";
 import { ClientMoves } from "../server-side/bgio-moves";

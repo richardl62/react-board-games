@@ -1,13 +1,14 @@
 import React from "react";
-import { boardIDs, SquareID } from "../local-actions";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "../../../utils/board/boardered-grid";
 import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../utils/assert";
 import { Tile } from "./tile";
-import { makeExtendedLetter } from "../local-actions/extended-letter";
 import { useScrabbleContext } from "./scrabble-context";
+import { SquareID, boardIDs } from "../client-side-actions";
+import { makeExtendedLetter } from "../client-side-actions/extended-letter";
+
 interface RackProps {
     selected: boolean[] | null;
     setSelected: (arg: boolean[]) => void;

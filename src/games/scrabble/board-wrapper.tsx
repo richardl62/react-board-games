@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { WrappedGameProps } from "../../app-game-support";
-import { scrabbleReducer } from "./local-actions/scrabble-reducer";
+import { scrabbleReducer } from "./client-side-actions/scrabble-reducer";
 import { Board } from "./board";
 import { ScrabbleConfig } from "./config";
 import { ScrabbleGameProps } from "./board/game-props";
@@ -8,7 +8,7 @@ import { makeScrabbleContext, ReactScrabbleContext} from "./board/scrabble-conte
 import { getWordChecker } from "../../utils/get-word-checker";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../utils/async-status";
-import { initialReducerState } from "./local-actions/reducer-state";
+import { initialReducerState } from "./client-side-actions/reducer-state";
 // import { beep } from "./sounds";
 
 export interface BoardWrapperProps {
