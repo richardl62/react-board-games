@@ -19,6 +19,9 @@ export interface AppGame<G = any> extends Game<G> {
   // Space-free name suitable for passing to bgio.
   name: string;
 
+  moves: Required<Game>["moves"];
+  setup: Required<Game<G>>["setup"];
+
   minPlayers: number,
   maxPlayers: number,
 
