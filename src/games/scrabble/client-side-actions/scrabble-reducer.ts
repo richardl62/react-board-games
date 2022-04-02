@@ -2,7 +2,7 @@ import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
 import { ClickMoveDirection, ClickMoveStart, newReducerState, ReducerState, sanityCheck } from "./reducer-state";
-import { ScrabbleGameProps } from "../board/game-props";
+import { ScrabbleGameProps } from "./srcabble-game-props";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}

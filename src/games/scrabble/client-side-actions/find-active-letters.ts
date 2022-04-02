@@ -1,4 +1,4 @@
-import { ScrabbleContext } from "../board/scrabble-context";
+import { ScrabbleContext } from "./scrabble-context";
 import { RowCol } from "./get-words-and-score";
 
 

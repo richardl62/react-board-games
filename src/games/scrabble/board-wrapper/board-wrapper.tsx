@@ -1,14 +1,15 @@
 import React, { useEffect, useReducer } from "react";
-import { WrappedGameProps } from "../../app-game-support";
-import { scrabbleReducer } from "./client-side-actions/scrabble-reducer";
-import { Board } from "./board";
-import { ScrabbleConfig } from "./config";
-import { ScrabbleGameProps } from "./board/game-props";
-import { makeScrabbleContext, ReactScrabbleContext} from "./board/scrabble-context";
-import { getWordChecker } from "../../utils/get-word-checker";
 import { useAsync } from "react-async-hook";
-import { AsyncStatus } from "../../utils/async-status";
-import { initialReducerState } from "./client-side-actions/reducer-state";
+import { WrappedGameProps } from "../../../app-game-support";
+import { AsyncStatus } from "../../../utils/async-status";
+import { getWordChecker } from "../../../utils/get-word-checker";
+import { Board } from "../board";
+import { ScrabbleGameProps } from "../client-side-actions/srcabble-game-props";
+import { initialReducerState } from "../client-side-actions/reducer-state";
+import { scrabbleReducer } from "../client-side-actions/scrabble-reducer";
+import { ScrabbleConfig } from "../config";
+import { makeScrabbleContext, ReactScrabbleContext } from "../client-side-actions/scrabble-context";
+
 // import { beep } from "./sounds";
 
 export interface BoardWrapperProps {

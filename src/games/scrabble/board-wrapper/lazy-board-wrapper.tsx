@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-import { WrappedGameProps } from "../../app-game-support";
-import { ScrabbleConfig } from "./config";
+import { WrappedGameProps } from "../../../app-game-support";
+import { ScrabbleConfig } from "../config";
 
 const BoardWrapper = React.lazy(() => import("./board-wrapper"));
 

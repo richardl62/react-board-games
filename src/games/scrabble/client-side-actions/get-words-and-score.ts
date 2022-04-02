@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { BoardData, BoardSquareData } from "../server-side/game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
-import { ScrabbleContext } from "../board/scrabble-context";
+import { ScrabbleContext } from "./scrabble-context";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {

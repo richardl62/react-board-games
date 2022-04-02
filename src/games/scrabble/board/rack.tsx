@@ -5,7 +5,7 @@ import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../utils/assert";
 import { Tile } from "./tile";
-import { useScrabbleContext } from "./scrabble-context";
+import { useScrabbleContext } from "../client-side-actions/scrabble-context";
 import { SquareID, boardIDs } from "../client-side-actions";
 import { makeExtendedLetter } from "../client-side-actions/extended-letter";
 

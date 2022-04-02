@@ -3,7 +3,7 @@ import React from "react";
 import { AppGame, WrappedGameProps } from "../../app-game-support";
 import { configs, ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./server-side";
-import { LazyBoardWrapper } from "./lazy-board-wrapper";
+import Board from "./board-wrapper";
 
 
 function makeAppGame(config: ScrabbleConfig) : AppGame
@@ -15,7 +15,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: WrappedGameProps) => <LazyBoardWrapper
+        board: (props: WrappedGameProps) => <Board
             appBoardProps={props} config={config}
         />
     };

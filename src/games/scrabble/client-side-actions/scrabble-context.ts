@@ -1,12 +1,12 @@
 import React, { Dispatch } from "react";
 import { sAssert } from "../../../utils/assert";
-import { ReducerState } from "../client-side-actions/reducer-state";
-import { ActionType } from "../client-side-actions/scrabble-reducer";
+import { ReducerState } from "./reducer-state";
+import { ActionType } from "./scrabble-reducer";
 import { ScrabbleConfig } from "../config";
 import { WrappedGameProps } from "../../../app-game-support";
 import { ClientMoves } from "../server-side/bgio-moves";
 import { isServerData, ServerData } from "../server-side";
-import { ScrabbleGameProps } from "./game-props";
+import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";
 
 export interface ScrabbleContext extends ReducerState {

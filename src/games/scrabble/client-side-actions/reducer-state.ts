@@ -1,5 +1,5 @@
 import { nNonNull } from "../../../utils/n-non-null";
-import { ScrabbleGameProps } from "../board/game-props";
+import { ScrabbleGameProps } from "./srcabble-game-props";
 import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
