@@ -7,7 +7,6 @@ import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
-import { Options } from "./options";
 import { EnableMoveHistoryToggle } from "./move-history";
 import { RewindControls } from "./rewind-controls";
 
@@ -64,7 +63,6 @@ export function MainGameArea(): JSX.Element {
     return <DndProvider>
         <Game>
             <ServerError />
-            <Options />
             <ScoresEtc/>
             <RackAndControls/>
             <Centered>
