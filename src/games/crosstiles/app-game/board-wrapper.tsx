@@ -15,8 +15,8 @@ export interface BoardWrapperProps {
 }
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const crossTileGameProps = props.appBoardProps as unknown as CrossTilesGameProps;
-    sAssert(isServerData(crossTileGameProps.G), "Server data appears invalid");
+    const crossTilesGameProps = props.appBoardProps as unknown as CrossTilesGameProps;
+    sAssert(isServerData(crossTilesGameProps.G), "Server data appears invalid");
 
     const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState);
     // const asyncWordChecker = useAsync(getWordChecker, []);
@@ -30,14 +30,14 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         throw new Error("isLegalWord not implemented");
     };
 
-    if (crossTileGameProps.G.timestamp !== reducerState.externalTimestamp) {
+    if (crossTilesGameProps.G.timestamp !== reducerState.externalTimestamp) {
         dispatch({
             type: "externalStateChange",
-            data: crossTileGameProps,
+            data: crossTilesGameProps,
         });
     } 
 
-    const context = makeCrossTilesContext(crossTileGameProps, reducerState, dispatch, isLegalWord);
+    const context = makeCrossTilesContext(crossTilesGameProps, reducerState, dispatch, isLegalWord);
 
     return <ReactCrossTilesContext.Provider value={context}>
         <Board />

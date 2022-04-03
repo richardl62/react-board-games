@@ -1,5 +1,6 @@
 import React from "react";
 import { WaitingForPlayers } from "../../../app-game-support";
+import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
 
 export function Board(): JSX.Element {
@@ -10,7 +11,15 @@ export function Board(): JSX.Element {
         <WaitingForPlayers {...wrappedGameProps} />;
     }
 
-    const changeLetters = () => wrappedGameProps.moves.changeSelectedTiles();
+    const { moves, events } = wrappedGameProps;
+
+    const { setActivePlayers } = events;
+    sAssert(setActivePlayers);
+
+    const changeLetters = () => {
+        setActivePlayers({all: "stage1"});
+        moves.changeSelectedTiles();
+    };
 
     return <div>
         <div>
