@@ -1,9 +1,9 @@
 import React, { useReducer } from "react";
-import { useAsync } from "react-async-hook";
+// import { useAsync } from "react-async-hook";
 import { WrappedGameProps } from "../../../app-game-support";
 import { sAssert } from "../../../utils/assert";
-import { AsyncStatus } from "../../../utils/async-status";
-import { getWordChecker } from "../../../utils/get-word-checker";
+// import { AsyncStatus } from "../../../utils/async-status";
+// import { getWordChecker } from "../../../utils/get-word-checker";
 import { Board } from "../board";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side-actions/cross-tiles-context";
 import { CrossTilesGameProps } from "../client-side-actions/cross-tiles-game-props";
@@ -19,12 +19,16 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     sAssert(isServerData(crossTileGameProps.G), "Server data appears invalid");
 
     const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState);
-    const asyncWordChecker = useAsync(getWordChecker, []);
+    // const asyncWordChecker = useAsync(getWordChecker, []);
 
-    const isLegalWord = asyncWordChecker.result;
-    if(!isLegalWord) {
-        return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
-    }
+    // const isLegalWord = asyncWordChecker.result;
+    // if(!isLegalWord) {
+    //     return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
+    // }
+
+    const isLegalWord = () => {
+        throw new Error("isLegalWord not implemented");
+    };
 
     if (crossTileGameProps.G.timestamp !== reducerState.externalTimestamp) {
         dispatch({
