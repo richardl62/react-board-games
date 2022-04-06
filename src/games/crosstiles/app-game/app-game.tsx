@@ -1,4 +1,5 @@
 import React from "react";
+import { ActivePlayers } from "boardgame.io/core";
 import { AppGame, GameCategory, WrappedGameProps } from "../../../app-game-support";
 import Board from "./board-wrapper";
 import { bgioMoves } from "../server-side/moves";
@@ -18,6 +19,7 @@ const game: AppGame = {
     moves: {},
 
     turn: {
+        activePlayers: {all: {stage: "stage1"}},
         stages: {
             stage1: {
                 moves: bgioMoves,

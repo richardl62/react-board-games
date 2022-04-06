@@ -17,7 +17,6 @@ export function Board(): JSX.Element {
     sAssert(setActivePlayers);
 
     const changeLetters = () => {
-        setActivePlayers({all: "stage1"});
         moves.changeSelectedTiles();
     };
 
