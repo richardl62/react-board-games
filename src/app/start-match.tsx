@@ -41,7 +41,7 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
     const defaultNumPlayers = snapToRange(2 /*arbitrary*/, minPlayers, maxPlayers);
 
     const [numPlayers, setNumPlayers] = useState(defaultNumPlayers);
-    const [persist, setPersist] = useState(false);
+    const [debugPanel, setDebugPanel] = useState(false);
 
     const asyncCreateMatch = useAsyncCallback(() =>
         createMatch(game, numPlayers).then(openOnlineMatchPage)
@@ -72,14 +72,14 @@ export function StartMatch({ game }: StartGameProps): JSX.Element {
             <BoxWithLegend legend="Test/Debug">
 
                 <OfflineLinkDiv>
-                    <a href={getOfflineMatchLink(numPlayers, persist)}>Play offline</a>
+                    <a href={getOfflineMatchLink(numPlayers, debugPanel)}>Play offline</a>
 
                     <label>
-                        Persistent Storage
+                        Debug Panel
                         <input
                             type="checkbox"
-                            value={persist ? 1 : 0}
-                            onChange={() => { setPersist(!persist); }}
+                            value={debugPanel ? 1 : 0}
+                            onChange={() => { setDebugPanel(!debugPanel); }}
                         />
                     </label>
                 </OfflineLinkDiv>

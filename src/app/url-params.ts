@@ -127,20 +127,19 @@ export function lobbyServer(): string {
     return result;
 }
 
-export function getOfflineMatchLink(nPlayers: number, persistentState: boolean): string {
+export function getOfflineMatchLink(nPlayers: number, debugPanel: boolean): string {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
     searchParams.set(keys.offline, "1");
     searchParams.set(keys.nPlayers, nPlayers.toString());
-    if(persistentState) {
-        searchParams.set(keys.persist, "1");
+    if(debugPanel) {
+        searchParams.set(keys.debugPanel, "1");
     }
     url.search = searchParams.toString();
 
     return url.href;
 }
 
-  
 export function openOnlineMatchPage(matchID: MatchID): void {
 
     const url = new URL(window.location.href);
