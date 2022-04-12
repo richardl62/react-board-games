@@ -1,6 +1,6 @@
 import { shuffle } from "../../../utils/shuffle";
 import { Letter, letterDistrubtion, nTilesPerTurn } from "../config";
-import { GameState } from "./server-data";
+import { ServerData } from "./server-data";
 
 
 export function selectTiles() : Letter[] {
@@ -23,6 +23,6 @@ export function selectTiles() : Letter[] {
 export type ChangeSelectTilesParam = void;
 
 
-export function changeSelectedTiles(state: GameState) : void {
+export function changeSelectedTiles(state: ServerData) : void {
     state.selectedLetters = selectTiles();
 }

@@ -16,15 +16,10 @@ const game: AppGame = {
     maxPlayers: 99,
 
     setup: () => startingServerData(),
-    moves: {},
+    moves: bgioMoves,
 
     turn: {
-        activePlayers: {all: {stage: "stage1"}},
-        stages: {
-            stage1: {
-                moves: bgioMoves,
-            },
-        },
+        activePlayers: ActivePlayers.ALL,
     },
 
     board: (props: WrappedGameProps) => <Board appBoardProps={props} />,
