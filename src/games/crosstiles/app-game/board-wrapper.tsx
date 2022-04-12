@@ -1,14 +1,12 @@
 import React, { useReducer } from "react";
 // import { useAsync } from "react-async-hook";
 import { WrappedGameProps } from "../../../app-game-support";
-import { sAssert } from "../../../utils/assert";
 // import { AsyncStatus } from "../../../utils/async-status";
 // import { getWordChecker } from "../../../utils/get-word-checker";
 import { Board } from "../board";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side-actions/cross-tiles-context";
 import { CrossTilesGameProps } from "../client-side-actions/cross-tiles-game-props";
 import { crossTilesReducer, initialReducerState } from "../client-side-actions/cross-tiles-reducer";
-import { isServerData } from "../server-side/server-data";
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;
@@ -16,7 +14,6 @@ export interface BoardWrapperProps {
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const crossTilesGameProps = props.appBoardProps as unknown as CrossTilesGameProps;
-    sAssert(isServerData(crossTilesGameProps.G), "Server data appears invalid");
 
     const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState);
     // const asyncWordChecker = useAsync(getWordChecker, []);
