@@ -2,7 +2,7 @@ import { Letter } from "../config";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 
 export type ReducerState = {
-    selectedLetters: Letter[],
+    selectedLetters: Letter[] | null,
     externalTimestamp: number,
 };
 

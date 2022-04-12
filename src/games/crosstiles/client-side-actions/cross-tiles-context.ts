@@ -7,13 +7,11 @@ import { ServerData } from "../server-side/server-data";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 
 
-export interface CrossTilesContext extends ReducerState {
+export interface CrossTilesContext extends ServerData {
     readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
 
     readonly dispatch:  Dispatch<ActionType>;
     readonly isLegalWord: (word: string) => boolean;
-
-    readonly serverError: ServerData["serverError"];
 }
 
 export const ReactCrossTilesContext = React.createContext<CrossTilesContext|null>(null);
@@ -34,7 +32,7 @@ export function makeCrossTilesContext(
     const G = crossTilesGameProps.G;
 
     return {
-        ...reducerState,
+        ...crossTilesGameProps.G,
         wrappedGameProps: crossTilesGameProps, //kludge? Note that 'G' is not available to clients
         dispatch: dispatch,
         isLegalWord: isLegalWord,

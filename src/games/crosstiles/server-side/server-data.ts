@@ -1,14 +1,13 @@
 import { Ctx } from "boardgame.io";
 import { Letter } from "../config";
 import { newScoreCard, ScoreCard } from "./score-card";
-import { selectTiles } from "./select-tiles";
 
-/** Data recorded and shared via BGIO */
-enum GameStage {
-    pollingForReady,
-    makingGrids,
-    scoring,
-    gameOver,
+/* Use string values to add with debugging */
+export enum GameStage {
+    pollingForReady = "polling for ready",
+    makingGrids = "making grids",
+    scoring = "scoring",
+    gameOver = "game over",
 }
 
 type Grid = Letter[][];
@@ -21,8 +20,8 @@ interface PlayerData {
 
 export interface ServerData {
     stage: GameStage;
-    selectedLetters: Letter[];
     playerData: {[playerID: string]: PlayerData };
+    selectedLetters: Letter[] | null;
 
     serverError: string | null;
     timestamp: number;
@@ -42,8 +41,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     return {
         stage: GameStage.pollingForReady,
-        selectedLetters: selectTiles(),
-
+        selectedLetters: null,
         playerData: playerData,
 
         serverError: null,
