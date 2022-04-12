@@ -1,11 +1,18 @@
-import { changeSelectedTiles, ChangeSelectTilesParam } from "./select-tiles";
+import { Ctx } from "boardgame.io";
 import { wrappedMoveFunction } from "../../../app-game-support/wrapped-move-function";
+import { sAssert } from "../../../utils/assert";
+import { ServerData } from "./server-data";
 
+type PlayerReadyArg = void;
+function playerReady(G: ServerData, ctx: Ctx) {
+    sAssert(ctx.playerID);
+    G.playerData[ctx.playerID].ready = true;
+}
 
 export const bgioMoves = {
-    changeSelectedTiles: wrappedMoveFunction(changeSelectedTiles),
+    playerReady: wrappedMoveFunction(playerReady),
 };
 
 export interface ClientMoves {
-    changeSelectedTiles: (arg: ChangeSelectTilesParam) => void;
+    playerReady: (arg: PlayerReadyArg) => void;
 }

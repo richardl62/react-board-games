@@ -1,7 +1,5 @@
 import { shuffle } from "../../../utils/shuffle";
 import { Letter, letterDistrubtion, nTilesPerTurn } from "../config";
-import { ServerData } from "./server-data";
-
 
 export function selectTiles() : Letter[] {
 
@@ -18,11 +16,4 @@ export function selectTiles() : Letter[] {
     shuffle(letterSet);
     
     return letterSet.slice(0, nTilesPerTurn);
-}
-
-export type ChangeSelectTilesParam = void;
-
-
-export function changeSelectedTiles(state: ServerData) : void {
-    state.selectedLetters = selectTiles();
 }

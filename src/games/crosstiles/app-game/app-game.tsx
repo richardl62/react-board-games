@@ -4,6 +4,7 @@ import { AppGame, GameCategory, WrappedGameProps } from "../../../app-game-suppo
 import Board from "./board-wrapper";
 import { bgioMoves } from "../server-side/moves";
 import { startingServerData } from "../server-side/server-data";
+import { Ctx } from "boardgame.io";
 
 const game: AppGame = {
 
@@ -15,7 +16,7 @@ const game: AppGame = {
     minPlayers: 1,
     maxPlayers: 99,
 
-    setup: () => startingServerData(),
+    setup: (ctx: Ctx) => startingServerData(ctx),
     moves: bgioMoves,
 
     turn: {
