@@ -3,9 +3,8 @@ import { sAssert } from "../../../utils/assert";
 import { selectTiles } from "./select-tiles";
 import { GameStage, ServerData } from "./server-data";
 
-export type PlayerReadyArg = void;
-
-export function playerReady(G: ServerData, ctx: Ctx): void {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function playerReady(G: ServerData, ctx: Ctx, arg: void): void {
     if (G.stage !== GameStage.pollingForReady) {
         throw new Error("Unexpected call to playerReady");
     }
@@ -13,17 +12,20 @@ export function playerReady(G: ServerData, ctx: Ctx): void {
     const { playerID } = ctx;
     sAssert(playerID);
 
-    if (!G.playerData[playerID].ready) {
-        G.playerData[playerID].ready = true;
+    if (G.playerData[playerID].ready) {
+        return;
+    }
 
-        let allReady = true;
-        for (const pid in G.playerData) {
-            allReady = allReady && G.playerData[pid].ready;
-        }
+    G.playerData[playerID].ready = true;
+    G.playerData[playerID].grid = null;
 
-        if (allReady) {
-            G.stage = GameStage.makingGrids;
-            G.selectedLetters = selectTiles();
-        }
+    let allReady = true;
+    for (const pid in G.playerData) {
+        allReady = allReady && G.playerData[pid].ready;
+    }
+
+    if (allReady) {
+        G.stage = GameStage.makingGrids;
+        G.selectedLetters = selectTiles();
     }
 }
