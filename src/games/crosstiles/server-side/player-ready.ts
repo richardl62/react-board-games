@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { selectTiles } from "./select-tiles";
 import { GameStage, ServerData } from "./server-data";
+import { startNextStage } from "./start-next-stage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function playerReady(G: ServerData, ctx: Ctx, arg: void): void {
@@ -25,7 +25,6 @@ export function playerReady(G: ServerData, ctx: Ctx, arg: void): void {
     }
 
     if (allReady) {
-        G.stage = GameStage.makingGrids;
-        G.selectedLetters = selectTiles();
+        startNextStage(G, ctx);
     }
 }

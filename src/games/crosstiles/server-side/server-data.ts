@@ -1,6 +1,5 @@
 import { Ctx } from "boardgame.io";
 import { Letter } from "../config";
-import { newScoreCard, ScoreCard } from "./score-card";
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -12,15 +11,20 @@ export enum GameStage {
 
 type Grid = Letter[][];
 
+export type ScoreCategory =   "length3" | "length4" | "length5";
+export const scoreCategories : ScoreCategory [] = ["length3",  "length4" , "length5"];
+
 interface PlayerData {
     ready: boolean;
     grid: Grid | null;
-    scoreCard: ScoreCard;
+    scoreCard: {[category in ScoreCategory]? : number};
 }
 
 export interface ServerData {
     stage: GameStage;
     playerData: {[playerID: string]: PlayerData };
+
+    playerToScore: string | null;
     selectedLetters: Letter[] | null;
 
     serverError: string | null;
@@ -35,7 +39,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData[pid] = {
             ready: false,
             grid: null,
-            scoreCard: newScoreCard(),
+            scoreCard: {},
         };
     }
 
@@ -43,7 +47,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         stage: GameStage.pollingForReady,
         selectedLetters: null,
         playerData: playerData,
-
+        playerToScore: null,
         serverError: null,
         timestamp: 0,
     };

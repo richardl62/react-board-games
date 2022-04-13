@@ -1,15 +1,30 @@
 import React from "react";
+import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
 import { GameStage } from "../server-side/server-data";
 
 export function Scoring() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage } = context;
-    const { moves } = context.wrappedGameProps;
-
+    const { stage, playerToScore } = context;
+    const { moves, playerID, getPlayerName } = context.wrappedGameProps;
+  
     if(stage !== GameStage.scoring) {
         return null;
     }
 
-    return <button onClick={()=>moves.playerReady()}>Scoring</button>;
+    sAssert(playerToScore);
+
+    if(playerToScore === playerID) {
+        const onClick = () => moves.setScore({
+            category: "length3",
+            score: 1,
+        });
+        return <button onClick={onClick}>Score</button>;
+    }
+
+    const name = getPlayerName(playerToScore);
+
+    return <div>
+        {`${name} to score`}
+    </div>;
 }
