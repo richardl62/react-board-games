@@ -2,7 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../../../app-game-support";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { GameOver } from "./game-over";
+import { MakeGrid } from "./make-grid";
 import { PollForReady } from "./poll-for-ready";
+import { Scoring } from "./scoring";
 
 const BoardDiv = styled.div`
    display: inline-block;
@@ -29,6 +32,10 @@ export function Board(): JSX.Element {
     return <BoardDiv>
         <Name>{name}</Name>
 
+        {/* The functions below return null if the game is not at the appropriate stage */}
         <PollForReady />
+        <MakeGrid />
+        <Scoring />
+        <GameOver />
     </BoardDiv>;
 }
