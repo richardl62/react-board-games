@@ -1,5 +1,6 @@
 import React from "react";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { Letter } from "../config";
 import { GameStage } from "../server-side/server-data";
 
 export function MakeGrid() : JSX.Element | null {
@@ -11,5 +12,6 @@ export function MakeGrid() : JSX.Element | null {
         return null;
     }
 
-    return <button onClick={()=>moves.playerReady()}>Make Grid</button>;
+    const dummyGrid : Letter [][] = [["A"]];
+    return <button onClick={()=>moves.recordGrid(dummyGrid)}>Record Grid</button>;
 }

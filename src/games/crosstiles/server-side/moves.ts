@@ -7,10 +7,11 @@ export const bgioMoves = {
     recordGrid: wrappedMoveFunction(recordGrid),
 };
 
-type PlayerReadyArg = Parameters<typeof playerReady>[2];
-type RecordGridParam = Parameters<typeof recordGrid>[2];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Parameters<F>[2]) => void;
+
 
 export interface ClientMoves {
-    playerReady: (arg: PlayerReadyArg) => void;
-    recordGrid: (arg: RecordGridParam) => void;
+    playerReady: ClientFunction<typeof playerReady>;
+    recordGrid: ClientFunction<typeof recordGrid>;
 }

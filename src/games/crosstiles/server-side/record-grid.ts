@@ -4,7 +4,7 @@ import { Letter } from "../config";
 import { ServerData, GameStage } from "./server-data";
 
 export function recordGrid(G: ServerData, ctx: Ctx, grid: Letter[][]): void {
-    if (G.stage !== GameStage.pollingForReady) {
+    if (G.stage !== GameStage.makingGrids) {
         throw new Error("Unexpected call to playerReady");
     }
 
@@ -12,4 +12,13 @@ export function recordGrid(G: ServerData, ctx: Ctx, grid: Letter[][]): void {
     sAssert(playerID);
 
     G.playerData[playerID].grid = grid.map(row => [...row]);
+
+    let allGridsRecorded = true;
+    for (const pid in G.playerData) {
+        allGridsRecorded = allGridsRecorded && G.playerData[pid].grid !== null;
+    }
+
+    if (allGridsRecorded) {
+        G.stage = GameStage.scoring;
+    }
 }
