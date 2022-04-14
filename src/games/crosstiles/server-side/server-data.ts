@@ -22,6 +22,8 @@ interface PlayerData {
 
 export interface ServerData {
     stage: GameStage;
+    round: number;
+
     playerData: {[playerID: string]: PlayerData };
 
     playerToScore: string | null;
@@ -45,6 +47,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     return {
         stage: GameStage.pollingForReady,
+        round: 0,
         selectedLetters: null,
         playerData: playerData,
         playerToScore: null,

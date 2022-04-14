@@ -7,6 +7,7 @@ export function startNextStage(G: ServerData, ctx: Ctx) : void {
 
     if(G.stage === GameStage.pollingForReady) {
         G.stage = GameStage.makingGrids;
+        G.round = G.round + 1;
         G.selectedLetters = selectTiles();
     } else if(G.stage === GameStage.makingGrids) {
         G.stage = GameStage.scoring;
