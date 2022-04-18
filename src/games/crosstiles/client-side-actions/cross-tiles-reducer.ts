@@ -2,12 +2,12 @@ import { Letter } from "../config";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 
 export type ReducerState = {
-    selectedLetters: Letter[] | null,
+    rack: Letter[] | null,
     externalTimestamp: number,
 };
 
 export const initialReducerState : ReducerState = {
-    selectedLetters: [],
+    rack: [ "A", "B", "C", "D", "E", "F", "I", "K"],
     externalTimestamp: -1,
 };
 
@@ -19,7 +19,7 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
 
     if(action.type === "externalStateChange") {
         return {
-            selectedLetters: action.data.G.selectedLetters,
+            ...state,
             externalTimestamp: action.data.G.timestamp,
         };
     }

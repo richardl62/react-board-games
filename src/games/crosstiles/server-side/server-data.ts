@@ -1,5 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { Letter } from "../config";
+import { startNextStage } from "./start-next-stage";
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -45,7 +46,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         };
     }
 
-    return {
+    const data = {
         stage: GameStage.pollingForReady,
         round: 0,
         selectedLetters: null,
@@ -54,4 +55,8 @@ export function startingServerData(ctx: Ctx): ServerData {
         serverError: null,
         timestamp: 0,
     };
+
+    startNextStage(data, ctx); // TEMPORARY
+
+    return data;
 }

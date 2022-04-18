@@ -12,6 +12,9 @@ export const letterDistrubtion = {
     Q: 1, R: 6, S: 4, T: 6, U: 4, V: 2, W: 2, X: 1, Y: 2, Z: 1,
 };
 
+export const bonusLetters : Letter [] = ["J", "K", "Q", "X", "Z" ];
+
+
 sAssert(Object.keys(letterDistrubtion).length === 26);
 
 /** The number of tiles available to players when forming words */

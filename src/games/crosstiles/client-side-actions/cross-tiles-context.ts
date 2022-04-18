@@ -7,7 +7,7 @@ import { ServerData } from "../server-side/server-data";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 
 
-export interface CrossTilesContext extends ServerData {
+export interface CrossTilesContext extends ServerData, ReducerState{
     readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
 
     readonly dispatch:  Dispatch<ActionType>;
@@ -33,6 +33,7 @@ export function makeCrossTilesContext(
 
     return {
         ...crossTilesGameProps.G,
+        ...reducerState,
         wrappedGameProps: crossTilesGameProps, //kludge? Note that 'G' is not available to clients
         dispatch: dispatch,
         isLegalWord: isLegalWord,
