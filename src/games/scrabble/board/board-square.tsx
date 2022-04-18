@@ -19,7 +19,6 @@ interface BoardSquareProps {
     onClick?: () => void;
 }
 
-
 export function BoardSquare(props: BoardSquareProps): JSX.Element {
 
     const {content, squareType, squareID, highlight, showHover, draggable, onDragEnd, onClick } = props;

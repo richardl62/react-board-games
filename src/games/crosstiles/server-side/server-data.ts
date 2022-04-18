@@ -10,7 +10,7 @@ export enum GameStage {
     gameOver = "game over",
 }
 
-type Grid = Letter[][];
+type Grid = (Letter | null) [][];
 
 export type ScoreCategory =   "length3" | "length4" | "length5";
 export const scoreCategories : ScoreCategory [] = ["length3",  "length4" , "length5"];

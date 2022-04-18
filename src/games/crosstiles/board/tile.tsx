@@ -16,14 +16,13 @@ const TileDiv = styled.div<{underline: boolean}>`
 
     text-decoration: ${props => props.underline? "underline" : "none"};
 `;
-
 interface TileProps {
-    letter?: Letter | null;
+    letter: Letter;
 }
 export function Tile(props: TileProps) : JSX.Element {
     const {letter} = props;
 
-    const bonus = Boolean(letter && bonusLetters.includes(letter));
+    const bonus = bonusLetters.includes(letter);
 
     return <TileDiv underline={bonus}>{letter}</TileDiv>;
 }

@@ -4,7 +4,7 @@ import { Letter } from "../config";
 import { ServerData, GameStage } from "./server-data";
 import { startNextStage } from "./start-next-stage";
 
-export function recordGrid(G: ServerData, ctx: Ctx, grid: Letter[][]): void {
+export function recordGrid(G: ServerData, ctx: Ctx, grid: (Letter | null)[][]): void {
     if (G.stage !== GameStage.makingGrids) {
         throw new Error("Unexpected call to recordGrid");
     }

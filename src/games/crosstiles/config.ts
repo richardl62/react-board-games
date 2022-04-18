@@ -14,6 +14,8 @@ export const letterDistrubtion = {
 
 export const bonusLetters : Letter [] = ["J", "K", "Q", "X", "Z" ];
 
+export const boardRows = 4;
+export const boardColumns = 6;
 
 sAssert(Object.keys(letterDistrubtion).length === 26);
 
