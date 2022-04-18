@@ -22,7 +22,7 @@ sAssert(Object.keys(letterDistrubtion).length === 26);
 /** The number of tiles available to players when forming words */
 export const nTilesPerTurn = 8; 
 
-export const maxTimeToMakeGrid = 10; /* For now */
+export const maxTimeToMakeGrid = 75; /* For now */
 
 
 
