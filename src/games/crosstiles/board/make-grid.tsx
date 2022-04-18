@@ -3,7 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
 import { Letter } from "../config";
 import { GameStage } from "../server-side/server-data";
-import { Tile } from "./tile";
+import { Rack } from "./rack";
 
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
@@ -15,11 +15,10 @@ export function MakeGrid() : JSX.Element | null {
     }
     sAssert(rack);
 
-
     const dummyGrid: Letter[][] = [["A"]];
     return <div>
         <div>
-            {rack.map((l, index) => <Tile key={index} letter={l} />)}
+            <Rack letters={rack} />
         </div>
         <button onClick={() => moves.recordGrid(dummyGrid)}>Record Grid</button>
     </div>;

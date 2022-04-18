@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { bonusLetters, Letter } from "../config";
 import { squareSize, tileBackgroundColor, tileTextColor } from "./style";
 
-
 const TileDiv = styled.div<{underline: boolean}>`
     height: ${squareSize};
     width: ${squareSize};
