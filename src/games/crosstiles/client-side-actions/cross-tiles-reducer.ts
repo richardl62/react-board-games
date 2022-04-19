@@ -7,6 +7,12 @@ export type ReducerState = {
     externalTimestamp: number,
 };
 
+export interface SquareID {
+    row: number,
+    col: number,
+    gridName: string;
+}
+
 function makeEmptyBoard() : (Letter | null) [][] {
     const board : (Letter | null) [][] = [];
 
@@ -29,6 +35,7 @@ export const initialReducerState : ReducerState = {
 
 export type ActionType =
     | { type: "externalStateChange", data: CrossTilesGameProps}
+    | { type: "move", data: {from: SquareID, to: SquareID}} // Used after a drag
     ;
 
 export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
@@ -40,7 +47,7 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
         };
     }
 
-    throw Error("Unrecogined reduced action");
+    throw Error(`Unrecogined reduced action: ${action.type}`);
 }
 
 
