@@ -2,7 +2,7 @@ import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
-import { SquareID } from "../client-side-actions/cross-tiles-reducer";
+import { SquareID } from "../client-side-actions/types";
 import { bonusLetters, Letter } from "../config";
 import { squareBackgroundColor, squareSize, tileBackgroundColor, tileTextColor } from "./style";
 

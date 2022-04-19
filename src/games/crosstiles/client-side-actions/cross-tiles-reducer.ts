@@ -1,17 +1,13 @@
 import { boardColumns, boardRows, Letter } from "../config";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
+import { GridAndRack } from "./grid-and-rack";
+import { SquareID } from "./types";
 
 export type ReducerState = {
     rack: (Letter | null) [],
     grid: (Letter | null) [][];
     externalTimestamp: number,
 };
-
-export interface SquareID {
-    row: number,
-    col: number,
-    gridName: string;
-}
 
 function makeEmptyBoard() : (Letter | null) [][] {
     const board : (Letter | null) [][] = [];
@@ -47,7 +43,17 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
         };
     }
 
-    throw Error(`Unrecogined reduced action: ${action.type}`);
+    if(action.type === "move") {
+        const gr = new GridAndRack(state.grid, state.rack);
+        gr.move(action.data.from, action.data.to);
+
+        return {
+            ...state,
+            grid: gr.grid,
+            rack: gr.rack,
+        };
+    }
+    throw Error("Unrecogined reduced action");
 }
 
 

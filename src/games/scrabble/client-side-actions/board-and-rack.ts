@@ -60,6 +60,8 @@ function moveTilesDown(rack: Rack, posToClear: number): boolean {
 /** 
  * BoardAndRack provides function to update (wait for it) a board and rank. 
  * It does not know anything about setting state or calling Bgio.
+ * 
+ * CrossTiles GridAndRack has an editted copy of some of this code.
 */
 export class BoardAndRack {
     constructor(board: BoardData, rack: Rack) {

@@ -4,6 +4,7 @@ import { Letter } from "../config";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { Square } from "./square";
 import { sAssert } from "../../../utils/assert";
+import { SquareID } from "../client-side-actions/types";
 
 // KLUDGE? Use Grid rather than flex to allow a gap to be specified
 const Grid = styled.div<{nCols: number}>`
@@ -14,13 +15,23 @@ const Grid = styled.div<{nCols: number}>`
     padding: ${boardBoarderSize.external}};
 `;
 
+type Container = SquareID["container"];
 interface TileGridProps {
     letters: (Letter | null) [][];
-    name: string;
+    container: Container;
+}
+
+function squareID(row: number, col: number, container: Container) : SquareID {
+    if (container === "grid") {
+        return {row, col, container};
+    } else {
+        sAssert(row === 0);
+        return {col, container};
+    }
 }
 
 export function TileGrid(props: TileGridProps) : JSX.Element {
-    const { letters, name } = props;
+    const { letters, container: name } = props;
 
     const nRows = letters.length;
     const nCols = letters[0].length;
@@ -29,7 +40,7 @@ export function TileGrid(props: TileGridProps) : JSX.Element {
     for(let row = 0; row < nRows; ++row) {
         sAssert(letters[row].length === nCols, "Grid of tiles in not rectangular");
         for(let col = 0; col < nCols; ++col) {
-            const id = { row, col, gridName: name };
+            const id = squareID(row, col, name);
             squares.push(<Square 
                 key={`${row}-${col}`} 
                 letter={letters[row][col]}

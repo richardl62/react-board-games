@@ -23,8 +23,8 @@ export function RackAndBoard() : JSX.Element | null {
 
     return <OuterDiv>
         <DndProvider backend={HTML5Backend}>
-            <TileGrid letters={[rack]} name="rack" />
-            <TileGrid letters={board} name="grid" />
+            <TileGrid letters={[rack]} container="rack" />
+            <TileGrid letters={board} container="grid" />
         </DndProvider>
     </OuterDiv>;
 }
