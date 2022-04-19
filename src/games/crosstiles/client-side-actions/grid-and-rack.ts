@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
-import { SquareID } from "./types";
+import { ClickMoveStart, SquareID } from "./types";
 
 type Grid = (Letter|null)[][];
 type Rack = (Letter|null)[];
@@ -97,6 +97,27 @@ export class GridAndRack {
             rack[pos] = letter;
         } else {
             throw new Error("attempt to insert into full rack");
+        }
+    }
+
+    moveFromRack(start: ClickMoveStart, rackPos: number) : void {
+        let { row, col } = start;
+
+        if( start.direction === "right") {
+            while(this.grid[row][col]) {
+                col++;
+            }
+        } else {
+            while(this.grid[row][col]) {
+                row++;
+            }
+        }
+
+        if( this.grid[row][col] === undefined ) {
+            // [row][col] off the board. Do nothing in this case.
+        } else {
+            this.grid[row][col] = this.rack[rackPos];
+            this.rack[rackPos] = null;
         }
     }
 }

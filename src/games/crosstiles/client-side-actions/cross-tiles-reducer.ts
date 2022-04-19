@@ -1,8 +1,7 @@
-import { sAssert } from "../../../utils/assert";
-import { nextCickMoveDirection } from "../../../utils/board/click-move-marker";
 import { boardColumns, boardRows, Letter } from "../config";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 import { GridAndRack } from "./grid-and-rack";
+import { tileClicked } from "./tile-clicked";
 import { ClickMoveStart, SquareID } from "./types";
 
 export type ReducerState = {
@@ -32,7 +31,7 @@ export const initialReducerState : ReducerState = {
     rack: [ "A", "B", "C", "D", "E", "F", "I", "K"],
     grid:  makeEmptyBoard(),
 
-    clickMoveStart: {row: 1, col : 1, direction: "down"}, // For now
+    clickMoveStart: null,
 
     externalTimestamp: -1,
 };
@@ -68,30 +67,3 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
     }
     throw Error("Unrecogined reduced action");
 }
-
-
-function tileClicked(state: ReducerState, id: SquareID): ReducerState {
-    const gr = new GridAndRack(state.grid, state.rack);
-    const cms = state.clickMoveStart;
-
-    if(id.container === "grid" && gr.get(id) === null) {
-        return {
-            ...state,
-            clickMoveStart: newClickMoveStart(cms, id),
-        };
-    }
-
-    return state;
-}
-
-function newClickMoveStart(cms: ClickMoveStart | null, id: SquareID): ClickMoveStart | null {
-    sAssert(id.container === "grid");
-    
-    const currentDirection = (cms && cms.row === id.row && cms.col === id.col) ? cms.direction : null;
-    
-    const newDirection = nextCickMoveDirection(currentDirection);
-
-
-    return newDirection && {row: id.row, col: id.col, direction: newDirection};
-}
-
