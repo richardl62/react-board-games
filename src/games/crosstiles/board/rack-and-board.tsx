@@ -1,4 +1,6 @@
 import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
@@ -20,7 +22,9 @@ export function RackAndBoard() : JSX.Element | null {
     sAssert(rack);
 
     return <OuterDiv>
-        <TileGrid letters={rack} />
-        <TileGrid letters={board} />
+        <DndProvider backend={HTML5Backend}>
+            <TileGrid letters={[rack]} name="rack" />
+            <TileGrid letters={board} name="grid" />
+        </DndProvider>
     </OuterDiv>;
 }

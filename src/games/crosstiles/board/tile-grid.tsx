@@ -1,16 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Letter } from "../config";
-import { boardBoarderColor, boardBoarderSize, squareBackgroundColor, squareSize } from "./style";
-import { Tile } from "./tile";
-
-const EmptySquare = styled.div`
-    height: ${squareSize};
-    width: ${squareSize};
-
-    background-color: ${squareBackgroundColor};
-`;
-
+import { boardBoarderColor, boardBoarderSize } from "./style";
+import { Square } from "./square";
 
 // KLUDGE? Use Grid rather than flex to allow a gap to be specified
 const Grid = styled.div<{nCols: number}>`
@@ -23,6 +15,7 @@ const Grid = styled.div<{nCols: number}>`
 
 interface TileGridProps {
     letters: (Letter | null) [] | (Letter | null) [][];
+    name: string;
 }
 
 export function TileGrid(props: TileGridProps) : JSX.Element {
@@ -32,9 +25,7 @@ export function TileGrid(props: TileGridProps) : JSX.Element {
 
     return <Grid nCols={nCols}>
         {letters.flat().map((letter, index) =>
-            letter ?
-                <Tile key={index} letter={letter} /> :
-                <EmptySquare key={index} />
+            <Square key={index} letter={letter} />
         )}
     </Grid>;
 }
