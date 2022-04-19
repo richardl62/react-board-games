@@ -29,7 +29,7 @@ export function ScoresEtc(): JSX.Element {
         
         let nInRackText = "";
         if(pid !== context.wrappedGameProps.playerID && context.nTilesInBag === 0) {
-            nInRackText = ` (${nInRack} tiles in rack) `;
+            nInRackText = ` (${nInRack} tiles left) `;
         }
 
         return (
