@@ -1,11 +1,16 @@
+import { sAssert } from "../../../utils/assert";
+import { nextCickMoveDirection } from "../../../utils/board/click-move-marker";
 import { boardColumns, boardRows, Letter } from "../config";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 import { GridAndRack } from "./grid-and-rack";
-import { SquareID } from "./types";
+import { ClickMoveStart, SquareID } from "./types";
 
 export type ReducerState = {
     rack: (Letter | null) [],
     grid: (Letter | null) [][];
+    
+    clickMoveStart: ClickMoveStart | null;
+    
     externalTimestamp: number,
 };
 
@@ -26,12 +31,16 @@ function makeEmptyBoard() : (Letter | null) [][] {
 export const initialReducerState : ReducerState = {
     rack: [ "A", "B", "C", "D", "E", "F", "I", "K"],
     grid:  makeEmptyBoard(),
+
+    clickMoveStart: {row: 1, col : 1, direction: "down"}, // For now
+
     externalTimestamp: -1,
 };
 
 export type ActionType =
     | { type: "externalStateChange", data: CrossTilesGameProps}
     | { type: "move", data: {from: SquareID, to: SquareID}} // Used after a drag
+    | { type: "tileClicked", data: {id: SquareID}}
     ;
 
 export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
@@ -53,7 +62,36 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
             rack: gr.rack,
         };
     }
+    
+    if(action.type === "tileClicked") {
+        return tileClicked(state, action.data.id);
+    }
     throw Error("Unrecogined reduced action");
 }
 
+
+function tileClicked(state: ReducerState, id: SquareID): ReducerState {
+    const gr = new GridAndRack(state.grid, state.rack);
+    const cms = state.clickMoveStart;
+
+    if(id.container === "grid" && gr.get(id) === null) {
+        return {
+            ...state,
+            clickMoveStart: newClickMoveStart(cms, id),
+        };
+    }
+
+    return state;
+}
+
+function newClickMoveStart(cms: ClickMoveStart | null, id: SquareID): ClickMoveStart | null {
+    sAssert(id.container === "grid");
+    
+    const currentDirection = (cms && cms.row === id.row && cms.col === id.col) ? cms.direction : null;
+    
+    const newDirection = nextCickMoveDirection(currentDirection);
+
+
+    return newDirection && {row: id.row, col: id.col, direction: newDirection};
+}
 

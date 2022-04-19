@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { ClickMoveDirection } from "../client-side-actions/reducer-state";
-import { squareSize } from "./style";
+import { squareSize } from "../../games/scrabble/board/style";
+
 const OuterDiv = styled.div<{rotation: string}>`
     display: flex;
     justify-content: center;
@@ -23,6 +23,20 @@ const ArrowHead = styled.div`
     border-bottom: calc(${squareSize}*0.3) solid transparent;
 `;
        
+
+export type ClickMoveDirection = "right" | "down";
+
+export function nextCickMoveDirection(current: ClickMoveDirection| null) : ClickMoveDirection | null {
+    if(current === null) {
+        return "right";
+    }
+
+    if(current === "right") {
+        return "down";
+    }
+
+    return null;
+}
 
 interface ClickMoveMarkerProps {
     direction: ClickMoveDirection;

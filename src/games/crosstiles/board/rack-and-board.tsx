@@ -18,13 +18,13 @@ const OuterDiv = styled.div`
 export function RackAndBoard() : JSX.Element | null {
     const context = useCrossTilesContext();
 
-    const { rack, grid: board } = context;
+    const { rack, grid: board, clickMoveStart } = context;
     sAssert(rack);
 
     return <OuterDiv>
         <DndProvider backend={HTML5Backend}>
             <TileGrid letters={[rack]} container="rack" />
-            <TileGrid letters={board} container="grid" />
+            <TileGrid letters={board} container="grid" clickMoveStart={clickMoveStart}/>
         </DndProvider>
     </OuterDiv>;
 }

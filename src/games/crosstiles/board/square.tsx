@@ -1,8 +1,9 @@
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
+import { ClickMoveMarker } from "../../../utils/board/click-move-marker";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
-import { SquareID } from "../client-side-actions/types";
+import { ClickMoveStart, SquareID } from "../client-side-actions/types";
 import { bonusLetters, Letter } from "../config";
 import { squareBackgroundColor, squareSize, tileBackgroundColor, tileTextColor } from "./style";
 
@@ -33,10 +34,11 @@ const TileDiv = styled.div<{bonus: boolean}>`
 interface SquareProps {
     id: SquareID,
     letter: Letter | null;
+    clickMoveDirection?: ClickMoveStart["direction"];
 }
 
 export function Square(props: SquareProps) : JSX.Element {
-    const {letter, id} = props;
+    const {letter, id, clickMoveDirection} = props;
     const { dispatch } = useCrossTilesContext();
 
     const [{isDragging}, dragRef] = useDrag(() => ({
@@ -56,11 +58,14 @@ export function Square(props: SquareProps) : JSX.Element {
             }),
     }));
 
-    return <EmptySquare ref={dropRef}>
-        {letter && !isDragging && 
+    return <EmptySquare ref={dropRef}
+        onClick={() => dispatch({ type: "tileClicked", data: { id } })}
+    >
+        {letter && !isDragging &&
             <TileDiv ref={dragRef} bonus={bonusLetters.includes(letter)}>
                 {letter}
             </TileDiv>
         }
+        {!letter && clickMoveDirection && <ClickMoveMarker direction={clickMoveDirection} />}
     </EmptySquare>;
 }

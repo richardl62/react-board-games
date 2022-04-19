@@ -3,8 +3,7 @@ import { ScrabbleGameProps } from "./srcabble-game-props";
 import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
-
-export type ClickMoveDirection = "right" | "down";
+import { ClickMoveDirection } from "../../../utils/board/click-move-marker";
 
 export interface ClickMoveStart {
     row: number;
@@ -26,10 +25,7 @@ export interface ReducerState extends LocalGameState {
     reviewGameHistory: { historyPosition: number } | false;
 
     clickMoveStart: ClickMoveStart | null;
-
 }
-
-
 
 interface SimplifedReducerState {
     clickMoveStart: ReducerState["clickMoveStart"];

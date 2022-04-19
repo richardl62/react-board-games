@@ -4,7 +4,7 @@ import { boardIDs, SquareID } from "../client-side-actions";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";
 import { Tile } from "./tile";
-import { ClickMoveMarker } from "./click-move-marker";
+import { ClickMoveMarker } from "../../../utils/board/click-move-marker";
 import { useScrabbleContext } from "../client-side-actions/scrabble-context";
 
 export function MainBoard(): JSX.Element {
