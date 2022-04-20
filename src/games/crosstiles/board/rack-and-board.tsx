@@ -15,15 +15,25 @@ const OuterDiv = styled.div`
     }    
 `;
 
+const RackDiv = styled.div`
+    > * {
+        margin-right: 0.3em;
+    }
+`;
+
 export function RackAndBoard() : JSX.Element | null {
     const context = useCrossTilesContext();
 
-    const { rack, grid: board, clickMoveStart } = context;
+    const { rack, grid: board, clickMoveStart, dispatch } = context;
     sAssert(rack);
 
     return <OuterDiv>
         <DndProvider backend={HTML5Backend}>
-            <TileGrid letters={[rack]} container="rack" />
+            <RackDiv>
+                <TileGrid letters={[rack]} container="rack" />
+                <button onClick={()=>dispatch({type: "recallToRack"})}>Recall</button>
+                <button onClick={()=>dispatch({type: "shuffleRack"})}>Shuffle</button>
+            </RackDiv>
             <TileGrid letters={board} container="grid" clickMoveStart={clickMoveStart}/>
         </DndProvider>
     </OuterDiv>;

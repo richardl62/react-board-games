@@ -1,4 +1,5 @@
 import { sAssert } from "../../../utils/assert";
+import { shuffle } from "../../../utils/shuffle";
 import { Letter } from "../config";
 import { ClickMoveStart, SquareID } from "./types";
 
@@ -118,6 +119,31 @@ export class GridAndRack {
         } else {
             this.grid[row][col] = this.rack[rackPos];
             this.rack[rackPos] = null;
+        }
+    }
+
+    compactRack(): void {
+        const rackLength = this.rack.length;
+        this.rack = this.rack.filter(elem => elem !== null);
+        while (this.rack.length < rackLength) {
+            this.rack.push(null);
+        }
+    }
+
+    shuffleRack(): void {
+        shuffle(this.rack);
+        this.compactRack();
+    }
+
+    recallToRack(): void {
+        for(let r = 0; r < this.grid.length; ++r) {
+            const row = this.grid[r];
+            for(let c = 0; c < row.length; ++c) {
+                if(row[c]) {
+                    this.addToRack(row[c]!);
+                    row[c] = null;
+                }
+            }
         }
     }
 }

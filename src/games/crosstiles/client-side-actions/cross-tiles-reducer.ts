@@ -40,6 +40,8 @@ export type ActionType =
     | { type: "externalStateChange", data: CrossTilesGameProps}
     | { type: "move", data: {from: SquareID, to: SquareID}} // Used after a drag
     | { type: "tileClicked", data: {id: SquareID}}
+    | { type: "recallToRack"}
+    | { type: "shuffleRack"}
     ;
 
 export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
@@ -51,6 +53,10 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
         };
     }
 
+    if(action.type === "tileClicked") {
+        return tileClicked(state, action.data.id);
+    }
+    
     if(action.type === "move") {
         const gr = new GridAndRack(state.grid, state.rack);
         gr.move(action.data.from, action.data.to);
@@ -62,8 +68,27 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
         };
     }
     
-    if(action.type === "tileClicked") {
-        return tileClicked(state, action.data.id);
+    if(action.type === "recallToRack") {
+        const gr = new GridAndRack(state.grid, state.rack);
+        gr.recallToRack();
+
+        return {
+            ...state,
+            grid: gr.grid,
+            rack: gr.rack,
+        };
     }
+
+    if(action.type === "shuffleRack") {
+        const gr = new GridAndRack(state.grid, state.rack);
+        gr.shuffleRack();
+
+        return {
+            ...state,
+            grid: gr.grid,
+            rack: gr.rack,
+        };
+    }
+
     throw Error("Unrecogined reduced action");
 }
