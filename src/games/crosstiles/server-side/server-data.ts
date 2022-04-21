@@ -1,4 +1,5 @@
 import { Ctx } from "boardgame.io";
+import { ScoreCard, startingScoreCard } from "./score-categories";
 import { Letter } from "../config";
 import { startNextStage } from "./start-next-stage";
 
@@ -12,13 +13,10 @@ export enum GameStage {
 
 type Grid = (Letter | null) [][];
 
-export type ScoreCategory =   "length3" | "length4" | "length5";
-export const scoreCategories : ScoreCategory [] = ["length3",  "length4" , "length5"];
-
 interface PlayerData {
     ready: boolean;
     grid: Grid | null;
-    scoreCard: {[category in ScoreCategory]? : number};
+    scoreCard: ScoreCard;
 }
 
 export interface ServerData {
@@ -42,7 +40,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData[pid] = {
             ready: false,
             grid: null,
-            scoreCard: {},
+            scoreCard: startingScoreCard(),
         };
     }
 

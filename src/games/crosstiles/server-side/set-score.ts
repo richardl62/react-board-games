@@ -1,6 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { ServerData, GameStage, ScoreCategory } from "./server-data";
+import { ScoreCategory } from "./score-categories";
+import { ServerData, GameStage } from "./server-data";
 import { startNextStage } from "./start-next-stage";
 
 function nextPlayer(ctx: Ctx, currentPlayer: string) {

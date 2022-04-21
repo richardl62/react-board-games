@@ -12,3 +12,6 @@ export const boardBoarderColor = "rgb(100,0,0)";
 export const tileTextColor = "white";
 
 export const squareBackgroundColor= "#fff8dc"; // cornsilk
+
+export const scoreCardBoardColor = tileBackgroundColor;
+export const scoreCardBackgroundColor = "white";
