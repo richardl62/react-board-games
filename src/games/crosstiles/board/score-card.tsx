@@ -6,6 +6,7 @@ import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 
 import { ScoreCard as ScoreCardType } from "../server-side/score-categories";
+import { BoxWithLegend } from "../../../utils/box-with-legend";
 
 const ScoreCardDiv = styled.div`
     display: grid;
@@ -62,8 +63,8 @@ export function ScoreCard(props: ScoreCardProps) : JSX.Element {
 
     const scoreELems = [];
     for(const category of scoreCategories) {
-        scoreELems.push(<Se>{displayName(category)}</Se>);
-        scoreELems.push(<Se>{scoreElement(category)}</Se>);
+        scoreELems.push(<Se key={category+"1"}>{displayName(category)}</Se>);
+        scoreELems.push(<Se key={category+"2"}>{scoreElement(category)}</Se>);
     }
 
     return <ScoreCardDiv>
@@ -85,7 +86,9 @@ export function ScoreCards() : JSX.Element {
     for(const id in playerData) {
         const name = getPlayerName(id);
         const { scoreCard: scoreCard } = playerData[id];
-        elems.push(<ScoreCard name={name} scoreCard={scoreCard} />);
+        elems.push(<ScoreCard key={id} name={name} scoreCard={scoreCard} />);
     }
-    return <ScoreCardsDiv>{elems}</ScoreCardsDiv>;
+    return <BoxWithLegend legend={"Scores so far"}>
+        <ScoreCardsDiv>{elems}</ScoreCardsDiv>
+    </BoxWithLegend>;
 }
