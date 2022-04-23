@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { ScoreCard, startingScoreCard } from "./score-categories";
+import { ScoreCard } from "./score-categories";
 import { Letter } from "../config";
 import { startNextStage } from "./start-next-stage";
 
@@ -40,11 +40,11 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData[pid] = {
             ready: false,
             grid: null,
-            scoreCard: startingScoreCard(),
+            scoreCard: {},
         };
     }
 
-    const data = {
+    const G = {
         stage: GameStage.pollingForReady,
         round: 0,
         selectedLetters: null,
@@ -54,8 +54,13 @@ export function startingServerData(ctx: Ctx): ServerData {
         timestamp: 0,
     };
 
-    startNextStage(data, ctx); // TEMPORARY
-    startNextStage(data, ctx); // TEMPORARY
-    
-    return data;
+    // Start of temporary code
+    startNextStage(G, ctx);
+    for (const pid in G.playerData) { 
+        G.playerData[pid].grid = [];
+    }
+    startNextStage(G, ctx);
+    // End of temporary code
+
+    return G;
 }
