@@ -1,7 +1,7 @@
 export type ScoreCategory =   "length3" | "length4" | "length5";
 export const scoreCategories : ScoreCategory [] = ["length3",  "length4" , "length5"];
 
-export type ScoreCard = {[category in string] : number};
+export type ScoreCard = {[category in ScoreCategory]? : number};
 
 /* To help with testing */
 export function startingScoreCard() : ScoreCard {

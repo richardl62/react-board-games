@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
-import { scoreCategories } from "../server-side/score-categories";
+import { ScoreCard as ScoreCardType, scoreCategories } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { ScoreCard } from "./score-card";
 
@@ -26,7 +26,7 @@ export function Scoring() : JSX.Element | null {
     const name = getPlayerName(playerToScore);
     const { scoreCard } = playerData[playerToScore];
 
-    const scoreOptions: {[category: string]: number} = {};
+    const scoreOptions: ScoreCardType = {};
     for(const category of scoreCategories) {
         if(!scoreCard[category]) {
             scoreOptions[category] = 0;

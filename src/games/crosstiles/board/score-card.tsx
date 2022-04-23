@@ -5,6 +5,7 @@ import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context
 import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 
+import { ScoreCard as ScoreCardType } from "../server-side/score-categories";
 
 const ScoreCardDiv = styled.div`
     display: grid;
@@ -32,18 +33,15 @@ const Se = styled.div` // Se -> Scorecard Element
 
 interface ScoreCardProps {
     name: string;
-    scoreCard: {[category: string]: number};
-    scoreOptions?: {[category: string]: number}; 
+    scoreCard: ScoreCardType;
+    scoreOptions?: ScoreCardType; 
 }
 
 export function ScoreCard(props: ScoreCardProps) : JSX.Element {
     const { name, scoreCard, scoreOptions } = props;
     const { moves } = useCrossTilesContext().wrappedGameProps;
     
-    const scoreElement = (categoryString:string) => {
-
-        const category = categoryString as ScoreCategory; // For now
-        sAssert(scoreCategories.includes(category));
+    const scoreElement = (category: ScoreCategory) => {
         
         if(scoreCard[category] !== undefined) {
             return scoreCard[category];
@@ -51,6 +49,8 @@ export function ScoreCard(props: ScoreCardProps) : JSX.Element {
 
         if(scoreOptions && scoreOptions[category] !== undefined) {
             const score = scoreOptions[category];
+            sAssert(score !== undefined); // Why is this needed?
+
             const onClick = () => {
                 moves.setScore({category, score});
             };
