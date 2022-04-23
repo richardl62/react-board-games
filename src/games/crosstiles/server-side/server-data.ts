@@ -57,7 +57,9 @@ export function startingServerData(ctx: Ctx): ServerData {
     // Start of temporary code
     startNextStage(G, ctx);
     for (const pid in G.playerData) { 
-        G.playerData[pid].grid = [];
+        G.playerData[pid].grid = [
+            [null]
+        ];
     }
     startNextStage(G, ctx);
     // End of temporary code
