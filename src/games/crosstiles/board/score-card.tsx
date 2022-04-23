@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { displayName, scoreCategories } from "../server-side/score-categories";
+import { displayName, scoreCategories, ScoreCategory } from "../server-side/score-categories";
 import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
 import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
+import { sAssert } from "../../../utils/assert";
 
 
 const ScoreCardDiv = styled.div`
@@ -32,14 +33,35 @@ const Se = styled.div` // Se -> Scorecard Element
 interface ScoreCardProps {
     name: string;
     scoreCard: {[category: string]: number};
+    scoreOptions?: {[category: string]: number}; 
 }
 
 function ScoreCard(props: ScoreCardProps) : JSX.Element {
-    const { name, scoreCard } = props;
+    const { name, scoreCard, scoreOptions } = props;
+    const { moves } = useCrossTilesContext().wrappedGameProps;
+    
+    const scoreElement = (categoryString:string) => {
+
+        const category = categoryString as ScoreCategory; // For now
+        sAssert(scoreCategories.includes(category));
+        
+        if(scoreCard[category]) {
+            return scoreCard[category];
+        }
+
+        if(scoreOptions && scoreOptions[category]) {
+            const score = scoreOptions[category];
+            const onClick = () => {
+                moves.setScore({category, score});
+            };
+            return <button onClick={onClick}>{scoreOptions[category]}</button>;
+        }
+    };
+
     const scoreELems = [];
     for(const category of scoreCategories) {
         scoreELems.push(<Se>{displayName(category)}</Se>);
-        scoreELems.push(<Se>{scoreCard[category]}</Se>);
+        scoreELems.push(<Se>{scoreElement(category)}</Se>);
     }
 
     return <ScoreCardDiv>
