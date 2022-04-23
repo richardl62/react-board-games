@@ -1,5 +1,5 @@
 import React from "react";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { GameStage } from "../server-side/server-data";
 
 export function GameOver() : JSX.Element | null {

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
-import { checkGrid } from "../client-side-actions/check-grid";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { checkGrid } from "../client-side/check-grid/check-grid";
 import { ScoreCard as ScoreCardType, scoreCategories, ScoreCategory } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { ScoreCard } from "./score-card";

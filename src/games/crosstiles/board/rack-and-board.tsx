@@ -3,7 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { TileGrid } from "./tile-grid";
 
 const OuterDiv = styled.div`

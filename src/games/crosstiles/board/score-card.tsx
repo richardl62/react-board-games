@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { displayName, scoreCategories, ScoreCategory } from "../server-side/score-categories";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 

@@ -4,7 +4,8 @@ import { Letter } from "../config";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { Square } from "./square";
 import { sAssert } from "../../../utils/assert";
-import { ClickMoveStart, SquareID } from "../client-side-actions/types";
+import { ClickMoveStart, SquareID } from "../client-side/actions/types";
+
 
 function squareID(row: number, col: number, container: Container) : SquareID {
     if (container === "grid") {

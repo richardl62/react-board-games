@@ -4,9 +4,10 @@ import { WrappedGameProps } from "../../../app-game-support";
 // import { AsyncStatus } from "../../../utils/async-status";
 // import { getWordChecker } from "../../../utils/get-word-checker";
 import { Board } from "../board";
-import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side-actions/cross-tiles-context";
-import { CrossTilesGameProps } from "../client-side-actions/cross-tiles-game-props";
-import { crossTilesReducer, initialReducerState } from "../client-side-actions/cross-tiles-reducer";
+import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
+import { crossTilesReducer, initialReducerState } from "../client-side/actions/cross-tiles-reducer";
+
 
 export interface BoardWrapperProps {
     appBoardProps: WrappedGameProps;

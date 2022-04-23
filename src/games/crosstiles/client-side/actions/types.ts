@@ -1,4 +1,4 @@
-import { ClickMoveDirection } from "../../../utils/board/click-move-marker";
+import { ClickMoveDirection } from "../../../../utils/board/click-move-marker";
 
 interface RackID {
     row?: undefined,

@@ -1,5 +1,5 @@
-import { sAssert } from "../../../utils/assert";
-import { nextCickMoveDirection } from "../../../utils/board/click-move-marker";
+import { sAssert } from "../../../../utils/assert";
+import { nextCickMoveDirection } from "../../../../utils/board/click-move-marker";
 import { GridAndRack } from "./grid-and-rack";
 import { ClickMoveStart, SquareID } from "./types";
 import { ReducerState } from "./cross-tiles-reducer";

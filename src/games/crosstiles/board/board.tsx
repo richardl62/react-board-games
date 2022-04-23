@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { GameOver } from "./game-over";
 import { MakeGrid } from "./make-grid";
 import { PollForReady } from "./poll-for-ready";

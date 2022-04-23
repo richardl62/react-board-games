@@ -2,8 +2,8 @@ import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
 import { ClickMoveMarker } from "../../../utils/board/click-move-marker";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
-import { ClickMoveStart, SquareID } from "../client-side-actions/types";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { ClickMoveStart, SquareID } from "../client-side/actions/types";
 import { bonusLetters, Letter } from "../config";
 import { squareBackgroundColor, squareSize, tileBackgroundColor, tileTextColor } from "./style";
 

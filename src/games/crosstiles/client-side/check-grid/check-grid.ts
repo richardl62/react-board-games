@@ -1,5 +1,5 @@
-import { Letter } from "../config";
-import { ScoreCategory } from "../server-side/score-categories";
+import { Letter } from "../../config";
+import { ScoreCategory } from "../../server-side/score-categories";
 
 interface CheckGridResult {
     illegalWords: string[] | null;

@@ -1,9 +1,9 @@
 import React, { Dispatch } from "react";
-import { WrappedGameProps } from "../../../app-game-support";
-import { sAssert } from "../../../utils/assert";
-import { ActionType, ReducerState } from "../client-side-actions/cross-tiles-reducer";
-import { ClientMoves } from "../server-side/moves";
-import { ServerData } from "../server-side/server-data";
+import { WrappedGameProps } from "../../../../app-game-support";
+import { sAssert } from "../../../../utils/assert";
+import { ActionType, ReducerState } from "./cross-tiles-reducer";
+import { ClientMoves } from "../../server-side/moves";
+import { ServerData } from "../../server-side/server-data";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 
 

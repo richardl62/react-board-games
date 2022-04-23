@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCountdown } from "../../../utils/use-countdown";
-import { useCrossTilesContext } from "../client-side-actions/cross-tiles-context";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { maxTimeToMakeGrid } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { RackAndBoard } from "./rack-and-board";

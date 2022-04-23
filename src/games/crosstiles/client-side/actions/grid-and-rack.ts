@@ -1,6 +1,6 @@
-import { sAssert } from "../../../utils/assert";
-import { shuffle } from "../../../utils/shuffle";
-import { Letter } from "../config";
+import { sAssert } from "../../../../utils/assert";
+import { shuffle } from "../../../../utils/shuffle";
+import { Letter } from "../../config";
 import { ClickMoveStart, SquareID } from "./types";
 
 type Grid = (Letter|null)[][];

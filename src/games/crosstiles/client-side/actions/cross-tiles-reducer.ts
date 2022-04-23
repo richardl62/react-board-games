@@ -1,4 +1,4 @@
-import { boardColumns, boardRows, Letter } from "../config";
+import { boardColumns, boardRows, Letter } from "../../config";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 import { GridAndRack } from "./grid-and-rack";
 import { tileClicked } from "./tile-clicked";
