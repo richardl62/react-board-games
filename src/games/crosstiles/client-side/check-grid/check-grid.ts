@@ -15,9 +15,14 @@ export function checkGrid(grid: (Letter | null)[][]): CheckGridResult {
     return {
         illegalWords,
         validScores: {
-            length3: false,
             length4: false,
-            length5: 50,
+            length5: 40,
+            length6: 50,
+            words2: false,
+            words3: false,
+            kind6: false,
+            chance: false,
+            bonus: false,
         },
     };
 }

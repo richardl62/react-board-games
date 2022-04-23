@@ -6,7 +6,7 @@ import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context
 import { GameOver } from "./game-over";
 import { MakeGrid } from "./make-grid";
 import { PollForReady } from "./poll-for-ready";
-import { ScoreCards } from "./score-card";
+import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
 
 const BoardDiv = styled.div`

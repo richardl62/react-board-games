@@ -6,7 +6,7 @@ import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 
 import { ScoreCard as ScoreCardType } from "../server-side/score-categories";
-import { BoxWithLegend } from "../../../utils/box-with-legend";
+import { totalScore } from "../client-side/check-grid/total-score";
 
 const ScoreCardDiv = styled.div`
     display: grid;
@@ -63,32 +63,14 @@ export function ScoreCard(props: ScoreCardProps) : JSX.Element {
 
     const scoreELems = [];
     for(const category of scoreCategories) {
-        scoreELems.push(<Se key={category+"1"}>{displayName(category)}</Se>);
+        scoreELems.push(<Se key={category+"1"}>{displayName[category]}</Se>);
         scoreELems.push(<Se key={category+"2"}>{scoreElement(category)}</Se>);
     }
+    scoreELems.push(<Se key={"Total1"}>TOTAL</Se>);
+    scoreELems.push(<Se key={"Total2"}>{totalScore(scoreCard)}</Se>);
 
     return <ScoreCardDiv>
         <Name>{name}</Name>
         {scoreELems}
     </ScoreCardDiv>;
-}
-
-const ScoreCardsDiv = styled.div`
-    display: flex;
-    > * {
-        margin-right: 10px;
-    }
-`;
-
-export function ScoreCards() : JSX.Element {
-    const { playerData, wrappedGameProps: {getPlayerName} } = useCrossTilesContext();
-    const elems = [];
-    for(const id in playerData) {
-        const name = getPlayerName(id);
-        const { scoreCard: scoreCard } = playerData[id];
-        elems.push(<ScoreCard key={id} name={name} scoreCard={scoreCard} />);
-    }
-    return <BoxWithLegend legend={"Scores so far"}>
-        <ScoreCardsDiv>{elems}</ScoreCardsDiv>
-    </BoxWithLegend>;
 }
