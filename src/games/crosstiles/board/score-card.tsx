@@ -36,7 +36,7 @@ interface ScoreCardProps {
     scoreOptions?: {[category: string]: number}; 
 }
 
-function ScoreCard(props: ScoreCardProps) : JSX.Element {
+export function ScoreCard(props: ScoreCardProps) : JSX.Element {
     const { name, scoreCard, scoreOptions } = props;
     const { moves } = useCrossTilesContext().wrappedGameProps;
     
@@ -45,11 +45,11 @@ function ScoreCard(props: ScoreCardProps) : JSX.Element {
         const category = categoryString as ScoreCategory; // For now
         sAssert(scoreCategories.includes(category));
         
-        if(scoreCard[category]) {
+        if(scoreCard[category] !== undefined) {
             return scoreCard[category];
         }
 
-        if(scoreOptions && scoreOptions[category]) {
+        if(scoreOptions && scoreOptions[category] !== undefined) {
             const score = scoreOptions[category];
             const onClick = () => {
                 moves.setScore({category, score});

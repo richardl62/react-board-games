@@ -55,6 +55,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     };
 
     startNextStage(data, ctx); // TEMPORARY
-
+    startNextStage(data, ctx); // TEMPORARY
+    
     return data;
 }
