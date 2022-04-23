@@ -39,7 +39,7 @@ interface ScoreCardProps {
 
 export function ScoreCard(props: ScoreCardProps) : JSX.Element {
     const { name, scoreCard, scoreOptions } = props;
-    const { moves } = useCrossTilesContext().wrappedGameProps;
+    const { playerToScore, wrappedGameProps: {moves, playerID} } = useCrossTilesContext();
     
     const scoreElement = (category: ScoreCategory) => {
         
@@ -54,7 +54,9 @@ export function ScoreCard(props: ScoreCardProps) : JSX.Element {
             const onClick = () => {
                 moves.setScore({category, score});
             };
-            return <button onClick={onClick}>{scoreOptions[category]}</button>;
+            return <button onClick={onClick} disabled={playerToScore !== playerID}>
+                {scoreOptions[category]}
+            </button>;
         }
     };
 
