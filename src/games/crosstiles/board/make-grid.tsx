@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCountdown } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { checkConnectivity } from "../client-side/check-grid/check-connectivity";
 import { maxTimeToMakeGrid } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { RackAndBoard } from "./rack-and-board";
@@ -45,6 +46,7 @@ export function MakeGrid() : JSX.Element | null {
     return <OuterDiv>
         <RackAndBoard />
 
+        <div>{checkConnectivity(grid)}</div>
         <div>
             <button onClick={() => moves.recordGrid(grid)}>Record Grid</button>
             <TimeLeft>{minutesAndSeconds(secondsLeft)}</TimeLeft>

@@ -61,7 +61,6 @@ export function startingServerData(ctx: Ctx): ServerData {
             [null]
         ];
     }
-    startNextStage(G, ctx);
     // End of temporary code
 
     return G;
