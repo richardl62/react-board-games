@@ -4,6 +4,7 @@ import { sAssert } from "../../../utils/assert";
 import { useCountdown } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkConnectivity } from "../client-side/check-grid/check-connectivity";
+import { getWords } from "../client-side/check-grid/get-words";
 import { maxTimeToMakeGrid } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { RackAndBoard } from "./rack-and-board";
@@ -47,6 +48,10 @@ export function MakeGrid() : JSX.Element | null {
         <RackAndBoard />
 
         <div>{checkConnectivity(grid)}</div>
+        <div>{getWords(grid).map((word, index) => 
+            <span key={index}>{word+" "}</span> 
+        )}
+        </div>
         <div>
             <button onClick={() => moves.recordGrid(grid)}>Record Grid</button>
             <TimeLeft>{minutesAndSeconds(secondsLeft)}</TimeLeft>
