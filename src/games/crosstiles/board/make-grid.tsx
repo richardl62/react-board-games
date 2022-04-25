@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useCountdown } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkConnectivity } from "../client-side/check-grid/check-connectivity";
-import { getWords } from "../client-side/check-grid/get-words";
-import { maxTimeToMakeGrid } from "../config";
+import { checkGrid } from "../client-side/check-grid/check-grid";
+import { Letter, maxTimeToMakeGrid } from "../config";
+import { displayName, ScoreCategory } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { RackAndBoard } from "./rack-and-board";
 
@@ -45,14 +45,26 @@ export function MakeGrid() : JSX.Element | null {
     return <OuterDiv>
         <RackAndBoard />
 
-        <div>{checkConnectivity(grid)}</div>
-        <div>{getWords(grid).map((word, index) => 
-            <span key={index}>{word+" "}</span> 
-        )}
-        </div>
+        <GridStatus grid={grid} />
+
         <div>
             <button onClick={() => moves.recordGrid(grid)}>Record Grid</button>
             <TimeLeft>{minutesAndSeconds(secondsLeft)}</TimeLeft>
         </div>
     </OuterDiv>;
+}
+
+function GridStatus({grid} : {grid: (Letter| null)[][]}) {
+
+    const {validScores} = checkGrid(grid);
+    const displayNames = Object.keys(validScores).map(category =>
+        displayName[(category as ScoreCategory)]
+    );
+
+    return <div>
+        {displayNames.map(name =>
+            <span key={name}>{name}</span>
+        )}
+    </div>;
+
 }

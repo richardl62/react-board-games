@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
-import { ScoreCard as ScoreCardType, scoreCategories, ScoreCategory } from "../server-side/score-categories";
+import { ScoreCard as ScoreCardType, fixedScoreCategories, FixedScoreCategory, scoreCategories } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { ScoreCard } from "./score-card";
 
@@ -18,11 +18,11 @@ const ScoringDiv = styled.div`
  */
 function scoreOptions(
     scoreCard: ScoreCardType,
-    validScores:  { [category in ScoreCategory] : number | false }
+    validScores:  { [category in FixedScoreCategory]? : number | false }
 ) {
     const options: ScoreCardType = {};
 
-    for(const category of scoreCategories) {
+    for(const category of fixedScoreCategories) {
         if(scoreCard[category] === undefined) {
             const scoreOption = validScores[category];
             if(scoreOption !== false) {
@@ -48,27 +48,28 @@ function zeroScores(scoreCard: ScoreCardType) {
     return zeros;
 }
 
-const IllegalWordsSpan = styled.div`
-  span:first-child {
-      color: red;
-      font-weight: bold;
-  };  
+// const IllegalWordsSpan = styled.div`
+//   span:first-child {
+//       color: red;
+//       font-weight: bold;
+//   };  
 
-  span {
-      margin-right: 0.25em;
-  };
-`;
+//   span {
+//       margin-right: 0.25em;
+//   };
+// `;
 
-function IllegalWords({words} : {words: string[] | null} ) {
-    if(!words) {
-        return null;
-    }
+// function IllegalWords({words} : {words: string[] | null} ) {
+//     if(!words) {
+//         return null;
+//     }
 
-    return <IllegalWordsSpan>
-        <span>Illegal words:</span>
-        {words.map((word, index) => <span key={index}>{word}</span>)}
-    </IllegalWordsSpan>;
-}
+//     return <IllegalWordsSpan>
+//         <span>Illegal words:</span>
+//         {words.map((word, index) => <span key={index}>{word}</span>)}
+//     </IllegalWordsSpan>;
+// }
+
 export function Scoring() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerToScore, playerData } = context;
@@ -84,15 +85,14 @@ export function Scoring() : JSX.Element | null {
     const { scoreCard, grid } = playerData[playerToScore];
     sAssert(grid, "Unexpected null grid");
 
-    const {illegalWords, validScores} = checkGrid(grid);
+    const {validScores} = checkGrid(grid);
     let scoreOpts = scoreOptions(scoreCard, validScores);
 
-    if (illegalWords || !scoreOpts) {
+    if (!scoreOpts) {
         scoreOpts = zeroScores(scoreCard);
     }
     
     return <div>
-        <IllegalWords words={illegalWords} />
         <ScoringDiv>
             <ScoreCard name={name} scoreCard={scoreCard} scoreOptions={scoreOpts} />
         </ScoringDiv>

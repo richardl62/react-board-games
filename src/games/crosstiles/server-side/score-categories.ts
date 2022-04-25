@@ -1,7 +1,11 @@
-export type ScoreCategory =   "length4" | "length5" | "length6" | "words2" | "words3" | "kind6" | "chance" | "bonus";
-export const scoreCategories : ScoreCategory [] = [
-    "length4", "length5", "length6", "words2", "words3", "kind6", "chance", "bonus"
+export type FixedScoreCategory =   "length4" | "length5" | "length6" | "words2" | "words3";
+export type ScoreCategory =  FixedScoreCategory | "chance" | "bonus";
+
+export const fixedScoreCategories : FixedScoreCategory [] = [
+    "length4", "length5", "length6", "words2", "words3"
 ];
+
+export const scoreCategories : ScoreCategory [] = [...fixedScoreCategories,  "chance", "bonus"];
 
 export type ScoreCard = {[category in ScoreCategory]? : number};
 
@@ -11,9 +15,17 @@ export const displayName: {[category in ScoreCategory] : string} = {
     length6: "6 letter word",
     words2: "2 words",
     words3: "3+ words",
-    kind6: "6 of a kind",
     chance: "Chance",
     bonus: "Bonus",
+};
+
+
+export const fixedScores: {[category in FixedScoreCategory] : number} = {
+    length4: 20,
+    length5: 30,
+    length6: 50,
+    words2: 30,
+    words3: 30,
 };
 
 /*
