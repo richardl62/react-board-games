@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../utils/assert";
 import { useCountdown } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkConnectivity } from "../client-side/check-grid/check-connectivity";
@@ -33,7 +32,7 @@ function minutesAndSeconds(seconds: number) {
 }
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, rack, grid, round } = context;
+    const { stage, grid, round } = context;
     const { moves } = context.wrappedGameProps;
 
     const {secondsLeft, reset} = useCountdown(maxTimeToMakeGrid);
@@ -42,7 +41,6 @@ export function MakeGrid() : JSX.Element | null {
     if(stage !== GameStage.makingGrids) {
         return null;
     }
-    sAssert(rack);
 
     return <OuterDiv>
         <RackAndBoard />

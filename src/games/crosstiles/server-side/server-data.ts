@@ -56,11 +56,6 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     // Start of temporary code
     startNextStage(G, ctx);
-    for (const pid in G.playerData) { 
-        G.playerData[pid].grid = [
-            [null]
-        ];
-    }
     // End of temporary code
 
     return G;

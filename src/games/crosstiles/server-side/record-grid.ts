@@ -14,12 +14,14 @@ export function recordGrid(G: ServerData, ctx: Ctx, grid: (Letter | null)[][]): 
 
     G.playerData[playerID].grid = grid.map(row => [...row]);
 
-    let allGridsRecorded = true;
+    let gridRecordsForAllPlayers = true;
     for (const pid in G.playerData) {
-        allGridsRecorded = allGridsRecorded && G.playerData[pid].grid !== null;
+        if(!G.playerData[pid].grid) {
+            gridRecordsForAllPlayers = false;
+        }
     }
 
-    if (allGridsRecorded) {
+    if (gridRecordsForAllPlayers) {
         startNextStage(G, ctx);
     }
 }

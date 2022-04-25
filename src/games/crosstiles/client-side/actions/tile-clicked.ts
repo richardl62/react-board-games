@@ -5,6 +5,7 @@ import { ClickMoveStart, SquareID } from "./types";
 import { ReducerState } from "./cross-tiles-reducer";
 
 export function tileClicked(state: ReducerState, id: SquareID): ReducerState {
+    sAssert(state.rack);
     const gr = new GridAndRack(state.grid, state.rack);
     const cms = state.clickMoveStart;
 

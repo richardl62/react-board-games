@@ -17,6 +17,11 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const crossTilesGameProps = props.appBoardProps as unknown as CrossTilesGameProps;
 
     const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState);
+
+    if(reducerState.serverData?.timestamp !== crossTilesGameProps.G.timestamp) {
+        dispatch({type: "reflectServerData", data: crossTilesGameProps.G});
+    }
+    
     // const asyncWordChecker = useAsync(getWordChecker, []);
 
     // const isLegalWord = asyncWordChecker.result;
@@ -28,12 +33,9 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         throw new Error("isLegalWord not implemented");
     };
 
-    if (crossTilesGameProps.G.timestamp !== reducerState.externalTimestamp) {
-        dispatch({
-            type: "externalStateChange",
-            data: crossTilesGameProps,
-        });
-    } 
+
+
+ 
 
     const context = makeCrossTilesContext(crossTilesGameProps, reducerState, dispatch, isLegalWord);
 
