@@ -32,14 +32,14 @@ export function getWords(grid: (Letter|null)[][]) : string[] {
     return words;
 }
 
-const grid1 = [
-    [1,2,3],
-    [4,5,6]
-];
-console.log(transpose(grid1));
+// const grid1 = [
+//     [1,2,3],
+//     [4,5,6]
+// ];
+// console.log(transpose(grid1));
 
-const grid2 : (Letter|null)[][] = [
-    ["C","A","T",null,"S","A","T"],
-    [null,"O","N",null,"A",null,"M","A","T",null]
-];
-console.log(getWords(grid2));
+// const grid2 : (Letter|null)[][] = [
+//     ["C","A","T",null,"S","A","T"],
+//     [null,"O","N",null,"A",null,"M","A","T",null]
+// ];
+// console.log(getWords(grid2));

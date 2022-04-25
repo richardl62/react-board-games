@@ -20,7 +20,13 @@ export const boardColumns = 6;
 sAssert(Object.keys(letterDistrubtion).length === 26);
 
 /** The number of tiles available to players when forming words */
-export const nTilesPerTurn = 8; 
+export const tilesPerTurn = {
+    number: 8,
+
+    // 'Y' counts as a vowel.
+    minVowels: 4,
+    minConsonants: 4,
+}; 
 
 export const maxTimeToMakeGrid = 75; /* For now */
 
