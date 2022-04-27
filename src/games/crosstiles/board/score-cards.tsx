@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { BoxWithLegend } from "../../../utils/box-with-legend";
-import { ScoreCard } from "./score-card";
+import { ScoreCard } from "./score-card"; 
 
 const ScoreCardsDiv = styled.div`
     display: flex;

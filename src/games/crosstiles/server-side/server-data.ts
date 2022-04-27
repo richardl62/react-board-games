@@ -32,6 +32,10 @@ export interface ServerData {
     timestamp: number;
 }
 
+function startingScoreCard() : ScoreCard {
+    return {bonus: 0};
+}
+
 export function startingServerData(ctx: Ctx): ServerData {
 
     const playerData : {[playerID: string]: PlayerData } = {};
@@ -40,7 +44,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData[pid] = {
             ready: false,
             grid: null,
-            scoreCard: {},
+            scoreCard: startingScoreCard(),
         };
     }
 

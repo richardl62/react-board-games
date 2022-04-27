@@ -13,6 +13,7 @@ export const letterDistrubtion = {
 };
 
 export const bonusLetters : Letter [] = ["J", "K", "Q", "X", "Z" ];
+export const bonusScore = 10;
 
 export const boardRows = 4;
 export const boardColumns = 6;

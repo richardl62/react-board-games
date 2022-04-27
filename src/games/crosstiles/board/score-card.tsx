@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { displayName, scoreCategories, ScoreCategory } from "../server-side/score-categories";
-import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 
@@ -32,15 +31,25 @@ const Se = styled.div` // Se -> Scorecard Element
     padding: 2px;
 `;
 
-interface ScoreCardProps {
+interface SimpleScoreCardProps {
     name: string;
     scoreCard: ScoreCardType;
-    scoreOptions?: ScoreCardType; 
+    scoreOptions?: undefined;
+    recordScore?: undefined;  
 }
 
+interface FullScoreCardProps {
+    name: string;
+    scoreCard: ScoreCardType;
+    scoreOptions: ScoreCardType;
+    /** If omitted score options are displays, but there functionality is disabled */
+    recordScore?: (category: ScoreCategory, score: number) => void;  
+}
+
+type ScoreCardProps = SimpleScoreCardProps | FullScoreCardProps;
+
 export function ScoreCard(props: ScoreCardProps) : JSX.Element {
-    const { name, scoreCard, scoreOptions } = props;
-    const { playerToScore, wrappedGameProps: {moves, playerID} } = useCrossTilesContext();
+    const { name, scoreCard, scoreOptions, recordScore } = props;
     
     const scoreElement = (category: ScoreCategory) => {
         
@@ -52,10 +61,10 @@ export function ScoreCard(props: ScoreCardProps) : JSX.Element {
             const score = scoreOptions[category];
             sAssert(score !== undefined); // Why is this needed?
 
-            const onClick = () => {
-                moves.setScore({category, score});
-            };
-            return <button onClick={onClick} disabled={playerToScore !== playerID}>
+            const onClick = recordScore && (() => {
+                recordScore(category, score);
+            });
+            return <button onClick={onClick} disabled={!recordScore}>
                 {scoreOptions[category]}
             </button>;
         }

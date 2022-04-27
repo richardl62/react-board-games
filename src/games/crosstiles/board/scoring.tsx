@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkGrid } from "../client-side/check-grid/check-grid";
-import { ScoreCard as ScoreCardType, fixedScoreCategories, FixedScoreCategory, scoreCategories } from "../server-side/score-categories";
+import { checkGrid, nBonuses } from "../client-side/check-grid/check-grid";
+import { bonusScore, Letter } from "../config";
+import { ScoreCard as ScoreCardType, fixedScoreCategories, ScoreCategory } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { ScoreCard } from "./score-card";
 
@@ -18,35 +19,36 @@ const ScoringDiv = styled.div`
  */
 function scoreOptions(
     scoreCard: ScoreCardType,
-    validScores:  { [category in FixedScoreCategory]? : number | false }
-) {
+    grid: (Letter|null)[][],
+) : ScoreCardType {
+    const {validScores} = checkGrid(grid);
     const options: ScoreCardType = {};
 
+    let chance = 0;
     for(const category of fixedScoreCategories) {
-        if(scoreCard[category] === undefined) {
-            const scoreOption = validScores[category];
-            if(scoreOption !== false) {
+        const scoreOption = validScores[category];
+        if(scoreOption !== undefined) {
+            if(scoreCard[category] === undefined) {
                 options[category] = scoreOption;
+            } 
+            if(scoreOption > chance) {
+                chance = scoreOption;
             }
         }
     } 
 
-    return Object.keys(options).length === 0 ? null : options;
-}
-
-function zeroScores(scoreCard: ScoreCardType) {
-    const zeros: ScoreCardType = {};
-
-    for(const category of scoreCategories) {
-        if(!scoreCard[category] !== undefined) {
-            zeros[category] = 0;
+    if(Object.keys(options).length === 0) {
+        for(const category of fixedScoreCategories) {
+            options[category] = 0;
         }
-    } 
-
-    sAssert(Object.keys(zeros).length > 0, "Cannot zero any scores");
-
-    return zeros;
+        if(scoreCard.chance === undefined) {
+            options.chance = chance;
+        }
+    }
+    
+    return options;
 }
+
 
 // const IllegalWordsSpan = styled.div`
 //   span:first-child {
@@ -73,7 +75,7 @@ function zeroScores(scoreCard: ScoreCardType) {
 export function Scoring() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerToScore, playerData } = context;
-    const { getPlayerName } = context.wrappedGameProps;
+    const { getPlayerName, moves } = context.wrappedGameProps;
   
     if(stage !== GameStage.scoring) {
         return null;
@@ -85,16 +87,20 @@ export function Scoring() : JSX.Element | null {
     const { scoreCard, grid } = playerData[playerToScore];
     sAssert(grid, "Unexpected null grid");
 
-    const {validScores} = checkGrid(grid);
-    let scoreOpts = scoreOptions(scoreCard, validScores);
+    const scoreOpts = scoreOptions(scoreCard, grid);
 
-    if (!scoreOpts) {
-        scoreOpts = zeroScores(scoreCard);
-    }
-    
+    const recordScore = (category: ScoreCategory, score: number) => {
+        let bonus = 0;
+        if(score > 0) {
+            bonus = nBonuses(grid) * bonusScore;
+        }
+        moves.setScore({category, score, bonus});
+    };
+
     return <div>
         <ScoringDiv>
-            <ScoreCard name={name} scoreCard={scoreCard} scoreOptions={scoreOpts} />
+            <ScoreCard name={name} scoreCard={scoreCard} scoreOptions={scoreOpts}
+                recordScore={recordScore} />
         </ScoringDiv>
     </div>;
 }

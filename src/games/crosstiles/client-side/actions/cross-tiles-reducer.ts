@@ -102,8 +102,9 @@ function reflectServerData(state: ReducerState, newServerData: ServerData): Redu
         serverData: newServerData,
     };
    
+    const oldSelectedLetters = state.serverData?.selectedLetters;
     const newSelectedLetters = newServerData.selectedLetters;
-    if(newSelectedLetters) {
+    if(!oldSelectedLetters && newSelectedLetters) {
         newState.rack = [...newSelectedLetters];
     }
 

@@ -18,6 +18,7 @@ function nextPlayer(ctx: Ctx, currentPlayer: string) {
 interface setScoreArg {
     category: ScoreCategory;
     score: number;
+    bonus: number;
 }
 export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
     if (G.stage !== GameStage.scoring) {
@@ -28,10 +29,17 @@ export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
     const { playerID } = ctx;
     sAssert(playerID);
 
-    const { category, score } = arg;
-
-    G.playerData[playerID].scoreCard[category] = score;
-
+    const { category, score, bonus } = arg;
+    const { scoreCard } =  G.playerData[playerID];
+    scoreCard[category] = score;
+    if(bonus) {
+        if(scoreCard.bonus) {
+            scoreCard.bonus += bonus;
+        } else {
+            scoreCard.bonus = bonus;
+        }
+    }
+    
     G.playerToScore = nextPlayer(ctx, G.playerToScore);
 
     if(!G.playerToScore) {

@@ -1,11 +1,12 @@
-import { Letter } from "../../config";
+import { bonusLetters, Letter } from "../../config";
 import { fixedScores, FixedScoreCategory } from "../../server-side/score-categories";
 import { checkConnectivity } from "./check-connectivity";
 import { getWords } from "./get-words";
 
+export type ValidScores = { [category in FixedScoreCategory]? : number }
 interface CheckGridResult {
     connectivity: ReturnType<typeof checkConnectivity>,
-    validScores: { [category in FixedScoreCategory]? : number };
+    validScores: ValidScores;
 }
 
 function countLetters(grid: (Letter | null)[][]) {
@@ -16,7 +17,7 @@ export function checkGrid(grid: (Letter | null)[][]): CheckGridResult {
     
     const connectivity = checkConnectivity(grid);
 
-    const validScores: CheckGridResult["validScores"] = {};
+    const validScores: ValidScores = {};
 
     if(connectivity === "connected") {
         const words = getWords(grid);
@@ -53,4 +54,9 @@ export function checkGrid(grid: (Letter | null)[][]): CheckGridResult {
         connectivity,
         validScores,
     };
+}
+
+export function nBonuses(grid: (Letter | null)[][]) : number {
+    const isBonus = (letter: Letter | null) => letter && bonusLetters.includes(letter);
+    return grid.flat().filter(isBonus).length;
 }
