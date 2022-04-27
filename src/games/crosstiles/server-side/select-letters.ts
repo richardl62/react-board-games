@@ -19,7 +19,7 @@ const letterSet = (() => {
 })();
 Object.freeze(letterSet);
 
-function selectTilesUnchecked() : Letter[] {
+function selectLettersUnchecked() : Letter[] {
     return shuffle([...letterSet]).slice(0, tilesPerTurn.number);
 }
 
@@ -37,10 +37,10 @@ function selectionOK(letters: Letter[]) {
     return nVowels >= tilesPerTurn.minVowels && nConsonants >= tilesPerTurn.minConsonants;
 }
 
-export function selectTiles() : Letter[] {
-    let selected = selectTilesUnchecked();
+export function selectLetters() : Letter[] {
+    let selected = selectLettersUnchecked();
     while(!selectionOK(selected)) {
-        selected = selectTilesUnchecked();
+        selected = selectLettersUnchecked();
     }
     
     return selected;

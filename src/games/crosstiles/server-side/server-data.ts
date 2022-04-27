@@ -2,6 +2,7 @@ import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-categories";
 import { Letter } from "../config";
 import { startNextStage } from "./start-next-stage";
+import { selectLetters } from "./select-letters";
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -24,9 +25,9 @@ export interface ServerData {
     round: number;
 
     playerData: {[playerID: string]: PlayerData };
-
     playerToScore: string | null;
-    selectedLetters: Letter[] | null;
+
+    selectedLetters: Letter[];
 
     serverError: string | null;
     timestamp: number;
@@ -51,7 +52,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     const G = {
         stage: GameStage.pollingForReady,
         round: 0,
-        selectedLetters: null,
+        selectedLetters: selectLetters(),
         playerData: playerData,
         playerToScore: null,
         serverError: null,

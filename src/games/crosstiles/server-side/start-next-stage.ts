@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { selectTiles } from "./select-tiles";
+import { selectLetters } from "./select-letters";
 import { GameStage, ServerData } from "./server-data";
 
 function nextStage(stage: GameStage) {
@@ -24,16 +24,12 @@ export function startNextStage(G: ServerData, ctx: Ctx) : void {
 
     if(G.stage === GameStage.pollingForReady) {
         G.round = G.round + 1;
-        G.selectedLetters = null;
+        G.selectedLetters = selectLetters();
 
         for (const pid in G.playerData) {
             G.playerData[pid].ready = false;
         }
     } 
-    
-    if(G.stage === GameStage.makingGrids) {
-        G.selectedLetters = selectTiles();
-    }
     
     if(G.stage === GameStage.scoring) {
         G.playerToScore = ctx.playOrder[0];

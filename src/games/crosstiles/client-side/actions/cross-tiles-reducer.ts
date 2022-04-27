@@ -15,7 +15,7 @@ export type ReducerState = {
     serverData: ServerData | null,
 };
 
-function makeEmptyBoard() : (Letter | null) [][] {
+function makeEmptyGrid() : (Letter | null) [][] {
     const board : (Letter | null) [][] = [];
 
     const row = [];
@@ -31,7 +31,7 @@ function makeEmptyBoard() : (Letter | null) [][] {
 
 export const initialReducerState : ReducerState = {
     rack: null,
-    grid:  makeEmptyBoard(),
+    grid:  makeEmptyGrid(),
 
     clickMoveStart: null,
 
@@ -102,10 +102,11 @@ function reflectServerData(state: ReducerState, newServerData: ServerData): Redu
         serverData: newServerData,
     };
    
-    const oldSelectedLetters = state.serverData?.selectedLetters;
-    const newSelectedLetters = newServerData.selectedLetters;
-    if(!oldSelectedLetters && newSelectedLetters) {
-        newState.rack = [...newSelectedLetters];
+    const oldRound = state.serverData?.round;
+    const newRound = newServerData.round;
+    if(oldRound != newRound) {
+        newState.rack = [...newServerData.selectedLetters];
+        newState.grid = makeEmptyGrid();
     }
 
     return newState;
