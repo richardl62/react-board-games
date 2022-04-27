@@ -29,7 +29,7 @@ export const tilesPerTurn = {
     minConsonants: 4,
 }; 
 
-export const maxTimeToMakeGrid = 75; /* For now */
+export const maxTimeToMakeGrid = 60; /* For now */
 
 
 

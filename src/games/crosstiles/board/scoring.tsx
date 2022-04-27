@@ -7,9 +7,15 @@ import { bonusScore, Letter } from "../config";
 import { ScoreCard as ScoreCardType, fixedScoreCategories, ScoreCategory } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { ScoreCard } from "./score-card";
+import { TileGrid } from "./tile-grid";
 
 const ScoringDiv = styled.div`
     display: flex;
+    align-items: center;
+
+    > *:first-child {
+        margin-right: 5px;
+    }
     font-size:large;
     margin-bottom: 6px;
 `;
@@ -99,8 +105,10 @@ export function Scoring() : JSX.Element | null {
 
     return <div>
         <ScoringDiv>
+            <TileGrid letters={grid} />
             <ScoreCard name={name} scoreCard={scoreCard} scoreOptions={scoreOpts}
                 recordScore={recordScore} />
+            <></>
         </ScoringDiv>
     </div>;
 }

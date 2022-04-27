@@ -28,7 +28,9 @@ const Grid = styled.div<{nCols: number}>`
 type Container = SquareID["container"];
 interface TileGridProps {
     letters: (Letter | null) [][];
-    container: Container;
+    
+    /** Use as part of the drag/drop ID. If omiited drag and drop is disabled. */
+    container?: Container;
     clickMoveStart?: ClickMoveStart | null;
 }
 
@@ -42,7 +44,7 @@ export function TileGrid(props: TileGridProps) : JSX.Element {
     for(let row = 0; row < nRows; ++row) {
         sAssert(letters[row].length === nCols, "Grid of tiles in not rectangular");
         for(let col = 0; col < nCols; ++col) {
-            const id = squareID(row, col, container);
+            const id = container && squareID(row, col, container);
             
             let clickMoveDirection;
             if(clickMoveStart && clickMoveStart.row === row && clickMoveStart.col === col) {
