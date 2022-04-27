@@ -1,62 +1,45 @@
 import { bonusLetters, Letter } from "../../config";
-import { fixedScores, FixedScoreCategory } from "../../server-side/score-categories";
+import { FixedScoreCategory, ScoreCard } from "../../server-side/score-categories";
 import { checkConnectivity } from "./check-connectivity";
-import { getWords } from "./get-words";
+import { scoreOptions as getScoreOptions } from "./score-options";
 
 export type ValidScores = { [category in FixedScoreCategory]? : number }
 interface CheckGridResult {
     connectivity: ReturnType<typeof checkConnectivity>,
-    validScores: ValidScores;
+    illegalWords: string[] | null;
+    scoreOptions: ValidScores | null;
+    nBonuses: number;
 }
 
-function countLetters(grid: (Letter | null)[][]) {
-    return grid.flat().filter(elem => elem).length;
+/** Dummy implementation */
+function getIllegalWords(grid: (Letter | null)[][]) {
+    if(grid[0][0]) {
+        return ["just", "testing"];
+    }
+
+    return null;
 }
 
-export function checkGrid(grid: (Letter | null)[][]): CheckGridResult {
+export function checkGrid(scoreCard: ScoreCard, grid: (Letter | null)[][]): CheckGridResult {
     
     const connectivity = checkConnectivity(grid);
 
-    const validScores: ValidScores = {};
+    const illegalWords = getIllegalWords(grid);
 
-    if(connectivity === "connected") {
-        const words = getWords(grid);
+    let scoreOptions = null;
+    let nBonuses = 0;
 
-        const singleWord = (len: number) => 
-            words.length === 1 && words[0].length === len;
-    
-        const twoWords = (len0: number, len1: number) => 
-            words.length === 2 && words[0].length === len0 && words[1].length === len1;
+    if(connectivity === "connected" && !illegalWords) {
+        scoreOptions = getScoreOptions(scoreCard, grid);
 
-        if(singleWord(4)) {
-            validScores.length4 = fixedScores.length4;
-        }
-
-        if(singleWord(5)) {
-            validScores.length5 = fixedScores.length5;
-        }
-
-        if(singleWord(6)){
-            validScores.length6 = fixedScores.length6;
-        }
-
-        if(twoWords(3,4) || twoWords(4,3)) {
-            validScores.words2 = fixedScores.words2;
-        }
-
-        if(words.length > 2 && countLetters(grid) === 6) {
-            validScores.words3 = fixedScores.words3;
-        }
+        const isBonus = (letter: Letter | null) => letter && bonusLetters.includes(letter);
+        nBonuses = grid.flat().filter(isBonus).length;
     }
-
 
     return {
         connectivity,
-        validScores,
+        illegalWords,
+        scoreOptions,
+        nBonuses,
     };
-}
-
-export function nBonuses(grid: (Letter | null)[][]) : number {
-    const isBonus = (letter: Letter | null) => letter && bonusLetters.includes(letter);
-    return grid.flat().filter(isBonus).length;
 }

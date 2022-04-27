@@ -2,9 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useCountdown } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkGrid } from "../client-side/check-grid/check-grid";
-import { Letter, maxTimeToMakeGrid } from "../config";
-import { displayName, ScoreCategory } from "../server-side/score-categories";
+import { maxTimeToMakeGrid } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { RackAndBoard } from "./rack-and-board";
 
@@ -28,8 +26,8 @@ function minutesAndSeconds(seconds: number) {
     const padding = remainder < 10 ? "0" : "";
 
     return `${minutes}:${padding}${remainder}`;
-
 }
+
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, grid, round } = context;
@@ -59,7 +57,7 @@ export function MakeGrid() : JSX.Element | null {
     return <OuterDiv>
         <RackAndBoard />
 
-        <GridStatus grid={grid} />
+        {/* <GridStatus grid={grid} /> */}
 
         <div>
             <button onClick={recordGrid}>Record Grid</button>
@@ -68,17 +66,17 @@ export function MakeGrid() : JSX.Element | null {
     </OuterDiv>;
 }
 
-function GridStatus({grid} : {grid: (Letter| null)[][]}) {
+// function GridStatus({grid} : {grid: (Letter| null)[][]}) {
 
-    const {validScores} = checkGrid(grid);
-    const displayNames = Object.keys(validScores).map(category =>
-        displayName[(category as ScoreCategory)]
-    );
+//     const {validScores} = checkGrid(grid);
+//     const displayNames = Object.keys(validScores).map(category =>
+//         displayName[(category as ScoreCategory)]
+//     );
 
-    return <div>
-        {displayNames.map(name =>
-            <span key={name}>{name}</span>
-        )}
-    </div>;
+//     return <div>
+//         {displayNames.map(name =>
+//             <span key={name}>{name}</span>
+//         )}
+//     </div>;
 
-}
+// }
