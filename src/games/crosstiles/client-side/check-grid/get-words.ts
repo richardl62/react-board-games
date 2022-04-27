@@ -1,5 +1,5 @@
 import { Letter } from "../../config";
-import { transpose } from "./transpose";
+import { transpose } from "../../../../utils/transpose";
 
 
 

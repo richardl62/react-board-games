@@ -1,3 +1,6 @@
+/** Return a the transpose of a 2-D array.  The input array is assumed
+ * to be reactangular (i.e. all rows have the same lenght.)
+ */
 export function transpose<T>(grid: T[][]) : T[][] {
     const nRows = grid.length;
     const nCols = grid[0].length;
