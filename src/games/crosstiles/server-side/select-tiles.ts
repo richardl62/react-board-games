@@ -34,7 +34,6 @@ function selectionOK(letters: Letter[]) {
         }
     }
 
-    console.log(letters, nVowels, nConsonants);
     return nVowels >= tilesPerTurn.minVowels && nConsonants >= tilesPerTurn.minConsonants;
 }
 

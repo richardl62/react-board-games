@@ -38,9 +38,23 @@ export function MakeGrid() : JSX.Element | null {
     const {secondsLeft, reset} = useCountdown(maxTimeToMakeGrid);
     useEffect(reset, [round]);
 
+    const  recordGrid = () => moves.recordGrid(grid);
+    useEffect(
+        () => {
+            if (stage === GameStage.makingGrids && secondsLeft === 0) {
+                moves.recordGrid(grid);
+            }
+        },
+        [secondsLeft]);
+
     if(stage !== GameStage.makingGrids) {
         return null;
     }
+
+
+    // if(secondsLeft === 0) {
+    //     recordGrid();
+    // }
 
     return <OuterDiv>
         <RackAndBoard />
@@ -48,7 +62,7 @@ export function MakeGrid() : JSX.Element | null {
         <GridStatus grid={grid} />
 
         <div>
-            <button onClick={() => moves.recordGrid(grid)}>Record Grid</button>
+            <button onClick={recordGrid}>Record Grid</button>
             <TimeLeft>{minutesAndSeconds(secondsLeft)}</TimeLeft>
         </div>
     </OuterDiv>;
