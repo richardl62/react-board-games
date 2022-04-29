@@ -1,7 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-card";
 import { Letter } from "../config";
-import { startNextStage } from "./start-next-stage";
 import { selectLetters } from "./select-letters";
 import { startingScoreCard } from "./score-card";
 
@@ -57,7 +56,8 @@ export function startingServerData(ctx: Ctx): ServerData {
     };
 
     // Start of temporary code
-    startNextStage(G, ctx);
+    //startNextStage(G, ctx);
+    G.stage = GameStage.gameOver;
     // End of temporary code
 
     return G;

@@ -1,8 +1,21 @@
 import { Ctx } from "boardgame.io";
+import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
 import { GameStage, ServerData } from "./server-data";
 
-function nextStage(stage: GameStage) {
+function nextStage(G: ServerData) {
+    const { stage, playerData } = G;
+    let gameOver = true;
+    for(const pid in playerData) {
+        if(!scoreCardFull(playerData[pid].scoreCard)) {
+            gameOver = false;
+        }
+    } 
+    
+    if(gameOver) {
+        return GameStage.gameOver;
+    }
+
     if(stage === GameStage.pollingForReady) {
         return GameStage.makingGrids;
 
@@ -20,7 +33,7 @@ function nextStage(stage: GameStage) {
 }
 
 export function startNextStage(G: ServerData, ctx: Ctx) : void {
-    G.stage = nextStage(G.stage);
+    G.stage = nextStage(G);
 
     if(G.stage === GameStage.pollingForReady) {
         G.round = G.round + 1;
