@@ -1,5 +1,6 @@
 import { sAssert } from "../../../../utils/assert";
-import { ScoreCard, ScoreCategory } from "../../server-side/score-categories";
+import { ScoreCard } from "../../server-side/score-card";
+import { ScoreCategory } from "../../server-side/score-categories";
 
 
 export function totalScore(scoreCard: ScoreCard) : number {

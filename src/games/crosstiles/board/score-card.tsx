@@ -4,7 +4,7 @@ import { displayName, scoreCategories, ScoreCategory } from "../server-side/scor
 import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 
-import { ScoreCard as ScoreCardType } from "../server-side/score-categories";
+import { ScoreCard as ScoreCardType } from "../server-side/score-card";
 import { totalScore } from "../client-side/check-grid/total-score";
 
 const ScoreCardDiv = styled.div`

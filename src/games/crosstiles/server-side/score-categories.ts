@@ -7,7 +7,6 @@ export const fixedScoreCategories : FixedScoreCategory [] = [
 
 export const scoreCategories : ScoreCategory [] = [...fixedScoreCategories,  "chance", "bonus"];
 
-export type ScoreCard = {[category in ScoreCategory]? : number};
 
 export const displayName: {[category in ScoreCategory] : string} = {
     length4: "4 letter word",

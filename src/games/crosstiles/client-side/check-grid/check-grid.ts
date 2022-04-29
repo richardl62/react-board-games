@@ -1,5 +1,6 @@
 import { bonusLetters, Letter } from "../../config";
-import { FixedScoreCategory, ScoreCard } from "../../server-side/score-categories";
+import { ScoreCard } from "../../server-side/score-card";
+import { FixedScoreCategory } from "../../server-side/score-categories";
 import { checkConnectivity } from "./check-connectivity";
 import { scoreOptions as getScoreOptions } from "./score-options";
 

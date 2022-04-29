@@ -1,8 +1,9 @@
 import { Ctx } from "boardgame.io";
-import { ScoreCard } from "./score-categories";
+import { ScoreCard } from "./score-card";
 import { Letter } from "../config";
 import { startNextStage } from "./start-next-stage";
 import { selectLetters } from "./select-letters";
+import { startingScoreCard } from "./score-card";
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -31,10 +32,6 @@ export interface ServerData {
 
     serverError: string | null;
     timestamp: number;
-}
-
-function startingScoreCard() : ScoreCard {
-    return {bonus: 0};
 }
 
 export function startingServerData(ctx: Ctx): ServerData {
