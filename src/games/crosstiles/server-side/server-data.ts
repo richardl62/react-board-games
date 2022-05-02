@@ -57,7 +57,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     // Start of temporary code
     //startNextStage(G, ctx);
-    G.stage = GameStage.gameOver;
+    //G.stage = GameStage.gameOver;
     // End of temporary code
 
     return G;
