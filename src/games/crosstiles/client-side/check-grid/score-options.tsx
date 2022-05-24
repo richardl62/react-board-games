@@ -62,22 +62,22 @@ export function scoreOptions(
     const fixedScores = fixedScoreOptions(grid);
     const options: ScoreCardType = {};
 
-    let chance = 0;
+    let chanceScore = null;
     for (const category of fixedScoreCategories) {
         const scoreOption = fixedScores[category];
         if (scoreOption !== undefined) {
             if (scoreCard[category] === undefined) {
                 options[category] = scoreOption;
             }
-            if (scoreOption > chance) {
-                chance = scoreOption;
+            if (!chanceScore || scoreOption > chanceScore) {
+                chanceScore = scoreOption;
             }
         }
     }
 
     if (Object.keys(options).length === 0) {
-        if (scoreCard.chance === undefined) {
-            options.chance = chance;
+        if (scoreCard.chance === undefined && chanceScore !== null) {
+            options.chance = chanceScore;
         }
     }
 
