@@ -2,6 +2,7 @@ import { sAssert } from "../../../../utils/assert";
 import { boardColumns, boardRows, Letter } from "../../config";
 import { ServerData } from "../../server-side/server-data";
 import { GridAndRack } from "./grid-and-rack";
+import { reflectServerData } from "./reflect-server-data";
 import { tileClicked } from "./tile-clicked";
 import { ClickMoveStart, SquareID } from "./types";
 
@@ -15,7 +16,7 @@ export type ReducerState = {
     serverData: ServerData | null,
 };
 
-function makeEmptyGrid() : (Letter | null) [][] {
+export function makeEmptyGrid() : (Letter | null) [][] {
     const board : (Letter | null) [][] = [];
 
     const row = [];
@@ -95,20 +96,4 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
     throw Error("Unrecogined reduced action");
 }
 
-function reflectServerData(state: ReducerState, newServerData: ServerData): ReducerState {
-
-    const newState = {
-        ...state,   
-        serverData: newServerData,
-    };
-   
-    const oldRound = state.serverData?.round;
-    const newRound = newServerData.round;
-    if(oldRound != newRound) {
-        newState.rack = [...newServerData.selectedLetters];
-        newState.grid = makeEmptyGrid();
-    }
-
-    return newState;
-}
 
