@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { displayName, scoreCategories, ScoreCategory } from "../server-side/score-categories";
-import { scoreCardBackgroundColor, scoreCardBoardColor } from "./style";
+import { scoreCardBackgroundColor, scoreCardBoarderColor } from "./style";
 import { sAssert } from "../../../utils/assert";
 
 import { ScoreCard as ScoreCardType, totalScore } from "../server-side/score-card";
@@ -10,14 +10,14 @@ const ScoreCardDiv = styled.div`
     display: grid;
     grid-template-columns: auto 2em;
     
-    background-color: ${scoreCardBoardColor};
+    background-color: ${scoreCardBoarderColor};
 
     grid-gap: 2px;
     padding 3px;
 `;
 
 const Name = styled.div`
-    background-color: ${scoreCardBoardColor}; 
+    background-color: ${scoreCardBoarderColor}; 
     color: white;
     font-weight: bold;
 
