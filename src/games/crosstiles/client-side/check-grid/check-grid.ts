@@ -13,7 +13,7 @@ interface CheckGridResult {
 }
 
 /** Dummy implementation */
-function getIllegalWords(grid: (Letter | null)[][]) {
+export function getIllegalWords(grid: (Letter | null)[][]) : string[] | null {
     if(grid[0][0]) {
         return ["just", "testing"];
     }

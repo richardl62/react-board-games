@@ -27,12 +27,12 @@ export function Board(): JSX.Element {
         <ErrorMessage category="server error" message={serverError} />
 
         <div>
-            {/* Start of functions the return null if the game is not at the appropriate stage */}
+            {/* Start of functions that return null if the game is not at the appropriate stage */}
             <PollForReady />
             <MakeGrid />
             <Scoring />
             <GameOver />
-            {/* Start of functions the return null if the game is not at the appropriate stage */}
+            {/* Start of functions that return null if the game is not at the appropriate stage */}
         </div>
         
         <ScoreCards />
