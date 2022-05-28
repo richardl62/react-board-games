@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { sAssert } from "../../../utils/assert";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-
-import { displayName, scoreCategories, ScoreCategory } from "../server-side/score-categories";
-import { scoreCardBackgroundColor, scoreCardBoarderColor, scoreCardBoarderSize } from "./style";
+import { scoreOptions } from "../client-side/check-grid/score-options";
+import { scoreCategories, ScoreCategory } from "../server-side/score-categories";
+import { GameStage } from "../server-side/server-data";
+import { CategoryLabel, ColumnHeader, KnownScore, OptionalScore, TotalLabel } from "./score-card-elements";
+import { scoreCardBoarderColor, scoreCardBoarderSize } from "./style";
 
 
 const ScoreCardsDiv = styled.div<{nPlayers: number}>`
@@ -16,46 +19,6 @@ const ScoreCardsDiv = styled.div<{nPlayers: number}>`
 
     margin-top: 4px;
 `;
-
-const ScoreElementDiv = styled.div`
-    background-color: ${scoreCardBackgroundColor};
-    padding: 1px;  
-`;
-
-const ColumnHeader = styled.div<{activePlayer?: boolean}>`
-    background-color: ${scoreCardBoarderColor};
-    color: white; //Kludge - not defined in styles.ts
-    padding: 1px;  // Kludge - copied from ScoreElement
-    font-weight: bold;
-    text-align: center;
-
-    text-decoration: ${props => props.activePlayer ? "underline" : "none"};
-`;
-
-interface CategoryLabelProps {
-    category: ScoreCategory;
-}
-function CategoryLabel({category}: CategoryLabelProps) {
-    return <ScoreElementDiv> {/* KLUDGE */}
-        {displayName[category]}
-    </ScoreElementDiv>;
-}
-
-function TotalLabel() {
-    return <ScoreElementDiv key={"total"}>
-        TOTAL
-    </ScoreElementDiv>;
-}
-
-interface ScoreElementsProps {
-    score: number | undefined;
-}
-function ScoreElement({score}: ScoreElementsProps) {
-    return <ScoreElementDiv>
-        {score}
-    </ScoreElementDiv>;
-}
-
 
 function totalPlayerScore(pid: string, context: CrossTilesContext) {
     const { scoreCard } = context.playerData[pid];
@@ -73,14 +36,38 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
 
 export function ScoreCards(): JSX.Element {
     const context = useCrossTilesContext();
-    const { playerData, wrappedGameProps: { getPlayerName } } = context;
+    const { stage, playerData,  wrappedGameProps } = context;
+    const { getPlayerName } = wrappedGameProps;
 
-    const scoreCard = (pid: string) =>
-        context.playerData[pid].scoreCard;
+
+    // Can be very inefficient.
+    const scoreOption = (pid: string, category: ScoreCategory) : number | null => {
+        if(stage !== GameStage.scoring) {
+            return null;
+        }
+
+        const { scoreCard } = context.playerData[pid];
+        if (scoreCard[category] !== undefined) {
+            return null;
+        }
+
+        const grid = playerData[pid].grid;
+        sAssert(grid);
+        const options = scoreOptions(scoreCard, grid);
+
+        // If there are no scoring options, all categories that have not don't already have a
+        // a score can given a 0 option. KLUDGE: Correct behaviour relies on 'bomus' being initialisedf
+        // to 0.
+        if (!options) {
+            return 0;
+        }
+
+        return options[category] || null;
+    };
     
     const elems : JSX.Element[] = [];
 
-    elems.push(<ColumnHeader key="black-header"/>);
+    elems.push(<ColumnHeader key="blank-header"/>);
     for (const pid in playerData) {
         elems.push(<ColumnHeader key={pid}>{getPlayerName(pid)}</ColumnHeader>);
     }
@@ -88,14 +75,23 @@ export function ScoreCards(): JSX.Element {
     for(const category of scoreCategories) {
         elems.push(<CategoryLabel key={category} category={category}/>);
         for (const pid in playerData) {
-            elems.push(<ScoreElement key={category+pid} score={scoreCard(pid)[category]} />); 
+            const key = category+pid;
+            const optionalScore = scoreOption(pid, category);
+            if(optionalScore !== null) {
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                const action = () => {};
+                elems.push(<OptionalScore key={key} score={optionalScore} action={action}/>); 
+            } else {
+                const score = context.playerData[pid].scoreCard[category];
+                elems.push(<KnownScore key={key}>{score}</KnownScore>);
+            } 
         }
     }
 
     elems.push(<TotalLabel key={"totalLabel"}/>);
     for (const pid in playerData) {
         const score = totalPlayerScore(pid, context);
-        elems.push(<ScoreElement key={"total"+pid} score={score} />);
+        elems.push(<KnownScore key={"total"+pid}>{score}</KnownScore>);
     }
 
     const nPlayers=Object.keys(playerData).length;

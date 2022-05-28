@@ -1,6 +1,6 @@
 import { Letter } from "../../config";
 import { ScoreCard as ScoreCardType  } from "../../server-side/score-card";
-import { fixedScoreCategories, FixedScoreCategory, fixedScores, scoreCategories } from "../../server-side/score-categories";
+import { fixedScoreCategories, FixedScoreCategory, fixedScores } from "../../server-side/score-categories";
 import { checkConnectivity } from "./check-connectivity";
 import { getWords } from "./get-words";
 
@@ -82,17 +82,4 @@ export function scoreOptions(
     }
 
     return Object.keys(options).length === 0 ? null : options;
-}
-
-export function zeroScores(scoreCard: ScoreCardType): ScoreCardType {
-    const options: ScoreCardType = {};
-
-    // KLUDGE: Behaviour depends on whether bonus is initalised to 0.
-    for (const category of scoreCategories) {
-        if (scoreCard[category] === undefined) {
-            options[category] = 0;
-        }
-    }
-
-    return options;
 }
