@@ -1,5 +1,5 @@
 import { Letter } from "../../config";
-import { ScoreCard as ScoreCardType  } from "../../server-side/score-card";
+import { ScoreCard  } from "../../server-side/score-card";
 import { fixedScoreCategories, FixedScoreCategory, fixedScores } from "../../server-side/score-categories";
 import { checkConnectivity } from "./check-connectivity";
 import { getWords } from "./get-words";
@@ -56,11 +56,11 @@ function fixedScoreOptions(grid: (Letter | null)[][]): FixedScoreOptions {
  * return null, if there are no such scores.
  */
 export function scoreOptions(
-    scoreCard: ScoreCardType,
-    grid: (Letter | null)[][]): ScoreCardType | null
+    scoreCard: ScoreCard,
+    grid: (Letter | null)[][]): ScoreCard | null
 {
     const fixedScores = fixedScoreOptions(grid);
-    const options: ScoreCardType = {};
+    const options: ScoreCard = {};
 
     let chanceScore = null;
     for (const category of fixedScoreCategories) {

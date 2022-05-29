@@ -46,7 +46,7 @@ export function startNextStage(G: ServerData, _ctx: Ctx) : void {
     
     if(G.stage === GameStage.scoring) {
         for(const pid in G.playerData) {
-            G.playerData[pid].scoreChoosen = null;
+            G.playerData[pid].chosenCategory = null;
         }
     } 
 }

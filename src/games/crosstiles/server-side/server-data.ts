@@ -19,7 +19,7 @@ interface PlayerData {
     ready: boolean;
     grid: Grid | null;
     scoreCard: ScoreCard;
-    scoreChoosen: ScoreCategory | null;
+    chosenCategory: ScoreCategory | null;
 }
 
 export interface ServerData {
@@ -43,7 +43,7 @@ export function startingServerData(ctx: Ctx): ServerData {
             ready: false,
             grid: null,
             scoreCard: startingScoreCard(),
-            scoreChoosen: null,
+            chosenCategory: null,
         };
     }
 

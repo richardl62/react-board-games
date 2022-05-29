@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { ScoreCategory, displayName } from "../server-side/score-categories";
 import { scoreCardBackgroundColor, scoreCardBoarderColor } from "./style";
 
-const ScoreElementDiv = styled.div`
+const ScoreElementDiv = styled.div<{recentlyChosen?: boolean}>`
     background-color: ${scoreCardBackgroundColor};
     padding: 1px;  
+    text-decoration: ${props => props.recentlyChosen ? "underline" : "none" };
 `;
 
 export const ColumnHeader = styled.div<{activePlayer?: boolean}>`

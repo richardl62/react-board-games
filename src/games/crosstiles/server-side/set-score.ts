@@ -27,11 +27,11 @@ export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
             scoreCard.bonus = bonus;
         }
     }
-    G.playerData[playerID].scoreChoosen = category;
+    G.playerData[playerID].chosenCategory = category;
 
     let scoreChoosenByAll = true;
     for(const pid in G.playerData) {
-        if(!G.playerData[pid].scoreChoosen) {
+        if(!G.playerData[pid].chosenCategory) {
             scoreChoosenByAll = false; 
         }
     }

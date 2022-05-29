@@ -44,7 +44,7 @@ export function ScoreCards(): JSX.Element {
 
     // Can be very inefficient.
     const scoreOption = (pid: string, category: ScoreCategory) : SetScoreArg | null => {
-        if(stage !== GameStage.scoring || pid !== playerID || playerData[pid].scoreChoosen) {
+        if(stage !== GameStage.scoring || pid !== playerID || playerData[pid].chosenCategory) {
             return null;
         }
 
@@ -64,9 +64,6 @@ export function ScoreCards(): JSX.Element {
             return {category, score:0, bonus: 0};
         }
 
-        if(category === "chance" || category === "bonus") { //Temporary KLUDGE
-            return null;
-        }
         const score = scoreOptions[category];
         if(score) {
             return {category, score, bonus: nBonuses * bonusScore};
@@ -91,8 +88,12 @@ export function ScoreCards(): JSX.Element {
                 const action = () => moves.setScore(optionalScore);
                 elems.push(<OptionalScore key={key} score={optionalScore.score} action={action}/>); 
             } else {
-                const score = context.playerData[pid].scoreCard[category];
-                elems.push(<KnownScore key={key}>{score}</KnownScore>);
+                const {scoreCard, chosenCategory} = context.playerData[pid];
+                elems.push(<KnownScore key={key} 
+                    recentlyChosen={chosenCategory === category}
+                >
+                    {scoreCard[category]}
+                </KnownScore>);
             } 
         }
     }

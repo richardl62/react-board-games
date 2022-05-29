@@ -1,14 +1,12 @@
 import { bonusLetters, Letter } from "../../config";
 import { ScoreCard } from "../../server-side/score-card";
-import { FixedScoreCategory } from "../../server-side/score-categories";
 import { checkConnectivity } from "./check-connectivity";
 import { scoreOptions as getScoreOptions } from "./score-options";
 
-export type ValidScores = { [category in FixedScoreCategory]? : number }
 interface CheckGridResult {
     connectivity: ReturnType<typeof checkConnectivity>,
     illegalWords: string[] | null;
-    scoreOptions: ValidScores | null;
+    scoreOptions: ScoreCard | null;
     nBonuses: number;
 }
 
