@@ -1,6 +1,7 @@
 import { bonusLetters, Letter } from "../../config";
 import { ScoreCard } from "../../server-side/score-card";
 import { checkConnectivity } from "./check-connectivity";
+import { getWords } from "./get-words";
 import { scoreOptions as getScoreOptions } from "./score-options";
 
 interface CheckGridResult {
@@ -10,20 +11,19 @@ interface CheckGridResult {
     nBonuses: number;
 }
 
-/** Dummy implementation */
-export function getIllegalWords(grid: (Letter | null)[][]) : string[] | null {
-    if(grid[0][0]) {
-        return ["just", "testing"];
-    }
-
-    return null;
-}
-
-export function checkGrid(scoreCard: ScoreCard, grid: (Letter | null)[][]): CheckGridResult {
+export function checkGrid(
+    scoreCard: ScoreCard, 
+    grid: (Letter | null)[][],
+    isLegalWord: (word: string) => boolean,
+): CheckGridResult {
     
     const connectivity = checkConnectivity(grid);
 
-    const illegalWords = getIllegalWords(grid);
+    const words = getWords(grid);
+    let illegalWords : string[] | null = words.filter(word => !isLegalWord(word));
+    if(illegalWords.length === 0) {
+        illegalWords = null;
+    }
 
     let scoreOptions = null;
     let nBonuses = 0;

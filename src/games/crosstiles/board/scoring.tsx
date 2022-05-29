@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { getIllegalWords } from "../client-side/check-grid/check-grid";
+import { checkGrid } from "../client-side/check-grid/check-grid";
 import { GameStage } from "../server-side/server-data";
 import { TileGrid } from "./tile-grid";
 
@@ -46,14 +46,15 @@ interface CompletedGridProps {
 
 function CompletedGrid({pid}: CompletedGridProps) {
     const context = useCrossTilesContext();
-    const { playerData } = context;
+    const { playerData, isLegalWord } = context;
     const { getPlayerName } = context.wrappedGameProps;
 
     const name = getPlayerName(pid);
     const { grid } = playerData[pid];
     sAssert(grid, "Unexpected null grid");
 
-    const illegalWords = getIllegalWords(grid);
+    const { illegalWords } = checkGrid(
+        playerData[pid].scoreCard, grid, isLegalWord);
 
     return <div>
         <Header>{name}</Header>

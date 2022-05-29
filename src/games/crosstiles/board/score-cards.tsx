@@ -55,7 +55,7 @@ export function ScoreCards(): JSX.Element {
 
         const grid = playerData[pid].grid;
         sAssert(grid);
-        const {scoreOptions, nBonuses} = checkGrid(scoreCard, grid);
+        const {scoreOptions, nBonuses} = checkGrid(scoreCard, grid, context.isLegalWord);
 
         // If there are no scoring options, all categories that have not don't already have a
         // a score can given a 0 option. KLUDGE: Correct behaviour relies on 'bomus' being initialisedf
