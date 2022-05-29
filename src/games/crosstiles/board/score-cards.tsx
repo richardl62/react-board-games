@@ -2,13 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { scoreOptions } from "../client-side/check-grid/score-options";
+import { checkGrid } from "../client-side/check-grid/check-grid";
+import { bonusScore } from "../config";
+import { ClientMoves } from "../server-side/moves";
 import { scoreCategories, ScoreCategory } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
 import { CategoryLabel, ColumnHeader, KnownScore, OptionalScore, TotalLabel } from "./score-card-elements";
 import { scoreCardBoarderColor, scoreCardBoarderSize } from "./style";
 
-
+type SetScoreArg = Parameters<ClientMoves["setScore"]>[0];
 const ScoreCardsDiv = styled.div<{nPlayers: number}>`
     display: grid;
     grid-template-columns: repeat(${props => props.nPlayers+1},auto);
@@ -37,12 +39,12 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
 export function ScoreCards(): JSX.Element {
     const context = useCrossTilesContext();
     const { stage, playerData,  wrappedGameProps } = context;
-    const { getPlayerName } = wrappedGameProps;
+    const { playerID, getPlayerName, moves } = wrappedGameProps;
 
 
     // Can be very inefficient.
-    const scoreOption = (pid: string, category: ScoreCategory) : number | null => {
-        if(stage !== GameStage.scoring) {
+    const scoreOption = (pid: string, category: ScoreCategory) : SetScoreArg | null => {
+        if(stage !== GameStage.scoring || pid !== playerID || playerData[pid].scoreChoosen) {
             return null;
         }
 
@@ -53,16 +55,24 @@ export function ScoreCards(): JSX.Element {
 
         const grid = playerData[pid].grid;
         sAssert(grid);
-        const options = scoreOptions(scoreCard, grid);
+        const {scoreOptions, nBonuses} = checkGrid(scoreCard, grid);
 
         // If there are no scoring options, all categories that have not don't already have a
         // a score can given a 0 option. KLUDGE: Correct behaviour relies on 'bomus' being initialisedf
         // to 0.
-        if (!options) {
-            return 0;
+        if (!scoreOptions) {
+            return {category, score:0, bonus: 0};
         }
 
-        return options[category] || null;
+        if(category === "chance" || category === "bonus") { //Temporary KLUDGE
+            return null;
+        }
+        const score = scoreOptions[category];
+        if(score) {
+            return {category, score, bonus: nBonuses * bonusScore};
+        }
+
+        return null;
     };
     
     const elems : JSX.Element[] = [];
@@ -78,9 +88,8 @@ export function ScoreCards(): JSX.Element {
             const key = category+pid;
             const optionalScore = scoreOption(pid, category);
             if(optionalScore !== null) {
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                const action = () => {};
-                elems.push(<OptionalScore key={key} score={optionalScore} action={action}/>); 
+                const action = () => moves.setScore(optionalScore);
+                elems.push(<OptionalScore key={key} score={optionalScore.score} action={action}/>); 
             } else {
                 const score = context.playerData[pid].scoreCard[category];
                 elems.push(<KnownScore key={key}>{score}</KnownScore>);

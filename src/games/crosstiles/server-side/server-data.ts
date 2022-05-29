@@ -3,6 +3,7 @@ import { ScoreCard } from "./score-card";
 import { Letter } from "../config";
 import { selectLetters } from "./select-letters";
 import { startingScoreCard } from "./score-card";
+import { ScoreCategory } from "./score-categories";
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -18,6 +19,7 @@ interface PlayerData {
     ready: boolean;
     grid: Grid | null;
     scoreCard: ScoreCard;
+    scoreChoosen: ScoreCategory | null;
 }
 
 export interface ServerData {
@@ -25,7 +27,6 @@ export interface ServerData {
     round: number;
 
     playerData: {[playerID: string]: PlayerData };
-    playerToScore: string | null;
 
     selectedLetters: Letter[];
 
@@ -42,6 +43,7 @@ export function startingServerData(ctx: Ctx): ServerData {
             ready: false,
             grid: null,
             scoreCard: startingScoreCard(),
+            scoreChoosen: null,
         };
     }
 
@@ -50,7 +52,6 @@ export function startingServerData(ctx: Ctx): ServerData {
         round: 0,
         selectedLetters: selectLetters(),
         playerData: playerData,
-        playerToScore: null,
         serverError: null,
         timestamp: 0,
     };

@@ -4,28 +4,16 @@ import { ScoreCategory } from "./score-categories";
 import { ServerData, GameStage } from "./server-data";
 import { startNextStage } from "./start-next-stage";
 
-function nextPlayer(ctx: Ctx, currentPlayer: string) {
-    const index = ctx.playOrder.indexOf(currentPlayer);
-    sAssert(index >= 0);
-
-    if(index === ctx.playOrder.length -1) {
-        return null;
-    }
-
-    return ctx.playOrder[index+1];
-}
-
 interface setScoreArg {
     category: ScoreCategory;
     score: number;
     bonus: number;
 }
+
 export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
     if (G.stage !== GameStage.scoring) {
         throw new Error("Unexpected call to recordGrid");
     }
-    sAssert(G.playerToScore);
-
     const { playerID } = ctx;
     sAssert(playerID);
 
@@ -39,10 +27,16 @@ export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
             scoreCard.bonus = bonus;
         }
     }
-    
-    G.playerToScore = nextPlayer(ctx, G.playerToScore);
+    G.playerData[playerID].scoreChoosen = category;
 
-    if(!G.playerToScore) {
+    let scoreChoosenByAll = true;
+    for(const pid in G.playerData) {
+        if(!G.playerData[pid].scoreChoosen) {
+            scoreChoosenByAll = false; 
+        }
+    }
+
+    if(scoreChoosenByAll) {
         startNextStage(G, ctx);
     }
 }

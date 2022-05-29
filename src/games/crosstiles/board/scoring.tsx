@@ -6,6 +6,13 @@ import { getIllegalWords } from "../client-side/check-grid/check-grid";
 import { GameStage } from "../server-side/server-data";
 import { TileGrid } from "./tile-grid";
 
+const ScoringDiv = styled.div`
+    display: flex;  
+    > * {
+        margin-right: 1em;
+    }
+`;
+
 const Header = styled.div`
     font-weight: bold;    
 `;
@@ -28,33 +35,42 @@ function IllegalWords({words} : {words: string[] | null} ) {
     }
 
     return <IllegalWordsSpan>
-        <span>Grid contains illegal words:</span>
+        <span>Illegal words:</span>
         {words.map((word, index) => <span key={index}>{word}</span>)}
     </IllegalWordsSpan>;
 }
 
-export function Scoring() : JSX.Element | null {
+interface CompletedGridProps {
+    pid: string;
+}
+
+function CompletedGrid({pid}: CompletedGridProps) {
     const context = useCrossTilesContext();
-    const { stage, playerToScore, playerData } = context;
+    const { playerData } = context;
     const { getPlayerName } = context.wrappedGameProps;
-  
-    if(stage !== GameStage.scoring) {
-        return null;
-    }
 
-    sAssert(playerToScore);
-    
-    const name = getPlayerName(playerToScore);
-    const { grid } = playerData[playerToScore];
+    const name = getPlayerName(pid);
+    const { grid } = playerData[pid];
     sAssert(grid, "Unexpected null grid");
-
 
     const illegalWords = getIllegalWords(grid);
 
     return <div>
-        <Header>{`${name} to score`}</Header>
+        <Header>{name}</Header>
         <TileGrid letters={grid} />
         <IllegalWords words={illegalWords} />
     </div>;
+}
+
+export function Scoring() : JSX.Element | null {
+    const context = useCrossTilesContext();
+    const { stage, playerData } = context;
+    if(stage !== GameStage.scoring) {
+        return null;
+    }
+
+    return <ScoringDiv>
+        {Object.keys(playerData).map(pid => <CompletedGrid key={pid} pid={pid} />)}
+    </ScoringDiv>;
 }
 

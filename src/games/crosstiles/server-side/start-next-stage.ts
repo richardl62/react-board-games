@@ -18,7 +18,6 @@ function nextStage(G: ServerData) {
 
     if(stage === GameStage.pollingForReady) {
         return GameStage.makingGrids;
-
     } 
     
     if(stage === GameStage.makingGrids) {
@@ -26,16 +25,17 @@ function nextStage(G: ServerData) {
     } 
     
     if(stage === GameStage.scoring) {
-        return GameStage.pollingForReady;
+        return GameStage.makingGrids;
     } 
 
     throw new Error("Problem stating next stage");
 }
 
-export function startNextStage(G: ServerData, ctx: Ctx) : void {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function startNextStage(G: ServerData, _ctx: Ctx) : void {
     G.stage = nextStage(G);
 
-    if(G.stage === GameStage.pollingForReady) {
+    if(G.stage === GameStage.makingGrids) {
         G.round = G.round + 1;
         G.selectedLetters = selectLetters();
 
@@ -45,6 +45,8 @@ export function startNextStage(G: ServerData, ctx: Ctx) : void {
     } 
     
     if(G.stage === GameStage.scoring) {
-        G.playerToScore = ctx.playOrder[0];
+        for(const pid in G.playerData) {
+            G.playerData[pid].scoreChoosen = null;
+        }
     } 
 }
