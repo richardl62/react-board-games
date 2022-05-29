@@ -36,11 +36,14 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
     return total;
 }
 
-export function ScoreCards(): JSX.Element {
+export function ScoreCards(): JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerData,  wrappedGameProps } = context;
     const { playerID, getPlayerName, moves } = wrappedGameProps;
 
+    if (stage === GameStage.settingOptions) {
+        return null;
+    }
 
     // Can be very inefficient.
     const scoreOption = (pid: string, category: ScoreCategory) : SetScoreArg | null => {

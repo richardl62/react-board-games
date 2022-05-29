@@ -16,6 +16,10 @@ function nextStage(G: ServerData) {
         return GameStage.gameOver;
     }
 
+    if(stage === GameStage.settingOptions) {
+        return GameStage.pollingForReady;
+    }
+
     if(stage === GameStage.pollingForReady) {
         return GameStage.makingGrids;
     } 

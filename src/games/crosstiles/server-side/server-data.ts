@@ -7,6 +7,7 @@ import { ScoreCategory } from "./score-categories";
 
 /* Use string values to add with debugging */
 export enum GameStage {
+    settingOptions = "set options",
     pollingForReady = "polling for ready",
     makingGrids = "making grids",
     scoring = "scoring",
@@ -48,7 +49,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     }
 
     const G = {
-        stage: GameStage.pollingForReady,
+        stage: GameStage.settingOptions,
         round: 0,
         selectedLetters: selectLetters(),
         playerData: playerData,

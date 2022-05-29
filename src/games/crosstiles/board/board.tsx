@@ -8,6 +8,7 @@ import { MakeGrid } from "./make-grid";
 import { PollForReady } from "./poll-for-ready";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
+import { SetOptions } from "./set-options";
 
 const BoardDiv = styled.div`
    display: inline-block;
@@ -28,6 +29,7 @@ export function Board(): JSX.Element {
 
         <div>
             {/* Start of functions that return null if the game is not at the appropriate stage */}
+            <SetOptions />
             <PollForReady />
             <MakeGrid />
             <Scoring />
