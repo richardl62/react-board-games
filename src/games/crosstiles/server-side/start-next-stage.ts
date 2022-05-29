@@ -41,6 +41,7 @@ export function startNextStage(G: ServerData, _ctx: Ctx) : void {
 
         for (const pid in G.playerData) {
             G.playerData[pid].ready = false;
+            G.playerData[pid].grid = null;
         }
     } 
     
