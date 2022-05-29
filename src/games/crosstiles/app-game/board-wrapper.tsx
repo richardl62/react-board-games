@@ -22,10 +22,17 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         dispatch({type: "reflectServerData", data: crossTilesGameProps.G});
     }
     
+    const checkSpelling = crossTilesGameProps.G.options.checkSpelling;
+
     const asyncWordChecker = useAsync(getWordChecker, []);
-    const isLegalWord = asyncWordChecker.result;
-    if(!isLegalWord) {
-        return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
+    let isLegalWord;
+    if (checkSpelling) {
+        isLegalWord = asyncWordChecker.result;
+        if (!isLegalWord) {
+            return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
+        }
+    } else {
+        isLegalWord = () => true;
     }
 
     const context = makeCrossTilesContext(crossTilesGameProps, reducerState, dispatch, isLegalWord);

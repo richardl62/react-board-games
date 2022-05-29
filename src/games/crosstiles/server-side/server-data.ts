@@ -1,9 +1,14 @@
 import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-card";
-import { Letter } from "../config";
+import { defaultOptions, Letter } from "../config";
 import { selectLetters } from "./select-letters";
 import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "./score-categories";
+
+export type GameOptions = {
+    timeToMakeGrid: number;
+    checkSpelling: boolean;
+};
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -24,6 +29,7 @@ interface PlayerData {
 }
 
 export interface ServerData {
+    options: GameOptions;
     stage: GameStage;
     round: number;
 
@@ -49,6 +55,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     }
 
     const G = {
+        options: defaultOptions,
         stage: GameStage.settingOptions,
         round: 0,
         selectedLetters: selectLetters(),
