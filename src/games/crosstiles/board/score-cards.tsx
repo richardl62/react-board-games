@@ -7,7 +7,8 @@ import { bonusScore } from "../config";
 import { ClientMoves } from "../server-side/moves";
 import { scoreCategories, ScoreCategory } from "../server-side/score-categories";
 import { GameStage } from "../server-side/server-data";
-import { CategoryLabel, ColumnHeader, KnownScore, OptionalScore, TotalLabel } from "./score-card-elements";
+import { ColumnHeader, KnownScore, OptionalScore, TotalLabel } from "./score-card-elements";
+import { CategoryLabel } from "./category-label";
 import { scoreCardBoarderColor, scoreCardBoarderSize } from "./style";
 
 type SetScoreArg = Parameters<ClientMoves["setScore"]>[0];
