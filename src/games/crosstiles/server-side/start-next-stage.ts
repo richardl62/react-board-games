@@ -29,7 +29,7 @@ function nextStage(G: ServerData) {
     } 
     
     if(stage === GameStage.scoring) {
-        return GameStage.makingGrids;
+        return GameStage.pollingForReady;
     } 
 
     throw new Error("Problem stating next stage");
