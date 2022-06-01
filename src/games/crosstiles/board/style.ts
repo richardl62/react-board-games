@@ -17,6 +17,8 @@ export const scoreCardBoarderColor = tileBackgroundColor;
 export const scoreCardBackgroundColor = squareBackgroundColor;
 export const scoreCardHeaderTextColor = "white";
 
+export const optionalScoreBackgroundColor = "palegoldenrod"; // For now
+
 export const scoreCardBoarderSize = {
     internal: "2px",
     external: "4px",

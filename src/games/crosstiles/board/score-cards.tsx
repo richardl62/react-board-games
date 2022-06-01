@@ -90,7 +90,9 @@ export function ScoreCards(): JSX.Element | null {
             const optionalScore = scoreOption(pid, category);
             if(optionalScore !== null) {
                 const action = () => moves.setScore(optionalScore);
-                elems.push(<OptionalScore key={key} score={optionalScore.score} action={action}/>); 
+                elems.push(
+                    <OptionalScore key={key} onClick={action}>{optionalScore.score} </OptionalScore>
+                ); 
             } else {
                 const {scoreCard, chosenCategory} = context.playerData[pid];
                 elems.push(<KnownScore key={key} 
