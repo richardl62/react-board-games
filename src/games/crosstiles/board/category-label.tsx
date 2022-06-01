@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ScoreCategory, displayName, fixedScores, FixedScoreCategory, categoryDescription } from "../score-categories";
+import { categoryDescription, displayName, FixedScoreCategory, fixedScores, ScoreCategoryOrTotal } from "../score-categories";
 import { scoreCardBackgroundColor } from "./style";
 
 const CategoryLabelDiv = styled.div`
@@ -35,7 +35,7 @@ const Description = styled.div`
 `;
 
 interface CategoryLabelProps {
-    category: ScoreCategory;
+    category: ScoreCategoryOrTotal;
 }
 export function CategoryLabel({ category }: CategoryLabelProps): JSX.Element {
 

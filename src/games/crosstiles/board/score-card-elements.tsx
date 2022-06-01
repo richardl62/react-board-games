@@ -1,28 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import { scoreCardBackgroundColor, scoreCardBoarderColor } from "./style";
+import { scoreCardBackgroundColor, scoreCardBoarderColor, scoreCardHeaderTextColor } from "./style";
 
 const ScoreElementDiv = styled.div<{recentlyChosen?: boolean}>`
     background-color: ${scoreCardBackgroundColor};
     padding: 1px;  
     text-decoration: ${props => props.recentlyChosen ? "underline" : "none" };
+    text-align: end;
 `;
 
 export const ColumnHeader = styled.div<{activePlayer?: boolean}>`
     background-color: ${scoreCardBoarderColor};
-    color: white; //Kludge - not defined in styles.ts
-    padding: 1px;  // Kludge - copied from ScoreElement
+    color: ${scoreCardHeaderTextColor};
+    padding: 1px;
+    padding-right: 4px;
     font-weight: bold;
     text-align: center;
 
     text-decoration: ${props => props.activePlayer ? "underline" : "none"};
 `;
-
-export function TotalLabel() : JSX.Element  {
-    return <ScoreElementDiv>
-        TOTAL
-    </ScoreElementDiv>;
-}
 
 export const KnownScore = ScoreElementDiv;
 

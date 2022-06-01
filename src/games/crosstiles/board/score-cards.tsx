@@ -7,13 +7,13 @@ import { bonusScore } from "../config";
 import { ClientMoves } from "../server-side/moves";
 import { scoreCategories, ScoreCategory } from "../score-categories";
 import { GameStage } from "../server-side/server-data";
-import { ColumnHeader, KnownScore, OptionalScore, TotalLabel } from "./score-card-elements";
+import { ColumnHeader, KnownScore, OptionalScore } from "./score-card-elements";
 import { CategoryLabel } from "./category-label";
 import { scoreCardBoarderColor, scoreCardBoarderSize } from "./style";
 
 type SetScoreArg = Parameters<ClientMoves["setScore"]>[0];
 const ScoreCardsDiv = styled.div<{nPlayers: number}>`
-    display: grid;
+    display: inline-grid;
     grid-template-columns: repeat(${props => props.nPlayers+1},auto);
     
     background-color: ${scoreCardBoarderColor};
@@ -102,7 +102,7 @@ export function ScoreCards(): JSX.Element | null {
         }
     }
 
-    elems.push(<TotalLabel key={"totalLabel"}/>);
+    elems.push(<CategoryLabel key={"totalLabel"} category={"total"} />);
     for (const pid in playerData) {
         const score = totalPlayerScore(pid, context);
         elems.push(<KnownScore key={"total"+pid}>{score}</KnownScore>);

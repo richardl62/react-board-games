@@ -15,12 +15,8 @@ function SetOptions() {
 
     const { moves } = context.wrappedGameProps;
     
-    
-
     const onChangeTimeToMakeGrid = (e: ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value);
-
-        
         setTimeToMakeGrid(value );
     };
 
@@ -34,7 +30,7 @@ function SetOptions() {
             />
         </label>
 
-        <label>{"Check spelling (debug) "}
+        <label>{"Check spelling "}
             <input type="checkbox" checked={checkSpelling}
                 onChange={() => setCheckSpelling(!checkSpelling)} 
             />
