@@ -1,3 +1,5 @@
+import { bonusLetters, bonusScore } from "../config";
+
 export type FixedScoreCategory =   "length4" | "length5" | "length6" | "words2" | "words3";
 export type ScoreCategory =  FixedScoreCategory | "chance" | "bonus";
 
@@ -18,6 +20,17 @@ export const displayName: {[category in ScoreCategory] : string} = {
     bonus: "Bonus",
 };
 
+export const categoryDescription: {[category in ScoreCategory] : string} = {
+    length4: "A single word of exactly 4 letters",
+    length5: "A single word of exactly 5 letters",
+    length6: "A single word of exactly 6 letters",
+    words2: "A 4 letter word crossing a 3 letter word",
+    words3: "A connected grid with 3 or more words",
+    chance: "Repeat a previously scored category",
+    bonus: `A ${bonusScore} point bonus for each of the special letters
+    (${bonusLetters.join(", ")}) that appears in a valid grid`,
+    
+};
 
 export const fixedScores: {[category in FixedScoreCategory] : number} = {
     length4: 20,

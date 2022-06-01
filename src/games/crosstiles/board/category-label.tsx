@@ -1,12 +1,37 @@
 import React from "react";
 import styled from "styled-components";
-import { ScoreCategory, displayName, fixedScores, FixedScoreCategory } from "../server-side/score-categories";
+import { ScoreCategory, displayName, fixedScores, FixedScoreCategory, categoryDescription } from "../server-side/score-categories";
 import { scoreCardBackgroundColor } from "./style";
 
-const CategoryLabelDiv = styled.div<{recentlyChosen?: boolean}>`
-    background-color: ${scoreCardBackgroundColor};
-    padding: 1px;  
-    text-decoration: ${props => props.recentlyChosen ? "underline" : "none" };
+const CategoryLabelDiv = styled.div`
+    position: relative;
+
+    :hover {
+        div {
+            display: inline-block;
+        } ;
+     } 
+`;
+
+const Label = styled.div`
+    position: relative;
+    z-index: 1;
+
+     background-color: ${scoreCardBackgroundColor};
+     padding: 1px;
+`;
+
+const Description = styled.div`
+    position: absolute;
+    z-index: 2;
+
+    display: none;
+    top: 2px;
+    left: 2px;
+    width: 19em;
+
+    border: 1px solid black;
+    background: white;
 `;
 
 interface CategoryLabelProps {
@@ -14,13 +39,14 @@ interface CategoryLabelProps {
 }
 export function CategoryLabel({ category }: CategoryLabelProps): JSX.Element {
 
-    let text = displayName[category];
+    let labelText = displayName[category];
     
     const fixedScore = fixedScores[category as FixedScoreCategory];
     if(fixedScore) {
-        text += ` (${fixedScore})`;
+        labelText += ` (${fixedScore})`;
     }
     return <CategoryLabelDiv>
-        {text}
+        <Label>{labelText}</Label>
+        <Description>{categoryDescription[category]}</Description>
     </CategoryLabelDiv>;
 }
