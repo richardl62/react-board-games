@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ScoreCategory, displayName, fixedScores, FixedScoreCategory, categoryDescription } from "../server-side/score-categories";
+import { ScoreCategory, displayName, fixedScores, FixedScoreCategory, categoryDescription } from "../score-categories";
 import { scoreCardBackgroundColor } from "./style";
 
 const CategoryLabelDiv = styled.div`

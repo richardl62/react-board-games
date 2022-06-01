@@ -1,6 +1,6 @@
 import { Letter } from "../../config";
 import { ScoreCard  } from "../../server-side/score-card";
-import { fixedScoreCategories, FixedScoreCategory, fixedScores } from "../../server-side/score-categories";
+import { fixedScoreCategories, FixedScoreCategory, fixedScores } from "../../score-categories";
 import { checkConnectivity } from "./check-connectivity";
 import { getWords } from "./get-words";
 

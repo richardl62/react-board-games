@@ -1,4 +1,4 @@
-import { bonusLetters, bonusScore } from "../config";
+import { bonusLetters, bonusScore } from "./config";
 
 export type FixedScoreCategory =   "length4" | "length5" | "length6" | "words2" | "words3";
 export type ScoreCategory =  FixedScoreCategory | "chance" | "bonus";

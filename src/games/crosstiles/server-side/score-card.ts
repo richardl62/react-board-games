@@ -1,5 +1,5 @@
 import { sAssert } from "../../../utils/assert";
-import { scoreCategories, ScoreCategory } from "./score-categories";
+import { scoreCategories, ScoreCategory } from "../score-categories";
 
 export type ScoreCard = {[category in ScoreCategory]? : number};
 

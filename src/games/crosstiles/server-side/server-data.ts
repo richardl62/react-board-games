@@ -3,7 +3,7 @@ import { ScoreCard } from "./score-card";
 import { defaultOptions, Letter } from "../config";
 import { selectLetters } from "./select-letters";
 import { startingScoreCard } from "./score-card";
-import { ScoreCategory } from "./score-categories";
+import { ScoreCategory } from "../score-categories";
 
 export type GameOptions = {
     timeToMakeGrid: number;

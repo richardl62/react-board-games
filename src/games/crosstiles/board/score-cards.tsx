@@ -5,7 +5,7 @@ import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore } from "../config";
 import { ClientMoves } from "../server-side/moves";
-import { scoreCategories, ScoreCategory } from "../server-side/score-categories";
+import { scoreCategories, ScoreCategory } from "../score-categories";
 import { GameStage } from "../server-side/server-data";
 import { ColumnHeader, KnownScore, OptionalScore, TotalLabel } from "./score-card-elements";
 import { CategoryLabel } from "./category-label";

@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { ScoreCategory } from "./score-categories";
+import { ScoreCategory } from "../score-categories";
 import { ServerData, GameStage } from "./server-data";
 import { startNextStage } from "./start-next-stage";
 
