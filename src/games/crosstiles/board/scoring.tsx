@@ -4,6 +4,7 @@ import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { GameStage } from "../server-side/server-data";
+import { GridStatus } from "./grid-status";
 import { TileGrid } from "./tile-grid";
 
 const ScoringDiv = styled.div`
@@ -17,29 +18,6 @@ const Header = styled.div`
     font-weight: bold;    
 `;
 
-const IllegalWordsSpan = styled.div`
-  span:first-child {
-      color: black;
-      font-weight: bold;
-  };  
-
-  span {
-    color: red;
-      margin-right: 0.25em;
-  };
-`;
-
-function IllegalWords({words} : {words: string[] | null} ) {
-    if(!words) {
-        return null;
-    }
-
-    return <IllegalWordsSpan>
-        <span>Illegal words:</span>
-        {words.map((word, index) => <span key={index}>{word}</span>)}
-    </IllegalWordsSpan>;
-}
-
 interface CompletedGridProps {
     pid: string;
 }
@@ -50,18 +28,16 @@ function CompletedGrid({pid}: CompletedGridProps) {
     const { getPlayerName } = context.wrappedGameProps;
 
     const name = getPlayerName(pid);
-    const { grid } = playerData[pid];
+    const { scoreCard, grid } = playerData[pid];
     sAssert(grid, "Unexpected null grid");
 
-    const { illegalWords } = checkGrid(
-        playerData[pid].scoreCard, grid, isLegalWord);
-
     const scoreConfirmed = Boolean(playerData[pid].chosenCategory);
-
+    const checkGridResult = checkGrid(scoreCard, grid, isLegalWord);
+    
     return <div>
         <Header>{name}</Header>
         <TileGrid letters={grid} />
-        <IllegalWords words={illegalWords} />
+        <GridStatus checkGridResult={checkGridResult} />
         {!scoreConfirmed && <div>Player must confirm score</div>}
     </div>;
 }
