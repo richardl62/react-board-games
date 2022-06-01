@@ -29,8 +29,8 @@ function minutesAndSeconds(seconds: number) {
 
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, grid, round, options } = context;
-    const { moves } = context.wrappedGameProps;
+    const { playerData, stage, grid, round, options } = context;
+    const { moves,  playerID } = context.wrappedGameProps;
 
     const {secondsLeft, reset} = useCountdown(options.timeToMakeGrid);
     useEffect(reset, [round]);
@@ -48,34 +48,14 @@ export function MakeGrid() : JSX.Element | null {
         return null;
     }
 
-
-    // if(secondsLeft === 0) {
-    //     recordGrid();
-    // }
-
+    const gridRecorded = Boolean(playerData[playerID].grid);
     return <OuterDiv>
         <RackAndBoard />
-
-        {/* <GridStatus grid={grid} /> */}
-
         <div>
-            <button onClick={recordGrid}>Record Grid</button>
-            <TimeLeft>{minutesAndSeconds(secondsLeft)}</TimeLeft>
+            <button onClick={recordGrid}>
+                {gridRecorded ? "Change Recorded Grid" : "Record Grid" }
+            </button>
+            <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </div>
     </OuterDiv>;
 }
-
-// function GridStatus({grid} : {grid: (Letter| null)[][]}) {
-
-//     const {validScores} = checkGrid(grid);
-//     const displayNames = Object.keys(validScores).map(category =>
-//         displayName[(category as ScoreCategory)]
-//     );
-
-//     return <div>
-//         {displayNames.map(name =>
-//             <span key={name}>{name}</span>
-//         )}
-//     </div>;
-
-// }

@@ -56,10 +56,13 @@ function CompletedGrid({pid}: CompletedGridProps) {
     const { illegalWords } = checkGrid(
         playerData[pid].scoreCard, grid, isLegalWord);
 
+    const scoreConfirmed = Boolean(playerData[pid].chosenCategory);
+
     return <div>
         <Header>{name}</Header>
         <TileGrid letters={grid} />
         <IllegalWords words={illegalWords} />
+        {!scoreConfirmed && <div>Player must confirm score</div>}
     </div>;
 }
 
