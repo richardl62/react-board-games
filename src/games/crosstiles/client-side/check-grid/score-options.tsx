@@ -64,13 +64,15 @@ export function scoreOptions(
 
     let chanceScore = null;
     for (const category of fixedScoreCategories) {
+        const currentScore = scoreCard[category];
         const scoreOption = fixedScores[category];
         if (scoreOption !== undefined) {
-            if (scoreCard[category] === undefined) {
+            if (currentScore === undefined) {
                 options[category] = scoreOption;
-            }
-            if (!chanceScore || scoreOption > chanceScore) {
-                chanceScore = scoreOption;
+            } else if (currentScore > 0) {
+                if (!chanceScore || scoreOption > chanceScore) {
+                    chanceScore = scoreOption;
+                }
             }
         }
     }
