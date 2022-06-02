@@ -1,8 +1,6 @@
 import { Letter } from "../../config";
 import { transpose } from "../../../../utils/transpose";
 
-
-
 function addWordsfromRow(row: (Letter | null)[], words: string[]) {
     let str = "";
     for(let r = 0; r < row.length+1; r++) { // Reads one off end of row

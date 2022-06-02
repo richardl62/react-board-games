@@ -1,51 +1,40 @@
 import React from "react";
-import { sAssert } from "../../../utils/assert";
-import { checkGrid } from "../client-side/check-grid/check-grid";
-import { displayName, scoreCategories, ScoreCategory } from "../score-categories";
+import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { findIllegalWords } from "../client-side/check-grid/find-illegal-words";
+import { findScoreOption } from "../client-side/check-grid/score-options";
+import { Letter } from "../config";
+import { displayName } from "../score-categories";
 import { ScoreCard } from "../server-side/score-card";
 
-function getScoreCategory(scoreCard: ScoreCard): ScoreCategory {
-    let category: ScoreCategory | null = null;
-    for (const cat of scoreCategories) {
-        if (scoreCard[cat]) {
-            sAssert(!category, "More than one category set in score card");
-            category = cat;
-        }
-    }
-    sAssert(category);
-    return category;
-}
+
 
 interface GridStatusProps {
-    checkGridResult: ReturnType<typeof checkGrid>;
+    scoreCard: ScoreCard, 
+    grid: (Letter | null)[][],
 }
-export function GridStatus(props: GridStatusProps) : JSX.Element {
+export function GridStatus(props: GridStatusProps) : JSX.Element | null {
 
-    const { scoreOptions, connectivity, illegalWords, nBonuses } = props.checkGridResult;
+    const { scoreCard, grid } = props;
+    const { gridCategory, scoringCategory} = findScoreOption(grid, scoreCard);
+    const { isLegalWord } = useCrossTilesContext();
 
-    if (connectivity === "empty") {
-        <div>Grid is not connected</div>;
+    if (!gridCategory) {
+        return null;
     }
 
-    if (connectivity === "disconnected") {
-        return <div>Grid is not connected</div>;
+    let mainText = displayName[gridCategory];
+    if (scoringCategory === "chance") {
+        mainText += " (available as chance)";
+    } else if (scoringCategory === null) {
+        mainText += " (not available)";
     }
 
-    if (illegalWords) {
-        return <div>
-            <span>Illegal words:</span>
-            {illegalWords.map((word, index) => <span key={index}>{word}</span>)}
-        </div>;
-    }
-
-    if (!scoreOptions) {
-        return <div>Grid does not score</div>;
-    }
-
-    const category = getScoreCategory(scoreOptions);
+    const illegalWords = findIllegalWords(grid, isLegalWord);
 
     return <div>
-        <span>{displayName[category]}</span>
-        {nBonuses && <span>{`${nBonuses} bonus(es)`}</span>}
+        <div>{mainText}</div>
+        {illegalWords && <div>
+            {"Illegal word(s): " + illegalWords.join(" ")}
+        </div>}
     </div>;
 }

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkGrid } from "../client-side/check-grid/check-grid";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { TileGrid } from "./tile-grid";
@@ -24,7 +23,7 @@ interface CompletedGridProps {
 
 function CompletedGrid({pid}: CompletedGridProps) {
     const context = useCrossTilesContext();
-    const { playerData, isLegalWord } = context;
+    const { playerData } = context;
     const { getPlayerName } = context.wrappedGameProps;
 
     const name = getPlayerName(pid);
@@ -32,12 +31,11 @@ function CompletedGrid({pid}: CompletedGridProps) {
     sAssert(grid, "Unexpected null grid");
 
     const scoreConfirmed = Boolean(playerData[pid].chosenCategory);
-    const checkGridResult = checkGrid(scoreCard, grid, isLegalWord);
     
     return <div>
         <Header>{name}</Header>
         <TileGrid letters={grid} />
-        <GridStatus checkGridResult={checkGridResult} />
+        <GridStatus grid={grid} scoreCard={scoreCard} />
         {!scoreConfirmed && <div>Player must confirm score</div>}
     </div>;
 }

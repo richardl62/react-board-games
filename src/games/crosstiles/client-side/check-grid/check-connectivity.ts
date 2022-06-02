@@ -6,7 +6,7 @@ interface RowCol {
 }
 
 
-/** Return an array indicating which elements in 'grid' are connect 'start' */
+/** Return an array indicating which elements in 'grid' are connect to 'start' */
 function connectedElements<T>(grid: T[][], start: RowCol) : boolean [][] {
     const connected: boolean[][] = [];
     for(let row = 0; row < grid.length; ++row) {

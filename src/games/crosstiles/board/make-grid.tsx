@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useCountdown } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkGrid } from "../client-side/check-grid/check-grid";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { RackAndBoard } from "./rack-and-board";
@@ -31,7 +30,7 @@ function minutesAndSeconds(seconds: number) {
 
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { playerData, stage, grid, round, options, isLegalWord } = context;
+    const { playerData, stage, grid, round, options } = context;
     const { moves,  playerID } = context.wrappedGameProps;
 
     const {secondsLeft, reset} = useCountdown(options.timeToMakeGrid);
@@ -51,10 +50,9 @@ export function MakeGrid() : JSX.Element | null {
     }
 
     const gridRecorded = Boolean(playerData[playerID].grid);
-    const checkGridResult = checkGrid(playerData[playerID].scoreCard, grid,isLegalWord);
     return <OuterDiv>
         <RackAndBoard />
-        <GridStatus checkGridResult={checkGridResult} />
+        <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
         <div>
             <button onClick={recordGrid}>
                 {gridRecorded ? "Change Recorded Grid" : "Record Grid" }
