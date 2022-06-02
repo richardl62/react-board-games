@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { ScoreOptions } from "../client-side/check-grid/score-options";
-import { scoreCategories } from "../score-categories";
+import { scoreCategories, ScoreCategory } from "../score-categories";
 import { GameStage } from "../server-side/server-data";
 import { CategoryLabel } from "./category-label";
 import { ColumnHeader, KnownScore, OptionalScore } from "./score-card-elements";
@@ -36,16 +36,26 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
 export function ScoreCards(): JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerData,  wrappedGameProps, isLegalWord } = context;
-    const { getPlayerName, moves } = wrappedGameProps;
+    const { getPlayerName, playerID, moves } = wrappedGameProps;
 
     if (stage === GameStage.settingOptions) {
         return null;
     }
 
-    const scoreOptions = new ScoreOptions();
-    if (stage === GameStage.scoring) {
-        scoreOptions.set(playerData, isLegalWord);
-    }
+    const scoreOptions = (stage === GameStage.scoring) ?
+        new ScoreOptions(playerData, isLegalWord) : null;
+    
+
+    const scoreAndABonus = (pid: string, category: ScoreCategory) => {
+        let score = null;
+        let bonus = 0;
+        if(scoreOptions && pid === playerID && !playerData[pid].chosenCategory) {
+            score = scoreOptions.scoreOption(pid, category);
+            bonus = scoreOptions.bonus(pid);
+        }
+
+        return {score, bonus};
+    };
 
     const elems : JSX.Element[] = [];
 
@@ -58,8 +68,7 @@ export function ScoreCards(): JSX.Element | null {
         elems.push(<CategoryLabel key={category} category={category}/>);
         for (const pid in playerData) {
             const key = category+pid;
-            const score = scoreOptions.scoreOption(pid, category);
-            const bonus = scoreOptions.bonus(pid);
+            const {score, bonus}  = scoreAndABonus(pid, category);
             if(score !== null) {
                 const action = () => moves.setScore({score, category, bonus});
                 elems.push(

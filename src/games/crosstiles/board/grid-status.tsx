@@ -18,23 +18,23 @@ export function GridStatus(props: GridStatusProps) : JSX.Element | null {
     const { gridCategory, scoreAs} = findGridCategory(grid, scoreCard, null);
     const { isLegalWord } = useCrossTilesContext();
 
-    if (!gridCategory) {
-        return null;
+    let text = "No score";
+
+    if (gridCategory) {
+        text = displayName[gridCategory];
+        if (scoreAs === "chance") {
+            text += " (available as chance)";
+        } else if (scoreAs === null) {
+            text += " (not available)";
+        }
+
+        if (scoreAs) {
+            const illegalWords = findIllegalWords(grid, isLegalWord);
+            if (illegalWords) {
+                text = "Illegal word(s): " + illegalWords.join(" ");
+            }
+        }
     }
 
-    let mainText = displayName[gridCategory];
-    if (scoreAs === "chance") {
-        mainText += " (available as chance)";
-    } else if (scoreAs === null) {
-        mainText += " (not available)";
-    }
-
-    const illegalWords = findIllegalWords(grid, isLegalWord);
-
-    return <div>
-        <div>{mainText}</div>
-        {illegalWords && <div>
-            {"Illegal word(s): " + illegalWords.join(" ")}
-        </div>}
-    </div>;
+    return <div>{text}</div>;
 }

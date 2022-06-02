@@ -21,10 +21,10 @@ export interface ScoringData {
 export class ScoreOptions {
     private playerScoreOptions: {[pid: string]: ScoringData} = {};
 
-    set(
+    constructor(
         playerData: ServerData["playerData"],
         isLegalWord: (word: string) => boolean,
-    ): void {
+    ) {
         for(const pid in playerData) {
             const { scoreCard, grid } = playerData[pid];
             sAssert(grid);
@@ -44,13 +44,8 @@ export class ScoreOptions {
 
     private scoringData(pid: string) {
         const data = this.playerScoreOptions[pid];
-
-        if(data) {
-            return data;
-        }
-
-        sAssert(Object.keys(this.playerScoreOptions).length === 0,
-            "Unrecognised pid after class is set");
+        sAssert(data, "Unrecognised player id");
+        return data;
     }
 
     scoreOption(pid: string, category: ScoreCategory) : number | null {
