@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { scoreCategories, ScoreCategory } from "../score-categories";
-import { ClientMoves } from "../server-side/moves";
+import { ScoreOptions } from "../client-side/check-grid/score-options";
+import { scoreCategories } from "../score-categories";
 import { GameStage } from "../server-side/server-data";
 import { CategoryLabel } from "./category-label";
 import { ColumnHeader, KnownScore, OptionalScore } from "./score-card-elements";
 import { scoreCardBoarderColor, scoreCardBoarderSize } from "./style";
 
-type SetScoreArg = Parameters<ClientMoves["setScore"]>[0];
 const ScoreCardsDiv = styled.div<{nPlayers: number}>`
     display: inline-grid;
     grid-template-columns: repeat(${props => props.nPlayers+1},auto);
@@ -36,44 +35,18 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
 
 export function ScoreCards(): JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData,  wrappedGameProps } = context;
+    const { stage, playerData,  wrappedGameProps, isLegalWord } = context;
     const { getPlayerName, moves } = wrappedGameProps;
 
     if (stage === GameStage.settingOptions) {
         return null;
     }
 
-    // Can be very inefficient.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const scoreOption = (pid: string, category: ScoreCategory) : SetScoreArg | null => {
-        // if(stage !== GameStage.scoring || pid !== playerID || playerData[pid].chosenCategory) {
-        //     return null;
-        // }
+    const scoreOptions = new ScoreOptions();
+    if (stage === GameStage.scoring) {
+        scoreOptions.set(playerData, isLegalWord);
+    }
 
-        // const { scoreCard } = context.playerData[pid];
-        // if (scoreCard[category] !== undefined) {
-        //     return null;
-        // }
-
-        // const grid = playerData[pid].grid;
-        // sAssert(grid);
-        // const {scoreOptions, nBonuses} = scoreOptions(scoreCard, grid, context.isLegalWord);
-
-        // // If there are no scoring options, all categories that have not don't already have a
-        // // a score can given a 0 option. KLUDGE: Correct behaviour relies on 'bomus' being initialisedf
-        // // to 0.
-        // if (!scoreOptions) {
-        //     return {category, score:0, bonus: 0};
-        // }
-
-        // const score = scoreOptions[category];
-        // if(score) {
-        //     return {category, score, bonus: nBonuses * bonusScore};
-        // }
-
-        return null;
-    };
-    
     const elems : JSX.Element[] = [];
 
     elems.push(<ColumnHeader key="blank-header"/>);
@@ -85,11 +58,12 @@ export function ScoreCards(): JSX.Element | null {
         elems.push(<CategoryLabel key={category} category={category}/>);
         for (const pid in playerData) {
             const key = category+pid;
-            const optionalScore = scoreOption(pid, category);
-            if(optionalScore !== null) {
-                const action = () => moves.setScore(optionalScore);
+            const score = scoreOptions.scoreOption(pid, category);
+            const bonus = scoreOptions.bonus(pid);
+            if(score !== null) {
+                const action = () => moves.setScore({score, category, bonus});
                 elems.push(
-                    <OptionalScore key={key} onClick={action}>{optionalScore.score} </OptionalScore>
+                    <OptionalScore key={key} onClick={action}>{score} </OptionalScore>
                 ); 
             } else {
                 const {scoreCard, chosenCategory} = context.playerData[pid];
