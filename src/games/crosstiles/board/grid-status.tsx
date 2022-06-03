@@ -1,50 +1,72 @@
 import React from "react";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { findIllegalWords } from "../client-side/check-grid/find-illegal-words";
 import { findGridCategory } from "../client-side/check-grid/find-grid-category";
-import { Letter } from "../config";
-import { displayName } from "../score-categories";
+import { bonusScore, Letter } from "../config";
+import { displayName, ScoreCategory } from "../score-categories";
 import { ScoreCard } from "../server-side/score-card";
+import { countBonusLetters } from "../client-side/check-grid/count-bonus-letters";
+import { sAssert } from "../../../utils/assert";
 
 
 
 interface GridStatusProps {
     scoreCard: ScoreCard, 
     grid: (Letter | null)[][],
-    requestConfirmation?: boolean;
 }
 export function GridStatus(props: GridStatusProps) : JSX.Element | null {
 
-    const { scoreCard, grid, requestConfirmation } = props;
-    const { gridCategory, scoreAs} = findGridCategory(grid, scoreCard, null);
+    const { scoreCard, grid } = props;
     const { isLegalWord } = useCrossTilesContext();
 
-    let text = "No score";
-    let scoreAvailable = Boolean(gridCategory);
-    if (gridCategory) {
+    const { gridCategory, scoreAs, illegalWords, nBonuses} = 
+        findGridCategory(grid, scoreCard, isLegalWord);
+
+    let text;
+
+    if(scoreAs) {
+        sAssert(gridCategory);
         text = displayName[gridCategory];
-        if (scoreAs === "chance") {
-            text += " (available as chance)";
-        } else if (scoreAs === null) {
-            text += " (not available)";
-            scoreAvailable = false;
+        if(scoreAs === "chance") {
+            text += " (as chance)";
         }
 
-        if (scoreAs) {
-            const illegalWords = findIllegalWords(grid, isLegalWord);
-            if (illegalWords) {
-                text = "Illegal word(s): " + illegalWords.join(" ");
-                scoreAvailable = false;
-            }
+        if (nBonuses === 1) {
+            text += " + bonus";
         }
+
+        if (nBonuses > 1) {
+            text += ` + ${nBonuses} bonuses`;
+        }
+    } else {
+        text = "No score";
+        if (illegalWords) {
+            text += ` (Illegal words: ${illegalWords.join(" ")})`;
+        } else if ( gridCategory) {
+            text += ` (${displayName[gridCategory]} unavailable)`;
+        } 
     }
 
-    const confirmation = scoreAvailable ?
-        "Player must confirm score" :
-        "Player must chose category to zero";
+    return <div>{text}</div>;
+}
 
-    return <div>
-        <div>{text}</div>
-        {requestConfirmation && <div>{confirmation}</div>}
-    </div>;
+interface ConfirmedScoreProps {
+    scoreCard: ScoreCard;
+    grid: (Letter | null)[][];
+    chosenCategory: ScoreCategory;
+}
+
+export function ConfirmedScore(props: ConfirmedScoreProps) : JSX.Element {
+    const {scoreCard, grid, chosenCategory} = props;
+    const categoryName = displayName[chosenCategory];
+    const score = scoreCard[chosenCategory];
+
+    let text = `${score} points for ${categoryName}`;
+    if(score === 0) {
+        const bonus = countBonusLetters(grid) * bonusScore;
+        if(bonus > 0) {
+            text += `and ${bonus} bonus`;
+        }
+    }
+        
+    return <div>{text}</div>;
 }

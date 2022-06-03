@@ -16,6 +16,10 @@ const BoardDiv = styled.div`
    padding: 4px;  
 `;
 
+const StagesDiv = styled.div`
+    margin-bottom: 6px;
+`;
+
 export function Board(): JSX.Element {
     const context = useCrossTilesContext();
     const {wrappedGameProps, serverError } = context;
@@ -27,7 +31,7 @@ export function Board(): JSX.Element {
     return <BoardDiv>
         <ErrorMessage category="server error" message={serverError} />
 
-        <div>
+        <StagesDiv>
             {/* Start of functions that return null if the game is not at the appropriate stage */}
             <SetOptionsOrWait />
             <PollForReady />
@@ -35,7 +39,7 @@ export function Board(): JSX.Element {
             <Scoring />
             <GameOver />
             {/* Start of functions that return null if the game is not at the appropriate stage */}
-        </div>
+        </StagesDiv>
         
         <ScoreCards />
     </BoardDiv>;

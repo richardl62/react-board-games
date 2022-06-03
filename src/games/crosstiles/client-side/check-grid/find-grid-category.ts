@@ -2,6 +2,7 @@ import { Letter } from "../../config";
 import { FixedScoreCategory } from "../../score-categories";
 import { ScoreCard } from "../../server-side/score-card";
 import { checkConnectivity } from "./check-connectivity";
+import { countBonusLetters } from "./count-bonus-letters";
 import { findIllegalWords } from "./find-illegal-words";
 import { getWords } from "./get-words";
 
@@ -55,9 +56,16 @@ interface ScoreOption {
     // The categery found just from the grid.
     gridCategory: FixedScoreCategory | null;
 
+    // Checked only for grids that would otherwise score.
+    // Null if not checked or if all words are legal.
+    illegalWords: string[] | null;
+
     // Scoring options depending on score card and spelling
     // checks
     scoreAs: "self" | "chance" | false;
+
+    // 0 for grids that do not score.
+    nBonuses: number;
 }
 
 export function findGridCategory(
@@ -71,8 +79,6 @@ export function findGridCategory(
     let scoreAs : ScoreOption["scoreAs"];
     if (!gridCategory) {
         scoreAs = false;
-    } else if (isLegalWord && findIllegalWords(grid, isLegalWord)) {
-        scoreAs = false;
     } else if (scoreCard[gridCategory] === undefined) {
         scoreAs = "self";
     } else if(scoreCard["chance"] === undefined ) {
@@ -81,5 +87,16 @@ export function findGridCategory(
         scoreAs = false;
     }
 
-    return {gridCategory, scoreAs};
+    let illegalWords : string[] | null = null;
+
+    if(scoreAs && isLegalWord) {
+        illegalWords = findIllegalWords(grid, isLegalWord);
+        if(illegalWords) {
+            scoreAs = false;
+        }
+    }
+
+    const nBonuses = scoreAs ? countBonusLetters(grid) : 0;
+
+    return {gridCategory, scoreAs, illegalWords, nBonuses};
 }

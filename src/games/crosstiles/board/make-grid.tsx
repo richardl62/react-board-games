@@ -9,10 +9,7 @@ import { RackAndBoard } from "./rack-and-board";
 const OuterDiv = styled.div`
     display: inline-flex;
     flex-direction: column;
-    align-items: start;
-    > * {
-        margin-bottom: 10px;
-    }    
+    align-items: start; 
 `;
 
 const TimeLeft = styled.span`
