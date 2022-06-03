@@ -25,7 +25,7 @@ export function PollForReady() : JSX.Element | null {
         const ready = playerData[pid].ready;
 
         elems.push(<span key={pid+"name"}>{getPlayerName(pid)+":"}</span>);
-        elems.push(<span key={pid+"ready"}>{ready ? "Ready" : "Waiting" }</span>);
+        elems.push(<span key={pid+"ready"}>{ready ? "Ready" : "Not Ready" }</span>);
     }
 
     const ready = playerData[playerID].ready;

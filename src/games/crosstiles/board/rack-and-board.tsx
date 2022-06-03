@@ -9,16 +9,14 @@ import { TileGrid } from "./tile-grid";
 const OuterDiv = styled.div`
     display: inline-flex;
     flex-direction: column;
-    align-items: start;
-    > * {
-        margin-bottom: 10px;
-    }    
+    align-items: start;  
 `;
 
 const RackDiv = styled.div`
     > * {
         margin-right: 0.3em;
     }
+    margin-bottom: 10px;
 `;
 
 export function RackAndBoard() : JSX.Element | null {

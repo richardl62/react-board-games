@@ -17,6 +17,10 @@ const TimeLeft = styled.span`
     margin-left: 0.4em;
 `;
 
+const ButtonAndTimeDiv = styled.div`
+    margin-top: 6px;
+`;
+
 function minutesAndSeconds(seconds: number) {
     const minutes =  Math.floor(seconds/60);
     const remainder = seconds % 60;
@@ -50,11 +54,11 @@ export function MakeGrid() : JSX.Element | null {
     return <OuterDiv>
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
-        <div>
+        <ButtonAndTimeDiv>
             <button onClick={recordGrid}>
                 {gridRecorded ? "Change Recorded Grid" : "Record Grid" }
             </button>
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
-        </div>
+        </ButtonAndTimeDiv>
     </OuterDiv>;
 }
