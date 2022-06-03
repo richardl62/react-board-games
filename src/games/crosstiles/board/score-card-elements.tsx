@@ -13,14 +13,19 @@ export const ColumnHeader = styled.div<{activePlayer?: boolean}>`
     color: ${scoreCardHeaderTextColor};
     padding: 1px 6px;
     font-weight: bold;
-
     text-decoration: ${props => props.activePlayer ? "underline" : "none"};
 `;
 
 export const KnownScore = ScoreElementDiv;
 
-export const OptionalScore = styled.div`
-    background-color: ${optionalScoreBackgroundColor};
+function oSBackgroundColor(self: boolean) {
+    return self ? optionalScoreBackgroundColor.self : 
+        optionalScoreBackgroundColor.other;
+}
+
+export const OptionalScore = styled.div<{onClick?:()=>void}>`
+    background-color: ${props => oSBackgroundColor(Boolean(props.onClick))};
     text-align: center;
-    text-decoration: underline;
+
+    /* text-decoration: ${props => props.onClick ? "underline" : "none"}; */
 `;

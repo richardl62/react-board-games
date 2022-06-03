@@ -49,7 +49,7 @@ export function ScoreCards(): JSX.Element | null {
     const scoreAndABonus = (pid: string, category: ScoreCategory) => {
         let score = null;
         let bonus = 0;
-        if(scoreOptions && pid === playerID && !playerData[pid].chosenCategory) {
+        if(scoreOptions && !playerData[pid].chosenCategory) {
             score = scoreOptions.scoreOption(pid, category);
             bonus = scoreOptions.bonus(pid);
         }
@@ -70,7 +70,8 @@ export function ScoreCards(): JSX.Element | null {
             const key = category+pid;
             const {score, bonus}  = scoreAndABonus(pid, category);
             if(score !== null) {
-                const action = () => moves.setScore({score, category, bonus});
+                const action =  pid === playerID ?
+                    () => moves.setScore({score, category, bonus}) : undefined;
                 elems.push(
                     <OptionalScore key={key} onClick={action}>{score} </OptionalScore>
                 ); 
