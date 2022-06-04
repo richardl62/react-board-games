@@ -6,7 +6,7 @@ import { ScoreCard } from "../../server-side/score-card";
 
 import { ServerData } from "../../server-side/server-data";
 import { countBonusLetters } from "./count-bonus-letters";
-import { findGridCategory } from "./find-grid-category";
+import { checkGrid } from "./check-grid";
 
 export interface ScoringData {
     scoreCard: ScoreCard;
@@ -30,7 +30,7 @@ export class ScoreOptions {
             sAssert(grid);
 
             const {gridCategory, scoreAs} = 
-                findGridCategory(grid, scoreCard, isLegalWord);
+                checkGrid(grid, scoreCard, isLegalWord);
             
             let bonus = 0;
             if(scoreAs) {

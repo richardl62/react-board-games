@@ -68,7 +68,7 @@ interface ScoreOption {
     nBonuses: number;
 }
 
-export function findGridCategory(
+export function checkGrid(
     grid: (Letter | null)[][],
     scoreCard: ScoreCard,
     isLegalWord: ((word: string) => boolean) | null,

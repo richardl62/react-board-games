@@ -1,6 +1,6 @@
 import React from "react";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { findGridCategory } from "../client-side/check-grid/find-grid-category";
+import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore, Letter } from "../config";
 import { displayName, ScoreCategory } from "../score-categories";
 import { ScoreCard } from "../server-side/score-card";
@@ -19,7 +19,7 @@ export function GridStatus(props: GridStatusProps) : JSX.Element | null {
     const { isLegalWord } = useCrossTilesContext();
 
     const { gridCategory, scoreAs, illegalWords, nBonuses} = 
-        findGridCategory(grid, scoreCard, isLegalWord);
+        checkGrid(grid, scoreCard, isLegalWord);
 
     let text;
 
