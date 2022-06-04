@@ -66,7 +66,7 @@ export function isGameState(arg: unknown) : boolean {
 }
 
 export function startingGameState(ctx: Ctx, config: ScrabbleConfig): GameState {
-    const bag = config.makeFullBag(); 
+    const bag = config.makeFullBag(ctx); 
 
     const rack = () => {
         const tiles : Letter[] = [];

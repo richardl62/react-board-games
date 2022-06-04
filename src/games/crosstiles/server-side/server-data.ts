@@ -58,7 +58,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         options: defaultOptions,
         stage: GameStage.settingOptions,
         round: 0,
-        selectedLetters: selectLetters(),
+        selectedLetters: selectLetters(ctx),
         playerData: playerData,
         serverError: null,
         timestamp: 0,

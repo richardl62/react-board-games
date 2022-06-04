@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { shuffle } from "../../../utils/shuffle";
+import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { GameState } from "./game-state";
 
@@ -32,7 +32,9 @@ export function swapTiles(state: GameState, ctx: Ctx,
             ++nSwapped;
         }
     }
-    shuffle(newBag);
+    const { random } = ctx;
+    sAssert(random);
+    random.Shuffle(newBag);
 
     state.playerData[ctx.currentPlayer].rack = newRack;
     state.bag = newBag;

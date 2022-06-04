@@ -35,13 +35,12 @@ function nextStage(G: ServerData) {
     throw new Error("Problem stating next stage");
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function startNextStage(G: ServerData, _ctx: Ctx) : void {
+export function startNextStage(G: ServerData, ctx: Ctx) : void {
     G.stage = nextStage(G);
 
     if(G.stage === GameStage.makingGrids) {
         G.round = G.round + 1;
-        G.selectedLetters = selectLetters();
+        G.selectedLetters = selectLetters(ctx);
 
         for (const pid in G.playerData) {
             G.playerData[pid].ready = false;

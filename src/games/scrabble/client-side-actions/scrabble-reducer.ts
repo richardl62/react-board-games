@@ -2,7 +2,7 @@ import { ClickMoveDirection } from "../../../utils/board/click-move-marker";
 import { Letter } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
-import { ClickMoveStart, newReducerState, ReducerState, sanityCheck } from "./reducer-state";
+import { ClickMoveStart, newReducerState, ReducerState } from "./reducer-state";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 
 export type ActionType =
@@ -85,11 +85,6 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
     };
-
-    const sanityProblem = sanityCheck(newState);
-    if(sanityProblem) {
-        alert(sanityProblem);
-    }
 
     return newState;
 }

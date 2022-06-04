@@ -3,6 +3,7 @@ import { shuffle } from "../../../utils/shuffle";
 import { AppGame, GameCategory } from "../../../app-game-support";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
+import { Ctx } from "boardgame.io";
 
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;
@@ -18,13 +19,13 @@ export interface ScrabbleConfig {
     maxPlayers: number, 
     
     /** Make a full bag of letters suitable for use at the start
-     * of a game. It returned bad is shuffled if appropriate.
+     * of a game. The returned bag is shuffled if appropriate.
      * (In general shuffling is appropriate. But for some test purposes,
      * an unshuffled bag make be perfered.)
      * The bag in always shuffled after an exchange of tile (even when
      * this would be unhelpful for testing.)  Aug 2021
      */
-    makeFullBag : () => Letter[];
+    makeFullBag : (ctx: Ctx) => Letter[];
     boardLayout: SquareType[][];
     rackSize: number;
 
@@ -38,7 +39,10 @@ const standard : ScrabbleConfig = {
     minPlayers: 1,
     maxPlayers: 4, 
 
-    makeFullBag() : Letter[] {
+    makeFullBag(ctx: Ctx) : Letter[] {
+
+        const random = ctx.random;
+        sAssert(random);
         return shuffle([...standardLetterSet]);
     },
 
