@@ -81,7 +81,7 @@ export function checkGrid(
         scoreAs = false;
     } else if (scoreCard[gridCategory] === undefined) {
         scoreAs = "self";
-    } else if(scoreCard["chance"] === undefined ) {
+    } else if(scoreCard[gridCategory] !== 0 && scoreCard["chance"] === undefined ) {
         scoreAs = "chance";
     } else {
         scoreAs = false;
