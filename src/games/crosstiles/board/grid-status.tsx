@@ -31,7 +31,7 @@ export function GridStatus(props: GridStatusProps) : JSX.Element | null {
         }
 
         if (nBonuses === 1) {
-            text += " + bonus";
+            text += " & bonus";
         }
 
         if (nBonuses > 1) {

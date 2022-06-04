@@ -26,7 +26,7 @@ export const categoryDescription: {[category in ScoreCategoryOrTotal] : string} 
     length5: "A single word of exactly 5 letters",
     length6: "A single word of exactly 6 letters",
     words2: "A 4 letter word crossing a 3 letter word",
-    words3: "3+ word crossword. Must using six titles",
+    words3: "3+ word crossword. Must use 6 titles",
     chance: "Repeat a previously scored category",
     bonus: `A ${bonusScore} point bonus for each special letters
     (${bonusLetters.join(", ")}) in a valid grid`,
