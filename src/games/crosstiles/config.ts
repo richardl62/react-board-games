@@ -1,6 +1,8 @@
 /* Some of this code is a copy-and-edit of config code for Scrabble */
 import { sAssert } from "../../utils/assert";
 
+// Note: Q is treated as Qu for display and spelling.
+// But it counts as a single letter for scoring categories (4-letter word etc.)
 export type Letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" |
     "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "S" |
     "R" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
