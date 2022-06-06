@@ -33,6 +33,21 @@ export class GridAndRack {
         }
     } 
 
+    /** Find the rack position of the first instance of the given letter. Return null if 
+     * the letter is not found. (Any string can be passed in. But if the string is not a 
+     * letter, null is returned.) 
+     * The check is case insensitive. 
+     */
+    findInRack(letter: string): number | null {
+        const candidateLetter = letter.toUpperCase();
+        for (let rackPos = 0; rackPos < this.rack.length; ++rackPos) {
+            if (this.rack[rackPos] === candidateLetter) {
+                return rackPos;
+            }
+        }
+
+        return null;
+    }
 
     addToRack(letter: Letter): void {
         const emptySquare = this.rack.findIndex(l => l === null);

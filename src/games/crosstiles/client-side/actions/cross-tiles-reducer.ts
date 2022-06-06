@@ -1,3 +1,4 @@
+import { formatDiagnostic } from "typescript";
 import { sAssert } from "../../../../utils/assert";
 import { boardColumns, boardRows, Letter } from "../../config";
 import { ServerData } from "../../server-side/server-data";
@@ -45,6 +46,8 @@ export type ActionType =
     | { type: "tileClicked", data: {id: SquareID}}
     | { type: "recallToRack"}
     | { type: "shuffleRack"}
+    // Used on keypress is "making grids" stage
+    | { type: "moveFromRack", data: {letter: string}}
     ;
 
 export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
@@ -91,6 +94,26 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
             grid: gr.grid,
             rack: gr.rack,
         };
+    }
+
+    if (action.type === "moveFromRack") {
+        const { rack, clickMoveStart } = state;
+
+        if (rack && clickMoveStart) {
+            const gr = new GridAndRack(state.grid, rack);
+            const rackPos = gr.findInRack(action.data.letter);
+            if (rackPos !== null) {
+                gr.moveFromRack(clickMoveStart, rackPos );
+
+                return {
+                    ...state,
+                    grid: gr.grid,
+                    rack: gr.rack,
+                };
+            }
+        }
+
+        return state;
     }
 
     throw Error("Unrecogined reduced action");
