@@ -14,14 +14,18 @@ const OuterDiv = styled.div`
 
 const TimeLeft = styled.span`
     font-size: large;
-    margin-left: 0.4em;
 `;
 
 const ButtonAndTimeDiv = styled.div`
     margin-top: 6px;
+
+    button {
+        margin-right: 4px;   
+    }
 `;
 
-function minutesAndSeconds(seconds: number) {
+function minutesAndSeconds(secondsFactional: number) {
+    const seconds = Math.floor(secondsFactional + 0.5);
     const minutes =  Math.floor(seconds/60);
     const remainder = seconds % 60;
     const padding = remainder < 10 ? "0" : "";
@@ -38,13 +42,21 @@ export function MakeGrid() : JSX.Element | null {
     useEffect(reset, [round]);
 
     const  recordGrid = () => moves.recordGrid(grid);
+
+    const doneRecording = () => {
+        recordGrid();
+        moves.doneRecordingGrid();
+    };
+
     useEffect(
         () => {
             if (stage === GameStage.makingGrids && secondsLeft === 0) {
-                moves.recordGrid(grid);
+                doneRecording();
             }
         },
         [secondsLeft]);
+
+    const amDoneRecording = playerData[playerID].doneRecordingGrid;
 
     if(stage !== GameStage.makingGrids) {
         return null;
@@ -55,8 +67,11 @@ export function MakeGrid() : JSX.Element | null {
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
         <ButtonAndTimeDiv>
-            <button onClick={recordGrid}>
-                {gridRecorded ? "Change Recorded Grid" : "Record Grid" }
+            <button onClick={recordGrid} disabled={amDoneRecording} >
+                {gridRecorded ? "Record New Grid" : "Record Grid" }
+            </button>
+            <button onClick={doneRecording} disabled={amDoneRecording} >
+                Done
             </button>
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>

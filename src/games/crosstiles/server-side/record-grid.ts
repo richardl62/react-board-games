@@ -13,15 +13,27 @@ export function recordGrid(G: ServerData, ctx: Ctx, grid: (Letter | null)[][]): 
     sAssert(playerID);
 
     G.playerData[playerID].grid = grid.map(row => [...row]);
+}
 
-    let gridRecordsForAllPlayers = true;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
+    if (G.stage !== GameStage.makingGrids) {
+        throw new Error("Unexpected call to recordGrid");
+    }
+
+    const { playerID } = ctx;
+    sAssert(playerID);
+
+    G.playerData[playerID].doneRecordingGrid = true;
+
+    let allPlayersDoneRecordingGrids = true;
     for (const pid in G.playerData) {
-        if(!G.playerData[pid].grid) {
-            gridRecordsForAllPlayers = false;
+        if(!G.playerData[pid].doneRecordingGrid) {
+            allPlayersDoneRecordingGrids = false;
         }
     }
 
-    if (gridRecordsForAllPlayers) {
+    if (allPlayersDoneRecordingGrids) {
         startNextStage(G, ctx);
     }
 }

@@ -45,6 +45,7 @@ export function startNextStage(G: ServerData, ctx: Ctx) : void {
         for (const pid in G.playerData) {
             G.playerData[pid].ready = false;
             G.playerData[pid].grid = null;
+            G.playerData[pid].doneRecordingGrid = false;
         }
     } 
     

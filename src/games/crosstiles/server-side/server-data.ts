@@ -24,6 +24,7 @@ type Grid = (Letter | null) [][];
 interface PlayerData {
     ready: boolean;
     grid: Grid | null;
+    doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
     chosenCategory: ScoreCategory | null;
 }
@@ -48,6 +49,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     for(const pid in ctx.playOrder) {
         playerData[pid] = {
             ready: false,
+            doneRecordingGrid: false,
             grid: null,
             scoreCard: startingScoreCard(),
             chosenCategory: null,

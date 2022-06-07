@@ -1,4 +1,3 @@
-import { formatDiagnostic } from "typescript";
 import { sAssert } from "../../../../utils/assert";
 import { boardColumns, boardRows, Letter } from "../../config";
 import { ServerData } from "../../server-side/server-data";
