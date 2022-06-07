@@ -1,5 +1,6 @@
 import { ServerData } from "../../server-side/server-data";
-import { ReducerState, makeEmptyGrid } from "./cross-tiles-reducer";
+import { ReducerState } from "./cross-tiles-reducer";
+import { makeEmptyGrid } from "../../server-side/make-empty-grid";
 
 export function reflectServerData(state: ReducerState, newServerData: ServerData): ReducerState {
 

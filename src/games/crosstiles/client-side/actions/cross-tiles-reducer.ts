@@ -1,7 +1,8 @@
 import { sAssert } from "../../../../utils/assert";
-import { boardColumns, boardRows, Letter } from "../../config";
+import { Letter } from "../../config";
 import { ServerData } from "../../server-side/server-data";
 import { GridAndRack } from "./grid-and-rack";
+import { makeEmptyGrid } from "../../server-side/make-empty-grid";
 import { reflectServerData } from "./reflect-server-data";
 import { tileClicked } from "./tile-clicked";
 import { ClickMoveStart, SquareID } from "./types";
@@ -15,20 +16,6 @@ export type ReducerState = {
     /** Use to help with updates */
     serverData: ServerData | null,
 };
-
-export function makeEmptyGrid() : (Letter | null) [][] {
-    const board : (Letter | null) [][] = [];
-
-    const row = [];
-    for(let c = 0; c < boardColumns; ++c) {
-        row.push(null);
-    }
-
-    for(let r = 0; r < boardRows; r++) {
-        board[r] = [...row];
-    }
-    return board;
-}
 
 export const initialReducerState : ReducerState = {
     rack: null,

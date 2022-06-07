@@ -26,6 +26,7 @@ interface PlayerData {
     grid: Grid | null;
     doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
+    makeGridStartTime: number | null;
     chosenCategory: ScoreCategory | null;
 }
 
@@ -52,6 +53,7 @@ export function startingServerData(ctx: Ctx): ServerData {
             doneRecordingGrid: false,
             grid: null,
             scoreCard: startingScoreCard(),
+            makeGridStartTime: null,
             chosenCategory: null,
         };
     }

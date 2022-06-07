@@ -1,6 +1,28 @@
 import { useState, useEffect } from "react";
 import { sAssert } from "./assert";
 
+export function useNowTicker(
+    /** interval in milliseconds.  Defaults to 1000. */
+    optionalIntervalLenght?: number
+) : number {
+    
+    const intervalLenght = optionalIntervalLenght === undefined ? 
+        defaultIntervalLength : optionalIntervalLenght;
+    sAssert(intervalLenght >= 0, "Bad interval length");
+    
+    const [now, setNow] = useState(Date.now());
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(Date.now());
+        }, intervalLenght);
+
+        return () => clearInterval(interval);
+    });
+
+    return now;
+}
+
+
 interface useTickerResult {
     /** Seconds since started or reset.  Can be fractional. 
      * Updated after (approximately) the given interval
