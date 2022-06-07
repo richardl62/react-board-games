@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { sAssert } from "./assert";
 
 interface useTickerResult {
+    /** Seconds since started or reset.  Can be fractional. 
+     * Updated after (approximately) the given interval
+     */
     count: number;
     stop: () => void;
     reset: () => void;
@@ -11,37 +14,41 @@ const defaultIntervalLength = 1000;
 
 export function useTicker(
     /** interval in milliseconds.  Defaults to 1000. */
-    intervalLenght?: number
+    optionalIntervalLenght?: number
 ) : useTickerResult {
-    sAssert(intervalLenght === undefined || intervalLenght >= 0, 
-        "Bad interval passed to useClockTicks");
-
-    const [count, setCount] = useState(0);
+    
+    const intervalLenght = optionalIntervalLenght === undefined ? 
+        defaultIntervalLength : optionalIntervalLenght;
+    sAssert(intervalLenght >= 0, "Bad interval length");
+        
+    const [start, setStart] = useState(Date.now());
+    const [now, setNow] = useState(Date.now());
     const [active, setActive] = useState(true);
 
     useEffect(() => {
         if (active) {
             const interval = setInterval(() => {
-                setCount(count + 1);
-            }, intervalLenght || defaultIntervalLength);
+                setNow(Date.now());
+            }, intervalLenght);
             
             return () => clearInterval(interval);
         }
     });
 
     return {
-        count, 
+        count: (now - start) / 1000, 
         /** I thought that the 'active &&' was unneccessary. But react seemed to trigger 
          * an update even when state was already false */
         stop : () => active && setActive(false),
         reset: () => {
-            setCount(0);
+            setStart(Date.now());
             setActive(true);
         },
     };
 }
 
 interface useCountdownResult {
+    /** Can be factional */
     secondsLeft: number;
     stop: () => void;
     reset: () => void;
