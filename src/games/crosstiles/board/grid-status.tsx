@@ -18,15 +18,15 @@ export function GridStatus(props: GridStatusProps) : JSX.Element | null {
     const { scoreCard, grid } = props;
     const { isLegalWord } = useCrossTilesContext();
 
-    const { gridCategory, scoreAs, illegalWords, nBonuses} = 
+    const { gridCategory, scoreCategory, illegalWords, nBonuses} = 
         checkGrid(grid, scoreCard, isLegalWord);
 
     let text;
 
-    if(scoreAs) {
+    if(scoreCategory) {
         sAssert(gridCategory);
         text = displayName[gridCategory];
-        if(scoreAs === "chance") {
+        if(scoreCategory === "chance") {
             text += " (as chance)";
         }
 

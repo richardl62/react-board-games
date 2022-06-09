@@ -1,5 +1,6 @@
+import { sAssert } from "../../../../utils/assert";
 import { Letter } from "../../config";
-import { FixedScoreCategory } from "../../score-categories";
+import { FixedScoreCategory, fixedScores, ScoreCategory } from "../../score-categories";
 import { ScoreCard } from "../../server-side/score-card";
 import { checkConnectivity } from "./check-connectivity";
 import { countBonusLetters } from "./count-bonus-letters";
@@ -52,17 +53,22 @@ function findFixedScoreCategory(grid: (Letter | null)[][]): FixedScoreCategory |
     return null;
 }
 
-interface ScoreOption {
-    // The categery found just from the grid.
+interface CheckGridResult {
+    /** The categery found just from the grid. */
     gridCategory: FixedScoreCategory | null;
 
-    // Checked only for grids that would otherwise score.
-    // Null if not checked or if all words are legal.
+    /** The category to be entered on the score card. 
+    Differs from gridCategory if there is a spelling error (in which case it
+    will be null) or the gridCategory is already filled in on the score card 
+    (in which case it will be "chance" or null); */ 
+    scoreCategory: ScoreCategory | null;
+
+
+    /** Checked only when the gridCategory is non-null */
     illegalWords: string[] | null;
 
-    // Scoring options depending on score card and spelling
-    // checks
-    scoreAs: "self" | "chance" | false;
+    /** The score ignoring bonuses */ 
+    score: number;
 
     // 0 for grids that do not score.
     nBonuses: number;
@@ -71,32 +77,36 @@ interface ScoreOption {
 export function checkGrid(
     grid: (Letter | null)[][],
     scoreCard: ScoreCard,
-    isLegalWord: ((word: string) => boolean) | null,
-): ScoreOption
+    isLegalWord: ((word: string) => boolean),
+): CheckGridResult
 {
     const gridCategory = findFixedScoreCategory(grid);
     
-    let scoreAs : ScoreOption["scoreAs"];
-    if (!gridCategory) {
-        scoreAs = false;
-    } else if (scoreCard[gridCategory] === undefined) {
-        scoreAs = "self";
-    } else if(scoreCard[gridCategory] !== 0 && scoreCard["chance"] === undefined ) {
-        scoreAs = "chance";
-    } else {
-        scoreAs = false;
-    }
+    let scoreCategory: ScoreCategory | null = null;
+    let illegalWords = null;
+    let score = 0;
+    let nBonuses = 0;
 
-    let illegalWords : string[] | null = null;
+    if (gridCategory) {
+        if(scoreCard[gridCategory] === undefined) {
+            scoreCategory = gridCategory;
+        } else if(scoreCard[gridCategory] !== 0 && scoreCard["chance"] === undefined ) {
+            scoreCategory = "chance";
+        }
+    } 
 
-    if(scoreAs && isLegalWord) {
+    if( scoreCategory) {
         illegalWords = findIllegalWords(grid, isLegalWord);
         if(illegalWords) {
-            scoreAs = false;
+            scoreCategory = null;
         }
     }
 
-    const nBonuses = scoreAs ? countBonusLetters(grid) : 0;
+    if( scoreCategory ) {
+        sAssert(gridCategory);
+        score = fixedScores[gridCategory];
+        nBonuses = countBonusLetters(grid);
+    }
 
-    return {gridCategory, scoreAs, illegalWords, nBonuses};
+    return {gridCategory, scoreCategory, illegalWords, score, nBonuses};
 }
