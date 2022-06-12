@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {  useNowTicker } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
@@ -33,6 +33,52 @@ function minutesAndSeconds(secondsFactional: number) {
     return `${minutes}:${padding}${remainder}`;
 }
 
+function DoneDialog() {
+    const context = useCrossTilesContext();
+    
+    const { grid, playerData, wrappedGameProps: { moves, playerID } } = context;
+    const { grid: recordedGrid, doneRecordingGrid: amDoneRecording } = playerData[playerID];
+
+    const [confirmationRequired, setConfirmationRequired] = useState(false);
+
+    const doneRecordedChecked = () => {
+        if(recordedGrid) {
+            moves.doneRecordingGrid();
+        } else {
+            setConfirmationRequired(true);
+        }
+    };
+
+    const doneRecordedUnchecked = () => {
+        moves.doneRecordingGrid();
+        setConfirmationRequired(false);
+    };
+
+    const doneCancelled = () => {
+        setConfirmationRequired(false);
+    };
+
+    if(confirmationRequired) {
+        return <div>
+            <span>No grid recorded </span>
+            <button onClick={doneRecordedUnchecked} >Confirm Done</button>
+            <button onClick={doneCancelled}>Cancel</button>
+        </div>;
+    }
+
+    return <div>
+        <button onClick={() => moves.recordGrid(grid)}
+            disabled={amDoneRecording}
+        >
+            Record Grid
+        </button>
+
+        <button onClick={doneRecordedChecked} disabled={amDoneRecording} >
+            Done
+        </button>
+    </div>;
+}
+
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { playerData, stage, grid, options } = context;
@@ -40,7 +86,6 @@ export function MakeGrid() : JSX.Element | null {
 
     const now = useNowTicker();
     const {makeGridStartTime, doneRecordingGrid: amDoneRecording } = playerData[playerID];
-
 
     useEffect(()=>{
         if(stage === GameStage.makingGrids) {
@@ -65,20 +110,12 @@ export function MakeGrid() : JSX.Element | null {
     }
 
     const secondsLeft = options.timeToMakeGrid - (now - makeGridStartTime) / 1000;
-    
-    const  recordGrid = () => moves.recordGrid(grid);
 
-    const gridRecorded = Boolean(playerData[playerID].grid);
     return <OuterDiv>
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
         <ButtonAndTimeDiv>
-            <button onClick={recordGrid} disabled={amDoneRecording} >
-                {gridRecorded ? "Record New Grid" : "Record Grid" }
-            </button>
-            <button onClick={()=>moves.doneRecordingGrid()} disabled={amDoneRecording} >
-                Done
-            </button>
+            <DoneDialog/>
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>
     </OuterDiv>;
