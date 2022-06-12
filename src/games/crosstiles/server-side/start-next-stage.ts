@@ -17,10 +17,10 @@ function nextStage(G: ServerData) {
     }
 
     if(stage === GameStage.settingOptions) {
-        return GameStage.pollingForReady;
+        return GameStage.startingGame;
     }
 
-    if(stage === GameStage.pollingForReady) {
+    if(stage === GameStage.startingGame) {
         return GameStage.makingGrids;
     } 
     
@@ -29,7 +29,7 @@ function nextStage(G: ServerData) {
     } 
     
     if(stage === GameStage.scoring) {
-        return GameStage.pollingForReady;
+        return GameStage.makingGrids;
     } 
 
     throw new Error("Problem stating next stage");
@@ -43,7 +43,7 @@ export function startNextStage(G: ServerData, ctx: Ctx) : void {
         G.selectedLetters = selectLetters(ctx);
 
         for (const pid in G.playerData) {
-            G.playerData[pid].ready = false;
+            G.playerData[pid].readyForNextRound = false;
             G.playerData[pid].grid = null;
             G.playerData[pid].makeGridStartTime = null;
             G.playerData[pid].doneRecordingGrid = false;

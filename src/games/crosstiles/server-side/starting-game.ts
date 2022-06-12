@@ -14,7 +14,7 @@ export function readyToStartGame(G: ServerData, ctx: Ctx, arg: void): void {
 
 
     G.playerData[playerID].readyToStartGame = true;
-    G.playerData[playerID].recordedGrid = null;
+    G.playerData[playerID].grid = null;
 
     let allReady = true;
     for (const pid in G.playerData) {

@@ -12,7 +12,7 @@ const PlayerStatusDiv = styled.div`
 
 export function ReadyToStartGame() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData, gameStarted } = context;
+    const { stage, playerData } = context;
     const { moves, getPlayerName, playerID } = context.wrappedGameProps;
 
     if(stage !== GameStage.startingGame) {
@@ -28,12 +28,11 @@ export function ReadyToStartGame() : JSX.Element | null {
         elems.push(<span key={pid+"ready"}>{ready ? "Ready" : "Not Ready" }</span>);
     }
 
-    const text = gameStarted ? "Start Game" : "Start Round";
     const ready = playerData[playerID].readyToStartGame;
     return <div>
         <PlayerStatusDiv>
             {elems}
         </PlayerStatusDiv>
-        {!ready && <button onClick={() => moves.readyToStartGame()}>{text}</button>}
+        {!ready && <button onClick={() => moves.readyToStartGame()}>Start Game</button>}
     </div>;
 }

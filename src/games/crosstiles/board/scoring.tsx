@@ -48,13 +48,24 @@ function CompletedGrid({pid}: CompletedGridProps) {
 
 export function Scoring() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData } = context;
+    const { stage, playerData, 
+        wrappedGameProps: {moves, playerID} 
+    } = context;
+    
     if(stage !== GameStage.scoring) {
         return null;
     }
+    const scoreChosen = Boolean(playerData[playerID].chosenCategory); 
+    return <div>
+        <ScoringDiv>
+            {Object.keys(playerData).map(pid => <CompletedGrid key={pid} pid={pid} />)}
+        </ScoringDiv>
 
-    return <ScoringDiv>
-        {Object.keys(playerData).map(pid => <CompletedGrid key={pid} pid={pid} />)}
-    </ScoringDiv>;
+        {scoreChosen && 
+            <button onClick={()=>moves.readyForNextRound()}>
+                Start Next Round
+            </button>
+        }
+    </div>;
 }
 
