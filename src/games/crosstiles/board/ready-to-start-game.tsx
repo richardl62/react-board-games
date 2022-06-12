@@ -10,29 +10,29 @@ const PlayerStatusDiv = styled.div`
     column-gap: 4px;
 `;
 
-export function PollForReady() : JSX.Element | null {
+export function ReadyToStartGame() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerData } = context;
     const { moves, getPlayerName, playerID } = context.wrappedGameProps;
 
-    if(stage !== GameStage.pollingForReady) {
+    if(stage !== GameStage.startingGame) {
         return null;
     }
 
     const elems: JSX.Element[] = [];
 
     for(const pid in playerData) {
-        const ready = playerData[pid].ready;
+        const ready = playerData[pid].readyToStartGame;
 
         elems.push(<span key={pid+"name"}>{getPlayerName(pid)+":"}</span>);
         elems.push(<span key={pid+"ready"}>{ready ? "Ready" : "Not Ready" }</span>);
     }
 
-    const ready = playerData[playerID].ready;
+    const ready = playerData[playerID].readyToStartGame;
     return <div>
         <PlayerStatusDiv>
             {elems}
         </PlayerStatusDiv>
-        {!ready && <button onClick={() => moves.playerReady()}>Start round</button>}
+        {!ready && <button onClick={() => moves.readyToStartGame()}>Start Game</button>}
     </div>;
 }

@@ -13,7 +13,7 @@ export type GameOptions = {
 /* Use string values to add with debugging */
 export enum GameStage {
     settingOptions = "set options",
-    pollingForReady = "polling for ready",
+    startingGame = "start game",
     makingGrids = "making grids",
     scoring = "scoring",
     gameOver = "game over",
@@ -22,7 +22,8 @@ export enum GameStage {
 type Grid = (Letter | null) [][];
 
 interface PlayerData {
-    ready: boolean;
+    readyToStartGame: boolean;
+    readyForNextRound: boolean;
     grid: Grid | null;
     doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
@@ -49,7 +50,8 @@ export function startingServerData(ctx: Ctx): ServerData {
     
     for(const pid in ctx.playOrder) {
         playerData[pid] = {
-            ready: false,
+            readyToStartGame: false,
+            readyForNextRound: false,
             doneRecordingGrid: false,
             grid: null,
             scoreCard: startingScoreCard(),

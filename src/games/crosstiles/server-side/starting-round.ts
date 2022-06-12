@@ -4,24 +4,19 @@ import { GameStage, ServerData } from "./server-data";
 import { startNextStage } from "./start-next-stage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function playerReady(G: ServerData, ctx: Ctx, arg: void): void {
-    if (G.stage !== GameStage.pollingForReady) {
-        throw new Error("Unexpected call to playerReady");
+export function readyForNextRound(G: ServerData, ctx: Ctx, arg: void): void {
+    if (G.stage !== GameStage.scoring) {
+        throw new Error("Unexpected call to readyForNextRound");
     }
 
     const { playerID } = ctx;
     sAssert(playerID);
 
-    if (G.playerData[playerID].ready) {
-        return;
-    }
-
-    G.playerData[playerID].ready = true;
-    G.playerData[playerID].grid = null;
+    G.playerData[playerID].readyForNextRound = true;
 
     let allReady = true;
     for (const pid in G.playerData) {
-        allReady = allReady && G.playerData[pid].ready;
+        allReady = allReady && G.playerData[pid].readyForNextRound;
     }
 
     if (allReady) {

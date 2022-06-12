@@ -2,7 +2,6 @@ import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { ScoreCategory } from "../score-categories";
 import { ServerData, GameStage } from "./server-data";
-import { startNextStage } from "./start-next-stage";
 
 interface setScoreArg {
     category: ScoreCategory;
@@ -28,15 +27,4 @@ export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
         }
     }
     G.playerData[playerID].chosenCategory = category;
-
-    let scoreChoosenByAll = true;
-    for(const pid in G.playerData) {
-        if(!G.playerData[pid].chosenCategory) {
-            scoreChoosenByAll = false; 
-        }
-    }
-
-    if(scoreChoosenByAll) {
-        startNextStage(G, ctx);
-    }
 }
