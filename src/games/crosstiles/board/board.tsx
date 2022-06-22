@@ -47,7 +47,7 @@ interface BoardProps {
     gameProps: WrappedGameProps;
 } 
 
-export function Board(props: BoardProps): JSX.Element {
+function Board(props: BoardProps): JSX.Element {
     const { gameProps } = props; 
     const crossTilesGameProps = gameProps as unknown as CrossTilesGameProps;
 
@@ -66,3 +66,4 @@ export function Board(props: BoardProps): JSX.Element {
     </BoardDiv>;
 }
 
+export default Board;
