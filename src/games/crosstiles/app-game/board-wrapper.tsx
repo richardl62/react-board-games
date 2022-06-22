@@ -3,7 +3,6 @@ import { useAsync } from "react-async-hook";
 import { WrappedGameProps } from "../../../app-game-support";
 import { AsyncStatus } from "../../../utils/async-status";
 import { getWordChecker } from "../../../utils/get-word-checker";
-import { Board } from "../board";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { crossTilesReducer, initialReducerState } from "../client-side/actions/cross-tiles-reducer";
@@ -56,7 +55,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const context = makeCrossTilesContext(crossTilesGameProps, reducerState, dispatch, isLegalWord);
 
     return <ReactCrossTilesContext.Provider value={context}>
-        <Board />
+        {/* <Board /> */}
     </ReactCrossTilesContext.Provider>;
 }
 

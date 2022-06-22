@@ -1,10 +1,10 @@
 import React from "react";
 import { ActivePlayers } from "boardgame.io/core";
 import { AppGame, GameCategory, WrappedGameProps } from "../../../app-game-support";
-import Board from "./board-wrapper";
 import { bgioMoves } from "../server-side/moves";
 import { startingServerData } from "../server-side/server-data";
 import { Ctx } from "boardgame.io";
+import { Board } from "../board/board";
 
 const game: AppGame = {
 
@@ -23,7 +23,7 @@ const game: AppGame = {
         activePlayers: ActivePlayers.ALL,
     },
 
-    board: (props: WrappedGameProps) => <Board appBoardProps={props} />,
+    board: (props: WrappedGameProps) => <Board gameProps={props} />,
 };
 
 const games = [game];

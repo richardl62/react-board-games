@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { WaitingForPlayers } from "../../../app-game-support";
+import { WaitingForPlayers, WrappedGameProps } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
-import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
+import { GameStage } from "../server-side/server-data";
 import { GameOver } from "./game-over";
 import { MakeGrid } from "./make-grid";
 import { ReadyToStartGame } from "./ready-to-start-game";
@@ -20,27 +21,43 @@ const StagesDiv = styled.div`
     margin-bottom: 6px;
 `;
 
-export function Board(): JSX.Element {
-    const context = useCrossTilesContext();
-    const {wrappedGameProps, serverError } = context;
+function GameStages() {
+    return <StagesDiv>
+        <div>Hello from GameStages</div>
+        
+        {/* Start of functions that return null if the game is not at the appropriate stage */}
 
-    if(!wrappedGameProps.allJoined) {
-        <WaitingForPlayers {...wrappedGameProps} />;
+        {/* <ReadyToStartGame />
+        <MakeGrid />
+        <Scoring />
+        <GameOver /> */}
+        {/* End of functions that return null if the game is not at the appropriate stage */}
+
+        {/* <ScoreCards /> */}
+
+    </StagesDiv>;
+}
+
+interface BoardProps {
+    gameProps: WrappedGameProps;
+} 
+
+export function Board(props: BoardProps): JSX.Element {
+    const { gameProps } = props; 
+    const crossTilesGameProps = gameProps as unknown as CrossTilesGameProps;
+
+    if(!crossTilesGameProps.allJoined) {
+        <WaitingForPlayers {...gameProps} />;
     }
 
+    const { G: {stage, serverError} } = crossTilesGameProps;
+
     return <BoardDiv>
+        <div>Hello</div>
         <ErrorMessage category="server error" message={serverError} />
 
-        <StagesDiv>
-            {/* Start of functions that return null if the game is not at the appropriate stage */}
-            <SetOptionsOrWait />
-            <ReadyToStartGame />
-            <MakeGrid />
-            <Scoring />
-            <GameOver />
-            {/* Start of functions that return null if the game is not at the appropriate stage */}
-        </StagesDiv>
-        
-        <ScoreCards />
+        {stage === GameStage.settingOptions ?  
+            <SetOptionsOrWait gameProps={crossTilesGameProps} /> : <GameStages/>}
     </BoardDiv>;
 }
+

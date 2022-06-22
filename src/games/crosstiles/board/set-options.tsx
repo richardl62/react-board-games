@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { GameStage } from "../server-side/server-data";
 
 const SetOptionsDiv = styled.div`
@@ -8,13 +8,16 @@ const SetOptionsDiv = styled.div`
     flex-direction: column;
 `;
 
-function SetOptions() {
-    const context = useCrossTilesContext();
-    const [checkSpelling, setCheckSpelling] = useState(context.options.checkSpelling);
-    const [timeToMakeGrid, setTimeToMakeGrid] = useState(context.options.timeToMakeGrid);
+interface SetOptionsProps {
+    gameProps: CrossTilesGameProps;
+} 
 
-    const { moves } = context.wrappedGameProps;
-    
+function SetOptions(props: SetOptionsProps) {
+    const { gameProps: {moves, G} } = props;
+
+    const [checkSpelling, setCheckSpelling] = useState(G.options.checkSpelling);
+    const [timeToMakeGrid, setTimeToMakeGrid] = useState(G.options.timeToMakeGrid);
+
     const onChangeTimeToMakeGrid = (e: ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value);
         setTimeToMakeGrid(value );
@@ -40,10 +43,12 @@ function SetOptions() {
     </SetOptionsDiv>;
 }
 
-export function SetOptionsOrWait() : JSX.Element | null {
-    const context = useCrossTilesContext();
-    const { stage } = context;
-    const { playerID, getPlayerName, ctx } = context.wrappedGameProps;
+
+export function SetOptionsOrWait(props: SetOptionsProps) : JSX.Element | null {
+
+    const { gameProps } = props;
+    const { stage } = gameProps.G;
+    const { playerID, getPlayerName, ctx } = gameProps;
 
     if(stage !== GameStage.settingOptions) {
         return null;
@@ -51,7 +56,7 @@ export function SetOptionsOrWait() : JSX.Element | null {
 
     const firstPlayer = ctx.playOrder[0];
     if(playerID === firstPlayer) {
-        return <SetOptions />;
+        return <SetOptions gameProps={gameProps} />;
     }
 
     return <div>{`Waiting for ${getPlayerName(firstPlayer)} to set options`}</div>;
