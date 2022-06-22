@@ -38,18 +38,21 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
     if(reducerState.serverData?.timestamp !== gameProps.G.timestamp) {
         dispatch({type: "reflectServerData", data: gameProps.G});
     }
-    
-    const checkSpelling = gameProps.G.options.checkSpelling;
 
-    const asyncWordChecker = useAsync(getWordChecker, []);
-    let isLegalWord;
-    if (checkSpelling) {
-        isLegalWord = asyncWordChecker.result;
-        if (!isLegalWord) {
-            return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
+    
+    const asyncWordChecker = useAsync(() => {
+        const checkSpelling = gameProps.G.options.checkSpelling;
+        if(checkSpelling) {
+            return getWordChecker();
         }
-    } else {
-        isLegalWord = () => true;
+
+        const dummyWordChecker = () => true;
+        return Promise.resolve(dummyWordChecker);
+    }, []);
+
+    const isLegalWord = asyncWordChecker.result;
+    if (!isLegalWord) {
+        return <AsyncStatus status={asyncWordChecker} activity="loading dictionary" />;
     }
 
     const context = makeCrossTilesContext(gameProps, reducerState, dispatch, isLegalWord);
