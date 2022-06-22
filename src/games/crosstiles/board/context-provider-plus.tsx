@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from "react";
 import { useAsync } from "react-async-hook";
-import { WrappedGameProps } from "../../../app-game-support";
 import { AsyncStatus } from "../../../utils/async-status";
 import { getWordChecker } from "../../../utils/get-word-checker";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side/actions/cross-tiles-context";
@@ -9,16 +8,17 @@ import { crossTilesReducer, initialReducerState } from "../client-side/actions/c
 import { GameStage } from "../server-side/server-data";
 
 
-export interface BoardWrapperProps {
-    appBoardProps: WrappedGameProps;
+export interface ContextProviderPlusProps {
+    gameProps: CrossTilesGameProps;
+    children: React.ReactNode;
 }
 
-function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const crossTilesGameProps = props.appBoardProps as unknown as CrossTilesGameProps;
+function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
+    const { gameProps, children } = props;
 
     const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState);
 
-    const { stage } = crossTilesGameProps.G;
+    const { stage } = gameProps.G;
 
     const downHandler = (event: KeyboardEvent) => {
         if(stage === GameStage.makingGrids) {
@@ -35,11 +35,11 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         };
     }, [stage]);
 
-    if(reducerState.serverData?.timestamp !== crossTilesGameProps.G.timestamp) {
-        dispatch({type: "reflectServerData", data: crossTilesGameProps.G});
+    if(reducerState.serverData?.timestamp !== gameProps.G.timestamp) {
+        dispatch({type: "reflectServerData", data: gameProps.G});
     }
     
-    const checkSpelling = crossTilesGameProps.G.options.checkSpelling;
+    const checkSpelling = gameProps.G.options.checkSpelling;
 
     const asyncWordChecker = useAsync(getWordChecker, []);
     let isLegalWord;
@@ -52,12 +52,12 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         isLegalWord = () => true;
     }
 
-    const context = makeCrossTilesContext(crossTilesGameProps, reducerState, dispatch, isLegalWord);
+    const context = makeCrossTilesContext(gameProps, reducerState, dispatch, isLegalWord);
 
     return <ReactCrossTilesContext.Provider value={context}>
-        {/* <Board /> */}
+        {children}
     </ReactCrossTilesContext.Provider>;
 }
 
-export default BoardWrapper;
+export default ContextProviderPlus;
 

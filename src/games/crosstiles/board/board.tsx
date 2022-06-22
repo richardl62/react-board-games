@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { WaitingForPlayers, WrappedGameProps } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
+import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { GameStage } from "../server-side/server-data";
 import { GameOver } from "./game-over";
@@ -21,22 +22,26 @@ const StagesDiv = styled.div`
     margin-bottom: 6px;
 `;
 
-function GameStages() {
-    return <StagesDiv>
-        <div>Hello from GameStages</div>
-        
-        {/* Start of functions that return null if the game is not at the appropriate stage */}
 
-        {/* <ReadyToStartGame />
-        <MakeGrid />
-        <Scoring />
-        <GameOver /> */}
-        {/* End of functions that return null if the game is not at the appropriate stage */}
-
-        {/* <ScoreCards /> */}
-
-    </StagesDiv>;
+interface GameStagesProps {
+    gameProps: CrossTilesGameProps;
 }
+
+function GameStages(props: GameStagesProps) {
+    return <ContextProviderPlus {...props}>
+        <StagesDiv>
+            {/* Start of functions that return null if the game is not at the appropriate stage */}
+            <ReadyToStartGame />
+            <MakeGrid />
+            <Scoring />
+            <GameOver />
+            {/* End of functions that return null if the game is not at the appropriate stage */}
+        </StagesDiv>
+
+        <ScoreCards />
+    </ContextProviderPlus>;
+}
+
 
 interface BoardProps {
     gameProps: WrappedGameProps;
@@ -53,11 +58,11 @@ export function Board(props: BoardProps): JSX.Element {
     const { G: {stage, serverError} } = crossTilesGameProps;
 
     return <BoardDiv>
-        <div>Hello</div>
         <ErrorMessage category="server error" message={serverError} />
 
         {stage === GameStage.setup ?  
-            <Setup gameProps={crossTilesGameProps} /> : <GameStages/>}
+            <Setup gameProps={crossTilesGameProps} /> : 
+            <GameStages gameProps={crossTilesGameProps} />}
     </BoardDiv>;
 }
 
