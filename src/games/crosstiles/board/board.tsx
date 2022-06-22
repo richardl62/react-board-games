@@ -9,7 +9,7 @@ import { MakeGrid } from "./make-grid";
 import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
-import { SetOptionsOrWait } from "./set-options";
+import { SetOptionsOrWait as Setup } from "./setup";
 
 const BoardDiv = styled.div`
    display: inline-block;
@@ -56,8 +56,8 @@ export function Board(props: BoardProps): JSX.Element {
         <div>Hello</div>
         <ErrorMessage category="server error" message={serverError} />
 
-        {stage === GameStage.settingOptions ?  
-            <SetOptionsOrWait gameProps={crossTilesGameProps} /> : <GameStages/>}
+        {stage === GameStage.setup ?  
+            <Setup gameProps={crossTilesGameProps} /> : <GameStages/>}
     </BoardDiv>;
 }
 

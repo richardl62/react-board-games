@@ -38,7 +38,7 @@ export function ScoreCards(): JSX.Element | null {
     const { stage, playerData,  wrappedGameProps, isLegalWord } = context;
     const { getPlayerName, playerID, moves } = wrappedGameProps;
 
-    if (stage === GameStage.settingOptions) {
+    if (stage === GameStage.setup) {
         return null;
     }
 

@@ -12,7 +12,7 @@ export type GameOptions = {
 
 /* Use string values to add with debugging */
 export enum GameStage {
-    settingOptions = "set options",
+    setup = "setup",
     startingGame = "start game",
     makingGrids = "making grids",
     scoring = "scoring",
@@ -62,7 +62,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     const G = {
         options: defaultOptions,
-        stage: GameStage.settingOptions,
+        stage: GameStage.setup,
         round: 0,
         selectedLetters: selectLetters(ctx),
         playerData: playerData,

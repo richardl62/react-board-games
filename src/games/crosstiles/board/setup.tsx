@@ -50,7 +50,7 @@ export function SetOptionsOrWait(props: SetOptionsProps) : JSX.Element | null {
     const { stage } = gameProps.G;
     const { playerID, getPlayerName, ctx } = gameProps;
 
-    if(stage !== GameStage.settingOptions) {
+    if(stage !== GameStage.setup) {
         return null;
     }
 

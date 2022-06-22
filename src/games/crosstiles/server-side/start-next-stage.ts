@@ -16,7 +16,7 @@ function nextStage(G: ServerData) {
         return GameStage.gameOver;
     }
 
-    if(stage === GameStage.settingOptions) {
+    if(stage === GameStage.setup) {
         return GameStage.startingGame;
     }
 

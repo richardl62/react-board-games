@@ -3,7 +3,7 @@ import { GameOptions, GameStage, ServerData } from "./server-data";
 import { startNextStage } from "./start-next-stage";
 
 export function setOptions(G: ServerData, ctx: Ctx, options: GameOptions): void {
-    if (G.stage !== GameStage.settingOptions) {
+    if (G.stage !== GameStage.setup) {
         throw new Error("Unexpected call to startGame");
     }
     G.options = {...options};
