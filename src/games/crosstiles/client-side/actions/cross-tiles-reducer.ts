@@ -15,16 +15,20 @@ export type ReducerState = {
     
     /** Use to help with updates */
     serverData: ServerData | null,
+    playerID: string;
 };
 
-export const initialReducerState : ReducerState = {
-    rack: null,
-    grid:  makeEmptyGrid(),
+export function initialReducerState(playerID: string): ReducerState {
+    return {
+        rack: null,
+        grid: makeEmptyGrid(),
 
-    clickMoveStart: null,
+        clickMoveStart: null,
 
-    serverData: null,
-};
+        serverData: null,
+        playerID: playerID,
+    };
+}
 
 export type ActionType =
     | { type: "reflectServerData", data: ServerData}

@@ -6,12 +6,17 @@ export function reflectServerData(state: ReducerState, newServerData: ServerData
 
     const oldRound = state.serverData?.round;
     const newRound = newServerData.round;
+    
+    const { playerID } = state;
+    const {selectedLetters} = newServerData.playerData[playerID]; 
+
     if (oldRound != newRound) {
         return {
-            rack: [...newServerData.selectedLetters],
+            rack: selectedLetters && [...selectedLetters],
             grid: makeEmptyGrid(),
             clickMoveStart: null,
             serverData: newServerData,
+            playerID: playerID,
         };
     }
 

@@ -15,8 +15,10 @@ export interface ContextProviderPlusProps {
 
 function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
     const { gameProps, children } = props;
+    const { playerID } = gameProps;
 
-    const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState);
+    const [reducerState, dispatch] = useReducer(crossTilesReducer, 
+        initialReducerState(playerID));
 
     const { stage } = gameProps.G;
 

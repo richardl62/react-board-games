@@ -1,7 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-card";
 import { defaultOptions, Letter } from "../config";
-import { selectLetters } from "./select-letters";
 import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "../score-categories";
 
@@ -25,6 +24,7 @@ type Grid = (Letter | null) [][];
 interface PlayerData {
     readyToStartGame: boolean;
     readyForNextRound: boolean;
+    selectedLetters: Letter[] | null;
     grid: Grid | null;
     doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
@@ -39,8 +39,6 @@ export interface ServerData {
 
     playerData: {[playerID: string]: PlayerData };
 
-    selectedLetters: Letter[];
-
     serverError: string | null;
     timestamp: number;
 }
@@ -51,6 +49,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     
     for(const pid in ctx.playOrder) {
         playerData[pid] = {
+            selectedLetters: null,
             readyToStartGame: false,
             readyForNextRound: false,
             doneRecordingGrid: false,
@@ -65,7 +64,6 @@ export function startingServerData(ctx: Ctx): ServerData {
         options: defaultOptions,
         stage: GameStage.setup,
         round: 0,
-        selectedLetters: selectLetters(ctx),
         playerData: playerData,
         serverError: null,
         timestamp: 0,

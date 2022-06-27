@@ -20,9 +20,11 @@ export function startRound(G: ServerData, ctx: Ctx): void {
         G.stage = GameStage.over;
     } else {
         G.round = G.round + 1;
-        G.selectedLetters = selectLetters(ctx);
+        const sharedLetters = selectLetters(ctx);
 
         for (const pid in G.playerData) {
+            G.playerData[pid].selectedLetters = G.options.playersGetSameLetters ?
+                sharedLetters : selectLetters(ctx),
             G.playerData[pid].readyForNextRound = false;
             G.playerData[pid].grid = null;
             G.playerData[pid].makeGridStartTime = null;
