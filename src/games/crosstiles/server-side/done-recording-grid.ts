@@ -2,7 +2,6 @@ import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "./server-data";
-import { startNextStage } from "./start-next-stage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
@@ -26,6 +25,6 @@ export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
     }
 
     if (allPlayersDoneRecordingGrids) {
-        startNextStage(G, ctx);
+        G.stage = GameStage.scoring;
     }
 }

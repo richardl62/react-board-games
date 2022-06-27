@@ -1,44 +1,24 @@
 import { Ctx } from "boardgame.io";
+import { sAssert } from "../../../utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
 import { GameStage, ServerData } from "./server-data";
 
-function nextStage(G: ServerData) {
+export function startRound(G: ServerData, ctx: Ctx): void {
     const { stage, playerData } = G;
+
+    sAssert(stage === GameStage.makingGrids);
+
     let gameOver = true;
     for(const pid in playerData) {
         if(!scoreCardFull(playerData[pid].scoreCard)) {
             gameOver = false;
         }
     } 
-    
+
     if(gameOver) {
-        return GameStage.over;
-    }
-
-    if(stage === GameStage.setup) {
-        return GameStage.starting;
-    }
-
-    if(stage === GameStage.starting) {
-        return GameStage.makingGrids;
-    } 
-    
-    if(stage === GameStage.makingGrids) {
-        return GameStage.scoring;
-    } 
-    
-    if(stage === GameStage.scoring) {
-        return GameStage.makingGrids;
-    } 
-
-    throw new Error("Problem stating next stage");
-}
-
-export function startNextStage(G: ServerData, ctx: Ctx) : void {
-    G.stage = nextStage(G);
-
-    if(G.stage === GameStage.makingGrids) {
+        G.stage = GameStage.over;
+    } else {
         G.round = G.round + 1;
         G.selectedLetters = selectLetters(ctx);
 
@@ -47,12 +27,8 @@ export function startNextStage(G: ServerData, ctx: Ctx) : void {
             G.playerData[pid].grid = null;
             G.playerData[pid].makeGridStartTime = null;
             G.playerData[pid].doneRecordingGrid = false;
-        }
-    } 
-    
-    if(G.stage === GameStage.scoring) {
-        for(const pid in G.playerData) {
             G.playerData[pid].chosenCategory = null;
         }
-    } 
+    }
+
 }

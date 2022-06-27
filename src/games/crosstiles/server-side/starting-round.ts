@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { GameStage, ServerData } from "./server-data";
-import { startNextStage } from "./start-next-stage";
+import { startRound } from "./start-round";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function readyForNextRound(G: ServerData, ctx: Ctx, arg: void): void {
@@ -20,6 +20,7 @@ export function readyForNextRound(G: ServerData, ctx: Ctx, arg: void): void {
     }
 
     if (allReady) {
-        startNextStage(G, ctx);
+        G.stage = GameStage.makingGrids;
+        startRound(G, ctx);
     }
 }
