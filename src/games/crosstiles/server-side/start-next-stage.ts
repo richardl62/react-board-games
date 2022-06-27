@@ -13,14 +13,14 @@ function nextStage(G: ServerData) {
     } 
     
     if(gameOver) {
-        return GameStage.gameOver;
+        return GameStage.over;
     }
 
     if(stage === GameStage.setup) {
-        return GameStage.startingGame;
+        return GameStage.starting;
     }
 
-    if(stage === GameStage.startingGame) {
+    if(stage === GameStage.starting) {
         return GameStage.makingGrids;
     } 
     

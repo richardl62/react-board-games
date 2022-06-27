@@ -13,10 +13,10 @@ export type GameOptions = {
 /* Use string values to add with debugging */
 export enum GameStage {
     setup = "setup",
-    startingGame = "start game",
+    starting = "starting",
     makingGrids = "making grids",
     scoring = "scoring",
-    gameOver = "game over",
+    over = "over",
 }
 
 type Grid = (Letter | null) [][];

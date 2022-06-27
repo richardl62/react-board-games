@@ -5,7 +5,7 @@ import { startNextStage } from "./start-next-stage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function readyToStartGame(G: ServerData, ctx: Ctx, arg: void): void {
-    if (G.stage !== GameStage.startingGame) {
+    if (G.stage !== GameStage.starting) {
         throw new Error("Unexpected call to readyToStartGame");
     }
 

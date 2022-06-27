@@ -19,7 +19,7 @@ export function GameOver() : JSX.Element | null {
     const { stage, playerData,  wrappedGameProps } = context;
     const { getPlayerName } = wrappedGameProps;
 
-    if(stage !== GameStage.gameOver) {
+    if(stage !== GameStage.over) {
         return null;
     }
 

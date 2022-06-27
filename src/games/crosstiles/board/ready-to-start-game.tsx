@@ -15,7 +15,7 @@ export function ReadyToStartGame() : JSX.Element | null {
     const { stage, playerData } = context;
     const { moves, getPlayerName, playerID } = context.wrappedGameProps;
 
-    if(stage !== GameStage.startingGame) {
+    if(stage !== GameStage.starting) {
         return null;
     }
 
