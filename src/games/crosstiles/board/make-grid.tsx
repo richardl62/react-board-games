@@ -37,7 +37,7 @@ function DoneDialog() {
     const context = useCrossTilesContext();
     
     const { grid, playerData, wrappedGameProps: { moves, playerID } } = context;
-    const { grid: recordedGrid, doneRecordingGrid: amDoneRecording } = playerData[playerID];
+    const { grid: recordedGrid } = playerData[playerID];
 
     const [confirmationRequired, setConfirmationRequired] = useState(false);
 
@@ -68,15 +68,26 @@ function DoneDialog() {
 
     return <div>
         <button onClick={() => moves.recordGrid(grid)}
-            disabled={amDoneRecording}
         >
             Record Grid
         </button>
 
-        <button onClick={doneRecordedChecked} disabled={amDoneRecording} >
+        <button onClick={doneRecordedChecked}>
             Done
         </button>
     </div>;
+}
+
+function WaitingForPlayers() {
+    const context = useCrossTilesContext();
+    const { playerData, wrappedGameProps: {getPlayerName} } = context;
+    const notFinished : string[] = [];
+    for(const pid in playerData) {
+        if(!playerData[pid].doneRecordingGrid) {
+            notFinished.push(getPlayerName(pid));
+        }
+    }
+    return <div>{"Waiting for " + notFinished.join(", ")}</div>;
 }
 
 export function MakeGrid() : JSX.Element | null {
@@ -109,13 +120,14 @@ export function MakeGrid() : JSX.Element | null {
         return null;
     }
 
+
     const secondsLeft = options.timeToMakeGrid - (now - makeGridStartTime) / 1000;
 
     return <OuterDiv>
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
         <ButtonAndTimeDiv>
-            <DoneDialog/>
+            {amDoneRecording ? <WaitingForPlayers/> : <DoneDialog/> }
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>
     </OuterDiv>;
