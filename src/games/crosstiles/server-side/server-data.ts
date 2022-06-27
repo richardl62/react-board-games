@@ -8,6 +8,7 @@ import { ScoreCategory } from "../score-categories";
 export type GameOptions = {
     timeToMakeGrid: number;
     checkSpelling: boolean;
+    playersGetSameLetters: boolean;
 };
 
 /* Use string values to add with debugging */

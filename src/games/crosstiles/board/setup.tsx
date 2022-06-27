@@ -15,31 +15,37 @@ interface SetOptionsProps {
 function SetOptions(props: SetOptionsProps) {
     const { gameProps: {moves, G} } = props;
 
-    const [checkSpelling, setCheckSpelling] = useState(G.options.checkSpelling);
-    const [timeToMakeGrid, setTimeToMakeGrid] = useState(G.options.timeToMakeGrid);
+    const [options, setOptions] = useState(G.options);
 
     const onChangeTimeToMakeGrid = (e: ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value);
-        setTimeToMakeGrid(value );
+        setOptions({...options, timeToMakeGrid: value} );
     };
 
     return <SetOptionsDiv>
         <label>{"Time to make grid "}
             <input 
                 type="number" 
-                defaultValue={`${timeToMakeGrid}`}
+                defaultValue={`${options.timeToMakeGrid}`}
                 min={"1"}
                 onChange={onChangeTimeToMakeGrid}
             />
         </label>
 
-        <label>{"Check spelling "}
-            <input type="checkbox" checked={checkSpelling}
-                onChange={() => setCheckSpelling(!checkSpelling)} 
+        <label>{"Players get same letters "}
+            <input type="checkbox" checked={options.playersGetSameLetters}
+                onChange={() => setOptions({...options, playersGetSameLetters: !options.playersGetSameLetters})}
             />
         </label>
 
-        <button onClick={() => moves.setOptions({checkSpelling, timeToMakeGrid})}>Set Options</button>
+        <label>{"Check spelling "}
+            <input type="checkbox" checked={options.checkSpelling}
+                onChange={() => setOptions({...options, checkSpelling: !options.checkSpelling})} 
+            />
+        </label>
+
+
+        <button onClick={() => moves.setOptions(options)}>Set Options</button>
     </SetOptionsDiv>;
 }
 

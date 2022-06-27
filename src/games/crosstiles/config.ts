@@ -34,4 +34,5 @@ export const tilesPerTurn = {
 export const defaultOptions = {
     timeToMakeGrid: 120,
     checkSpelling: true,
+    playersGetSameLetters: true,
 }; 
