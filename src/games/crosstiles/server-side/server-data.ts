@@ -3,6 +3,7 @@ import { ScoreCard } from "./score-card";
 import { defaultOptions, Letter } from "../config";
 import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "../score-categories";
+import { ScoreWithCategory } from "./set-score";
 
 export type GameOptions = {
     timeToMakeGrid: number;
@@ -19,13 +20,16 @@ export enum GameStage {
     over = "over",
 }
 
-type Grid = (Letter | null) [][];
+interface GridAndScore {
+    grid: (Letter | null) [][];
+    score: ScoreWithCategory | null;
+}
 
 interface PlayerData {
     readyToStartGame: boolean;
     readyForNextRound: boolean;
     selectedLetters: Letter[] | null;
-    grid: Grid | null;
+    gridAndScore: GridAndScore | null;
     doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
     makeGridStartTime: number | null;
@@ -53,7 +57,7 @@ export function startingServerData(ctx: Ctx): ServerData {
             readyToStartGame: false,
             readyForNextRound: false,
             doneRecordingGrid: false,
-            grid: null,
+            gridAndScore: null,
             scoreCard: startingScoreCard(),
             makeGridStartTime: null,
             chosenCategory: null,

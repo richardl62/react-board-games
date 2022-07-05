@@ -2,8 +2,16 @@ import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { ServerData, GameStage } from "./server-data";
+import { ScoreWithCategory } from "./set-score";
 
-export function recordGrid(G: ServerData, ctx: Ctx, grid: (Letter | null)[][]): void {
+export function recordGrid(
+    G: ServerData,
+    ctx: Ctx,
+    gridAndScore: {
+        grid: (Letter | null)[][],
+        score: ScoreWithCategory | null,
+    }
+): void {
     if (G.stage !== GameStage.makingGrids) {
         throw new Error("Unexpected call to recordGrid - " + G.stage);
     }
@@ -11,5 +19,10 @@ export function recordGrid(G: ServerData, ctx: Ctx, grid: (Letter | null)[][]): 
     const { playerID } = ctx;
     sAssert(playerID);
 
-    G.playerData[playerID].grid = grid.map(row => [...row]);
+    const {grid, score} = gridAndScore;
+
+    G.playerData[playerID].gridAndScore = {
+        grid: grid.map(row => [...row]),
+        score
+    };
 }

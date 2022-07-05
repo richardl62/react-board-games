@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { sameJSON } from "../../../utils/same-json";
 import {  useNowTicker } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { checkGrid } from "../client-side/check-grid/check-grid";
+import { bonusScore } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { RackAndBoard } from "./rack-and-board";
@@ -37,9 +39,10 @@ function minutesAndSeconds(secondsFactional: number) {
 function DoneDialog() {
     const context = useCrossTilesContext();
     
-    const { grid, playerData, wrappedGameProps: { moves, playerID } } = context;
-
-    const recordedGrid = playerData[playerID].grid;
+    const { grid, playerData, isLegalWord, wrappedGameProps: { moves, playerID } } = context;
+    const { gridAndScore: recordedGridAndScore, scoreCard } = playerData[playerID];
+    
+    const recordedGrid = recordedGridAndScore && recordedGridAndScore.grid;
     const gridChangedMessage = () => {
         if(!recordedGrid) {
             return null;
@@ -54,8 +57,20 @@ function DoneDialog() {
     };
 
 
+    const recordGrid = () => {
+        const {scoreCategory, score, nBonuses} = checkGrid(grid, scoreCard, isLegalWord);
+        
+        const scoreParam = scoreCategory && {
+            score,
+            category: scoreCategory,
+            bonus: nBonuses * bonusScore,
+        };
+
+        moves.recordGrid({grid, score: scoreParam});
+    };
+
     return <div>
-        <button onClick={() => moves.recordGrid(grid)} >
+        <button onClick={recordGrid}>
             Record Grid
         </button>
 

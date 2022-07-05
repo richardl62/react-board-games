@@ -26,7 +26,7 @@ export function startRound(G: ServerData, ctx: Ctx): void {
             G.playerData[pid].selectedLetters = G.options.playersGetSameLetters ?
                 sharedLetters : selectLetters(ctx),
             G.playerData[pid].readyForNextRound = false;
-            G.playerData[pid].grid = null;
+            G.playerData[pid].gridAndScore = null;
             G.playerData[pid].makeGridStartTime = null;
             G.playerData[pid].doneRecordingGrid = false;
             G.playerData[pid].chosenCategory = null;

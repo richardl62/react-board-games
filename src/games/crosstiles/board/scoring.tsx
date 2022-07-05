@@ -29,8 +29,9 @@ function CompletedGrid({pid}: CompletedGridProps) {
     const { getPlayerName } = context.wrappedGameProps;
 
     const name = getPlayerName(pid);
-    const { scoreCard, grid, chosenCategory } = playerData[pid];
-    sAssert(grid, "Unexpected null grid");
+    const { scoreCard, gridAndScore, chosenCategory } = playerData[pid];
+    sAssert(gridAndScore, "Unexpected null grid");
+    const {grid} = gridAndScore;
     
     // Kludge??: Ignore any recently chosed option when showing
     // the grid status. This avoids misleading reported status, e.g.

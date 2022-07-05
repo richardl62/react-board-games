@@ -3,19 +3,13 @@ import { sAssert } from "../../../utils/assert";
 import { ScoreCategory } from "../score-categories";
 import { ServerData, GameStage } from "./server-data";
 
-interface setScoreArg {
+export interface ScoreWithCategory {
     category: ScoreCategory;
     score: number;
     bonus: number;
 }
 
-export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
-    if (G.stage !== GameStage.scoring) {
-        throw new Error("Unexpected call to recordGrid");
-    }
-    const { playerID } = ctx;
-    sAssert(playerID);
-
+export function doSetScore(G: ServerData, playerID: string, arg: ScoreWithCategory): void {
     const { category, score, bonus } = arg;
     const { scoreCard } =  G.playerData[playerID];
     scoreCard[category] = score;
@@ -27,4 +21,14 @@ export function setScore(G: ServerData, ctx: Ctx, arg: setScoreArg): void {
         }
     }
     G.playerData[playerID].chosenCategory = category;
+}
+
+export function setScore(G: ServerData, ctx: Ctx, arg: ScoreWithCategory): void {
+    if (G.stage !== GameStage.scoring) {
+        throw new Error("Unexpected call to recordGrid");
+    }
+    const { playerID } = ctx;
+    sAssert(playerID);
+
+    doSetScore(G, playerID, arg);
 }
