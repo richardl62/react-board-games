@@ -33,6 +33,6 @@ export function ReadyToStartGame() : JSX.Element | null {
         <PlayerStatusDiv>
             {elems}
         </PlayerStatusDiv>
-        {!ready && <button onClick={() => moves.readyToStartGame()}>Start Game</button>}
+        {!ready && <button onClick={() => moves.readyToStartGame()}>Start First Round</button>}
     </div>;
 }
