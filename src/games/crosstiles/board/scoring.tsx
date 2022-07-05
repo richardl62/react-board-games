@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
+import { displayName } from "../score-categories";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { TileGrid } from "./tile-grid";
@@ -39,10 +40,17 @@ function CompletedGrid({pid}: CompletedGridProps) {
         originalScoreCard[chosenCategory] = undefined;
     }
     
+    const noScoreMessage = () => {
+        if (chosenCategory) {
+            return `Zero for ${displayName[chosenCategory]}`;
+        }
+        return "Must set a score to zero";
+    };
+    
     return <div>
         <Header>{name}</Header>
         <TileGrid letters={grid} />
-        <GridStatus grid={grid} scoreCard={originalScoreCard} />
+        <GridStatus grid={grid} scoreCard={originalScoreCard} noScoreMessage={noScoreMessage} />
     </div>;
 }
 

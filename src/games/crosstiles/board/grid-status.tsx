@@ -12,16 +12,18 @@ import { sAssert } from "../../../utils/assert";
 interface GridStatusProps {
     scoreCard: ScoreCard, 
     grid: (Letter | null)[][],
+    noScoreMessage?: () => string;
 }
 export function GridStatus(props: GridStatusProps) : JSX.Element | null {
 
-    const { scoreCard, grid } = props;
+    const { scoreCard, grid, noScoreMessage } = props;
     const { isLegalWord } = useCrossTilesContext();
 
     const { gridCategory, scoreCategory, illegalWords, nBonuses} = 
         checkGrid(grid, scoreCard, isLegalWord);
 
-    let text;
+    let text : string;
+    let nsText : string | null = null;
 
     if(scoreCategory) {
         sAssert(gridCategory);
@@ -38,15 +40,23 @@ export function GridStatus(props: GridStatusProps) : JSX.Element | null {
             text += ` + ${nBonuses} bonuses`;
         }
     } else {
-        text = "No score";
         if (illegalWords) {
-            text += ` (Illegal words: ${illegalWords.join(" ")})`;
-        } else if ( gridCategory) {
-            text += ` (${displayName[gridCategory]} unavailable)`;
-        } 
+            text = `Illegal words: ${illegalWords.join(" ")}`;
+        } else if (gridCategory) {
+            text = `${displayName[gridCategory]} unavailable`;
+        } else {
+            text = "";
+        }
+
+        if(noScoreMessage) {
+            nsText = noScoreMessage();
+        }
     }
 
-    return <div>{text}</div>;
+    return <div>
+        <div>{text}</div>
+        {nsText && <div>{nsText}</div>}
+    </div>;
 }
 
 interface ConfirmedScoreProps {
