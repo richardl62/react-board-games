@@ -31,6 +31,12 @@ export function MainBoard(): JSX.Element {
             let onClick;
             if ( tile ) {
                 content = <Tile tile={tile} />;
+                if(active) {
+                    onClick = () => dispatch({
+                        type: "moveToRack",
+                        data: {row: row, col: col}
+                    }); 
+                }
             } else {
                 onClick = () => dispatch({
                     type: "setClickMoveStart",

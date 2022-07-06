@@ -12,6 +12,7 @@ export type ActionType =
     | { type: "setBlank", data: {id: SquareID, letter: Letter}}
     | { type: "externalStateChange", data: ScrabbleGameProps }
     | { type: "setClickMoveStart", data: {row: number, col: number} }
+    | { type: "moveToRack", data:  {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
     | { type: "enableGameHistory", data: {enable: boolean}}
@@ -62,7 +63,10 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         } else {
             console.warn("Attempted clickMove when start is not set");
         }
-    } else if(action.type === "keydown") {
+    } else if(action.type === "moveToRack") {
+        br.moveToRack(action.data);
+    } 
+    else if(action.type === "keydown") {
         if( !state.focusInWordChecker && state.clickMoveStart ) {
             const rackPos = br.findInRack(action.data.key);
             if (rackPos !== null) {

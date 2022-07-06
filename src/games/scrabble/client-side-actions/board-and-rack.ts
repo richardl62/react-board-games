@@ -226,6 +226,15 @@ export class BoardAndRack {
         }
     }
 
+    moveToRack(from: {row: number, col: number} ) : void {
+        const fromPos : TilePosition = {board: from};
+        const fromLetter = this.getExtendedLetter(fromPos);
+        sAssert(fromLetter && this.isActive(fromPos), "Attempt to move non-active tile");
+        
+        this.setActiveTile(fromPos, null);
+        this.addToRack(fromLetter);
+    }
+
     /** Find the rack position of the first instance of the given letter. Return null if 
      * the letter is not found. (Any string can be passed in. But if the string is not a 
      * letter, null is returned.) 

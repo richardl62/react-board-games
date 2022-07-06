@@ -9,11 +9,22 @@ export function tileClicked(state: ReducerState, id: SquareID): ReducerState {
     const gr = new GridAndRack(state.grid, state.rack);
     const cms = state.clickMoveStart;
 
-    if (id.container === "grid" && gr.get(id) === null) {
-        return {
-            ...state,
-            clickMoveStart: newClickMoveStart(cms, id),
-        };
+    if (id.container === "grid" ) {
+        const letter = gr.get(id);
+        if(letter === null) {
+            return {
+                ...state,
+                clickMoveStart: newClickMoveStart(cms, id),
+            };
+        } else {
+            gr.set(id, null);
+            gr.addToRack(letter);
+            return {
+                ...state,
+                grid: gr.grid,
+                rack: gr.rack,
+            };
+        }
     }
 
     if (cms && id.container === "rack") {
@@ -27,6 +38,7 @@ export function tileClicked(state: ReducerState, id: SquareID): ReducerState {
 
     return state;
 }
+
 function newClickMoveStart(cms: ClickMoveStart | null, id: SquareID): ClickMoveStart | null {
     sAssert(id.container === "grid");
 
