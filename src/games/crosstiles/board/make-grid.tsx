@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import {  useNowTicker } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
@@ -37,44 +37,17 @@ function DoneDialog() {
     const context = useCrossTilesContext();
     
     const { grid, playerData, wrappedGameProps: { moves, playerID } } = context;
-    const { grid: recordedGrid } = playerData[playerID];
 
-    const [confirmationRequired, setConfirmationRequired] = useState(false);
-
-    const doneRecordedChecked = () => {
-        if(recordedGrid) {
-            moves.doneRecordingGrid();
-        } else {
-            setConfirmationRequired(true);
-        }
-    };
-
-    const doneRecordedUnchecked = () => {
-        moves.doneRecordingGrid();
-        setConfirmationRequired(false);
-    };
-
-    const doneCancelled = () => {
-        setConfirmationRequired(false);
-    };
-
-    if(confirmationRequired) {
-        return <div>
-            <span>No grid recorded </span>
-            <button onClick={doneRecordedUnchecked} >Confirm Done</button>
-            <button onClick={doneCancelled}>Cancel</button>
-        </div>;
-    }
+    const gridRecorded = Boolean(playerData[playerID].grid);
 
     return <div>
-        <button onClick={() => moves.recordGrid(grid)}
-        >
+        <button onClick={() => moves.recordGrid(grid)} >
             Record Grid
         </button>
 
-        <button onClick={doneRecordedChecked}>
+        {gridRecorded && <button onClick={() => moves.doneRecordingGrid()}> 
             Done
-        </button>
+        </button>}
     </div>;
 }
 
