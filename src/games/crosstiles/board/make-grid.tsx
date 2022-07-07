@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import { sameJSON } from "../../../utils/same-json";
 import {  useNowTicker } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { GameStage } from "../server-side/server-data";
@@ -38,16 +39,31 @@ function DoneDialog() {
     
     const { grid, playerData, wrappedGameProps: { moves, playerID } } = context;
 
-    const gridRecorded = Boolean(playerData[playerID].grid);
+    const recordedGrid = playerData[playerID].grid;
+    const gridChangedMessage = () => {
+        if(!recordedGrid) {
+            return null;
+        }
+ 
+        // Inefficient
+        if(sameJSON(grid, recordedGrid)) {
+            return "Grid recorded";
+        }
+
+        return "Grid changed";
+    };
+
 
     return <div>
         <button onClick={() => moves.recordGrid(grid)} >
             Record Grid
         </button>
 
-        {gridRecorded && <button onClick={() => moves.doneRecordingGrid()}> 
+        {recordedGrid && <button onClick={() => moves.doneRecordingGrid()}> 
             Done
         </button>}
+
+        <span>{gridChangedMessage()}</span>
     </div>;
 }
 
@@ -92,7 +108,6 @@ export function MakeGrid() : JSX.Element | null {
     if(makeGridStartTime === null) {
         return null;
     }
-
 
     const secondsLeft = options.timeToMakeGrid - (now - makeGridStartTime) / 1000;
 
