@@ -40,9 +40,9 @@ function DoneDialog() {
     const context = useCrossTilesContext();
     
     const { grid, playerData, isLegalWord, wrappedGameProps: { moves, playerID } } = context;
-    const { gridAndScore: recordedGridAndScore, scoreCard } = playerData[playerID];
+    const { gridRackAndScore: recordedGridRackAndScore, scoreCard } = playerData[playerID];
     
-    const recordedGrid = recordedGridAndScore && recordedGridAndScore.grid;
+    const recordedGrid = recordedGridRackAndScore && recordedGridRackAndScore.grid;
     const gridChangedMessage = () => {
         if(!recordedGrid) {
             return null;

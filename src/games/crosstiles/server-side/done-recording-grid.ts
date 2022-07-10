@@ -14,8 +14,8 @@ export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
     sAssert(playerID);
 
     G.playerData[playerID].doneRecordingGrid = true;
-    if (!G.playerData[playerID].gridAndScore) {
-        G.playerData[playerID].gridAndScore = {
+    if (!G.playerData[playerID].gridRackAndScore) {
+        G.playerData[playerID].gridRackAndScore = {
             grid: makeEmptyGrid(),
             score: null
         };
@@ -35,7 +35,7 @@ export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
 }
 function applyRecordedScores(G: ServerData) {
     for (const pid in G.playerData) {
-        const score = G.playerData[pid].gridAndScore?.score;
+        const score = G.playerData[pid].gridRackAndScore?.score;
         if(score) {
             doSetScore(G, pid, score);
         }

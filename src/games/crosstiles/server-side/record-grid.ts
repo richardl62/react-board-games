@@ -21,7 +21,7 @@ export function recordGrid(
 
     const {grid, score} = gridAndScore;
 
-    G.playerData[playerID].gridAndScore = {
+    G.playerData[playerID].gridRackAndScore = {
         grid: grid.map(row => [...row]),
         score
     };

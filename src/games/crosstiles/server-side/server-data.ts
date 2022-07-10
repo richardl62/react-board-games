@@ -20,7 +20,7 @@ export enum GameStage {
     over = "over",
 }
 
-interface GridAndScore {
+interface GridRackAndScore {
     grid: (Letter | null) [][];
     score: ScoreWithCategory | null;
 }
@@ -29,7 +29,7 @@ interface PlayerData {
     readyToStartGame: boolean;
     readyForNextRound: boolean;
     selectedLetters: Letter[] | null;
-    gridAndScore: GridAndScore | null;
+    gridRackAndScore: GridRackAndScore | null;
     doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
     makeGridStartTime: number | null;
@@ -57,7 +57,7 @@ export function startingServerData(ctx: Ctx): ServerData {
             readyToStartGame: false,
             readyForNextRound: false,
             doneRecordingGrid: false,
-            gridAndScore: null,
+            gridRackAndScore: null,
             scoreCard: startingScoreCard(),
             makeGridStartTime: null,
             chosenCategory: null,

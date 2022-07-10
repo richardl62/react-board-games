@@ -18,12 +18,12 @@ export class ScoreOptions {
         isLegalWord: (word: string) => boolean,
     ) {
         for(const pid in playerData) {
-            const { scoreCard, gridAndScore } = playerData[pid];
-            sAssert(gridAndScore);
+            const { scoreCard, gridRackAndScore } = playerData[pid];
+            sAssert(gridRackAndScore);
 
 
             this.playerScoreOptions[pid] = {
-                ... checkGrid(gridAndScore.grid, scoreCard, isLegalWord),
+                ... checkGrid(gridRackAndScore.grid, scoreCard, isLegalWord),
                 scoreCard
             };
         }
