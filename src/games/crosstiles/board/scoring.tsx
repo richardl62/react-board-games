@@ -18,6 +18,14 @@ const Header = styled.div`
     font-weight: bold;    
 `;
 
+const GridAndRack = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+    > *:first-child {
+        margin-bottom: 4px;
+    };
+`;
 
 interface CompletedGridProps {
     pid: string;
@@ -31,7 +39,7 @@ function CompletedGrid({pid}: CompletedGridProps) {
     const name = getPlayerName(pid);
     const { scoreCard, gridRackAndScore, chosenCategory } = playerData[pid];
     sAssert(gridRackAndScore, "Unexpected null grid");
-    const {grid} = gridRackAndScore;
+    const {grid, rack } = gridRackAndScore;
     
     // Kludge??: Ignore any recently chosed option when showing
     // the grid status. This avoids misleading reported status, e.g.
@@ -50,7 +58,10 @@ function CompletedGrid({pid}: CompletedGridProps) {
     
     return <div>
         <Header>{name}</Header>
-        <TileGrid letters={grid} />
+        <GridAndRack>
+            <TileGrid letters={[rack]} />
+            <TileGrid letters={grid} />
+        </GridAndRack>
         <GridStatus grid={grid} scoreCard={originalScoreCard} noScoreMessage={noScoreMessage} />
     </div>;
 }
