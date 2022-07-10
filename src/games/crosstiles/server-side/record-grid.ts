@@ -9,6 +9,7 @@ export function recordGrid(
     ctx: Ctx,
     gridAndScore: {
         grid: (Letter | null)[][],
+        rack:  (Letter | null)[],
         score: ScoreWithCategory | null,
     }
 ): void {
@@ -19,10 +20,11 @@ export function recordGrid(
     const { playerID } = ctx;
     sAssert(playerID);
 
-    const {grid, score} = gridAndScore;
+    const {grid, rack, score} = gridAndScore;
 
     G.playerData[playerID].gridRackAndScore = {
         grid: grid.map(row => [...row]),
+        rack: [...rack],
         score
     };
 }

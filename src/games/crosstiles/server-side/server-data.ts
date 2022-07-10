@@ -22,6 +22,7 @@ export enum GameStage {
 
 interface GridRackAndScore {
     grid: (Letter | null) [][];
+    rack: (Letter | null) [],
     score: ScoreWithCategory | null;
 }
 

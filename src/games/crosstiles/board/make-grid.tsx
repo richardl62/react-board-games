@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import { sAssert } from "../../../utils/assert";
 import { sameJSON } from "../../../utils/same-json";
 import {  useNowTicker } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
@@ -8,6 +9,7 @@ import { bonusScore } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { RackAndBoard } from "./rack-and-board";
+import { makeEmptyGrid } from "../server-side/make-empty-grid";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -39,10 +41,12 @@ function minutesAndSeconds(secondsFactional: number) {
 function DoneDialog() {
     const context = useCrossTilesContext();
     
-    const { grid, playerData, isLegalWord, wrappedGameProps: { moves, playerID } } = context;
+    const { grid, rack, playerData, isLegalWord, wrappedGameProps: { moves, playerID } } = context;
     const { gridRackAndScore: recordedGridRackAndScore, scoreCard } = playerData[playerID];
     
     const recordedGrid = recordedGridRackAndScore && recordedGridRackAndScore.grid;
+
+    sAssert(rack);
     const gridChangedMessage = () => {
         if(!recordedGrid) {
             return null;
@@ -66,7 +70,7 @@ function DoneDialog() {
             bonus: nBonuses * bonusScore,
         };
 
-        moves.recordGrid({grid, score: scoreParam});
+        moves.recordGrid({grid, rack, score: scoreParam});
     };
 
     return <div>
@@ -100,7 +104,11 @@ export function MakeGrid() : JSX.Element | null {
     const { moves,  playerID } = context.wrappedGameProps;
 
     const now = useNowTicker();
-    const {makeGridStartTime, doneRecordingGrid: amDoneRecording } = playerData[playerID];
+    const {makeGridStartTime, 
+        gridRackAndScore: recordedGridRackAndScore,
+        doneRecordingGrid: amDoneRecording,
+        selectedLetters, 
+    } = playerData[playerID];
 
     useEffect(()=>{
         if(stage === GameStage.makingGrids) {
@@ -110,6 +118,10 @@ export function MakeGrid() : JSX.Element | null {
             } else {
                 const timesUp = options.timeToMakeGrid < (now - makeGridStartTime) / 1000;
                 if(timesUp && !amDoneRecording) {
+                    if(!recordedGridRackAndScore) {
+                        sAssert(selectedLetters);
+                        moves.recordGrid({grid: makeEmptyGrid(), rack: selectedLetters, score: null});
+                    }
                     moves.doneRecordingGrid();
                 }
             }
