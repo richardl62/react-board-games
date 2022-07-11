@@ -88,9 +88,9 @@ function DoneDialog() {
 
 function WaitingForPlayers() {
     const context = useCrossTilesContext();
-    const { playerData, wrappedGameProps: {getPlayerName} } = context;
+    const { playerData, orderedPlayerIDs, wrappedGameProps: {getPlayerName} } = context;
     const notFinished : string[] = [];
-    for(const pid in playerData) {
+    for(const pid of orderedPlayerIDs) {
         if(!playerData[pid].doneRecordingGrid) {
             notFinished.push(getPlayerName(pid));
         }

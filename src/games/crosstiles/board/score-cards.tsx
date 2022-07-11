@@ -35,7 +35,7 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
 
 export function ScoreCards(): JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData,  wrappedGameProps, isLegalWord } = context;
+    const { stage, playerData,  orderedPlayerIDs, wrappedGameProps, isLegalWord } = context;
     const { getPlayerName, playerID, moves } = wrappedGameProps;
 
     if (stage === GameStage.setup) {
@@ -60,13 +60,13 @@ export function ScoreCards(): JSX.Element | null {
     const elems : JSX.Element[] = [];
 
     elems.push(<ColumnHeader key="blank-header"/>);
-    for (const pid in playerData) {
+    for (const pid of orderedPlayerIDs) {
         elems.push(<ColumnHeader key={pid}>{getPlayerName(pid)}</ColumnHeader>);
     }
 
     for(const category of scoreCategories) {
         elems.push(<CategoryLabel key={category} category={category}/>);
-        for (const pid in playerData) {
+        for (const pid of orderedPlayerIDs) {
             const key = category+pid;
             const {score, bonus}  = scoreAndABonus(pid, category);
             if(score !== null) {
@@ -87,11 +87,10 @@ export function ScoreCards(): JSX.Element | null {
     }
 
     elems.push(<CategoryLabel key={"totalLabel"} category={"total"} />);
-    for (const pid in playerData) {
+    for (const pid of orderedPlayerIDs) {
         const score = totalPlayerScore(pid, context);
         elems.push(<KnownScore key={"total"+pid}>{score}</KnownScore>);
     }
 
-    const nPlayers=Object.keys(playerData).length;
-    return <ScoreCardsDiv nPlayers={nPlayers}>{elems}</ScoreCardsDiv>;
+    return <ScoreCardsDiv nPlayers={orderedPlayerIDs.length}>{elems}</ScoreCardsDiv>;
 }

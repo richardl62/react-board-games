@@ -12,7 +12,7 @@ const PlayerStatusDiv = styled.div`
 
 export function ReadyToStartGame() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData } = context;
+    const { stage, playerData, orderedPlayerIDs } = context;
     const { moves, getPlayerName, playerID } = context.wrappedGameProps;
 
     if(stage !== GameStage.starting) {
@@ -21,7 +21,7 @@ export function ReadyToStartGame() : JSX.Element | null {
 
     const elems: JSX.Element[] = [];
 
-    for(const pid in playerData) {
+    for(const pid of orderedPlayerIDs) {
         const ready = playerData[pid].readyToStartGame;
 
         elems.push(<span key={pid+"name"}>{getPlayerName(pid)+":"}</span>);
