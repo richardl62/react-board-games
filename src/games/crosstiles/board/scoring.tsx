@@ -5,6 +5,7 @@ import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context
 import { displayName } from "../score-categories";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
+import { PlayerStatus } from "./player-status";
 import { TileGrid } from "./tile-grid";
 
 const ScoringDiv = styled.div`
@@ -76,16 +77,22 @@ export function Scoring() : JSX.Element | null {
         return null;
     }
     const scoreChosen = Boolean(playerData[playerID].chosenCategory); 
+    const amReady = playerData[playerID].readyForNextRound;
+
+    const readyMessage = (pid: string) =>
+        playerData[pid].readyForNextRound ? "Ready" : null;
+
     return <div>
         <ScoringDiv>
             {Object.keys(playerData).map(pid => <CompletedGrid key={pid} pid={pid} />)}
         </ScoringDiv>
 
-        {scoreChosen && 
+        {scoreChosen && !amReady &&
             <button onClick={()=>moves.readyForNextRound()}>
-                Start Next Round
+                Ready for Next Round
             </button>
         }
+        <PlayerStatus message={readyMessage} />
     </div>;
 }
 

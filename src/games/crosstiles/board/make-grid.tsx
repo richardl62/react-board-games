@@ -10,6 +10,7 @@ import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { RackAndBoard } from "./rack-and-board";
 import { makeEmptyGrid } from "../server-side/make-empty-grid";
+import { PlayerStatus } from "./player-status";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -86,18 +87,6 @@ function DoneDialog() {
     </div>;
 }
 
-function WaitingForPlayers() {
-    const context = useCrossTilesContext();
-    const { playerData, orderedPlayerIDs, wrappedGameProps: {getPlayerName} } = context;
-    const notFinished : string[] = [];
-    for(const pid of orderedPlayerIDs) {
-        if(!playerData[pid].doneRecordingGrid) {
-            notFinished.push(getPlayerName(pid));
-        }
-    }
-    return <div>{"Waiting for " + notFinished.join(", ")}</div>;
-}
-
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { playerData, stage, grid, options } = context;
@@ -138,11 +127,15 @@ export function MakeGrid() : JSX.Element | null {
 
     const secondsLeft = options.timeToMakeGrid - (now - makeGridStartTime) / 1000;
 
+    const doneMessage = (pid: string) =>
+        playerData[pid].doneRecordingGrid ? "Done" : null;
+
     return <OuterDiv>
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
         <ButtonAndTimeDiv>
-            {amDoneRecording ? <WaitingForPlayers/> : <DoneDialog/> }
+            {!amDoneRecording && <DoneDialog/> }
+            <PlayerStatus message={doneMessage} />
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>
     </OuterDiv>;

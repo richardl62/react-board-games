@@ -19,7 +19,7 @@ export function ReadyToStartGame() : JSX.Element | null {
 
     const ready = playerData[playerID].readyToStartGame;
     return <div>
-        {!ready && <button onClick={() => moves.readyToStartGame()}>Start First Round</button>}
+        {!ready && <button onClick={() => moves.readyToStartGame()}>Ready</button>}
         <PlayerStatus message={message} />
     </div>;
 }
