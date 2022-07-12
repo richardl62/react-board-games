@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { displayName } from "../score-categories";
+import { scoreCardFull } from "../server-side/score-card";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { PlayerStatus } from "./player-status";
@@ -83,6 +84,8 @@ export function Scoring() : JSX.Element | null {
     const readyMessage = (pid: string) =>
         playerData[pid].readyForNextRound ? "Ready" : null;
 
+    const endOfGame = scoreCardFull(playerData[playerID].scoreCard); //KLUDGE?
+    
     return <div>
         <ScoringDiv>
             {Object.keys(playerData).map(pid => <CompletedGrid key={pid} pid={pid} />)}
@@ -90,7 +93,7 @@ export function Scoring() : JSX.Element | null {
 
         {scoreChosen && !amReady &&
             <button onClick={()=>moves.readyForNextRound()}>
-                Ready for Next Round
+                {endOfGame ? "Ready for final scores" : "Ready for Next Round"}
             </button>
         }
         <PlayerStatus message={readyMessage} />
