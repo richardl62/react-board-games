@@ -132,7 +132,8 @@ export function MakeGrid() : JSX.Element | null {
 
     return <OuterDiv>
         <RackAndBoard />
-        <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />
+        {options.showStatusWhileMakingGrid &&
+            <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} />}
         <ButtonAndTimeDiv>
             {!amDoneRecording && <DoneDialog/> }
             <PlayerStatus message={doneMessage} />

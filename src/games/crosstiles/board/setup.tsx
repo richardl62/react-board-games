@@ -35,7 +35,7 @@ function SetOptions(props: SetOptionsProps) {
     // To do. Think about simplifying this code, in particular
     // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
-        <div>*** Work in progress ***</div>
+        <div>*** Under development ***</div>
         <br/>
         <label>{"Time to make grid "}
             <input 
@@ -93,6 +93,13 @@ function SetOptions(props: SetOptionsProps) {
                 onChange={() => setOptions({...options, playersGetSameLetters: !options.playersGetSameLetters})}
             />
         </label>
+
+        <label>{"Show status while making grids "}
+            <input type="checkbox" checked={options.showStatusWhileMakingGrid}
+                onChange={() => setOptions({...options, showStatusWhileMakingGrid: !options.showStatusWhileMakingGrid})} 
+            />
+        </label>
+
 
         <label>{"Check spelling "}
             <input type="checkbox" checked={options.checkSpelling}

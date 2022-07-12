@@ -28,6 +28,7 @@ export type GameOptions = {
     minVowels: number;
     minConsonants: number;
     checkSpelling: boolean;
+    showStatusWhileMakingGrid: boolean;
     playersGetSameLetters: boolean;
 };
 
@@ -37,5 +38,6 @@ export const defaultOptions: GameOptions = {
     minVowels: 2,
     minConsonants: 4,
     checkSpelling: true,
+    showStatusWhileMakingGrid: true,
     playersGetSameLetters: true,
 }; 
