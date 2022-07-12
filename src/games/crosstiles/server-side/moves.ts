@@ -6,6 +6,7 @@ import { setOptions } from "./set-options";
 import { setMakeGridStartTime } from "./set-make-grid-start";
 import { readyToStartGame } from "./starting-game";
 import { readyForNextRound } from "./starting-round";
+import { restart } from "./restart";
 
 export const bgioMoves = {
     setOptions: wrappedMoveFunction(setOptions),
@@ -15,6 +16,7 @@ export const bgioMoves = {
     recordGrid: wrappedMoveFunction(recordGrid),
     doneRecordingGrid: wrappedMoveFunction(doneRecordingGrid),
     setScore: wrappedMoveFunction(setScore),
+    restart: wrappedMoveFunction(restart),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,4 +30,5 @@ export interface ClientMoves {
     recordGrid: ClientFunction<typeof recordGrid>;
     doneRecordingGrid: ClientFunction<typeof doneRecordingGrid>;
     setScore: ClientFunction<typeof setScore>;
+    restart: ClientFunction<typeof restart>;
 }

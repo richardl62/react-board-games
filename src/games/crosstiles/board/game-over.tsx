@@ -4,6 +4,12 @@ import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context
 import { totalScore } from "../server-side/score-card";
 import { GameStage } from "../server-side/server-data";
 
+const GameOverDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+`;
+
 const Heading = styled.div`
     font-weight: bold;
 `;
@@ -17,7 +23,7 @@ const ScoreTable = styled.div`
 export function GameOver() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerData,  wrappedGameProps } = context;
-    const { getPlayerName } = wrappedGameProps;
+    const { getPlayerName, moves } = wrappedGameProps;
 
     if(stage !== GameStage.over) {
         return null;
@@ -34,7 +40,7 @@ export function GameOver() : JSX.Element | null {
     scores.sort((p1, p2) => p2.score - p1.score);
 
 
-    return <div>
+    return <GameOverDiv>
         <Heading>Final scores</Heading>
 
         <ScoreTable>
@@ -44,5 +50,7 @@ export function GameOver() : JSX.Element | null {
             ]
             )}
         </ScoreTable>
-    </div>;
+
+        <button onClick={()=>moves.restart()}>Start new game</button>
+    </GameOverDiv>;
 }
