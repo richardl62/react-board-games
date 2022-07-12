@@ -12,23 +12,79 @@ interface SetOptionsProps {
     gameProps: CrossTilesGameProps;
 } 
 
+function parseRestrictedInt(str: string, low: number, high: number) : number {
+    const val = parseInt(str);
+    if(isNaN(val)) {
+        return low; // arbitary.
+    }
+    if(val < low) {
+        return low;
+    }
+    if(val > high) {
+        return high;
+    }
+
+    return val;
+}
+
 function SetOptions(props: SetOptionsProps) {
     const { gameProps: {moves, G} } = props;
 
     const [options, setOptions] = useState(G.options);
 
-    const onChangeTimeToMakeGrid = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(e.target.value);
-        setOptions({...options, timeToMakeGrid: value} );
-    };
-
+    // To do. Think about simplifying this code, in particular
+    // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
+        <div>*** Work in progress ***</div>
+        <br/>
         <label>{"Time to make grid "}
             <input 
                 type="number" 
-                defaultValue={`${options.timeToMakeGrid}`}
-                min={"1"}
-                onChange={onChangeTimeToMakeGrid}
+                defaultValue={options.timeToMakeGrid}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+                    const value = parseRestrictedInt(e.target.value,1,9999);
+                    setOptions({...options, timeToMakeGrid: value} );
+                }}
+            />
+        </label>
+
+        <label>{"Rack size [6-8] "}
+            <input 
+                type="number" 
+                min={6}
+                max={8}
+                defaultValue={options.rackSize}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+                    const value = parseRestrictedInt(e.target.value, 6, 8);
+                    setOptions({...options, rackSize: value} );
+                }}
+            />
+        </label>
+
+        <label>{"Min vowels [0-2] "}
+            <input 
+                type="number"
+                min={0}
+                max={2} 
+                defaultValue={options.minVowels}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+                    const value = parseRestrictedInt(e.target.value, 0, 2);
+                    setOptions({...options, minVowels: value} );
+                }}
+            />
+        </label>
+
+        
+        <label>{"Min consonsants [0-4] "}
+            <input 
+                type="number"
+                min={0}
+                max={4}  
+                defaultValue={options.minConsonants}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+                    const value = parseRestrictedInt(e.target.value, 0, 4);
+                    setOptions({...options, minConsonants: value} );
+                }}
             />
         </label>
 
