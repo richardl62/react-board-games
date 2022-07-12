@@ -5,7 +5,7 @@ import { ErrorMessage } from "../../../utils/error-message";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { GameStage } from "../server-side/server-data";
-import { GameOver } from "./game-over";
+import { EndOfGame } from "./end-of-game";
 import { MakeGrid } from "./make-grid";
 import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
@@ -34,7 +34,7 @@ function GameStages(props: GameStagesProps) {
             <ReadyToStartGame />
             <MakeGrid />
             <Scoring />
-            <GameOver />
+            <EndOfGame />
             {/* End of functions that return null if the game is not at the appropriate stage */}
         </StagesDiv>
 

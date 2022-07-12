@@ -22,7 +22,7 @@ const ScoreTable = styled.div`
     margin-bottom: 8px;
 `;
 
-export function GameOver() : JSX.Element | null {
+export function EndOfGame() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { stage, playerData,  wrappedGameProps } = context;
     const { getPlayerName, moves, playerID } = wrappedGameProps;
