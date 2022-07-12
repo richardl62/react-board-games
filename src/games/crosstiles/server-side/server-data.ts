@@ -23,6 +23,7 @@ interface GridRackAndScore {
 
 interface PlayerData {
     readyToStartGame: boolean;
+    readyForNewGame: boolean;
     readyForNextRound: boolean;
     selectedLetters: Letter[] | null;
     gridRackAndScore: GridRackAndScore | null;
@@ -51,6 +52,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData[pid] = {
             selectedLetters: null,
             readyToStartGame: false,
+            readyForNewGame: false,
             readyForNextRound: false,
             doneRecordingGrid: false,
             gridRackAndScore: null,
