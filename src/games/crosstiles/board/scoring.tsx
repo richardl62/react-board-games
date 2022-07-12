@@ -22,6 +22,7 @@ const Header = styled.div`
 const GridAndRack = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     margin-top: 2px;
     > *:first-child {
         margin-bottom: 4px;
