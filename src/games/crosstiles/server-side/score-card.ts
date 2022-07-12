@@ -6,15 +6,6 @@ export type ScoreCard = {[category in ScoreCategory]? : number};
 export function startingScoreCard(): ScoreCard {
     return {
         bonus: 0,
-
-        /* Start of temporary hack */
-        // length4: 0,
-        length5: 0,
-        length6: 0,
-        words2: 0,
-        words3: 0,
-        chance: 0,
-        /* End of temporary hack */
     };
 }
 
