@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { Letter, letterDistrubtion, tilesPerTurn } from "../config";
+import { GameOptions, Letter, letterDistrubtion } from "../config";
 
 // Here "Y" counts as a vowel.
 const vowels = ["A","E","I","O","U","Y"];
@@ -20,13 +20,13 @@ const letterSet = (() => {
 })();
 Object.freeze(letterSet);
 
-function selectLettersUnchecked(ctx: Ctx) : Letter[] {
+function selectLettersUnchecked(ctx: Ctx, opts: GameOptions) : Letter[] {
     const random = ctx.random;
     sAssert(random);
-    return random.Shuffle([...letterSet]).slice(0, tilesPerTurn.number);
+    return random.Shuffle([...letterSet]).slice(0, opts.rackSize);
 }
 
-function selectionOK(letters: Letter[]) {
+function selectionOK(letters: Letter[], opts: GameOptions) {
     let nVowels = 0;
     let nConsonants = 0;
     for(const letter of letters) {
@@ -37,13 +37,13 @@ function selectionOK(letters: Letter[]) {
         }
     }
 
-    return nVowels >= tilesPerTurn.minVowels && nConsonants >= tilesPerTurn.minConsonants;
+    return nVowels >= opts.minVowels && nConsonants >= opts.minConsonants;
 }
 
-export function selectLetters(ctx: Ctx) : Letter[] {
-    let selected = selectLettersUnchecked(ctx);
-    while(!selectionOK(selected)) {
-        selected = selectLettersUnchecked(ctx);
+export function selectLetters(ctx: Ctx, opts: GameOptions) : Letter[] {
+    let selected = selectLettersUnchecked(ctx, opts);
+    while(!selectionOK(selected, opts)) {
+        selected = selectLettersUnchecked(ctx, opts);
     }
     
     return selected;

@@ -1,15 +1,10 @@
 import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-card";
-import { defaultOptions, Letter } from "../config";
+import { defaultOptions, GameOptions, Letter } from "../config";
 import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "../score-categories";
 import { ScoreWithCategory } from "./set-score";
 
-export type GameOptions = {
-    timeToMakeGrid: number;
-    checkSpelling: boolean;
-    playersGetSameLetters: boolean;
-};
 
 /* Use string values to add with debugging */
 export enum GameStage {
