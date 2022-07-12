@@ -15,12 +15,13 @@ export function PlayerStatus(props: PlayerStatusProps): JSX.Element {
     const { message } = props;
 
     const context = useCrossTilesContext();
-    const { orderedPlayerIDs } = context;
+    const { nPlayers, nthPlayerID } = context;
     const { getPlayerName } = context.wrappedGameProps;
 
 
     const elems: JSX.Element[] = [];
-    for (const pid of orderedPlayerIDs) {
+    for (let i = 0; i < nPlayers; ++i) {
+        const pid = nthPlayerID(i);
         const msg = message(pid);
         if (msg) {
             elems.push(<span key={pid + "name"}>{getPlayerName(pid) + ":"}</span>);
