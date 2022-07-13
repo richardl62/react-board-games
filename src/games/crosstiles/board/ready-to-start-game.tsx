@@ -31,7 +31,7 @@ export function ReadyToStartGame() : JSX.Element | null {
     const addOption = (name:string, val: number|boolean) => {
         const key = () => optionElems.length;
 
-        const boolStr = (b: boolean) => b ? "true" : "false";
+        const boolStr = (b: boolean) => b ? "True" : "False";
         const valStr = typeof val === "boolean" ? boolStr(val) : val.toString();
         
 
