@@ -50,7 +50,7 @@ function DoneDialog() {
     sAssert(rack);
     const gridChangedMessage = () => {
         if(!recordedGrid) {
-            return null;
+            return "No grid recorded";
         }
  
         // Inefficient

@@ -44,22 +44,25 @@ export interface ServerData {
     timestamp: number;
 }
 
+export function startingPlayerData() : PlayerData {
+    return {
+        selectedLetters: null,
+        readyToStartGame: false,
+        readyForNewGame: false,
+        readyForNextRound: false,
+        doneRecordingGrid: false,
+        gridRackAndScore: null,
+        scoreCard: startingScoreCard(),
+        makeGridStartTime: null,
+        chosenCategory: null,
+    };
+}
 export function startingServerData(ctx: Ctx): ServerData {
 
     const playerData : {[playerID: string]: PlayerData } = {};
     
     for(const pid in ctx.playOrder) {
-        playerData[pid] = {
-            selectedLetters: null,
-            readyToStartGame: false,
-            readyForNewGame: false,
-            readyForNextRound: false,
-            doneRecordingGrid: false,
-            gridRackAndScore: null,
-            scoreCard: startingScoreCard(),
-            makeGridStartTime: null,
-            chosenCategory: null,
-        };
+        playerData[pid] = startingPlayerData();
     }
 
     const G = {

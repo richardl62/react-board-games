@@ -2,12 +2,18 @@ import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
-import { GameStage, ServerData } from "./server-data";
+import { GameStage, ServerData, startingPlayerData } from "./server-data";
 
 export function startRound(G: ServerData, ctx: Ctx): void {
     const { stage, playerData, options } = G;
 
     sAssert(stage === GameStage.makingGrids);
+
+    for (const pid in G.playerData) {
+        const scoreCard = G.playerData[pid].scoreCard;
+        G.playerData[pid] = startingPlayerData();
+        G.playerData[pid].scoreCard = scoreCard;
+    }
 
     let gameOver = true;
     for(const pid in playerData) {
@@ -20,16 +26,16 @@ export function startRound(G: ServerData, ctx: Ctx): void {
         G.stage = GameStage.over;
     } else {
         G.round = G.round + 1;
-        const sharedLetters = selectLetters(ctx, options);
 
-        for (const pid in G.playerData) {
-            G.playerData[pid].selectedLetters = G.options.playersGetSameLetters ?
-                sharedLetters : selectLetters(ctx, options),
-            G.playerData[pid].readyForNextRound = false;
-            G.playerData[pid].gridRackAndScore = null;
-            G.playerData[pid].makeGridStartTime = null;
-            G.playerData[pid].doneRecordingGrid = false;
-            G.playerData[pid].chosenCategory = null;
+        if(G.options.playersGetSameLetters) {
+            const sharedLetters = selectLetters(ctx, options);
+            for (const pid in G.playerData) {
+                G.playerData[pid].selectedLetters = sharedLetters;
+            }
+        } else {
+            for (const pid in G.playerData) {
+                G.playerData[pid].selectedLetters = selectLetters(ctx, options);
+            }
         }
     }
 
