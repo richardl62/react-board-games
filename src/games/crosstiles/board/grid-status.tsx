@@ -12,12 +12,21 @@ import { sAssert } from "../../../utils/assert";
 interface GridStatusProps {
     scoreCard: ScoreCard, 
     grid: (Letter | null)[][],
+    checkSpelling?: boolean, // Defaaults to true
     noScoreMessage?: () => string;
 }
 export function GridStatus(props: GridStatusProps) : JSX.Element | null {
 
     const { scoreCard, grid, noScoreMessage } = props;
-    const { isLegalWord } = useCrossTilesContext();
+    const checkSpelling = props.checkSpelling !== false;
+    const ctx = useCrossTilesContext();
+
+    let isLegalWord;
+    if(checkSpelling) {
+        isLegalWord = ctx.isLegalWord;
+    } else {
+        isLegalWord = () => true;
+    }
 
     const { gridCategory, scoreCategory, illegalWords, nBonuses} = 
         checkGrid(grid, scoreCard, isLegalWord);

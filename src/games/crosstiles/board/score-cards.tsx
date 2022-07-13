@@ -39,7 +39,7 @@ export function ScoreCards(): JSX.Element | null {
         isLegalWord } = context;
     const { getPlayerName, playerID, moves } = wrappedGameProps;
 
-    if (stage === GameStage.setup) {
+    if (stage === GameStage.setup || stage === GameStage.starting) {
         return null;
     }
 
