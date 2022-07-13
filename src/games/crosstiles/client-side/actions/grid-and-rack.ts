@@ -117,8 +117,9 @@ export class GridAndRack {
     }
 
     moveFromRack(start: ClickMoveStart, rackPos: number) : void {
-        let { row, col } = start;
+        sAssert(this.rack[rackPos]);
 
+        let { row, col } = start;
         if( start.direction === "right") {
             while(this.grid[row][col]) {
                 col++;
