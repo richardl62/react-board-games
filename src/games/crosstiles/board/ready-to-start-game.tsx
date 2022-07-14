@@ -44,11 +44,12 @@ export function ReadyToStartGame() : JSX.Element | null {
     addOption("Rack size", options.rackSize);
     addOption("Min vowels in rack", options.minVowels);
     addOption("Min consonants in rack", options.minConsonants);
+    addOption("Min bonus letters", options.minBonusLetters);
     addOption("All players get same letters", options.playersGetSameLetters);
     if(options.checkSpelling) {
         addOption("Check spell while making grid", options.checkSpellingWhileMakingGrid);  
     } else {
-        addOption("Full disable spelling checks (debug)", true);
+        addOption("Fully disable spelling checks (debug)", true);
     }
     const ready = playerData[playerID].readyToStartGame;
     return <div>

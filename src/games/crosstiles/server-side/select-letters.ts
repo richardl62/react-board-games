@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { GameOptions, Letter, letterDistrubtion } from "../config";
+import { bonusLetters, GameOptions, Letter, letterDistrubtion } from "../config";
 
 const vowels = ["A","E","I","O","U"];
 
@@ -28,15 +28,23 @@ function selectLettersUnchecked(ctx: Ctx, opts: GameOptions) : Letter[] {
 function selectionOK(letters: Letter[], opts: GameOptions) {
     let nVowels = 0;
     let nConsonants = 0;
+    let nBonusLetters = 0;
     for(const letter of letters) {
         if(vowels.includes(letter)) {
             ++nVowels;
         } else {
             ++nConsonants;
         }
+
+        if(bonusLetters.includes(letter)) {
+            nBonusLetters++;
+        }
     }
 
-    return nVowels >= opts.minVowels && nConsonants >= opts.minConsonants;
+    return nVowels >= opts.minVowels 
+        && nConsonants >= opts.minConsonants
+        && nBonusLetters >= opts.minBonusLetters
+    ;
 }
 
 export function selectLetters(ctx: Ctx, opts: GameOptions) : Letter[] {

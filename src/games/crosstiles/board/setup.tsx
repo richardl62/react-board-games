@@ -88,6 +88,19 @@ function SetOptions(props: SetOptionsProps) {
             />
         </label>
 
+        <label>{"Min bonus letters [0-2] "}
+            <input 
+                type="number"
+                min={0}
+                max={2}  
+                defaultValue={options.minBonusLetters}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+                    const value = parseRestrictedInt(e.target.value, 0, 2);
+                    setOptions({...options, minBonusLetters: value} );
+                }}
+            />
+        </label>
+
         <label>{"Players get same letters "}
             <input type="checkbox" checked={options.playersGetSameLetters}
                 onChange={() => setOptions({...options, playersGetSameLetters: !options.playersGetSameLetters})}
