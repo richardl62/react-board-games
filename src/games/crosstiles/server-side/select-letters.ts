@@ -2,8 +2,7 @@ import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { GameOptions, Letter, letterDistrubtion } from "../config";
 
-// Here "Y" counts as a vowel.
-const vowels = ["A","E","I","O","U","Y"];
+const vowels = ["A","E","I","O","U"];
 
 const letterSet = (() => {
     const letterSet: Array<Letter> = [];
