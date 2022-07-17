@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GameWarnings, WaitingForPlayers, WrappedGameProps } from "../../../app-game-support";
+import { GameWarnings, WrappedGameProps } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
@@ -10,7 +10,7 @@ import { MakeGrid } from "./make-grid";
 import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
-import { SetOptionsOrWait as Setup } from "./setup";
+import { SetOptionsOrWait } from "./setup";
 
 const BoardDiv = styled.div`
    display: inline-block;
@@ -51,10 +51,6 @@ function Board(props: BoardProps): JSX.Element {
     const { gameProps } = props; 
     const crossTilesGameProps = gameProps as unknown as CrossTilesGameProps;
 
-    if(!crossTilesGameProps.allJoined) {
-        <WaitingForPlayers {...gameProps} />;
-    }
-
     const { G: {stage, serverError} } = crossTilesGameProps;
 
     return <BoardDiv>
@@ -62,7 +58,7 @@ function Board(props: BoardProps): JSX.Element {
         <ErrorMessage category="server error" message={serverError} />
 
         {stage === GameStage.setup ?  
-            <Setup gameProps={crossTilesGameProps} /> : 
+            <SetOptionsOrWait gameProps={crossTilesGameProps} /> : 
             <GameStages gameProps={crossTilesGameProps} />}
     </BoardDiv>;
 }

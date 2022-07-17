@@ -4,7 +4,7 @@
 import { sAssert } from "../utils/assert";
 import { BoardProps } from "./board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
-
+//import * as UrlParams from "../app/url-params";
 /**
  * Bgio type definition of 'moves'.
  *
@@ -41,19 +41,24 @@ export interface WrappedGameProps<G = unknown, Moves=unknown>
 export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
+    //const {offline} = UrlParams;
+    const offline = false;
 
     let allJoined = true;
     let allConnected = true;
-    for (const playerID in playerData) {
-        const pd = playerData[playerID];
-        if (pd.status !== "connected") {
-            allConnected = false;
-        }
-        if (pd.status === "not joined") {
-            allJoined = false;
+
+    // KLUDGE?: Assume all players in an offline game are connected
+    if (!offline) {
+        for (const playerID in playerData) {
+            const pd = playerData[playerID];
+            if (pd.status !== "connected") {
+                allConnected = false;
+            }
+            if (pd.status === "not joined") {
+                allJoined = false;
+            }
         }
     }
-
     sAssert(bgioProps.playerID);
     
     const bigoEvents = bgioProps.events;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { WaitingForPlayers } from "../../../app-game-support";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { GameStage } from "../server-side/server-data";
 import { PlayerStatus } from "./player-status";
@@ -15,8 +16,8 @@ const OptionsTable = styled.div`
 
 export function ReadyToStartGame() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData, options } = context;
-    const { moves, playerID } = context.wrappedGameProps;
+    const { stage, playerData, options, wrappedGameProps } = context;
+    const { moves, playerID, allJoined } = wrappedGameProps;
 
     if(stage !== GameStage.starting) {
         return null;
@@ -51,10 +52,19 @@ export function ReadyToStartGame() : JSX.Element | null {
     } else {
         addOption("Fully disable spelling checks (debug)", true);
     }
+    
     const ready = playerData[playerID].readyToStartGame;
     return <div>
         <OptionsTable>{optionElems}</OptionsTable>
-        {!ready && <button onClick={() => moves.readyToStartGame()}>Ready to start game</button>}
-        <PlayerStatus message={message} />
+
+        {allJoined ?
+            <div>
+                {!ready && <button onClick={() => moves.readyToStartGame()}>Ready to start game</button>}
+                <PlayerStatus message={message} />
+            </div>
+            :
+            <WaitingForPlayers {...wrappedGameProps} />
+        }
+
     </div>;
 }
