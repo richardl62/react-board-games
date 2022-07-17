@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { WaitingForPlayers, WrappedGameProps } from "../../../app-game-support";
+import { GameWarnings, WaitingForPlayers, WrappedGameProps } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
@@ -58,6 +58,7 @@ function Board(props: BoardProps): JSX.Element {
     const { G: {stage, serverError} } = crossTilesGameProps;
 
     return <BoardDiv>
+        <GameWarnings {...gameProps}/>
         <ErrorMessage category="server error" message={serverError} />
 
         {stage === GameStage.setup ?  
