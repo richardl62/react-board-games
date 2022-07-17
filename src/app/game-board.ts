@@ -2,7 +2,8 @@
 // isConnected as an optional member. The code below is my way of add it.
 
 import { useEffect } from "react";
-import { AppGame, BoardProps, makeWrappedGameProps, WrappedGameProps } from "../app-game-support";
+import { AppGame, BoardProps } from "../app-game-support";
+import { WrappedGameProps, makeWrappedGameProps } from "../app-game-support/wrapped-game-props";
 
 
 function gameStatus(gameProps: WrappedGameProps) {

@@ -1,7 +1,8 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
-import { AppGame, DefaultMovesType, GameCategory, GameWarnings, WaitingForPlayers, WrappedGameProps } from "../app-game-support";
+import { AppGame, GameCategory, GameWarnings, WaitingForPlayers } from "../app-game-support";
+import { WrappedGameProps, DefaultMovesType } from "../app-game-support/wrapped-game-props";
 
 // Needlessly complex to help with testing. (Hmm, that seems to be contradict itself.)
 interface G {

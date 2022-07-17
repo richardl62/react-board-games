@@ -4,7 +4,7 @@
 import { sAssert } from "../utils/assert";
 import { BoardProps } from "./board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
-//import * as UrlParams from "../app/url-params";
+import * as UrlParams from "../app/url-params";
 /**
  * Bgio type definition of 'moves'.
  *
@@ -35,14 +35,12 @@ export interface WrappedGameProps<G = unknown, Moves=unknown>
     /** Part of BGIO props, but here we assert it is non-null */
     playerID: string; 
     getPlayerName: (pid: string) => string;
-
 }
 
 export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
-    //const {offline} = UrlParams;
-    const offline = false;
+    const {offline} = UrlParams;
 
     let allJoined = true;
     let allConnected = true;

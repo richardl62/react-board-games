@@ -1,4 +1,4 @@
-import { WrappedGameProps } from "../../../app-game-support";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { ServerData } from "../server-side";
 import { ClientMoves } from "../server-side/bgio-moves";
 

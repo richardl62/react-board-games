@@ -7,6 +7,5 @@ export { defaultPlayerName, nonJoinedPlayerName } from "./player-data";
 export { GameWarnings } from "./show-warning";
 export type { MatchID, Player } from "./types";
 export { WaitingForPlayers } from "./waiting-for-players";
-export { makeWrappedGameProps } from "./wrapped-game-props";
-export type { DefaultMovesType, WrappedGameProps } from "./wrapped-game-props";
+
 

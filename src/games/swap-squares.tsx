@@ -1,6 +1,7 @@
 import { Ctx } from "boardgame.io";
 import React from "react";
-import { AppGame, DefaultMovesType, GameCategory, WrappedGameProps } from "../app-game-support";
+import { AppGame, GameCategory } from "../app-game-support";
+import { DefaultMovesType, WrappedGameProps } from "../app-game-support/wrapped-game-props";
 import { BoarderedGrid } from "../utils/board/boardered-grid";
 import { DndProvider } from "../utils/board/drag-drop";
 import { DragDrop, PieceHolder } from "../utils/board/piece-holder";

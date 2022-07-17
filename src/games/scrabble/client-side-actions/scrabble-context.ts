@@ -3,11 +3,11 @@ import { sAssert } from "../../../utils/assert";
 import { ReducerState } from "./reducer-state";
 import { ActionType } from "./scrabble-reducer";
 import { ScrabbleConfig } from "../config";
-import { WrappedGameProps } from "../../../app-game-support";
 import { ClientMoves } from "../server-side/bgio-moves";
 import { isServerData, ServerData } from "../server-side";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state

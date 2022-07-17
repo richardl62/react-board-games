@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GameWarnings, WrappedGameProps } from "../../../app-game-support";
+import { GameWarnings } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
@@ -11,6 +11,7 @@ import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
 import { SetOptionsOrWait } from "./setup";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
 const BoardDiv = styled.div`
    display: inline-block;

@@ -1,6 +1,6 @@
 import React from "react";
-import { WrappedGameProps } from ".";
 import styled from "styled-components";
+import { WrappedGameProps } from "./wrapped-game-props";
 
 const Name = styled.span`
     /* font-weight: bold; */
