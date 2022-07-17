@@ -29,6 +29,11 @@ interface PlayerData {
     gridRackAndScore: GridRackAndScore | null;
     doneRecordingGrid: boolean;
     scoreCard: ScoreCard;
+    /**
+     * makeGridStartTime is recorded on the server to ensure it is 
+     * preserved when the browser is refresheed. It is in PlayerData to avoid
+     * any issues caused by different clock settings on different machines.
+     */
     makeGridStartTime: number | null;
     chosenCategory: ScoreCategory | null;
 }
