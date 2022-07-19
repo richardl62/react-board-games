@@ -54,7 +54,7 @@ export function GridStatus(props: GridStatusProps) : JSX.Element | null {
         } else if (gridCategory) {
             text = `${displayName[gridCategory]} unavailable`;
         } else {
-            text = "";
+            text = "No category completed";
         }
 
         if(noScoreMessage) {
