@@ -8,32 +8,33 @@ export function tileClicked(state: ReducerState, id: SquareID): ReducerState {
     sAssert(state.rack);
     const gr = new GridAndRack(state.grid, state.rack);
     const cms = state.clickMoveStart;
+    const letter = gr.get(id);
 
     if (id.container === "grid" ) {
-        const letter = gr.get(id);
         if(letter === null) {
             return {
                 ...state,
                 clickMoveStart: newClickMoveStart(cms, id),
             };
         } else {
-            gr.set(id, null);
-            gr.addToRack(letter);
+            gr.moveToRack(id);
             return {
                 ...state,
                 grid: gr.grid,
                 rack: gr.rack,
             };
         }
-    }
-
-    if (cms && id.container === "rack") {
-        gr.moveFromRack(cms, id.col);
-        return {
-            ...state,
-            grid: gr.grid,
-            rack: gr.rack,
-        };
+    } else {
+        sAssert(id.container === "rack");
+    
+        if (letter && cms ) {
+            gr.moveFromRack(cms, id.col);
+            return {
+                ...state,
+                grid: gr.grid,
+                rack: gr.rack,
+            };
+        }
     }
 
     return state;

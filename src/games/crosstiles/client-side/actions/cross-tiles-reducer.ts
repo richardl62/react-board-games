@@ -37,10 +37,10 @@ export type ActionType =
     | { type: "recallToRack"}
     | { type: "shuffleRack"}
     // Used on keypress in "making grids" stage
-    | { type: "moveFromRack", data: {letter: string}}
+    | { type: "placeLetterFromRack", data: {letter: string}}
     ;
 
-function crossTilesReducerUnchecked(state : ReducerState, action: ActionType) : ReducerState {
+export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
 
     if(action.type === "reflectServerData") {
         return reflectServerData(state, action.data);
@@ -86,7 +86,7 @@ function crossTilesReducerUnchecked(state : ReducerState, action: ActionType) : 
         };
     }
 
-    if (action.type === "moveFromRack") {
+    if (action.type === "placeLetterFromRack") {
         const { rack, clickMoveStart } = state;
 
         if (rack && clickMoveStart) {
@@ -108,21 +108,3 @@ function crossTilesReducerUnchecked(state : ReducerState, action: ActionType) : 
 
     throw Error("Unrecogined reduced action");
 }
-
-
-export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
-    const newState = crossTilesReducerUnchecked(state, action);
-
-    // Run a sanity check.
-    const { rack, grid, serverData } = newState;
-    if(rack && serverData) {
-        const rackLetters = rack.filter(x => x);
-        const gridLetters = grid.flat().filter(x => x);
-        const nLetters = rackLetters.length + gridLetters.length;
-        sAssert(nLetters === serverData.options.rackSize, 
-            "Unexpected number of letters in grid and rack");
-    }
-
-    return newState;
-}
-

@@ -24,7 +24,7 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
 
     const downHandler = (event: KeyboardEvent) => {
         if(stage === GameStage.makingGrids) {
-            dispatch({ type: "moveFromRack", data: { letter: event.key } });
+            dispatch({ type: "placeLetterFromRack", data: { letter: event.key } });
         }
     };
 

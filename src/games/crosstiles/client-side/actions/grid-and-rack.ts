@@ -1,7 +1,7 @@
 import { sAssert } from "../../../../utils/assert";
 import { shuffle } from "../../../../utils/shuffle";
 import { Letter } from "../../config";
-import { ClickMoveStart, SquareID } from "./types";
+import { ClickMoveStart, sameSquareID, SquareID } from "./types";
 
 type Grid = (Letter|null)[][];
 type Rack = (Letter|null)[];
@@ -25,7 +25,7 @@ export class GridAndRack {
         }
     } 
 
-    set(sq: SquareID, val: Letter | null) : void  {
+    private set(sq: SquareID, val: Letter | null) : void  {
         if(sq.container === "rack") {
             this.rack[sq.col] = val;
         } else {
@@ -49,12 +49,21 @@ export class GridAndRack {
         return null;
     }
 
-    addToRack(letter: Letter): void {
+    private addToRack(letter: Letter): void {
         const emptySquare = this.rack.findIndex(l => l === null);
         sAssert(emptySquare >= 0, "Problem adding tile to rack");
         this.rack[emptySquare] = letter;
     }
 
+    /** Move a tile from grid to rack */
+    moveToRack(sq: SquareID): void {
+        sAssert(sq.container === "grid", "unexpected parameter in moveToRack");
+        const letter = this.get(sq);
+        sAssert(letter, "null letter in moveToRack");
+        
+        this.set(sq,null);
+        this.addToRack(letter);
+    }
 
     /** 
      * Moves should be from an active square to an empty or active square.
@@ -65,7 +74,11 @@ export class GridAndRack {
     move(from: SquareID, to: SquareID) : void {
         const fromVal = this.get(from);
         const toVal = this.get(to);
-        sAssert(fromVal);
+
+        if(sameSquareID(from,to)) {
+            return;
+        }
+        sAssert(fromVal, "null from value in move");
 
         if (to.container === "grid") {
             this.set(from, null);
@@ -77,7 +90,7 @@ export class GridAndRack {
         }
     }
 
-    insertIntoRack(pos: number, letter: Letter): void {
+    private insertIntoRack(pos: number, letter: Letter): void {
         const rack = this.rack;
 
         const moveTilesUp = (posToClear: number) => {
@@ -116,8 +129,8 @@ export class GridAndRack {
         }
     }
 
-    moveFromRack(start: ClickMoveStart, rackPos: number) : void {
-        sAssert(this.rack[rackPos]);
+    moveFromRack(start: ClickMoveStart, rackPos: number) : void {     
+        sAssert(this.rack[rackPos], "Unexpected null tile in moveFromRack");
 
         let { row, col } = start;
         if( start.direction === "right") {
@@ -138,7 +151,7 @@ export class GridAndRack {
         }
     }
 
-    compactRack(): void {
+    private compactRack(): void {
         const rackLength = this.rack.length;
         this.rack = this.rack.filter(elem => elem !== null);
         while (this.rack.length < rackLength) {
