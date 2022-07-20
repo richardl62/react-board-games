@@ -34,7 +34,7 @@ export type GameOptions = {
 };
 
 export const defaultOptions: GameOptions = {
-    timeToMakeGrid: 120,
+    timeToMakeGrid: 60,
     rackSize: 8,
     minVowels: 2,
     minConsonants: 4,
