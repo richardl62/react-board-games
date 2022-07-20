@@ -35,7 +35,6 @@ function SetOptions(props: SetOptionsProps) {
     // To do. Think about simplifying this code, in particular
     // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
-        <div>*** Under development ***</div>
         <br/>
         <label>{"Time to make grid "}
             <input 
