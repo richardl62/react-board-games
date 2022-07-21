@@ -106,14 +106,14 @@ function SetOptions(props: SetOptionsProps) {
             />
         </label>
 
-        <label>{"Check spelling while making grids "}
-            <input type="checkbox" checked={options.checkSpellingWhileMakingGrid}
-                onChange={() => setOptions({...options, checkSpellingWhileMakingGrid: !options.checkSpellingWhileMakingGrid})} 
+        <label>{"Warn when recording non-scoring grid "}
+            <input type="checkbox" checked={options.checkGridBeforeRecoding}
+                onChange={() => setOptions({...options, checkGridBeforeRecoding: !options.checkGridBeforeRecoding})} 
             />
         </label>
 
-        <label>{"Check spelling general "}
-            <input type="checkbox" checked={options.checkSpelling}
+        <label>{"Suppress spelling checks (debug) "}
+            <input type="checkbox" checked={!options.checkSpelling}
                 onChange={() => setOptions({...options, checkSpelling: !options.checkSpelling})} 
             />
         </label>

@@ -47,10 +47,9 @@ export function ReadyToStartGame() : JSX.Element | null {
     addOption("Min consonants in rack", options.minConsonants);
     addOption("Min bonus letters", options.minBonusLetters);
     addOption("All players get same letters", options.playersGetSameLetters);
-    if(options.checkSpelling) {
-        addOption("Check spell while making grid", options.checkSpellingWhileMakingGrid);  
-    } else {
-        addOption("Fully disable spelling checks (debug)", true);
+    addOption("Warn when recording non-scoring grid", options.checkGridBeforeRecoding);  
+    if(!options.checkSpelling) {
+        addOption("Spelling checks disabled (debug)", true);
     }
     
     const ready = playerData[playerID].readyToStartGame;

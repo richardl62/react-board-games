@@ -7,7 +7,7 @@ export function reflectServerData(state: ReducerState, newServerData: ServerData
     const oldRound = state.serverData?.round;
     const newRound = newServerData.round;
     
-    const { playerID } = state;
+    const { playerID, gridChangeTimestamp } = state;
     const {selectedLetters} = newServerData.playerData[playerID]; 
 
     if (oldRound != newRound) {
@@ -16,7 +16,9 @@ export function reflectServerData(state: ReducerState, newServerData: ServerData
             grid: makeEmptyGrid(),
             clickMoveStart: null,
             serverData: newServerData,
-            playerID: playerID,
+
+            playerID,
+            gridChangeTimestamp,
         };
     }
 

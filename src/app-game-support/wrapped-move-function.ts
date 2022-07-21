@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 
 export interface RequiredState  {
     serverError: string | null;
-    timestamp: number;
+    serverTimestamp: number;
 }
 
 export type MoveFunc<State, Param> = (state: State, ctx: Ctx, param: Param) => void;
@@ -18,6 +18,6 @@ export function wrappedMoveFunction<State extends RequiredState, Param>(func: Mo
             G.serverError = message;
         }
 
-        G.timestamp++;
+        G.serverTimestamp++;
     };
 }

@@ -46,7 +46,7 @@ export interface ServerData {
     playerData: {[playerID: string]: PlayerData };
 
     serverError: string | null;
-    timestamp: number;
+    serverTimestamp: number;
 }
 
 export function startingPlayerData() : PlayerData {
@@ -62,6 +62,7 @@ export function startingPlayerData() : PlayerData {
         chosenCategory: null,
     };
 }
+
 export function startingServerData(ctx: Ctx): ServerData {
 
     const playerData : {[playerID: string]: PlayerData } = {};
@@ -70,15 +71,14 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData[pid] = startingPlayerData();
     }
 
-    const G = {
+    const G : ServerData = {
         options: defaultOptions,
         stage: GameStage.setup,
         round: 0,
         playerData: playerData,
         serverError: null,
-        timestamp: 0,
+        serverTimestamp: 0,
     };
-
 
     return G;
 }

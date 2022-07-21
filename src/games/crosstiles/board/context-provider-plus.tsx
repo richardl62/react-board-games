@@ -37,7 +37,7 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
         };
     }, [stage]);
 
-    if(reducerState.serverData?.timestamp !== gameProps.G.timestamp) {
+    if(reducerState.serverData?.serverTimestamp !== gameProps.G.serverTimestamp) {
         dispatch({type: "reflectServerData", data: gameProps.G});
     }
 

@@ -13,20 +13,26 @@ export type ReducerState = {
     
     clickMoveStart: ClickMoveStart | null;
     
+    playerID: string;
+
     /** Use to help with updates */
     serverData: ServerData | null,
-    playerID: string;
+
+    /** Incremented after a (potential) user-made change made to the grid. 
+     * (In practice, incremented on every reducer action, except reflecting server data.) */
+    gridChangeTimestamp: number;
 };
 
 export function initialReducerState(playerID: string): ReducerState {
     return {
         rack: null,
         grid: makeEmptyGrid(),
-
         clickMoveStart: null,
 
-        serverData: null,
         playerID: playerID,
+        serverData: null,
+        
+        gridChangeTimestamp: 0,
     };
 }
 
@@ -40,11 +46,8 @@ export type ActionType =
     | { type: "placeLetterFromRack", data: {letter: string}}
     ;
 
-export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
-
-    if(action.type === "reflectServerData") {
-        return reflectServerData(state, action.data);
-    }
+/** Actions that should cause gridChangeTimestamp to be incremented. */
+function gridChangeReducerActions(state : ReducerState, action: ActionType) : ReducerState {
 
     if(action.type === "tileClicked") {
         return tileClicked(state, action.data.id);
@@ -107,4 +110,15 @@ export function crossTilesReducer(state : ReducerState, action: ActionType) : Re
     }
 
     throw Error("Unrecogined reduced action");
+}
+
+export function crossTilesReducer(state : ReducerState, action: ActionType) : ReducerState {
+
+    if(action.type === "reflectServerData") {
+        return reflectServerData(state, action.data);
+    }
+
+    const newState = gridChangeReducerActions(state,action);
+    newState.gridChangeTimestamp++;
+    return newState;
 }

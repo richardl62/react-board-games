@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
-import { sameJSON } from "../../../utils/same-json";
 import {  useNowTicker } from "../../../utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkGrid } from "../client-side/check-grid/check-grid";
-import { bonusScore } from "../config";
 import { GameStage } from "../server-side/server-data";
 import { GridStatus } from "./grid-status";
 import { RackAndBoard } from "./rack-and-board";
 import { makeEmptyGrid } from "../server-side/make-empty-grid";
 import { PlayerStatus } from "./player-status";
+import { RecordAndDoneButtons, RecordRequest } from "./record-and-done-buttons";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -39,60 +37,15 @@ function minutesAndSeconds(secondsFactional: number) {
     return `${minutes}:${padding}${remainder}`;
 }
 
-function DoneDialog() {
-    const context = useCrossTilesContext();
-    
-    const { grid, rack, playerData, isLegalWord, wrappedGameProps: { moves, playerID } } = context;
-    const { gridRackAndScore: recordedGridRackAndScore, scoreCard } = playerData[playerID];
-    
-    const recordedGrid = recordedGridRackAndScore && recordedGridRackAndScore.grid;
-
-    sAssert(rack);
-    const gridChangedMessage = () => {
-        if(!recordedGrid) {
-            return "No grid recorded";
-        }
- 
-        // Inefficient
-        if(sameJSON(grid, recordedGrid)) {
-            return "Grid recorded";
-        }
-
-        return "Grid changed";
-    };
-
-
-    const recordGrid = () => {
-        const {scoreCategory, score, nBonuses} = checkGrid(grid, scoreCard, isLegalWord);
-        
-        const scoreParam = scoreCategory && {
-            score,
-            category: scoreCategory,
-            bonus: nBonuses * bonusScore,
-        };
-
-        moves.recordGrid({grid, rack, score: scoreParam});
-    };
-
-    return <div>
-        <button onClick={recordGrid}>
-            Record Grid
-        </button>
-
-        {recordedGrid && <button onClick={() => moves.doneRecordingGrid()}> 
-            Done
-        </button>}
-
-        <span>{gridChangedMessage()}</span>
-    </div>;
-}
-
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { playerData, stage, grid, options } = context;
     const { moves,  playerID } = context.wrappedGameProps;
 
     const now = useNowTicker();
+
+    const [showIllegalWords, setShowIllegalWords] = useState(false);
+
     const {makeGridStartTime, 
         gridRackAndScore: recordedGridRackAndScore,
         doneRecordingGrid: amDoneRecording,
@@ -130,12 +83,16 @@ export function MakeGrid() : JSX.Element | null {
     const doneMessage = (pid: string) =>
         playerData[pid].doneRecordingGrid ? "Done" : null;
 
+    const recordRequest = (status: RecordRequest) => {
+        setShowIllegalWords(status === "blockedWithIllegalWords");
+    };
+
     return <OuterDiv>
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} 
-            checkSpelling={options.checkSpellingWhileMakingGrid}/>
+            checkSpelling={showIllegalWords}/>
         <ButtonAndTimeDiv>
-            {!amDoneRecording && <DoneDialog/> }
+            <RecordAndDoneButtons recordRequest={recordRequest}/>
             <PlayerStatus message={doneMessage} />
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>

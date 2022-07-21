@@ -29,7 +29,7 @@ export type GameOptions = {
     minConsonants: number;
     minBonusLetters: number;
     checkSpelling: boolean;
-    checkSpellingWhileMakingGrid: boolean;
+    checkGridBeforeRecoding: boolean,
     playersGetSameLetters: boolean;
 };
 
@@ -40,6 +40,6 @@ export const defaultOptions: GameOptions = {
     minConsonants: 4,
     minBonusLetters: 0,
     checkSpelling: true,
-    checkSpellingWhileMakingGrid: true,
+    checkGridBeforeRecoding: true,
     playersGetSameLetters: true,
 }; 
