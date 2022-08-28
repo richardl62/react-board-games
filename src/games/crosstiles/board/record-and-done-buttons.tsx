@@ -69,7 +69,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
 
     // Request confirmation if no grid is recorded.
     const onDone = (status: "unchecked" | "confirmed") => {
-        if (recordedGrid) {
+        if (gridRecordedTimestamp === gridChangeTimestamp) {
             moves.doneRecordingGrid();
         } if (status === "unchecked") {
             setBlockedDoneTimestamp(gridChangeTimestamp);
@@ -91,8 +91,10 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
     };
 
     if (blockedDoneTimestamp === gridChangeTimestamp) {
+        const message = recordedGrid ? "Current grid not recorded " :
+            "No grid recorded ";
         return <div>
-            <span>No grid recorded </span>
+            <span>{message}</span>
             <button onClick={() => onDone("confirmed")}> Confirm done </button>
             <button onClick={onCancelDone}> Cancel </button>
         </div>;
