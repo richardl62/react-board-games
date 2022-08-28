@@ -80,8 +80,13 @@ export function MakeGrid() : JSX.Element | null {
 
     const secondsLeft = options.timeToMakeGrid - (now - makeGridStartTime) / 1000;
 
-    const doneMessage = (pid: string) =>
-        playerData[pid].doneRecordingGrid ? "Done" : null;
+    const doneMessage = (pid: string) => {
+        if ( pid === playerID ) {
+            return null;
+        }
+
+        return playerData[pid].doneRecordingGrid ? "Done" : "Not done";
+    };
 
     const recordRequest = (status: RecordRequest) => {
         setShowIllegalWords(status === "blockedWithIllegalWords");
@@ -90,9 +95,13 @@ export function MakeGrid() : JSX.Element | null {
     return <OuterDiv>
         <RackAndBoard />
         <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} 
-            checkSpelling={showIllegalWords}/>
+            checkSpelling={showIllegalWords} />
+
+        {amDoneRecording && <div>Done: Waiting for other player(s)</div>}   
         <ButtonAndTimeDiv>
-            <RecordAndDoneButtons recordRequest={recordRequest}/>
+            {amDoneRecording || 
+                <RecordAndDoneButtons recordRequest={recordRequest}/>
+            }
             <PlayerStatus message={doneMessage} />
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>

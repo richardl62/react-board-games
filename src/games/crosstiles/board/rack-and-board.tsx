@@ -22,8 +22,21 @@ const RackDiv = styled.div`
 export function RackAndBoard() : JSX.Element | null {
     const context = useCrossTilesContext();
 
-    const { rack, grid: board, clickMoveStart, dispatch } = context;
+    const { rack, grid: board, clickMoveStart, dispatch,
+        playerData, wrappedGameProps: { playerID }  } = context;
+
+    const { doneRecordingGrid } = playerData[playerID];
+
     sAssert(rack);
+
+    if (doneRecordingGrid) {
+        return <OuterDiv>
+            <RackDiv>
+                <TileGrid letters={[rack]} />
+            </RackDiv>
+            <TileGrid letters={board} />
+        </OuterDiv>;
+    }
 
     return <OuterDiv>
         <DndProvider backend={HTML5Backend}>

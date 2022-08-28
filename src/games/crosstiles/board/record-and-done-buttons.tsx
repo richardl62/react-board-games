@@ -23,10 +23,11 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
     const context = useCrossTilesContext();
 
     const { grid, rack, playerData, isLegalWord, gridChangeTimestamp, options,
-        wrappedGameProps: { moves, playerID },  } = context;
+        dispatch, wrappedGameProps: { moves, playerID },  } = context;
 
 
-    const { gridRackAndScore: recordedGridRackAndScore, scoreCard, selectedLetters } = playerData[playerID];
+    const { gridRackAndScore: recordedGridRackAndScore, scoreCard, 
+        selectedLetters, doneRecordingGrid } = playerData[playerID];
     const recordedGrid = recordedGridRackAndScore && recordedGridRackAndScore.grid;
     
     sAssert(rack);
@@ -74,7 +75,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
             setBlockedDoneTimestamp(gridChangeTimestamp);
         } else {
             setBlockedDoneTimestamp(null);
-
+            dispatch({type: "clearClickMoveStart"});
             sAssert(selectedLetters);
             moves.recordGrid({
                 grid: makeEmptyGrid(),
@@ -118,9 +119,19 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
     };
 
     return <div>
-        <button onClick={() => onRecordGrid("unchecked")}>Record Grid</button>
+        <button 
+            onClick={() => onRecordGrid("unchecked")} 
+            disabled={doneRecordingGrid}
+        >
+            Record Grid
+        </button>
 
-        <button onClick={() => onDone("unchecked")}> Done </button>
+        <button 
+            onClick={() => onDone("unchecked")}
+            disabled={doneRecordingGrid}
+        >
+            Done
+        </button>
 
         <span>{gridChangedMessage()}</span>
     </div>;

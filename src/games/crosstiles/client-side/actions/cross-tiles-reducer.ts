@@ -40,6 +40,7 @@ export type ActionType =
     | { type: "reflectServerData", data: ServerData}
     | { type: "move", data: {from: SquareID, to: SquareID}} // Used after a drag
     | { type: "tileClicked", data: {id: SquareID}}
+    | { type: "clearClickMoveStart"}
     | { type: "recallToRack"}
     | { type: "shuffleRack"}
     // Used on keypress in "making grids" stage
@@ -51,6 +52,13 @@ function gridChangeReducerActions(state : ReducerState, action: ActionType) : Re
 
     if(action.type === "tileClicked") {
         return tileClicked(state, action.data.id);
+    }
+
+    if(action.type === "clearClickMoveStart") {
+        return {
+            ...state,
+            clickMoveStart: null,
+        };
     }
     
     if(action.type === "move") {
