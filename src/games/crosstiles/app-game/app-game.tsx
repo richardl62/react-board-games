@@ -11,7 +11,7 @@ const LazyBoard = React.lazy(() => import("../board/board"));
 const game: AppGame = {
 
     displayName: "CrossTiles",
-    category: GameCategory.development,
+    category: GameCategory.standard,
 
     name: "crosstiles",
 
