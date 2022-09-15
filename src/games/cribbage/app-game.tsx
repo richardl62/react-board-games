@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
+import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 
-import { Board } from "./board/board";
+const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
     name: "Cribbage",
@@ -16,5 +17,9 @@ export const appGame: AppGame = {
     moves: {
     },
 
-    board: () => <Board/>,
+    board: (props: WrappedGameProps) => {
+        return <Suspense fallback={<div>Loading...</div>}>
+            <LazyBoard gameProps={props} />
+        </Suspense>;
+    }
 };
