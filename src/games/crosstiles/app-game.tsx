@@ -1,14 +1,14 @@
 import React, { Suspense } from "react";
 import { ActivePlayers } from "boardgame.io/core";
-import { AppGame, GameCategory } from "../../../app-game-support";
-import { bgioMoves } from "../server-side/moves";
-import { startingServerData } from "../server-side/server-data";
+import { AppGame, GameCategory } from "../../app-game-support";
+import { bgioMoves } from "./server-side/moves";
+import { startingServerData } from "./server-side/server-data";
 import { Ctx } from "boardgame.io";
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 
-const LazyBoard = React.lazy(() => import("../board/board"));
+const LazyBoard = React.lazy(() => import("./board/board"));
 
-const game: AppGame = {
+export const appGame: AppGame = {
 
     displayName: "CrossTiles",
     category: GameCategory.standard,
@@ -31,7 +31,3 @@ const game: AppGame = {
         </Suspense>;
     }
 };
-
-const games = [game];
-
-export default games;

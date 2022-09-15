@@ -1,11 +1,11 @@
 import React from "react";
-import { ReactCribbageContext } from "./cribbage-context";
-import { Cribbage } from "./board/game";
-import { useCribbageReducer } from "./actions/use-cribbage-reducer";
+import { ReactCribbageContext } from "../cribbage-context";
+import { Cribbage } from "./game";
+import { useCribbageReducer } from "../actions/use-cribbage-reducer";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-export function GameWrapper(): JSX.Element {
+export function Board(): JSX.Element {
     const [state, dispatch] = useCribbageReducer();
 
     const context = {...state,

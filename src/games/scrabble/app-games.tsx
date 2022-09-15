@@ -22,5 +22,5 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
     };
 }
 
-const games = configs.map(makeAppGame);
-export default games;
+export const appGames = configs.map(makeAppGame);
+
