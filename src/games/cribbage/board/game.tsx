@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useCribbageContext } from "../cribbage-context";
+import { useCribbageContext } from "../client-side/cribbage-context";
 import { CutCard } from "./cut-card";
 import { Scores } from "./scores";
 import { AddingCardsToBox as PuttingCardsIntoBox } from "./adding-cards-to-box";

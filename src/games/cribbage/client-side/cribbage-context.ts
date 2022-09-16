@@ -1,7 +1,7 @@
 import React from "react";
-import { sAssert } from "../../utils/assert";
-import { ActionType } from "./client-side/use-cribbage-reducer";
-import { GameState } from "./client-side/game-state";
+import { sAssert } from "../../../utils/assert";
+import { ActionType } from "./use-cribbage-reducer";
+import { GameState } from "./game-state";
 
 interface Context extends GameState {
     dispatch: React.Dispatch<ActionType>;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CardSVG } from "../../../utils/cards";
-import { useCribbageContext } from "../cribbage-context";
+import { useCribbageContext } from "../client-side/cribbage-context";
 
 const DeckDiv = styled.div`
     display: inline-flex;

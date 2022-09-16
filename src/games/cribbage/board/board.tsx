@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactCribbageContext } from "../cribbage-context";
+import { ReactCribbageContext } from "../client-side/cribbage-context";
 import { Cribbage } from "./game";
 import { useCribbageReducer } from "../client-side/use-cribbage-reducer";
 import { DndProvider } from "react-dnd";

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useCribbageContext } from "../cribbage-context";
+import { useCribbageContext } from "../client-side/cribbage-context";
 
 const ScoresDiv = styled.div`
     display: flex;    
