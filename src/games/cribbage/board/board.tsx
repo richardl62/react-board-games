@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactCribbageContext } from "../cribbage-context";
 import { Cribbage } from "./game";
-import { useCribbageReducer } from "../actions/use-cribbage-reducer";
+import { useCribbageReducer } from "../client-side/use-cribbage-reducer";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";

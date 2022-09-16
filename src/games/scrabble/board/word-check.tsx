@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
+import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const WordInput = styled.input`
   margin-right: 0.2em;

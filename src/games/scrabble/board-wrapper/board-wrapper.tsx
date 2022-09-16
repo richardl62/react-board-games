@@ -3,11 +3,11 @@ import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../../utils/async-status";
 import { getWordChecker } from "../../../utils/get-word-checker";
 import { Board } from "../board";
-import { ScrabbleGameProps } from "../client-side-actions/srcabble-game-props";
-import { initialReducerState } from "../client-side-actions/reducer-state";
-import { scrabbleReducer } from "../client-side-actions/scrabble-reducer";
+import { ScrabbleGameProps } from "../client-side/srcabble-game-props";
+import { initialReducerState } from "../client-side/reducer-state";
+import { scrabbleReducer } from "../client-side/scrabble-reducer";
 import { ScrabbleConfig } from "../config";
-import { makeScrabbleContext, ReactScrabbleContext } from "../client-side-actions/scrabble-context";
+import { makeScrabbleContext, ReactScrabbleContext } from "../client-side/scrabble-context";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
 // import { beep } from "./sounds";

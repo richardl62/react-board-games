@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GameWarnings } from "../../../app-game-support";
 import { nNonNull } from "../../../utils/n-non-null";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
+import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const StyledScoresEtc=styled.div`
     display: flex;

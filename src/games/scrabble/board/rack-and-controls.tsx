@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { Rack } from "./rack";
 import { BoardData } from "../server-side/game-state";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
+import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;

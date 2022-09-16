@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Letter } from "../config";
-import { getWordsAndScore, findActiveLetters, SquareID } from "../client-side-actions";
-import { findUnsetBlack } from "../client-side-actions/board-and-rack";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
+import { getWordsAndScore, findActiveLetters, SquareID } from "../client-side";
+import { findUnsetBlack } from "../client-side/board-and-rack";
+import { useScrabbleContext } from "../client-side/scrabble-context";
 
 function sameWordList(words1: string[], words2: string[]): boolean {
     return words1.join() === words2.join();

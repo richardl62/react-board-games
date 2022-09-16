@@ -5,9 +5,9 @@ import { SquareType } from "../config";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "../../../utils/assert";
 import { Tile } from "./tile";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
-import { SquareID, boardIDs } from "../client-side-actions";
-import { makeExtendedLetter } from "../client-side-actions/extended-letter";
+import { useScrabbleContext } from "../client-side/scrabble-context";
+import { SquareID, boardIDs } from "../client-side";
+import { makeExtendedLetter } from "../client-side/extended-letter";
 
 interface RackProps {
     selected: boolean[] | null;

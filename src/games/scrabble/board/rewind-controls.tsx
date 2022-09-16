@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
+import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const arrowHeight = "15px";
 const arrowColor = "darkred";

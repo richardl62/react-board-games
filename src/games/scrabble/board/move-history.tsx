@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { MoveHistoryElement, WordsPlayedInfo } from "../server-side/move-hstory";
-import { useScrabbleContext } from "../client-side-actions/scrabble-context";
+import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const FirstSpan = styled.span`
     font-weight: bold;
