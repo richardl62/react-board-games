@@ -14,7 +14,7 @@ const Board = styled.div<{height: number, width: number}>`
     height: ${props => props.height}px;
     width: ${props => props.width}px;
 
-
+    box-sizing: content-box; //KLUDGE?
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     background: brown;
