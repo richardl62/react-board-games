@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { CutCard } from "./cut-card";
-import { Scores } from "./scores";
 import { AddingCardsToBox as PuttingCardsIntoBox } from "./adding-cards-to-box";
 import { Pegging } from "./pegging";
 import { ScoringHands } from "./scoring-hands";
+import { AvticeScoreBoard } from "../score-board/score-board";
 
 
 const GameArea = styled.div`
@@ -25,7 +25,7 @@ export function Cribbage() : JSX.Element {
         {context.pegging && <Pegging/>}
         {context.scoringHands && <ScoringHands/>}
           
-        <Scores/>
+        <AvticeScoreBoard/>
         
     </GameArea>;
 }
