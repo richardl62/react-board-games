@@ -33,7 +33,7 @@ function offsetPoints(points: Position[], offset: Position) {
             bottom: pos.bottom + offset.bottom,
             left: pos.left + offset.left,
         };
-    })
+    });
 }
 
 const rawPegPoints: PegPoints = {
@@ -65,4 +65,4 @@ const offset = {
 export const pegPoints: PegPoints = {
     player1: offsetPoints(rawPegPoints.player1, offset),
     player2: offsetPoints(rawPegPoints.player2, offset),
-}
+};

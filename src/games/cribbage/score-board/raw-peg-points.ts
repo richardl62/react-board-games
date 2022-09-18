@@ -1,7 +1,7 @@
 import { nPostEndPegs, nPreStartPegs, nInPlayPegs } from "./config";
-import { sAssert } from "./s-assert";
 import { rowGap } from "./sizes";
 import { Position } from "./types";
+import { sAssert } from "../../../utils/assert";
 
 // Make 'raw' peg points for one player.
 // 'raw' points do not fit in constraint on coordiated (wherea the final peg point 
@@ -10,7 +10,7 @@ export function makeRawPegPoints(params: {
     start: Position;
     topArcRadius: number;
     bottomArcRadius: number;
-}) {
+}) : Position[] {
     const { start, topArcRadius, bottomArcRadius } = params;
 
     const points: Position[] = [];
@@ -25,7 +25,7 @@ export function makeRawPegPoints(params: {
     };
 
     const addOffsetPoint = (offset: number) => {
-        let { bottom, left } = lastPoint;
+        const { bottom, left } = lastPoint;
         addPoint({ bottom: bottom + offset, left });
     };
 

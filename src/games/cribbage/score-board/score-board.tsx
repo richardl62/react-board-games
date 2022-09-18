@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { nPreStartPegs } from "./config";
@@ -23,7 +24,7 @@ const Board = styled.div<{height: number, width: number}>`
 interface HoleProps {
     left: number;
     bottom: number;
- };
+ }
 
 /*
 Originally, Hole did not use attribs, and instead bottom and left were defined
@@ -34,18 +35,19 @@ a warnings like
 */
 const PegContainer = styled.div.attrs<
 HoleProps, // What is consumed by .attrs()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     {style: any} // What comes out of .attrs(). Use of 'any' is a kludge. 
 >((props) => {
     return {style: {
         position: "absolute",
         bottom: props.bottom,
         left: props.left,
-    }}
+    }};
 })<HoleProps>`
 
     height: ${holeRadius}px;
     width: ${holeRadius}px;
-`
+`;
 
 const Hole = styled.div`
     height: ${holeRadius}px;
@@ -56,7 +58,8 @@ const Hole = styled.div`
     box-sizing: border-box;
     border: solid 2px black;
     background: cornsilk;
-`
+`;
+
 const Peg = styled.div<{player1 : boolean}>`
     height: 100%;
     width: 100%;
@@ -72,7 +75,7 @@ interface PlayerProps {
 
     /** Called when a peg/hole is clicked */
     onClick: (index: number) => void;
-};
+}
 
 
 function makeElements(pegPoints: Position[], props: PlayerProps, player1: boolean) {
@@ -81,7 +84,7 @@ function makeElements(pegPoints: Position[], props: PlayerProps, player1: boolea
         return <PegContainer key={key} bottom={pos.bottom} left={pos.left}
             onClick={()=>props.onClick(index)}
         >
-             {props.hasPeg(index) ? <Peg player1={player1}/> : <Hole/>}
+            {props.hasPeg(index) ? <Peg player1={player1}/> : <Hole/>}
         </PegContainer>;
     });
 }
@@ -107,13 +110,13 @@ function movePeg(pegs: Pegs, moveTo:number) : Pegs {
         return pegs;
     }
 
-    if(moveTo > pegs[1]) {
-         // Standard move
-         return [pegs[1], moveTo];
+    if (moveTo > pegs[1]) {
+        // Standard move
+        return [pegs[1], moveTo];
     } else if (moveTo > pegs[0]) {
         return [pegs[0], moveTo];
     } else {
-        return [moveTo, pegs[0]]
+        return [moveTo, pegs[0]];
     }
 }
 function usePlayerProps() {
@@ -129,7 +132,7 @@ function usePlayerProps() {
     return playerProps;
 }
 
-export function Game() {
+export function AvticeScoreBoard() : JSX.Element {
     const player1 = usePlayerProps();
     const player2 = usePlayerProps();
 
