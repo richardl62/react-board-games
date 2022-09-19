@@ -10,6 +10,7 @@ import { makeEmptyGrid } from "../server-side/make-empty-grid";
 import { PlayerStatus } from "./player-status";
 import { RecordAndDoneButtons, RecordRequest } from "./record-and-done-buttons";
 import { makeGridCountTime as makeGridCountdownTime } from "../config";
+import { MakeGridCountDown } from "./make-grid-countdown";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -49,7 +50,6 @@ function MakeGridInner(props: MakeGridInnerProps) : JSX.Element {
     const { playerData, stage, grid } = context;
     const { moves,  playerID } = context.wrappedGameProps;
     const [showIllegalWords, setShowIllegalWords] = useState(false);
-
 
     sAssert(stage === GameStage.makingGrids);
 
@@ -97,18 +97,6 @@ function MakeGridInner(props: MakeGridInnerProps) : JSX.Element {
     </OuterDiv>;
 }
 
-interface CountDownProps {
-    secondsLeft: number;
-}
-function CountDown(props: CountDownProps) {
-    const { secondsLeft } = props;
-    return <div>
-        <div>Making new grid in</div>
-        <div>{Math.floor(secondsLeft + 0.5)}</div>
-    </div>;
-
-}
-
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { playerData, stage, options } = context;
@@ -133,13 +121,12 @@ export function MakeGrid() : JSX.Element | null {
     if(makeGridStartTime === null) {
         return null;
     }
-
    
     const secondsSinceStart = (now - makeGridStartTime) / 1000;
     const remainingCountdown = makeGridCountdownTime - secondsSinceStart;
 
     if(remainingCountdown > 0) {
-        return <CountDown secondsLeft={remainingCountdown} />;
+        return <MakeGridCountDown secondsLeft={remainingCountdown} />;
     }
 
     const totalTime = options.timeToMakeGrid + makeGridCountdownTime;

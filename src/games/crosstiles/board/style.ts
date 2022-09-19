@@ -1,5 +1,6 @@
 
 export const squareSize = "30px";
+export const aboveScoreCardsHeight = "335px"; // Kludge - set by hand and hard coded
 
 export const boardBoarderSize = {
     internal: "2px",

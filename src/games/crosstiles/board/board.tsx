@@ -12,6 +12,7 @@ import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
 import { SetOptionsOrWait } from "./setup";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { aboveScoreCardsHeight } from "./style";
 
 const BoardDiv = styled.div`
    display: inline-block;
@@ -21,6 +22,11 @@ const BoardDiv = styled.div`
 
 const StagesDiv = styled.div`
     margin-bottom: 6px;
+    
+    // KLUDGE?: Specify the (hard coded) height to prevent the score cards
+    // moving as the connect above them changes. This also allows inner containers
+    // to use, e.g. height: 100%
+    height: ${aboveScoreCardsHeight};
 `;
 
 
