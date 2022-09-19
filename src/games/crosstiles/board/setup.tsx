@@ -47,6 +47,17 @@ function SetOptions(props: SetOptionsProps) {
             />
         </label>
 
+        <label>{"Make grid countdown "}
+            <input 
+                type="number" 
+                defaultValue={options.makeGridCountdown}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+                    const value = parseRestrictedInt(e.target.value,0,9999);
+                    setOptions({...options, makeGridCountdown: value} );
+                }}
+            />
+        </label>
+
         <label>{"Rack size [6-8] "}
             <input 
                 type="number" 

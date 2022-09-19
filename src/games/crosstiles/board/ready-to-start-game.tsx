@@ -42,6 +42,7 @@ export function ReadyToStartGame() : JSX.Element | null {
     };
     
     addOption("Time to make grid (secs)", options.timeToMakeGrid);
+    addOption("Make grid countdown (secs)", options.makeGridCountdown);
     addOption("Rack size", options.rackSize);
     addOption("Min vowels in rack", options.minVowels);
     addOption("Min consonants in rack", options.minConsonants);

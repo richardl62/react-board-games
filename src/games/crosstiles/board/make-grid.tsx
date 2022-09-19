@@ -9,7 +9,6 @@ import { RackAndBoard } from "./rack-and-board";
 import { makeEmptyGrid } from "../server-side/make-empty-grid";
 import { PlayerStatus } from "./player-status";
 import { RecordAndDoneButtons, RecordRequest } from "./record-and-done-buttons";
-import { makeGridCountTime as makeGridCountdownTime } from "../config";
 import { MakeGridCountDown } from "./make-grid-countdown";
 
 const OuterDiv = styled.div`
@@ -123,13 +122,13 @@ export function MakeGrid() : JSX.Element | null {
     }
    
     const secondsSinceStart = (now - makeGridStartTime) / 1000;
-    const remainingCountdown = makeGridCountdownTime - secondsSinceStart;
+    const remainingCountdown = options.makeGridCountdown - secondsSinceStart;
 
     if(remainingCountdown > 0) {
         return <MakeGridCountDown secondsLeft={remainingCountdown} />;
     }
 
-    const totalTime = options.timeToMakeGrid + makeGridCountdownTime;
+    const totalTime = options.timeToMakeGrid + options.makeGridCountdown;
     const secondsLeft = totalTime - secondsSinceStart;
 
     return <MakeGridInner secondsLeft={secondsLeft} />;
