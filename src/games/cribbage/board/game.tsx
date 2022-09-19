@@ -5,7 +5,7 @@ import { CutCard } from "./cut-card";
 import { AddingCardsToBox as PuttingCardsIntoBox } from "./adding-cards-to-box";
 import { Pegging } from "./pegging";
 import { ScoringHands } from "./scoring-hands";
-import { AvticeScoreBoard } from "../score-board/score-board";
+import { AvticeScoreBoard } from "./score-board/score-board";
 
 
 const GameArea = styled.div`

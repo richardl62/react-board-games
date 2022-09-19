@@ -1,7 +1,7 @@
 import { nPostEndPegs, nPreStartPegs, nInPlayPegs } from "./config";
 import { rowGap } from "./sizes";
 import { Position } from "./types";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "../../../../utils/assert";
 
 // Make 'raw' peg points for one player.
 // 'raw' points do not fit in constraint on coordiated (wherea the final peg point 

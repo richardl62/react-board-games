@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "../../../../utils/assert";
 import { nPreStartPegs, skunkLinePos, nInPlayPegs } from "./config";
 import { pegPoints } from "./peg-points";
 import { columnGap, holeRadius, rowGap } from "./sizes";
