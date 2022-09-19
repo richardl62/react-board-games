@@ -108,6 +108,7 @@ function CountDown(props: CountDownProps) {
     </div>;
 
 }
+
 export function MakeGrid() : JSX.Element | null {
     const context = useCrossTilesContext();
     const { playerData, stage, options } = context;
