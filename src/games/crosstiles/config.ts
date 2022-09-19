@@ -43,3 +43,5 @@ export const defaultOptions: GameOptions = {
     checkGridBeforeRecoding: true,
     playersGetSameLetters: true,
 }; 
+
+export const makeGridCountTime = 5; // In seconds

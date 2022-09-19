@@ -9,6 +9,7 @@ import { RackAndBoard } from "./rack-and-board";
 import { makeEmptyGrid } from "../server-side/make-empty-grid";
 import { PlayerStatus } from "./player-status";
 import { RecordAndDoneButtons, RecordRequest } from "./record-and-done-buttons";
+import { makeGridCountTime as makeGridCountdownTime } from "../config";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -37,48 +38,36 @@ function minutesAndSeconds(secondsFactional: number) {
     return `${minutes}:${padding}${remainder}`;
 }
 
-export function MakeGrid() : JSX.Element | null {
+interface MakeGridInnerProps {
+    secondsLeft: number;
+}
+
+function MakeGridInner(props: MakeGridInnerProps) : JSX.Element {
+    const { secondsLeft } = props;
+    
     const context = useCrossTilesContext();
-    const { playerData, stage, grid, options } = context;
+    const { playerData, stage, grid } = context;
     const { moves,  playerID } = context.wrappedGameProps;
-
-    const now = useNowTicker();
-
     const [showIllegalWords, setShowIllegalWords] = useState(false);
 
-    const {makeGridStartTime, 
+
+    sAssert(stage === GameStage.makingGrids);
+
+    const {
         gridRackAndScore: recordedGridRackAndScore,
         doneRecordingGrid: amDoneRecording,
         selectedLetters, 
     } = playerData[playerID];
 
-    useEffect(()=>{
-        if(stage === GameStage.makingGrids) {
-
-            if(makeGridStartTime === null) {
-                moves.setMakeGridStartTime(now);
-            } else {
-                const timesUp = options.timeToMakeGrid < (now - makeGridStartTime) / 1000;
-                if(timesUp && !amDoneRecording) {
-                    if(!recordedGridRackAndScore) {
-                        sAssert(selectedLetters);
-                        moves.recordGrid({grid: makeEmptyGrid(), rack: selectedLetters, score: null});
-                    }
-                    moves.doneRecordingGrid();
-                }
+    useEffect(() => {
+        if (secondsLeft < 0 && !amDoneRecording) {
+            if (!recordedGridRackAndScore) {
+                sAssert(selectedLetters);
+                moves.recordGrid({ grid: makeEmptyGrid(), rack: selectedLetters, score: null });
             }
+            moves.doneRecordingGrid();
         }
     });
-
-    if(stage !== GameStage.makingGrids) {
-        return null;
-    }
-
-    if(makeGridStartTime === null) {
-        return null;
-    }
-
-    const secondsLeft = options.timeToMakeGrid - (now - makeGridStartTime) / 1000;
 
     const doneMessage = (pid: string) => {
         if ( pid === playerID ) {
@@ -106,4 +95,54 @@ export function MakeGrid() : JSX.Element | null {
             <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
         </ButtonAndTimeDiv>
     </OuterDiv>;
+}
+
+interface CountDownProps {
+    secondsLeft: number;
+}
+function CountDown(props: CountDownProps) {
+    const { secondsLeft } = props;
+    return <div>
+        <div>Making new grid in</div>
+        <div>{Math.floor(secondsLeft + 0.5)}</div>
+    </div>;
+
+}
+export function MakeGrid() : JSX.Element | null {
+    const context = useCrossTilesContext();
+    const { playerData, stage, options } = context;
+    const { moves,  playerID } = context.wrappedGameProps;
+
+    const now = useNowTicker();
+
+    const { makeGridStartTime } = playerData[playerID];
+
+    useEffect(()=>{
+        if(stage === GameStage.makingGrids) {
+            if(makeGridStartTime === null) {
+                moves.setMakeGridStartTime(now);
+            } 
+        }
+    });
+
+    if(stage !== GameStage.makingGrids) {
+        return null;
+    }
+
+    if(makeGridStartTime === null) {
+        return null;
+    }
+
+   
+    const secondsSinceStart = (now - makeGridStartTime) / 1000;
+    const remainingCountdown = makeGridCountdownTime - secondsSinceStart;
+
+    if(remainingCountdown > 0) {
+        return <CountDown secondsLeft={remainingCountdown} />;
+    }
+
+    const totalTime = options.timeToMakeGrid + makeGridCountdownTime;
+    const secondsLeft = totalTime - secondsSinceStart;
+
+    return <MakeGridInner secondsLeft={secondsLeft} />;
 }
