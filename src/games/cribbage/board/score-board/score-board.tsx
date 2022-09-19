@@ -8,10 +8,10 @@ import { boardPadding, holeRadius, pegSize, rowGap } from "./sizes";
 import { Position } from "./types";
 
 const colors = {
-    board: "rgb(210, 125, 45)",
+    board: "rgb(240, 170, 70)",
     holeBackground: "white",
     holeBorder: "black",
-    player1: "green",
+    player1: "rgb(175,0,0)",
     player2: "blue",
 };
 
