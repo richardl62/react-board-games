@@ -7,6 +7,13 @@ import { boardHeight, boardWidth, pegPoints } from "./peg-points";
 import { boardPadding, holeRadius } from "./sizes";
 import { Position } from "./types";
 
+const colors = {
+    board: "rgb(165, 42, 42)",
+    holeBackground: "cornsilk",
+    holeBorder: "black",
+    player1: "red",
+    player2: "blue",
+};
 
 const Board = styled.div<{height: number, width: number}>`
     position: relative;
@@ -17,8 +24,8 @@ const Board = styled.div<{height: number, width: number}>`
     box-sizing: content-box; //KLUDGE?
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    background: brown;
-    border: ${boardPadding}px solid brown;
+    background: ${colors.board};
+    border: ${boardPadding}px solid ${colors.board};
 `;
 
 interface HoleProps {
@@ -56,17 +63,17 @@ const Hole = styled.div`
 
 
     box-sizing: border-box;
-    border: solid 2px black;
-    background: cornsilk;
+    border: solid 2px ${colors.holeBorder};
+    background: ${colors.holeBackground};
 `;
 
 const Peg = styled.div<{player1 : boolean}>`
     height: 100%;
     width: 100%;
     box-sizing: border-box;
-    border: solid 1px black;
+    border: solid 1px ${colors.holeBorder};
     border-radius: 50%;
-    background: ${props => props.player1 ? "yellow" : "blue"};
+    background: ${props => props.player1 ? colors.player1 : colors.player2};
 `;
 
 interface PlayerProps {
