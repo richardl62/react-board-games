@@ -9,6 +9,8 @@ export const rowGap = {
     fifthRow: holeRadius * 2,
 };
 
+export const pegSize = holeRadius*1.2;
+
 export const boardPadding = 10;
 
 // The radius of the middle of the top arc.

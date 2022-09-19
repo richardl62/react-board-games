@@ -20,7 +20,7 @@ function lineStart(indexAfter: number) {
     sAssert(pa.left < pegPoints.player2[indexAfter].left);
 
     return {
-        bottom: (pa.bottom + pb.bottom)/2 + holeRadius/2,
+        bottom: (pa.bottom + pb.bottom)/2 + holeRadius/2 + 3, //KJLUDGE
         left: pa.left,
     };
 }

@@ -4,14 +4,14 @@ import styled from "styled-components";
 import { nPreStartPegs } from "./config";
 import { MarkerLines } from "./marker-lines";
 import { boardHeight, boardWidth, pegPoints } from "./peg-points";
-import { boardPadding, holeRadius } from "./sizes";
+import { boardPadding, holeRadius, pegSize, rowGap } from "./sizes";
 import { Position } from "./types";
 
 const colors = {
-    board: "rgb(165, 42, 42)",
-    holeBackground: "cornsilk",
+    board: "rgb(210, 125, 45)",
+    holeBackground: "white",
     holeBorder: "black",
-    player1: "red",
+    player1: "green",
     player2: "blue",
 };
 
@@ -52,8 +52,8 @@ HoleProps, // What is consumed by .attrs()
     }};
 })<HoleProps>`
 
-    height: ${holeRadius}px;
-    width: ${holeRadius}px;
+    height: ${rowGap.standard}px;
+    width: ${rowGap.standard}px;
 `;
 
 const Hole = styled.div`
@@ -68,8 +68,8 @@ const Hole = styled.div`
 `;
 
 const Peg = styled.div<{player1 : boolean}>`
-    height: 100%;
-    width: 100%;
+    height: ${pegSize}px;
+    width: ${pegSize}px;
     box-sizing: border-box;
     border: solid 1px ${colors.holeBorder};
     border-radius: 50%;
