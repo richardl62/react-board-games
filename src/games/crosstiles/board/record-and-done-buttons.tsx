@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sAssert } from "../../../utils/assert";
+import { sameNestedArray } from "../../../utils/same-nested-array";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore } from "../config";
@@ -113,7 +114,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
             return "No grid recorded";
         }
 
-        if (gridRecordedTimestamp === gridChangeTimestamp) {
+        if (sameNestedArray(recordedGrid, grid)) {
             return "Grid recorded";
         }
 
