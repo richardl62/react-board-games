@@ -5,13 +5,19 @@ import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context
 import { GameStage } from "../server-side/server-data";
 import { PlayerStatus } from "./player-status";
 
+const OuterDiv = styled.div `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
 
 const OptionsTable = styled.div`
     display: grid;
     grid-template-columns: auto auto;
     column-gap: 1em;
     
-    margin-bottom: 8px;
+    font-size: 12px;
+    margin-bottom: 20px;
 `;
 
 export function ReadyToStartGame() : JSX.Element | null {
@@ -54,7 +60,7 @@ export function ReadyToStartGame() : JSX.Element | null {
     }
     
     const ready = playerData[playerID].readyToStartGame;
-    return <div>
+    return <OuterDiv>
         <OptionsTable>{optionElems}</OptionsTable>
 
         {allJoined ?
@@ -66,5 +72,5 @@ export function ReadyToStartGame() : JSX.Element | null {
             <WaitingForPlayers {...wrappedGameProps} />
         }
 
-    </div>;
+    </OuterDiv>;
 }
