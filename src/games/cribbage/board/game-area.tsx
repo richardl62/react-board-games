@@ -8,17 +8,17 @@ import { ScoringHands } from "./scoring-hands";
 import { SimpleClickScoreBoard } from "./score-board/simple-click-score-board";
 
 
-const GameArea = styled.div`
+const GameAreaDiv = styled.div`
     display: inline flex;
     div {
         margin-right: 5px;
     }
 `;
 
-export function Cribbage() : JSX.Element {
+export function GameArea() : JSX.Element {
     const context = useCribbageContext();
 
-    return <GameArea>
+    return <GameAreaDiv>
         <CutCard/>
 
         {context.addingCardsToBox && <PuttingCardsIntoBox/>}
@@ -27,6 +27,6 @@ export function Cribbage() : JSX.Element {
           
         <SimpleClickScoreBoard/>
         
-    </GameArea>;
+    </GameAreaDiv>;
 }
 
