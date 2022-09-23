@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CutCard } from "./cut-card";
-import { MyCards, PonesCards, SharedCards } from "./hands";
+import { PlayerCards, SharedCards } from "./hands";
 import { WrappedScoreBoard } from "./wrapped-score-board";
 
 
@@ -19,9 +19,9 @@ export function GameArea() : JSX.Element {
         <CutCard/>
 
         <div>
-            <PonesCards />
+            <PlayerCards playerID={"pone"} />
             <SharedCards />
-            <MyCards />
+            <PlayerCards playerID={"me"} />
         </div>
           
         <WrappedScoreBoard/>

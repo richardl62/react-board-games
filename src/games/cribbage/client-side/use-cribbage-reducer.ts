@@ -25,9 +25,9 @@ function reducer(state: GameState, action: ActionType) : GameState {
         const newState = deepCopyState(state); // inefficient
 
         const { from, to } = action.data;
-        if(from.handID === "hand" && to.handID === "hand") {
+        if(from.handID === "me" && to.handID === "me") {
             reorderFollowingDrag(newState.me.hand, from.index, to.index);
-        } else if (from.handID === "hand" && to.handID === "dropSpot")  {
+        } else if (from.handID === "me" && to.handID === "dropSpot")  {
             const card = newState.me.hand[from.index];
             newState.me.hand = [...newState.me.hand];
             newState.me.hand.splice(from.index, 1);
