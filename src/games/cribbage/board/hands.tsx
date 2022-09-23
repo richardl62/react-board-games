@@ -9,9 +9,8 @@ const InlineFlex = styled.div`
 `;
 
 
-export function AddingCardsToBox() : JSX.Element {
-    const { me, other, box, dispatch } = useCribbageContext();
-
+export function MyCards() : JSX.Element {
+    const { me, dispatch } = useCribbageContext();
 
     const dragEnd = useCallback((arg: {from:CardID, to: CardID}) => {
         const { from, to } = arg;
@@ -30,18 +29,20 @@ export function AddingCardsToBox() : JSX.Element {
             });
         }
     },[]);
-
-    return <div>
-        <Hand cards={other.hand} showBack />
-
-
-        <InlineFlex>
-            <Hand cards={box} />
-            <Hand cards={[null]} handID={"dropSpot"} dropTarget />
-        </InlineFlex>
        
-        <Hand cards={me.hand} handID={"hand"} dragEnd={dragEnd} dropTarget />
+    return <Hand cards={me.hand} handID={"hand"} dragEnd={dragEnd} dropTarget />;
+}
 
-    </div>;
+export function PonesCards() : JSX.Element {
+    const { other } = useCribbageContext();
+    return <Hand cards={other.hand} showBack />;
+}
 
+export function SharedCards() : JSX.Element {
+    const { box } = useCribbageContext();
+
+    return <InlineFlex>
+        <Hand cards={box} />
+        <Hand cards={[null]} handID={"dropSpot"} dropTarget />
+    </InlineFlex>;
 }

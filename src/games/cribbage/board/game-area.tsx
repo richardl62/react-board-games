@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CutCard } from "./cut-card";
-import { AddingCardsToBox as PuttingCardsIntoBox } from "./adding-cards-to-box";
+import { MyCards, PonesCards, SharedCards } from "./hands";
 import { WrappedScoreBoard } from "./wrapped-score-board";
 
 
@@ -12,15 +12,20 @@ const GameAreaDiv = styled.div`
     }
 `;
 
+
 export function GameArea() : JSX.Element {
 
     return <GameAreaDiv>
         <CutCard/>
 
-        <PuttingCardsIntoBox/>
+        <div>
+            <PonesCards />
+            <SharedCards />
+            <MyCards />
+        </div>
           
         <WrappedScoreBoard/>
-        
+
     </GameAreaDiv>;
 }
 
