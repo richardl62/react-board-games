@@ -34,8 +34,8 @@ export function MyCards() : JSX.Element {
 }
 
 export function PonesCards() : JSX.Element {
-    const { other } = useCribbageContext();
-    return <Hand cards={other.hand} showBack />;
+    const { pone } = useCribbageContext();
+    return <Hand cards={pone.hand} showBack />;
 }
 
 export function SharedCards() : JSX.Element {

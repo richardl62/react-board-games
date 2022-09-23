@@ -1,5 +1,4 @@
 import { Dispatch, useReducer } from "react";
-import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
 import { GameState, startingState } from "./game-state";
 
@@ -39,7 +38,6 @@ function reducer(state: GameState, action: ActionType) : GameState {
         const card = newState.me.hand[from];
         newState.me.hand = [...newState.me.hand];
         newState.me.hand.splice(from, 1);
-        sAssert(newState.addingCardsToBox);
         newState.box.push(card);
 
         return newState;
