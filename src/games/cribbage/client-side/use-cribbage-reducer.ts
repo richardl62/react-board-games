@@ -1,7 +1,8 @@
 import { Dispatch, useReducer } from "react";
+import { Card } from "../../../utils/cards";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
-import { GameState, startingState } from "./game-state";
+import { GameState, makeCardSetID, startingState } from "./game-state";
 
 export type ActionType =
     { type: "showCutCard"} |
@@ -10,6 +11,21 @@ export type ActionType =
 
 function deepCopyState(state: GameState) : GameState {
     return JSON.parse(JSON.stringify(state));  // inefficient
+}
+
+function moveBetweenCardSets(
+    fromCards: Card [], fromIndex: number,
+    toCards: Card[],    toIndex: number 
+) {
+    const card = fromCards[fromIndex];
+    fromCards.splice(fromIndex, 1);
+
+    // Shuffle up cards at position toIndex or greater
+    for(let i = toCards.length; i > toIndex; --i) {
+        toCards[i] = toCards[i-1];
+    }
+
+    toCards[toIndex] = card;
 }
 
 function reducer(state: GameState, action: ActionType) : GameState {
@@ -25,13 +41,16 @@ function reducer(state: GameState, action: ActionType) : GameState {
         const newState = deepCopyState(state); // inefficient
 
         const { from, to } = action.data;
-        if(from.handID === "me" && to.handID === "me") {
-            reorderFollowingDrag(newState.me.hand, from.index, to.index);
-        } else if (from.handID === "me" && to.handID === "dropSpot")  {
-            const card = newState.me.hand[from.index];
-            newState.me.hand = [...newState.me.hand];
-            newState.me.hand.splice(from.index, 1);
-            newState.box.push(card);
+        const fromID = makeCardSetID(from.handID);
+        const toID = makeCardSetID(to.handID);
+    
+        if(fromID === toID) {
+            reorderFollowingDrag(newState[fromID].hand, from.index, to.index);
+        } else {
+            moveBetweenCardSets(
+                newState[fromID].hand, from.index, 
+                newState[toID].hand, to.index,
+            );
         }
         return newState;
     }

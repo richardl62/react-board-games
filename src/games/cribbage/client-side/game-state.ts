@@ -1,19 +1,32 @@
 
+import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 
-export type PlayerID = "me" | "pone";
-export type HandID = PlayerID | "shared";
+// The whole CardSetID stuff is rather kludged.
+export enum CardSetID {
+    Me = "me",
+    Pone = "pone",
+    Shared = "shared",
+}
 
-interface PlayerData {
+export function makeCardSetID(value: string) : CardSetID {
+    sAssert(value === CardSetID.Me ||
+        value === CardSetID.Pone ||
+        value === CardSetID.Shared, "string does not represent a card set");
+        
+    return value as CardSetID;
+}
+
+
+interface CardSetData {
     /** 'visible' cards.  Does not include cards in play */ 
     hand: Card[];
 }
 
 export interface GameState {
-    me: PlayerData;
-    pone: PlayerData;
-
-    box: Card [];
+    me: CardSetData;
+    pone: CardSetData;
+    shared: CardSetData;
 
     // Kludge? The cut card is selected from the start but is shown only when
     // a player 'cuts' the deck.
@@ -42,7 +55,9 @@ export const startingState: GameState = {
         ],
     },
 
-    box: [],
+    shared: {
+        hand: [],
+    },
 
 
     cutCard: { 

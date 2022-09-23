@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { CutCard } from "./cut-card";
-import { PlayerCards, SharedCards } from "./hands";
+import { WrappedHand } from "./wrapped-hand";
 import { WrappedScoreBoard } from "./wrapped-score-board";
+import { CardSetID } from "../client-side/game-state";
 
 
 const GameAreaDiv = styled.div`
@@ -19,9 +20,9 @@ export function GameArea() : JSX.Element {
         <CutCard/>
 
         <div>
-            <PlayerCards playerID={"pone"} />
-            <SharedCards />
-            <PlayerCards playerID={"me"} />
+            <WrappedHand cardSetID={CardSetID.Pone} />
+            <WrappedHand cardSetID={CardSetID.Shared} />
+            <WrappedHand cardSetID={CardSetID.Me} />
         </div>
           
         <WrappedScoreBoard/>
