@@ -5,7 +5,7 @@ import { CutCard } from "./cut-card";
 import { AddingCardsToBox as PuttingCardsIntoBox } from "./adding-cards-to-box";
 import { Pegging } from "./pegging";
 import { ScoringHands } from "./scoring-hands";
-import { SimpleClickScoreBoard } from "./score-board/simple-click-score-board";
+import { WrappedScoreBoard } from "./wrapped-score-board";
 
 
 const GameAreaDiv = styled.div`
@@ -25,7 +25,7 @@ export function GameArea() : JSX.Element {
         {context.pegging && <Pegging/>}
         {context.scoringHands && <ScoringHands/>}
           
-        <SimpleClickScoreBoard/>
+        <WrappedScoreBoard/>
         
     </GameAreaDiv>;
 }

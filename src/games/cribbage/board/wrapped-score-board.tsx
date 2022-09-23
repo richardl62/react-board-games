@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { nPreStartPegs } from "./config";
-import { ScoreBoard } from "./score-board";
+import { nPreStartPegs } from "./score-board/config";
+import { ScoreBoard } from "./score-board/score-board";
 
 type Pegs = [number,number];
 function movePeg(pegs: Pegs, moveTo:number) : Pegs {
@@ -33,7 +33,7 @@ function usePlayerProps() {
     return playerProps;
 }
 
-export function SimpleClickScoreBoard() : JSX.Element {
+export function WrappedScoreBoard() : JSX.Element {
     const player1 = usePlayerProps();
     const player2 = usePlayerProps();
 
