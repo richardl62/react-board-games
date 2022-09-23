@@ -13,21 +13,11 @@ export function MyCards() : JSX.Element {
     const { me, dispatch } = useCribbageContext();
 
     const dragEnd = useCallback((arg: {from:CardID, to: CardID}) => {
-        const { from, to } = arg;
+        dispatch({
+            type: "drag",
+            data: arg,
+        });
 
-        if(to.handID === "hand") {
-            dispatch({
-                type: "dragWithinHand", 
-                data: {from: from.index, to: to.index},
-            });
-        }
-
-        if(to.handID === "dropSpot") {
-            dispatch({
-                type: "moveToBox", 
-                data: {from: from.index},
-            });
-        }
     },[]);
        
     return <Hand cards={me.hand} handID={"hand"} dragEnd={dragEnd} dropTarget />;

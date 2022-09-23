@@ -1,12 +1,11 @@
 import { Dispatch, useReducer } from "react";
+import { CardID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
 import { GameState, startingState } from "./game-state";
 
-
 export type ActionType =
     { type: "showCutCard"} |
-    { type: "dragWithinHand", data: { from: number, to: number} } |
-    { type: "moveToBox", data: { from: number } }
+    { type: "drag", data: {from:CardID, to: CardID} } 
 ;
 
 function deepCopyState(state: GameState) : GameState {
@@ -22,24 +21,18 @@ function reducer(state: GameState, action: ActionType) : GameState {
         return newState;
     }
 
-    if (action.type === "dragWithinHand") {
+    if (action.type === "drag") {
         const newState = deepCopyState(state); // inefficient
 
         const { from, to } = action.data;
-        reorderFollowingDrag(newState.me.hand, from, to);
-        return newState;
-    }
-
-    if (action.type === "moveToBox") {
-        const newState = deepCopyState(state); // inefficient
-
-        const { from } = action.data;
-
-        const card = newState.me.hand[from];
-        newState.me.hand = [...newState.me.hand];
-        newState.me.hand.splice(from, 1);
-        newState.box.push(card);
-
+        if(from.handID === "hand" && to.handID === "hand") {
+            reorderFollowingDrag(newState.me.hand, from.index, to.index);
+        } else if (from.handID === "hand" && to.handID === "dropSpot")  {
+            const card = newState.me.hand[from.index];
+            newState.me.hand = [...newState.me.hand];
+            newState.me.hand.splice(from.index, 1);
+            newState.box.push(card);
+        }
         return newState;
     }
 
