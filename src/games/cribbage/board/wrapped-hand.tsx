@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { Hand } from "../../../utils/cards";
+import { Card, Hand } from "../../../utils/cards";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { CardSetID } from "../client-side/game-state";
 
@@ -13,7 +13,10 @@ export function WrappedHand(props: WrappedHandProps) : JSX.Element {
 
     const context = useCribbageContext();
     const { dispatch } = context;
-    const cards = context[cardSetID].hand;
+    let cards : (Card|null) [] = context[cardSetID].hand;
+    if (cards.length === 0) {
+        cards = [null];
+    }
 
     const dragEnd = useCallback((arg: {from:CardID, to: CardID}) => {
         dispatch({
