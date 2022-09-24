@@ -23,6 +23,11 @@ interface CardSetData {
     hand: Card[];
 }
 
+interface PlayerData extends CardSetData {
+    /** Includes cards in play (i.e. those that have been played during pegging) */
+    fullHand: Card[];
+}
+
 export enum GameStage  {
     SettingBox,
     Pegging,
@@ -30,8 +35,9 @@ export enum GameStage  {
 }
 
 export interface GameState {
-    me: CardSetData;
-    pone: CardSetData;
+    me: PlayerData;
+    pone: PlayerData;
+
     shared: CardSetData;
 
     stage: GameStage;
@@ -46,35 +52,44 @@ export interface GameState {
     };
 }
 
-export const startingState: GameState = {
-    me: {
-        hand: [
-            { rank: "A", suit: "S" },
-            { rank: "2", suit: "S" },
-            { rank: "3", suit: "S" },
-            { rank: "4", suit: "S" }
-        ],
-    },
+export function makeGameState() : GameState {
 
-    pone: {
-        hand: [
-            { rank: "A", suit: "D" },
-            { rank: "2", suit: "D" },
-            { rank: "3", suit: "D" },
-            { rank: "4", suit: "D" }
-        ],
-    },
+    const meHand : Card[] = [
+        { rank: "A", suit: "S" },
+        { rank: "2", suit: "S" },
+        { rank: "3", suit: "S" },
+        { rank: "4", suit: "S" }
+    ];
 
-    shared: {
-        hand: [],
-    },
+    const poneHand : Card[]  = [
+        { rank: "A", suit: "D" },
+        { rank: "2", suit: "D" },
+        { rank: "3", suit: "D" },
+        { rank: "4", suit: "D" }
+    ];
 
-    box: [],
- 
-    stage: GameStage.SettingBox,
+    return {
+        me: {
+            hand: meHand,
+            fullHand: [...meHand],
+        },
 
-    cutCard: { 
-        card: {rank: "7", suit: "D" },
-        visible: false,
-    },
-};
+        pone: {
+            hand: poneHand,
+            fullHand: [...meHand],
+        },
+
+        shared: {
+            hand: [],
+        },
+
+        box: [],
+
+        stage: GameStage.SettingBox,
+
+        cutCard: {
+            card: { rank: "7", suit: "D" },
+            visible: false,
+        },
+    };
+}

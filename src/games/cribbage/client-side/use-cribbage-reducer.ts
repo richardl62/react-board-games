@@ -2,7 +2,7 @@ import { Dispatch, useReducer } from "react";
 import { sAssert } from "../../../utils/assert";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { doDrag } from "./drag-support";
-import { GameStage, GameState, startingState } from "./game-state";
+import { GameStage, GameState, makeGameState } from "./game-state";
 
 export type ActionType =
     { type: "showCutCard"} |
@@ -43,7 +43,7 @@ function reducer(state: GameState, action: ActionType) : GameState {
 }
 
 export function useCribbageReducer(): [GameState, Dispatch<ActionType>] {
-    return useReducer(reducer, startingState);
+    return useReducer(reducer, makeGameState());
 }
 
 
