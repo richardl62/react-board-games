@@ -28,6 +28,9 @@ export interface GameState {
     pone: CardSetData;
     shared: CardSetData;
 
+    box: Card [] | null;
+    toPeg: "me" | "pone" | null,
+
     // Kludge? The cut card is selected from the start but is shown only when
     // a player 'cuts' the deck.
     cutCard: {
@@ -48,10 +51,10 @@ export const startingState: GameState = {
 
     pone: {
         hand: [
-            { rank: "A", suit: "C" },
-            { rank: "2", suit: "C" },
-            { rank: "3", suit: "C" },
-            { rank: "4", suit: "C" }
+            { rank: "A", suit: "D" },
+            { rank: "2", suit: "D" },
+            { rank: "3", suit: "D" },
+            { rank: "4", suit: "D" }
         ],
     },
 
@@ -59,6 +62,8 @@ export const startingState: GameState = {
         hand: [],
     },
 
+    box: null,
+    toPeg: null,
 
     cutCard: { 
         card: {rank: "7", suit: "D" },

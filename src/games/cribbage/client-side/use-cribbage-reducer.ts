@@ -1,4 +1,5 @@
 import { Dispatch, useReducer } from "react";
+import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
@@ -6,7 +7,8 @@ import { GameState, makeCardSetID, startingState } from "./game-state";
 
 export type ActionType =
     { type: "showCutCard"} |
-    { type: "drag", data: {from:CardID, to: CardID} } 
+    { type: "drag", data: {from:CardID, to: CardID} } |
+    { type: "doneMakingBox"}
 ;
 
 function deepCopyState(state: GameState) : GameState {
@@ -28,34 +30,40 @@ function moveBetweenCardSets(
     toCards[toIndex] = card;
 }
 
-function reducer(state: GameState, action: ActionType) : GameState {
+function reducerAction(state: GameState, action: ActionType) : GameState {
+   
     if (action.type === "showCutCard") {
-        const newState = deepCopyState(state); // inefficient
-
-        newState.cutCard.visible = true;
-
-        return newState;
-    }
-
-    if (action.type === "drag") {
-        const newState = deepCopyState(state); // inefficient
-
+        state.cutCard.visible = true;
+    } else if (action.type === "drag") {
         const { from, to } = action.data;
         const fromID = makeCardSetID(from.handID);
         const toID = makeCardSetID(to.handID);
     
         if(fromID === toID) {
-            reorderFollowingDrag(newState[fromID].hand, from.index, to.index);
+            reorderFollowingDrag(state[fromID].hand, from.index, to.index);
         } else {
             moveBetweenCardSets(
-                newState[fromID].hand, from.index, 
-                newState[toID].hand, to.index,
+                state[fromID].hand, from.index, 
+                state[toID].hand, to.index,
             );
         }
-        return newState;
+    } else if (action.type === "doneMakingBox") {
+        sAssert(state.box === null);
+        state.box = state.shared.hand;
+        state.shared.hand = [];
+        state.toPeg = "me";
+    } else {
+        throw new Error("Unexpected action in reducer");
     }
 
-    throw new Error("Unexpected action in reducer");
+    return state;
+}
+
+function reducer(state: GameState, action: ActionType) : GameState {
+    return reducerAction(
+        deepCopyState(state), // inefficient
+        action
+    );
 }
 
 export function useCribbageReducer(): [GameState, Dispatch<ActionType>] {

@@ -4,6 +4,7 @@ import { CutCard } from "./cut-card";
 import { WrappedHand } from "./wrapped-hand";
 import { WrappedScoreBoard } from "./wrapped-score-board";
 import { CardSetID } from "../client-side/game-state";
+import { MessageAndButton } from "./message-and-button";
 
 
 const GameAreaDiv = styled.div`
@@ -23,6 +24,7 @@ export function GameArea() : JSX.Element {
             <WrappedHand cardSetID={CardSetID.Pone} />
             <WrappedHand cardSetID={CardSetID.Shared} />
             <WrappedHand cardSetID={CardSetID.Me} />
+            <MessageAndButton />
         </div>
           
         <WrappedScoreBoard/>
