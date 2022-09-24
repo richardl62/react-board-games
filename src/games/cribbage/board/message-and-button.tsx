@@ -7,8 +7,8 @@ const OuterDiv = styled.div`
     display: flex;
 
     font-size: 20px;
-    span {
-        margin-right: 10px;
+    button {
+        margin-left: 10px;
     }
 `;
 
@@ -18,21 +18,28 @@ function MakingBox() {
         return null;
     }
 
-    const onClick = () => dispatch({type: "doneMakingBox"});
+    const doneMakingBox = () => dispatch({type: "doneMakingBox"});
 
     return <OuterDiv>
         <span>Add Cards to box</span>
-        <button onClick={onClick}>Done</button>
+        <button onClick={doneMakingBox}>Done</button>
     </OuterDiv>;
 }
 
 function Pegging() {
-    const { stage } = useCribbageContext();
+    const { stage, dispatch } = useCribbageContext();
     if(stage !== GameStage.Pegging) {
         return null;
     }
 
-    return <div>Pegging</div>;
+    const restartPegging = () => dispatch({type: "restartPegging"});
+    const donePegging = () => dispatch({type: "donePegging"});
+
+    return <OuterDiv>
+        <span>Pegging</span>
+        <button onClick={restartPegging}>Restart</button>
+        <button onClick={donePegging}>Done</button>
+    </OuterDiv>;
 }
 
 export function MessageAndButton() : JSX.Element {

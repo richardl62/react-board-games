@@ -7,7 +7,9 @@ import { GameStage, GameState, startingState } from "./game-state";
 export type ActionType =
     { type: "showCutCard"} |
     { type: "drag", data: {from:CardID, to: CardID} } |
-    { type: "doneMakingBox"}
+    { type: "doneMakingBox"} |
+    { type: "restartPegging"} |
+    { type: "donePegging"}
 ;
 
 function deepCopyState(state: GameState) : GameState {
