@@ -38,7 +38,21 @@ function Pegging() {
     return <OuterDiv>
         <span>Pegging</span>
         <button onClick={restartPegging}>Restart</button>
-        <button onClick={donePegging}>Done</button>
+        <button onClick={donePegging}>Done (reveal hands)</button>
+    </OuterDiv>;
+}
+
+function Scoring() {
+    const { stage, dispatch } = useCribbageContext();
+    if(stage !== GameStage.Scoring) {
+        return null;
+    }
+
+    const newDeal = () => dispatch({type: "newDeal"});
+
+    return <OuterDiv>
+        <span>Scoring</span>
+        <button onClick={newDeal}>Done (new deal)</button>
     </OuterDiv>;
 }
 
@@ -46,5 +60,6 @@ export function MessageAndButton() : JSX.Element {
     return <>
         <MakingBox />
         <Pegging />
+        <Scoring />
     </>;
 }

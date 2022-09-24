@@ -9,7 +9,8 @@ export type ActionType =
     { type: "drag", data: {from:CardID, to: CardID} } |
     { type: "doneMakingBox"} |
     { type: "restartPegging"} |
-    { type: "donePegging"}
+    { type: "donePegging"} |
+    { type: "newDeal" }
 ;
 
 function deepCopyState(state: GameState) : GameState {
@@ -17,7 +18,7 @@ function deepCopyState(state: GameState) : GameState {
 }
 
 
-function reducerAction(state: GameState, action: ActionType) : GameState {
+function reducerModifyState(state: GameState, action: ActionType) : GameState {
    
     if (action.type === "showCutCard") {
         state.cutCard.visible = true;
@@ -25,9 +26,22 @@ function reducerAction(state: GameState, action: ActionType) : GameState {
         doDrag(state, action.data);
     } else if (action.type === "doneMakingBox") {
         sAssert(state.stage === GameStage.SettingBox);
+        state.me.fullHand = [...state.me.hand];
+        state.pone.fullHand = [...state.pone.hand];
+
         state.box = state.shared.hand;
+
         state.shared.hand = [];
         state.stage = GameStage.Pegging;
+    } else if (action.type === "restartPegging") {
+        state.shared.hand = [];
+    } else if (action.type === "donePegging") {
+        state.me.hand = [...state.me.fullHand];
+        state.pone.hand = [...state.pone.fullHand];
+        state.shared.hand = state.box;
+        state.box = [];
+
+        state.stage = GameStage.Scoring;
     } else {
         throw new Error("Unexpected action in reducer");
     }
@@ -36,7 +50,12 @@ function reducerAction(state: GameState, action: ActionType) : GameState {
 }
 
 function reducer(state: GameState, action: ActionType) : GameState {
-    return reducerAction(
+
+    if (action.type === "newDeal") {
+        return makeGameState();
+    }
+    
+    return reducerModifyState(
         deepCopyState(state), // inefficient
         action
     );

@@ -23,7 +23,7 @@ export function dragPermitted(state: GameState, {to, from}: FromTo) : boolean {
     }
 
     if (state.stage === GameStage.Pegging) {
-        return fromID === "shared";
+        return toID === "shared";
     } 
 
     sAssert(false, "Cannot determined result of dragPermitted");
