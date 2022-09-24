@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
-import { GameState, makeCardSetID } from "./game-state";
+import { GameState, GameStage, makeCardSetID } from "./game-state";
 
 interface FromTo {
     from: CardID;
@@ -14,17 +14,16 @@ export function dragPermitted(state: GameState, {to, from}: FromTo) : boolean {
     const fromID = makeCardSetID(from.handID);
     const toID = makeCardSetID(to.handID);
     
-    if (fromID === toID ) {
+    if (fromID === toID && fromID !== "shared") {
         return true;
     }
 
-    if (state.box === null) {
+    if (state.stage === GameStage.SettingBox) {
         return toID === "shared" || fromID === "shared";
     }
 
-    if (state.toPeg) {
-        return toID === state.toPeg && fromID === "shared";
-        return true;
+    if (state.stage === GameStage.Pegging) {
+        return fromID === "shared";
     } 
 
     sAssert(false, "Cannot determined result of dragPermitted");

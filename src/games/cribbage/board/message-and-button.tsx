@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
+import { GameStage } from "../client-side/game-state";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -12,8 +13,8 @@ const OuterDiv = styled.div`
 `;
 
 function MakingBox() {
-    const { dispatch, box } = useCribbageContext();
-    if(box) {
+    const { dispatch, stage } = useCribbageContext();
+    if(stage !== GameStage.SettingBox) {
         return null;
     }
 
@@ -26,14 +27,12 @@ function MakingBox() {
 }
 
 function Pegging() {
-    const { toPeg } = useCribbageContext();
-    if(toPeg === null) {
+    const { stage } = useCribbageContext();
+    if(stage !== GameStage.Pegging) {
         return null;
     }
 
-    const name = toPeg === "me" ? "You" : "Pone";
-
-    return <div>{`${name} to peg`}</div>;
+    return <div>Pegging</div>;
 }
 
 export function MessageAndButton() : JSX.Element {

@@ -2,7 +2,7 @@ import { Dispatch, useReducer } from "react";
 import { sAssert } from "../../../utils/assert";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { doDrag } from "./drag-support";
-import { GameState, startingState } from "./game-state";
+import { GameStage, GameState, startingState } from "./game-state";
 
 export type ActionType =
     { type: "showCutCard"} |
@@ -22,10 +22,10 @@ function reducerAction(state: GameState, action: ActionType) : GameState {
     } else if (action.type === "drag") {
         doDrag(state, action.data);
     } else if (action.type === "doneMakingBox") {
-        sAssert(state.box === null);
+        sAssert(state.stage === GameStage.SettingBox);
         state.box = state.shared.hand;
         state.shared.hand = [];
-        state.toPeg = "me";
+        state.stage = GameStage.Pegging;
     } else {
         throw new Error("Unexpected action in reducer");
     }

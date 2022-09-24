@@ -23,13 +23,20 @@ interface CardSetData {
     hand: Card[];
 }
 
+export enum GameStage  {
+    SettingBox,
+    Pegging,
+    Scoring,
+}
+
 export interface GameState {
     me: CardSetData;
     pone: CardSetData;
     shared: CardSetData;
 
-    box: Card [] | null;
-    toPeg: "me" | "pone" | null,
+    stage: GameStage;
+
+    box: Card [];
 
     // Kludge? The cut card is selected from the start but is shown only when
     // a player 'cuts' the deck.
@@ -62,8 +69,9 @@ export const startingState: GameState = {
         hand: [],
     },
 
-    box: null,
-    toPeg: null,
+    box: [],
+ 
+    stage: GameStage.SettingBox,
 
     cutCard: { 
         card: {rank: "7", suit: "D" },
