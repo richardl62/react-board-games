@@ -2,7 +2,8 @@ import { Dispatch, useReducer } from "react";
 import { sAssert } from "../../../utils/assert";
 import { CardID } from "../../../utils/cards/card-dnd";
 import { doDrag } from "./drag-support";
-import { GameStage, GameState, makeGameState } from "./game-state";
+import { GameStage, GameState } from "./game-state";
+import { makeGameState } from "./make-game-state";
 
 export type ActionType =
     { type: "showCutCard"} |

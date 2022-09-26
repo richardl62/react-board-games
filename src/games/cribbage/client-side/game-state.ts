@@ -52,44 +52,4 @@ export interface GameState {
     };
 }
 
-export function makeGameState() : GameState {
 
-    const meHand : Card[] = [
-        { rank: "A", suit: "S" },
-        { rank: "2", suit: "S" },
-        { rank: "3", suit: "S" },
-        { rank: "4", suit: "S" }
-    ];
-
-    const poneHand : Card[]  = [
-        { rank: "A", suit: "D" },
-        { rank: "2", suit: "D" },
-        { rank: "3", suit: "D" },
-        { rank: "4", suit: "D" }
-    ];
-
-    return {
-        me: {
-            hand: meHand,
-            fullHand: [...meHand],
-        },
-
-        pone: {
-            hand: poneHand,
-            fullHand: [...meHand],
-        },
-
-        shared: {
-            hand: [],
-        },
-
-        box: [],
-
-        stage: GameStage.SettingBox,
-
-        cutCard: {
-            card: { rank: "7", suit: "D" },
-            visible: false,
-        },
-    };
-}
