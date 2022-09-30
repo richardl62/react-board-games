@@ -9,11 +9,11 @@ import { makeEmptyGrid } from "../server-side/make-empty-grid";
 export type RecordRequest = "blockedWithIllegalWords" | "cancelled" | "done";
 
 interface RecordAndDoneButtonsProps {
-    /** Called a record is requested, when a record request is cancelled, or
+    /** Called when a record is requested, when a record request is cancelled, or
      * when a record actually occurs. 
      * 
      * Request can be implicitly cancelled by changed the grid. This function
-     * is still call in those case.
+     * is still be call in those case.
      */
     recordRequest: (status: RecordRequest) => void
 }
@@ -33,9 +33,10 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
     
     sAssert(rack);
 
-    const [gridRecordedTimestamp, setGridRecordedTimestamp] = useState<number | null>(null);
     const [blockedRecordTimestamp, setBlockedRecordTimestamp] = useState<number | null>(null);
     const [blockedDoneTimestamp, setBlockedDoneTimestamp] = useState<number | null>(null);
+
+    const currentGridRecorded = recordedGrid && sameNestedArray(recordedGrid, grid);
 
     // Request confirmation if the grid does not score, unless that option
     // is disabled.
@@ -51,7 +52,6 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
             };
             moves.recordGrid({ grid, rack, score: scoreParam });
 
-            setGridRecordedTimestamp(gridChangeTimestamp);
             setBlockedRecordTimestamp(null);
             recordRequest("done");
         } else {
@@ -70,7 +70,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
 
     // Request confirmation if no grid is recorded.
     const onDone = (status: "unchecked" | "confirmed") => {
-        if (gridRecordedTimestamp === gridChangeTimestamp) {
+        if (currentGridRecorded) {
             moves.doneRecordingGrid();
         } if (status === "unchecked") {
             setBlockedDoneTimestamp(gridChangeTimestamp);
@@ -114,7 +114,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
             return "No grid recorded";
         }
 
-        if (sameNestedArray(recordedGrid, grid)) {
+        if (currentGridRecorded) {
             return "Grid recorded";
         }
 
