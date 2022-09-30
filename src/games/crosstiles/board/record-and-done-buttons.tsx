@@ -4,7 +4,6 @@ import { sameNestedArray } from "../../../utils/same-nested-array";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore } from "../config";
-import { makeEmptyGrid } from "../server-side/make-empty-grid";
 
 export type RecordRequest = "blockedWithIllegalWords" | "cancelled" | "done";
 
@@ -26,9 +25,8 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
     const { grid, rack, playerData, isLegalWord, gridChangeTimestamp, options,
         dispatch, wrappedGameProps: { moves, playerID },  } = context;
 
-
     const { gridRackAndScore: recordedGridRackAndScore, scoreCard, 
-        selectedLetters, doneRecordingGrid } = playerData[playerID];
+        doneRecordingGrid } = playerData[playerID];
     const recordedGrid = recordedGridRackAndScore && recordedGridRackAndScore.grid;
     
     sAssert(rack);
@@ -40,7 +38,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
 
     // Request confirmation if the grid does not score, unless that option
     // is disabled.
-    const onRecordGrid = (status: "unchecked" | "confirmed") => {
+    const onRecordGrid = (status: "unconfirmed" | "confirmed") => {
         const { scoreCategory, score, nBonuses, illegalWords }
             = checkGrid(grid, scoreCard, isLegalWord);
 
@@ -69,20 +67,13 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
     };
 
     // Request confirmation if no grid is recorded.
-    const onDone = (status: "unchecked" | "confirmed") => {
-        if (currentGridRecorded) {
-            moves.doneRecordingGrid();
-        } if (status === "unchecked") {
+    const onDone = (status: "unconfirmed" | "confirmed") => {
+        if (!currentGridRecorded && status === "unconfirmed") {
             setBlockedDoneTimestamp(gridChangeTimestamp);
         } else {
             setBlockedDoneTimestamp(null);
             dispatch({type: "clearClickMoveStart"});
-            sAssert(selectedLetters);
-            moves.recordGrid({
-                grid: makeEmptyGrid(),
-                rack: selectedLetters,
-                score: null,
-            });
+
             moves.doneRecordingGrid();
         }
     };
@@ -123,14 +114,14 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
 
     return <div>
         <button 
-            onClick={() => onRecordGrid("unchecked")} 
+            onClick={() => onRecordGrid("unconfirmed")} 
             disabled={doneRecordingGrid}
         >
             Record Grid
         </button>
 
         <button 
-            onClick={() => onDone("unchecked")}
+            onClick={() => onDone("unconfirmed")}
             disabled={doneRecordingGrid}
         >
             Done

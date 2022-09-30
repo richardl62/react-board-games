@@ -1,6 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
+import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "./server-data";
 import { ScoreWithCategory } from "./set-score";
 
@@ -27,4 +28,26 @@ export function recordGrid(
         rack: [...rack],
         score
     };
+}
+
+export function recordEmptyGrid(
+    G: ServerData,
+    ctx: Ctx,
+): void {
+
+    const { playerID } = ctx;
+    sAssert(playerID);
+
+    const { selectedLetters } = G.playerData[playerID];
+    sAssert(selectedLetters);
+
+    recordGrid(
+        G, ctx,
+        {
+            grid: makeEmptyGrid(),
+            rack: selectedLetters,
+            score: null,
+        }
+    );
+
 }

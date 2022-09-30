@@ -1,5 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
+import { recordEmptyGrid } from "./record-grid";
 import { ServerData, GameStage } from "./server-data";
 import { doSetScore } from "./set-score";
 
@@ -12,11 +13,9 @@ export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
     const { playerID } = ctx;
     sAssert(playerID);
 
-    // Client code must ensure a grid has been recorded before calling this function
-    // (e.g. by recording dummy grid if one has not been explicitly recorded).
-    sAssert(G.playerData[playerID].gridRackAndScore,
-        "Grid, rack and score not recorded"); 
-
+    if(!G.playerData[playerID].gridRackAndScore) {
+        recordEmptyGrid(G, ctx);
+    }
     G.playerData[playerID].doneRecordingGrid = true;
 
     let allPlayersDoneRecordingGrids = true;
@@ -31,6 +30,7 @@ export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
         applyRecordedScores(G);
     }
 }
+
 function applyRecordedScores(G: ServerData) {
     for (const pid in G.playerData) {
         const score = G.playerData[pid].gridRackAndScore?.score;
