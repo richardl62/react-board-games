@@ -64,7 +64,7 @@ export function RackAndControls(): JSX.Element {
         return (
             <StyledRackAndControls>
                 <PreRack>
-                    <span>Select times to swap </span>
+                    <span>Toggle tiles to swap </span>
                 </PreRack>
 
                 <Rack selected={selectedForSwap} setSelected={setSelectedForSwap}/>
@@ -80,7 +80,7 @@ export function RackAndControls(): JSX.Element {
         const doEnableSwap = () => {
             sAssert(!selectedForSwap);
             context.dispatch({type: "recallRack"});
-            setSelectedForSwap(Array(nTiles).fill(false));
+            setSelectedForSwap(Array(nTiles).fill(true));
         };
 
         const recallRack = () =>  context.dispatch({type: "recallRack"});
