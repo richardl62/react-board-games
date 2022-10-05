@@ -10,11 +10,11 @@ const HandDiv = styled.div`
 `;
 
 
-interface WrappedHandProps {
+interface HandProps {
     cardSetID: CardSetID;
 }
 
-export function WrappedHand(props: WrappedHandProps) : JSX.Element {
+export function Hand(props: HandProps) : JSX.Element {
     const { cardSetID } = props;
 
     const context = useCribbageContext();
