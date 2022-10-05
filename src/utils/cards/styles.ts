@@ -4,12 +4,12 @@
 
 import { CardBack } from "./types";
 
-const cardHieght = "140px";
+const cardHieght = 140;
 
-// more about styling SVGs.
-export const cardSize = {
+// Card size in pixels
+export const cardSize = { 
     height: cardHieght,
-    width: `calc(${cardHieght} / 1.4)`, 
+    width: cardHieght / 1.4, 
 };
 
 export const defaultCardBack : CardBack = "red";
