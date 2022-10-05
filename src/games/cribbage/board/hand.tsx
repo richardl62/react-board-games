@@ -3,12 +3,8 @@ import { useCribbageContext } from "../client-side/cribbage-context";
 import { CardDnD, CardID } from "../../../utils/cards/card-dnd";
 import { CardSetID } from "../client-side/game-state";
 import { Card } from "../../../utils/cards/types";
-import styled from "styled-components";
-
-const HandDiv = styled.div`
-    display: flex;
-`;
-
+import { cardSize } from "../../../utils/cards/styles";
+import { Spread } from "./spread";
 
 interface HandProps {
     cardSetID: CardSetID;
@@ -44,7 +40,14 @@ export function Hand(props: HandProps) : JSX.Element {
             dropTarget
         />;
     });
-       
-    return <HandDiv> {elems} </HandDiv>;
+    
+    const cardWidth = cardSize.width;
+    const maxSeperation = cardWidth / 8;
+    return <Spread
+        elemWidth={cardWidth}
+        maxElemSeparation={maxSeperation}
+        totalWidth={4*cardWidth + 3*maxSeperation}
+        elems={elems} 
+    />;
 }
 
