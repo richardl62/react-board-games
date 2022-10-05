@@ -11,8 +11,6 @@ const HandDiv = styled.div`
     display: flex;
 `;
 
-export const dropSpotIndex = -1;
-
 export interface HandProps {
     cards: (Card|null)[];
     showBack?: ShowBack;
