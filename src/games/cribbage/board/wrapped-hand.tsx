@@ -1,8 +1,14 @@
 import React, { useCallback } from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { Card, Hand } from "../../../utils/cards";
-import { CardID } from "../../../utils/cards/card-dnd";
+import { CardDnD, CardID } from "../../../utils/cards/card-dnd";
 import { CardSetID } from "../client-side/game-state";
+import { Card } from "../../../utils/cards/types";
+import styled from "styled-components";
+
+const HandDiv = styled.div`
+    display: flex;
+`;
+
 
 interface WrappedHandProps {
     cardSetID: CardSetID;
@@ -25,7 +31,20 @@ export function WrappedHand(props: WrappedHandProps) : JSX.Element {
         });
 
     },[]);
+
+    const elems = cards.map((card, index) => {
+
+        const cardID = {handID: cardSetID, index: index};
+
+        return <CardDnD
+            key={index}
+            card={card}
+            cardID={cardID}
+            dragEnd={dragEnd}
+            dropTarget
+        />;
+    });
        
-    return <Hand cards={cards} handID={cardSetID} dragEnd={dragEnd} dropTarget />;
+    return <HandDiv> {elems} </HandDiv>;
 }
 
