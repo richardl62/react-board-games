@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { CardDnD, CardID } from "../../../utils/cards/card-dnd";
+import { CardDnD, CardDndID } from "../../../utils/cards/card-dnd";
 import { CardSetID } from "../client-side/game-state";
 import { Card } from "../../../utils/cards/types";
 import { cardSize } from "../../../utils/cards/styles";
@@ -20,7 +20,7 @@ export function Hand(props: HandProps) : JSX.Element {
         cards = [null];
     }
 
-    const dragEnd = useCallback((arg: {from:CardID, to: CardID}) => {
+    const dragEnd = useCallback((arg: {from:CardDndID, to: CardDndID}) => {
         dispatch({
             type: "drag",
             data: arg,

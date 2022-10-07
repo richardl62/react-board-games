@@ -1,12 +1,12 @@
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
-import { CardID } from "../../../utils/cards/card-dnd";
+import { CardDndID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
 import { GameState, GameStage, makeCardSetID } from "./game-state";
 
 interface FromTo {
-    from: CardID;
-    to: CardID;
+    from: CardDndID;
+    to: CardDndID;
 }
 
 export function dragPermitted(state: GameState, {to, from}: FromTo) : boolean {

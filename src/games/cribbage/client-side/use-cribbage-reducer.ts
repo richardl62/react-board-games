@@ -1,13 +1,13 @@
 import { Dispatch, useReducer } from "react";
 import { sAssert } from "../../../utils/assert";
-import { CardID } from "../../../utils/cards/card-dnd";
+import { CardDndID } from "../../../utils/cards/card-dnd";
 import { doDrag } from "./drag-support";
 import { GameStage, GameState } from "./game-state";
 import { makeGameState } from "./make-game-state";
 
 export type ActionType =
     { type: "showCutCard"} |
-    { type: "drag", data: {from:CardID, to: CardID} } |
+    { type: "drag", data: {from:CardDndID, to: CardDndID} } |
     { type: "doneMakingBox"} |
     { type: "restartPegging"} |
     { type: "donePegging"} |
