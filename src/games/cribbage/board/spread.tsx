@@ -7,8 +7,6 @@ const OuterDiv = styled.div<{height: number, width: number}>`
     height: auto;
     height: ${props => props.height}px;
     width: ${props => props.width}px;
-
-    border: solid black 1px; // Temporary
 `;
 
 const Positioned = styled.div<{left: number}>`

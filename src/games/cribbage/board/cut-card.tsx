@@ -16,13 +16,11 @@ const DeckDiv = styled.div`
 export function CutCard() : JSX.Element {
     const { cutCard, dispatch } = useCribbageContext();
 
-    if( cutCard.visible ) {
-        return <CardSVG card={cutCard.card} />; 
-    }
+
     const onClick = () => dispatch({type: "showCutCard"});
     return <DeckDiv>    
-        <CardSVG showBack /> 
-        <button onClick={onClick}>
+        <CardSVG card={cutCard.card} showBack={!cutCard.visible} /> 
+        <button onClick={onClick} disabled={cutCard.visible}>
             Cut
         </button>
     </DeckDiv>;

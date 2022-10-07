@@ -14,18 +14,27 @@ const GameAreaDiv = styled.div`
     }
 `;
 
+const Hands = styled.div`
+    margin-left: 20px;
+    > * {
+        margin-bottom: 40px;
+    };
+`;
+
 
 export function GameArea() : JSX.Element {
 
     return <GameAreaDiv>
         <CutCard/>
 
-        <div>
+        <Hands>
             <Hand cardSetID={CardSetID.Pone} />
             <Hand cardSetID={CardSetID.Shared} />
-            <Hand cardSetID={CardSetID.Me} />
-            <MessageAndButton />
-        </div>
+            <div>
+                <Hand cardSetID={CardSetID.Me} />
+                <MessageAndButton />
+            </div>
+        </Hands>
           
         <WrappedScoreBoard/>
 
