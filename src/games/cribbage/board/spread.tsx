@@ -9,13 +9,15 @@ const OuterDiv = styled.div<{height: number, width: number}>`
     width: ${props => props.width}px;
 `;
 
-const Positioned = styled.div<{left: number}>`
+const Positioned = styled.div<{left: number, zIndex: number}>`
     position: absolute;
     height: auto;
     width: auto;
 
     top: 0px;
     left: ${props => props.left}px;
+
+    z-index: ${props => props.zIndex};
 `;
 
 /** Return a separation that would have the elems exactly fit the given width.
@@ -48,7 +50,7 @@ export function Spread(props: SpreadProps) : JSX.Element {
     return <OuterDiv width={totalWidth} height={elemHeight}>
         {elems[0]}
         {elems.map((elem, index) => {
-            return <Positioned key={index} 
+            return <Positioned key={index} zIndex={index}
                 left={index* (elemWidth + separation)}
             >
                 {elem}
