@@ -42,9 +42,10 @@ export function Hand(props: HandProps) : JSX.Element {
     });
     
     const cardWidth = cardSize.width;
-    const maxSeperation = cardWidth / 8;
+    const maxSeperation = cardSize.width / 8;
     return <Spread
-        elemWidth={cardWidth}
+        elemHeight={cardSize.height}
+        elemWidth={cardSize.width}
         maxElemSeparation={maxSeperation}
         totalWidth={4*cardWidth + 3*maxSeperation}
         elems={elems} 
