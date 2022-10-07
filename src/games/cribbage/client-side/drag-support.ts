@@ -30,18 +30,25 @@ export function dragPermitted(state: GameState, {to, from}: FromTo) : boolean {
 }
 
 function moveBetweenCardSets(
-    fromCards: Card [], fromIndex: number,
-    toCards: Card[],    toIndex: number 
+    fromCards: Card [], 
+    fromIndex: number,
+    toCards: Card[], 
+    /** A null toIndex implied add to end */   
+    toIndex: number  | null
 ) {
     const card = fromCards[fromIndex];
     fromCards.splice(fromIndex, 1);
 
-    // Shuffle up cards at position toIndex or greater
-    for(let i = toCards.length; i > toIndex; --i) {
-        toCards[i] = toCards[i-1];
-    }
+    if (toIndex) {
+        // Shuffle up cards at position toIndex or greater
+        for (let i = toCards.length; i > toIndex; --i) {
+            toCards[i] = toCards[i - 1];
+        }
 
-    toCards[toIndex] = card;
+        toCards[toIndex] = card;
+    } else {
+        toCards.push(card);
+    }
 }
 
 export function doDrag(state: GameState, { to, from }: FromTo): void {
@@ -54,8 +61,11 @@ export function doDrag(state: GameState, { to, from }: FromTo): void {
     const fromID = makeCardSetID(from.handID);
     const toID = makeCardSetID(to.handID);
 
+    sAssert(from.index !== null);
     if (fromID === toID) {
-        reorderFollowingDrag(state[fromID].hand, from.index, to.index);
+        if(to.index !== null) {
+            reorderFollowingDrag(state[fromID].hand, from.index, to.index);
+        }
     } else {
         moveBetweenCardSets(
             state[fromID].hand, from.index,

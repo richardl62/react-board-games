@@ -6,7 +6,7 @@ import { CardSVG } from "./card";
 
 type CardProps = Parameters<typeof CardSVG>[0];
 
-const playingCard = "playing card";
+export const playingCard = "playing card";
 
 const InlineDiv = styled.div`
     display: inline;  
@@ -15,14 +15,16 @@ const InlineDiv = styled.div`
 /** ID used to indentity a card during drag and drop */
 export interface CardDndID {
     handID: string;
-    index: number;
+    /** A null index is used when a drop target is a hand rather than a
+     * specific card */
+    index: number | null;
 }
 
 function isCardDndID(arg: unknown) : boolean {
     const cid = arg as CardDndID;
     return typeof cid === "object" &&
         typeof cid.handID === "string" && 
-        typeof cid.index === "number"; 
+        (typeof cid.index === "number" || cid.index === null); 
 }
 
 interface CardDnDProps extends CardProps {

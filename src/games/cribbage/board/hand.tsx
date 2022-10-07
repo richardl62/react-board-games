@@ -1,11 +1,19 @@
 import React, { useCallback } from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { CardDnD, CardDndID } from "../../../utils/cards/card-dnd";
+import { CardDnD, CardDndID, playingCard } from "../../../utils/cards/card-dnd";
 import { CardSetID } from "../client-side/game-state";
 import { Card } from "../../../utils/cards/types";
 import { cardSize } from "../../../utils/cards/styles";
 import { Spread } from "./spread";
+import { useDrop } from "react-dnd";
+import styled from "styled-components";
 
+const OuterDiv = styled.div`
+    height: auto;
+    width: auto;
+
+    background: cornsilk;
+`;
 interface HandProps {
     cardSetID: CardSetID;
 }
@@ -28,6 +36,12 @@ export function Hand(props: HandProps) : JSX.Element {
 
     },[]);
 
+    const handID: CardDndID = {handID: cardSetID, index: null};
+    const [, dropRef] = useDrop(() => ({
+        accept: playingCard,
+        drop: () => handID,
+    }), [cardSetID]);
+
     const elems = cards.map((card, index) => {
 
         const cardID = {handID: cardSetID, index: index};
@@ -43,12 +57,14 @@ export function Hand(props: HandProps) : JSX.Element {
     
     const cardWidth = cardSize.width;
     const maxSeperation = cardSize.width / 12;
-    return <Spread
-        elemHeight={cardSize.height}
-        elemWidth={cardSize.width}
-        maxElemSeparation={maxSeperation}
-        totalWidth={4*cardWidth + 3*maxSeperation}
-        elems={elems} 
-    />;
+    return <OuterDiv ref={dropRef}>
+        <Spread
+            elemHeight={cardSize.height}
+            elemWidth={cardSize.width}
+            maxElemSeparation={maxSeperation}
+            totalWidth={4 * cardWidth + 3 * maxSeperation}
+            elems={elems}
+        />
+    </OuterDiv>;
 }
 
