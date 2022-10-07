@@ -20,6 +20,18 @@ const Positioned = styled.div<{left: number}>`
     left: ${props => props.left}px;
 `;
 
+/** Return a separation that would have the elems exactly fit the given width.
+ * The result will be -ve if the elements need to overlap.
+*/
+function naturalSeparation(nElems: number, 
+    {totalWidth, elemWidth} : {totalWidth: number, elemWidth: number}
+) {
+    const nGaps = nElems - 1;
+    const totalSeparation = totalWidth - nElems * elemWidth;
+    
+    return totalSeparation / nGaps;
+}
+
 interface SpreadProps {
     totalWidth: number;
     elemWidth: number;
@@ -30,12 +42,17 @@ interface SpreadProps {
 }
 
 export function Spread(props: SpreadProps) : JSX.Element {
-    const {totalWidth, elemHeight, elems} = props;
+    const {totalWidth, elemWidth, elemHeight, maxElemSeparation, elems} = props;
+
+    const separation = Math.min(
+        naturalSeparation(elems.length, props), maxElemSeparation);
 
     return <OuterDiv width={totalWidth} height={elemHeight}>
         {elems[0]}
         {elems.map((elem, index) => {
-            return <Positioned key={index} left={index*20}>
+            return <Positioned key={index} 
+                left={index* (elemWidth + separation)}
+            >
                 {elem}
             </Positioned>;
         })}
