@@ -5,19 +5,28 @@ export interface RequiredState  {
     serverTimestamp: number;
 }
 
-export type MoveFunc<State, Param> = (state: State, ctx: Ctx, param: Param) => void;
+export type MoveFunc<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
 
 export function wrappedMoveFunction<State extends RequiredState, Param>(func: MoveFunc<State, Param>): MoveFunc<State, Param> {
     return (G, ctx, param) => {
-        G.serverError = null;
+        let errorMessage = null;
+        let funcResult = undefined;
         try {
-            func(G, ctx, param);
+            funcResult = func(G, ctx, param);
         } catch (error) {
-            const message = error instanceof Error ? error.message :
+            errorMessage = error instanceof Error ? error.message :
                 "unknown error";
-            G.serverError = message;
         }
 
-        G.serverTimestamp++;
+        if(funcResult) {
+            return {
+                ...funcResult,
+                serverError: errorMessage, // No strictly necessary
+                serverTimestamp: G.serverTimestamp+1,
+            };
+        } else {
+            G.serverTimestamp++;
+            G.serverError = errorMessage;
+        }
     };
 }

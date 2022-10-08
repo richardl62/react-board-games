@@ -2,7 +2,7 @@ import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage } from "./server-data";
 
-export function startingServerData(): ServerData {
+export function newDealData(): Omit<ServerData, "serverError" | "serverTimestamp"> {
 
     const cards = deck({ jokers: false, shuffled: true });
 
@@ -33,7 +33,13 @@ export function startingServerData(): ServerData {
             card: cutCard,
             visible: false,
         },
+    };
+}
 
+export function startingServerData(): ServerData {
+
+    return {
+        ...newDealData(),
         serverError: null,
         serverTimestamp: 0,
     };
