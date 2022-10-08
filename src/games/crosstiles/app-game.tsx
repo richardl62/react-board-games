@@ -21,6 +21,7 @@ export const appGame: AppGame = {
     setup: (ctx: Ctx) => startingServerData(ctx),
     moves: bgioMoves,
 
+    // BGIO does not impose turn order
     turn: {
         activePlayers: ActivePlayers.ALL,
     },

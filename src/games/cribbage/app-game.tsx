@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
+import { ActivePlayers } from "boardgame.io/core";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
+import { startingServerData } from "./server-side/starting-server-data";
+import { bgioMoves } from "./server-side/moves";
 
 const LazyBoardWrapper = React.lazy(() => import("./board/board-wrapper"));
 
@@ -9,12 +12,16 @@ export const appGame: AppGame = {
     displayName: "Cribbage",
     category: GameCategory.development,
 
-    setup: () => null,
+    setup: () => startingServerData(),
 
     minPlayers: 1,
-    maxPlayers: 1,
+    maxPlayers: 2,
 
-    moves: {
+    moves: bgioMoves,
+
+    // BGIO does not impose turn order
+    turn: {
+        activePlayers: ActivePlayers.ALL,
     },
 
     board: (props: WrappedGameProps) => {

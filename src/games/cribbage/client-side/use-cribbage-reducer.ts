@@ -3,7 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { CardDndID } from "../../../utils/cards/card-dnd";
 import { doDrag } from "./drag-support";
 import { GameStage, ServerData } from "../server-side/server-data";
-import { makeServerData } from "../server-side/make-server-data";
+import { startingServerData } from "../server-side/starting-server-data";
 
 export type ActionType =
     { type: "showCutCard"} |
@@ -53,7 +53,7 @@ function reducerModifyState(state: ServerData, action: ActionType) : ServerData 
 function reducer(state: ServerData, action: ActionType) : ServerData {
 
     if (action.type === "newDeal") {
-        return makeServerData();
+        return startingServerData();
     }
     
     return reducerModifyState(
@@ -63,7 +63,7 @@ function reducer(state: ServerData, action: ActionType) : ServerData {
 }
 
 export function useCribbageReducer(): [ServerData, Dispatch<ActionType>] {
-    return useReducer(reducer, makeServerData());
+    return useReducer(reducer, startingServerData());
 }
 
 
