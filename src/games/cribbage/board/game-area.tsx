@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CutCard } from "./cut-card";
 import { Hand } from "./hand";
 import { WrappedScoreBoard } from "./wrapped-score-board";
-import { CardSetID } from "../client-side/game-state";
+import { CardSetID } from "../server-side/server-data";
 import { MessageAndButton } from "./message-and-button";
 
 

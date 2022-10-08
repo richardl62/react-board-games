@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { CardDnD, CardDndID, playingCard } from "../../../utils/cards/card-dnd";
-import { CardSetID } from "../client-side/game-state";
+import { CardSetID } from "../server-side/server-data";
 import { Card } from "../../../utils/cards/types";
 import { cardSize } from "../../../utils/cards/styles";
 import { Spread } from "./spread";

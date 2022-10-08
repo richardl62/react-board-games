@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameStage } from "../client-side/game-state";
+import { GameStage } from "../server-side/server-data";
 
 const OuterDiv = styled.div`
     display: flex;

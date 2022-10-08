@@ -2,8 +2,8 @@ import { Dispatch, useReducer } from "react";
 import { sAssert } from "../../../utils/assert";
 import { CardDndID } from "../../../utils/cards/card-dnd";
 import { doDrag } from "./drag-support";
-import { GameStage, GameState } from "./game-state";
-import { makeGameState } from "./make-game-state";
+import { GameStage, ServerData } from "../server-side/server-data";
+import { makeServerData } from "../server-side/make-server-data";
 
 export type ActionType =
     { type: "showCutCard"} |
@@ -14,12 +14,12 @@ export type ActionType =
     { type: "newDeal" }
 ;
 
-function deepCopyState(state: GameState) : GameState {
+function deepCopyState(state: ServerData) : ServerData {
     return JSON.parse(JSON.stringify(state));  // inefficient
 }
 
 
-function reducerModifyState(state: GameState, action: ActionType) : GameState {
+function reducerModifyState(state: ServerData, action: ActionType) : ServerData {
    
     if (action.type === "showCutCard") {
         state.cutCard.visible = true;
@@ -50,10 +50,10 @@ function reducerModifyState(state: GameState, action: ActionType) : GameState {
     return state;
 }
 
-function reducer(state: GameState, action: ActionType) : GameState {
+function reducer(state: ServerData, action: ActionType) : ServerData {
 
     if (action.type === "newDeal") {
-        return makeGameState();
+        return makeServerData();
     }
     
     return reducerModifyState(
@@ -62,8 +62,8 @@ function reducer(state: GameState, action: ActionType) : GameState {
     );
 }
 
-export function useCribbageReducer(): [GameState, Dispatch<ActionType>] {
-    return useReducer(reducer, makeGameState());
+export function useCribbageReducer(): [ServerData, Dispatch<ActionType>] {
+    return useReducer(reducer, makeServerData());
 }
 
 

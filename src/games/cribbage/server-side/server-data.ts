@@ -17,7 +17,6 @@ export function makeCardSetID(value: string) : CardSetID {
     return value as CardSetID;
 }
 
-
 interface CardSetData {
     /** 'visible' cards.  Does not include cards in play */ 
     hand: Card[];
@@ -34,7 +33,7 @@ export enum GameStage  {
     Scoring,
 }
 
-export interface GameState {
+export interface ServerData {
     me: PlayerData;
     pone: PlayerData;
 

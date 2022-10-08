@@ -1,9 +1,8 @@
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
-import { GameState, GameStage } from "./game-state";
+import { ServerData, GameStage } from "./server-data";
 
-
-export function makeGameState(): GameState {
+export function makeServerData(): ServerData {
 
     const cards = deck({ jokers: false, shuffled: true });
 
