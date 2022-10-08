@@ -13,12 +13,12 @@ const OuterDiv = styled.div`
 `;
 
 function MakingBox() {
-    const { dispatch, stage } = useCribbageContext();
+    const { moves, stage } = useCribbageContext();
     if(stage !== GameStage.SettingBox) {
         return null;
     }
 
-    const doneMakingBox = () => dispatch({type: "doneMakingBox"});
+    const doneMakingBox = () => moves.doneMakingBox();
 
     return <OuterDiv>
         <span>Add Cards to box</span>
@@ -27,13 +27,13 @@ function MakingBox() {
 }
 
 function Pegging() {
-    const { stage, dispatch } = useCribbageContext();
+    const { stage, moves } = useCribbageContext();
     if(stage !== GameStage.Pegging) {
         return null;
     }
 
-    const restartPegging = () => dispatch({type: "restartPegging"});
-    const donePegging = () => dispatch({type: "donePegging"});
+    const restartPegging = () => moves.restartPegging();
+    const donePegging = () => moves.donePegging();
 
     return <OuterDiv>
         <span>Pegging</span>
@@ -43,12 +43,12 @@ function Pegging() {
 }
 
 function Scoring() {
-    const { stage, dispatch } = useCribbageContext();
+    const { stage, moves } = useCribbageContext();
     if(stage !== GameStage.Scoring) {
         return null;
     }
 
-    const newDeal = () => dispatch({type: "newDeal"});
+    const newDeal = () => moves.newDeal();
 
     return <OuterDiv>
         <span>Scoring</span>
