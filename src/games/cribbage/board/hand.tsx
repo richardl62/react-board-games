@@ -16,10 +16,11 @@ const OuterDiv = styled.div`
 `;
 interface HandProps {
     cardSetID: CardSetID;
+    dropTarget: "cards" | "hand";
 }
 
 export function Hand(props: HandProps) : JSX.Element {
-    const { cardSetID } = props;
+    const { cardSetID, dropTarget } = props;
 
     const context = useCribbageContext();
     const { dispatch } = context;
@@ -51,20 +52,27 @@ export function Hand(props: HandProps) : JSX.Element {
             card={card}
             cardID={cardID}
             dragEnd={dragEnd}
-            dropTarget
+            dropTarget={dropTarget === "cards"}
         />;
     });
     
     const cardWidth = cardSize.width;
     const maxSeperation = cardSize.width / 12;
-    return <OuterDiv ref={dropRef}>
-        <Spread
-            elemHeight={cardSize.height}
-            elemWidth={cardSize.width}
-            maxElemSeparation={maxSeperation}
-            totalWidth={4 * cardWidth + 3 * maxSeperation}
-            elems={elems}
-        />
-    </OuterDiv>;
+
+    const spread = <Spread
+        elemHeight={cardSize.height}
+        elemWidth={cardSize.width}
+        maxElemSeparation={maxSeperation}
+        totalWidth={4 * cardWidth + 3 * maxSeperation}
+        elems={elems}
+    />;
+
+    if(dropTarget === "hand") {
+        return <OuterDiv ref={dropRef}>
+            {spread} 
+        </OuterDiv>;
+    }
+
+    return spread;
 }
 
