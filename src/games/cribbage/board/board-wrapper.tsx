@@ -5,6 +5,7 @@ import { useCribbageReducer } from "../client-side/use-cribbage-reducer";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { CribbageGameProps } from "../client-side/cribbage-game-props";
 
 interface BoardProps {
     gameProps: WrappedGameProps;
@@ -13,9 +14,13 @@ interface BoardProps {
 // Temporary kludge: BoardProps are not used for now
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Board(props: BoardProps): JSX.Element {
-    const [state, dispatch] = useCribbageReducer();
+    const { gameProps } = props;
+    const crossTilesGameProps = gameProps as unknown as CribbageGameProps;
 
-    const context = {...state,
+    const [, dispatch] = useCribbageReducer(); // TEMPORARY
+    
+    const context = {
+        ...crossTilesGameProps.G,
         dispatch: dispatch,
     };
     return <ReactCribbageContext.Provider value={context}>
