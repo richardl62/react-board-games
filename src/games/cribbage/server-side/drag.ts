@@ -1,15 +1,16 @@
+import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { CardDndID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
-import { ServerData, GameStage, makeCardSetID } from "../server-side/server-data";
+import { ServerData, GameStage, makeCardSetID } from "./server-data";
 
 interface FromTo {
     from: CardDndID;
     to: CardDndID;
 }
 
-export function dragPermitted(state: ServerData, {to, from}: FromTo) : boolean {
+function dragPermitted(state: ServerData, {to, from}: FromTo) : boolean {
 
     const fromID = makeCardSetID(from.handID);
     const toID = makeCardSetID(to.handID);
@@ -51,7 +52,7 @@ function moveBetweenCardSets(
     }
 }
 
-export function doDrag(state: ServerData, { to, from }: FromTo): void {
+export function drag(state: ServerData, ctx: Ctx, { to, from }: FromTo): void {
 
     if(!dragPermitted(state, { to, from })) {
         console.log("Attempted drag is not pemitted: from ", from, " to ", to);

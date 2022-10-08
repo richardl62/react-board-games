@@ -1,12 +1,9 @@
 import { Dispatch, useReducer } from "react";
 import { sAssert } from "../../../utils/assert";
-import { CardDndID } from "../../../utils/cards/card-dnd";
-import { doDrag } from "./drag-support";
 import { GameStage, ServerData } from "../server-side/server-data";
 import { startingServerData } from "../server-side/starting-server-data";
 
 export type ActionType =
-    { type: "drag", data: {from:CardDndID, to: CardDndID} } |
     { type: "doneMakingBox"} |
     { type: "restartPegging"} |
     { type: "donePegging"} |
@@ -20,9 +17,7 @@ function deepCopyState(state: ServerData) : ServerData {
 
 function reducerModifyState(state: ServerData, action: ActionType) : ServerData {
    
-    if (action.type === "drag") {
-        doDrag(state, action.data);
-    } else if (action.type === "doneMakingBox") {
+    if (action.type === "doneMakingBox") {
         sAssert(state.stage === GameStage.SettingBox);
         state.me.fullHand = [...state.me.hand];
         state.pone.fullHand = [...state.pone.hand];

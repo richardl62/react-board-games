@@ -23,18 +23,14 @@ export function Hand(props: HandProps) : JSX.Element {
     const { cardSetID, dropTarget } = props;
 
     const context = useCribbageContext();
-    const { dispatch } = context;
+    const { moves } = context;
     let cards : (Card|null) [] = context[cardSetID].hand;
     if (cards.length === 0) {
         cards = [null];
     }
 
     const dragEnd = useCallback((arg: {from:CardDndID, to: CardDndID}) => {
-        dispatch({
-            type: "drag",
-            data: arg,
-        });
-
+        moves.drag(arg);
     },[]);
 
     const handID: CardDndID = {handID: cardSetID, index: null};

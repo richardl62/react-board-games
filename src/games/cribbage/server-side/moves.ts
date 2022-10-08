@@ -1,7 +1,17 @@
 import { wrappedMoveFunction } from "../../../app-game-support/wrapped-move-function";
+import { doneMakingBox } from "./done-making-box";
+import { donePegging } from "./done-pegging";
+import { drag } from "./drag";
+import { newDeal } from "./new-deal";
+import { restartPegging } from "./retart-pegging";
 import { showCutCard } from "./show-cut-card";
 
 export const bgioMoves = {
+    drag: wrappedMoveFunction(drag),
+    doneMakingBox: wrappedMoveFunction(doneMakingBox),
+    donePegging: wrappedMoveFunction(donePegging),
+    newDeal: wrappedMoveFunction(newDeal),
+    restartPegging: wrappedMoveFunction(restartPegging),
     showCutCard: wrappedMoveFunction(showCutCard),
 };
 
@@ -10,5 +20,10 @@ type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Paramete
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ClientMoves {
+    drag: ClientFunction<typeof drag>;
+    doneMakingBox: ClientFunction<typeof doneMakingBox>;
+    donePegging: ClientFunction<typeof donePegging>;
+    newDeal: ClientFunction<typeof newDeal>;
+    restartPegging: ClientFunction<typeof restartPegging>;
     showCutCard: ClientFunction<typeof showCutCard>;
 }
