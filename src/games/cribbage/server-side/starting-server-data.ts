@@ -33,5 +33,8 @@ export function startingServerData(): ServerData {
             card: cutCard,
             visible: false,
         },
+
+        serverError: null,
+        serverTimestamp: 0,
     };
 }

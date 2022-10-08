@@ -49,6 +49,9 @@ export interface ServerData {
         card: Card;
         visible: boolean;
     };
+
+    serverError: string | null;
+    serverTimestamp: number;
 }
 
 

@@ -21,6 +21,7 @@ function Board(props: BoardProps): JSX.Element {
     
     const context = {
         ...crossTilesGameProps.G,
+        moves: crossTilesGameProps.moves,
         dispatch: dispatch,
     };
     return <ReactCribbageContext.Provider value={context}>

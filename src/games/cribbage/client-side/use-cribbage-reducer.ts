@@ -6,7 +6,6 @@ import { GameStage, ServerData } from "../server-side/server-data";
 import { startingServerData } from "../server-side/starting-server-data";
 
 export type ActionType =
-    { type: "showCutCard"} |
     { type: "drag", data: {from:CardDndID, to: CardDndID} } |
     { type: "doneMakingBox"} |
     { type: "restartPegging"} |
@@ -21,9 +20,7 @@ function deepCopyState(state: ServerData) : ServerData {
 
 function reducerModifyState(state: ServerData, action: ActionType) : ServerData {
    
-    if (action.type === "showCutCard") {
-        state.cutCard.visible = true;
-    } else if (action.type === "drag") {
+    if (action.type === "drag") {
         doDrag(state, action.data);
     } else if (action.type === "doneMakingBox") {
         sAssert(state.stage === GameStage.SettingBox);
