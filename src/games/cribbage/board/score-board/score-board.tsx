@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { nPreStartPegs } from "./config";
 import { MarkerLines } from "./marker-lines";
 import { boardHeight, boardWidth, pegPoints } from "./peg-points";
 import { boardPadding, holeRadius, pegSize, rowGap } from "./sizes";
@@ -76,22 +77,33 @@ const Peg = styled.div<{player1 : boolean}>`
 
 
 function makeElements(pegPoints: Position[], props: PlayerProps, player1: boolean) {
+
     return pegPoints.map((pos, index) => {
+        // offSet to convert an index into a score.
+        const scoreOffset = nPreStartPegs - 1;
+
+        const hasPeg = props.hasPeg(index - scoreOffset);
+        const onClick = ()=>props.onClick(index - scoreOffset);
+
         const key = `${index}-{player1}`;
         return <PegContainer key={key} bottom={pos.bottom} left={pos.left}
-            onClick={()=>props.onClick(index)}
+            onClick={onClick}
         >
-            {props.hasPeg(index) ? <Peg player1={player1}/> : <Hole/>}
+            {hasPeg ? <Peg player1={player1}/> : <Hole/>}
         </PegContainer>;
     });
 }
 
-interface PlayerProps {
-    /** Called to check if there is a peg in the hole */
-    hasPeg: (index: number) => boolean;
+export interface PlayerProps {
+    /** Called to check if there is a peg in the hole 
+    A score of 0 or less implies a pre-peg hole
+    */
+    hasPeg: (score: number) => boolean;
 
-    /** Called when a peg/hole is clicked */
-    onClick: (index: number) => void;
+    /** Called when a peg/hole is clicked 
+     * See hasPeg for further comments.
+    */
+    onClick: (score: number) => void;
 }
 
 interface ScoreBoardProps {

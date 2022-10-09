@@ -22,7 +22,12 @@ interface CardSetData {
     hand: Card[];
 }
 
-interface PlayerData extends CardSetData {
+export interface PegPositions {
+    trailingPeg: number; // initialised to -1.
+    score: number;
+}
+
+interface PlayerData extends CardSetData, PegPositions {
     /** Includes cards in play (i.e. those that have been played during pegging) */
     fullHand: Card[];
 }

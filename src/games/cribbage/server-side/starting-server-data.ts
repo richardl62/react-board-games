@@ -6,20 +6,20 @@ export function newDealData(): Omit<ServerData, "serverError" | "serverTimestamp
 
     const cards = deck({ jokers: false, shuffled: true });
 
-    const meHand = cards.splice(0, cardsPerHand);
-    const poneHand = cards.splice(0, cardsPerHand);
-    const cutCard = cards[0];
+    const playerData = () => {
+        const hand = cards.splice(0, cardsPerHand);
+        return {
+            hand,
+            fullHand: [...hand],
+            score: 0,
+            trailingPeg: -1,
+        };
+    };
 
     return {
-        me: {
-            hand: meHand,
-            fullHand: [...meHand],
-        },
+        me: playerData(),
 
-        pone: {
-            hand: poneHand,
-            fullHand: [...meHand],
-        },
+        pone: playerData(),
 
         shared: {
             hand: [],
@@ -30,7 +30,7 @@ export function newDealData(): Omit<ServerData, "serverError" | "serverTimestamp
         stage: GameStage.SettingBox,
 
         cutCard: {
-            card: cutCard,
+            card: cards.pop()!,
             visible: false,
         },
     };
