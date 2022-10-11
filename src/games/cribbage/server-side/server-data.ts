@@ -4,14 +4,16 @@ import { Card } from "../../../utils/cards";
 
 // The whole CardSetID stuff is rather kludged.
 export enum CardSetID {
-    Me = "me",
-    Pone = "pone",
+    Player0 = "player0",
+    Player1 = "player1",
     Shared = "shared",
 }
 
+export type PlayerID = CardSetID.Player0 | CardSetID.Player1;
+
 export function makeCardSetID(value: string) : CardSetID {
-    sAssert(value === CardSetID.Me ||
-        value === CardSetID.Pone ||
+    sAssert(value === CardSetID.Player0 ||
+        value === CardSetID.Player1 ||
         value === CardSetID.Shared, "string does not represent a card set");
         
     return value as CardSetID;
@@ -39,8 +41,8 @@ export enum GameStage  {
 }
 
 export interface ServerData {
-    me: PlayerData;
-    pone: PlayerData;
+    player0: PlayerData;
+    player1: PlayerData;
 
     shared: CardSetData;
 

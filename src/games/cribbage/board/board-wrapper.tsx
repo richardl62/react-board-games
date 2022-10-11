@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactCribbageContext } from "../client-side/cribbage-context";
+import { makeCribbageContext, ReactCribbageContext } from "../client-side/cribbage-context";
 import { GameArea } from "./game-area";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -16,12 +16,8 @@ function Board(props: BoardProps): JSX.Element {
     const { gameProps } = props;
     const crossTilesGameProps = gameProps as unknown as CribbageGameProps;
 
-    const context = {
-        ...crossTilesGameProps.G,
-        moves: crossTilesGameProps.moves,
-    };
     
-    return <ReactCribbageContext.Provider value={context}>
+    return <ReactCribbageContext.Provider value={makeCribbageContext(crossTilesGameProps)}>
         
         <DndProvider backend={HTML5Backend}>
             <GameArea />

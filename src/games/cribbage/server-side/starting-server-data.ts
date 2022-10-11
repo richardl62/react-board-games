@@ -17,9 +17,8 @@ export function newDealData(): Omit<ServerData, "serverError" | "serverTimestamp
     };
 
     return {
-        me: playerData(),
-
-        pone: playerData(),
+        player0: playerData(),
+        player1: playerData(),
 
         shared: {
             hand: [],

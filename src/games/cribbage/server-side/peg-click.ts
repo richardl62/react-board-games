@@ -1,8 +1,8 @@
 import { Ctx } from "boardgame.io";
-import {  PegPositions, ServerData } from "./server-data";
+import {  PegPositions, PlayerID, ServerData } from "./server-data";
 
 interface Arg {
-    who: "me" | "pone";
+    who: PlayerID;
     score: number;
 }
 

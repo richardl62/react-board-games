@@ -5,6 +5,7 @@ import { Hand } from "./hand";
 import { WrappedScoreBoard } from "./wrapped-score-board";
 import { CardSetID } from "../server-side/server-data";
 import { MessageAndButton } from "./message-and-button";
+import { useCribbageContext } from "../client-side/cribbage-context";
 
 
 const GameAreaDiv = styled.div`
@@ -23,15 +24,15 @@ const Hands = styled.div`
 
 
 export function GameArea() : JSX.Element {
-
+    const {me, pone} = useCribbageContext();
     return <GameAreaDiv>
         <CutCard/>
 
         <Hands>
-            <Hand cardSetID={CardSetID.Pone} dropTarget={"cards"} />
+            <Hand cardSetID={pone} dropTarget={"cards"} />
             <Hand cardSetID={CardSetID.Shared} dropTarget={"hand"} />
             <div>
-                <Hand cardSetID={CardSetID.Me} dropTarget={"cards"} />
+                <Hand cardSetID={me} dropTarget={"cards"} />
                 <MessageAndButton />
             </div>
         </Hands>
