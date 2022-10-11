@@ -44,7 +44,10 @@ export function TurnControl(): JSX.Element {
 
             <StyledScoreLine>
                 {score && <span>{"Score this turn: " + score}</span>}
-                {onPass && <button onClick={onPass}>Pass</button>}
+                {onPass && <>
+                    <span>Your turn </span>
+                    <button onClick={onPass}>Pass</button>
+                </>}
                 {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
                 {onDone && <button onClick={onDone}> {doButtonText} </button>}
             </StyledScoreLine>
