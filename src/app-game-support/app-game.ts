@@ -9,8 +9,7 @@ export enum GameCategory {
   test = "Test/Debug",
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface AppGame<G = any> extends Game<G> { 
+export interface AppGame<G = unknown> extends Game<G> { 
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
   // display purposes.
   displayName: string;
@@ -25,6 +24,5 @@ export interface AppGame<G = any> extends Game<G> {
   minPlayers: number,
   maxPlayers: number,
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  board: (props: WrappedGameProps<G, any>) => JSX.Element;
+  board: (props: WrappedGameProps<G, unknown>) => JSX.Element;
 }

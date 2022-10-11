@@ -85,7 +85,10 @@ const game: AppGame = {
         },
     },
 
-    board: Board,
+    board: (props: WrappedGameProps) => {
+        const castProps = props as WrappedGameProps<G,DefaultMovesType/*KLUDGE*/>;
+        return <Board {...castProps}/>;
+    },
 };
 
 export default [game];
