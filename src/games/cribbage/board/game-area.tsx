@@ -29,10 +29,10 @@ export function GameArea() : JSX.Element {
         <CutCard/>
 
         <Hands>
-            <Hand cardSetID={pone} dropTarget={"cards"} />
-            <Hand cardSetID={CardSetID.Shared} dropTarget={"hand"} />
+            <Hand cardSetID={pone} />
+            <Hand cardSetID={CardSetID.Shared} />
             <div>
-                <Hand cardSetID={me} dropTarget={"cards"} />
+                <Hand cardSetID={me} />
                 <MessageAndButton />
             </div>
         </Hands>

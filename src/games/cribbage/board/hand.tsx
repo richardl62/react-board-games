@@ -7,6 +7,7 @@ import { cardSize } from "../../../utils/cards/styles";
 import { Spread } from "./spread";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
+import { dragAllowed, dropTarget } from "../client-side/dnd-control";
 
 const OuterDiv = styled.div`
     height: auto;
@@ -16,11 +17,10 @@ const OuterDiv = styled.div`
 `;
 interface HandProps {
     cardSetID: CardSetID;
-    dropTarget: "cards" | "hand";
 }
 
 export function Hand(props: HandProps) : JSX.Element {
-    const { cardSetID, dropTarget } = props;
+    const { cardSetID } = props;
 
     const context = useCribbageContext();
     const { moves } = context;
@@ -47,8 +47,8 @@ export function Hand(props: HandProps) : JSX.Element {
             key={index}
             card={card}
             cardID={cardID}
-            dragEnd={dragEnd}
-            dropTarget={dropTarget === "cards"}
+            dragEnd={dragAllowed(context, cardID) ? dragEnd : undefined }
+            dropTarget={dropTarget(context, cardID)}
         />;
     });
     
@@ -63,7 +63,7 @@ export function Hand(props: HandProps) : JSX.Element {
         elems={elems}
     />;
 
-    if(dropTarget === "hand") {
+    if(dropTarget(context, handID)) {
         return <OuterDiv ref={dropRef}>
             {spread} 
         </OuterDiv>;

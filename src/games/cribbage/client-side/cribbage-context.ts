@@ -4,7 +4,7 @@ import { CardSetID, PlayerID, ServerData } from "../server-side/server-data";
 import { ClientMoves } from "../server-side/moves";
 import { CribbageGameProps } from "./cribbage-game-props";
 
-interface CribbageContext extends ServerData {
+export interface CribbageContext extends ServerData {
     moves: ClientMoves;
     me: PlayerID;
     pone: PlayerID;
