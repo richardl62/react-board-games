@@ -5,7 +5,7 @@ import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 import { startingServerData } from "./server-side/starting-server-data";
 import { bgioMoves } from "./server-side/moves";
 
-const LazyBoardWrapper = React.lazy(() => import("./board/board-wrapper"));
+const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
     name: "Cribbage",
@@ -26,7 +26,7 @@ export const appGame: AppGame = {
 
     board: (props: WrappedGameProps) => {
         return <Suspense fallback={<div>Loading...</div>}>
-            <LazyBoardWrapper gameProps={props} />
+            <LazyBoard gameProps={props} />
         </Suspense>;
     }
 };
