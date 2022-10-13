@@ -1,6 +1,6 @@
 import React from "react";
-import { CardDnD, playingCard } from "../../../utils/cards/card-dnd";
-import { Card } from "../../../utils/cards/types";
+import { CardDnD, playingCard } from "./card-dnd";
+import { Card } from "./types";
 import { Spread } from "./spread";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";

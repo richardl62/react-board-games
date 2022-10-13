@@ -4,7 +4,7 @@ import { cardSize } from "../../../utils/cards/styles";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { dragAllowed, dropTarget } from "../client-side/dnd-control";
 import { CardSetID, makeCardSetID } from "../server-side/server-data";
-import { Hand } from "./hand";
+import { Hand } from "../../../utils/cards/hand";
 
 interface HandWrapperProps {
     cardSetID: CardSetID;
