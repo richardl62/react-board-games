@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { CutCard } from "./cut-card";
-import { Hand } from "./hand";
 import { WrappedScoreBoard } from "./wrapped-score-board";
 import { CardSetID } from "../server-side/server-data";
 import { MessageAndButton } from "./message-and-button";
 import { useCribbageContext } from "../client-side/cribbage-context";
+import { HandWrapper } from "./hand-wrapper";
 
 
 const GameAreaDiv = styled.div`
@@ -29,10 +29,10 @@ export function GameArea() : JSX.Element {
         <CutCard/>
 
         <Hands>
-            <Hand cardSetID={pone} />
-            <Hand cardSetID={CardSetID.Shared} />
+            <HandWrapper cardSetID={pone} />
+            <HandWrapper cardSetID={CardSetID.Shared} />
             <div>
-                <Hand cardSetID={me} />
+                <HandWrapper cardSetID={me} />
                 <MessageAndButton />
             </div>
         </Hands>
