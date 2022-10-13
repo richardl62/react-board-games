@@ -12,23 +12,22 @@ const InlineDiv = styled.div`
     display: inline;  
 `;
 
-/** ID used to indentity a card during drag and drop */
-export interface CardDndID {
+interface CardID {
     handID: string;
     /** A null index is used when a drop target is a hand rather than a
      * specific card */
-    index: number | null;
+    index: number;
 }
 
 function isCardDndID(arg: unknown) : boolean {
-    const cid = arg as CardDndID;
+    const cid = arg as CardID;
     return typeof cid === "object" &&
         typeof cid.handID === "string" && 
         (typeof cid.index === "number" || cid.index === null); 
 }
 
 interface CardDnDProps extends CardProps {
-    cardID: CardDndID;
+    cardID: CardID;
 
     dropTarget?: boolean;
 
@@ -36,7 +35,7 @@ interface CardDnDProps extends CardProps {
      *  the end if a sucessful drag (i.e. one which finished on a valid
      *  drop target.)
      */
-     dragEnd?: (arg: {from:CardDndID, to: CardDndID}) => void;
+     dragEnd?: (arg: {from:CardID, to: CardID}) => void;
 }
 
 export function CardDnD(props: CardDnDProps) : JSX.Element {
@@ -52,7 +51,7 @@ export function CardDnD(props: CardDnDProps) : JSX.Element {
 
             if(dropResult) {
                 // Unwrap the id. See "Note on Drag/drop ID" above.
-                const dropID  = dropResult as CardDndID;
+                const dropID  = dropResult as CardID;
                 sAssert(isCardDndID(dropID));
             
                 dragEnd({from: cardID, to: dropID});

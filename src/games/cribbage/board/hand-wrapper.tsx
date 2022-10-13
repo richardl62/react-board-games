@@ -2,7 +2,8 @@ import React from "react";
 import { Card } from "../../../utils/cards";
 import { cardSize } from "../../../utils/cards/styles";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { CardSetID } from "../server-side/server-data";
+import { dragAllowed, dropTarget } from "../client-side/dnd-control";
+import { CardSetID, makeCardSetID } from "../server-side/server-data";
 import { Hand } from "./hand";
 
 interface HandWrapperProps {
@@ -13,6 +14,7 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
     const { cardSetID } = props;
 
     const context = useCribbageContext();
+    const { moves} = context;
 
     const cardWidth = cardSize.width;
     const cardHeight = cardSize.height;
@@ -23,6 +25,24 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
         cards = [null];
     }
 
+    const draggable = (index: number) => dragAllowed(context, {cardSetID, index});
+    const dropable = (index?: number) => dropTarget(context, {cardSetID, index});
+
+    const onDragEnd = (
+        arg: {
+            from: { handID: string, index: number },
+            to: { handID: string, index?: number }
+        }
+    ) => {
+        const {from, to} = arg;
+
+        moves.drag({
+            from: { cardSetID: makeCardSetID(from.handID), index: from.index },
+            to: { cardSetID: makeCardSetID(to.handID), index: to.index },
+        });
+    };
+
+    //dropTarget: (index?: number) => boolean;
     return <Hand 
         cards={cards}
 
@@ -30,7 +50,11 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
         cardHeight={cardHeight}
         maxSeperation={maxSeperation}
 
-        cardSetID={cardSetID}
+        handID={cardSetID}
+        draggable={draggable}
+        dropTarget={dropable}
+
+        onDragEnd={onDragEnd}
     />;
 }
 

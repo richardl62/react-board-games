@@ -1,19 +1,18 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
-import { CardDndID } from "../../../utils/cards/card-dnd";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
-import { ServerData, GameStage, makeCardSetID } from "./server-data";
+import { ServerData, GameStage, makeCardSetID, CardSetID } from "./server-data";
 
 interface FromTo {
-    from: CardDndID;
-    to: CardDndID;
+    from:  {cardSetID: CardSetID, index: number};
+    to: {cardSetID: CardSetID, index?: number};
 }
 
 function dragPermitted(state: ServerData, {to, from}: FromTo) : boolean {
 
-    const fromID = makeCardSetID(from.handID);
-    const toID = makeCardSetID(to.handID);
+    const fromID = makeCardSetID(from.cardSetID);
+    const toID = makeCardSetID(to.cardSetID);
     
     if (fromID === toID && fromID !== "shared") {
         return true;
@@ -35,7 +34,7 @@ function moveBetweenCardSets(
     fromIndex: number,
     toCards: Card[], 
     /** A null toIndex implied add to end */   
-    toIndex: number  | null
+    toIndex?: number,
 ) {
     const card = fromCards[fromIndex];
     fromCards.splice(fromIndex, 1);
@@ -59,12 +58,12 @@ export function drag(state: ServerData, ctx: Ctx, { to, from }: FromTo): void {
         return;
     }
 
-    const fromID = makeCardSetID(from.handID);
-    const toID = makeCardSetID(to.handID);
+    const fromID = makeCardSetID(from.cardSetID);
+    const toID = makeCardSetID(to.cardSetID);
 
     sAssert(from.index !== null);
     if (fromID === toID) {
-        if(to.index !== null) {
+        if(to.index !== undefined) {
             reorderFollowingDrag(state[fromID].hand, from.index, to.index);
         }
     } else {
