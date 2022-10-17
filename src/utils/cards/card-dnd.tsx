@@ -19,7 +19,7 @@ interface CardID {
     index: number;
 }
 
-function getCardID(arg: unknown) : CardID {
+export function getCardID(arg: unknown) : CardID {
     const cid = arg as CardID;
     sAssert(typeof cid === "object" &&
         typeof cid.handID === "string" && 
@@ -53,10 +53,12 @@ export function CardDnD(props: CardDnDProps) : JSX.Element {
 
     const [, dropRef] = useDrop(() => ({
         accept: playingCard,
-        drop: (draggedID) => onDrop({
-            from: getCardID(draggedID),
-            to: cardID
-        })
+        drop: (draggedID) => {
+            onDrop({
+                from: getCardID(draggedID),
+                to: cardID
+            });
+        }
     }), [cardID]);
 
 

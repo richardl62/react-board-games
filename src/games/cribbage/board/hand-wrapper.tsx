@@ -28,14 +28,13 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
     const draggable = (index: number) => dragAllowed(context, {cardSetID, index});
     const dropable = (index?: number) => dropTarget(context, {cardSetID, index});
 
-    const onDragEnd = (
+    const onDrop = (
         arg: {
             from: { handID: string, index: number },
             to: { handID: string, index?: number }
         }
     ) => {
         const {from, to} = arg;
-
         moves.drag({
             from: { cardSetID: makeCardSetID(from.handID), index: from.index },
             to: { cardSetID: makeCardSetID(to.handID), index: to.index },
@@ -54,7 +53,7 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
         draggable={draggable}
         dropTarget={dropable}
 
-        onDrop={onDragEnd}
+        onDrop={onDrop}
     />;
 }
 

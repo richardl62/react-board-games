@@ -1,5 +1,5 @@
 import React from "react";
-import { CardDnD, playingCard } from "./card-dnd";
+import { CardDnD, getCardID, playingCard } from "./card-dnd";
 import { Card } from "./types";
 import { Spread } from "./spread";
 import { useDrop } from "react-dnd";
@@ -45,7 +45,16 @@ export function Hand(props: HandProps) : JSX.Element {
 
     const [, dropRef] = useDrop(() => ({
         accept: playingCard,
-        drop: () => {return {handID, index: null};},
+        drop: (draggedID, monitor) => {
+            // Ignore recursive drops (i.e. ignore a drop on this hand
+            // if drop on a card in the hand has already been reported).
+            if (!monitor.didDrop()) {
+                onDrop({
+                    from: getCardID(draggedID),
+                    to: { handID }
+                });
+            }
+        },
     }), [handID]);
 
     const elems = cards.map((card, index) => {
