@@ -19,11 +19,14 @@ interface CardID {
     index: number;
 }
 
-function isCardDndID(arg: unknown) : boolean {
+function getCardID(arg: unknown) : CardID {
     const cid = arg as CardID;
-    return typeof cid === "object" &&
+    sAssert(typeof cid === "object" &&
         typeof cid.handID === "string" && 
-        (typeof cid.index === "number" || cid.index === null); 
+        typeof cid.index === "number",
+    "Bad card ID");
+    
+    return cid; 
 }
 
 interface CardDnDProps extends CardProps {
@@ -46,24 +49,14 @@ export function CardDnD(props: CardDnDProps) : JSX.Element {
     const [, dragRef] = useDrag(() => ({
         type: playingCard,
         item: cardID,
-        end: (item: unknown, monitor) => {
-            const dropResult = monitor.getDropResult();
-
-
-            if(dropResult) {
-                // Unwrap the id. See "Note on Drag/drop ID" above.
-                const dropID  = dropResult as CardID;
-                sAssert(isCardDndID(dropID));
-            
-                //To do: move to dropRef
-                onDrop({from: cardID, to: dropID});
-            }
-        },
     }), [cardID]);
 
     const [, dropRef] = useDrop(() => ({
         accept: playingCard,
-        drop: () => cardID,
+        drop: (draggedID) => onDrop({
+            from: getCardID(draggedID),
+            to: cardID
+        })
     }), [cardID]);
 
 
