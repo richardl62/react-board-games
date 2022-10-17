@@ -54,7 +54,7 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
         draggable={draggable}
         dropTarget={dropable}
 
-        onDragEnd={onDragEnd}
+        onDrop={onDragEnd}
     />;
 }
 

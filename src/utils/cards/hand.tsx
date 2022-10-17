@@ -31,7 +31,7 @@ interface HandProps {
      * (Strictly speaking, from.handID is redundant as it will always be the
      * same function to be supplied to multipled.)
      */
-    onDragEnd: (
+    onDrop: (
         arg: {
             from: {handID: string, index: number},
             to: {handID: string, index?: number},
@@ -41,7 +41,7 @@ interface HandProps {
 
 export function Hand(props: HandProps) : JSX.Element {
     const { cards, cardWidth, cardHeight, maxSeperation,
-        handID, draggable, dropTarget, onDragEnd} = props;
+        handID, draggable, dropTarget, onDrop} = props;
 
     const [, dropRef] = useDrop(() => ({
         accept: playingCard,
@@ -55,8 +55,10 @@ export function Hand(props: HandProps) : JSX.Element {
             card={card}
          
             cardID={{handID, index}}
-            dragEnd={dropTarget(index) ? onDragEnd : undefined }
+
+            draggable={draggable(index)}
             dropTarget={draggable(index)}
+            onDrop={onDrop}
         />;
     });
 
