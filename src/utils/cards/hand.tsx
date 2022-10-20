@@ -13,6 +13,7 @@ const OuterDiv = styled.div`
 
 interface HandProps {
     cards : (Card|null) [];
+    showBack: boolean | ((index: number) => boolean);
 
     cardWidth: number;
     cardHeight: number;
@@ -39,7 +40,15 @@ interface HandProps {
 
 export function Hand(props: HandProps) : JSX.Element {
     const { cards, cardWidth, cardHeight, maxSeperation,
-        handID, draggable, dropTarget, onDrop} = props;
+        handID, draggable, dropTarget, onDrop } = props;
+
+    const showBack = (index: number) : boolean => {
+        if(typeof props.showBack === "boolean") {
+            return props.showBack;
+        }
+
+        return props.showBack(index);
+    };
 
     const [, dropRef] = useDrop(() => ({
         accept: playingCard,
@@ -60,6 +69,7 @@ export function Hand(props: HandProps) : JSX.Element {
         return <CardDnD
             key={index}
             card={card}
+            showBack={showBack(index)}
          
             cardID={{handID, index}}
 
