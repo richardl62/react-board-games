@@ -1,4 +1,4 @@
-import { nPostEndPegs, nPreStartPegs, nInPlayPegs } from "./config";
+import { nPostEndPegs, nPreStartPegs, winningLinePos } from "../../config";
 import { rowGap } from "./sizes";
 import { Position } from "./types";
 import { sAssert } from "../../../../utils/assert";
@@ -114,7 +114,7 @@ export function makeRawPegPoints(params: {
     addOffsetPoint(rowGap.fifthRow);
 
     // Playing points
-    sAssert(points.length === nPreStartPegs + nInPlayPegs + nPostEndPegs); 
+    sAssert(points.length === nPreStartPegs + winningLinePos + nPostEndPegs); 
 
     return points;
 }

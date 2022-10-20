@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { nPreStartPegs } from "./config";
+import { nPreStartPegs } from "../../config";
 import { MarkerLines } from "./marker-lines";
 import { boardHeight, boardWidth, pegPoints } from "./peg-points";
 import { boardPadding, holeRadius, pegSize, rowGap } from "./sizes";

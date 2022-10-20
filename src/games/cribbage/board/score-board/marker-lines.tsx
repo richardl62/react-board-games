@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../../utils/assert";
-import { nPreStartPegs, skunkLinePos, nInPlayPegs } from "./config";
+import { nPreStartPegs, skunkLinePos, winningLinePos } from "../../config";
 import { pegPoints } from "./peg-points";
 import { columnGap, holeRadius, rowGap } from "./sizes";
 import { Position } from "./types";
@@ -65,6 +65,6 @@ export function MarkerLines() : JSX.Element {
         <MarkerLine start={snunkLineStart} grey />
         <Snunk start={snunkSStart}>S</Snunk>
 
-        <MarkerLine start={lineStart(nPreStartPegs+nInPlayPegs)} />
+        <MarkerLine start={lineStart(nPreStartPegs+winningLinePos)} />
     </div>;
 }
