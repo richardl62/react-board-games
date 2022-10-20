@@ -20,10 +20,7 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
     const cardHeight = cardSize.height;
     const maxSeperation = cardSize.width / 12;
     
-    let cards : (Card|null) [] = context[cardSetID].hand;
-    if (cards.length === 0) {
-        cards = [null];
-    }
+    const cards : (Card|null) [] = context[cardSetID].hand;
 
     const showBack = (index: number) => dndControl.showBack(context, {cardSetID, index});
     const draggable = (index: number) => dndControl.dragAllowed(context, {cardSetID, index});
