@@ -8,8 +8,6 @@ import styled from "styled-components";
 const OuterDiv = styled.div`
     height: auto;
     width: auto;
-
-    background: cornsilk;
 `;
 
 

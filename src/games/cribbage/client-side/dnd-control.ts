@@ -10,8 +10,5 @@ export function dragAllowed(context: CribbageContext,
 export function dropTarget(context: CribbageContext,
     id: {cardSetID: CardSetID, index?: number} 
 ) : boolean {
-    if(id.index === undefined) {
-        return id.cardSetID === "shared";
-    }
     return id.cardSetID !== context.pone;
 }
