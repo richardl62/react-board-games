@@ -3,40 +3,80 @@ import { CribbageContext } from "./cribbage-context";
 import { boxFull, owner } from "./context-tools";
 import { sAssert } from "../../../utils/assert";
 
-export function dragAllowed(context: CribbageContext, 
-    id: {cardSetID: CardSetID, index: number}
+export function dragAllowed(
+    context: CribbageContext, 
+    cardSetID: CardSetID, 
+    index: number,
 ) : boolean {
-    const card = context[id.cardSetID].hand[id.index];
-    sAssert(card);
-    return owner(context, card) === context.me;
+    const { stage, me} = context;
+
+    
+    if(stage === GameStage.SettingBox) {
+        const card = context[cardSetID].hand[index];
+        sAssert(card);
+        return owner(context, card) === me;
+    }
+
+    if(stage === GameStage.Pegging) {
+        return cardSetID === me;
+    }
+
+    if(stage === GameStage.Scoring) {
+        return false;
+    }
+
+    throw new Error("Unexpected GameStage"); // Why does typescript require this?
 }
 
-export function showBack(context: CribbageContext, 
-    id: {cardSetID: CardSetID, index: number}
+export function showBack(
+    context: CribbageContext, 
+    cardSetID: CardSetID,
+    index: number,
 ) : boolean {
-    return !dragAllowed(context, id);
+
+    const { stage, pone} = context;
+    
+    if(stage === GameStage.SettingBox) {
+        return !dragAllowed(context, cardSetID, index);
+    }
+
+    if(stage === GameStage.Pegging) {
+        return cardSetID === pone;
+    }
+
+    if(stage === GameStage.Scoring) {
+        return false;
+    }
+
+    throw new Error("Unexpected GameStage"); // Why does typescript require this?
 }
 
 
 export function dropTarget(context: CribbageContext,
-    id: {cardSetID: CardSetID, index?: number} 
+    cardSetID: CardSetID, 
+    index?: number,
 ) : boolean {
-    const { cardSetID, index } = id;
 
-    if(cardSetID === context.me) {
-        // Reordering hand
-        return true;
-    }
+    const { stage, pone} = context;
 
-    if(cardSetID === CardSetID.Shared && index === undefined) {
-        if(context.stage === GameStage.SettingBox) {
-            return !boxFull(context, context.me);
+    if(stage === GameStage.SettingBox) {
+        if(cardSetID === context.me) {
+            return true;
         }
 
-        return true;
+        return cardSetID === CardSetID.Shared && index === undefined &&
+            !boxFull(context, context.me);
     }
 
+    if(stage === GameStage.Pegging) {
+        return cardSetID !== pone;
+    }
 
+    if(stage === GameStage.Scoring) {
+        return false;
+    }
+
+    throw new Error("Unexpected GameStage"); // Why does typescript require this?
 
     return false;
 }

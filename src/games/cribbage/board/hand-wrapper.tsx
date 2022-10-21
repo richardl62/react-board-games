@@ -22,9 +22,9 @@ export function HandWrapper(props: HandWrapperProps) : JSX.Element {
     
     const cards : (Card|null) [] = context[cardSetID].hand;
 
-    const showBack = (index: number) => dndControl.showBack(context, {cardSetID, index});
-    const draggable = (index: number) => dndControl.dragAllowed(context, {cardSetID, index});
-    const dropTarget = (index?: number) =>  dndControl.dropTarget(context, {cardSetID, index});
+    const showBack = (index: number) => dndControl.showBack(context, cardSetID, index);
+    const draggable = (index: number) => dndControl.dragAllowed(context, cardSetID, index);
+    const dropTarget = (index?: number) =>  dndControl.dropTarget(context, cardSetID, index);
 
     const onDrop = (
         arg: {
