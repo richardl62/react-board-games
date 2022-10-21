@@ -74,7 +74,7 @@ export function Hand(props: HandProps) : JSX.Element {
             cardID={{handID, index}}
 
             draggable={draggable(index)}
-            dropTarget={draggable(index)}
+            dropTarget={dropTarget(index)}
             onDrop={onDrop}
         />;
     });
