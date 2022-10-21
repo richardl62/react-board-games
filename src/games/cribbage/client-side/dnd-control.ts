@@ -1,44 +1,14 @@
-import { Card } from "../../../utils/cards";
-import { compareCards } from "../../../utils/cards/types";
-import { CardSetID, PlayerID } from "../server-side/server-data";
+import { CardSetID, GameStage } from "../server-side/server-data";
 import { CribbageContext } from "./cribbage-context";
-
-function owner(context: CribbageContext,  
-    id: {cardSetID: CardSetID, index: number}) : PlayerID {
-
-    const includes = (cardSet: Card[], card: Card) => {
-        for(const c of cardSet) {
-            if(compareCards(c, card) === 0) {
-                return true;
-            }
-        }
-
-        return false;
-    };
-
-    const card = context[id.cardSetID].hand[id.index];
-    if(!card) {
-        console.error("unknown card");
-        return CardSetID.Player0;
-
-    }
-    if(includes(context.player0.fullHand, card)) {
-        return CardSetID.Player0;
-    }
-
-    if(includes(context.player1.fullHand, card)) {
-        return CardSetID.Player1;
-    }
-
-    throw new Error("Card does not have known owner");
-}
-
+import { boxFull, owner } from "./context-tools";
+import { sAssert } from "../../../utils/assert";
 
 export function dragAllowed(context: CribbageContext, 
     id: {cardSetID: CardSetID, index: number}
 ) : boolean {
-
-    return owner(context, id) === context.me;
+    const card = context[id.cardSetID].hand[id.index];
+    sAssert(card);
+    return owner(context, card) === context.me;
 }
 
 export function showBack(context: CribbageContext, 
@@ -51,6 +21,23 @@ export function showBack(context: CribbageContext,
 export function dropTarget(context: CribbageContext,
     id: {cardSetID: CardSetID, index?: number} 
 ) : boolean {
-    return id.cardSetID !== context.pone;
+    const { cardSetID, index } = id;
+
+    if(cardSetID === context.me) {
+        // Reordering hand
+        return true;
+    }
+
+    if(cardSetID === CardSetID.Shared && index === undefined) {
+        if(context.stage === GameStage.SettingBox) {
+            return !boxFull(context, context.me);
+        }
+
+        return true;
+    }
+
+
+
+    return false;
 }
 

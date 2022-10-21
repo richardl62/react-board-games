@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { GameStage } from "../server-side/server-data";
+import { MakingBox } from "./making-box";
 
-const OuterDiv = styled.div`
+export const OuterDiv = styled.div`
     display: flex;
 
     font-size: 20px;
@@ -11,20 +12,6 @@ const OuterDiv = styled.div`
         margin-left: 10px;
     }
 `;
-
-function MakingBox() {
-    const { moves, stage } = useCribbageContext();
-    if(stage !== GameStage.SettingBox) {
-        return null;
-    }
-
-    const doneMakingBox = () => moves.doneMakingBox();
-
-    return <OuterDiv>
-        <span>Add Cards to box</span>
-        <button onClick={doneMakingBox}>Done</button>
-    </OuterDiv>;
-}
 
 function Pegging() {
     const { stage, moves } = useCribbageContext();

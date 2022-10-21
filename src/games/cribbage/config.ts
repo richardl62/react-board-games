@@ -4,3 +4,4 @@ export const winningLinePos = 120; // Number of pegs excluding pre-start and pos
 export const nPostEndPegs = 1;
 
 export const cardsPerHand = 6;
+export const cardInBoxPerPlayer = 2;
