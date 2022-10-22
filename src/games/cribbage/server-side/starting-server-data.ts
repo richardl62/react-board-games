@@ -18,6 +18,7 @@ export function newDealData(pegPos: PlayerPegPositions): Omit<ServerData, "serve
             fullHand: [...hand],
             ...pegPos,
             doneSettingBox: false,
+            restartPeggingRequested: false,
         };
     };
 

@@ -30,6 +30,8 @@ interface PerDealPlayerData extends CardSetData {
 
     /** Set true when player is finished adding cards to box */
     doneSettingBox: boolean;
+
+    restartPeggingRequested: boolean;
 }
 
 export interface PegPositions {

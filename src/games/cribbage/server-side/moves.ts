@@ -4,7 +4,7 @@ import { donePegging } from "./done-pegging";
 import { drag } from "./drag";
 import { newDeal } from "./new-deal";
 import { pegClick } from "./peg-click";
-import { restartPegging } from "./retart-pegging";
+import { requestRestartPegging } from "./request-restart-pegging";
 import { showCutCard } from "./show-cut-card";
 
 export const bgioMoves = {
@@ -13,7 +13,7 @@ export const bgioMoves = {
     donePegging: wrappedMoveFunction(donePegging),
     newDeal: wrappedMoveFunction(newDeal),
     pegClick: wrappedMoveFunction(pegClick),
-    restartPegging: wrappedMoveFunction(restartPegging),
+    requestRestartPegging: wrappedMoveFunction(requestRestartPegging),
     showCutCard: wrappedMoveFunction(showCutCard),
 
 };
@@ -27,6 +27,6 @@ export interface ClientMoves {
     donePegging: ClientFunction<typeof donePegging>;
     newDeal: ClientFunction<typeof newDeal>;
     pegClick: ClientFunction<typeof pegClick>;
-    restartPegging: ClientFunction<typeof restartPegging>;
+    requestRestartPegging: ClientFunction<typeof requestRestartPegging>;
     showCutCard: ClientFunction<typeof showCutCard>;
 }

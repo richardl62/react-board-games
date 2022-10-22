@@ -14,12 +14,12 @@ export const OuterDiv = styled.div`
 `;
 
 function Pegging() {
-    const { stage, moves } = useCribbageContext();
+    const { stage, moves, me } = useCribbageContext();
     if(stage !== GameStage.Pegging) {
         return null;
     }
 
-    const restartPegging = () => moves.restartPegging();
+    const restartPegging = () => moves.requestRestartPegging(me);
     const donePegging = () => moves.donePegging();
 
     return <OuterDiv>
