@@ -15,16 +15,18 @@ export const OuterDiv = styled.div`
 `;
 
 function Scoring() {
-    const { stage, moves } = useCribbageContext();
+    const context = useCribbageContext();
+    const { stage, moves, me } = context;
+
     if(stage !== GameStage.HandsRevealed) {
         return null;
     }
 
-    const newDeal = () => moves.newDeal();
-
+    const newDeal = () => moves.newDeal(me);
+    const requested = context[me].newDealRequested;
     return <OuterDiv>
         <span>Scoring</span>
-        <button onClick={newDeal}>Done (new deal)</button>
+        <button onClick={newDeal} disabled={requested}>Done (new deal)</button>
     </OuterDiv>;
 }
 

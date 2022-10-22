@@ -33,6 +33,7 @@ interface PerDealPlayerData extends CardSetData {
 
     restartPeggingRequested: boolean;
     revealHandsRequested: boolean;
+    newDealRequested: boolean;
 }
 
 export interface PegPositions {

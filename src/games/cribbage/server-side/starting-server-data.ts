@@ -20,6 +20,7 @@ export function newDealData(pegPos: PlayerPegPositions): Omit<ServerData, "serve
             doneSettingBox: false,
             restartPeggingRequested: false,
             revealHandsRequested: false,
+            newDealRequested: false,
         };
     };
 
