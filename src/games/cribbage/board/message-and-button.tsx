@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { GameStage } from "../server-side/server-data";
 import { MakingBox } from "./making-box";
+import { Pegging } from "./pegging";
 
 export const OuterDiv = styled.div`
     display: flex;
@@ -12,22 +13,6 @@ export const OuterDiv = styled.div`
         margin-left: 10px;
     }
 `;
-
-function Pegging() {
-    const { stage, moves, me } = useCribbageContext();
-    if(stage !== GameStage.Pegging) {
-        return null;
-    }
-
-    const restartPegging = () => moves.requestRestartPegging(me);
-    const donePegging = () => moves.donePegging();
-
-    return <OuterDiv>
-        <span>Pegging</span>
-        <button onClick={restartPegging}>Restart</button>
-        <button onClick={donePegging}>Done (reveal hands)</button>
-    </OuterDiv>;
-}
 
 function Scoring() {
     const { stage, moves } = useCribbageContext();
