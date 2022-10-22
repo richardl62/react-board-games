@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 import { GameStage, PlayerID, ServerData } from "./server-data";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function revealHands(G: ServerData, ctx: Ctx, playerID: PlayerID): void {
+export function requestRevealHands(G: ServerData, ctx: Ctx, playerID: PlayerID): void {
 
     G[playerID].revealHandsRequested = true;
 

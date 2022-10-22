@@ -26,12 +26,12 @@ export function Pegging() : JSX.Element | null {
     }
 
     const cardsLeft = context[me].hand.length > 0 || context[pone].hand.length > 0;
-    const donePegging = () => moves.revealHands(me);
+    const revealHands = () => moves.requestRevealHands(me);
     const revealRequested = context[me].revealHandsRequested;
 
     return <OuterDiv> {
         cardsLeft ? 
             <CardsLeft /> :
-            <button onClick={donePegging} disabled={revealRequested}>Reveal Hands</button>
+            <button onClick={revealHands} disabled={revealRequested}>Reveal Hands</button>
     }</OuterDiv>;
 }
