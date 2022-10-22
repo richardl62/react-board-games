@@ -14,7 +14,7 @@ export const appGame: AppGame = {
 
     setup: () => startingServerData(),
 
-    minPlayers: 1,
+    minPlayers: 2,
     maxPlayers: 2,
 
     moves: bgioMoves,
