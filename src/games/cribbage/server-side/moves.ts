@@ -1,6 +1,6 @@
 import { wrappedMoveFunction } from "../../../app-game-support/wrapped-move-function";
 import { doneMakingBox } from "./done-making-box";
-import { donePegging } from "./done-pegging";
+import { revealHands } from "./reveal-hands";
 import { drag } from "./drag";
 import { newDeal } from "./new-deal";
 import { pegClick } from "./peg-click";
@@ -10,7 +10,7 @@ import { showCutCard } from "./show-cut-card";
 export const bgioMoves = {
     drag: wrappedMoveFunction(drag),
     doneMakingBox: wrappedMoveFunction(doneMakingBox),
-    donePegging: wrappedMoveFunction(donePegging),
+    revealHands: wrappedMoveFunction(revealHands),
     newDeal: wrappedMoveFunction(newDeal),
     pegClick: wrappedMoveFunction(pegClick),
     requestRestartPegging: wrappedMoveFunction(requestRestartPegging),
@@ -24,7 +24,7 @@ type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Paramete
 export interface ClientMoves {
     drag: ClientFunction<typeof drag>;
     doneMakingBox: ClientFunction<typeof doneMakingBox>;
-    donePegging: ClientFunction<typeof donePegging>;
+    revealHands: ClientFunction<typeof revealHands>;
     newDeal: ClientFunction<typeof newDeal>;
     pegClick: ClientFunction<typeof pegClick>;
     requestRestartPegging: ClientFunction<typeof requestRestartPegging>;

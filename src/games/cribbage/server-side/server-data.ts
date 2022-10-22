@@ -45,7 +45,7 @@ export interface PlayerData extends PerDealPlayerData, PegPositions {
 export enum GameStage  {
     SettingBox,
     Pegging,
-    Scoring,
+    HandsRevealed,
 }
 
 export interface ServerData {

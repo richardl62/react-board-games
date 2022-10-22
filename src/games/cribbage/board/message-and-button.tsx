@@ -16,7 +16,7 @@ export const OuterDiv = styled.div`
 
 function Scoring() {
     const { stage, moves } = useCribbageContext();
-    if(stage !== GameStage.Scoring) {
+    if(stage !== GameStage.HandsRevealed) {
         return null;
     }
 

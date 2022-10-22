@@ -21,7 +21,7 @@ export function dragAllowed(
         return cardSetID === me;
     }
 
-    if(stage === GameStage.Scoring) {
+    if(stage === GameStage.HandsRevealed) {
         return false;
     }
 
@@ -44,7 +44,7 @@ export function showBack(
         return cardSetID === pone;
     }
 
-    if(stage === GameStage.Scoring) {
+    if(stage === GameStage.HandsRevealed) {
         return false;
     }
 
@@ -72,7 +72,7 @@ export function dropTarget(context: CribbageContext,
         return cardSetID !== pone;
     }
 
-    if(stage === GameStage.Scoring) {
+    if(stage === GameStage.HandsRevealed) {
         return false;
     }
 

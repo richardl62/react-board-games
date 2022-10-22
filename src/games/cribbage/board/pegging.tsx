@@ -26,7 +26,7 @@ export function Pegging() : JSX.Element | null {
     }
 
     const cardsLeft = context[me].hand.length > 0 || context[pone].hand.length > 0;
-    const donePegging = () => moves.donePegging();
+    const donePegging = () => moves.revealHands();
 
     return <OuterDiv> {
         cardsLeft ? 
