@@ -6,6 +6,6 @@ import { newDealData } from "./starting-server-data";
 export function newDeal(G: ServerData, ctx: Ctx, arg: void): ServerData {
     return {
         ...G,
-        ...newDealData(),
+        ...newDealData(G),
     };
 }

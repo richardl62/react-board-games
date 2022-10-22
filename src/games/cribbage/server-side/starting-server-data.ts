@@ -1,24 +1,28 @@
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
-import { ServerData, GameStage } from "./server-data";
+import { ServerData, GameStage, PegPositions } from "./server-data";
 
-export function newDealData(): Omit<ServerData, "serverError" | "serverTimestamp"> {
+interface PlayerPegPositions {
+    player0: PegPositions;
+    player1: PegPositions;
+}
+
+export function newDealData(pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
 
     const cards = deck({ jokers: false, shuffled: true });
 
-    const playerData = () => {
+    const playerData = (pegPos: PegPositions) => {
         const hand = cards.splice(0, cardsPerHand);
         return {
             hand,
             fullHand: [...hand],
-            score: 0,
-            trailingPeg: -1,
+            ...pegPos,
         };
     };
 
     return {
-        player0: playerData(),
-        player1: playerData(),
+        player0: playerData(pegPos.player0),
+        player1: playerData(pegPos.player1),
 
         shared: {
             hand: [],
@@ -36,9 +40,19 @@ export function newDealData(): Omit<ServerData, "serverError" | "serverTimestamp
 }
 
 export function startingServerData(): ServerData {
+    const startingPegPos : PlayerPegPositions = {
+        player0: {
+            score: 0,
+            trailingPeg: -1,
+        },
+        player1: {
+            score: 0,
+            trailingPeg: -1,
+        },
+    };
 
     return {
-        ...newDealData(),
+        ...newDealData(startingPegPos),
         serverError: null,
         serverTimestamp: 0,
     };
