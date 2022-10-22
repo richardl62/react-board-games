@@ -24,14 +24,20 @@ interface CardSetData {
     hand: Card[];
 }
 
+interface PerDealPlayerData extends CardSetData {
+    /** Includes cards in play (i.e. those that have been played during pegging) */
+    fullHand: Card[];
+
+    /** Set true when player is finished adding cards to box */
+    doneSettingBox: boolean;
+}
+
 export interface PegPositions {
     trailingPeg: number; // initialised to -1.
     score: number;
 }
 
-interface PlayerData extends CardSetData, PegPositions {
-    /** Includes cards in play (i.e. those that have been played during pegging) */
-    fullHand: Card[];
+export interface PlayerData extends PerDealPlayerData, PegPositions {
 }
 
 export enum GameStage  {

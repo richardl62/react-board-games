@@ -12,10 +12,18 @@ export function MakingBox() : JSX.Element | null {
         return null;
     }
 
-    const doneMakingBox = () => moves.doneMakingBox();
+    const doneMakingBox = () => moves.doneMakingBox(me);
     const full = boxFull(context, me);
+    const done = context[me].doneSettingBox;
     return <OuterDiv>
         <span>Add cards to box</span>
-        {full && <button onClick={doneMakingBox}>Confirm</button>}
+        {full &&
+            <button
+                onClick={doneMakingBox}
+                disabled={done}
+            >
+                Confirm
+            </button>
+        }
     </OuterDiv>;
 }
