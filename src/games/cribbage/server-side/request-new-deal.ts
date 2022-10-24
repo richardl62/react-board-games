@@ -9,13 +9,17 @@ export function requestNewDeal(inputG: ServerData, ctx: Ctx, playerID: PlayerID)
 
     newG[playerID] = {...newG[playerID]};
     newG[playerID].newDealRequested = true;
-
+    const ndd = newDealData(ctx, newG);
+    console.log("ndd", ndd);
     if (newG.player0.newDealRequested && newG.player1.newDealRequested) {
-        return {
+        const res = {
             ...newG,
-            ...newDealData(newG),
+            ...ndd,
         };
+
+        console.log("res", res);
     }
+    console.log("newG", newG);
 
     return newG;
 }
