@@ -1,9 +1,10 @@
-import { shuffle } from "../shuffle";
+import { Ctx } from "boardgame.io";
+import { sAssert } from "../assert";
 import { Card, ranks, suits } from "./types";
 
 // Inefficient if called multiple times (could cache a deck)
 
-export function deck(options: { jokers: boolean; shuffled: boolean}): Card[] {
+export function deck(ctx: Ctx, options: { jokers: boolean; shuffled: boolean}): Card[] {
     const cards: Card[] = [];
     for (const rank of ranks) {
         for (const suit of suits) {
@@ -17,7 +18,8 @@ export function deck(options: { jokers: boolean; shuffled: boolean}): Card[] {
     }
 
     if (options.shuffled) {
-        shuffle(cards);
+        sAssert(ctx.random);
+        ctx.random.Shuffle(cards);
     }
     return cards;
 }

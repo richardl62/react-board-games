@@ -4,6 +4,7 @@ import { AppGame, GameCategory } from "../../app-game-support";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 import { startingServerData } from "./server-side/starting-server-data";
 import { bgioMoves } from "./server-side/moves";
+import { Ctx } from "boardgame.io";
 
 const LazyBoard = React.lazy(() => import("./board/board"));
 
@@ -12,7 +13,7 @@ export const appGame: AppGame = {
     displayName: "Cribbage",
     category: GameCategory.development,
 
-    setup: () => startingServerData(),
+    setup: (ctx: Ctx) => startingServerData(ctx),
 
     minPlayers: 2,
     maxPlayers: 2,

@@ -1,3 +1,4 @@
+import { Ctx } from "boardgame.io";
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
@@ -7,9 +8,9 @@ interface PlayerPegPositions {
     player1: PegPositions;
 }
 
-export function newDealData(pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
+export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
 
-    const cards = deck({ jokers: false, shuffled: true });
+    const cards = deck(ctx, { jokers: false, shuffled: true });
 
     const playerData = (pegPos: PegPositions) : PlayerData => {
         const hand = cards.splice(0, cardsPerHand);
@@ -43,7 +44,7 @@ export function newDealData(pegPos: PlayerPegPositions): Omit<ServerData, "serve
     };
 }
 
-export function startingServerData(): ServerData {
+export function startingServerData(ctx: Ctx): ServerData {
     const startingPegPos : PlayerPegPositions = {
         player0: {
             score: 0,
@@ -56,7 +57,7 @@ export function startingServerData(): ServerData {
     };
 
     return {
-        ...newDealData(startingPegPos),
+        ...newDealData(ctx, startingPegPos),
         serverError: null,
         serverTimestamp: 0,
     };
