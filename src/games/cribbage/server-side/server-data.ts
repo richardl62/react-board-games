@@ -29,15 +29,12 @@ export enum GameRequest {
     RestartPegging,
     RevealHand,
     NewDeal,
+    FinishSettingBox,
 }
 
 interface PerDealPlayerData extends CardSetData {
     /** Includes cards in play (i.e. those that have been played during pegging) */
     fullHand: Card[];
-
-    /** Set true when player is finished adding cards to box */
-    doneSettingBox: boolean;
-
     request: GameRequest | null;
 }
 

@@ -6,6 +6,8 @@ import { CribbageGameProps } from "./cribbage-game-props";
 
 export interface CribbageContext extends ServerData {
     moves: ClientMoves;
+    numPlayers: number;
+
     me: PlayerID;
     pone: PlayerID;
 }
@@ -29,6 +31,7 @@ export function makeCribbageContext(gameProps: CribbageGameProps) : CribbageCont
     return {
         ...gameProps.G,
         moves: gameProps.moves,
+        numPlayers: gameProps.ctx.numPlayers,
         me,
         pone,
     };
