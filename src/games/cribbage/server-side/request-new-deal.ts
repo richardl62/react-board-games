@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { PlayerID, ServerData } from "./server-data";
+import { GameRequest, PlayerID, ServerData } from "./server-data";
 import { newDealData } from "./starting-server-data";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -8,16 +8,18 @@ export function requestNewDeal(inputG: ServerData, ctx: Ctx, playerID: PlayerID)
     const newG = {...inputG};
 
     newG[playerID] = {...newG[playerID]};
-    newG[playerID].newDealRequested = true;
+    newG[playerID].request = GameRequest.NewDeal;
     const ndd = newDealData(ctx, newG);
     console.log("ndd", ndd);
-    if (newG.player0.newDealRequested && newG.player1.newDealRequested) {
+    if (newG.player0.request === GameRequest.NewDeal && 
+        newG.player1.request === GameRequest.NewDeal ) {
         const res = {
             ...newG,
             ...ndd,
         };
 
         console.log("res", res);
+        return res;
     }
     console.log("newG", newG);
 

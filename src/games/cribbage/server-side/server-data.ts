@@ -24,6 +24,13 @@ interface CardSetData {
     hand: Card[];
 }
 
+/** Requests for a particular action (e.g. a new deal) to be performed */
+export enum GameRequest {
+    RestartPegging,
+    RevealHand,
+    NewDeal,
+}
+
 interface PerDealPlayerData extends CardSetData {
     /** Includes cards in play (i.e. those that have been played during pegging) */
     fullHand: Card[];
@@ -31,9 +38,7 @@ interface PerDealPlayerData extends CardSetData {
     /** Set true when player is finished adding cards to box */
     doneSettingBox: boolean;
 
-    restartPeggingRequested: boolean;
-    revealHandsRequested: boolean;
-    newDealRequested: boolean;
+    request: GameRequest | null;
 }
 
 export interface PegPositions {
