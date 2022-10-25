@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameStage } from "../server-side/server-data";
+import { GameRequest, GameStage } from "../server-side/server-data";
 import { MakingBox } from "./making-box";
 import { Pegging } from "./pegging";
 
@@ -23,7 +23,7 @@ function Scoring() {
     }
 
     const newDeal = () => moves.requestNewDeal(me);
-    const requested = context[me].newDealRequested;
+    const requested = context[me].request === GameRequest.NewDeal;
     return <OuterDiv>
         <span>Scoring</span>
         <button onClick={newDeal} disabled={requested}>Done (new deal)</button>

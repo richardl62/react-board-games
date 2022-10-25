@@ -1,6 +1,6 @@
 import React from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameStage } from "../server-side/server-data";
+import { GameRequest, GameStage } from "../server-side/server-data";
 import { OuterDiv } from "./message-and-button";
 
 function CardsLeft() {
@@ -9,7 +9,7 @@ function CardsLeft() {
 
     const cardsPegged = context.shared.hand.length > 0;
     const restartPegging = () => moves.requestRestartPegging(me);
-    const clearRequested = context[me].restartPeggingRequested;
+    const clearRequested = context[me].request === GameRequest.RestartPegging;
 
     return <>
         <span>Pegging</span>
@@ -27,7 +27,7 @@ export function Pegging() : JSX.Element | null {
 
     const cardsLeft = context[me].hand.length > 0 || context[pone].hand.length > 0;
     const revealHands = () => moves.requestRevealHands(me);
-    const revealRequested = context[me].revealHandsRequested;
+    const revealRequested = context[me].request === GameRequest.RevealHand;  
 
     return <OuterDiv> {
         cardsLeft ? 

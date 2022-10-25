@@ -19,9 +19,7 @@ export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerDa
             fullHand: [...hand],
             ...pegPos,
             doneSettingBox: false,
-            restartPeggingRequested: false,
-            revealHandsRequested: false,
-            newDealRequested: false,
+            request: null,
         };
     };
 
