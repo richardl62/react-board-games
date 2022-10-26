@@ -1,4 +1,5 @@
 import { Ctx } from "boardgame.io";
+import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
@@ -8,23 +9,36 @@ interface PlayerPegPositions {
     player1: PegPositions;
 }
 
+
+function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
+    const hand = cards.splice(0, cardsPerHand);
+    const pd = {
+        hand,
+        fullHand: [...hand],
+        ...pegPos,
+        request: null,
+    };
+
+
+    // Setting hand and fullHand below fixes a bug I don't understand.
+    // The symptom is that hand and fullHand had the wrong length as shown by
+    // following console.log.
+    console.log("hand", hand.length, "pd.hand", pd.hand.length, "pd.fullHand", pd.fullHand.length);
+
+    pd.hand = [...hand];
+    pd.fullHand = [...hand];
+
+    return pd;
+
+}
+
 export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
 
     const cards = deck(ctx, { jokers: false, shuffled: true });
 
-    const playerData = (pegPos: PegPositions) : PlayerData => {
-        const hand = cards.splice(0, cardsPerHand);
-        return {
-            hand,
-            fullHand: [...hand],
-            ...pegPos,
-            request: null,
-        };
-    };
-
     return {
-        player0: playerData(pegPos.player0),
-        player1: playerData(pegPos.player1),
+        player0: playerData(cards, pegPos.player0),
+        player1: playerData(cards, pegPos.player1),
 
         shared: {
             hand: [],
