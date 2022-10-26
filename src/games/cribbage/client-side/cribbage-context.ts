@@ -6,10 +6,10 @@ import { CribbageGameProps } from "./cribbage-game-props";
 
 export interface CribbageContext extends ServerData {
     moves: ClientMoves;
-    numPlayers: number;
-
     me: PlayerID;
     pone: PlayerID;
+
+    numPlayers: number;
 }
 
 export const ReactCribbageContext = React.createContext<CribbageContext|null>(null);
@@ -31,9 +31,10 @@ export function makeCribbageContext(gameProps: CribbageGameProps) : CribbageCont
     return {
         ...gameProps.G,
         moves: gameProps.moves,
-        numPlayers: gameProps.ctx.numPlayers,
         me,
         pone,
+
+        numPlayers: gameProps.ctx.numPlayers,
     };
 }
 
