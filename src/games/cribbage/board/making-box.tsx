@@ -1,7 +1,7 @@
 import React from "react";
 import { boxFull } from "../client-side/context-tools";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameStage } from "../server-side/server-data";
+import { GameRequest, GameStage } from "../server-side/server-data";
 import { OuterDiv } from "./message-and-button";
 
 export function MakingBox() : JSX.Element | null {
@@ -14,7 +14,7 @@ export function MakingBox() : JSX.Element | null {
 
     const doneMakingBox = () => moves.doneMakingBox(me);
     const full = boxFull(context, me);
-    const done = context[me].doneSettingBox;
+    const done = context[me].request === GameRequest.FinishSettingBox;
     return <OuterDiv>
         <span>Add cards to box</span>
         {full &&

@@ -17,7 +17,6 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
         fullHand: [...hand],
         ...pegPos,
         request: null,
-        doneSettingBox: false,
     };
 
 

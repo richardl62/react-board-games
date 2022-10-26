@@ -8,16 +8,17 @@ export function dragAllowed(
     cardSetID: CardSetID, 
     index: number,
 ) : boolean {
-    const { stage, me} = context;
+    const { stage, me, numPlayers} = context;
+    const singlePlayer = numPlayers === 1;
     
     if(stage === GameStage.SettingBox) {
         const card = context[cardSetID].hand[index];
         sAssert(card);
-        return owner(context, card) === me;
+        return owner(context, card) === me || singlePlayer;
     }
 
     if(stage === GameStage.Pegging) {
-        return cardSetID === me;
+        return cardSetID === me || singlePlayer;
     }
 
     if(stage === GameStage.HandsRevealed) {
@@ -33,14 +34,15 @@ export function showBack(
     index: number,
 ) : boolean {
 
-    const { stage, pone} = context;
-    
+    const { stage, pone, numPlayers} = context;
+    const singlePlayer = numPlayers === 1;
+
     if(stage === GameStage.SettingBox) {
         return !dragAllowed(context, cardSetID, index);
     }
 
     if(stage === GameStage.Pegging) {
-        return cardSetID === pone;
+        return cardSetID === pone && !singlePlayer;
     }
 
     if(stage === GameStage.HandsRevealed) {
@@ -51,14 +53,21 @@ export function showBack(
 }
 
 
-export function dropTarget(context: CribbageContext,
+export function dropTarget(
+    context: CribbageContext,
     cardSetID: CardSetID, 
     index?: number,
 ) : boolean {
 
-    const { stage, pone} = context;
+    const { stage, pone, numPlayers} = context;
+    const singlePlayer = numPlayers === 1;
 
     if(stage === GameStage.SettingBox) {
+        // Could do better if the start of the drag was known
+        if(singlePlayer) {
+            return true;
+        }
+
         if(cardSetID === context.me) {
             return true;
         }
@@ -68,7 +77,7 @@ export function dropTarget(context: CribbageContext,
     }
 
     if(stage === GameStage.Pegging) {
-        return cardSetID !== pone;
+        return cardSetID !== pone || singlePlayer;
     }
 
     if(stage === GameStage.HandsRevealed) {
