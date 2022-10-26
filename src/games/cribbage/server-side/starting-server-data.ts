@@ -12,11 +12,12 @@ interface PlayerPegPositions {
 
 function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
     const hand = cards.splice(0, cardsPerHand);
-    const pd = {
+    const pd : PlayerData = {
         hand,
         fullHand: [...hand],
         ...pegPos,
         request: null,
+        doneSettingBox: false,
     };
 
 
@@ -29,7 +30,6 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
     pd.fullHand = [...hand];
 
     return pd;
-
 }
 
 export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
