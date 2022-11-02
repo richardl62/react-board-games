@@ -71,7 +71,7 @@ function CompletedGrid({pid}: CompletedGridProps) {
 
 export function Scoring() : JSX.Element | null {
     const context = useCrossTilesContext();
-    const { stage, playerData, 
+    const { stage, playerData, nPlayers, nthPlayerID,
         wrappedGameProps: {moves, playerID} 
     } = context;
     
@@ -86,10 +86,14 @@ export function Scoring() : JSX.Element | null {
 
     const endOfGame = scoreCardFull(playerData[playerID].scoreCard); //KLUDGE?
     
+    const completedGrids : JSX.Element[] = [];
+    for (let i = 0; i < nPlayers; ++i) {
+        const pid = nthPlayerID(i);
+        completedGrids.push(<CompletedGrid key={pid} pid={pid} />);
+    }
+
     return <div>
-        <ScoringDiv>
-            {Object.keys(playerData).map(pid => <CompletedGrid key={pid} pid={pid} />)}
-        </ScoringDiv>
+        <ScoringDiv> {completedGrids} </ScoringDiv>
 
         {scoreChosen && !amReady &&
             <button onClick={()=>moves.readyForNextRound()}>
