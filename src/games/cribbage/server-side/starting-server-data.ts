@@ -9,26 +9,21 @@ interface PlayerPegPositions {
     player1: PegPositions;
 }
 
-
 function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
+
     const hand = cards.splice(0, cardsPerHand);
-    const pd : PlayerData = {
+
+    return {
         hand,
         fullHand: [...hand],
-        ...pegPos,
         request: null,
+
+        // Explicitly assign the required members of pegPos rather than using 
+        // ...pegPos. This prevents any non-required members also being copied. 
+        // (Previous use of ...pegPos lead to hand and fullHand being overwritten.)
+        trailingPeg: pegPos.trailingPeg,
+        score: pegPos.score,
     };
-
-
-    // Setting hand and fullHand below fixes a bug I don't understand.
-    // The symptom is that hand and fullHand had the wrong length as shown by
-    // following console.log.
-    console.log("hand", hand.length, "pd.hand", pd.hand.length, "pd.fullHand", pd.fullHand.length);
-
-    pd.hand = [...hand];
-    pd.fullHand = [...hand];
-
-    return pd;
 }
 
 export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
