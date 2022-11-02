@@ -1,8 +1,13 @@
 import React from "react";
+import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { PlayerID } from "../server-side/server-data";
 import { PlayerProps, ScoreBoard } from "./score-board/score-board";
+import { colors } from "./score-board/style";
 
+const ScoreLine = styled.div<{color: string}>`
+    color: ${props => props.color}
+`;
 
 export function WrappedScoreBoard() : JSX.Element {
     const context = useCribbageContext();
@@ -18,7 +23,11 @@ export function WrappedScoreBoard() : JSX.Element {
 
     return <div>
         <ScoreBoard player1={playerProps(context.me)} player2={playerProps(context.pone)} />
-        <div>{`You: ${context[context.me].score}`}</div>
-        <div>{`Pone: ${context[context.pone].score}`}</div>
+        <ScoreLine color={colors.player1}>
+            {`You: ${context[context.me].score}`}
+        </ScoreLine>
+        <ScoreLine color={colors.player2}>
+            {`Pone: ${context[context.pone].score}`}
+        </ScoreLine>
     </div>; 
 }
