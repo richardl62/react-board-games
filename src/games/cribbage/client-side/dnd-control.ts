@@ -77,7 +77,7 @@ export function dropTarget(
     }
 
     if(stage === GameStage.Pegging) {
-        return cardSetID !== pone || singlePlayer;
+        return cardSetID !== pone || singlePlayer && index === undefined;
     }
 
     if(stage === GameStage.HandsRevealed) {
