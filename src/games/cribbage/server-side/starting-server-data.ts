@@ -1,4 +1,5 @@
 import { Ctx } from "boardgame.io";
+import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
@@ -27,8 +28,8 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
 }
 
 export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
-
-    const cards = deck(ctx, { jokers: false, shuffled: true });
+    sAssert(ctx.random);
+    const cards = ctx.random.Shuffle(deck({ jokers: false}));
 
     return {
         player0: playerData(cards, pegPos.player0),

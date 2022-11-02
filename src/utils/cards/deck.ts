@@ -1,10 +1,11 @@
-import { Ctx } from "boardgame.io";
-import { sAssert } from "../assert";
 import { Card, ranks, suits } from "./types";
 
+// Return a deck with optional jokers.
 // Inefficient if called multiple times (could cache a deck)
-
-export function deck(ctx: Ctx, options: { jokers: boolean; shuffled: boolean}): Card[] {
+//
+// Shuffling is left to client code. This is partly to allow client code 
+// to use 'random.shuffle' from BGIO where appropriate.
+export function deck( options: { jokers: boolean}): Card[] {
     const cards: Card[] = [];
     for (const rank of ranks) {
         for (const suit of suits) {
@@ -17,9 +18,5 @@ export function deck(ctx: Ctx, options: { jokers: boolean; shuffled: boolean}): 
         cards.push({ joker: 2 });
     }
 
-    if (options.shuffled) {
-        sAssert(ctx.random);
-        ctx.random.Shuffle(cards);
-    }
     return cards;
 }
