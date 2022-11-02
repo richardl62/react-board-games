@@ -16,7 +16,7 @@ export interface CrossTilesContext extends ServerData, ReducerState{
     readonly nPlayers: number,
     
     // Get the ID of the nth player, with players ordered to start with the
-    // actionve player (i.e. playerID).  This is provided as a function rather
+    // active player (i.e. playerID).  This is provided as a function rather
     // than array to avoid subtle bugs that might arise if for...in is used in
     // place of for...of. 
     readonly nthPlayerID: (n: number) => string;
