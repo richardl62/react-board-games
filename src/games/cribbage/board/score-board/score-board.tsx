@@ -1,18 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { nPreStartPegs } from "../../config";
+import { colors } from "./style";
 import { MarkerLines } from "./marker-lines";
 import { boardHeight, boardWidth, pegPoints } from "./peg-points";
 import { boardPadding, holeRadius, pegSize, rowGap } from "./sizes";
 import { Position } from "./types";
-
-const colors = {
-    board: "rgb(240, 170, 70)",
-    holeBackground: "white",
-    holeBorder: "black",
-    player1: "rgb(175,0,0)",
-    player2: "blue",
-};
 
 const Board = styled.div<{height: number, width: number}>`
     position: relative;
