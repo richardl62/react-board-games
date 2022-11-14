@@ -36,7 +36,7 @@ export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
 
     return (
         <WarningsDiv>
-            <span key='-'>Warnings:</span>
+            <span key='-'>Warning:</span>
             {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
     );   
