@@ -1,16 +1,11 @@
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
-import styled from "styled-components";
 import { sAssert } from "../assert";
 import { CardSVG } from "./card";
 
 type CardProps = Parameters<typeof CardSVG>[0];
 
 export const playingCard = "playing card";
-
-const InlineDiv = styled.div`
-    display: inline;  
-`;
 
 interface CardID {
     handID: string;
@@ -62,9 +57,9 @@ export function CardDnD(props: CardDnDProps) : JSX.Element {
     }), [cardID]);
 
 
-    return <InlineDiv ref={dropTarget ? dropRef : undefined}>
-        <InlineDiv ref={draggable ? dragRef : undefined }>
+    return <div ref={dropTarget ? dropRef : undefined}>
+        <div ref={draggable ? dragRef : undefined }>
             <CardSVG {...props} />
-        </InlineDiv>
-    </InlineDiv>;
+        </div>
+    </div>;
 }
