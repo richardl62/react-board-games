@@ -1,4 +1,3 @@
-import { WaitingForPlayers } from "../../../app-game-support";
 import React from "react";
 import styled from "styled-components";
 import { MoveHistory } from "./move-history";
@@ -17,10 +16,6 @@ const Game = styled.div`
 
 export function Board(): JSX.Element {
     const context = useScrabbleContext();
-
-    if(!context.wrappedGameProps.allJoined) {
-        <WaitingForPlayers {...context.wrappedGameProps} />;
-    }
 
     return (
         <Game>
