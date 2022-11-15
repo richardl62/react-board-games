@@ -27,7 +27,7 @@ export function WrappedScoreBoard() : JSX.Element {
             {`You: ${context[context.me].score}`}
         </ScoreLine>
         <ScoreLine color={colors.player2}>
-            {`Pone: ${context[context.pone].score}`}
+            {`${context.poneName}: ${context[context.pone].score}`}
         </ScoreLine>
     </div>; 
 }
