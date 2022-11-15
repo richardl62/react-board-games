@@ -4,7 +4,6 @@ import { WrappedGameProps } from "./wrapped-game-props";
 
 
 const WarningsDiv = styled.div`
-    display: inline;
     *:first-child {
         color: red;
         text-transform: uppercase;
@@ -16,10 +15,9 @@ const WarningsDiv = styled.div`
 `;
 
 /** Show warnings, if any, about general (non-game-specifiy) issues.
- * Currently, this the only warning is players being off line.
+ * Currently, the only warning is about players being off line.
  */
 export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
-
 
     const warnings: string[] = [];
 
