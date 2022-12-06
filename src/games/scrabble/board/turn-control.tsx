@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { LetterSelector } from "./letter-selector";
 import { useTurnControlData } from "./use-turn-control-data";
@@ -21,9 +21,32 @@ const StyledIllegalWords = styled.div`
 `;
 
 
+// Prehaps this should be generalised into a 'button with confirmation' untility
+function PassButton() {
+    const [ awaitingConfirmation, setAwaitingConfirmation ] = useState(false);
+
+    const { onPass } = useTurnControlData();
+    if(!onPass) {
+        return null;
+    }
+
+    if(awaitingConfirmation) {
+        return <>
+            <button onClick={()=>{setAwaitingConfirmation(false); onPass();}}>
+                Confirm Pass</button>
+            <button onClick={()=>setAwaitingConfirmation(false)}>Cancel</button>
+        </>;
+    }
+    return <>
+
+        <span>Your turn </span>
+        <button onClick={()=>setAwaitingConfirmation(true)}>Pass</button>
+    </>;
+}
+
 /** 'Dumb' class that does the formatting for TurnControl */
 export function TurnControl(): JSX.Element {
-    const { score, illegalWords, onPass, onDone, onSetBlank, doSetBlank } = useTurnControlData();
+    const { score, illegalWords, onDone, onSetBlank, doSetBlank } = useTurnControlData();
     const doButtonText = illegalWords ?
         "Done (permitting illegal words)" :
         "Done"
@@ -44,10 +67,7 @@ export function TurnControl(): JSX.Element {
 
             <StyledScoreLine>
                 {score && <span>{"Score this turn: " + score}</span>}
-                {onPass && <>
-                    <span>Your turn </span>
-                    <button onClick={onPass}>Pass</button>
-                </>}
+                <PassButton/>
                 {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
                 {onDone && <button onClick={onDone}> {doButtonText} </button>}
             </StyledScoreLine>
