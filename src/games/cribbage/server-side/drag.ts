@@ -36,8 +36,7 @@ function moveBetweenCardSets(
     /** A null toIndex implied add to end */   
     toIndex?: number,
 ) {
-    const card = fromCards[fromIndex];
-    fromCards.splice(fromIndex, 1);
+    const card = fromCards.splice(fromIndex, 1)[0];
 
     if (toIndex) {
         // Shuffle up cards at position toIndex or greater
@@ -66,6 +65,10 @@ export function drag(state: ServerData, ctx: Ctx, { to, from }: FromTo): void {
         if(to.index !== undefined) {
             reorderFollowingDrag(state[fromID].hand, from.index, to.index);
         }
+    } else if (state.stage === GameStage.Pegging) {
+        sAssert(toID === "shared", "unexpected action during pegging");
+        const card = state[fromID].hand.splice(from.index, 1)[0];
+        state[toID].hand.push(card);
     } else {
         moveBetweenCardSets(
             state[fromID].hand, from.index,
