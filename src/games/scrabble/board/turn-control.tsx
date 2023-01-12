@@ -22,7 +22,7 @@ const StyledIllegalWords = styled.div`
 
 
 // Prehaps this should be generalised into a 'button with confirmation' untility
-function PassButton() {
+function PassDialog() {
     const [ awaitingConfirmation, setAwaitingConfirmation ] = useState(false);
 
     const { onPass } = useTurnControlData();
@@ -67,7 +67,7 @@ export function TurnControl(): JSX.Element {
 
             <StyledScoreLine>
                 {score && <span>{"Score this turn: " + score}</span>}
-                <PassButton/>
+                <PassDialog/>
                 {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
                 {onDone && <button onClick={onDone}> {doButtonText} </button>}
             </StyledScoreLine>
