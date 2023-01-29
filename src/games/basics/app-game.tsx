@@ -3,6 +3,7 @@ import { AppGame, GameCategory } from "../../app-game-support";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 import { Ctx } from "boardgame.io";
 import { startingServerData } from "./server-side/starting-server-data";
+import { bgioMoves } from "./server-side/moves";
 
 const LazyBoard = React.lazy(() => import("./board/board"));
 
@@ -17,7 +18,7 @@ export const appGame: AppGame = {
     minPlayers: 1,
     maxPlayers: 8,
 
-    moves: {},
+    moves: bgioMoves,
 
     // BGIO does not impose turn order
     // turn: {

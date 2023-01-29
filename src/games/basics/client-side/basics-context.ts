@@ -1,10 +1,12 @@
 import React from "react";
 import { sAssert } from "../../../utils/assert";
+import { ClientMoves } from "../server-side/moves";
 import { ServerData } from "../server-side/server-data";
 import { BasicsGameProps } from "./basics-game-props";
 
 export interface BasicsContext extends ServerData {
-    extraData: string;
+    moves: ClientMoves;
+    events: BasicsGameProps["events"];
 }
 
 export const ReactBasicsContext = React.createContext<BasicsContext|null>(null);
@@ -12,7 +14,8 @@ export const ReactBasicsContext = React.createContext<BasicsContext|null>(null);
 export function makeBasicsContext(gameProps: BasicsGameProps) : BasicsContext {
     return {
         ...gameProps.G,
-        extraData: "extra data"
+        moves: gameProps.moves,
+        events: gameProps.events,
     };
 }
 
