@@ -12,8 +12,6 @@ interface BoardProps {
     gameProps: WrappedGameProps;
 } 
 
-// Temporary kludge: BoardProps are not used for now
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Board(props: BoardProps): JSX.Element {
     const { gameProps } = props;
     const cribbageGameProps = gameProps as unknown as CribbageGameProps;
