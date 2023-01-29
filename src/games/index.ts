@@ -3,7 +3,6 @@ import scrabble from "./scrabble";
 import cribbage from "./cribbage";
 import crosstiles from "./crosstiles";
 import basics from "./basics";
-import plusMinus from "./plus-minus";
 import swapSquares from "./swap-squares";
 
 export const games : Array<AppGame> = [
@@ -11,6 +10,5 @@ export const games : Array<AppGame> = [
     ...cribbage,
     ...crosstiles,
     ...basics, 
-    ...plusMinus,
     ...swapSquares,
 ];
