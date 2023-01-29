@@ -1,13 +1,13 @@
 import { AppGame } from "../app-game-support";
 import scrabble from "./scrabble";
-import cards from "./cribbage";
+import cribbage from "./cribbage";
 import crosstiles from "./crosstiles";
 import plusMinus from "./plus-minus";
 import swapSquares from "./swap-squares";
 
 export const games : Array<AppGame> = [
     ...scrabble,
-    ...cards,
+    ...cribbage,
     ...crosstiles,  
     ...plusMinus,
     ...swapSquares,
