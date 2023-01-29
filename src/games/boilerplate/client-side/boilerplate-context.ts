@@ -1,15 +1,18 @@
 import React from "react";
 import { sAssert } from "../../../utils/assert";
+import { ServerData } from "../server-side/server-data";
+import { BoilerplateGameProps } from "./boilerplate-game-props";
 
-export interface BoilerplateContext {
-    dummyData: string;
+export interface BoilerplateContext extends ServerData {
+    extraData: string;
 }
 
 export const ReactBoilerplateContext = React.createContext<BoilerplateContext|null>(null);
 
-export function makeBoilerplateContext() : BoilerplateContext {
+export function makeBoilerplateContext(gameProps: BoilerplateGameProps) : BoilerplateContext {
     return {
-        dummyData: "boiler plate"
+        ...gameProps.G,
+        extraData: "extra data"
     };
 }
 

@@ -17,7 +17,7 @@ function Board(props: BoardProps): JSX.Element {
     const boilerplateGameProps = gameProps as unknown as BoilerplateGameProps;
     const { G: { serverError} } = boilerplateGameProps;
     
-    return <ReactBoilerplateContext.Provider value={makeBoilerplateContext()}>
+    return <ReactBoilerplateContext.Provider value={makeBoilerplateContext(boilerplateGameProps)}>
         <GameWarnings {...gameProps}/>
         <ErrorMessage category="server error" message={serverError} />
         
