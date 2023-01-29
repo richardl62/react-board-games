@@ -7,8 +7,8 @@ import { startingServerData } from "./server-side/starting-server-data";
 const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
-    name: "boilerplate",
-    displayName: "Boilerplate",
+    name: "basics",
+    displayName: "Basics",
     category: GameCategory.test,
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
