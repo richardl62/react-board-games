@@ -30,3 +30,6 @@ export function wrappedMoveFunction<State extends RequiredState, Param>(func: Mo
         }
     };
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+export type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Parameters<F>[2]) => void;

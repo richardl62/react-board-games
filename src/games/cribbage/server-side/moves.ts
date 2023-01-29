@@ -1,4 +1,4 @@
-import { wrappedMoveFunction } from "../../../app-game-support/wrapped-move-function";
+import { ClientFunction, wrappedMoveFunction } from "../../../app-game-support/wrapped-move-function";
 import { doneMakingBox } from "./done-making-box";
 import { requestRevealHands } from "./request-reveal-hands";
 import { drag } from "./drag";
@@ -17,9 +17,6 @@ export const bgioMoves = {
     showCutCard: wrappedMoveFunction(showCutCard),
 
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Parameters<F>[2]) => void;
 
 export interface ClientMoves {
     drag: ClientFunction<typeof drag>;
