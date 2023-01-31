@@ -1,12 +1,9 @@
-import React, { Suspense } from "react";
 import { ActivePlayers } from "boardgame.io/core";
 import { AppGame, GameCategory } from "../../app-game-support";
-import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 import { startingServerData } from "./server-side/starting-server-data";
 import { bgioMoves } from "./server-side/moves";
 import { Ctx } from "boardgame.io";
-
-const LazyBoard = React.lazy(() => import("./board/board"));
+import { makeStandardBoard } from "app-game-support/make-standard-board";
 
 export const appGame: AppGame = {
     name: "Cribbage",
@@ -25,9 +22,5 @@ export const appGame: AppGame = {
         activePlayers: ActivePlayers.ALL,
     },
 
-    board: (props: WrappedGameProps) => {
-        return <Suspense fallback={<div>Loading...</div>}>
-            <LazyBoard gameProps={props} />
-        </Suspense>;
-    }
+    board: makeStandardBoard(() => import("./board/board"))
 };

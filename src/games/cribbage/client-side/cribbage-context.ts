@@ -1,9 +1,9 @@
-import React from "react";
 import { sAssert } from "../../../utils/assert";
 import { CardSetID, PlayerID, ServerData } from "../server-side/server-data";
 import { ClientMoves } from "../server-side/moves";
 import { CribbageGameProps } from "./cribbage-game-props";
 import { nonJoinedPlayerName } from "../../../app-game-support";
+import { useStandardBoardContext } from "app-game-support/make-standard-board";
 
 export interface CribbageContext extends ServerData {
     moves: ClientMoves;
@@ -15,9 +15,9 @@ export interface CribbageContext extends ServerData {
     poneName: string;
 }
 
-export const ReactCribbageContext = React.createContext<CribbageContext|null>(null);
+export function useCribbageContext() : CribbageContext {
+    const gameProps = useStandardBoardContext()  as CribbageGameProps;
 
-export function makeCribbageContext(gameProps: CribbageGameProps) : CribbageContext {
     let me: PlayerID;
     let pone: PlayerID;
     let poneID : "0" | "1";
@@ -47,13 +47,5 @@ export function makeCribbageContext(gameProps: CribbageGameProps) : CribbageCont
         pone,
         poneName,
     };
-}
-
-
-export function useCribbageContext() : CribbageContext {
-    const context = React.useContext(ReactCribbageContext);
-    sAssert(context);
-
-    return context;
 }
 

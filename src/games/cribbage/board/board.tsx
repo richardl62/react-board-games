@@ -1,31 +1,44 @@
 import React from "react";
-import { makeCribbageContext, ReactCribbageContext } from "../client-side/cribbage-context";
-import { GameArea } from "./game-area";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { CribbageGameProps } from "../client-side/cribbage-game-props";
-import { GameWarnings } from "../../../app-game-support";
-import { ErrorMessage } from "../../../utils/error-message";
+import styled from "styled-components";
+import { CutCard } from "./cut-card";
+import { WrappedScoreBoard } from "./wrapped-score-board";
+import { CardSetID } from "../server-side/server-data";
+import { MessageAndButton } from "./message-and-button";
+import { useCribbageContext } from "../client-side/cribbage-context";
+import { HandWrapper } from "./hand-wrapper";
 
-interface BoardProps {
-    gameProps: WrappedGameProps;
-} 
 
-function Board(props: BoardProps): JSX.Element {
-    const { gameProps } = props;
-    const cribbageGameProps = gameProps as unknown as CribbageGameProps;
-    const { G: { serverError} } = cribbageGameProps;
-    
-    return <ReactCribbageContext.Provider value={makeCribbageContext(cribbageGameProps)}>
-        <GameWarnings {...gameProps}/>
-        <ErrorMessage category="server error" message={serverError} />
-        
-        <DndProvider backend={HTML5Backend}>
-            <GameArea />
-        </DndProvider>
+const GameAreaDiv = styled.div`
+    display: inline flex;
+    div {
+        margin-right: 5px;
+    }
+`;
 
-    </ReactCribbageContext.Provider>;
+const Hands = styled.div`
+    margin-left: 20px;
+    > * {
+        margin-bottom: 40px;
+    };
+`;
+
+function Board() : JSX.Element {
+    const {me, pone} = useCribbageContext();
+    return <GameAreaDiv>
+        <CutCard/>
+
+        <Hands>
+            <HandWrapper cardSetID={pone} />
+            <HandWrapper cardSetID={CardSetID.Shared} />
+            <div>
+                <HandWrapper cardSetID={me} />
+                <MessageAndButton />
+            </div>
+        </Hands>
+          
+        <WrappedScoreBoard/>
+
+    </GameAreaDiv>;
 }
 
 export default Board;
