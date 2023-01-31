@@ -1,24 +1,12 @@
-import React from "react";
+import { useStandardBoardContext } from "app-game-support/make-standard-board";
 import { sAssert } from "../../../utils/assert";
 import { BasicsGameProps } from "./basics-game-props";
 
-export interface BasicsContext extends BasicsGameProps {
-    extraData: string;
-}
 
-export const ReactBasicsContext = React.createContext<BasicsContext|null>(null);
+export function useBasicsContext() : BasicsGameProps {
+    const props = useStandardBoardContext();
+    sAssert(props);
 
-export function makeBasicsContext(gameProps: BasicsGameProps) : BasicsContext {
-    return {
-        ...gameProps,
-        extraData: "dummy",
-    };
-}
-
-export function useBasicsContext() : BasicsContext {
-    const context = React.useContext(ReactBasicsContext);
-    sAssert(context);
-
-    return context;
+    return props as BasicsGameProps;
 }
 

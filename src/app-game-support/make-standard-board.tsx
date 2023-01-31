@@ -1,23 +1,36 @@
 import React, { Suspense } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { sAssert } from "utils/assert";
+import { ErrorMessage } from "utils/error-message";
+import { GameWarnings } from "./show-warning";
 import { WrappedGameProps } from "./wrapped-game-props";
 
-type MakeBoardResult = (props: WrappedGameProps) => JSX.Element;
-export function makeBoard(filePath: string): MakeBoardResult {
-    // eslint-disable-next-line react/display-name
-    return (props: WrappedGameProps) => {
-        const LazyBoard = React.lazy(() => import(filePath));
-        return <Suspense fallback={<div>Loading...</div>}>
-            <LazyBoard gameProps={props} />
-        </Suspense>;
-    };
+export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(null);
+
+function serverError(props: WrappedGameProps) : string | null {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const err = (props.G as any).serverError;
+
+    sAssert(typeof err === "string" || err === null, 
+        "Server data G does not have 'serverError' field (or it has the wrong type)");
+    return err;
 }
 
 type FuncType = Parameters<typeof React.lazy>[0];
 function standardBoard(importFunc: FuncType, props: WrappedGameProps) : JSX.Element
 {   
     const LazyBoard = React.lazy(importFunc);
+    
     return <Suspense fallback={<div>Loading...</div>}>
-        <LazyBoard gameProps={props} />
+        <GameWarnings {...props}/>
+        <ErrorMessage category="server error" message={serverError(props)} />
+
+        <ReactBasicsContext.Provider value={props}>
+            <DndProvider backend={HTML5Backend}>
+                <LazyBoard />
+            </DndProvider>
+        </ReactBasicsContext.Provider>
     </Suspense>;
 }
 
@@ -25,4 +38,11 @@ export function makeStandardBoard(importFunc: FuncType) :
     (props: WrappedGameProps) => ReturnType<typeof standardBoard>
 {
     return (props: WrappedGameProps) => standardBoard(importFunc, props);
+}
+
+export function useStandardBoardContext() : WrappedGameProps {
+    const context = React.useContext(ReactBasicsContext);
+    sAssert(context);
+
+    return context;
 }

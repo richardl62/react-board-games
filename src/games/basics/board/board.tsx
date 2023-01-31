@@ -1,31 +1,36 @@
 import React from "react";
-import { makeBasicsContext, ReactBasicsContext } from "../client-side/basics-context";
-import { GameArea } from "./game-area";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { GameWarnings } from "../../../app-game-support";
-import { ErrorMessage } from "../../../utils/error-message";
-import { BasicsGameProps } from "../client-side/basics-game-props";
+import { useBasicsContext } from "../client-side/basics-context";
 
-interface BoardProps {
-    gameProps: WrappedGameProps;
-} 
-
-function Board(props: BoardProps): JSX.Element {
-    const { gameProps } = props;
-    const basicGameProps = gameProps as unknown as BasicsGameProps;
-    const { G: { serverError} } = basicGameProps;
+function Board() : JSX.Element {
+    const context = useBasicsContext();
+    const {G: {count}, moves, events, playerID, getPlayerName} = context;
     
-    return <ReactBasicsContext.Provider value={makeBasicsContext(basicGameProps)}>
-        <GameWarnings {...gameProps}/>
-        <ErrorMessage category="server error" message={serverError} />
-        
-        <DndProvider backend={HTML5Backend}>
-            <GameArea />
-        </DndProvider>
+    const current = context.ctx.currentPlayer === playerID;
 
-    </ReactBasicsContext.Provider>;
+    return <div>
+        <div>{getPlayerName(playerID)}</div>
+        
+        <button 
+            onClick={()=>moves.add(1)} 
+            disabled={!current}>
+            +1
+        </button>
+
+        <button 
+            onClick={()=>moves.add(-1)} 
+            disabled={!current}>
+            -1
+        </button>
+
+        <button 
+            onClick={() => events.endTurn()} 
+            disabled={!current}>
+            End Turn
+        </button>
+        
+        <div>{count}</div>
+    </div>;
 }
 
 export default Board;
+
