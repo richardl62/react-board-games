@@ -3,7 +3,7 @@ import { CardSetID, PlayerID, ServerData } from "../server-side/server-data";
 import { ClientMoves } from "../server-side/moves";
 import { CribbageGameProps } from "./cribbage-game-props";
 import { nonJoinedPlayerName } from "../../../app-game-support";
-import { useStandardBoardContext } from "app-game-support/make-standard-board";
+import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
 
 export interface CribbageContext extends ServerData {
     moves: ClientMoves;

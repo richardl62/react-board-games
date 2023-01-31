@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { sAssert } from "utils/assert";
-import { ErrorMessage } from "utils/error-message";
+import { sAssert } from "../utils/assert";
+import { ErrorMessage } from "../utils/error-message";
 import { GameWarnings } from "./show-warning";
 import { WrappedGameProps } from "./wrapped-game-props";
 

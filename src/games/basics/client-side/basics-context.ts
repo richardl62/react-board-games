@@ -1,4 +1,4 @@
-import { useStandardBoardContext } from "app-game-support/make-standard-board";
+import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
 import { sAssert } from "../../../utils/assert";
 import { BasicsGameProps } from "./basics-game-props";
 

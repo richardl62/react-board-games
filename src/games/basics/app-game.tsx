@@ -2,7 +2,7 @@ import { AppGame, GameCategory } from "../../app-game-support";
 import { Ctx } from "boardgame.io";
 import { startingServerData } from "./server-side/starting-server-data";
 import { bgioMoves } from "./server-side/moves";
-import { makeStandardBoard } from "app-game-support/make-standard-board";
+import { makeStandardBoard } from "../../app-game-support/make-standard-board";
 
 export const appGame: AppGame = {
     name: "basics",
