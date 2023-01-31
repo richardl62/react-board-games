@@ -5,7 +5,7 @@ import { Ctx } from "boardgame.io";
 import { startingServerData } from "./server-side/starting-server-data";
 import { bgioMoves } from "./server-side/moves";
 
-const LazyBoard = React.lazy(() => import("./board/board"));
+const LazyBoard = React.lazy(() => import("games/basics/board/board"));
 
 export const appGame: AppGame = {
     name: "basics",
