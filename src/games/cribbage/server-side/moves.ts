@@ -1,4 +1,4 @@
-import { ClientFunctionsT, wrappedMoveFunctions } from "../../../app-game-support/wrapped-move-function";
+import { ClientFunctionsT, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
 import { doneMakingBox } from "./done-making-box";
 import { drag } from "./drag";
 import { pegClick } from "./peg-click";
@@ -17,6 +17,6 @@ export const allFuncs = {
     showCutCard,
 };
 
-export const bgioMoves = wrappedMoveFunctions(allFuncs);
+export const bgioMoves = wrapMoveFunctions(allFuncs);
 
 export type ClientMoves = ClientFunctionsT<typeof allFuncs>;

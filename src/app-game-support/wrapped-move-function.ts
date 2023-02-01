@@ -5,9 +5,9 @@ export interface RequiredState  {
     serverTimestamp: number;
 }
 
-export type MoveFunc<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
+type MoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
 
-export function wrappedMoveFunction<State extends RequiredState, Param>(func: MoveFunc<State, Param>): MoveFunc<State, Param> {
+export function wrapMoveFunction<State extends RequiredState, Param>(func: MoveFunction<State, Param>): MoveFunction<State, Param> {
     return (G, ctx, param) => {
         let errorMessage = null;
         let funcResult = undefined;
@@ -32,13 +32,13 @@ export function wrappedMoveFunction<State extends RequiredState, Param>(func: Mo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BgioMoveFuncs<S extends RequiredState> = {[key: string]: MoveFunc<S, any>};
+type MoveFunctions<S extends RequiredState> = {[key: string]: MoveFunction<S, any>};
 
-export function wrappedMoveFunctions<S extends RequiredState>(unwrapped: BgioMoveFuncs<S>) : BgioMoveFuncs<S> {
-    const obj : BgioMoveFuncs<S> = {};
+export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFunctions<S>) : MoveFunctions<S> {
+    const obj : MoveFunctions<S> = {};
     
     for (const [key, value] of Object.entries(unwrapped)) {
-        obj[key] = wrappedMoveFunction(value);
+        obj[key] = wrapMoveFunction(value);
     }
 
     return obj;
