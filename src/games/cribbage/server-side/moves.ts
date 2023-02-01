@@ -1,29 +1,22 @@
-import { ClientFunction, wrappedMoveFunction } from "../../../app-game-support/wrapped-move-function";
+import { ClientFunctionsT, wrappedMoveFunctions } from "../../../app-game-support/wrapped-move-function";
 import { doneMakingBox } from "./done-making-box";
-import { requestRevealHands } from "./request-reveal-hands";
 import { drag } from "./drag";
-import { requestNewDeal } from "./request-new-deal";
 import { pegClick } from "./peg-click";
+import { requestNewDeal } from "./request-new-deal";
 import { requestRestartPegging } from "./request-restart-pegging";
+import { requestRevealHands } from "./request-reveal-hands";
 import { showCutCard } from "./show-cut-card";
 
-export const bgioMoves = {
-    drag: wrappedMoveFunction(drag),
-    doneMakingBox: wrappedMoveFunction(doneMakingBox),
-    requestRevealHands: wrappedMoveFunction(requestRevealHands),
-    requestNewDeal: wrappedMoveFunction(requestNewDeal),
-    pegClick: wrappedMoveFunction(pegClick),
-    requestRestartPegging: wrappedMoveFunction(requestRestartPegging),
-    showCutCard: wrappedMoveFunction(showCutCard),
-
+export const allFuncs = {
+    doneMakingBox,
+    drag,
+    pegClick,
+    requestNewDeal,
+    requestRestartPegging,
+    requestRevealHands,
+    showCutCard,
 };
 
-export interface ClientMoves {
-    drag: ClientFunction<typeof drag>;
-    doneMakingBox: ClientFunction<typeof doneMakingBox>;
-    requestRevealHands: ClientFunction<typeof requestRevealHands>;
-    requestNewDeal: ClientFunction<typeof requestNewDeal>;
-    pegClick: ClientFunction<typeof pegClick>;
-    requestRestartPegging: ClientFunction<typeof requestRestartPegging>;
-    showCutCard: ClientFunction<typeof showCutCard>;
-}
+export const bgioMoves = wrappedMoveFunctions(allFuncs);
+
+export type ClientMoves = ClientFunctionsT<typeof allFuncs>;

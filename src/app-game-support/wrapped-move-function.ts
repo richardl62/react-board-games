@@ -31,5 +31,27 @@ export function wrappedMoveFunction<State extends RequiredState, Param>(func: Mo
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type BgioMoveFuncs<S extends RequiredState> = {[key: string]: MoveFunc<S, any>};
+
+export function wrappedMoveFunctions<S extends RequiredState>(unwrapped: BgioMoveFuncs<S>) : BgioMoveFuncs<S> {
+    const obj : BgioMoveFuncs<S> = {};
+    
+    for (const [key, value] of Object.entries(unwrapped)) {
+        obj[key] = wrappedMoveFunction(value);
+    }
+
+    return obj;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 export type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Parameters<F>[2]) => void;
+
+type Moves = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: (a: any, b: Ctx, c: any) => void; 
+}
+
+export type ClientFunctionsT<Type extends Moves> = {
+    [Property in keyof Type]: ClientFunction<Type[Property]>;
+};
