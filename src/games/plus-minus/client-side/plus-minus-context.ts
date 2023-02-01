@@ -3,9 +3,9 @@ import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { ClientMoves } from "../server-side/moves";
 import { ServerData } from "../server-side/server-data";
 
-type BasicsGameProps = WrappedGameProps<ServerData, ClientMoves>;
+type PlusMinusGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
-export function useBasicsContext() : BasicsGameProps {
-    return useStandardBoardContext() as BasicsGameProps;
+export function usePlusMinusContext() : PlusMinusGameProps {
+    return useStandardBoardContext() as PlusMinusGameProps;
 }
 

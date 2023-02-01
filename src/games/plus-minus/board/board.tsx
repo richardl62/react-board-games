@@ -1,8 +1,8 @@
 import React from "react";
-import { useBasicsContext } from "../client-side/basics-context";
+import { usePlusMinusContext } from "../client-side/plus-minus-context";
 
 function Board() : JSX.Element {
-    const context = useBasicsContext();
+    const context = usePlusMinusContext();
     const {G: {count}, moves, events, playerID, getPlayerName} = context;
     
     const current = context.ctx.currentPlayer === playerID;

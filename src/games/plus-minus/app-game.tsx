@@ -5,8 +5,8 @@ import { bgioMoves } from "./server-side/moves";
 import { makeStandardBoard } from "../../app-game-support/make-standard-board";
 
 export const appGame: AppGame = {
-    name: "basics",
-    displayName: "Basics",
+    name: "plusminus",
+    displayName: "Plus Minus",
     category: GameCategory.test,
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
