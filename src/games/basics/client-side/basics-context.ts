@@ -1,12 +1,11 @@
 import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
-import { sAssert } from "../../../utils/assert";
-import { BasicsGameProps } from "./basics-game-props";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { ClientMoves } from "../server-side/moves";
+import { ServerData } from "../server-side/server-data";
 
+type BasicsGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
 export function useBasicsContext() : BasicsGameProps {
-    const props = useStandardBoardContext();
-    sAssert(props);
-
-    return props as BasicsGameProps;
+    return useStandardBoardContext() as BasicsGameProps;
 }
 

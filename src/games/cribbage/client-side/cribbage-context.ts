@@ -1,9 +1,9 @@
 import { sAssert } from "../../../utils/assert";
 import { CardSetID, PlayerID, ServerData } from "../server-side/server-data";
 import { ClientMoves } from "../server-side/moves";
-import { CribbageGameProps } from "./cribbage-game-props";
 import { nonJoinedPlayerName } from "../../../app-game-support";
 import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
 export interface CribbageContext extends ServerData {
     moves: ClientMoves;
@@ -16,7 +16,7 @@ export interface CribbageContext extends ServerData {
 }
 
 export function useCribbageContext() : CribbageContext {
-    const gameProps = useStandardBoardContext()  as CribbageGameProps;
+    const gameProps = useStandardBoardContext() as WrappedGameProps<ServerData, ClientMoves>;
 
     let me: PlayerID;
     let pone: PlayerID;
