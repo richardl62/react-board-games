@@ -1,6 +1,6 @@
 import { AppGame, GameCategory } from "../../app-game-support";
 import { Ctx } from "boardgame.io";
-import { startingServerData } from "./server-side/starting-server-data";
+import { startingServerData } from "./server-side/server-data";
 import { bgioMoves } from "./server-side/moves";
 import { makeStandardBoard } from "../../app-game-support/make-standard-board";
 
@@ -9,7 +9,8 @@ export const appGame: AppGame = {
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    setup: (ctx: Ctx) => startingServerData(ctx),
+    setup: (ctx: Ctx) => startingServerData(ctx), 
+    
 
     minPlayers: 1,
     maxPlayers: 8,
