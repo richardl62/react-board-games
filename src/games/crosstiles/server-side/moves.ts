@@ -1,4 +1,4 @@
-import { ClientFunctionsT, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrap-move-functions";
 import { doneRecordingGrid } from "./done-recording-grid";
 import { readyForNewGame } from "./ready-for-new-game";
 import { recordGrid } from "./record-grid";
@@ -21,4 +21,4 @@ export const allFuncs = {
 
 export const bgioMoves = wrapMoveFunctions(allFuncs);
 
-export type ClientMoves = ClientFunctionsT<typeof allFuncs>;
+export type ClientMoves = ClientMoveFunctions<typeof allFuncs>;

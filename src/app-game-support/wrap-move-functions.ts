@@ -21,7 +21,7 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: MoveF
         if(funcResult) {
             return {
                 ...funcResult,
-                serverError: errorMessage, // No strictly necessary
+                serverError: errorMessage, // Not strictly necessary
                 serverTimestamp: G.serverTimestamp+1,
             };
         } else {
@@ -34,7 +34,8 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: MoveF
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MoveFunctions<S extends RequiredState> = {[key: string]: MoveFunction<S, any>};
 
-export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFunctions<S>) : MoveFunctions<S> {
+export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFunctions<S>) 
+    : MoveFunctions<S> {
     const obj : MoveFunctions<S> = {};
     
     for (const [key, value] of Object.entries(unwrapped)) {
@@ -45,13 +46,13 @@ export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFuncti
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-export type ClientFunction<F extends (a: any, b: any, c: any) => void> = (arg: Parameters<F>[2]) => void;
+export type ClientFunctionFunction<F extends MoveFunction<any,any>> = (arg: Parameters<F>[2]) => void;
 
 type Moves = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: (a: any, b: Ctx, c: any) => void; 
+    [key: string]: MoveFunction<any,any>; 
 }
 
-export type ClientFunctionsT<Type extends Moves> = {
-    [Property in keyof Type]: ClientFunction<Type[Property]>;
+export type ClientMoveFunctions<Type extends Moves> = {
+    [Property in keyof Type]: ClientFunctionFunction<Type[Property]>;
 };

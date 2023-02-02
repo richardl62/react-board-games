@@ -1,4 +1,4 @@
-import { ClientFunctionsT, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrap-move-functions";
 import { add } from "./add";
 
 export const allFuncs = {
@@ -7,4 +7,4 @@ export const allFuncs = {
 
 export const bgioMoves = wrapMoveFunctions(allFuncs);
 
-export type ClientMoves = ClientFunctionsT<typeof allFuncs>;
+export type ClientMoves = ClientMoveFunctions<typeof allFuncs>;
