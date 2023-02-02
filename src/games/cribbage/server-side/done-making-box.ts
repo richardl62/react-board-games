@@ -3,7 +3,6 @@ import { sAssert } from "../../../utils/assert";
 import { processGameRequest } from "./process-game-request";
 import { GameRequest, GameStage, PlayerID, ServerData } from "./server-data";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function doneMakingBox(G: ServerData, ctx: Ctx, playerID: PlayerID): void {
     sAssert(G.stage === GameStage.SettingBox);
 

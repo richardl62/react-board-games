@@ -45,7 +45,7 @@ export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFuncti
     return obj;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ClientFunctionFunction<F extends MoveFunction<any,any>> = (arg: Parameters<F>[2]) => void;
 
 type Moves = {

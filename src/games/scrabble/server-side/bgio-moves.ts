@@ -7,7 +7,6 @@ import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";
 
 type PassParam = void;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function pass(state: GameState, ctx: Ctx, _param: PassParam) : void {
     state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 }

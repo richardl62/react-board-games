@@ -57,7 +57,6 @@ function Square(props: SquareProps) : JSX.Element {
     </PieceHolder>;  
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE*/>): JSX.Element {
     const onReset = () => {
         moves.reset();

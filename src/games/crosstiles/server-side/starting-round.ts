@@ -3,8 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { GameStage, ServerData } from "./server-data";
 import { startRound } from "./start-round";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function readyForNextRound(G: ServerData, ctx: Ctx, arg: void): void {
+export function readyForNextRound(G: ServerData, ctx: Ctx, _arg: void): void {
     if (G.stage !== GameStage.scoring) {
         throw new Error("Unexpected call to readyForNextRound");
     }

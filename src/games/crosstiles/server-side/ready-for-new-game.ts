@@ -3,9 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { GameStage, ServerData, startingServerData } from "./server-data";
 import { startRound } from "./start-round";
 
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function readyForNewGame(G: ServerData, ctx: Ctx, option: void): void {
+export function readyForNewGame(G: ServerData, ctx: Ctx, _option: void): void {
 
     const { playerID } = ctx;
     sAssert(playerID);

@@ -28,7 +28,6 @@ function movePeg(pegs: PegPositions, moveTo:number)  {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function pegClick(G: ServerData, ctx: Ctx, {who, score}: Arg): void {
     movePeg(G[who], score);
 }

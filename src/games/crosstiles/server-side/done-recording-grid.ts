@@ -4,8 +4,7 @@ import { recordEmptyGrid } from "./record-grid";
 import { ServerData, GameStage } from "./server-data";
 import { doSetScore } from "./set-score";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function doneRecordingGrid(G: ServerData, ctx: Ctx, arg: void): void {
+export function doneRecordingGrid(G: ServerData, ctx: Ctx, _arg: void): void {
     if (G.stage !== GameStage.makingGrids) {
         throw new Error("Unexpected call to doneRecordingGrid - " + G.stage);
     }

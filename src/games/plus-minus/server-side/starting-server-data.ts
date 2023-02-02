@@ -1,6 +1,7 @@
+import { Ctx } from "boardgame.io";
 import { ServerData } from "./server-data";
 
-export function startingServerData(): ServerData {
+export function startingServerData(_ctx: Ctx): ServerData {
     return {
         count: 0,
         

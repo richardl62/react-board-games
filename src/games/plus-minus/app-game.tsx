@@ -9,8 +9,7 @@ export const appGame: AppGame = {
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setup: (ctx: Ctx) => startingServerData(),
+    setup: (ctx: Ctx) => startingServerData(ctx),
 
     minPlayers: 1,
     maxPlayers: 8,
