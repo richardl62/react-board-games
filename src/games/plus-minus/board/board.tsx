@@ -1,8 +1,8 @@
 import React from "react";
-import { usePlusMinusContext } from "../client-side/plus-minus-context";
+import { useGameContext } from "../client-side/game-context";
 
 function Board() : JSX.Element {
-    const context = usePlusMinusContext();
+    const context = useGameContext();
     const {G: {count}, moves, events, playerID, getPlayerName} = context;
     
     const current = context.ctx.currentPlayer === playerID;
