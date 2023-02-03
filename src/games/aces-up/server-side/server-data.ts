@@ -8,47 +8,47 @@ export interface PlayerData {
     /** The pile that the player in trying to get rid of */
     mainPile: Card[];
 
-    /** The number of kings that have been set aside from the main pile. */
-    kings: number;
+    /** The kings that have been set aside from the main pile. */
+    kings: Card[];
 
     hand: Card[];
 
     discardPiles: [Card[], Card[], Card[]];
-
-    cardPlayedThisTurn: boolean;
 }
+
+type PlayerDataDictionary =  {[playerID: string]: PlayerData }
 
 /** Starting PlayerData but with no cards in mainPile or hand */
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 
     return {
         mainPile: mainPileDeck.draw(mainPileSize),
-        kings: 0,
+        kings: [],
 
         hand: handDeck.draw(handSize),
         discardPiles: [[], [], []],
-
-        cardPlayedThisTurn: false,
     };
 }
 
 /** A shared pile that is build up during play */
-interface Pile {
+interface SharedPile {
     /** The top card of the pile (others are not recorded) */
     top: Card; 
   
-    /** In general, the rank of the card. But if the card is a king, if gives the effective rank */
+    /** In general, the rank of the card. But if the card is a king, this gives the effective rank */
     rank: Rank;
 }
 
-type PlayerDataDictionary =  {[playerID: string]: PlayerData }
 export interface ServerData {
     /** The deck that cards are drawn from */
     deck: Card[];
 
-    piles: Pile[];
+    /** The piles that any play can add to */
+    sharedPiles: SharedPile[];
 
     playerData: PlayerDataDictionary;
+
+    cardAddedToSharedPiles: boolean;
 
     serverError: string | null;
     serverTimestamp: number;
@@ -58,9 +58,11 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     const sd: ServerData = {
         deck: [],
-        piles: [],
+        sharedPiles: [],
 
         playerData: {},
+
+        cardAddedToSharedPiles: false,
 
         serverError: null,
         serverTimestamp: 0,
