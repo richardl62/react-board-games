@@ -1,23 +1,37 @@
 import React from "react";
-import { CardSVG } from "../../../utils/cards";
+import styled from "styled-components";
+import { rankName } from "../../../utils/cards/types";
 import { useGameContext } from "../client-side/game-context";
-import { SharedPile } from "../server-side/server-data";
+import { SharedPile } from "../server-side/shared-pile";
+import { CardWithText } from "./card-with-text";
+
+const SharedPilesDiv = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+
+    > *:not(:last-child) {
+        margin-right: 5px;
+    }
+`;
 
 interface PileProps {
     pile: SharedPile;
 }
 
 function Pile(props: PileProps) {
-    const { pile: {top} } = props;
+    const { pile: {top, rank} } = props;
 
-    return <CardSVG card={top} />;
+    return <CardWithText card={top} 
+        text={rank && rankName(rank)}
+    />;
 }
 
 export function SharedPiles() : JSX.Element {
     const { G: {sharedPiles} } = useGameContext();
 
-    return <div> {sharedPiles.map((pile, index) => 
+    return <SharedPilesDiv> {sharedPiles.map((pile, index) => 
         <Pile key={index} pile={pile} />
     )}
-    </div>;
+    <CardWithText/>
+    </SharedPilesDiv>;
 }

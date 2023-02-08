@@ -1,8 +1,8 @@
 import { Ctx } from "boardgame.io";
 import { Card } from "../../../utils/cards";
-import { Rank } from "../../../utils/cards/types";
 import { handSize, mainPileSize, nSharedPilesAtStart } from "./config";
 import { ExtendingDeck } from "./extendable-deck";
+import { makeSharedPile, SharedPile } from "./shared-pile";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of */
@@ -28,15 +28,6 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
         hand: handDeck.draw(handSize),
         discardPiles: [[], [], []],
     };
-}
-
-/** A shared pile that is build up during play */
-export interface SharedPile {
-    /** The top card of the pile (others are not recorded) */
-    top: Card; 
-  
-    /** In general, the rank of the card. But if the card is a king, this gives the effective rank */
-    rank: Rank;
 }
 
 export interface ServerData {
@@ -72,10 +63,13 @@ export function startingServerData(ctx: Ctx): ServerData {
     const handDeck = new ExtendingDeck(ctx, sd.deck);
     for(let i = 0; i < nSharedPilesAtStart; ++i) {
         const card = handDeck.draw(1)[0];
-        const rank = card.rank === "K" ? "A" : card.rank!;
-
-        sd.sharedPiles.push({top: card, rank});
+        sd.sharedPiles.push(makeSharedPile(card));
     }
+
+    // TEMPORARY: To help with testing, push a king
+    const king : Card = {rank: "K", suit: "C"};
+    sd.sharedPiles.push(makeSharedPile(king));
+
 
     for(const pid in ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck);

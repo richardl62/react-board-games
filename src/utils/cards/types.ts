@@ -53,6 +53,28 @@ export function suitName(suit: Suit) : string {
     sAssert(false);
 }
 
+export function rankName(rank: Rank) : string {
+    if(rank === "A") {
+        return "ace";
+    }
+
+    if(rank === "J") {
+        return "Jack";
+    }
+
+    if(rank === "Q") {
+        return "queen";
+    }
+
+    if(rank === "K") {
+        return "king";
+    }
+
+    return rank;
+
+    sAssert(false);
+}
+
 export function cardName(card: Card) : string {
     if(card.joker) {
         return "joker" + card.joker;
