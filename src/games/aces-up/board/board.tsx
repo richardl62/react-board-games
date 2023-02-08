@@ -1,23 +1,16 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
+import { PlayerAreas } from "./player-areas";
 import { SharedPiles } from "./shared-piles";
 
 function Board() : JSX.Element {
-    const context = useGameContext();
-    const { events, playerID, getPlayerName} = context;
+    const { getPlayerName, ctx: {currentPlayer}} = useGameContext();
     
-    const current = context.ctx.currentPlayer === playerID;
-
     return <div>
-        <div>{getPlayerName(playerID)}</div>     
+        <div>{getPlayerName(currentPlayer) + " to play"}</div>     
 
         <SharedPiles/>
-        
-        <button 
-            onClick={() => events.endTurn()} 
-            disabled={!current}>
-            End Turn
-        </button>        
+        <PlayerAreas/>        
     </div>;
 }
 
