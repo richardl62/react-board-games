@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { Card } from "../../../utils/cards";
 import { Rank } from "../../../utils/cards/types";
-import { handSize, mainPileSize } from "./config";
+import { handSize, mainPileSize, nSharedPilesAtStart } from "./config";
 import { ExtendingDeck } from "./extendable-deck";
 
 export interface PlayerData {
@@ -31,7 +31,7 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
 }
 
 /** A shared pile that is build up during play */
-interface SharedPile {
+export interface SharedPile {
     /** The top card of the pile (others are not recorded) */
     top: Card; 
   
@@ -70,6 +70,13 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     const mainPileDeck = new ExtendingDeck(ctx, []);
     const handDeck = new ExtendingDeck(ctx, sd.deck);
+    for(let i = 0; i < nSharedPilesAtStart; ++i) {
+        const card = handDeck.draw(1)[0];
+        const rank = card.rank === "K" ? "A" : card.rank!;
+
+        sd.sharedPiles.push({top: card, rank});
+    }
+
     for(const pid in ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck);
     }
