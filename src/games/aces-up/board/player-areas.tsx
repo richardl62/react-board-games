@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { rotateArray } from "../../../utils/rotate-array";
 import { useGameContext } from "../client-side/game-context";
 
 const PlayerAreaDiv = styled.div`
@@ -40,10 +41,13 @@ function PlayerArea(props: PlayerAreaProps) {
 }
 
 export function PlayerAreas() : JSX.Element {
-    const { playerData } = useGameContext();
+    const {  playerID, ctx: {playOrder} } = useGameContext();
+    
+    const playerIDs = [...playOrder];
+    rotateArray(playerIDs, playerID);
     
     return <PlayerAreasDiv>
-        {Object.keys(playerData).map(id => 
+        {playerIDs.map(id => 
             <PlayerArea key={id} playerID={id}/>
         )}
     </PlayerAreasDiv>;
