@@ -1,9 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../client-side/game-context";
+import { DiscardPiles } from "./discard-piles";
+import { Hand } from "./hand";
+import { MainPile } from "./main-pile";
 
 const OuterDiv = styled.div`
     border: black 1px solid;
+`;
+
+const InnerDiv = styled.div`
+    display: flex;
 `;
 
 interface Props {
@@ -13,18 +20,15 @@ interface Props {
 export function PlayerArea(props: Props) : JSX.Element {
     const { playerID: inputPlayerID } = props;
 
-    const { events, playerID: contextPlayerID, ctx: { currentPlayer }, getPlayerName } = useGameContext();
+    const { playerID: contextPlayerID, getPlayerName } = useGameContext();
 
-    const showEndTurnButton = inputPlayerID === contextPlayerID;
-    const allowEndTurn = inputPlayerID === currentPlayer;
 
     return <OuterDiv>
         <div>{getPlayerName(inputPlayerID)}</div>
-        {showEndTurnButton && <button
-            onClick={() => events.endTurn()}
-            disabled={!allowEndTurn}
-        >
-            End Turn
-        </button>}
+        <InnerDiv>
+            <MainPile playerID={inputPlayerID}/>
+            <DiscardPiles playerID={inputPlayerID}/>
+            { inputPlayerID === contextPlayerID && <Hand playerID={inputPlayerID}/> }  
+        </InnerDiv>
     </OuterDiv>;
 }
