@@ -1,16 +1,16 @@
 import { Ctx } from "boardgame.io";
-import { Card } from "../../../utils/cards";
+import { CardNonJoker } from "../../../utils/cards";
 import { handSize, mainPileSize, nSharedPilesAtStart } from "./config";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile, SharedPile } from "./shared-pile";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of */
-    mainPile: Card[];
+    mainPile: CardNonJoker[];
 
-    hand: Card[];
+    hand: CardNonJoker[];
 
-    discardPiles: [Card[], Card[], Card[]];
+    discardPiles: [CardNonJoker[], CardNonJoker[], CardNonJoker[]];
 }
 
 type PlayerDataDictionary =  {[playerID: string]: PlayerData }
@@ -29,7 +29,7 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
 
 export interface ServerData {
     /** The deck that cards are drawn from */
-    deck: Card[];
+    deck: CardNonJoker[];
 
     /** The piles that any play can add to */
     sharedPiles: SharedPile[];
@@ -64,7 +64,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     }
 
     // TEMPORARY: To help with testing, push a king
-    const king : Card = {rank: "K", suit: "C"};
+    const king : CardNonJoker = {rank: "K", suit: "C"};
     sd.sharedPiles.push(makeSharedPile(king));
 
 

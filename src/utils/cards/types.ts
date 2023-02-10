@@ -6,19 +6,19 @@ export const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"] as c
 export type Suit = typeof suits[number];
 export type Rank = typeof ranks[number];
 
-interface NonJoker {
+export interface CardNonJoker {
     rank: Rank;
     suit: Suit;
     joker?: undefined;
 }
 
-interface Joker {
+interface CardJoker {
     rank?: undefined;
     suit?: undefined;
     joker: 1 | 2;
 }
 
-export type Card = Joker | NonJoker;
+export type Card = CardJoker | CardNonJoker;
 
 export function compareCards(c1: Card, c2: Card) : number {
     if(c1.rank && c2.rank) {

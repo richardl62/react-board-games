@@ -1,2 +1,2 @@
-export type { Card } from "./types";
+export type { Card, CardNonJoker } from "./types";
 export { CardSVG } from "./card";
