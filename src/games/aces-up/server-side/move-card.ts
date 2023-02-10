@@ -15,7 +15,7 @@ class PeekPop {
         } else {
             this.deck = [];
             if (from.area === "discardPiles") {
-                this.deck = playerData.discardPiles[from.index];
+                this.deck = playerData.discards[from.index];
             } 
             
             this.index = this.deck.length - 1;
@@ -82,7 +82,7 @@ function moveCardImpl(
     
     if(to.area === "discardPiles" && from.area === "playerPile") {
         if(status === "move") {
-            playerData.discardPiles[to.index].push(fromAccess.pop());
+            playerData.discards[to.index].push(fromAccess.pop());
             //To do: Add end turn actions
         }
         return true;

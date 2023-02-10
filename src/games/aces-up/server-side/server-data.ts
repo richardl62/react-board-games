@@ -10,12 +10,11 @@ export interface PlayerData {
 
     hand: CardNonJoker[];
 
-    discardPiles: [CardNonJoker[], CardNonJoker[], CardNonJoker[]];
+    discards: [CardNonJoker[], CardNonJoker[], CardNonJoker[]];
 }
 
 type PlayerDataDictionary =  {[playerID: string]: PlayerData }
 
-/** Starting PlayerData but with no cards in mainPile or hand */
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 
     return {
@@ -23,7 +22,7 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
 
         hand: handDeck.drawN(handSize),
 
-        discardPiles: [[], [], []],
+        discards: [[], [], []],
     };
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../client-side/game-context";
-import { DiscardPiles } from "./discard-piles";
+import { Discards } from "./discards";
 import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
 
@@ -27,7 +27,7 @@ export function PlayerArea(props: Props) : JSX.Element {
         <div>{getPlayerName(inputPlayerID)}</div>
         <InnerDiv>
             <MainPile playerID={inputPlayerID}/>
-            <DiscardPiles playerID={inputPlayerID}/>
+            <Discards playerID={inputPlayerID}/>
             { inputPlayerID === contextPlayerID && <Hand playerID={inputPlayerID}/> }  
         </InnerDiv>
     </OuterDiv>;
