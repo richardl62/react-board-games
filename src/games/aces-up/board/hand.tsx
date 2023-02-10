@@ -1,4 +1,11 @@
 import React from "react";
+import styled from "styled-components";
+import { CardSVG } from "../../../utils/cards";
+import { useGameContext } from "../client-side/game-context";
+
+const OuterDiv = styled.div`
+    display: flex;
+`;
 
 interface Props {
     playerID: string;
@@ -6,6 +13,11 @@ interface Props {
 
 export function Hand(props: Props) : JSX.Element {
     const { playerID: inputPlayerID } = props;
+    const { G : { playerData } } = useGameContext();
 
-    return <div>{"Hand " + inputPlayerID}</div>;
+    const { hand } = playerData[inputPlayerID];
+    return <OuterDiv> {
+        hand.map((card,index) =>
+            <CardSVG key={index} card={card}/>)
+    } </OuterDiv>;
 }

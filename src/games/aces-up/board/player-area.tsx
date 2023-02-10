@@ -6,11 +6,15 @@ import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
 
 const OuterDiv = styled.div`
-    border: black 1px solid;
 `;
 
 const InnerDiv = styled.div`
     display: flex;
+    flex-wrap: wrap;
+
+    > *:not(:last-child) {
+        margin-right: 10px;
+    };
 `;
 
 interface Props {
