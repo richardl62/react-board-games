@@ -20,7 +20,7 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     if (prepopulateDiscards) {
         res.discards[0] = mainPileDeck.drawN(12);
         res.discards[1] = mainPileDeck.drawN(5);
-        res.discards[2].push({rank: "A", suit: "C"});
+        res.discards[2] = [{rank: "A", suit: "C"}, {rank: "2", suit: "C"}];
     }
 
     return res;
