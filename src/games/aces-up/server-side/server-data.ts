@@ -8,9 +8,6 @@ export interface PlayerData {
     /** The pile that the player in trying to get rid of */
     mainPile: Card[];
 
-    /** The kings that have been set aside from the main pile. */
-    kings: Card[];
-
     hand: Card[];
 
     discardPiles: [Card[], Card[], Card[]];
@@ -22,10 +19,10 @@ type PlayerDataDictionary =  {[playerID: string]: PlayerData }
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 
     return {
-        mainPile: mainPileDeck.draw(mainPileSize),
-        kings: [],
+        mainPile: mainPileDeck.drawN(mainPileSize),
 
-        hand: handDeck.draw(handSize),
+        hand: handDeck.drawN(handSize),
+
         discardPiles: [[], [], []],
     };
 }
@@ -62,7 +59,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     const mainPileDeck = new ExtendingDeck(ctx, []);
     const handDeck = new ExtendingDeck(ctx, sd.deck);
     for(let i = 0; i < nSharedPilesAtStart; ++i) {
-        const card = handDeck.draw(1)[0];
+        const card = handDeck.draw();
         sd.sharedPiles.push(makeSharedPile(card));
     }
 
