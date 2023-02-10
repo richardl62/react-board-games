@@ -29,7 +29,7 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
 
 export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "serverError" | "serverTimestamp"> {
     sAssert(ctx.random);
-    const cards = ctx.random.Shuffle(deck({ jokers: false}));
+    const cards = ctx.random.Shuffle(deck());
 
     return {
         player0: playerData(cards, pegPos.player0),

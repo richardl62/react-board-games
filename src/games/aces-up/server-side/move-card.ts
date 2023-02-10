@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { Card } from "../../../utils/cards";
+import { CardNonJoker } from "../../../utils/cards";
 import { CardLocation } from "./card-location";
 import { PlayerData, ServerData } from "./server-data";
 
@@ -24,14 +24,14 @@ class PeekPop {
         }
     }
     
-    deck: Card[];
+    deck: CardNonJoker[];
     index: number;
 
-    peek() : Card {
+    peek() : CardNonJoker {
         return this.deck[this.index];
     }
 
-    pop() : Card {
+    pop() : CardNonJoker {
         return this.deck.splice(this.index, 1)[0];
     }
 }
