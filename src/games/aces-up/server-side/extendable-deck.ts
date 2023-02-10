@@ -3,31 +3,42 @@ import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { deck as drawDeck } from "../../../utils/cards/deck";
 
+type Option = "noKings";
 export class ExtendingDeck {
-    constructor(ctx: Ctx, deck: Card[]) {
+    constructor(ctx: Ctx, deck: Card[], option?: Option) {
  
         this.ctx = ctx;
         this.deck = deck;
+        this.option = option || null;
     }
     ctx: Ctx;
     deck: Card[];
+    option: Option | null;
 
-    draw(nCards: number) : Card[] {
-        if(nCards > this.deck.length) {
-            const newCards = drawDeck({jokers: false});
+    draw() : Card {
+        let card;
+        while (!card) {
+            const c = this.deck.pop();
+            if (!c) {
+                const newCards = drawDeck({ jokers: false });
 
-            sAssert(this.ctx.random);
-            this.deck.splice(this.deck.length, 0, 
-                ...this.ctx.random.Shuffle(newCards)
-            );
+                sAssert(this.ctx.random);
+                this.deck.splice(this.deck.length, 0,
+                    ...this.ctx.random.Shuffle(newCards)
+                );
+            } else if(c.rank !== "K" || this.option !== "noKings") {
+                card = c;
+            }
         }
 
-        const result = this.deck.splice(0, nCards);
-
-        // Can fail if more than the number of cards in a deck was requested.
-        sAssert(nCards === result.length); 
-
-        return result;
+        return card;
     }
 
+    drawN(count: number) : Card[] {
+        const cards = [];
+        for(let i = 0; i < count; ++i) {
+            cards.push(this.draw());
+        }
+        return cards;
+    }
 }

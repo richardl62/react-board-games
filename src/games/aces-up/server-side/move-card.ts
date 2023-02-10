@@ -16,12 +16,8 @@ class PeekPop {
             this.deck = [];
             if (from.area === "discardPiles") {
                 this.deck = playerData.discardPiles[from.index];
-            } else if (from.area === "kings") {
-                this.deck = playerData.kings;
-            } else if (from.area === "playerPile") {
-                this.deck = playerData.kings;
-            }
-
+            } 
+            
             this.index = this.deck.length - 1;
              
             sAssert(this.index > 0, "Problem accessing deck");
@@ -82,13 +78,7 @@ function moveCardImpl(
     if(to.area === "playerPile") {
         return false;
     } 
-    
-    if(to.area === "kings" && from.area === "playerPile" && fromAccess.peek().rank === "K") {
-        if(status === "move") {
-            playerData.kings.push(fromAccess.pop());
-        }
-        return true;
-    } 
+     
     
     if(to.area === "discardPiles" && from.area === "playerPile") {
         if(status === "move") {
