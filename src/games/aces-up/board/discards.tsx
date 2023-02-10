@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../client-side/game-context";
+import { DiscardPile } from "./discard-pile";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -18,6 +18,6 @@ export function Discards(props: Props) : JSX.Element {
     const { discards } = playerData[inputPlayerID];
     return <OuterDiv> {
         discards.map((cards,index) =>
-            <CardSVG key={index} card={cards[0]}/>)
+            <DiscardPile key={index} cards={cards}/>)
     } </OuterDiv>;
 }

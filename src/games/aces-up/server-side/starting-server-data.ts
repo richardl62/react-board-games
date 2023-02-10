@@ -5,15 +5,25 @@ import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PlayerData, ServerData } from "./server-data";
 
+const prepopulateDiscards = true;
+
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 
-    return {
+    const res : PlayerData = {
         mainPile: mainPileDeck.drawN(mainPileSize),
 
         hand: handDeck.drawN(handSize),
 
         discards: [[], [], []],
     };
+
+    if (prepopulateDiscards) {
+        res.discards[0] = mainPileDeck.drawN(12);
+        res.discards[1] = mainPileDeck.drawN(5);
+        res.discards[2].push({rank: "A", suit: "C"});
+    }
+
+    return res;
 }
 
 
