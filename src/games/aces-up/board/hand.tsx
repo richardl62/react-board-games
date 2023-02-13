@@ -22,7 +22,7 @@ export function Hand(props: Props) : JSX.Element {
             <CardDraggable 
                 key={index} card={card}
 
-                location={{area: "hand", index, owner: inputPlayerID}}
+                id={{area: "hand", index, owner: inputPlayerID}}
             />)
     } </OuterDiv>;
 }

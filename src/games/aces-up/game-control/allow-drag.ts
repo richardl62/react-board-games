@@ -1,6 +1,6 @@
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { sAssert } from "../../../utils/assert";
-import { CardLocation } from "./card-location";
+import { CardID } from "./card-id";
 import { ClientMoves } from "./moves";
 import { ServerData } from "./server-data";
 
@@ -8,29 +8,29 @@ type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
 export function isDraggable(
     gameContext: TypedGameProps,
-    location: CardLocation) : boolean {
+    id: CardID) : boolean {
 
-    if (location.area === "sharedPiles") {
+    if (id.area === "sharedPiles") {
         return false;
     }
 
-    if(location.owner !== gameContext.ctx.currentPlayer) {
+    if(id.owner !== gameContext.ctx.currentPlayer) {
         // Not this players turn.
         return false;
     }
 
-    if (location.area === "playerPile") {
+    if (id.area === "playerPile") {
         return true;
     }
 
-    if (location.area === "hand") {
+    if (id.area === "hand") {
         return true;
     }
 
-    if (location.area === "discardPiles") {
+    if (id.area === "discardPiles") {
         // Only the top card in the pile can be dragged.
-        return location.cardIndex === 0;
+        return id.cardIndex === 0;
     }
 
-    sAssert(false,"Unexpect card location");
+    sAssert(false,"Unexpect card id");
 }

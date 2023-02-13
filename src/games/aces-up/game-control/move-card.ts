@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { CardLocation } from "./card-location";
+import { CardID } from "./card-id";
 import { ServerData } from "./server-data";
 
 
@@ -51,7 +51,7 @@ type MoveStatus = "check only" | "move";
 function moveCardImpl(
     _G: ServerData, 
     _ctx: Ctx, 
-    {from: _from, to: _to}: {from: CardLocation, to: CardLocation},
+    {from: _from, to: _to}: {from: CardID, to: CardID},
     _status: MoveStatus,
 ) : boolean {
     
@@ -92,7 +92,7 @@ function moveCardImpl(
 export function canMoveCard(
     G: ServerData, 
     ctx: Ctx, 
-    {from, to}: {from: CardLocation, to: CardLocation},
+    {from, to}: {from: CardID, to: CardID},
 ) : boolean {
     return moveCardImpl(G, ctx, {from, to}, "check only");
 }
@@ -100,7 +100,7 @@ export function canMoveCard(
 export function moveCard(
     G: ServerData, 
     ctx: Ctx, 
-    {from, to}: {from: CardLocation, to: CardLocation},
+    {from, to}: {from: CardID, to: CardID},
 ) : void {
     const ok = moveCardImpl(G, ctx, {from, to}, "move");
     if(!ok) {

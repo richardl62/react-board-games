@@ -1,6 +1,6 @@
-import { PlayerID } from "boardgame.io"
+import { PlayerID } from "boardgame.io";
 
-export type CardLocation = {
+export type CardID = {
     area: "sharedPiles",
     index: number,
 } | {

@@ -3,25 +3,25 @@ import { useDrag } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../client-side/game-context";
 import { isDraggable } from "../game-control/allow-drag";
-import { CardLocation } from "../game-control/card-location";
+import { CardID } from "../game-control/card-id";
 
 const dndType = "Card";
 
 type CardSVGProps = Parameters<typeof CardSVG>[0];
 
 interface Props extends CardSVGProps {
-    location: CardLocation
+    id: CardID
 }
 
 export function CardDraggable(props: Props): JSX.Element {
-    const { location } = props;
+    const { id } = props;
     const ctx = useGameContext();
 
 
     const [, dragRef] = useDrag(
         () => ({
             type: dndType,
-            item: { location },
+            item: { id },
             //   collect: (monitor) => ({
             //     opacity: monitor.isDragging() ? 0.5 : 1
             //   })
@@ -30,7 +30,7 @@ export function CardDraggable(props: Props): JSX.Element {
     );
 
     const card = <CardSVG {...props} />;
-    if (isDraggable(ctx, location)) {
+    if (isDraggable(ctx, id)) {
         return <div ref={dragRef}>{card}</div>;
     } else {
         return card;

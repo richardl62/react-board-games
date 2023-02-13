@@ -41,7 +41,7 @@ export function DiscardPile(props: Props): JSX.Element {
                 key={cardName(card) + cardIndex}>
                 <CardDraggable
                     card={cards[cardIndex]} 
-                    location={{area:"discardPiles", pileIndex, cardIndex, owner}}
+                    id={{area:"discardPiles", pileIndex, cardIndex, owner}}
                 />
             </CardDiv>
         )}
