@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
-import { CardLocation } from "../server-side/card-location";
+import { CardLocation } from "../game-control/card-location";
 
 const dndType = "Card";
 

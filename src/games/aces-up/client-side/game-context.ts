@@ -1,7 +1,7 @@
 import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { ClientMoves } from "../server-side/moves";
-import { ServerData } from "../server-side/server-data";
+import { ClientMoves } from "../game-control/moves";
+import { ServerData } from "../game-control/server-data";
 
 type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
