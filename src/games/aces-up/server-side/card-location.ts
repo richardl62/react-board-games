@@ -13,6 +13,7 @@ export type CardLocation = {
     index: number,
 } | {
     area: "discardPiles",
-    index: number,
+    pileIndex: number,
+    cardIndex: number,
 }
 

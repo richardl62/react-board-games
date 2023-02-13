@@ -1,6 +1,6 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
-import { CardWithText } from "./card-with-text";
+import { CardDraggable } from "./drag-drop";
 
 interface Props {
     playerID: string;
@@ -12,5 +12,13 @@ export function MainPile(props: Props) : JSX.Element {
 
     const { mainPile } = playerData[inputPlayerID];
     const message = `${mainPile.length} cards`;
-    return <CardWithText card={mainPile[0]} text={message} />;
+
+    return <div>
+        <CardDraggable 
+            card={mainPile[0]} 
+            location={{area: "playerPile"}}
+        />
+
+        <div>{message}</div>
+    </div>;
 }

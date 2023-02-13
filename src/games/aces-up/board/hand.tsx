@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../client-side/game-context";
+import { CardDraggable } from "./drag-drop";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -18,6 +18,9 @@ export function Hand(props: Props) : JSX.Element {
     const { hand } = playerData[inputPlayerID];
     return <OuterDiv> {
         hand.map((card,index) =>
-            <CardSVG key={index} card={card}/>)
+            <CardDraggable 
+                key={index} card={card} 
+                location={{area: "hand", index}}
+            />)
     } </OuterDiv>;
 }

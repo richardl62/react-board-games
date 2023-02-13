@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { CardNonJoker, CardSVG } from "../../../utils/cards";
 import { cardName } from "../../../utils/cards/types";
+import { CardDraggable } from "./drag-drop";
 
 const cardOffset = 20;
 
@@ -20,17 +21,25 @@ const CardDiv = styled.div<{index: number}>`
 
 interface Props {
     cards: CardNonJoker[];
+    index: number;
 }
 
 export function DiscardPile(props: Props): JSX.Element {
-    const { cards } = props;
+    const { cards, index: pileIndex } = props;
     return <OuterDiv nCards={cards.length}>
+        {/* KLUDGE: Always having an empty card esures that the outer div
+            has the required width
+        */}
         <CardSVG />
-        {cards.map((card, index) =>
+
+        {cards.map((card, cardIndex) =>
             <CardDiv 
-                index={cards.length - (index+1)} 
-                key={cardName(card) + index}>
-                <CardSVG card={cards[index]} />
+                index={cards.length - (cardIndex+1)} 
+                key={cardName(card) + cardIndex}>
+                <CardDraggable 
+                    card={cards[cardIndex]} 
+                    location={{area:"discardPiles", pileIndex, cardIndex}}
+                />
             </CardDiv>
         )}
     </OuterDiv>;
