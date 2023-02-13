@@ -4,10 +4,8 @@ export type CardLocation = {
     index: number,
 } | {
     area: "playerPile",
-    index?: undefined,
 } | {
     area: "kings",
-    index?: undefined,
 } | {
     area: "hand",
     index: number,

@@ -1,3 +1,4 @@
+import { PlayerID } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../client-side/game-context";
@@ -8,7 +9,7 @@ const OuterDiv = styled.div`
 `;
 
 interface Props {
-    playerID: string;
+    playerID: PlayerID;
 }
 
 export function Hand(props: Props) : JSX.Element {
@@ -19,7 +20,8 @@ export function Hand(props: Props) : JSX.Element {
     return <OuterDiv> {
         hand.map((card,index) =>
             <CardDraggable 
-                key={index} card={card} 
+                key={index} card={card}
+                owner={inputPlayerID} 
                 location={{area: "hand", index}}
             />)
     } </OuterDiv>;

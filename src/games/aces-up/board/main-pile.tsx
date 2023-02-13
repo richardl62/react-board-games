@@ -17,6 +17,7 @@ export function MainPile(props: Props) : JSX.Element {
         <CardDraggable 
             card={mainPile[0]} 
             location={{area: "playerPile"}}
+            owner={inputPlayerID}
         />
 
         <div>{message}</div>

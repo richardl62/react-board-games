@@ -1,3 +1,4 @@
+import { PlayerID } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
 import { CardNonJoker, CardSVG } from "../../../utils/cards";
@@ -22,10 +23,12 @@ const CardDiv = styled.div<{index: number}>`
 interface Props {
     cards: CardNonJoker[];
     index: number;
+    owner: PlayerID;
 }
 
 export function DiscardPile(props: Props): JSX.Element {
-    const { cards, index: pileIndex } = props;
+    const { cards, owner, index: pileIndex } = props;
+
     return <OuterDiv nCards={cards.length}>
         {/* KLUDGE: Always having an empty card esures that the outer div
             has the required width
@@ -36,7 +39,8 @@ export function DiscardPile(props: Props): JSX.Element {
             <CardDiv 
                 index={cards.length - (cardIndex+1)} 
                 key={cardName(card) + cardIndex}>
-                <CardDraggable 
+                <CardDraggable
+                    owner={owner} 
                     card={cards[cardIndex]} 
                     location={{area:"discardPiles", pileIndex, cardIndex}}
                 />

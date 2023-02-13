@@ -18,6 +18,6 @@ export function Discards(props: Props) : JSX.Element {
     const { discards } = playerData[inputPlayerID];
     return <OuterDiv> {
         discards.map((cards,index) =>
-            <DiscardPile key={index} cards={cards} index={index} />)
+            <DiscardPile key={index} cards={cards} index={index} owner={inputPlayerID}/>)
     } </OuterDiv>;
 }
