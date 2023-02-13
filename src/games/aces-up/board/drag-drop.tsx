@@ -1,4 +1,3 @@
-import { PlayerID } from "boardgame.io";
 import React from "react";
 import { useDrag } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
@@ -11,12 +10,11 @@ const dndType = "Card";
 type CardSVGProps = Parameters<typeof CardSVG>[0];
 
 interface Props extends CardSVGProps {
-    owner: PlayerID;
     location: CardLocation
 }
 
 export function CardDraggable(props: Props): JSX.Element {
-    const { location, owner } = props;
+    const { location } = props;
     const ctx = useGameContext();
 
 
@@ -32,7 +30,7 @@ export function CardDraggable(props: Props): JSX.Element {
     );
 
     const card = <CardSVG {...props} />;
-    if (isDraggable(ctx, owner, location)) {
+    if (isDraggable(ctx, location)) {
         return <div ref={dragRef}>{card}</div>;
     } else {
         return card;

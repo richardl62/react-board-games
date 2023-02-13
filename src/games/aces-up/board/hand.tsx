@@ -21,8 +21,8 @@ export function Hand(props: Props) : JSX.Element {
         hand.map((card,index) =>
             <CardDraggable 
                 key={index} card={card}
-                owner={inputPlayerID} 
-                location={{area: "hand", index}}
+
+                location={{area: "hand", index, owner: inputPlayerID}}
             />)
     } </OuterDiv>;
 }

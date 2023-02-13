@@ -1,5 +1,5 @@
-import { PlayerID } from "boardgame.io";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { sAssert } from "../../../utils/assert";
 import { CardLocation } from "./card-location";
 import { ClientMoves } from "./moves";
 import { ServerData } from "./server-data";
@@ -8,10 +8,13 @@ type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
 export function isDraggable(
     gameContext: TypedGameProps,
-    owner: PlayerID, 
     location: CardLocation) : boolean {
 
-    if(owner !== gameContext.ctx.currentPlayer) {
+    if (location.area === "sharedPiles") {
+        return false;
+    }
+
+    if(location.owner !== gameContext.ctx.currentPlayer) {
         // Not this players turn.
         return false;
     }
@@ -29,5 +32,5 @@ export function isDraggable(
         return location.cardIndex === 0;
     }
 
-    return false;
+    sAssert(false,"Unexpect card location");
 }
