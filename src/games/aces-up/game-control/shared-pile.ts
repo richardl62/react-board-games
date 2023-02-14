@@ -5,7 +5,7 @@ import { Rank } from "../../../utils/cards/types";
 
 export interface SharedPile {
     /** The top card of the pile (the rest of the pile is not recorded) */
-    top: Card;
+    top: Card | null;
 
     /** In general, the rank is null. But if 'top' is a king, this gives the effective rank */
     rank: Rank | null;

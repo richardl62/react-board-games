@@ -4,7 +4,7 @@ import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../game-support/game-context";
 import { isDraggable } from "../game-control/is-draggable";
 import { CardID, getCardID } from "../game-control/card-id";
-import { isDropTarget } from "../game-control/is-drop-target";
+import { canDrop } from "../game-control/can-drop";
 
 const dndType = "Card";
 
@@ -20,12 +20,14 @@ export function useCardDropRef(id: CardID) : DropRef | null {
         accept: dndType,
         drop: (dragID) => {
             const from = getCardID(dragID);
-            console.log("from", dragID, "to", id);
+            
             moveCard({from, to: id});
-        }
+        },
+        canDrop: (item) => canDrop(ctx, {from: getCardID(item), to: id}),
+
     }), [id]);
 
-    return isDropTarget(ctx, id) ? dropRef : null;
+    return dropRef;
 }
 
 function useCardDragRef(id: CardID)  {

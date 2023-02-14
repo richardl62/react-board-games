@@ -1,9 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { rankName } from "../../../utils/cards/types";
+import { cardName, rankName } from "../../../utils/cards/types";
 import { useGameContext } from "../game-support/game-context";
 import { SharedPile } from "../game-control/shared-pile";
-import { CardWithText } from "./card-with-text";
+import { CardDraggable } from "./drag-drop";
+
+const TextDiv = styled.div`
+    /* KLUDGE: This positioning avoid a gap between card and text.
+    I don't know the reason for the gap. */
+    position: relative;
+    top: -10px;
+
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+`;
 
 const SharedPilesDiv = styled.div`
     display: flex;
@@ -16,22 +27,27 @@ const SharedPilesDiv = styled.div`
 
 interface PileProps {
     pile: SharedPile;
+    pileIndex: number;
 }
 
 function Pile(props: PileProps) {
-    const { pile: {top, rank} } = props;
+    const { pile: { top, rank }, pileIndex } = props;
 
-    return <CardWithText card={top} 
-        text={rank && rankName(rank)}
-    />;
+    return <div>
+        <CardDraggable card={top} 
+            id={{area: "sharedPiles", index: pileIndex}} 
+        />
+        <TextDiv> {rank && rankName(rank)} </TextDiv>
+
+    </div>;
 }
 
 export function SharedPiles() : JSX.Element {
     const { G: {sharedPiles} } = useGameContext();
 
-    return <SharedPilesDiv> {sharedPiles.map((pile, index) => 
-        <Pile key={index} pile={pile} />
-    )}
-    <CardWithText/>
+    return <SharedPilesDiv> {sharedPiles.map((pile, index) => {
+        const name = pile.top ? cardName(pile.top) : "empty";
+        return <Pile key={name+index} pile={pile} pileIndex={index} />;
+    })}
     </SharedPilesDiv>;
 }

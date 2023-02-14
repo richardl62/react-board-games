@@ -45,6 +45,8 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     const mainPileDeck = new ExtendingDeck(ctx, []);
     const handDeck = new ExtendingDeck(ctx, sd.deck);
+
+
     for (let i = 0; i < nSharedPilesAtStart; ++i) {
         const card = handDeck.draw();
         sd.sharedPiles.push(makeSharedPile(card));
@@ -54,6 +56,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     const king: CardNonJoker = { rank: "K", suit: "C" };
     sd.sharedPiles.push(makeSharedPile(king));
 
+    sd.sharedPiles.push({top: null, rank: null});
 
     for (const pid in ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck);
