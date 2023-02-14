@@ -5,3 +5,7 @@ export const handSize = 5;
 export const mainPileSize = 3;
 
 export const nSharedPilesAtStart = 3;
+
+export const debugOptions = {
+    prepopulate: false,
+};

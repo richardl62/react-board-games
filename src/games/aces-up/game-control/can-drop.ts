@@ -43,7 +43,7 @@ export function canDrop(
     if (to.area === "discardPiles") {
         // Dropping is supported on the pile as a whole rather than
         // on individual cards in the pile.
-        return to.cardIndex === "any";
+        return to.cardIndex === "any" && from.area === "hand";
     }
 
     sAssert(false, "Cannot determine if drop is permissable");
