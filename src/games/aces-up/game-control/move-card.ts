@@ -1,110 +1,82 @@
 import { Ctx } from "boardgame.io";
+import { sAssert } from "../../../utils/assert";
+import { CardNonJoker } from "../../../utils/cards";
 import { CardID } from "./card-id";
 import { ServerData } from "./server-data";
+import { SharedPile } from "./shared-pile";
 
-
-type MoveStatus = "check only" | "move";
-
-// class PeekPop {
-//     constructor(playerData: PlayerData, from: CardLocation) {
-//         if(from.area === "hand") {
-//             this.deck = playerData.hand;
-//             this.index = from.index;
-//         } else {
-//             this.deck = [];
-//             if (from.area === "discardPiles") {
-//                 this.deck = playerData.discards[from.index];
-//             } 
-            
-//             this.index = this.deck.length - 1;
-             
-//             sAssert(this.index > 0, "Problem accessing deck");
-//         }
-//     }
-    
-//     deck: CardNonJoker[];
-//     index: number;
-
-//     peek() : CardNonJoker {
-//         return this.deck[this.index];
-//     }
-
-//     pop() : CardNonJoker {
-//         return this.deck.splice(this.index, 1)[0];
-//     }
-// }
-
-// function moveToSharePiles(G: ServerData, fromAccess: PeekPop, toIndex: number, status: MoveStatus): boolean {
-//     // To Do: Add check that move is valid.
-//     if(status === "move") {
-//         const card = fromAccess.pop();
-//         G.sharedPiles[toIndex].top = card;
-//         G.sharedPiles[toIndex].rank = card.rank!;
-//         G.cardAddedToSharedPiles = true;
-//     }
-//     return true;
-// }
-
-/** Return true if the specified move is legal.  The move is actually made only
- * if status is "move".
- */
-function moveCardImpl(
-    _G: ServerData, 
-    _ctx: Ctx, 
-    {from: _from, to: _to}: {from: CardID, to: CardID},
-    _status: MoveStatus,
-) : boolean {
-    
-    // const playerData = G.playerData[ctx.currentPlayer];
-    // sAssert(playerData, "Cannot access player data");
-
-    // if(from.area === "sharedPiles") {
-    //     return false;
-    // } 
-
-    // const fromAccess = new PeekPop(playerData, from);
-
-    // if(to.area === "sharedPiles") {
-    //     return moveToSharePiles(G, fromAccess, to.index, status);
-    // } 
-    
-    // if(to.area === "hand") {
-    //     // To do: Consider allowing moving cards within hand
-    //     return false;
-    // }
-    
-    // if(to.area === "playerPile") {
-    //     return false;
-    // } 
-     
-    
-    // if(to.area === "discardPiles" && from.area === "playerPile") {
-    //     if(status === "move") {
-    //         playerData.discards[to.index].push(fromAccess.pop());
-    //         //To do: Add end turn actions
-    //     }
-    //     return true;
-    // } 
-
-    return false;
+function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
+    const card = cards.splice(index,1)[0];
+    sAssert(card);
+    return card;
 }
 
-export function canMoveCard(
-    G: ServerData, 
-    ctx: Ctx, 
-    {from, to}: {from: CardID, to: CardID},
-) : boolean {
-    return moveCardImpl(G, ctx, {from, to}, "check only");
+function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNonJoker){
+    // To do: set rank
+    const sp = sharedPiles[index];
+    sp.top = card;
+
+
+    // Ensure that there is an empty pile.
+    if(sharedPiles[sharedPiles.length-1].top !== null) {
+        sharedPiles.push({top: null, rank: null});
+    }
+}
+
+function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
+
+    if(id.area === "sharedPiles") {
+        throw new Error("Cannot remove card from shared pile");
+    }
+
+    const playerData = G.playerData[id.owner];
+    if(id.area === "hand") {
+        return removeOneCard(playerData.hand, id.index);
+    }
+
+    if(id.area === "discardPiles") {
+        sAssert(id.cardIndex !== "any");
+        return removeOneCard(playerData.discards[id.pileIndex], id.cardIndex);
+    }
+
+    if(id.area === "playerPile") {
+        return removeOneCard(playerData.mainPile, 0);
+    }
+
+    throw new Error("Unexpected card ID");
+}
+
+function addCard(G: ServerData,  id: CardID, card: CardNonJoker) {
+
+    if(id.area === "sharedPiles") {
+        addToSharedPile(G.sharedPiles, id.index, card);
+        return;
+    }
+
+    if(id.area === "playerPile") {
+        throw new Error("Cannot add card to players piles");
+    }
+
+    if(id.area === "hand") {
+        throw new Error("Cannot add card to players hand");
+    }
+
+    const playerData = G.playerData[id.owner];
+
+    if (id.area === "discardPiles") {
+        playerData.discards[id.pileIndex].unshift(card);
+        return;
+    }
+
+    throw new Error("Unexpected card ID");
 }
 
 export function moveCard(
     G: ServerData, 
     ctx: Ctx, 
+    /** PlayerID is the ID of the play who requested the move */
     {from, to}: {from: CardID, to: CardID},
 ) : void {
-    G.message = `Move requested from ${JSON.stringify(from)} to ${JSON.stringify(to)}`;
-    // const ok = moveCardImpl(G, ctx, {from, to}, "move");
-    // if(!ok) {
-    //     console.warn("moveCard failed", "from:", from, "to:", to);
-    // }
+    const card = removeCard(G, from);
+    addCard(G, to, card);
 }
