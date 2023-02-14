@@ -1,13 +1,9 @@
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { sAssert } from "../../../utils/assert";
+import { GameContext } from "../game-support/game-context";
 import { CardID } from "./card-id";
-import { ClientMoves } from "./moves";
-import { ServerData } from "./server-data";
-
-type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
 export function isDraggable(
-    gameContext: TypedGameProps,
+    gameContext: GameContext,
     id: CardID) : boolean {
 
     if (id.area === "sharedPiles") {

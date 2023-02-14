@@ -102,8 +102,9 @@ export function moveCard(
     ctx: Ctx, 
     {from, to}: {from: CardID, to: CardID},
 ) : void {
-    const ok = moveCardImpl(G, ctx, {from, to}, "move");
-    if(!ok) {
-        console.warn("moveCard failed", "from:", from, "to:", to);
-    }
+    G.message = `Move requested from ${JSON.stringify(from)} to ${JSON.stringify(to)}`;
+    // const ok = moveCardImpl(G, ctx, {from, to}, "move");
+    // if(!ok) {
+    //     console.warn("moveCard failed", "from:", from, "to:", to);
+    // }
 }

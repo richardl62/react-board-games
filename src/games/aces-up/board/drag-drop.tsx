@@ -1,13 +1,48 @@
 import React from "react";
-import { useDrag } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../game-support/game-context";
-import { isDraggable } from "../game-control/allow-drag";
-import { CardID } from "../game-control/card-id";
+import { isDraggable } from "../game-control/is-draggable";
+import { CardID, getCardID } from "../game-control/card-id";
+import { isDropTarget } from "../game-control/is-drop-target";
 
 const dndType = "Card";
 
 type CardSVGProps = Parameters<typeof CardSVG>[0];
+
+
+type DropRef = ReturnType<typeof useDrop>[1];
+export function useCardDropRef(id: CardID) : DropRef | null {
+    const ctx = useGameContext();
+    const { moveCard } = ctx.moves;
+
+    const [, dropRef] = useDrop(() => ({
+        accept: dndType,
+        drop: (dragID) => {
+            const from = getCardID(dragID);
+            console.log("from", dragID, "to", id);
+            moveCard({from, to: id});
+        }
+    }), [id]);
+
+    return isDropTarget(ctx, id) ? dropRef : null;
+}
+
+function useCardDragRef(id: CardID)  {
+
+    const ctx = useGameContext();
+
+    const [, dragRef] = useDrag(
+        () => ({
+            type: dndType,
+            item: id,
+        }),
+        []
+    );
+
+    return isDraggable(ctx, id) ? dragRef : null;
+}
+
 
 interface Props extends CardSVGProps {
     id: CardID
@@ -15,24 +50,13 @@ interface Props extends CardSVGProps {
 
 export function CardDraggable(props: Props): JSX.Element {
     const { id } = props;
-    const ctx = useGameContext();
 
+    const dropRef = useCardDropRef(id);
+    const dragRef = useCardDragRef(id);
 
-    const [, dragRef] = useDrag(
-        () => ({
-            type: dndType,
-            item: { id },
-            //   collect: (monitor) => ({
-            //     opacity: monitor.isDragging() ? 0.5 : 1
-            //   })
-        }),
-        []
-    );
-
-    const card = <CardSVG {...props} />;
-    if (isDraggable(ctx, id)) {
-        return <div ref={dragRef}>{card}</div>;
-    } else {
-        return card;
-    }
+    return <div ref={dropRef}>
+        <div ref={dragRef}>
+            <CardSVG {...props} />
+        </div>
+    </div>;
 }

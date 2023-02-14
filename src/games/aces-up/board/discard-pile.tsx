@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { CardNonJoker, CardSVG } from "../../../utils/cards";
 import { cardName } from "../../../utils/cards/types";
-import { CardDraggable } from "./drag-drop";
+import { CardDraggable, useCardDropRef } from "./drag-drop";
 
 const cardOffset = 20;
 
@@ -29,7 +29,11 @@ interface Props {
 export function DiscardPile(props: Props): JSX.Element {
     const { cards, owner, index: pileIndex } = props;
 
-    return <OuterDiv nCards={cards.length}>
+    const dropRef = useCardDropRef({area: "discardPiles", pileIndex, 
+        cardIndex: "any", owner
+    });
+    
+    return <OuterDiv ref={dropRef} nCards={cards.length}>
         {/* KLUDGE: Always having an empty card esures that the outer div
             has the required width
         */}

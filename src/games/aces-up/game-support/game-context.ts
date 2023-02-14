@@ -3,9 +3,9 @@ import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { ClientMoves } from "../game-control/moves";
 import { ServerData } from "../game-control/server-data";
 
-type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
+export type GameContext = WrappedGameProps<ServerData, ClientMoves>;
 
-export function useGameContext() : TypedGameProps {
-    return useStandardBoardContext() as TypedGameProps;
+export function useGameContext() : GameContext {
+    return useStandardBoardContext() as GameContext;
 }
 
