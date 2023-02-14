@@ -1,5 +1,5 @@
 import React from "react";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 
 
 export function Message() : JSX.Element {

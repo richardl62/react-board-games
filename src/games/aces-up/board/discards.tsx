@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { DiscardPile } from "./discard-pile";
 
 const OuterDiv = styled.div`

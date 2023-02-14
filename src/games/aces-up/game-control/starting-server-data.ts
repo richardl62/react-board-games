@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { CardNonJoker } from "../../../utils/cards";
-import { handSize, mainPileSize, nSharedPilesAtStart } from "./config";
+import { handSize, mainPileSize, nSharedPilesAtStart } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PlayerData, ServerData } from "./server-data";

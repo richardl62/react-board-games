@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { isDraggable } from "../game-control/allow-drag";
 import { CardID } from "../game-control/card-id";
 

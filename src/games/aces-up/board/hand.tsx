@@ -1,7 +1,7 @@
 import { PlayerID } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { CardDraggable } from "./drag-drop";
 
 const OuterDiv = styled.div`

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { rotateArray } from "../../../utils/rotate-array";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { PlayerArea } from "./player-area";
 
 const OuterDiv = styled.div`

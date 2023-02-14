@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { rankName } from "../../../utils/cards/types";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { SharedPile } from "../game-control/shared-pile";
 import { CardWithText } from "./card-with-text";
 

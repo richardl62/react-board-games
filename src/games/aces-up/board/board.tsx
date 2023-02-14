@@ -1,5 +1,5 @@
 import React from "react";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { Message } from "./message";
 import { PlayerAreas } from "./player-areas";
 import { SharedPiles } from "./shared-piles";
