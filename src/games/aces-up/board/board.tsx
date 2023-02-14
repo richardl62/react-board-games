@@ -1,5 +1,6 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
+import { Message } from "./message";
 import { PlayerAreas } from "./player-areas";
 import { SharedPiles } from "./shared-piles";
 
@@ -10,7 +11,8 @@ function Board() : JSX.Element {
         <div>{getPlayerName(currentPlayer) + " to play"}</div>     
 
         <SharedPiles/>
-        <PlayerAreas/>        
+        <PlayerAreas/>
+        <Message/>        
     </div>;
 }
 

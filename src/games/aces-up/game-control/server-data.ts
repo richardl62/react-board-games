@@ -23,6 +23,8 @@ export interface ServerData {
 
     cardAddedToSharedPiles: boolean;
 
+    message: string;
+
     serverError: string | null;
     serverTimestamp: number;
 }

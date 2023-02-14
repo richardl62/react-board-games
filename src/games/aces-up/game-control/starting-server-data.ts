@@ -36,6 +36,8 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData: {},
 
         cardAddedToSharedPiles: false,
+        
+        message: "Test message",
 
         serverError: null,
         serverTimestamp: 0,
