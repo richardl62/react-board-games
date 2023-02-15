@@ -3,6 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { CardNonJoker } from "../../../utils/cards";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
 import { CardID } from "./card-id";
+import { endTurn } from "./end-turn";
 import { ServerData } from "./server-data";
 import { nextRank, SharedPile } from "./shared-pile";
 
@@ -90,4 +91,8 @@ export function moveCard(
 
     const card = removeCard(G, from);
     addCard(G, to, card);
+
+    if(to.area === "discardPiles") {
+        endTurn(G, ctx);
+    }
 }
