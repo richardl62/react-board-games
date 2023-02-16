@@ -1,10 +1,9 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
-import { handSize } from "../game-support/config";
 import { addCard, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
-import { ExtendingDeck } from "./extendable-deck";
+import { endTurn, refillHand } from "./end-turn";
 import { ServerData } from "./server-data";
 
 function nextPlayerID(ctx: Ctx) {
@@ -18,11 +17,16 @@ export function moveCard(
     /** PlayerID is the ID of the play who requested the move */
     {from, to}: {from: CardID, to: CardID},
 ) : void {
+    const playerID = ctx.currentPlayer;
+    sAssert(from.area !== "sharedPiles", "Card played from shared piles" );
+    sAssert(from.owner === playerID, "Unexpected card owner");
+    sAssert(to.area === "sharedPiles" || to.owner === playerID, "Unexpected card owner");
+    G.message = "";
+    
+    const playerData = G.playerData[playerID];
 
     if(from.area === "hand" && to.area === "hand") {
-        sAssert(from.owner === to.owner);
-        const hand = G.playerData[from.owner].hand;
-        reorderFollowingDrag(hand, from.index, to.index);
+        reorderFollowingDrag(playerData.hand, from.index, to.index);
         return;
     }
 
@@ -30,14 +34,14 @@ export function moveCard(
     addCard(G, to, card);
 
     if(to.area === "discardPiles") {
-        const playerData = G.playerData[nextPlayerID(ctx)];
-        const deck = new ExtendingDeck(ctx, G.deck);
-    
-        while(playerData.hand.length < handSize) {
-            playerData.hand.push(deck.draw());
+        endTurn(G, ctx);
+    } else {
+        if (playerData.hand.length === 0) {
+            refillHand(G, ctx, nextPlayerID(ctx));
         }
-        
-        sAssert(ctx.events);
-        ctx.events.endTurn();
+
+        if (to.area === "sharedPiles") {
+            G.cardAddedToSharedPiles = true;
+        }
     }
 }

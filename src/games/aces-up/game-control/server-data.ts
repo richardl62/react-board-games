@@ -1,6 +1,7 @@
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPile } from "./shared-pile";
 
+
 export interface PlayerData {
     /** The pile that the player in trying to get rid of */
     mainPile: CardNonJoker[];
@@ -8,6 +9,8 @@ export interface PlayerData {
     hand: CardNonJoker[];
 
     discards: [CardNonJoker[], CardNonJoker[], CardNonJoker[]];
+
+    cardPlayedToSharedPiles: boolean;
 }
 
 type PlayerDataDictionary =  {[playerID: string]: PlayerData }

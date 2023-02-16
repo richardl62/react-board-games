@@ -12,6 +12,8 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
         hand: handDeck.drawN(handSize),
 
         discards: [[], [], []],
+
+        cardPlayedToSharedPiles: false,
     };
 
     if (debugOptions.prepopulate) {
