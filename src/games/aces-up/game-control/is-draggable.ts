@@ -6,6 +6,10 @@ export function isDraggable(
     gameContext: GameContext,
     id: CardID) : boolean {
 
+    if (gameContext.G.status.penaltyConfirmationRequired) {
+        return false;
+    }
+
     if (id.area === "sharedPiles") {
         return false;
     }

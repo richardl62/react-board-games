@@ -3,6 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
+import { startTurnStatus } from "./starting-server-data";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -18,16 +19,18 @@ export function refillHand(G: ServerData, ctx: Ctx, playerID: PlayerID) : void {
     }
 }
 
-export function endTurn(
+function doEndTurn(
     G: ServerData, 
-    ctx: Ctx, 
+    ctx: Ctx,
 ) : void {
     const playerID = ctx.currentPlayer;
-    if(!G.cardAddedToSharedPiles) {
+
+    if (!G.status.cardAddedToSharedPiles) {
         const deck = new ExtendingDeck(ctx, G.deck);
         G.playerData[playerID].mainPile.push(deck.draw());
     }
-    G.cardAddedToSharedPiles = false;
+
+    G.status = startTurnStatus();
     
     const nextPlayerID_ = nextPlayerID(ctx);
         
@@ -35,4 +38,17 @@ export function endTurn(
             
     sAssert(ctx.events);
     ctx.events.endTurn();
+}
+
+export function endTurn(
+    G: ServerData, 
+    ctx: Ctx,
+    status?: {penaltyConfirmed: boolean}
+) : void {
+
+    if(!G.status.cardAddedToSharedPiles && !status?.penaltyConfirmed) {
+        G.status.penaltyConfirmationRequired = true;
+    } else {
+        doEndTurn(G, ctx);
+    }
 }

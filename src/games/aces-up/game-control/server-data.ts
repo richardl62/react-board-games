@@ -1,7 +1,6 @@
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPile } from "./shared-pile";
 
-
 export interface PlayerData {
     /** The pile that the player in trying to get rid of */
     mainPile: CardNonJoker[];
@@ -24,7 +23,10 @@ export interface ServerData {
 
     playerData: PlayerDataDictionary;
 
-    cardAddedToSharedPiles: boolean;
+    status: {
+        cardAddedToSharedPiles: boolean;
+        penaltyConfirmationRequired: boolean;
+    };
 
     serverError: string | null;
     serverTimestamp: number;

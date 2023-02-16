@@ -21,6 +21,7 @@ export function moveCard(
     sAssert(from.area !== "sharedPiles", "Card played from shared piles" );
     sAssert(from.owner === playerID, "Unexpected card owner");
     sAssert(to.area === "sharedPiles" || to.owner === playerID, "Unexpected card owner");
+    sAssert(!G.status.penaltyConfirmationRequired, "Move attempted while penalty confirmation required");
     
     const playerData = G.playerData[playerID];
 
@@ -40,7 +41,7 @@ export function moveCard(
         }
 
         if (to.area === "sharedPiles") {
-            G.cardAddedToSharedPiles = true;
+            G.status.cardAddedToSharedPiles = true;
         }
     }
 }

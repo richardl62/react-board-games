@@ -1,7 +1,9 @@
 import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrap-move-functions";
+import { confirmPenaltyCard } from "./confirm-penalty-card";
 import { moveCard } from "./move-card";
 
 export const allFuncs = {
+    confirmPenaltyCard,
     moveCard,
 };
 
