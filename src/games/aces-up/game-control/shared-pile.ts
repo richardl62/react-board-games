@@ -11,6 +11,14 @@ export interface SharedPile {
     rank: Rank | null;
 }
 
+export function rank(sharedPile: SharedPile) : Rank | null {
+    if(sharedPile.top === null) {
+        return null;
+    }
+
+    return sharedPile.rank || sharedPile.top.rank;
+}
+
 export function nextRank(sharedPile: SharedPile) : Rank {
     if(sharedPile.top === null) {
         return "A";

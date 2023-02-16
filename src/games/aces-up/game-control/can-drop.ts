@@ -1,6 +1,9 @@
 import { sAssert } from "../../../utils/assert";
+import { debugOptions } from "../game-support/config";
 import { GameContext } from "../game-support/game-context";
+import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
+import { rank, nextRank } from "./shared-pile";
 
 export function canDrop(
     gameContext: GameContext,
@@ -8,8 +11,18 @@ export function canDrop(
 ) : boolean {
 
     if (to.area === "sharedPiles") {
-        // To do: Add logic to check that move is valid.
-        return true;
+        if(debugOptions.skipCheckOnAddedToSharedPiles) {
+            return true;
+        }
+
+        const pile = gameContext.G.sharedPiles[to.index];
+        if(rank(pile) === "Q") {
+            // You can't add to a full pile
+            return false;
+        } 
+        
+        const card = getCard(gameContext.G, from);
+        return card.rank === "K" || card.rank === nextRank(pile);
     }
 
     if (from.area === "sharedPiles") {
