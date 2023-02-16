@@ -3,6 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
+import { rank } from "./shared-pile";
 import { startTurnStatus } from "./starting-server-data";
 
 function nextPlayerID(ctx: Ctx) {
@@ -35,6 +36,9 @@ function doEndTurn(
     const nextPlayerID_ = nextPlayerID(ctx);
         
     refillHand(G, ctx, nextPlayerID_);
+
+    // Clear any full shared piles
+    G.sharedPiles = G.sharedPiles.filter(p => rank(p) !== "Q");
             
     sAssert(ctx.events);
     ctx.events.endTurn();
