@@ -26,7 +26,6 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     return res;
 }
 
-
 export function startingServerData(ctx: Ctx): ServerData {
 
     const sd: ServerData = {
@@ -36,8 +35,6 @@ export function startingServerData(ctx: Ctx): ServerData {
         playerData: {},
 
         cardAddedToSharedPiles: false,
-        
-        message: "Test message",
 
         serverError: null,
         serverTimestamp: 0,

@@ -21,7 +21,6 @@ export function moveCard(
     sAssert(from.area !== "sharedPiles", "Card played from shared piles" );
     sAssert(from.owner === playerID, "Unexpected card owner");
     sAssert(to.area === "sharedPiles" || to.owner === playerID, "Unexpected card owner");
-    G.message = "";
     
     const playerData = G.playerData[playerID];
 

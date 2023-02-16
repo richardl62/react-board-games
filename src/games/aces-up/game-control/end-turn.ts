@@ -26,7 +26,6 @@ export function endTurn(
     if(!G.cardAddedToSharedPiles) {
         const deck = new ExtendingDeck(ctx, G.deck);
         G.playerData[playerID].mainPile.push(deck.draw());
-        G.message = "Penalty card added";
     }
     G.cardAddedToSharedPiles = false;
     
