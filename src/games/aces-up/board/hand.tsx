@@ -1,15 +1,12 @@
 import { PlayerID } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
-import { cardSize } from "../../../utils/cards/styles";
 import { useGameContext } from "../game-support/game-context";
 import { AreaLabel } from "./area-label";
 import { CardDraggable } from "./drag-drop";
 
 const CardsDiv = styled.div`
     display: flex;
-    height: ${cardSize.height}px; //KLUDGE: Avoids a gap below the card for which I don't
-                                  //understand the reason.
 `;
 
 interface Props {

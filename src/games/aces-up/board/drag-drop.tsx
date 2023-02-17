@@ -5,6 +5,8 @@ import { useGameContext } from "../game-support/game-context";
 import { isDraggable } from "../game-control/is-draggable";
 import { CardID, getCardID } from "../game-control/card-id";
 import { canDrop } from "../game-control/can-drop";
+import styled from "styled-components";
+import { cardSize } from "../../../utils/cards/styles";
 
 const dndType = "Card";
 
@@ -50,15 +52,19 @@ interface Props extends CardSVGProps {
     id: CardID
 }
 
+const CD = styled.div`
+    height: ${cardSize.height}px; //KLUDGE: This makes a difference, but I am not sure why.
+`;
+
 export function CardDraggable(props: Props): JSX.Element {
     const { id } = props;
 
     const dropRef = useCardDropRef(id);
     const dragRef = useCardDragRef(id);
 
-    return <div ref={dropRef}>
+    return <CD ref={dropRef}>
         <div ref={dragRef}>
             <CardSVG {...props} />
         </div>
-    </div>;
+    </CD>;
 }
