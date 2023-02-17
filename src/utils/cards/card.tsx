@@ -5,11 +5,11 @@ import { cardSize, defaultCardBack } from "./styles";
 import { Card, CardBack } from "./types";
 
 export const EmptyCard = styled.div`
-    display: inline flow;
-    
     width: ${cardSize.width}px;  
     height: ${cardSize.height}px;    
 
+    box-sizing: border-box;
+    background-color: white;
     border: 1px solid black;
     border-radius: 5%;
 `;

@@ -1,10 +1,17 @@
 import React from "react";
+import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
 import { CardDraggable } from "./drag-drop";
 
 interface Props {
     playerID: string;
 }
+
+const NumCards = styled.div`
+    font-size: 18px;
+
+    text-align: center;
+`;
 
 export function MainPile(props: Props) : JSX.Element {
     const { playerID: inputPlayerID } = props;
@@ -19,6 +26,7 @@ export function MainPile(props: Props) : JSX.Element {
             id={{area: "playerPile", owner: inputPlayerID}}
         />
 
-        <div>{message}</div>
+        <NumCards>{message}</NumCards>
+
     </div>;
 }
