@@ -23,6 +23,20 @@ interface CardJoker {
 
 export type Card = CardJoker | CardNonJokerExtended;
 
+/**
+ * @param rank - Input rank of null to indicate 'below the first rank'.
+ * @returns The next rank (aces low) or null if there is no next rank.
+ * If passed null, returns 'A' which is the first rank.
+ */
+export function nextRank(rank: Rank | null) : Rank | null {
+    if(rank === null) {
+        return "A";
+    }
+
+    const newRank = ranks[ranks.indexOf(rank)+1];
+    return newRank || null;
+}
+
 export function compareCards(c1: Card, c2: Card) : number {
     if(c1.rank && c2.rank) {
         return c1.rank.localeCompare(c2.rank)

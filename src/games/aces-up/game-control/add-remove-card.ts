@@ -1,8 +1,9 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker } from "../../../utils/cards";
+import { nextRank } from "../../../utils/cards/types";
 import { CardID } from "./card-id";
 import { ServerData } from "./server-data";
-import { nextRank, SharedPile } from "./shared-pile";
+import { SharedPile } from "./shared-pile";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     const card = cards.splice(index,1)[0];
@@ -13,9 +14,8 @@ function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
 function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNonJoker) {
     const sp = sharedPiles[index];
 
-    const newRank = card.rank === "K" ? nextRank(sp) : null;
     sp.top = card;
-    sp.rank = newRank;
+    sp.rank = card.rank === "K" ? nextRank(sp.rank) : card.rank;
 
     // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
     // moved. )

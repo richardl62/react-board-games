@@ -1,28 +1,27 @@
 import { sAssert } from "../../../utils/assert";
+import { nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/config";
 import { GameContext } from "../game-support/game-context";
 import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
-import { rank, nextRank } from "./shared-pile";
 
 export function canDrop(
     gameContext: GameContext,
     {to, from}: {to: CardID, from: CardID}
 ) : boolean {
-
     if (to.area === "sharedPiles") {
         if(debugOptions.skipCheckOnAddedToSharedPiles) {
             return true;
         }
 
         const pile = gameContext.G.sharedPiles[to.index];
-        if(rank(pile) === "Q") {
+        if(pile.rank === "Q") {
             // You can't add to a full pile
             return false;
         } 
         
         const card = getCard(gameContext.G, from);
-        return card.rank === "K" || card.rank === nextRank(pile);
+        return card.rank === "K" || card.rank === nextRank(pile.rank);
     }
 
     if (from.area === "sharedPiles") {

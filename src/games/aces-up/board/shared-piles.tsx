@@ -31,13 +31,15 @@ interface PileProps {
 }
 
 function Pile(props: PileProps) {
-    const { pile: { top, rank }, pileIndex } = props;
+    const { pile, pileIndex } = props;
 
+    const showRank = pile.rank && pile.rank !== pile.top.rank;
+    
     return <div>
-        <CardDraggable card={top} 
+        <CardDraggable card={pile.top} 
             id={{area: "sharedPiles", index: pileIndex}} 
         />
-        <TextDiv> {rank && rankName(rank)} </TextDiv>
+        <TextDiv> {showRank && rankName(pile.rank)} </TextDiv>
 
     </div>;
 }
