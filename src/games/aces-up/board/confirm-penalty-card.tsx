@@ -1,27 +1,40 @@
 import React from "react";
 import { useGameContext } from "../game-support/game-context";
 
-export function ConfirmPenaltyCard() : JSX.Element | null {
+interface Props {
+    playerID: string;
+}
+
+export function ConfirmPenaltyCard(props: Props) : JSX.Element | null {
+    const {playerID: inputPlayerID} = props;
     const {
-        playerID, moves, getPlayerName, undo,
+        playerID: bgioPlayerID, moves, undo,
         G: {status}, 
         ctx: {currentPlayer}
     } = useGameContext();
 
     if (!status.penaltyConfirmationRequired) {
+        // No penalty
         return null;
     }
 
-    if (playerID !== currentPlayer) {
-        const name = getPlayerName(currentPlayer);
-        return <div>{`waiting for ${name} to confirm penalty card`}</div>;
+    // If we have got here, currentPlayer is facing a penalty.
+
+    if (currentPlayer !== inputPlayerID) {
+        // Not this player penalty
+        return null;
     }
 
+
+    const disableButtons = currentPlayer !== bgioPlayerID;
+
     return <div>
-        <button onClick={() => moves.confirmPenaltyCard()}>
+        <button onClick={() => moves.confirmPenaltyCard()} 
+            disabled={disableButtons}
+        >
             Confirm penalty Card
         </button>
-        <button onClick={() => undo()}>
+        <button onClick={() => undo()} disabled={disableButtons}>
             Undo
         </button>
     </div>;

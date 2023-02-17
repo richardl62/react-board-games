@@ -14,7 +14,12 @@ export function isDraggable(
         return false;
     }
 
-    if(id.owner !== gameContext.ctx.currentPlayer) {
+    if(id.owner !== gameContext.playerID) {
+        // Not this players card.
+        return false;
+    }
+
+    if(gameContext.playerID !== gameContext.ctx.currentPlayer) {
         // Not this players turn.
         return false;
     }

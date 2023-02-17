@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
+import { ConfirmPenaltyCard } from "./confirm-penalty-card";
 import { Discards } from "./discard-piles";
 import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
@@ -30,19 +31,25 @@ interface Props {
 
 export function PlayerArea(props: Props) : JSX.Element {
     const { playerID: inputPlayerID } = props;
-    const { playerID: contextPlayerID, getPlayerName,
+    const { playerID: bgioPlayerID, getPlayerName,
         ctx: {currentPlayer} } = useGameContext();
 
+    const myHand = inputPlayerID === bgioPlayerID;
+
     let message = getPlayerName(inputPlayerID);
-    if(contextPlayerID === currentPlayer) {
-        message += " (Your turn)";
+    if( inputPlayerID === currentPlayer ) {
+        if(myHand)
+            message += " (Your turn)";
+        else
+            message += " (Their turn)";
     }
     return <OuterDiv>
         <Text>{message}</Text>
+        <ConfirmPenaltyCard {...props}/>
         <InnerDiv>
             <MainPile playerID={inputPlayerID}/>
             <Discards playerID={inputPlayerID}/>
-            { inputPlayerID === contextPlayerID && <Hand playerID={inputPlayerID}/> }  
+            { myHand && <Hand playerID={inputPlayerID}/> }  
         </InnerDiv>
     </OuterDiv>;
 }

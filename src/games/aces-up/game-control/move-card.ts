@@ -6,11 +6,6 @@ import { CardID } from "./card-id";
 import { endTurn, refillHand } from "./end-turn";
 import { ServerData } from "./server-data";
 
-function nextPlayerID(ctx: Ctx) {
-    const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
-    return ctx.playOrder[nextPlayerPos];
-}
-
 export function moveCard(
     G: ServerData, 
     ctx: Ctx, 
@@ -37,7 +32,7 @@ export function moveCard(
         endTurn(G, ctx);
     } else {
         if (playerData.hand.length === 0) {
-            refillHand(G, ctx, nextPlayerID(ctx));
+            refillHand(G, ctx, playerID);
         }
 
         if (to.area === "sharedPiles") {
