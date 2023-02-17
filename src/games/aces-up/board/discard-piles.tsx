@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
+import { AreaLabel } from "./area-label";
 import { DiscardPile } from "./discard-pile";
 
-const OuterDiv = styled.div`
+const PilesDiv = styled.div`
     display: flex;
 `;
 
@@ -16,8 +17,11 @@ export function Discards(props: Props) : JSX.Element {
     const { G : { playerData } } = useGameContext();
 
     const { discards } = playerData[inputPlayerID];
-    return <OuterDiv> {
-        discards.map((cards,index) =>
-            <DiscardPile key={index} cards={cards} index={index} owner={inputPlayerID}/>)
-    } </OuterDiv>;
+    const discardPiles = discards.map((cards,index) =>
+        <DiscardPile key={index} cards={cards} index={index} owner={inputPlayerID}/>);
+    
+    return <div>
+        <PilesDiv> {discardPiles} </PilesDiv>
+        <AreaLabel>Discards</AreaLabel>
+    </div>;
 }

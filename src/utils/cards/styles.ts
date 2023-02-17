@@ -13,3 +13,9 @@ export const cardSize = {
 };
 
 export const defaultCardBack : CardBack = "red";
+
+/** An offset that can be used when stacking cards vertically
+ * It is failry small, but big enough to allow the rank (if not
+ * the suit) of the card below to seen.
+ */
+export const cardVerticalStackingOffset = cardHieght/7; // In pixels

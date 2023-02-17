@@ -10,4 +10,5 @@ export const nSharedPilesAtStart = 3;
 export const debugOptions = {
     prepopulate: false,
     skipCheckOnAddedToSharedPiles: false,
+    skipPenaltyCardProp: false,
 };

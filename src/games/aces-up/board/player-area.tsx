@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
-import { Discards } from "./discards";
+import { Discards } from "./discard-piles";
 import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
 

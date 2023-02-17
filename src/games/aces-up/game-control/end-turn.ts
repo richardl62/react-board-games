@@ -1,6 +1,6 @@
 import { Ctx, PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { handSize } from "../game-support/config";
+import { debugOptions, handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { startTurnStatus } from "./starting-server-data";
@@ -49,7 +49,8 @@ export function endTurn(
     status?: {penaltyConfirmed: boolean}
 ) : void {
 
-    if(!G.status.cardAddedToSharedPiles && !status?.penaltyConfirmed) {
+    if(!G.status.cardAddedToSharedPiles && !status?.penaltyConfirmed
+        && !debugOptions.skipPenaltyCardProp) {
         G.status.penaltyConfirmationRequired = true;
     } else {
         doEndTurn(G, ctx);
