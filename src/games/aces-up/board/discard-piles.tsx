@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
-import { AreaLabel } from "./area-label";
+import { columnGap } from "../game-support/styles";
+import { AreaLabelBelow } from "./area-label";
 import { DiscardPile } from "./discard-pile";
 
 const PilesDiv = styled.div`
     display: flex;
+    
+    column-gap: ${columnGap.betweenCards};
 `;
 
 interface Props {
@@ -22,6 +25,6 @@ export function Discards(props: Props) : JSX.Element {
     
     return <div>
         <PilesDiv> {discardPiles} </PilesDiv>
-        <AreaLabel>Discards</AreaLabel>
+        <AreaLabelBelow>Discards</AreaLabelBelow>
     </div>;
 }

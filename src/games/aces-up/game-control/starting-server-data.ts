@@ -17,8 +17,8 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     };
 
     if (debugOptions.prepopulate) {
-        res.discards[0] = mainPileDeck.drawN(12);
-        res.discards[1] = mainPileDeck.drawN(5);
+        res.discards[0] = mainPileDeck.drawN(6);
+        res.discards[1] = mainPileDeck.drawN(1);
         res.discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
             {rank: "K", suit: "H"}, {rank: "K", suit: "S"} ];
     }

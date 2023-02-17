@@ -4,25 +4,17 @@ import { cardName, rankName } from "../../../utils/cards/types";
 import { useGameContext } from "../game-support/game-context";
 import { SharedPile } from "../game-control/shared-pile";
 import { CardDraggable } from "./drag-drop";
+import { columnGap } from "../game-support/styles";
 
 const TextDiv = styled.div`
-    /* KLUDGE: This positioning avoid a gap between card and text.
-    I don't know the reason for the gap. */
-    position: relative;
-    top: -10px;
-
-    font-size: 20px;
     text-align: center;
-    font-weight: bold;
 `;
 
 const SharedPilesDiv = styled.div`
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
 
-    > *:not(:last-child) {
-        margin-right: 5px;
-    }
+    column-gap: ${columnGap.betweenCards};
 `;
 
 interface PileProps {

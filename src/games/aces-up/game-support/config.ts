@@ -8,7 +8,7 @@ export const nSharedPilesAtStart = 3;
 
 // The debug iptions should be set to false for normal play.
 export const debugOptions = {
-    prepopulate: false,
-    skipCheckOnAddedToSharedPiles: false,
-    skipPenaltyCardProp: false,
+    prepopulate: true,
+    skipCheckOnAddedToSharedPiles: true,
+    skipPenaltyCardProp: true,
 };

@@ -2,11 +2,14 @@ import { PlayerID } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
-import { AreaLabel } from "./area-label";
+import { columnGap } from "../game-support/styles";
+import { AreaLabelBelow } from "./area-label";
 import { CardDraggable } from "./drag-drop";
 
 const CardsDiv = styled.div`
     display: flex;
+    
+    column-gap: ${columnGap.betweenCards};
 `;
 
 interface Props {
@@ -26,6 +29,6 @@ export function Hand(props: Props) : JSX.Element {
     
     return <div>
         <CardsDiv> {cards} </CardsDiv>
-        <AreaLabel>Hand</AreaLabel>
+        <AreaLabelBelow>Hand</AreaLabelBelow>
     </div>;
 }

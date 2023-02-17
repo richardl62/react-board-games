@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useGameContext } from "../game-support/game-context";
-import { ConfirmPenaltyCard } from "./confirm-penalty-card";
+import { rowGap } from "../game-support/styles";
+import { SharedArea } from "./shared-area";
 import { PlayerAreas } from "./player-areas";
-import { SharedPiles } from "./shared-piles";
 
 const OuterDiv = styled.div`
   /* Make the div full screen */
@@ -21,18 +20,16 @@ const OuterDiv = styled.div`
 `;
 
 const GameDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    row-gap: ${rowGap.betweenAreas};
     margin: 2%;
 `;
 
 function Board() : JSX.Element {
-    const { getPlayerName, ctx: {currentPlayer}} = useGameContext();
-    
     return <OuterDiv>
         <GameDiv>
-            <div>{getPlayerName(currentPlayer) + " to play"}</div>
-
-            <ConfirmPenaltyCard />
-            <SharedPiles />
+            <SharedArea/>
             <PlayerAreas />
         </GameDiv>
     </OuterDiv>;
