@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
-import { ConfirmPenaltyCard } from "./confirm-penalty-card";
+import { IllegalMoveNotification } from "./illegal-move-notification";
 import { Discards } from "./discard-piles";
 import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
@@ -45,7 +45,7 @@ export function PlayerArea(props: Props) : JSX.Element {
     }
     return <OuterDiv>
         <Text>{message}</Text>
-        <ConfirmPenaltyCard {...props}/>
+        <IllegalMoveNotification {...props}/>
         <InnerDiv>
             <MainPile playerID={inputPlayerID}/>
             <Discards playerID={inputPlayerID}/>

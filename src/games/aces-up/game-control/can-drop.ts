@@ -1,9 +1,20 @@
 import { sAssert } from "../../../utils/assert";
-import { nextRank } from "../../../utils/cards/types";
+import { CardNonJoker, nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/config";
 import { GameContext } from "../game-support/game-context";
 import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
+import { SharedPile } from "./shared-pile";
+
+export function moveableToSharedPile(card: CardNonJoker, pile: SharedPile) : boolean {
+
+    if(pile.rank === "Q") {
+        // You can't add to a full pile
+        return false;
+    } 
+    
+    return card.rank === "K" || card.rank === nextRank(pile.rank);
+}
 
 export function canDrop(
     gameContext: GameContext,
@@ -14,14 +25,10 @@ export function canDrop(
             return true;
         }
 
-        const pile = gameContext.G.sharedPiles[to.index];
-        if(pile.rank === "Q") {
-            // You can't add to a full pile
-            return false;
-        } 
-        
         const card = getCard(gameContext.G, from);
-        return card.rank === "K" || card.rank === nextRank(pile.rank);
+        const pile = gameContext.G.sharedPiles[to.index];
+
+        return moveableToSharedPile(card, pile);
     }
 
     if (from.area === "sharedPiles") {

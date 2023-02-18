@@ -26,12 +26,10 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     return res;
 }
 
-export function startTurnStatus() : ServerData["status"] {
-    return {
-        cardAddedToSharedPiles: false,
-        penaltyConfirmationRequired: false,
-    };
+export function startMoveToSharedPile() : ServerData["moveToSharedPile"] {
+    return "pending";
 }
+
 export function startingServerData(ctx: Ctx): ServerData {
 
     const sd: ServerData = {
@@ -40,7 +38,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
         playerData: {},
 
-        status: startTurnStatus(),
+        moveToSharedPile: startMoveToSharedPile(),
 
         serverError: null,
         serverTimestamp: 0,

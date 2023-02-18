@@ -94,10 +94,18 @@ export function rankName(rank: Rank) : string {
 
 export function cardName(card: Card) : string {
     if(card.joker) {
-        return "joker" + card.joker;
+        return "Joker" + card.joker;
     }
 
     return card.rank + suitName(card.suit);
+}
+
+export function cardShortName(card: Card) : string {
+    if(card.joker) {
+        return "J" + card.joker;
+    }
+
+    return card.rank + card.suit;
 }
 
 export type CardBack = "red" | "black";

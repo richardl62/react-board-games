@@ -3,6 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
 import { addCard, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
+import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
 import { ServerData } from "./server-data";
 
@@ -16,13 +17,19 @@ export function moveCard(
     sAssert(from.area !== "sharedPiles", "Card played from shared piles" );
     sAssert(from.owner === playerID, "Unexpected card owner");
     sAssert(to.area === "sharedPiles" || to.owner === playerID, "Unexpected card owner");
-    sAssert(!G.status.penaltyConfirmationRequired, "Move attempted while penalty confirmation required");
     
     const playerData = G.playerData[playerID];
 
     if(from.area === "hand" && to.area === "hand") {
         reorderFollowingDrag(playerData.hand, from.index, to.index);
         return;
+    }
+
+    if (to.area === "discardPiles" && G.moveToSharedPile !== "done") {
+        if(cardsMovableToSharedPile(G, playerID).length !== 0) {
+            G.moveToSharedPile = "required";
+            return;
+        }
     }
 
     const card = removeCard(G, from);
@@ -36,7 +43,7 @@ export function moveCard(
         }
 
         if (to.area === "sharedPiles") {
-            G.status.cardAddedToSharedPiles = true;
+            G.moveToSharedPile = "done";
         }
     }
 }

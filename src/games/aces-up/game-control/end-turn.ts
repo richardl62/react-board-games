@@ -1,9 +1,9 @@
 import { Ctx, PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { debugOptions, handSize } from "../game-support/config";
+import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
-import { startTurnStatus } from "./starting-server-data";
+import { startMoveToSharedPile } from "./starting-server-data";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -19,18 +19,12 @@ export function refillHand(G: ServerData, ctx: Ctx, playerID: PlayerID) : void {
     }
 }
 
-function doEndTurn(
+export function endTurn(
     G: ServerData, 
     ctx: Ctx,
 ) : void {
-    const playerID = ctx.currentPlayer;
 
-    if (!G.status.cardAddedToSharedPiles) {
-        const deck = new ExtendingDeck(ctx, G.deck);
-        G.playerData[playerID].mainPile.push(deck.draw());
-    }
-
-    G.status = startTurnStatus();
+    G.moveToSharedPile = startMoveToSharedPile();
     
     const nextPlayerID_ = nextPlayerID(ctx);
         
@@ -41,18 +35,4 @@ function doEndTurn(
             
     sAssert(ctx.events);
     ctx.events.endTurn();
-}
-
-export function endTurn(
-    G: ServerData, 
-    ctx: Ctx,
-    status?: {penaltyConfirmed: boolean}
-) : void {
-
-    if(!G.status.cardAddedToSharedPiles && !status?.penaltyConfirmed
-        && !debugOptions.skipPenaltyCardProp) {
-        G.status.penaltyConfirmationRequired = true;
-    } else {
-        doEndTurn(G, ctx);
-    }
 }

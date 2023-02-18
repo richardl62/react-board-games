@@ -23,10 +23,7 @@ export interface ServerData {
 
     playerData: PlayerDataDictionary;
 
-    status: {
-        cardAddedToSharedPiles: boolean;
-        penaltyConfirmationRequired: boolean;
-    };
+    moveToSharedPile: "pending" | "done" | "required";
 
     serverError: string | null;
     serverTimestamp: number;
