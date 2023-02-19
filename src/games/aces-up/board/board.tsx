@@ -8,29 +8,32 @@ import { useGameContext } from "../game-support/game-context";
 import { GameWarnings } from "../../../app-game-support";
 
 const OuterDivSinglePlayer = styled.div`
-  /* Make the div full screen */
-  position:absolute;
-  top:0px;
-  right:0px;
-  bottom:0px;
-  left:0px;
+    /* Make sure that the whole div is at least as big as the window.
+       This ensured that background-color applies to the whole window */
+    width: 100%;
+    min-height: 100vh;
 
-  background-color: green;
-  color: white;
-  font-size: 18px;
+    background-color: green;
+    
+    /* KLUDGE: This removes a several-pixel wide white marging at the
+    top and bottom of the window. I am not sure why the margin was 
+    there. */
+    border: 1px green solid;
+
+    color: white;
+    font-size: 18px;
   
-  font-family: Helvetica;
+    font-family: Helvetica;
 `;
 
 const OuterDivMultiplePlayers = styled.div`
-  /* Make the div full screen */
-  width: 100%;
-
-  background-color: green;
-  color: white;
-  font-size: 18px;
+    width: 100%;
+   
+    background-color: green;
+    color: white;
+    font-size: 18px;
   
-  font-family: Helvetica;
+    font-family: Helvetica;
 `;
 
 const GameDiv = styled.div`
