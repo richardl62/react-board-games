@@ -1,5 +1,11 @@
 import React from "react";
+import styled from "styled-components";
+import { standardOuterMargin } from "../../../app-game-support/styles";
 import { useGameContext } from "../client-side/game-context";
+
+const OuterDiv = styled.div`
+    margin: ${standardOuterMargin};
+`;
 
 function Board() : JSX.Element {
     const context = useGameContext();
@@ -7,7 +13,7 @@ function Board() : JSX.Element {
     
     const current = context.ctx.currentPlayer === playerID;
 
-    return <div>
+    return <OuterDiv>
         <div>{getPlayerName(playerID)}</div>
         
         <button 
@@ -29,7 +35,7 @@ function Board() : JSX.Element {
         </button>
         
         <div>{count}</div>
-    </div>;
+    </OuterDiv>;
 }
 
 export default Board;

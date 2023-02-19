@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { AppGame, GameCategory } from "../app-game-support";
+import { standardOuterMargin } from "../app-game-support/styles";
 import { games as appGames } from "../games";
 import "./app.css";
 import { gameComponent } from "./game-component";
@@ -18,6 +19,8 @@ const HomePageStyles = styled.div`
         font-size: 12pt;
         font-weight: 600;
     }
+
+    margin: ${standardOuterMargin};
 `;
 
 const ErrorMessage = styled.div`

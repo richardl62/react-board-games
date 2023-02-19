@@ -6,6 +6,7 @@ import { CardSetID } from "../server-side/server-data";
 import { MessageAndButton } from "./message-and-button";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { HandWrapper } from "./hand-wrapper";
+import { standardOuterMargin } from "../../../app-game-support/styles";
 
 
 const GameAreaDiv = styled.div`
@@ -13,6 +14,8 @@ const GameAreaDiv = styled.div`
     div {
         margin-right: 5px;
     }
+
+    margin: ${standardOuterMargin};
 `;
 
 const Hands = styled.div`

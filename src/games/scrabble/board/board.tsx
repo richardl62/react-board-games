@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { MoveHistory } from "./move-history";
 import { MainGameArea } from "./main-game-area";
 import { useScrabbleContext } from "../client-side/scrabble-context";
+import { standardOuterMargin } from "../../../app-game-support/styles";
 
 const Game = styled.div`
     display: flex;
@@ -12,6 +13,8 @@ const Game = styled.div`
         margin-left: 20px;
         margin-top: 70px;  // KLUDGE
     }
+
+    margin: ${standardOuterMargin};
 `;
 
 export function Board(): JSX.Element {
