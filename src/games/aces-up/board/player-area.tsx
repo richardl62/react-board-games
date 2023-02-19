@@ -6,6 +6,7 @@ import { IllegalMoveNotification } from "./illegal-move-notification";
 import { Discards } from "./discard-piles";
 import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
+import { PlayerInfo } from "./player-info";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -26,30 +27,28 @@ const Text = styled.div`
 `;
 
 interface Props {
-    playerID: string;
+    playerInfo: PlayerInfo;
 }
 
 export function PlayerArea(props: Props) : JSX.Element {
-    const { playerID: inputPlayerID } = props;
-    const { playerID: bgioPlayerID, getPlayerName,
-        ctx: {currentPlayer} } = useGameContext();
+    const { playerInfo } = props;
+    const { getPlayerName } = useGameContext();
 
-    const myHand = inputPlayerID === bgioPlayerID;
-
-    let message = getPlayerName(inputPlayerID);
-    if( inputPlayerID === currentPlayer ) {
-        if(myHand)
+    let message = getPlayerName(playerInfo.owner);
+    if( playerInfo.owner === playerInfo.currentPlayer ) {
+        if(playerInfo.owner === playerInfo.viewer)
             message += " (Your turn)";
         else
             message += " (Their turn)";
     }
+
     return <OuterDiv>
         <Text>{message}</Text>
-        <IllegalMoveNotification {...props}/>
+        <IllegalMoveNotification playerInfo={playerInfo}/>
         <InnerDiv>
-            <MainPile playerID={inputPlayerID}/>
-            <Discards playerID={inputPlayerID}/>
-            { myHand && <Hand playerID={inputPlayerID}/> }  
+            <MainPile playerInfo={playerInfo}/>
+            <Discards playerInfo={playerInfo}/>
+            <Hand playerInfo={playerInfo}/>  
         </InnerDiv>
     </OuterDiv>;
 }

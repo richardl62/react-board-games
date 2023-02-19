@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useGameContext } from "../game-support/game-context";
+import { usePlayerData } from "../game-support/game-context";
 import { CardDraggable } from "./drag-drop";
-
-interface Props {
-    playerID: string;
-}
+import { PlayerInfo } from "./player-info";
 
 const NumCards = styled.div`
     font-size: 18px;
@@ -13,17 +10,21 @@ const NumCards = styled.div`
     text-align: center;
 `;
 
-export function MainPile(props: Props) : JSX.Element {
-    const { playerID: inputPlayerID } = props;
-    const { G : { playerData } } = useGameContext();
+interface Props {
+    playerInfo: PlayerInfo;
+}
 
-    const { mainPile } = playerData[inputPlayerID];
+export function MainPile(props: Props) : JSX.Element {
+    const { playerInfo } = props;
+
+    const { mainPile } = usePlayerData(playerInfo.owner);
+
     const message = `${mainPile.length} cards`;
 
     return <div>
         <CardDraggable 
             card={mainPile[0]} 
-            id={{area: "playerPile", owner: inputPlayerID}}
+            id={{area: "playerPile", owner: playerInfo.owner}}
         />
 
         <NumCards>{message}</NumCards>

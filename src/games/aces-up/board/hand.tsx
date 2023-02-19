@@ -1,10 +1,10 @@
-import { PlayerID } from "boardgame.io";
 import React from "react";
 import styled from "styled-components";
-import { useGameContext } from "../game-support/game-context";
+import { usePlayerData } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
 import { CardDraggable } from "./drag-drop";
+import { PlayerInfo } from "./player-info";
 
 const CardsDiv = styled.div`
     display: flex;
@@ -13,18 +13,18 @@ const CardsDiv = styled.div`
 `;
 
 interface Props {
-    playerID: PlayerID;
+    playerInfo: PlayerInfo;
 }
 
 export function Hand(props: Props) : JSX.Element {
-    const { playerID: inputPlayerID } = props;
-    const { G : { playerData } } = useGameContext();
+    const { playerInfo } = props;
 
-    const { hand } = playerData[inputPlayerID];
+    const { hand } = usePlayerData(playerInfo.owner);
+
     const cards =  hand.map((card,index) =>
         <CardDraggable
             key={index} card={card}
-            id={{ area: "hand", index, owner: inputPlayerID }}
+            id={{ area: "hand", index, owner: playerInfo.owner }}
         />);
     
     return <div>

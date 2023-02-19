@@ -2,36 +2,32 @@ import React from "react";
 import { cardShortName } from "../../../utils/cards/types";
 import { cardsMovableToSharedPile } from "../game-control/cards-movable-to-shared-pile";
 import { useGameContext } from "../game-support/game-context";
+import { PlayerInfo } from "./player-info";
 
 interface Props {
-    playerID: string;
+    playerInfo: PlayerInfo;
 }
 
 export function IllegalMoveNotification(props: Props) : JSX.Element | null {
-    const {playerID: inputPlayerID} = props;
-    const {
-        playerID: bgioPlayerID, 
-        G, 
-        ctx: {currentPlayer}
-    } = useGameContext();
+    const {playerInfo} = props;
+    
+    const {G} = useGameContext();
 
     if (G.moveToSharedPile !== "required") {
         // No notification needed
         return null;
     }
 
-    if (currentPlayer !== inputPlayerID) {
-        // Notification not for this player
+    if (playerInfo.owner !== playerInfo.viewer) {
         return null;
     }
 
-    if (currentPlayer !== bgioPlayerID) {
-        // Not viewing data for this player
+    if (playerInfo.owner !== playerInfo.currentPlayer) {
         return null;
     }
 
     const moveOptions = () => {
-        const movableCards = cardsMovableToSharedPile(G, currentPlayer);
+        const movableCards = cardsMovableToSharedPile(G, playerInfo.currentPlayer);
         return movableCards.map(card => cardShortName(card));
     };
 
