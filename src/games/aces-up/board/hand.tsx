@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { CardNonJoker, CardSVG } from "../../../utils/cards";
+import { cardShortName } from "../../../utils/cards/types";
 import { usePlayerData } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
@@ -21,14 +23,21 @@ export function Hand(props: Props) : JSX.Element {
 
     const { hand } = usePlayerData(playerInfo.owner);
 
-    const cards =  hand.map((card,index) =>
-        <CardDraggable
-            key={index} card={card}
-            id={{ area: "hand", index, owner: playerInfo.owner }}
-        />);
+    const makeCard = (card: CardNonJoker, index: number) => {
+        const key = cardShortName(card) + index;
+        
+        if(playerInfo.viewer === playerInfo.owner) {
+            return <CardDraggable
+                key={index} card={card}
+                id={{ area: "hand", index, owner: playerInfo.owner }}
+            />;
+        } 
+            
+        return <CardSVG key={key} showBack={true} />;
+    };
     
     return <div>
-        <CardsDiv> {cards} </CardsDiv>
+        <CardsDiv> {hand.map(makeCard)} </CardsDiv>
         <AreaLabelBelow>Hand</AreaLabelBelow>
     </div>;
 }
