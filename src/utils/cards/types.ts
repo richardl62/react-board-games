@@ -37,6 +37,13 @@ export function nextRank(rank: Rank | null) : Rank | null {
     return newRank || null;
 }
 
+export function compareRank(r1: Rank, r2: Rank) : number {
+    const ind1 = ranks.indexOf(r1);
+    const ind2 = ranks.indexOf(r2);
+
+    return ind1 - ind2;
+}
+
 export function compareCards(c1: Card, c2: Card) : number {
     if(c1.rank && c2.rank) {
         return c1.rank.localeCompare(c2.rank)
