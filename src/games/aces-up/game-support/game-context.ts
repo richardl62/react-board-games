@@ -1,5 +1,5 @@
 import { PlayerID } from "boardgame.io";
-import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
+import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { sAssert } from "../../../utils/assert";
 import { ClientMoves } from "../game-control/moves";

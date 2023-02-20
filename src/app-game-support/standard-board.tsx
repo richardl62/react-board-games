@@ -17,11 +17,10 @@ function serverError(props: WrappedGameProps) : string | null {
     return err;
 }
 
-type FuncType = Parameters<typeof React.lazy>[0];
-function standardBoard(importFunc: FuncType, props: WrappedGameProps) : JSX.Element
+export function standardBoard(
+    LazyBoard: ReturnType<typeof React.lazy>, 
+    props: WrappedGameProps) : JSX.Element
 {   
-    const LazyBoard = React.lazy(importFunc);
-    
     return <Suspense fallback={<div>Loading...</div>}>
         <GameWarnings {...props}/>
         <ErrorMessage category="server error" message={serverError(props)} />
@@ -32,12 +31,6 @@ function standardBoard(importFunc: FuncType, props: WrappedGameProps) : JSX.Elem
             </DndProvider>
         </ReactBasicsContext.Provider>
     </Suspense>;
-}
-
-export function makeStandardBoard(importFunc: FuncType) : 
-    (props: WrappedGameProps) => ReturnType<typeof standardBoard>
-{
-    return (props: WrappedGameProps) => standardBoard(importFunc, props);
 }
 
 export function useStandardBoardContext() : WrappedGameProps {

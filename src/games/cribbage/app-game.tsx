@@ -3,7 +3,10 @@ import { AppGame, GameCategory } from "../../app-game-support";
 import { startingServerData } from "./server-side/starting-server-data";
 import { bgioMoves } from "./server-side/moves";
 import { Ctx } from "boardgame.io";
-import { makeStandardBoard } from "../../app-game-support/make-standard-board";
+import { standardBoard } from "../../app-game-support/standard-board";
+import React from "react";
+
+const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
     name: "Cribbage",
@@ -22,5 +25,5 @@ export const appGame: AppGame = {
         activePlayers: ActivePlayers.ALL,
     },
 
-    board: makeStandardBoard(() => import("./board/board"))
+    board: (props) => standardBoard(LazyBoard, props),
 };

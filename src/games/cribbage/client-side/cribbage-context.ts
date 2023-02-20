@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { CardSetID, PlayerID, ServerData } from "../server-side/server-data";
 import { ClientMoves } from "../server-side/moves";
 import { nonJoinedPlayerName } from "../../../app-game-support";
-import { useStandardBoardContext } from "../../../app-game-support/make-standard-board";
+import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
 export interface CribbageContext extends ServerData {
