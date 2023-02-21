@@ -5,5 +5,6 @@ export const columnGap = {
 };
 
 export const rowGap = {
-    betweenAreas: "40px"
+    belowLabels: "10px",
+    betweenAreas: "30px", // The effective gap is this value + belowLabels.
 };

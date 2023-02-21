@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CardNonJoker, CardSVG } from "../../../utils/cards";
+import { cardSize } from "../../../utils/cards/styles";
 import { cardShortName } from "../../../utils/cards/types";
 import { usePlayerData } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
@@ -12,6 +13,10 @@ const CardsDiv = styled.div`
     display: flex;
     
     column-gap: ${columnGap.betweenCards};
+
+
+    min-width: ${cardSize.width}px;
+    min-height: ${cardSize.height}px;
 `;
 
 interface Props {

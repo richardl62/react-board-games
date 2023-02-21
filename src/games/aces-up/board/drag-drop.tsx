@@ -2,7 +2,7 @@ import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../game-support/game-context";
-import { isDraggable } from "../game-control/is-draggable";
+import { canDrag } from "../game-control/can-drag";
 import { CardID, getCardID } from "../game-control/card-id";
 import { canDrop } from "../game-control/can-drop";
 import styled from "styled-components";
@@ -44,7 +44,7 @@ function useCardDragRef(id: CardID)  {
         []
     );
 
-    return isDraggable(ctx, id) ? dragRef : null;
+    return canDrag(ctx, id) ? dragRef : null;
 }
 
 
