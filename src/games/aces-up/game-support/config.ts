@@ -1,3 +1,5 @@
+import { sAssert } from "../../../utils/assert";
+
 export const handSize = 5;
 
 /** The initial size of the main piles, i.e. the cards that players
@@ -8,6 +10,19 @@ export const nSharedPilesAtStart = 3;
 
 // The debug iptions should be set to false for normal play.
 export const debugOptions = {
-    prepopulate: false,
-    skipCheckOnAddedToSharedPiles: false,
+    prepopulateRandom: true,
+    prepopulateOrdered: true, // Takes precedence over prepopulateRandom
+    skipCheckOnAddedToSharedPiles: true,
+    skipRequirementToAddToSharedPiles: true,
 };
+
+export function debugOptionsInUse() : boolean {
+    for (const [, value] of Object.entries(debugOptions)) {
+        sAssert(typeof value === "boolean");
+        if(value) {
+            return true;
+        }
+    }
+
+    return false;
+}

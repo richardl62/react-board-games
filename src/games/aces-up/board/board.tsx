@@ -4,8 +4,7 @@ import { rowGap } from "../game-support/styles";
 import { SharedArea } from "./shared-area";
 import { PlayerAreas } from "./player-areas";
 import { numPlayersOnScreen } from "../../../app/url-params";
-import { useGameContext } from "../game-support/game-context";
-import { GameWarnings } from "../../../app-game-support";
+import { Warnings } from "./warnings";
 
 const OuterDivSinglePlayer = styled.div`
     /* Make sure that the whole div is at least as big as the window.
@@ -44,14 +43,13 @@ const GameDiv = styled.div`
 `;
 
 function Board() : JSX.Element {
-    const ctx = useGameContext();
     const OuterDiv = numPlayersOnScreen() === 1 ? OuterDivSinglePlayer :
         OuterDivMultiplePlayers;
         
     return <OuterDiv>
-        <GameWarnings {...ctx}/>
+        <Warnings />
         <GameDiv>
-            <SharedArea/>
+            <SharedArea />
             <PlayerAreas />
         </GameDiv>
     </OuterDiv>;

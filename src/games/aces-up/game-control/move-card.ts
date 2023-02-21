@@ -1,6 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/drag-support";
+import { debugOptions } from "../game-support/config";
 import { addCard, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
@@ -26,7 +27,8 @@ export function moveCard(
     }
 
     if (to.area === "discardPiles" && G.moveToSharedPile !== "done") {
-        if(cardsMovableToSharedPile(G, playerID).length !== 0) {
+        if(cardsMovableToSharedPile(G, playerID).length !== 0 && 
+            !debugOptions.skipRequirementToAddToSharedPiles) {
             G.moveToSharedPile = "required";
             return;
         }

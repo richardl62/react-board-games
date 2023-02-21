@@ -3,6 +3,7 @@ import { debugOptions, handSize, mainPileSize, nSharedPilesAtStart } from "../ga
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PlayerData, ServerData } from "./server-data";
+import { ranks } from "../../../utils/cards/types";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 
@@ -16,7 +17,12 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
         cardPlayedToSharedPiles: false,
     };
 
-    if (debugOptions.prepopulate) {
+    if (debugOptions.prepopulateOrdered) {
+        for(const rank of ranks.slice(0,6)) {
+            res.discards[0].push({rank, suit: "C"});
+            res.discards[1].push({rank, suit: "D"});
+        }
+    } else if (debugOptions.prepopulateRandom) {
         res.discards[0] = mainPileDeck.drawN(6);
         res.discards[1] = mainPileDeck.drawN(1);
         res.discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
@@ -53,7 +59,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         sd.sharedPiles.push(makeSharedPile(card));
     }
 
-    if(debugOptions.prepopulate) {
+    if(debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {
         sd.sharedPiles.push(makeSharedPile({ rank: "K", suit: "C" }));
     }
 

@@ -20,11 +20,11 @@ export function removeDuplicates<T>(arr: T[]) : T[] {
     return ra;
 }
 
-function test(...args: number[]) {
-    console.log(...args, ":", ...removeDuplicates(args));
-}
+// function test(...args: number[]) {
+//     console.log(...args, ":", ...removeDuplicates(args));
+// }
 
-test();
-test(1);
-test(1,1);
-test(1, 2, 2, 2, 1, 3, 3);
+// test();
+// test(1);
+// test(1,1);
+// test(1, 2, 2, 2, 1, 3, 3);
