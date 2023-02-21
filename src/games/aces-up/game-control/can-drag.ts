@@ -29,8 +29,7 @@ export function canDrag(
     }
 
     if (id.area === "discardPiles") {
-        // Only the top card in the pile can be dragged.
-        return id.cardIndex === 0;
+        return true;
     }
 
     sAssert(false,"Unexpect card id");

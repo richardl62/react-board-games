@@ -46,13 +46,16 @@ export function canDrop(
     }
 
     if(from.area === "discardPiles") {
-        // Drops from discard piles to shared piles are allow (subject to normal checks).
-        // This case is handled above.
-        return false;
+        // Drops from discard piles to shared piles are handled above.
+        // This case is from drops from one discard pile to another
+        return to.area === "discardPiles"
+            && to.cardIndex === "any"
+            && from.pileIndex !== to.pileIndex;
     }
 
     if(to.area === "hand") {
-        return from.area === "hand";
+        return from.area === "hand" &&
+            from.index !== to.index;
     }
 
     if (to.area === "playerPile") {
