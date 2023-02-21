@@ -12,12 +12,15 @@ export type CardID = {
     owner: PlayerID,
     index: number,
 } | {
-    area: "discardPiles",
+    area: "discardPileCard",
     owner: PlayerID,
     pileIndex: number,
-    cardIndex: number | "any", // KLUDGE?: "any" is used when indentify a
-        // particular pile  as a drop target.
-}
+    cardIndex: number,
+} | {
+    area: "discardPileAll", //The whole pile rather than an individual card
+    owner: PlayerID,
+    pileIndex: number,
+} 
 
 // Cast as unknown value to a CardID, and do a basic sanity check.
 export function getCardID(value: unknown) : CardID {

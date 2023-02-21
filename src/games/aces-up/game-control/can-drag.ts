@@ -28,7 +28,7 @@ export function canDrag(
         return true;
     }
 
-    if (id.area === "discardPiles") {
+    if (id.area === "discardPileCard") {
         return true;
     }
 

@@ -44,9 +44,7 @@ interface Props {
 export function DiscardPile(props: Props): JSX.Element {
     const { cards, owner, index: pileIndex } = props;
 
-    const dropRef = useCardDropRef({area: "discardPiles", pileIndex, 
-        cardIndex: "any", owner
-    });
+    const dropRef = useCardDropRef({area: "discardPileAll", pileIndex, owner});
     
     const cardDivs = cards.map((card, cardIndex) =>
         <CardDiv
@@ -54,7 +52,7 @@ export function DiscardPile(props: Props): JSX.Element {
             key={cardName(card) + cardIndex}>
             <CardDraggable
                 card={cards[cardIndex]}
-                id={{ area: "discardPiles", pileIndex, cardIndex, owner }}
+                id={{ area: "discardPileCard", pileIndex, cardIndex, owner }}
             />
         </CardDiv>
     );

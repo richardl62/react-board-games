@@ -7,6 +7,9 @@ import { CardID } from "./card-id";
 import { SharedPile } from "./shared-pile";
 
 export function moveableToSharedPile(card: CardNonJoker, pile: SharedPile) : boolean {
+    if(debugOptions.skipCheckOnAddedToSharedPiles) {
+        return true;
+    }
 
     if(pile.rank === "Q") {
         // You can't add to a full pile
@@ -21,8 +24,8 @@ export function canDrop(
     {to, from}: {to: CardID, from: CardID}
 ) : boolean {
     if (to.area === "sharedPiles") {
-        if(debugOptions.skipCheckOnAddedToSharedPiles) {
-            return true;
+        if(from.area === "discardPileCard" && from.cardIndex !== 0) {
+            return false;
         }
 
         const card = getCard(gameContext.G, from);
@@ -45,11 +48,10 @@ export function canDrop(
         return false;
     }
 
-    if(from.area === "discardPiles") {
+    if(from.area === "discardPileCard") {
         // Drops from discard piles to shared piles are handled above.
         // This case is from drops from one discard pile to another
-        return to.area === "discardPiles"
-            && to.cardIndex === "any"
+        return to.area === "discardPileAll"
             && from.pileIndex !== to.pileIndex;
     }
 
@@ -62,11 +64,18 @@ export function canDrop(
         return false;
     }
 
-    if (to.area === "discardPiles") {
+    if (to.area === "discardPileAll") {
         // Dropping is supported on the pile as a whole rather than
         // on individual cards in the pile.
-        return to.cardIndex === "any" && from.area === "hand";
+        return from.area === "hand";
     }
+
+    if (to.area === "discardPileCard") {
+        // Dropping is supported on the pile as a whole rather than
+        // on individual cards in the pile.
+        return false;
+    }
+
 
     sAssert(false, "Cannot determine if drop is permissable");
 }

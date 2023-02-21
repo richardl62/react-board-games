@@ -37,8 +37,7 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker {
         return playerData.hand[id.index];
     }
 
-    if(id.area === "discardPiles") {
-        sAssert(id.cardIndex !== "any");
+    if(id.area === "discardPileCard") {
         return playerData.discards[id.pileIndex][id.cardIndex];
     }
 
@@ -60,8 +59,7 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
         return removeOneCard(playerData.hand, id.index);
     }
 
-    if(id.area === "discardPiles") {
-        sAssert(id.cardIndex !== "any");
+    if(id.area === "discardPileCard") {
         return removeOneCard(playerData.discards[id.pileIndex], id.cardIndex);
     }
 
@@ -89,7 +87,7 @@ export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
 
     const playerData = G.playerData[id.owner];
 
-    if (id.area === "discardPiles") {
+    if (id.area === "discardPileAll") {
         playerData.discards[id.pileIndex].unshift(card);
         return;
     }

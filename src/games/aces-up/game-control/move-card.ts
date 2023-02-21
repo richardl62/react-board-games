@@ -18,8 +18,8 @@ function moveWithinSharedPiles(
     {from, to}: {from: CardID, to: CardID},
 )
 {
-    sAssert(from.area === "discardPiles" && from.cardIndex !== "any");
-    sAssert(to.area === "discardPiles" && to.cardIndex === "any");
+    sAssert(from.area === "discardPileCard");
+    sAssert(to.area === "discardPileAll");
     sAssert(from.pileIndex != to.pileIndex);
 
     const fromPile = playerData.discards[from.pileIndex];
@@ -42,22 +42,24 @@ export function moveCard(
 
     const playerData = G.playerData[playerID];
 
-    if (to.area === "discardPiles") {
+    if (to.area === "discardPileAll"){
         if (moveToSharedPileRequired(G, playerID)) {
             G.moveToSharedPile = "required";
             return;
         }
 
-        if(from.area === "discardPiles") {
+        if(from.area === "discardPileCard") {
             moveWithinSharedPiles(playerData, {from, to});
             return;
         }
     }
 
+    sAssert(to.area !== "discardPileCard");
+    
     const card = removeCard(G, from);
     addCard(G, to, card);
 
-    if(to.area === "discardPiles") {
+    if(to.area === "discardPileAll") {
         endTurn(G, ctx);
     } else {
         if (playerData.hand.length === 0) {
