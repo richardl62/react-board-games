@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { cardSize } from "../../../utils/cards/styles";
 import { SharedPiles } from "./shared-piles";
 
 const OuterDiv = styled.div`
@@ -7,15 +8,12 @@ const OuterDiv = styled.div`
 
     display: flex;
     flex-direction: column;
-`;
 
-const Text = styled.div`
-  align-self: center;  
+    margin-left: ${cardSize.width/2}px;
 `;
 
 export function SharedArea(): JSX.Element {
     return <OuterDiv>
-        <Text>Shared Piles</Text>
         <SharedPiles />
     </OuterDiv>;
 }
