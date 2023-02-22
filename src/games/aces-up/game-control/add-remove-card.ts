@@ -88,7 +88,7 @@ export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
     const playerData = G.playerData[id.owner];
 
     if (id.area === "discardPileAll") {
-        playerData.discards[id.pileIndex].unshift(card);
+        playerData.discards[id.pileIndex].push(card);
         return;
     }
 

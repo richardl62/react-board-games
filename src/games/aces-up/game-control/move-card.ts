@@ -25,8 +25,10 @@ function moveWithinSharedPiles(
     const fromPile = playerData.discards[from.pileIndex];
     const toPile = playerData.discards[to.pileIndex];
 
-    const movedCards = fromPile.splice(0, from.cardIndex+1);
-    toPile.splice(0,0,...movedCards);
+    const movedCards = fromPile.splice(
+        from.cardIndex, 
+        fromPile.length - from.cardIndex);
+    toPile.push(...movedCards);
 }
 
 export function moveCard(

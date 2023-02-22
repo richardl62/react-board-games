@@ -15,6 +15,10 @@ export type CardID = {
     area: "discardPileCard",
     owner: PlayerID,
     pileIndex: number,
+
+    /** low number are at the bottom of the pile, i.e. they were
+     * added before higher numbers. (This makes the indices more 
+     * stable.) */
     cardIndex: number,
 } | {
     area: "discardPileAll", //The whole pile rather than an individual card

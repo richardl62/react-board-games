@@ -24,14 +24,17 @@ export function canDrop(
     {to, from}: {to: CardID, from: CardID}
 ) : boolean {
     if (to.area === "sharedPiles") {
-        if(from.area === "discardPileCard" && from.cardIndex !== 0) {
-            return false;
+        if(from.area === "discardPileCard") {
+            const fromPile = gameContext.G.playerData[from.owner].discards[from.pileIndex];
+            if(from.cardIndex !== fromPile.length-1) {
+                return false;
+            }
         }
 
         const card = getCard(gameContext.G, from);
-        const pile = gameContext.G.sharedPiles[to.index];
+        const toPile = gameContext.G.sharedPiles[to.index];
 
-        return moveableToSharedPile(card, pile);
+        return moveableToSharedPile(card, toPile);
     }
 
     if (from.area === "sharedPiles") {

@@ -50,8 +50,8 @@ function CardArea(props:{
     const dragRef = useCardDragRef(cardID);
 
     // Card with index 0 is at the top
-    const cardsAbove = cards.length - (cardIndex + 1);
-    const cardsBelow = cardIndex + 1;
+    const cardsAbove = cardIndex;
+    const cardsBelow = cards.length - (cardIndex + 1);
 
     return <CardAreaDiv ref={dragRef} cardsAbove={cardsAbove} cardsBelow={cardsBelow}>
         <CardSVG card={cards[cardIndex]} />
@@ -70,8 +70,8 @@ export function DiscardPile(props: {
     const cardDivs : JSX.Element[] = [];
 
     /* KLUDGE?: Backwards loop to achieve desired overlap - see CardDiv */
-    for(let cardIndex = cards.length - 1; cardIndex >= 0 ; --cardIndex) {
-        const cardID : CardID = { area: "discardPileCard", pileIndex, cardIndex, owner };
+    for(let cardIndex = 0; cardIndex < cards.length; ++cardIndex) {
+        const cardID : CardID = { area: "discardPileCard", pileIndex, cardIndex: cardIndex, owner };
         const key= cardName(cards[cardIndex]) + cardIndex;
 
         cardDivs.push(
