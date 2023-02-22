@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { CardNonJoker, CardSVG } from "../../../utils/cards";
 import { cardSize, cardVerticalStackingOffset } from "../../../utils/cards/styles";
 import { cardName } from "../../../utils/cards/types";
-import { CardDraggable, useCardDropRef } from "./drag-drop";
+import { CardID } from "../game-control/card-id";
+import { useCardDragRef, useCardDropRef } from "./drag-drop";
 
 function cardTop(index: number) {
     return index * cardVerticalStackingOffset;
@@ -25,37 +26,58 @@ const OuterDiv = styled.div<{nCards: number}>`
     width: ${cardSize.width}px;
 `;
 
-const CardDiv = styled.div<{index: number}>`
+const CardAreaDiv = styled.div<{
+    cardsAbove: number,
+    cardsBelow: number,
+}>`
+    /* KLUDGE?: Rely on order of cards to get the required overlapping.
+      (The same overlap can achieved by setting z-index to cardsAbove, but then 
+      only the selected card would apoear to drag, not the cards below it. 
+      Limitation: With Firefox only the selected card appears to drag wether
+      or not the z-index is set.)*/
     position: absolute;
-    top: ${props => cardTop(props.index)}px;
-    
-    z-index: ${props => props.index+1};
+    top: ${props => cardTop(props.cardsAbove)}px;
 
-    padding: none;
-    margin: none;
+    height: ${props => pileHeight(props.cardsBelow)}px;
 `;
 
-interface Props {
+function CardArea(props:{
+    cards: CardNonJoker[],
+    cardIndex: number,
+    cardID: CardID,
+}) {
+    const { cards, cardIndex, cardID } = props;
+    const dragRef = useCardDragRef(cardID);
+
+    // Card with index 0 is at the top
+    const cardsAbove = cards.length - (cardIndex + 1);
+    const cardsBelow = cardIndex + 1;
+
+    return <CardAreaDiv ref={dragRef} cardsAbove={cardsAbove} cardsBelow={cardsBelow}>
+        <CardSVG card={cards[cardIndex]} />
+    </CardAreaDiv>;
+}
+
+export function DiscardPile(props: {
     cards: CardNonJoker[];
     index: number;
     owner: PlayerID;
-}
-
-export function DiscardPile(props: Props): JSX.Element {
+}): JSX.Element {
     const { cards, owner, index: pileIndex } = props;
 
     const dropRef = useCardDropRef({area: "discardPileAll", pileIndex, owner});
     
-    const cardDivs = cards.map((card, cardIndex) =>
-        <CardDiv
-            index={cards.length - (cardIndex + 1)}
-            key={cardName(card) + cardIndex}>
-            <CardDraggable
-                card={cards[cardIndex]}
-                id={{ area: "discardPileCard", pileIndex, cardIndex, owner }}
-            />
-        </CardDiv>
-    );
+    const cardDivs : JSX.Element[] = [];
+
+    /* KLUDGE?: Backwards loop to achieve desired overlap - see CardDiv */
+    for(let cardIndex = cards.length - 1; cardIndex >= 0 ; --cardIndex) {
+        const cardID : CardID = { area: "discardPileCard", pileIndex, cardIndex, owner };
+        const key= cardName(cards[cardIndex]) + cardIndex;
+
+        cardDivs.push(
+            <CardArea key={key} cards={cards} cardIndex={cardIndex} cardID={cardID} />
+        );
+    }
 
     return <OuterDiv ref={dropRef} nCards={cards.length}>
         {cardDivs.length === 0 && <CardSVG />}

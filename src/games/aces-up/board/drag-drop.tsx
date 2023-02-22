@@ -32,7 +32,8 @@ export function useCardDropRef(id: CardID) : DropRef | null {
     return dropRef;
 }
 
-function useCardDragRef(id: CardID)  {
+type DragRef = ReturnType<typeof useDrag>[1];
+export function useCardDragRef(id: CardID) : DragRef | null {
 
     const ctx = useGameContext();
 
