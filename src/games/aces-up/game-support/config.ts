@@ -10,10 +10,10 @@ export const nSharedPilesAtStart = 3;
 
 // The debug iptions should be set to false for normal play.
 export const debugOptions = {
-    prepopulateRandom: true,
-    prepopulateOrdered: true, // Takes precedence over prepopulateRandom
-    skipCheckOnAddedToSharedPiles: true,
-    skipRequirementToAddToSharedPiles: true,
+    prepopulateRandom: false,
+    prepopulateOrdered: false, // Takes precedence over prepopulateRandom
+    skipCheckOnAddedToSharedPiles: false,
+    skipRequirementToAddToSharedPiles: false,
 };
 
 export function debugOptionsInUse() : boolean {

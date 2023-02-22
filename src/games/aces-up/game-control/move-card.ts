@@ -42,24 +42,27 @@ export function moveCard(
 
     const playerData = G.playerData[playerID];
 
-    if (to.area === "discardPileAll"){
+    // Check move is valid. (Must of the checking is done in canDrag()/canDrop(). 
+    // But the check that cards are played to discard piles before ending
+    // the turn is done here.)
+    const endOfTurn = to.area === "discardPileAll";
+    if (endOfTurn){
         if (moveToSharedPileRequired(G, playerID)) {
             G.moveToSharedPile = "required";
             return;
         }
-
-        if(from.area === "discardPileCard") {
-            moveWithinSharedPiles(playerData, {from, to});
-            return;
-        }
     }
 
-    sAssert(to.area !== "discardPileCard");
-    
-    const card = removeCard(G, from);
-    addCard(G, to, card);
+    // Do the move
+    if(to.area === "discardPileAll" && from.area === "discardPileCard") {
+        moveWithinSharedPiles(playerData, {from, to});
+    } else {
+        const card = removeCard(G, from);
+        addCard(G, to, card);
+    }
 
-    if(to.area === "discardPileAll") {
+    // Post-move actions
+    if(endOfTurn) {
         endTurn(G, ctx);
     } else {
         if (playerData.hand.length === 0) {
