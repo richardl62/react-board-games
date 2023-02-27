@@ -63,7 +63,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         sd.sharedPiles.push(makeSharedPile({ rank: "K", suit: "C" }));
     }
 
-    sd.sharedPiles.push({top: null, rank: null});
+    sd.sharedPiles.push({cards: null, rank: null});
 
     for (const pid in ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck);

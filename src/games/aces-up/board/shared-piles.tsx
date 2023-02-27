@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { cardName, rankName } from "../../../utils/cards/types";
+import { cardShortName, rankName } from "../../../utils/cards/types";
 import { useGameContext } from "../game-support/game-context";
 import { SharedPile } from "../game-control/shared-pile";
 import { CardDraggable } from "./drag-drop";
@@ -25,10 +25,11 @@ interface PileProps {
 function Pile(props: PileProps) {
     const { pile, pileIndex } = props;
 
-    const showRank = pile.rank && pile.rank !== pile.top.rank;
+    const topCard = pile.cards && pile.cards[pile.cards.length-1];
+    const showRank = topCard && pile.rank != topCard.rank;
     
     return <div>
-        <CardDraggable card={pile.top} 
+        <CardDraggable card={topCard} 
             id={{area: "sharedPiles", index: pileIndex}} 
         />
         <TextDiv> {showRank && rankName(pile.rank)} </TextDiv>
@@ -40,7 +41,10 @@ export function SharedPiles() : JSX.Element {
     const { G: {sharedPiles} } = useGameContext();
 
     return <SharedPilesDiv> {sharedPiles.map((pile, index) => {
-        const name = pile.top ? cardName(pile.top) : "empty";
+        let name = "";
+        if(pile.cards) {
+            name = pile.cards.reduce((str, card) => str + cardShortName(card), ""); 
+        }
         return <Pile key={name+index} pile={pile} pileIndex={index} />;
     })}
     </SharedPilesDiv>;

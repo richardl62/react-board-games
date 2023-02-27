@@ -1,21 +1,21 @@
 import { CardNonJoker, Rank} from "../../../utils/cards/types";
 
 export type SharedPileNonEmpty = {
-    top: CardNonJoker;
-    /** In general, the same as top.rank. But if 'top' is a wild card, this gives the effective rank */
+    /* The cards to be displayed. This will be the cards added this turn (index > 0), 
+    plus the previous top card (index 0). */
+    cards: CardNonJoker[];
+
+    /** In general, the rank of cards[cards.length-1]. But if that card is wild, this gives the effective rank */
     rank: Rank;
 };
 
 /** A shared pile that is built up during play */
 export type SharedPile = {
-    top: null,
+    cards: null,
     rank: null,
 } | SharedPileNonEmpty;
 
 export function makeSharedPile(top: CardNonJoker) : SharedPileNonEmpty {
     const rank = top.rank === "K" ? "A" : top.rank;
-    return { top, rank };
+    return { cards: [top], rank };
 }
-
-
-
