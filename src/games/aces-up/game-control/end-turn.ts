@@ -32,6 +32,15 @@ export function endTurn(
 
     // Clear any full shared piles
     G.sharedPiles = G.sharedPiles.filter(p => p.rank !== "Q");
+
+    // Clear all but the top card of shared piles (so only the
+    // cards played in the current turn are shown)
+    for(const sharedPile of G.sharedPiles) {
+        if(sharedPile.cards) {
+            sAssert(sharedPile.cards.length > 0);
+            sharedPile.cards = sharedPile.cards.slice(-1); // The last element
+        }
+    }
             
     sAssert(ctx.events);
     ctx.events.endTurn();

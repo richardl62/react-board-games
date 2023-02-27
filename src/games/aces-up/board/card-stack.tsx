@@ -18,11 +18,11 @@ const SubStackDiv = styled.div`
 function SubStack(props: {
     cards: CardNonJoker[],
     cardIndex: number,
-    dragID: (index: number) => CardID;
+    dragID?: (index: number) => CardID,
 }) {
     const {cards, cardIndex, dragID } = props;
 
-    const dragRef = useCardDragRef(dragID(cardIndex));
+    const dragRef = useCardDragRef(dragID ? dragID(cardIndex) : null);
 
     return <SubStackDiv ref={dragRef}>
         <CardSVG card={cards[cardIndex]} />
@@ -54,13 +54,13 @@ const CardStackDiv = styled.div<{height: number}>`
  */
 export function CardStack(props: {
     cards: CardNonJoker[];
-    dragID: (index: number) => CardID;
-    dropID: CardID;
+    dragID?: (index: number) => CardID;
+    dropID?: CardID | null;
 
 }): JSX.Element {
     const { cards, dragID, dropID } = props;
 
-    const dropRef = useCardDropRef(dropID);
+    const dropRef = useCardDropRef(dropID || null);
 
     return <CardStackDiv ref={dropRef} height={stackHeight(cards.length)}>
         {cards.length === 0 ? 

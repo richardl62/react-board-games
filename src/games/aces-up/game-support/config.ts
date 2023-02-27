@@ -12,7 +12,7 @@ export const nSharedPilesAtStart = 3;
 export const debugOptions = {
     prepopulateRandom: false,
     prepopulateOrdered: true, // Takes precedence over prepopulateRandom
-    skipCheckOnAddedToSharedPiles: false,
+    skipCheckOnAddedToSharedPiles: true,
     skipRequirementToAddToSharedPiles: false,
 };
 

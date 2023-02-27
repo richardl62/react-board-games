@@ -7,6 +7,7 @@ import { CardID, getCardID } from "../game-control/card-id";
 import { canDrop } from "../game-control/can-drop";
 import styled from "styled-components";
 import { cardSize } from "../../../utils/cards/styles";
+import { sAssert } from "../../../utils/assert";
 
 const dndType = "Card";
 
@@ -14,7 +15,7 @@ type CardSVGProps = Parameters<typeof CardSVG>[0];
 
 
 type DropRef = ReturnType<typeof useDrop>[1];
-export function useCardDropRef(id: CardID) : DropRef | null {
+export function useCardDropRef(id: CardID | null) : DropRef | null {
     const ctx = useGameContext();
     const { moveCard } = ctx.moves;
 
@@ -22,18 +23,21 @@ export function useCardDropRef(id: CardID) : DropRef | null {
         accept: dndType,
         drop: (dragID) => {
             const from = getCardID(dragID);
-            
+            sAssert(id);
             moveCard({from, to: id});
         },
-        canDrop: (item) => canDrop(ctx, {from: getCardID(item), to: id}),
+        canDrop: (item) => {
+            sAssert(id);
+            return canDrop(ctx, {from: getCardID(item), to: id});
+        },
 
     }), [id]);
 
-    return dropRef;
+    return id && dropRef;
 }
 
 type DragRef = ReturnType<typeof useDrag>[1];
-export function useCardDragRef(id: CardID) : DragRef | null {
+export function useCardDragRef(id: CardID | null) : DragRef | null {
 
     const ctx = useGameContext();
 
@@ -45,7 +49,7 @@ export function useCardDragRef(id: CardID) : DragRef | null {
         []
     );
 
-    return canDrag(ctx, id) ? dragRef : null;
+    return id && canDrag(ctx, id) ? dragRef : null;
 }
 
 

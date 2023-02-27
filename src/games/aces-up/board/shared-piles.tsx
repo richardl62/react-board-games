@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { cardShortName, rankName } from "../../../utils/cards/types";
 import { useGameContext } from "../game-support/game-context";
 import { SharedPile } from "../game-control/shared-pile";
-import { CardDraggable } from "./drag-drop";
 import { columnGap } from "../game-support/styles";
+import { CardStack } from "./card-stack";
 
 const TextDiv = styled.div`
     text-align: center;
@@ -29,8 +29,9 @@ function Pile(props: PileProps) {
     const showRank = topCard && pile.rank != topCard.rank;
     
     return <div>
-        <CardDraggable card={topCard} 
-            id={{area: "sharedPiles", index: pileIndex}} 
+        <CardStack 
+            cards={pile.cards || []} 
+            dropID={{area: "sharedPiles", index: pileIndex}} 
         />
         <TextDiv> {showRank && rankName(pile.rank)} </TextDiv>
 

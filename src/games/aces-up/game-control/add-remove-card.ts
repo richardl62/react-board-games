@@ -14,9 +14,18 @@ function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
 function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNonJoker) {
     const sp = sharedPiles[index];
 
-    sp.cards = [card];
-
-    sp.rank = card.rank === "K" ? nextRank(sp.rank) : card.rank;
+    const newRank = card.rank === "K" ? nextRank(sp.rank) : card.rank;
+    sAssert(newRank);
+    
+    if(sp.cards) {
+        sp.cards.push(card);
+        sp.rank = newRank;
+    } else {
+        sharedPiles[index] = {
+            cards: [card],
+            rank: newRank,
+        };
+    }
 
     // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
     // moved. )
