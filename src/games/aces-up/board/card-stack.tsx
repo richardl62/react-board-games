@@ -33,7 +33,8 @@ function SubStack(props: {
     </SubStackDiv>;
 }
 
-function stackHeight(nCards: number) {
+/** Return height of CardStack in pixels */
+export function cardStackHeight(nCards: number) : number {
     if(nCards === 0) {
         return cardSize.height;
     } else {
@@ -62,7 +63,7 @@ export function CardStack(props: {
 
     const dropRef = useCardDropRef(dropID || null);
 
-    return <CardStackDiv ref={dropRef} height={stackHeight(cards.length)}>
+    return <CardStackDiv ref={dropRef} height={cardStackHeight(cards.length)}>
         {cards.length === 0 ? 
             <CardSVG /> : 
             <SubStack cards={cards} cardIndex={0} dragID={dragID} />
