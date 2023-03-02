@@ -1,11 +1,12 @@
 import { Ctx, PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
+import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { debugOptions } from "../game-support/config";
 import { addCard, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
-import { PlayerData, ServerData } from "./server-data";
+import { PlayerData, ServerData, UndoItem } from "./server-data";
 import { makeUndoItem } from "./undo";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
@@ -57,10 +58,14 @@ export function moveCard(
     
     const playerData = G.playerData[playerID];
 
-    const undoItem = makeUndoItem(G, playerID);
+    let undoItem : UndoItem | null = makeUndoItem(G, playerID);
 
     // Do the move
-    if(to.area === "discardPileAll" && from.area === "discardPileCard") {
+    if(to.area === "hand" && from.area === "hand") {
+        sAssert(to.owner === playerID && from.owner === playerID);
+        reorderFollowingDrag(playerData.hand, from.index, to.index);
+        undoItem = null;
+    } else if(to.area === "discardPileAll" && from.area === "discardPileCard") {
         moveWithinSharedPiles(playerData, {from, to});
     } else {
         const card = removeCard(G, from);
@@ -79,7 +84,9 @@ export function moveCard(
             refillHand(G, ctx, playerID);
             G.undoItems = [];
         } else {
-            G.undoItems.push(undoItem); 
+            if(undoItem) {
+                G.undoItems.push(undoItem); 
+            }
         }
     }
 }

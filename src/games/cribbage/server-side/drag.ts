@@ -1,7 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
-import { reorderFollowingDrag } from "../../../utils/drag-support";
+import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { ServerData, GameStage, makeCardSetID, CardSetID } from "./server-data";
 
 interface FromTo {
