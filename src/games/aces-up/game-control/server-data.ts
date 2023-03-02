@@ -14,7 +14,13 @@ export interface PlayerData {
 
 type PlayerDataDictionary =  {[playerID: string]: PlayerData }
 
-export interface ServerData {
+// Server Data that is reset each turn
+export interface PerTurnServerData {
+    moveToSharedPile: "pending" | "done" | "required";
+    undoAvailable: boolean;
+}
+
+export interface ServerData extends PerTurnServerData {
     /** The deck that cards are drawn from */
     deck: CardNonJoker[];
 
@@ -23,7 +29,7 @@ export interface ServerData {
 
     playerData: PlayerDataDictionary;
 
-    moveToSharedPile: "pending" | "done" | "required";
+
 
     serverError: string | null;
     serverTimestamp: number;

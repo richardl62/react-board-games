@@ -3,7 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
-import { startMoveToSharedPile } from "./starting-server-data";
+import { turnStartServerData } from "./starting-server-data";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -24,7 +24,7 @@ export function endTurn(
     ctx: Ctx,
 ) : void {
 
-    G.moveToSharedPile = startMoveToSharedPile();
+    Object.assign(G, turnStartServerData);
     
     const nextPlayerID_ = nextPlayerID(ctx);
         

@@ -56,6 +56,7 @@ export function moveCard(
     }
 
     // Do the move
+    G.undoAvailable = true;
     if(to.area === "discardPileAll" && from.area === "discardPileCard") {
         moveWithinSharedPiles(playerData, {from, to});
     } else {
@@ -68,6 +69,7 @@ export function moveCard(
         endTurn(G, ctx);
     } else {
         if (playerData.hand.length === 0) {
+            G.undoAvailable = false;
             refillHand(G, ctx, playerID);
         }
 

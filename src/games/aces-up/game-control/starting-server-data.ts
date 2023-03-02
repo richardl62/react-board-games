@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 import { debugOptions, handSize, mainPileSize, nSharedPilesAtStart } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
-import { PlayerData, ServerData } from "./server-data";
+import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
@@ -32,9 +32,11 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     return res;
 }
 
-export function startMoveToSharedPile() : ServerData["moveToSharedPile"] {
-    return "pending";
-}
+
+export const turnStartServerData: PerTurnServerData = {
+    moveToSharedPile: "pending",
+    undoAvailable: false,
+};
 
 export function startingServerData(ctx: Ctx): ServerData {
 
@@ -44,7 +46,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
         playerData: {},
 
-        moveToSharedPile: startMoveToSharedPile(),
+        ...turnStartServerData,
 
         serverError: null,
         serverTimestamp: 0,

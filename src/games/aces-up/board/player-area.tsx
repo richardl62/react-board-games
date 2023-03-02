@@ -32,18 +32,23 @@ interface Props {
 
 export function PlayerArea(props: Props) : JSX.Element {
     const { playerInfo } = props;
-    const { getPlayerName } = useGameContext();
+    const { getPlayerName, undo, G: {undoAvailable} } = useGameContext();
 
     let message = getPlayerName(playerInfo.owner);
+    let canUndo = false;
     if( playerInfo.owner === playerInfo.currentPlayer ) {
-        if(playerInfo.owner === playerInfo.viewer)
+        if(playerInfo.owner === playerInfo.viewer) {
             message += " (Your turn)";
-        else
+            canUndo = undoAvailable;
+        }
+        else {
             message += " (Their turn)";
+        }
     }
 
     return <OuterDiv>
         <Text>{message}</Text>
+        {canUndo && <button onClick={undo}>Undo</button>}
         <IllegalMoveNotification playerInfo={playerInfo}/>
         <InnerDiv>
             <MainPile playerInfo={playerInfo}/>
