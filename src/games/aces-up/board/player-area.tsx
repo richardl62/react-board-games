@@ -8,6 +8,10 @@ import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
 import { PlayerInfo } from "./player-info";
 
+const Button = styled.button`
+    font-size: 1em;  
+`;
+
 const OuterDiv = styled.div`
     display: inline-flex;
     flex-direction: column;
@@ -32,14 +36,14 @@ interface Props {
 
 export function PlayerArea(props: Props) : JSX.Element {
     const { playerInfo } = props;
-    const { getPlayerName, undo, G: {undoAvailable} } = useGameContext();
+    const { getPlayerName, moves, G: {undoItems} } = useGameContext();
 
     let message = getPlayerName(playerInfo.owner);
     let canUndo = false;
     if( playerInfo.owner === playerInfo.currentPlayer ) {
         if(playerInfo.owner === playerInfo.viewer) {
             message += " (Your turn)";
-            canUndo = undoAvailable;
+            canUndo = undoItems.length > 0;
         }
         else {
             message += " (Their turn)";
@@ -48,7 +52,7 @@ export function PlayerArea(props: Props) : JSX.Element {
 
     return <OuterDiv>
         <Text>{message}</Text>
-        {canUndo && <button onClick={undo}>Undo</button>}
+        {canUndo && <Button onClick={() => moves.undo()}>Undo</Button>}
         <IllegalMoveNotification playerInfo={playerInfo}/>
         <InnerDiv>
             <MainPile playerInfo={playerInfo}/>

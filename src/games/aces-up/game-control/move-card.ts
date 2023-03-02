@@ -6,6 +6,7 @@ import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
 import { PlayerData, ServerData } from "./server-data";
+import { makeUndoItem } from "./undo";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.moveToSharedPile !== "done" &&
@@ -42,8 +43,6 @@ export function moveCard(
     sAssert(from.owner === playerID, "Unexpected card owner");
     sAssert(to.area === "sharedPiles" || to.owner === playerID, "Unexpected card owner");
 
-    const playerData = G.playerData[playerID];
-
     // Check move is valid. (Must of the checking is done in canDrag()/canDrop(). 
     // But the check that cards are played to discard piles before ending
     // the turn is done here.)
@@ -55,13 +54,21 @@ export function moveCard(
         }
     }
 
+    
+    const playerData = G.playerData[playerID];
+
+    const undoItem = makeUndoItem(G, playerID);
+
     // Do the move
-    G.undoAvailable = true;
     if(to.area === "discardPileAll" && from.area === "discardPileCard") {
         moveWithinSharedPiles(playerData, {from, to});
     } else {
         const card = removeCard(G, from);
         addCard(G, to, card);
+    }
+    
+    if (to.area === "sharedPiles") {
+        G.moveToSharedPile = "done";
     }
 
     // Post-move actions
@@ -69,12 +76,10 @@ export function moveCard(
         endTurn(G, ctx);
     } else {
         if (playerData.hand.length === 0) {
-            G.undoAvailable = false;
             refillHand(G, ctx, playerID);
-        }
-
-        if (to.area === "sharedPiles") {
-            G.moveToSharedPile = "done";
+            G.undoItems = [];
+        } else {
+            G.undoItems.push(undoItem); 
         }
     }
 }

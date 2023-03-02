@@ -1,8 +1,10 @@
 import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrap-move-functions";
 import { moveCard } from "./move-card";
+import { undo } from "./undo";
 
 export const allFuncs = {
     moveCard,
+    undo,
 };
 
 export const bgioMoves = wrapMoveFunctions(allFuncs);

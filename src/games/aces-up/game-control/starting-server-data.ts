@@ -35,7 +35,7 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
 
 export const turnStartServerData: PerTurnServerData = {
     moveToSharedPile: "pending",
-    undoAvailable: false,
+    undoItems:[],
 };
 
 export function startingServerData(ctx: Ctx): ServerData {
