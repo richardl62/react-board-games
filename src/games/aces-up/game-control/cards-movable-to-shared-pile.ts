@@ -16,7 +16,7 @@ function moveableCards(playerData: PlayerData) {
     }
 
     if(playerData.mainPile.length > 0) {
-        moveable.push(playerData.mainPile[0]);
+        moveable.push(playerData.mainPile.slice(-1)[0]);
     }
 
     return moveable;

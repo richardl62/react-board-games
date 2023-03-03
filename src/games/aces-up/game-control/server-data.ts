@@ -3,11 +3,14 @@ import { CardNonJoker } from "../../../utils/cards";
 import { SharedPile } from "./shared-pile";
 
 export interface PlayerData {
-    /** The pile that the player in trying to get rid of */
+    /** The pile that the player in trying to get rid of.
+     * The card with index 0 is the most deeply burried.
+     */
     mainPile: CardNonJoker[];
 
     hand: CardNonJoker[];
 
+    /* For each discard pile, the card with index 0 is the most deeply burried. */
     discards: [CardNonJoker[], CardNonJoker[], CardNonJoker[]];
 
     cardPlayedToSharedPiles: boolean;

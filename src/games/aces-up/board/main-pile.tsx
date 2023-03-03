@@ -23,7 +23,7 @@ export function MainPile(props: Props) : JSX.Element {
 
     return <div>
         <CardDraggable 
-            card={mainPile[0]} 
+            card={mainPile[mainPile.length-1]} 
             id={{area: "playerPile", owner: playerInfo.owner}}
         />
 

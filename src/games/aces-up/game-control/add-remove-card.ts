@@ -52,7 +52,7 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker {
     }
 
     if(id.area === "playerPile") {
-        return playerData.mainPile[0];
+        return playerData.mainPile.slice(-1)[0]; // The last element
     }
 
     throw new Error("Unexpected card ID");
@@ -74,7 +74,9 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
     }
 
     if(id.area === "playerPile") {
-        return removeOneCard(playerData.mainPile, 0);
+        const card = playerData.mainPile.pop();
+        sAssert(card);
+        return card;
     }
 
     throw new Error("Unexpected card ID");
