@@ -7,7 +7,7 @@ function moveableCards(playerData: PlayerData) {
     const moveable: CardNonJoker[] = [];
     for(const discardPile of playerData.discards) {
         if(discardPile.length > 0) {
-            moveable.push(discardPile[0]);
+            moveable.push(discardPile[discardPile.length-1]);
         }
     }
 
