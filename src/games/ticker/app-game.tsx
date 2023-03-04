@@ -9,12 +9,11 @@ import React from "react";
 const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
-    name: "counter",
-    displayName: "Counter",
+    name: "ticker",
+    displayName: "Ticker",
     category: GameCategory.test,
 
     setup: (ctx: Ctx) => startingServerData(ctx), 
-    
 
     minPlayers: 1,
     maxPlayers: 8,

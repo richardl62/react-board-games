@@ -35,7 +35,6 @@ function hoursMinSeconds(totalSecond: number) {
     const [mins, hours] = div60(totalMinutes);
 
     return `${hours}:${twoDigits(mins)}:${twoDigits(secs)}`; 
-
 }
 
 function Board() : JSX.Element {
@@ -53,7 +52,6 @@ function Board() : JSX.Element {
         <h1>Reported time since start</h1>
         <p>{`Local: ${hoursMinSeconds(localCount)}`}</p>
         <p>{`Server: ${hoursMinSeconds(serverCount)}`}</p>
-        <button onClick={()=>moves.setCount(localCount)}>Update server</button>
     </Count>; 
 }
 
