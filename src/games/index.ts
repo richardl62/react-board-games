@@ -8,11 +8,11 @@ import swapSquares from "./swap-squares";
 import ticker from "./ticker";
 
 export const games : Array<AppGame> = [
-    ...scrabble,
     ...acesUp,
     ...cribbage,
     ...crosstiles,
     ...plusMinus,
+    ...scrabble,
     ...swapSquares, 
     ...ticker,
 ];
