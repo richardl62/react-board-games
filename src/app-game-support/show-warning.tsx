@@ -21,14 +21,18 @@ export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
 
     const warnings: string[] = [];
 
-    for(const pId in props.playerData) {
-        const {name, status } = props.playerData[pId];
-        if(status === "notConnected") {
-            warnings.push(`${name} is not connected`);
+    if (!props.isConnected) {
+        warnings.push("No connection to server");
+    } else {
+        for (const pId in props.playerData) {
+            const { name, status } = props.playerData[pId];
+            if (status === "notConnected") {
+                warnings.push(`${name} is not connected`);
+            }
         }
     }
 
-    if(warnings.length === 0) { 
+    if (warnings.length === 0) {
         return null;
     }
 
@@ -37,5 +41,5 @@ export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
             <span key='-'>Warning:</span>
             {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
-    );   
+    );
 }
