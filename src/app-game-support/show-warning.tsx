@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { WrappedGameProps } from "./wrapped-game-props";
 
@@ -17,7 +17,7 @@ const WarningsDiv = styled.div`
 /** Show warnings, if any, about general (non-game-specifiy) issues.
  * Currently, the only warning is about players being off line.
  */
-export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
+function ConnectionWarnings(props: WrappedGameProps) {
 
     const warnings: string[] = [];
 
@@ -42,4 +42,28 @@ export function GameWarnings(props: WrappedGameProps): JSX.Element | null {
             {warnings.map(w => <span key={w}>{w}</span>)}
         </WarningsDiv>
     );
+}
+
+function ReconnectionCount(props: WrappedGameProps) {
+    const { isConnected } = props;
+    const [wasConnected, setWasConnected] = useState(true);
+    const [reconnectionCount, setReconnectionCount] = useState(0);
+
+    if(wasConnected !== isConnected) {
+        if(isConnected) {
+            setReconnectionCount(reconnectionCount+1);
+        }
+        setWasConnected(isConnected);
+    }
+
+    return reconnectionCount > 0 ?
+        <div>{`Reconnection count: ${reconnectionCount}`}</div> :
+        null;
+}
+
+export function GameWarnings(props: WrappedGameProps): JSX.Element {
+    return <>
+        <ReconnectionCount {...props}/>
+        <ConnectionWarnings {...props}/>
+    </>;
 }
