@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { numPlayersOnScreen } from "../../../app/url-params";
+
 import { standardBoard } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
@@ -36,10 +36,15 @@ const OuterDivMultiplePlayers = styled.div`
 `;
 
 function Board(props: WrappedGameProps) : JSX.Element {
-    const Div = numPlayersOnScreen() === 1 ? OuterDivSinglePlayer :
-        OuterDivMultiplePlayers;
+    const { numPlayers } = props.ctx;
+    const offline = props.matchID === "default";
+    
+    const Div = (offline && numPlayers > 1) ? OuterDivMultiplePlayers
+        : OuterDivSinglePlayer;
 
-    return <Div>{standardBoard(LazyBoard,props)}</Div>;
+    return <Div>
+        {standardBoard(LazyBoard,props)}
+    </Div>;
 }
 
 export default Board;

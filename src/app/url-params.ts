@@ -149,7 +149,3 @@ export function openOnlineMatchPage(matchID: MatchID): void {
 
     window.location.href = url.href;
 }
-
-export function numPlayersOnScreen() : number {
-    return offline ? offline.nPlayers : 1;
-}
