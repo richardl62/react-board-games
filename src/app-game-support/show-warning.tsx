@@ -57,7 +57,7 @@ function ReconnectionCount(props: WrappedGameProps) {
     }
 
     return reconnectionCount > 0 ?
-        <div>{`Reconnection count: ${reconnectionCount}`}</div> :
+        <div>{`Server reconnection count: ${reconnectionCount}`}</div> :
         null;
 }
 

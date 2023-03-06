@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { rowGap } from "../game-support/styles";
-import { SharedArea } from "./shared-area";
-import { PlayerAreas } from "./player-areas";
 import { numPlayersOnScreen } from "../../../app/url-params";
-import { Warnings } from "./warnings";
+import { standardBoard } from "../../../app-game-support/standard-board";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+
+const LazyBoard = React.lazy(() => import("../board/inner-board"));
 
 const OuterDivSinglePlayer = styled.div`
     /* Make sure that the whole div is at least as big as the window.
@@ -35,24 +35,11 @@ const OuterDivMultiplePlayers = styled.div`
     font-family: Helvetica;
 `;
 
-const GameDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    row-gap: ${rowGap.betweenAreas};
-    margin: 2%;
-`;
-
-function Board() : JSX.Element {
-    const OuterDiv = numPlayersOnScreen() === 1 ? OuterDivSinglePlayer :
+function Board(props: WrappedGameProps) : JSX.Element {
+    const Div = numPlayersOnScreen() === 1 ? OuterDivSinglePlayer :
         OuterDivMultiplePlayers;
-        
-    return <OuterDiv>
-        <Warnings />
-        <GameDiv>
-            <SharedArea />
-            <PlayerAreas />
-        </GameDiv>
-    </OuterDiv>;
+
+    return <Div>{standardBoard(LazyBoard,props)}</Div>;
 }
 
 export default Board;
