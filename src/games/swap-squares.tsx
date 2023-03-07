@@ -88,7 +88,7 @@ function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE
     );
 }
 
-const game: AppGame = {
+export const appGame: AppGame = {
     name: "swap-squares",
     displayName: "Swap Squares",
     category: GameCategory.test,
@@ -122,4 +122,3 @@ const game: AppGame = {
     },
 };
 
-export default [ game ];
