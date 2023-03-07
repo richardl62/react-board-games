@@ -31,7 +31,7 @@ export function ScoresEtc(): JSX.Element {
             nInRackText = ` (${nInRack} tiles left) `;
         }
 
-        const key = name + index; // Include index to ensure unique keys even if players have
+        const key = name + index; // Use index to ensure unique keys even if players have
         // the same name (e.g. "<available>").
         return <div key={key} >
             <PlayerScore current={pid === context.currentPlayer} >
