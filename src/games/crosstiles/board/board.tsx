@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { ErrorMessage } from "../../../utils/error-message";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { GameStage } from "../server-side/server-data";
@@ -51,11 +50,9 @@ function GameStages(props: GameStagesProps) {
 function Board(): JSX.Element {
     const crossTilesGameProps = useStandardBoardContext() as CrossTilesGameProps;
 
-    const { G: {stage, serverError} } = crossTilesGameProps;
+    const { G: { stage } } = crossTilesGameProps;
 
     return <BoardDiv>
-        <ErrorMessage category="server error" message={serverError} />
-
         {stage === GameStage.setup ?  
             <SetOptionsOrWait gameProps={crossTilesGameProps} /> : 
             <GameStages gameProps={crossTilesGameProps} />}
