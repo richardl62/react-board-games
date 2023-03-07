@@ -1,10 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { standardBoard } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 
-const LazyBoard = React.lazy(() => import("../board/inner-board"));
 
 const OuterDivSinglePlayer = styled.div`
     /* Make sure that the whole div is at least as big as the window.
@@ -35,16 +33,16 @@ const OuterDivMultiplePlayers = styled.div`
     font-family: Helvetica;
 `;
 
-function Board(props: WrappedGameProps) : JSX.Element {
-    const { offline, ctx: {numPlayers} } = props;
+interface Props extends WrappedGameProps {
+    children: React.ReactNode;
+}
+export function OuterBoard(props: Props) : JSX.Element {
+    const { offline, ctx: {numPlayers}, children } = props;
     
     const Div = (offline && numPlayers > 1) ? OuterDivMultiplePlayers
         : OuterDivSinglePlayer;
 
-    return <Div>
-        {standardBoard(LazyBoard,props)}
-    </Div>;
+    return <Div>{children}</Div>;
 }
 
-export default Board;
 

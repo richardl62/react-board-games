@@ -1,8 +1,12 @@
+import React from "react";
 import { Ctx } from "boardgame.io";
 import { AppGame, GameCategory } from "../../../app-game-support";
-import Board from "../board/board";
+import {OuterBoard} from "../board/outer-board";
 import { bgioMoves } from "../game-control/moves";
 import { startingServerData } from "../game-control/starting-server-data";
+import { standardBoard } from "../../../app-game-support/standard-board";
+import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+const LazyBoard = React.lazy(() => import("../board/inner-board"));
 
 export const appGame: AppGame = {
     name: "acesup",
@@ -16,5 +20,7 @@ export const appGame: AppGame = {
 
     moves: bgioMoves,
 
-    board: Board,
+    board: (props: WrappedGameProps) => <OuterBoard {...props}>
+        {standardBoard(LazyBoard, props)}
+    </OuterBoard>,
 };
