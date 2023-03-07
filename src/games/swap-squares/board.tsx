@@ -1,21 +1,10 @@
-import { Ctx } from "boardgame.io";
 import React from "react";
-import { AppGame, GameCategory } from "../app-game-support";
-import { DefaultMovesType, WrappedGameProps } from "../app-game-support/wrapped-game-props";
-import { BoarderedGrid } from "../utils/board/boardered-grid";
-import { DndProvider } from "../utils/board/drag-drop";
-import { DragDrop, PieceHolder } from "../utils/board/piece-holder";
-
-interface G {
-  squares: number[];
-}
-
-const initialSquares = [
-    1, 2, 3,
-    4, 5, 6,
-    7, 8, 9,
-];
-Object.freeze(initialSquares);
+import { DndProvider } from "../../utils/board/drag-drop";
+import { BoarderedGrid } from "../../utils/board/boardered-grid";
+import { DragDrop, PieceHolder } from "../../utils/board/piece-holder";
+import { useStandardBoardContext } from "../../app-game-support/standard-board";
+import { WrappedGameProps, DefaultMovesType } from "../../app-game-support/wrapped-game-props";
+import { ServerData } from "./server-data";
 
 interface SquareProps {
     value: number;
@@ -57,7 +46,9 @@ function Square(props: SquareProps) : JSX.Element {
     </PieceHolder>;  
 }
 
-function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE*/>): JSX.Element {
+export default function Board(): JSX.Element {
+    const ctx = useStandardBoardContext() as WrappedGameProps<ServerData, DefaultMovesType /*KLUDGE*/>;
+    const { G, moves } = ctx;
     const onReset = () => {
         moves.reset();
     };
@@ -87,38 +78,3 @@ function SwapSquares({ G, moves }: WrappedGameProps<G, DefaultMovesType /*KLUDGE
         </DndProvider>
     );
 }
-
-export const appGame: AppGame = {
-    name: "swap-squares",
-    displayName: "Swap Squares",
-    category: GameCategory.test,
-
-    setup: (): G => {
-        return { squares: [...initialSquares] };
-    },
-
-    minPlayers: 1,
-    maxPlayers: 1,
-
-    moves: {
-        swap: (G: G, _ctx: Ctx, from: number, to: number) => {
-            if (from !== to) {
-                const tmp = G.squares[to];
-                G.squares[to] = G.squares[from];
-                G.squares[from] = tmp;
-            }
-        },
-
-        // Using the BGIO supplied reset function lead to server errros.
-        // TO DO: Understand why this happened;
-        reset: (G: G /*, ctx: Ctx*/) => {
-            G.squares = [...initialSquares];
-        },
-    },
-
-    board: (props: WrappedGameProps) => {
-        const castProps = props as WrappedGameProps<G,DefaultMovesType/*KLUDGE*/>;
-        return <SwapSquares {...castProps}/>;
-    },
-};
-
