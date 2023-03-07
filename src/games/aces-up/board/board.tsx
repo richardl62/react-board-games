@@ -36,8 +36,7 @@ const OuterDivMultiplePlayers = styled.div`
 `;
 
 function Board(props: WrappedGameProps) : JSX.Element {
-    const { numPlayers } = props.ctx;
-    const offline = props.matchID === "default";
+    const { offline, ctx: {numPlayers} } = props;
     
     const Div = (offline && numPlayers > 1) ? OuterDivMultiplePlayers
         : OuterDivSinglePlayer;

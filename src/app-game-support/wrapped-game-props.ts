@@ -29,6 +29,8 @@ export interface WrappedGameProps<G = unknown, Moves=unknown>
     events: Events;
 
     playerData: PlayerDataDictionary;
+
+    offline: boolean;
     allJoined: boolean;
     allConnected: boolean;
     
@@ -69,6 +71,7 @@ export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGamePr
         ...bgioProps,
         events: events,
         playerData: playerData,
+        offline: Boolean(offline),
         allJoined: allJoined,
         allConnected: allConnected,
         playerID: bgioProps.playerID,
