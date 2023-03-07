@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { GameWarnings } from "../../../app-game-support";
 import { ErrorMessage } from "../../../utils/error-message";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
@@ -11,8 +10,8 @@ import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
 import { SetOptionsOrWait } from "./setup";
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { aboveScoreCardsHeight } from "./style";
+import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 
 const BoardDiv = styled.div`
    display: inline-block;
@@ -49,19 +48,12 @@ function GameStages(props: GameStagesProps) {
     </ContextProviderPlus>;
 }
 
-
-interface BoardProps {
-    gameProps: WrappedGameProps;
-} 
-
-function Board(props: BoardProps): JSX.Element {
-    const { gameProps } = props; 
-    const crossTilesGameProps = gameProps as unknown as CrossTilesGameProps;
+function Board(): JSX.Element {
+    const crossTilesGameProps = useStandardBoardContext() as CrossTilesGameProps;
 
     const { G: {stage, serverError} } = crossTilesGameProps;
 
     return <BoardDiv>
-        <GameWarnings {...gameProps}/>
         <ErrorMessage category="server error" message={serverError} />
 
         {stage === GameStage.setup ?  

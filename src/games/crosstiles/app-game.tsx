@@ -1,10 +1,11 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { ActivePlayers } from "boardgame.io/core";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/server-data";
 import { Ctx } from "boardgame.io";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
+import { standardBoard } from "../../app-game-support/standard-board";
 
 const LazyBoard = React.lazy(() => import("./board/board"));
 
@@ -26,9 +27,5 @@ export const appGame: AppGame = {
         activePlayers: ActivePlayers.ALL,
     },
 
-    board: (props: WrappedGameProps) => {
-        return <Suspense fallback={<div>Loading...</div>}>
-            <LazyBoard gameProps={props} />
-        </Suspense>;
-    }
+    board: (props: WrappedGameProps) => standardBoard(LazyBoard, props),
 };
