@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { GameWarnings } from "../../../app-game-support";
 import { nNonNull } from "../../../utils/n-non-null";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 
@@ -22,30 +21,25 @@ const NumTilesInRack=styled.span`
 export function ScoresEtc(): JSX.Element {
     const context = useScrabbleContext();
 
-    const scoreElems = context.wrappedGameProps.ctx.playOrder.map(pid => {
+    const scoreElems = context.wrappedGameProps.ctx.playOrder.map((pid,index) => {
         const name = context.wrappedGameProps.getPlayerName(pid);
         const score = context.playerData[pid].score;
         const nInRack = nNonNull(context.playerData[pid].rack);
         
         let nInRackText = "";
-        if(pid !== context.wrappedGameProps.playerID && context.nTilesInBag === 0) {
+        if (pid !== context.wrappedGameProps.playerID && context.nTilesInBag === 0) {
             nInRackText = ` (${nInRack} tiles left) `;
         }
 
-        return (
-            <div key={name} >
-                <PlayerScore current={pid === context.currentPlayer} >
-                    {`${name}: ${score}`}
-                </PlayerScore>
-                <NumTilesInRack>{nInRackText}</NumTilesInRack>
-            </div>
-        );
+        const key = name + index; // Include index to ensure unique keys even if players have
+        // the same name (e.g. "<available>").
+        return <div key={key} >
+            <PlayerScore current={pid === context.currentPlayer} >
+                {`${name}: ${score}`}
+            </PlayerScore>
+            <NumTilesInRack>{nInRackText}</NumTilesInRack>
+        </div>;
     });
 
-    return (
-        <div>
-            <StyledScoresEtc> {scoreElems} </StyledScoresEtc>
-            <GameWarnings {...context.wrappedGameProps}/>
-        </div>
-    );
+    return <StyledScoresEtc> {scoreElems} </StyledScoresEtc>;
 }

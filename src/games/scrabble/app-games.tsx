@@ -6,7 +6,7 @@ import { bgioMoves, startingServerData } from "./server-side";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
 import { standardBoard } from "../../app-game-support/standard-board";
 
-const LazyBoard = React.lazy(() => import("./board-wrapper/board-wrapper"));
+const LazyBoard = React.lazy(() => import("./board/board-wrapper"));
 
 function makeAppGame(config: ScrabbleConfig) : AppGame
 {

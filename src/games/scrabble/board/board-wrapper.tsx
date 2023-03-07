@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../../utils/async-status";
 import { getWordChecker } from "../../../utils/get-word-checker";
-import { Board } from "../board";
+import { Board } from ".";
 import { ScrabbleGameProps } from "../client-side/srcabble-game-props";
 import { initialReducerState } from "../client-side/reducer-state";
 import { scrabbleReducer } from "../client-side/scrabble-reducer";

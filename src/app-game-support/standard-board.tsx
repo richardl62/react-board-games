@@ -21,7 +21,7 @@ export function standardBoard(
     LazyBoard: ReturnType<typeof React.lazy>, 
     props: WrappedGameProps,
 
-    /** Passed to the board. Intended for configuration setting. */
+    /** Passed to the board. Intended for configuration settings. */
     customData?: unknown,
 ) : JSX.Element
 {   

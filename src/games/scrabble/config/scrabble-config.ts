@@ -106,7 +106,7 @@ Object.freeze(simple);
 
 export const configs = [standard, simple];
 
-/** Quick check that and object is a ScrabbleContext */
+/** Quick check that an object is a ScrabbleContext */
 export function isScrabbleConfig(arg: unknown) : boolean {
     let valid = false;
     
