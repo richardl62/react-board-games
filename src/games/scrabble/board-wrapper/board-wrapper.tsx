@@ -8,18 +8,21 @@ import { initialReducerState } from "../client-side/reducer-state";
 import { scrabbleReducer } from "../client-side/scrabble-reducer";
 import { ScrabbleConfig } from "../config";
 import { makeScrabbleContext, ReactScrabbleContext } from "../client-side/scrabble-context";
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { isScrabbleConfig } from "../config/scrabble-config";
+import { sAssert } from "../../../utils/assert";
+import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 
 // import { beep } from "./sounds";
 
 export interface BoardWrapperProps {
-    appBoardProps: WrappedGameProps;
-    config: ScrabbleConfig
+    customData: unknown,
 }
 
 function BoardWrapper(props: BoardWrapperProps): JSX.Element {
-    const scrabbleGameProps = props.appBoardProps as unknown as ScrabbleGameProps;
-    const { config } = props;
+    const config = props.customData as ScrabbleConfig;
+    sAssert(isScrabbleConfig(config), "Invalid Srabble context");
+
+    const scrabbleGameProps = useStandardBoardContext() as ScrabbleGameProps;
 
     const [reducerState, dispatch] = useReducer(scrabbleReducer, 
         initialReducerState(scrabbleGameProps, config)

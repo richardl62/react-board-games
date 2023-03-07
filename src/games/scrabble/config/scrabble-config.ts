@@ -106,5 +106,22 @@ Object.freeze(simple);
 
 export const configs = [standard, simple];
 
+/** Quick check that and object is a ScrabbleContext */
+export function isScrabbleConfig(arg: unknown) : boolean {
+    let valid = false;
+    
+    try {
+        const inputConf = arg as ScrabbleConfig;
+        for (const conf of configs) {
+            if (inputConf.displayName === conf.displayName) {
+                valid = true;
+            }
+        }
+    // eslint-disable-next-line no-empty
+    } catch { }
+
+    return valid;
+}
+
 
 

@@ -3,9 +3,10 @@ import React from "react";
 import { AppGame } from "../../app-game-support";
 import { configs, ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./server-side";
-import Board from "./board-wrapper";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
+import { standardBoard } from "../../app-game-support/standard-board";
 
+const LazyBoard = React.lazy(() => import("./board-wrapper/board-wrapper"));
 
 function makeAppGame(config: ScrabbleConfig) : AppGame
 {
@@ -16,9 +17,7 @@ function makeAppGame(config: ScrabbleConfig) : AppGame
   
         moves: bgioMoves,
   
-        board: (props: WrappedGameProps) => <Board
-            appBoardProps={props} config={config}
-        />
+        board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, config),
     };
 }
 

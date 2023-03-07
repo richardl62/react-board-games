@@ -19,7 +19,11 @@ function serverError(props: WrappedGameProps) : string | null {
 
 export function standardBoard(
     LazyBoard: ReturnType<typeof React.lazy>, 
-    props: WrappedGameProps) : JSX.Element
+    props: WrappedGameProps,
+
+    /** Passed to the board. Intended for configuration setting. */
+    customData?: unknown,
+) : JSX.Element
 {   
     return <Suspense fallback={<div>Loading...</div>}>
         <GameWarnings {...props}/>
@@ -27,7 +31,7 @@ export function standardBoard(
 
         <ReactBasicsContext.Provider value={props}>
             <DndProvider backend={HTML5Backend}>
-                <LazyBoard />
+                <LazyBoard customData={customData}/>
             </DndProvider>
         </ReactBasicsContext.Provider>
     </Suspense>;
