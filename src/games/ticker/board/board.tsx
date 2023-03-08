@@ -64,21 +64,28 @@ function BoardCurrentPlayer() : JSX.Element {
         setServerLag(parseInt(value));
     };
 
-    return <Count>
-        <p>Reported time since start</p>
-        <p>{`Local: ${hoursMinSeconds(localCount)}`}</p>
-        <p>{`Server: ${hoursMinSeconds(serverCount)}`}</p>
-        <label>
-            Max server lag:
-            <input 
-                type="number" 
-                value={serverLag} 
-                min={0}
-                step={1}
-                onChange={(event) => onChangeServerLag(event.target.value)}
-            />
-        </label>
-    </Count>; 
+    return <div>
+        <Count>
+            <p>Reported time since start</p>
+            <p>{`Local: ${hoursMinSeconds(localCount)}`}</p>
+            <p>{`Server: ${hoursMinSeconds(serverCount)}`}</p>
+            <label>
+                Max server lag:
+                <input
+                    type="number"
+                    value={serverLag}
+                    min={0}
+                    step={1}
+                    onChange={(event) => onChangeServerLag(event.target.value)}
+                />
+            </label>
+        </Count>
+
+        <button
+            onClick={() => moves.throwError("Testing")}
+        > Throw error
+        </button>
+    </div>;
 }
 
 function BoardNonCurrentPlayer() : JSX.Element {
@@ -91,13 +98,12 @@ function BoardNonCurrentPlayer() : JSX.Element {
 }
 
 function Board() : JSX.Element {
-    const {playerID, ctx: {currentPlayer}} = useGameContext();
+    const {playerID, ctx: {currentPlayer} } = useGameContext();
 
-    if (playerID === currentPlayer) {
-        return <BoardCurrentPlayer/>;
-    } else {
-        return <BoardNonCurrentPlayer/>;
-    }
+    return <div>
+        {(playerID === currentPlayer) ? <BoardCurrentPlayer /> : <BoardNonCurrentPlayer />}
+
+    </div>;
 }
 
 export default Board;

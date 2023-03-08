@@ -27,7 +27,7 @@ export function standardBoard(
 {   
     return <Suspense fallback={<div>Loading...</div>}>
         <GameWarnings {...props}/>
-        <ErrorMessage category="server error" message={moveError(props)} />
+        <ErrorMessage category="Error during move" message={moveError(props)} />
 
         <ReactBasicsContext.Provider value={props}>
             <DndProvider backend={HTML5Backend}>
