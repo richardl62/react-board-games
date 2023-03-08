@@ -8,8 +8,8 @@ export interface ServerData {
     /** states avialable for undo/redo */
     states: GameState[];
 
-    /** Any move that changes game data will also increase timestamp */
-    timestamp: number;
+    /** Any move that changes game data will also increase moveCount */
+    moveCount: number;
 
     moveError: string | null;
 }
@@ -18,7 +18,7 @@ export interface ServerData {
 export function isServerData(arg: unknown): boolean {
     const serverData = arg as ServerData;
     return Array.isArray(serverData.states) &&
-        typeof serverData.timestamp === "number" &&
+        typeof serverData.moveCount === "number" &&
         isGameState(serverData.states[0]);
 }
 
@@ -26,7 +26,7 @@ export function startingServerData(ctx: Ctx, config: ScrabbleConfig): ServerData
 
     return {
         states: [startingGameState(ctx, config)],
-        timestamp: 0,
+        moveCount: 0,
         moveError: null,
     };
 }

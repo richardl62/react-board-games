@@ -49,7 +49,7 @@ function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
             G.states[G.states.length-1].moveHistory.push({ moveError: { message: message } });
         }
 
-        G.timestamp++;
+        G.moveCount++;
     };
 }
 

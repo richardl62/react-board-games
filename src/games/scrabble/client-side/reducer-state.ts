@@ -50,7 +50,7 @@ export function newReducerState(
     scrabbleGameProps: ScrabbleGameProps,
     simplifiedState: SimplifedReducerState,
 ): ReducerState {
-    const { states, timestamp } = scrabbleGameProps.G;
+    const { states, moveCount } = scrabbleGameProps.G;
     const historyPosition = simplifiedState.reviewGameHistory ? 
         simplifiedState.reviewGameHistory.historyPosition : states.length-1;
 
@@ -69,7 +69,7 @@ export function newReducerState(
         
         gameStates: states,
 
-        externalTimestamp: timestamp,
+        externalTimestamp: moveCount,
         scrabbleGameProps: scrabbleGameProps,
     };
 }
