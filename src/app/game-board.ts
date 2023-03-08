@@ -3,6 +3,7 @@
 
 import { useEffect } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
+import { RequiredState } from "../app-game-support/wrap-move-functions";
 import { WrappedGameProps, makeWrappedGameProps } from "../app-game-support/wrapped-game-props";
 
 
@@ -15,12 +16,12 @@ function gameStatus(gameProps: WrappedGameProps) {
     }
 }
 
-interface GameBoardProps<G> {
-    bgioProps: BoardProps<G>;
+interface GameBoardProps {
+    bgioProps: BoardProps<RequiredState>;
     game: AppGame;
 }
 
-export function GameBoard<G>(props: GameBoardProps<G>) : JSX.Element {
+export function GameBoard(props: GameBoardProps) : JSX.Element {
     const {bgioProps, game} = props;
 
     const gameProps = makeWrappedGameProps(bgioProps);

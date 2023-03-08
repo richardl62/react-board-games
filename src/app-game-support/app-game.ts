@@ -1,4 +1,5 @@
-import { Game } from "boardgame.io";
+import { Ctx, Game } from "boardgame.io";
+import { RequiredState } from "./wrap-move-functions";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 // The string values are uses as section headers when displaying the list of
@@ -9,7 +10,7 @@ export enum GameCategory {
   test = "Test/Debug",
 }
 
-export interface AppGame<G = unknown> extends Game<G> { 
+export interface AppGame<G extends RequiredState = RequiredState> extends Game<G> { 
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
   // display purposes.
   displayName: string;
@@ -19,7 +20,7 @@ export interface AppGame<G = unknown> extends Game<G> {
   name: string;
 
   moves: Required<Game>["moves"];
-  setup: Required<Game<G>>["setup"];
+  setup: (ctx: Ctx) => G;
 
   minPlayers: number,
   maxPlayers: number,
