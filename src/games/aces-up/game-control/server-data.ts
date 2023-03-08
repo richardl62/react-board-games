@@ -41,7 +41,7 @@ export interface ServerData extends PerTurnServerData {
 
     playerData: PlayerDataDictionary;
     moveError: string | null;
-    serverTimestamp: number;
+    moveCount: number;
 }
 
 

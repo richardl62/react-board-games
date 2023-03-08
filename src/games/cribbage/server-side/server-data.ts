@@ -70,7 +70,7 @@ export interface ServerData {
     };
 
     moveError: string | null;
-    serverTimestamp: number;
+    moveCount: number;
 }
 
 

@@ -4,7 +4,7 @@ export interface ServerData {
     count: number;
     
     moveError: string | null;
-    serverTimestamp: number;
+    moveCount: number;
 }
 
 export function startingServerData(_ctx: Ctx): ServerData {
@@ -12,6 +12,6 @@ export function startingServerData(_ctx: Ctx): ServerData {
         count: 0,
         
         moveError: null,
-        serverTimestamp: 0,
+        moveCount: 0,
     };
 }

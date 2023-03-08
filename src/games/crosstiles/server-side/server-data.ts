@@ -46,7 +46,7 @@ export interface ServerData {
     playerData: {[playerID: string]: PlayerData };
 
     moveError: string | null;
-    serverTimestamp: number;
+    moveCount: number;
 }
 
 export function startingPlayerData() : PlayerData {
@@ -77,7 +77,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         round: 0,
         playerData: playerData,
         moveError: null,
-        serverTimestamp: 0,
+        moveCount: 0,
     };
 
     return G;

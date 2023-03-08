@@ -49,7 +49,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         ...turnStartServerData,
 
         moveError: null,
-        serverTimestamp: 0,
+        moveCount: 0,
     };
 
     const mainPileDeck = new ExtendingDeck(ctx, []);

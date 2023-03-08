@@ -27,7 +27,7 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
     };
 }
 
-export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "moveError" | "serverTimestamp"> {
+export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "moveError" | "moveCount"> {
     sAssert(ctx.random);
     const cards = ctx.random.Shuffle(deck());
 
@@ -65,6 +65,6 @@ export function startingServerData(ctx: Ctx): ServerData {
     return {
         ...newDealData(ctx, startingPegPos),
         moveError: null,
-        serverTimestamp: 0,
+        moveCount: 0,
     };
 }
