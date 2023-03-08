@@ -48,7 +48,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
         ...turnStartServerData,
 
-        serverError: null,
+        moveError: null,
         serverTimestamp: 0,
     };
 

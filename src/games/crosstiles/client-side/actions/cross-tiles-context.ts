@@ -67,6 +67,6 @@ export function makeCrossTilesContext(
         wrappedGameProps: crossTilesGameProps, //kludge? Note that 'G' is not available to clients
         dispatch: dispatch,
         isLegalWord: isLegalWord,
-        serverError: G.serverError,
+        moveError: G.moveError,
     };
 }

@@ -23,7 +23,7 @@ export interface ScrabbleContext extends ReducerState {
 
     readonly winnerIds: GameState["winnerIds"],
 
-    readonly serverError: ServerData["serverError"];
+    readonly moveError: ServerData["moveError"];
 }
 
 export const ReactScrabbleContext = React.createContext<ScrabbleContext|null>(null);
@@ -79,6 +79,6 @@ export function makeScrabbleContext(
 
         winnerIds: finalGameState.winnerIds,
     
-        serverError: G.serverError,
+        moveError: G.moveError,
     };
 }

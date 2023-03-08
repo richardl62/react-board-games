@@ -39,10 +39,10 @@ function BagInfo(): JSX.Element {
 }
 
 export function MainGameArea(): JSX.Element {
-    const { reviewGameHistory, winnerIds, serverError } = useScrabbleContext();
+    const { reviewGameHistory, winnerIds, moveError } = useScrabbleContext();
     return <DndProvider>
         <Game>
-            <ErrorMessage category={"server error"} message={serverError}/>
+            <ErrorMessage category={"server error"} message={moveError}/>
             <ScoresEtc/>
             <RackAndControls/>
             <Centered>

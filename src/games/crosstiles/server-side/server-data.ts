@@ -45,7 +45,7 @@ export interface ServerData {
 
     playerData: {[playerID: string]: PlayerData };
 
-    serverError: string | null;
+    moveError: string | null;
     serverTimestamp: number;
 }
 
@@ -76,7 +76,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         stage: GameStage.setup,
         round: 0,
         playerData: playerData,
-        serverError: null,
+        moveError: null,
         serverTimestamp: 0,
     };
 

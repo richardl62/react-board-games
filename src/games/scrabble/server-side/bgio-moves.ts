@@ -24,7 +24,7 @@ function nextPlayer(ctx: Ctx) {
 
 function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
     return (G, ctx, param) => {
-        G.serverError = null;
+        G.moveError = null;
         try {
             const currentState = G.states[G.states.length-1];
             sAssert(currentState.currentPlayer === ctx.currentPlayer);
@@ -40,13 +40,13 @@ function wrappedMoveFunction<P>(func: SimpleMoveFunc<P> ) : WrappedMoveFunc<P> {
             if (ctx.events) {
                 ctx.events.endTurn();
             } else {
-                G.serverError = "Cannot end turn (internal error)";
+                G.moveError = "Cannot end turn (internal error)";
             }
         } catch (error) {
             const message = error instanceof Error ? error.message :
                 "unknown error";
-            G.serverError = message;
-            G.states[G.states.length-1].moveHistory.push({ serverError: { message: message } });
+            G.moveError = message;
+            G.states[G.states.length-1].moveHistory.push({ moveError: { message: message } });
         }
 
         G.timestamp++;

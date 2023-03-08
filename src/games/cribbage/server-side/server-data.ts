@@ -69,7 +69,7 @@ export interface ServerData {
         visible: boolean;
     };
 
-    serverError: string | null;
+    moveError: string | null;
     serverTimestamp: number;
 }
 

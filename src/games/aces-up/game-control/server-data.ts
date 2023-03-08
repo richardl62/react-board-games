@@ -40,7 +40,7 @@ export interface ServerData extends PerTurnServerData {
     sharedPiles: SharedPile[];
 
     playerData: PlayerDataDictionary;
-    serverError: string | null;
+    moveError: string | null;
     serverTimestamp: number;
 }
 

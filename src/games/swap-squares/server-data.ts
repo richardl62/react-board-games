@@ -1,6 +1,6 @@
 export interface ServerData {
   squares: number[];
-  serverError: null;
+  moveError: null;
 }
 
 export const initialSquares = [
@@ -12,7 +12,7 @@ export const initialSquares = [
 export function startingServerData(): ServerData {
     return {
         squares: initialSquares,
-        serverError: null,
+        moveError: null,
     };
 }
 

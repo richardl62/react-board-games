@@ -1,7 +1,8 @@
 import { Ctx } from "boardgame.io";
 
 export interface RequiredState  {
-    serverError: string | null;
+    /** Description of the exception, if any, thrown during the last move */
+    moveError: string | null;
     serverTimestamp: number;
 }
 
@@ -21,12 +22,12 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: MoveF
         if(funcResult) {
             return {
                 ...funcResult,
-                serverError: errorMessage, // Not strictly necessary
+                moveError: errorMessage, // Not strictly necessary
                 serverTimestamp: G.serverTimestamp+1,
             };
         } else {
             G.serverTimestamp++;
-            G.serverError = errorMessage;
+            G.moveError = errorMessage;
         }
     };
 }

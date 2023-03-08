@@ -11,7 +11,7 @@ export interface ServerData {
     /** Any move that changes game data will also increase timestamp */
     timestamp: number;
 
-    serverError: string | null;
+    moveError: string | null;
 }
 /** Quick check that an object is (probably) a GameData. */
 
@@ -27,6 +27,6 @@ export function startingServerData(ctx: Ctx, config: ScrabbleConfig): ServerData
     return {
         states: [startingGameState(ctx, config)],
         timestamp: 0,
-        serverError: null,
+        moveError: null,
     };
 }

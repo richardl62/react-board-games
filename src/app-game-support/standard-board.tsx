@@ -8,12 +8,12 @@ import { WrappedGameProps } from "./wrapped-game-props";
 
 export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(null);
 
-function serverError(props: WrappedGameProps) : string | null {
+function moveError(props: WrappedGameProps) : string | null {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const err = (props.G as any).serverError;
+    const err = (props.G as any).moveError;
 
     sAssert(typeof err === "string" || err === null, 
-        "Server data G does not have 'serverError' field (or it has the wrong type)");
+        "Server data G does not have 'moveError' field (or it has the wrong type)");
     return err;
 }
 
@@ -27,7 +27,7 @@ export function standardBoard(
 {   
     return <Suspense fallback={<div>Loading...</div>}>
         <GameWarnings {...props}/>
-        <ErrorMessage category="server error" message={serverError(props)} />
+        <ErrorMessage category="server error" message={moveError(props)} />
 
         <ReactBasicsContext.Provider value={props}>
             <DndProvider backend={HTML5Backend}>

@@ -101,13 +101,13 @@ function GameOver(props: WinnersProps) {
     }
 }
 
-interface ServerErrorProps {
+interface MoveErrorProps {
     message: string;
 }
 
-function ServerError({message}: ServerErrorProps) {
+function MoveError({message}: MoveErrorProps) {
     return <div>
-        <FirstSpan>ServerError</FirstSpan>
+        <FirstSpan>Error during move</FirstSpan>
         <span>{message}</span>
     </div>;
 }
@@ -147,8 +147,8 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
         return <GameOver winners={elem.gameOver.winners} />;
     }
 
-    if(elem.serverError) {
-        return <ServerError message={elem.serverError.message} />;
+    if(elem.moveError) {
+        return <MoveError message={elem.moveError.message} />;
     }
 
     return <div>Problem with turn description</div>;
