@@ -10,7 +10,7 @@ export enum GameCategory {
   test = "Test/Debug",
 }
 
-export interface AppGame<G extends RequiredState = RequiredState> extends Game<G> { 
+export interface AppGame extends Game { 
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
   // display purposes.
   displayName: string;
@@ -20,10 +20,13 @@ export interface AppGame<G extends RequiredState = RequiredState> extends Game<G
   name: string;
 
   moves: Required<Game>["moves"];
-  setup: (ctx: Ctx) => G;
+
+  // KLUDGE?: The setup function is expected to return a type derived from
+  // RequiredState. Specifying the return type as RequiredStates enforces this.
+  setup: (ctx: Ctx) => RequiredState;
 
   minPlayers: number,
   maxPlayers: number,
 
-  board: (props: WrappedGameProps<G, unknown>) => JSX.Element;
+  board: (props: WrappedGameProps) => JSX.Element;
 }
