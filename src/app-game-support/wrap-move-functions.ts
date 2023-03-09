@@ -10,9 +10,9 @@ export interface RequiredState  {
     moveCount: number;
 }
 
-type MoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
+type BgioMoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
 
-export function wrapMoveFunction<State extends RequiredState, Param>(func: MoveFunction<State, Param>): MoveFunction<State, Param> {
+export function wrapMoveFunction<State extends RequiredState, Param>(func: BgioMoveFunction<State, Param>): BgioMoveFunction<State, Param> {
     return (G, ctx, param) => {
         let errorMessage = null;
         let funcResult = undefined;
@@ -37,11 +37,13 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: MoveF
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type MoveFunctions<S extends RequiredState> = {[key: string]: MoveFunction<S, any>};
+type BgioMoveFunctions<S extends RequiredState> = {[key: string]: BgioMoveFunction<S, any>};
 
-export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFunctions<S>) 
-    : MoveFunctions<S> {
-    const obj : MoveFunctions<S> = {};
+export function wrapMoveFunctions<S extends RequiredState>(
+    unwrapped: BgioMoveFunctions<S>
+) 
+    : BgioMoveFunctions<S> {
+    const obj : BgioMoveFunctions<S> = {};
     
     for (const [key, value] of Object.entries(unwrapped)) {
         obj[key] = wrapMoveFunction(value);
@@ -50,14 +52,9 @@ export function wrapMoveFunctions<S extends RequiredState>(unwrapped: MoveFuncti
     return obj;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ClientFunctionFunction<F extends MoveFunction<any,any>> = (arg: Parameters<F>[2]) => void;
-
-type Moves = {
+export type ClientMoveFunctions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: MoveFunction<any,any>; 
-}
-
-export type ClientMoveFunctions<Type extends Moves> = {
-    [Property in keyof Type]: ClientFunctionFunction<Type[Property]>;
+    Functions extends { [key: string]: BgioMoveFunction<any,any> } 
+> = {
+    [Name in keyof Functions]: (arg: Parameters<Functions[Name]>[2]) => void;
 };
