@@ -8,9 +8,7 @@ export interface ServerData {
     /** states avialable for undo/redo */
     states: GameState[];
 
-    /** Any move that changes game data will also increase moveCount */
     moveCount: number;
-
     moveError: string | null;
 }
 /** Quick check that an object is (probably) a GameData. */

@@ -3,7 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { ReducerState } from "./reducer-state";
 import { ActionType } from "./scrabble-reducer";
 import { ScrabbleConfig } from "../config";
-import { ClientMoves } from "../server-side/bgio-moves";
+import { ClientMoves } from "../server-side/moves";
 import { isServerData, ServerData } from "../server-side";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";

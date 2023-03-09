@@ -41,8 +41,7 @@ type BgioMoveFunctions<S extends RequiredState> = {[key: string]: BgioMoveFuncti
 
 export function wrapMoveFunctions<S extends RequiredState>(
     unwrapped: BgioMoveFunctions<S>
-) 
-    : BgioMoveFunctions<S> {
+) : BgioMoveFunctions<S> {
     const obj : BgioMoveFunctions<S> = {};
     
     for (const [key, value] of Object.entries(unwrapped)) {

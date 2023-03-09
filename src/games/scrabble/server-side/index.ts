@@ -1,3 +1,3 @@
 export { isServerData , startingServerData } from "./server-data";
 export type { ServerData } from "./server-data";
-export { bgioMoves } from "./bgio-moves";
+export { bgioMoves } from "./moves";
