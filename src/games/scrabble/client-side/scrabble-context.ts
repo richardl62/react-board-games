@@ -8,9 +8,10 @@ import { isServerData, ServerData } from "../server-side";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { RequiredServerData } from "../../../app-game-support/required-state";
 
 export interface ScrabbleContext extends ReducerState {
-    readonly wrappedGameProps: WrappedGameProps<unknown, ClientMoves>; // Bgio properties other than game state
+    readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data
     playerID: string;
     currentPlayer: string;
 

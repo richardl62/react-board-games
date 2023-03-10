@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { sAssert } from "../utils/assert";
 import { ErrorMessage } from "../utils/error-message";
-import { asRequiredServerData } from "./required-state";
 import { WrappedGameProps } from "./wrapped-game-props";
-
 
 const WarningsDiv = styled.div`
     *:first-child {
@@ -64,16 +61,9 @@ function ReconnectionCount(props: WrappedGameProps) {
         null;
 }
 
-function moveError(props: WrappedGameProps) : string | null {
-    const state = asRequiredServerData(props.G);
-
-    sAssert(state, "Server data G does not have the required state");
-    return state.moveError;
-}
-
 export function GameWarnings(props: WrappedGameProps): JSX.Element {
     return <>
-        <ErrorMessage category="Error during move" message={moveError(props)} />
+        <ErrorMessage category="Error during move" message={props.G.moveError} />
         
         <ReconnectionCount {...props}/>
         <ConnectionWarnings {...props}/>

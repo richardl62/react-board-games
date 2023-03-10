@@ -5,6 +5,7 @@ import { sAssert } from "../utils/assert";
 import { BoardProps } from "./board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 import * as UrlParams from "../app/url-params";
+import { RequiredServerData } from "./required-state";
 /**
  * Bgio type definition of 'moves'.
  *
@@ -22,7 +23,7 @@ interface Events extends Omit<BgioEvents, "endTurn"> {
 /**
  * Game properties.  (A wrapper for BGIO BoardProps.)
  */
-export interface WrappedGameProps<G = unknown, Moves=unknown> 
+export interface WrappedGameProps<G extends RequiredServerData = RequiredServerData, Moves=unknown> 
     extends Omit<BoardProps<G>, "moves" | "events"> {
     
     moves: Moves;
@@ -39,7 +40,7 @@ export interface WrappedGameProps<G = unknown, Moves=unknown>
     getPlayerName: (pid: string) => string;
 }
 
-export function makeWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
+export function makeWrappedGameProps<G extends RequiredServerData>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
     const {offline} = UrlParams;
