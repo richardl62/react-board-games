@@ -1,4 +1,4 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrap-move-functions";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
 import { doneRecordingGrid } from "./done-recording-grid";
 import { readyForNewGame } from "./ready-for-new-game";
 import { recordGrid } from "./record-grid";

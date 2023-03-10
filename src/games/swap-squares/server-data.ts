@@ -1,8 +1,7 @@
-export interface ServerData {
-    squares: number[];
+import { RequiredState, startingRequiredState } from "../../app-game-support/required-state";
 
-    moveError: null;
-    moveCount: number;
+export interface ServerData extends RequiredState {
+    squares: number[];
 }
 
 export const initialSquares = [
@@ -15,8 +14,7 @@ export function startingServerData(): ServerData {
     return {
         squares: initialSquares,
         
-        moveError: null,
-        moveCount: 0,
+        ...startingRequiredState,
     };
 }
 

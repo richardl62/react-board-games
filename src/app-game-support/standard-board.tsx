@@ -4,17 +4,16 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { sAssert } from "../utils/assert";
 import { ErrorMessage } from "../utils/error-message";
 import { GameWarnings } from "./show-warning";
+import { asRequiredState } from "./required-state";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(null);
 
 function moveError(props: WrappedGameProps) : string | null {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const err = (props.G as any).moveError;
+    const state = asRequiredState(props.G);
 
-    sAssert(typeof err === "string" || err === null, 
-        "Server data G does not have 'moveError' field (or it has the wrong type)");
-    return err;
+    sAssert(state, "Server data G does not have the required state");
+    return state.moveError;
 }
 
 export function standardBoard(

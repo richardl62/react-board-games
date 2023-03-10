@@ -1,5 +1,5 @@
 import { Ctx, Game } from "boardgame.io";
-import { RequiredState } from "./wrap-move-functions";
+import { RequiredState } from "./required-state";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 // The string values are uses as section headers when displaying the list of

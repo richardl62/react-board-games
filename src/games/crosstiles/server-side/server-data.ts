@@ -4,6 +4,7 @@ import { defaultOptions, GameOptions, Letter } from "../config";
 import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "../score-categories";
 import { ScoreWithCategory } from "./set-score";
+import { RequiredState, startingRequiredState } from "../../../app-game-support/required-state";
 
 
 /* Use string values to add with debugging */
@@ -38,15 +39,12 @@ interface PlayerData {
     chosenCategory: ScoreCategory | null;
 }
 
-export interface ServerData {
+export interface ServerData extends RequiredState {
     options: GameOptions;
     stage: GameStage;
     round: number;
 
     playerData: {[playerID: string]: PlayerData };
-
-    moveError: string | null;
-    moveCount: number;
 }
 
 export function startingPlayerData() : PlayerData {
@@ -76,8 +74,8 @@ export function startingServerData(ctx: Ctx): ServerData {
         stage: GameStage.setup,
         round: 0,
         playerData: playerData,
-        moveError: null,
-        moveCount: 0,
+        
+        ...startingRequiredState,
     };
 
     return G;

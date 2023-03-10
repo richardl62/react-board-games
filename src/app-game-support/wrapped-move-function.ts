@@ -1,14 +1,5 @@
 import { Ctx } from "boardgame.io";
-
-export interface RequiredState  {
-    /** Description of the exception, if any, thrown during the last move.
-     *  Set in wrapMoveFunction.
-     */
-    moveError: string | null;
-
-    /** Count of moves. Set in wrapMoveFunction. */
-    moveCount: number;
-}
+import { RequiredState } from "./required-state";
 
 type BgioMoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
 
@@ -23,11 +14,11 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: BgioM
                 "unknown error";
         }
 
-        if(funcResult) {
+        if (funcResult) {
             return {
                 ...funcResult,
-                moveError: errorMessage, // Not strictly necessary
-                moveCount: G.moveCount+1,
+                moveError: errorMessage,
+                moveCount: G.moveCount + 1,
             };
         } else {
             G.moveCount++;
@@ -35,15 +26,14 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: BgioM
         }
     };
 }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BgioMoveFunctions<S extends RequiredState> = {[key: string]: BgioMoveFunction<S, any>};
+type BgioMoveFunctions<S extends RequiredState> = { [key: string]: BgioMoveFunction<S, any>; };
 
 export function wrapMoveFunctions<S extends RequiredState>(
     unwrapped: BgioMoveFunctions<S>
-) : BgioMoveFunctions<S> {
-    const obj : BgioMoveFunctions<S> = {};
-    
+): BgioMoveFunctions<S> {
+    const obj: BgioMoveFunctions<S> = {};
+
     for (const [key, value] of Object.entries(unwrapped)) {
         obj[key] = wrapMoveFunction(value);
     }
@@ -53,7 +43,7 @@ export function wrapMoveFunctions<S extends RequiredState>(
 
 export type ClientMoveFunctions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Functions extends { [key: string]: BgioMoveFunction<any,any> } 
+    Functions extends { [key: string]: BgioMoveFunction<any, any>; }
 > = {
-    [Name in keyof Functions]: (arg: Parameters<Functions[Name]>[2]) => void;
-};
+        [Name in keyof Functions]: (arg: Parameters<Functions[Name]>[2]) => void;
+    };

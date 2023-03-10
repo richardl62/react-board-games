@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../app-game-support/wrap-move-functions";
+import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../app-game-support/wrapped-move-function";
 import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";
 import { GameState } from "./game-state";

@@ -1,4 +1,5 @@
 import { Ctx } from "boardgame.io";
+import { startingRequiredState } from "../../../app-game-support/required-state";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";
@@ -64,7 +65,6 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     return {
         ...newDealData(ctx, startingPegPos),
-        moveError: null,
-        moveCount: 0,
+        ...startingRequiredState,
     };
 }

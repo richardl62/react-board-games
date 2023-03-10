@@ -4,6 +4,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
+import { startingRequiredState } from "../../../app-game-support/required-state";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 
@@ -48,8 +49,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
         ...turnStartServerData,
 
-        moveError: null,
-        moveCount: 0,
+        ...startingRequiredState,
     };
 
     const mainPileDeck = new ExtendingDeck(ctx, []);

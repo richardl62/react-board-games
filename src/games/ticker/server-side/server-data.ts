@@ -1,17 +1,14 @@
 import { Ctx } from "boardgame.io";
+import { RequiredState, startingRequiredState } from "../../../app-game-support/required-state";
 
-export interface ServerData {
+export interface ServerData extends RequiredState {
     count: number;
-    
-    moveError: string | null;
-    moveCount: number;
 }
 
 export function startingServerData(_ctx: Ctx): ServerData {
     return {
         count: 0,
         
-        moveError: null,
-        moveCount: 0,
+        ...startingRequiredState,
     };
 }

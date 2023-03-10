@@ -1,4 +1,5 @@
 
+import { RequiredState } from "../../../app-game-support/required-state";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 
@@ -52,7 +53,7 @@ export enum GameStage  {
     HandsRevealed,
 }
 
-export interface ServerData {
+export interface ServerData extends RequiredState {
     player0: PlayerData;
     player1: PlayerData;
 
@@ -68,9 +69,6 @@ export interface ServerData {
         card: Card;
         visible: boolean;
     };
-
-    moveError: string | null;
-    moveCount: number;
 }
 
 
