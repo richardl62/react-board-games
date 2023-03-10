@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { sAssert } from "../utils/assert";
+import { ErrorMessage } from "../utils/error-message";
+import { asRequiredServerData } from "./required-state";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 
@@ -61,8 +64,17 @@ function ReconnectionCount(props: WrappedGameProps) {
         null;
 }
 
+function moveError(props: WrappedGameProps) : string | null {
+    const state = asRequiredServerData(props.G);
+
+    sAssert(state, "Server data G does not have the required state");
+    return state.moveError;
+}
+
 export function GameWarnings(props: WrappedGameProps): JSX.Element {
     return <>
+        <ErrorMessage category="Error during move" message={moveError(props)} />
+        
         <ReconnectionCount {...props}/>
         <ConnectionWarnings {...props}/>
     </>;
