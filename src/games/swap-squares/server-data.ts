@@ -1,6 +1,6 @@
-import { RequiredState, startingRequiredState } from "../../app-game-support/required-state";
+import { RequiredServerData, startingRequiredState } from "../../app-game-support/required-state";
 
-export interface ServerData extends RequiredState {
+export interface ServerData extends RequiredServerData {
     squares: number[];
 }
 

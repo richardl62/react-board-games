@@ -3,7 +3,7 @@
 
 import { useEffect } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
-import { RequiredState } from "../app-game-support/required-state";
+import { RequiredServerData } from "../app-game-support/required-state";
 import { WrappedGameProps, makeWrappedGameProps } from "../app-game-support/wrapped-game-props";
 
 
@@ -17,7 +17,7 @@ function gameStatus(gameProps: WrappedGameProps) {
 }
 
 interface GameBoardProps {
-    bgioProps: BoardProps<RequiredState>;
+    bgioProps: BoardProps<RequiredServerData>;
     game: AppGame;
 }
 

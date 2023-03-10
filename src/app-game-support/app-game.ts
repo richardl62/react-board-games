@@ -1,5 +1,5 @@
 import { Ctx, Game } from "boardgame.io";
-import { RequiredState } from "./required-state";
+import { RequiredServerData } from "./required-state";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 // The string values are uses as section headers when displaying the list of
@@ -23,7 +23,7 @@ export interface AppGame extends Game {
 
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.
-  setup: (ctx: Ctx) => RequiredState;
+  setup: (ctx: Ctx) => RequiredServerData;
 
   minPlayers: number,
   maxPlayers: number,

@@ -1,5 +1,5 @@
 import { PlayerID } from "boardgame.io";
-import { RequiredState } from "../../../app-game-support/required-state";
+import { RequiredServerData } from "../../../app-game-support/required-state";
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPile } from "./shared-pile";
 
@@ -33,7 +33,7 @@ export interface PerTurnServerData {
     undoItems: UndoItem[];
 }
 
-export interface ServerData extends PerTurnServerData, RequiredState {
+export interface ServerData extends PerTurnServerData, RequiredServerData {
     /** The deck that cards are drawn from */
     deck: CardNonJoker[];
 

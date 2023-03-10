@@ -1,9 +1,9 @@
 import { Ctx } from "boardgame.io";
-import { RequiredState } from "./required-state";
+import { RequiredServerData } from "./required-state";
 
 type BgioMoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
 
-export function wrapMoveFunction<State extends RequiredState, Param>(func: BgioMoveFunction<State, Param>): BgioMoveFunction<State, Param> {
+export function wrapMoveFunction<State extends RequiredServerData, Param>(func: BgioMoveFunction<State, Param>): BgioMoveFunction<State, Param> {
     return (G, ctx, param) => {
         let errorMessage = null;
         let funcResult = undefined;
@@ -27,9 +27,9 @@ export function wrapMoveFunction<State extends RequiredState, Param>(func: BgioM
     };
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BgioMoveFunctions<S extends RequiredState> = { [key: string]: BgioMoveFunction<S, any>; };
+type BgioMoveFunctions<S extends RequiredServerData> = { [key: string]: BgioMoveFunction<S, any>; };
 
-export function wrapMoveFunctions<S extends RequiredState>(
+export function wrapMoveFunctions<S extends RequiredServerData>(
     unwrapped: BgioMoveFunctions<S>
 ): BgioMoveFunctions<S> {
     const obj: BgioMoveFunctions<S> = {};

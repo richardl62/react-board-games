@@ -1,5 +1,5 @@
 
-import { RequiredState } from "../../../app-game-support/required-state";
+import { RequiredServerData } from "../../../app-game-support/required-state";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 
@@ -53,7 +53,7 @@ export enum GameStage  {
     HandsRevealed,
 }
 
-export interface ServerData extends RequiredState {
+export interface ServerData extends RequiredServerData {
     player0: PlayerData;
     player1: PlayerData;
 

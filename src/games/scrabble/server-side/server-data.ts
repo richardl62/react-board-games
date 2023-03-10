@@ -1,11 +1,11 @@
 import { Ctx } from "boardgame.io";
-import { RequiredState, startingRequiredState } from "../../../app-game-support/required-state";
+import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-state";
 import { ScrabbleConfig } from "../config";
 import { GameState, isGameState, startingGameState } from "./game-state";
 
 /** Data recorded and shared via BGIO */
 
-export interface ServerData extends RequiredState {
+export interface ServerData extends RequiredServerData {
     /** states avialable for undo/redo */
     states: GameState[];
 }

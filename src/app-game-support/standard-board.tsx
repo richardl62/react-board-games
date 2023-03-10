@@ -4,13 +4,13 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { sAssert } from "../utils/assert";
 import { ErrorMessage } from "../utils/error-message";
 import { GameWarnings } from "./show-warning";
-import { asRequiredState } from "./required-state";
+import { asRequiredServerData } from "./required-state";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(null);
 
 function moveError(props: WrappedGameProps) : string | null {
-    const state = asRequiredState(props.G);
+    const state = asRequiredServerData(props.G);
 
     sAssert(state, "Server data G does not have the required state");
     return state.moveError;

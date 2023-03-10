@@ -1,4 +1,4 @@
-export interface RequiredState  {
+export interface RequiredServerData  {
     /** Description of the exception, if any, thrown during the last move.
      *  Set in wrapMoveFunction.
      */
@@ -8,11 +8,11 @@ export interface RequiredState  {
     moveCount: number;
 }
 
-/** Return 'arg as RequiredState' if arg is a required state (including extensions)
- * Return null if arg is not a required state.
+/** Return 'arg as RequiredServerData' if arg appears to be a RequiredServerData 
+ * (including or extented types). Return null if arg is not a required state.
 */
-export function asRequiredState(arg: unknown) : RequiredState | null {
-    const state = arg as RequiredState;
+export function asRequiredServerData(arg: unknown) : RequiredServerData | null {
+    const state = arg as RequiredServerData;
     
     const ok = typeof state === "object" &&
         (typeof state.moveCount === "number" || state.moveError === null) &&
@@ -21,7 +21,7 @@ export function asRequiredState(arg: unknown) : RequiredState | null {
     return ok ? state : null;
 }
 
-export const startingRequiredState : RequiredState = {
+export const startingRequiredState : RequiredServerData = {
     moveError: null,
     moveCount: 0,
 };
