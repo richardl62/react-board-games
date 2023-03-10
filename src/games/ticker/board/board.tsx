@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { useTicker } from "../../../utils/use-countdown";
 import { useGameContext } from "../client-side/game-context";
 
-const defaultServerLag = 10;
-
-const Count = styled.div`
+const OuterDiv = styled.div`
     margin: 20px;
     margin: 20px;
 
@@ -25,61 +23,74 @@ const Count = styled.div`
 
 `;
 
-function hoursMinSeconds(totalSecond: number) {
+// function hoursMinSeconds(totalSecond: number) {
     
-    function div60(num: number) {
-        const nearestInt = Math.floor(num + 0.5);
+//     function div60(num: number) {
+//         const nearestInt = Math.floor(num + 0.5);
    
-        const rem = nearestInt % 60;
-        const div = Math.floor((nearestInt - rem) / 60);
+//         const rem = nearestInt % 60;
+//         const div = Math.floor((nearestInt - rem) / 60);
 
-        return [rem, div];
-    }
+//         return [rem, div];
+//     }
 
-    function twoDigits(num: number) {
-        return ((num < 10 ) ? "0" : "") + num;
-    }
+//     function twoDigits(num: number) {
+//         return ((num < 10 ) ? "0" : "") + num;
+//     }
 
-    const [secs, totalMinutes] = div60(totalSecond);
-    const [mins, hours] = div60(totalMinutes);
+//     const [secs, totalMinutes] = div60(totalSecond);
+//     const [mins, hours] = div60(totalMinutes);
 
-    return `${hours}:${twoDigits(mins)}:${twoDigits(secs)}`; 
+//     return `${hours}:${twoDigits(mins)}:${twoDigits(secs)}`; 
+//}
+
+function Ticks(props: {
+    localCount?: number;
+}) {
+    const { localCount } = props;
+    const {G: {count: serverCount} } = useGameContext();
+    return <div>
+        <p>Ticks since start</p>
+        {localCount !== undefined && <p>{`Local: ${localCount}`}</p>}
+        <p>{`Server: ${serverCount}`}</p>
+    </div>;
 }
 
-
 function BoardCurrentPlayer() : JSX.Element {
-    const {G: {count: serverCount}, moves
-    } = useGameContext();
+    const { moves } = useGameContext();
 
-    const {count: localCount} = useTicker();
-    const [serverLag, setServerLag] = useState(defaultServerLag);
+    const {count: tickerCount} = useTicker();
+    const [lastIncrement, setLastIncrement] = useState(0);
+    const [localCount, setLocalCount] = useState(0);
+
+    const [tickInterval, setTickInterval] = useState(10);
 
     useEffect(()=>{
-        if(serverCount < localCount - serverLag) {
-            moves.setCount(localCount);
-        }   
-    },[serverCount, localCount, serverLag]);
-
-    const onChangeServerLag = (value: string) => {
-        setServerLag(parseInt(value));
-    };
+        if(lastIncrement + tickInterval <= tickerCount) {
+            moves.incrementCount();
+  
+            setLastIncrement(tickerCount);
+            setLocalCount(localCount + 1);
+        } 
+    },[tickerCount, tickInterval]);
 
     return <div>
-        <Count>
-            <p>Reported time since start</p>
-            <p>{`Local: ${hoursMinSeconds(localCount)}`}</p>
-            <p>{`Server: ${hoursMinSeconds(serverCount)}`}</p>
-            <label>
-                Max server lag:
-                <input
-                    type="number"
-                    value={serverLag}
-                    min={0}
-                    step={1}
-                    onChange={(event) => onChangeServerLag(event.target.value)}
-                />
-            </label>
-        </Count>
+
+        <Ticks localCount={localCount} />
+        <label>
+            Tick interval:
+            <input
+                type="number"
+                value={tickInterval}
+                min={0}
+                step={1}
+                onChange={(event) => {
+                    const value = parseInt(event.target.value);
+                    setTickInterval(value);
+                }}
+            />
+        </label>
+
 
         <button
             onClick={() => moves.throwError("Testing")}
@@ -88,22 +99,14 @@ function BoardCurrentPlayer() : JSX.Element {
     </div>;
 }
 
-function BoardNonCurrentPlayer() : JSX.Element {
-    const {G: {count: serverCount}} = useGameContext();
-
-    return <Count>
-        <p>Reported time since start</p>
-        <p>{`Server: ${hoursMinSeconds(serverCount)}`}</p>
-    </Count>; 
-}
 
 function Board() : JSX.Element {
     const {playerID, ctx: {currentPlayer} } = useGameContext();
 
-    return <div>
-        {(playerID === currentPlayer) ? <BoardCurrentPlayer /> : <BoardNonCurrentPlayer />}
+    return <OuterDiv>
+        {(playerID === currentPlayer) ? <BoardCurrentPlayer /> : <Ticks/>}
 
-    </div>;
+    </OuterDiv>;
 }
 
 export default Board;
