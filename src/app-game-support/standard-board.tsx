@@ -18,7 +18,7 @@ export function standardBoard(
     return <Suspense fallback={<div>Loading...</div>}>
 
         <ReactBasicsContext.Provider value={props}>
-            <Warnings {...props}/>
+            <Warnings />
             <DndProvider backend={HTML5Backend}>
                 <LazyBoard customData={customData}/>
             </DndProvider>
