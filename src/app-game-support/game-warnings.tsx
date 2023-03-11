@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ErrorMessage } from "../utils/error-message";
+import { ErrorMessage } from "./error-message";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 const WarningsDiv = styled.div`

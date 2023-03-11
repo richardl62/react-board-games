@@ -9,9 +9,6 @@ import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 import { EnableMoveHistoryToggle } from "./move-history";
 import { RewindControls } from "./rewind-controls";
-import { ErrorMessage } from "../../../utils/error-message";
-
-
 
 const SpaceBetween = styled.div`
   display: flex;
@@ -39,10 +36,9 @@ function BagInfo(): JSX.Element {
 }
 
 export function MainGameArea(): JSX.Element {
-    const { reviewGameHistory, winnerIds, moveError } = useScrabbleContext();
+    const { reviewGameHistory, winnerIds } = useScrabbleContext();
     return <DndProvider>
         <Game>
-            <ErrorMessage category={"server error"} message={moveError}/>
             <ScoresEtc/>
             <RackAndControls/>
             <Centered>
