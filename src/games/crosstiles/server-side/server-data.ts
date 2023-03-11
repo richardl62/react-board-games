@@ -75,7 +75,7 @@ export function startingServerData(ctx: Ctx): ServerData {
         round: 0,
         playerData: playerData,
         
-        ...startingRequiredState,
+        ...startingRequiredState(),
     };
 
     return G;

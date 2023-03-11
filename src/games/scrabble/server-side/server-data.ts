@@ -22,6 +22,6 @@ export function startingServerData(ctx: Ctx, config: ScrabbleConfig): ServerData
 
     return {
         states: [startingGameState(ctx, config)],
-        ...startingRequiredState,
+        ...startingRequiredState(),
     };
 }

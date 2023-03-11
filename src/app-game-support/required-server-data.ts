@@ -6,9 +6,15 @@ export interface RequiredServerData  {
 
     /** Count of moves. Set in wrapMoveFunction. */
     moveCount: number;
+
+    // Date at which startingRequiredState() is called
+    startDate: number;
 }
 
-export const startingRequiredState : RequiredServerData = {
-    moveError: null,
-    moveCount: 0,
-};
+export function startingRequiredState() : RequiredServerData {
+    return {
+        moveError: null,
+        moveCount: 0,
+        startDate: Date.now(),
+    };
+}

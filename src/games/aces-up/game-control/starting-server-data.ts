@@ -49,7 +49,7 @@ export function startingServerData(ctx: Ctx): ServerData {
 
         ...turnStartServerData,
 
-        ...startingRequiredState,
+        ...startingRequiredState(),
     };
 
     const mainPileDeck = new ExtendingDeck(ctx, []);

@@ -14,7 +14,7 @@ export function startingServerData(): ServerData {
     return {
         squares: initialSquares,
         
-        ...startingRequiredState,
+        ...startingRequiredState(),
     };
 }
 

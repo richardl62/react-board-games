@@ -9,6 +9,6 @@ export function startingServerData(_ctx: Ctx): ServerData {
     return {
         count: 0,
         
-        ...startingRequiredState,
+        ...startingRequiredState(),
     };
 }

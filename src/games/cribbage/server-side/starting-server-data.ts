@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { startingRequiredState } from "../../../app-game-support/required-server-data";
+import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";
@@ -28,7 +28,7 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
     };
 }
 
-export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, "moveError" | "moveCount"> {
+export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, keyof RequiredServerData> {
     sAssert(ctx.random);
     const cards = ctx.random.Shuffle(deck());
 
@@ -65,6 +65,6 @@ export function startingServerData(ctx: Ctx): ServerData {
 
     return {
         ...newDealData(ctx, startingPegPos),
-        ...startingRequiredState,
+        ...startingRequiredState(),
     };
 }
