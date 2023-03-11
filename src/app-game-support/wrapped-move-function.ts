@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { RequiredServerData } from "./required-state";
+import { RequiredServerData } from "./required-server-data";
 
 type BgioMoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
 

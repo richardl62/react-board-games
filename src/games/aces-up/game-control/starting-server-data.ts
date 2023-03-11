@@ -4,7 +4,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
-import { startingRequiredState } from "../../../app-game-support/required-state";
+import { startingRequiredState } from "../../../app-game-support/required-server-data";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
 

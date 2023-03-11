@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-state";
+import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { ScrabbleConfig } from "../config";
 import { GameState, isGameState, startingGameState } from "./game-state";
 

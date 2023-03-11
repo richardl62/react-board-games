@@ -1,5 +1,5 @@
 import { PlayerID } from "boardgame.io";
-import { RequiredServerData } from "../../../app-game-support/required-state";
+import { RequiredServerData } from "../../../app-game-support/required-server-data";
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPile } from "./shared-pile";
 

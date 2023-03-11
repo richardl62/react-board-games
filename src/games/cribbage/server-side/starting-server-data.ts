@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { startingRequiredState } from "../../../app-game-support/required-state";
+import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";

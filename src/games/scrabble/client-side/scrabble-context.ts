@@ -8,7 +8,7 @@ import { isServerData, ServerData } from "../server-side";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { RequiredServerData } from "../../../app-game-support/required-state";
+import { RequiredServerData } from "../../../app-game-support/required-server-data";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data

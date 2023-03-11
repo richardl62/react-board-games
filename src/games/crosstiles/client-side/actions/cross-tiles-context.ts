@@ -5,7 +5,7 @@ import { ClientMoves } from "../../server-side/moves";
 import { ServerData } from "../../server-side/server-data";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 import { WrappedGameProps } from "../../../../app-game-support/wrapped-game-props";
-import { RequiredServerData } from "../../../../app-game-support/required-state";
+import { RequiredServerData } from "../../../../app-game-support/required-server-data";
 
 
 
