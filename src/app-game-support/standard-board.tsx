@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { sAssert } from "../utils/assert";
-import { GameWarnings } from "./game-warnings";
+import { Warnings } from "./warnings/warnings";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(null);
@@ -16,9 +16,9 @@ export function standardBoard(
 ) : JSX.Element
 {   
     return <Suspense fallback={<div>Loading...</div>}>
-        <GameWarnings {...props}/>
 
         <ReactBasicsContext.Provider value={props}>
+            <Warnings {...props}/>
             <DndProvider backend={HTML5Backend}>
                 <LazyBoard customData={customData}/>
             </DndProvider>

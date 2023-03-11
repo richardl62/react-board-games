@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ErrorMessage } from "./error-message";
-import { WrappedGameProps } from "./wrapped-game-props";
+import { WrappedGameProps } from "../wrapped-game-props";
 
 const WarningsDiv = styled.div`
     *:first-child {
@@ -17,18 +17,14 @@ const WarningsDiv = styled.div`
 /** Show warnings, if any, about general (non-game-specifiy) issues.
  * Currently, the only warning is about players being off line.
  */
-function ConnectionWarnings(props: WrappedGameProps) {
+function PlayerConnections(props: WrappedGameProps) {
 
     const warnings: string[] = [];
 
-    if (!props.isConnected) {
-        warnings.push("No connection to server");
-    } else {
-        for (const pId in props.playerData) {
-            const { name, status } = props.playerData[pId];
-            if (status === "notConnected") {
-                warnings.push(`${name} is not connected`);
-            }
+    for (const pId in props.playerData) {
+        const { name, status } = props.playerData[pId];
+        if (status === "notConnected") {
+            warnings.push(`${name} is not connected`);
         }
     }
 
@@ -44,10 +40,16 @@ function ConnectionWarnings(props: WrappedGameProps) {
     );
 }
 
-function ReconnectionCount(props: WrappedGameProps) {
+function ServerConnection(props: WrappedGameProps) {
     const { isConnected } = props;
     const [wasConnected, setWasConnected] = useState(true);
     const [reconnectionCount, setReconnectionCount] = useState(0);
+
+    const warnings: string[] = [];
+
+    if (!props.isConnected) {
+        warnings.push("No connection to server");
+    }
 
     if(wasConnected !== isConnected) {
         if(isConnected) {
@@ -56,16 +58,22 @@ function ReconnectionCount(props: WrappedGameProps) {
         setWasConnected(isConnected);
     }
 
-    return reconnectionCount > 0 ?
-        <div>{`Server reconnection count: ${reconnectionCount}`}</div> :
-        null;
+    if(reconnectionCount > 0) {
+        warnings.push(`Server reconnection count: ${reconnectionCount}`);
+    }
+
+    return <div>
+        {warnings.map((text) => 
+            <div key={text}>{text}</div>
+        )}
+    </div>;
 }
 
-export function GameWarnings(props: WrappedGameProps): JSX.Element {
+export function Warnings(props: WrappedGameProps): JSX.Element {
     return <>
         <ErrorMessage category="Error during move" message={props.G.moveError} />
         
-        <ReconnectionCount {...props}/>
-        <ConnectionWarnings {...props}/>
+        <ServerConnection {...props}/>
+        <PlayerConnections {...props}/>
     </>;
 }
