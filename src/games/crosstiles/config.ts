@@ -46,4 +46,3 @@ export const defaultOptions: GameOptions = {
     playersGetSameLetters: true,
 }; 
 
-export const makeGridCountTime = 5; // In seconds
