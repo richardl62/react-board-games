@@ -8,7 +8,7 @@ import { MakeGrid } from "./make-grid";
 import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
-import { SetOptionsOrWait } from "./setup";
+import { SetOptionsOrWait } from "./set-options";
 import { aboveScoreCardsHeight } from "./style";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 
