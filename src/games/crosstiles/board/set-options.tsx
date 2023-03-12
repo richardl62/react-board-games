@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
+import { sAssert } from "../../../utils/assert";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
+import { GameOptions } from "../options";
 import { GameStage } from "../server-side/server-data";
 
 const SetOptionsDiv = styled.div`
@@ -29,16 +31,30 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-interface NumericOption {
-    value: number;
-    setValue: (arg: number) => void;
+interface NumericOption {    
+    optionName: keyof GameOptions;
+    options: GameOptions;
+    setOptions: (arg: GameOptions) => void;
+
     label: string;
     min?: number;
     max?: number;
 }
 
-function SetNumericValue(props: NumericOption) {
-    const { value, setValue, label, min, max } = props;
+function SetNumericOption(props: NumericOption) {
+    const { options, setOptions, optionName, label, min, max } = props;
+
+    const value = options[optionName];
+    sAssert(typeof value === "number");
+
+    const changeValue = (newValue: number) => {
+        // Use 'any' to avoid typescript error due (I assume) to it's not
+        // knowing that newOptions[optionName] is a number.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const newOptions = {...options} as any;
+        newOptions[optionName] = newValue;
+        setOptions(newOptions);
+    };
 
     const minMaxText = () => {
 
@@ -58,14 +74,15 @@ function SetNumericValue(props: NumericOption) {
         return `[${txt}] `;
     }; 
 
+
     return <label>
         {label+" "+minMaxText()}
         <input
             type="number"
             defaultValue={value}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                const value = parseRestrictedInt(e.target.value, min, max);
-                setValue(value);
+                const newValue = parseRestrictedInt(e.target.value, min, max);
+                changeValue(newValue);
             }}
             min={min}
             max={max}
@@ -82,49 +99,61 @@ function SetOptions(props: SetOptionsProps) {
     // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
         <br/>
-        <SetNumericValue
+        <SetNumericOption
             label="Time to make grid"
-            value={options.timeToMakeGrid}
-            setValue={(value: number) => setOptions({...options, timeToMakeGrid: value} )}
+            optionName="timeToMakeGrid"
+
+            options={options}
+            setOptions={setOptions}
         />
 
-        <SetNumericValue
+        <SetNumericOption
             label="Make grid countdown"
-            value={options.makeGridCountdown}
-            setValue={(value: number) => setOptions({...options, makeGridCountdown: value} )}
+            optionName="makeGridCountdown"
+
+            options={options}
+            setOptions={setOptions}
         />
 
-        <SetNumericValue
+        <SetNumericOption
             label="Rack size"
-            value={options.rackSize}
+            optionName="rackSize"
             min={6}
             max={8}
-            setValue={(value: number) => setOptions({...options, rackSize: value} )}
+            
+            options={options}
+            setOptions={setOptions}
         />
 
-        <SetNumericValue
+        <SetNumericOption
             label="Min vowels"
-            value={options.minVowels}
+            optionName="minVowels"
             min={0}
             max={2}
-            setValue={(value: number) => setOptions({...options, minVowels: value} )}
+            
+            options={options}
+            setOptions={setOptions}
         />
 
-        <SetNumericValue
+        <SetNumericOption
             label="Min consonsants"
-            value={options.minConsonants}
+            optionName="minConsonants"
             min={0}
             max={4}
-            setValue={(value: number) => setOptions({...options, minConsonants: value} )}
+            
+            options={options}
+            setOptions={setOptions}
         />
         
 
-        <SetNumericValue
+        <SetNumericOption
             label="Min bonus letters"
-            value={options.minBonusLetters}
+            optionName="minBonusLetters"
             min={0}
             max={2}
-            setValue={(value: number) => setOptions({...options, minBonusLetters: value} )}
+            
+            options={options}
+            setOptions={setOptions}
         />
 
         <label>{"Players get same letters "}
