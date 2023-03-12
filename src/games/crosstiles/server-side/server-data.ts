@@ -1,10 +1,11 @@
 import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-card";
-import { defaultOptions, GameOptions, Letter } from "../config";
+import { Letter } from "../config";
 import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "../score-categories";
 import { ScoreWithCategory } from "./set-score";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
+import { GameOptions, defaultOptions } from "../options";
 
 
 /* Use string values to add with debugging */

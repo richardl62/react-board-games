@@ -1,5 +1,5 @@
 import { Ctx } from "boardgame.io";
-import { GameOptions } from "../config";
+import { GameOptions } from "../options";
 import { GameStage, ServerData } from "./server-data";
 
 export function setOptions(G: ServerData, ctx: Ctx, options: GameOptions): void {

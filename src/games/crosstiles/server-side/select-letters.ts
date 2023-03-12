@@ -1,6 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { bonusLetters, GameOptions, Letter, letterDistrubtion } from "../config";
+import { bonusLetters, Letter, letterDistrubtion } from "../config";
+import { GameOptions } from "../options";
 
 const vowels = ["A","E","I","O","U"];
 
