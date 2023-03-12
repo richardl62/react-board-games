@@ -12,19 +12,65 @@ interface SetOptionsProps {
     gameProps: CrossTilesGameProps;
 } 
 
-function parseRestrictedInt(str: string, low: number, high: number) : number {
-    const val = parseInt(str);
+function parseRestrictedInt(str: string, low?: number, high?: number) : number {
+    let val = parseInt(str);
     if(isNaN(val)) {
-        return low; // arbitary.
+        // KLUDGE? Setting a non-null value allows the high/low testes below// apply
+        val = 0; 
     }
-    if(val < low) {
+
+    if(low !== undefined && val < low) {
         return low;
     }
-    if(val > high) {
+    if(high !== undefined && val > high) {
         return high;
     }
 
     return val;
+}
+
+interface NumericOption {
+    value: number;
+    setValue: (arg: number) => void;
+    label: string;
+    min?: number;
+    max?: number;
+}
+
+function SetNumericValue(props: NumericOption) {
+    const { value, setValue, label, min, max } = props;
+
+    const minMaxText = () => {
+
+        if (min === undefined && max === undefined) {
+            return "";
+        }
+
+        let txt;
+        if ( min === undefined ) {
+            txt = `<=${max}`;
+        } else if ( max === undefined ) {
+            txt = `>=${min}`;
+        } else {
+            txt = `${min}-${max}`;
+        }
+        
+        return `[${txt}] `;
+    }; 
+
+    return <label>
+        {label+" "+minMaxText()}
+        <input
+            type="number"
+            defaultValue={value}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                const value = parseRestrictedInt(e.target.value, min, max);
+                setValue(value);
+            }}
+            min={min}
+            max={max}
+        />
+    </label>;
 }
 
 function SetOptions(props: SetOptionsProps) {
@@ -36,80 +82,50 @@ function SetOptions(props: SetOptionsProps) {
     // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
         <br/>
-        <label>{"Time to make grid "}
-            <input 
-                type="number" 
-                defaultValue={options.timeToMakeGrid}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
-                    const value = parseRestrictedInt(e.target.value,1,9999);
-                    setOptions({...options, timeToMakeGrid: value} );
-                }}
-            />
-        </label>
+        <SetNumericValue
+            label="Time to make grid"
+            value={options.timeToMakeGrid}
+            setValue={(value: number) => setOptions({...options, timeToMakeGrid: value} )}
+        />
 
-        <label>{"Make grid countdown "}
-            <input 
-                type="number" 
-                defaultValue={options.makeGridCountdown}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
-                    const value = parseRestrictedInt(e.target.value,0,9999);
-                    setOptions({...options, makeGridCountdown: value} );
-                }}
-            />
-        </label>
+        <SetNumericValue
+            label="Make grid countdown"
+            value={options.makeGridCountdown}
+            setValue={(value: number) => setOptions({...options, makeGridCountdown: value} )}
+        />
 
-        <label>{"Rack size [6-8] "}
-            <input 
-                type="number" 
-                min={6}
-                max={8}
-                defaultValue={options.rackSize}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
-                    const value = parseRestrictedInt(e.target.value, 6, 8);
-                    setOptions({...options, rackSize: value} );
-                }}
-            />
-        </label>
+        <SetNumericValue
+            label="Rack size"
+            value={options.rackSize}
+            min={6}
+            max={8}
+            setValue={(value: number) => setOptions({...options, rackSize: value} )}
+        />
 
-        <label>{"Min vowels [0-2] "}
-            <input 
-                type="number"
-                min={0}
-                max={2} 
-                defaultValue={options.minVowels}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
-                    const value = parseRestrictedInt(e.target.value, 0, 2);
-                    setOptions({...options, minVowels: value} );
-                }}
-            />
-        </label>
+        <SetNumericValue
+            label="Min vowels"
+            value={options.minVowels}
+            min={0}
+            max={2}
+            setValue={(value: number) => setOptions({...options, minVowels: value} )}
+        />
 
+        <SetNumericValue
+            label="Min consonsants"
+            value={options.minConsonants}
+            min={0}
+            max={4}
+            setValue={(value: number) => setOptions({...options, minConsonants: value} )}
+        />
         
-        <label>{"Min consonsants [0-4] "}
-            <input 
-                type="number"
-                min={0}
-                max={4}  
-                defaultValue={options.minConsonants}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
-                    const value = parseRestrictedInt(e.target.value, 0, 4);
-                    setOptions({...options, minConsonants: value} );
-                }}
-            />
-        </label>
 
-        <label>{"Min bonus letters [0-2] "}
-            <input 
-                type="number"
-                min={0}
-                max={2}  
-                defaultValue={options.minBonusLetters}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>{
-                    const value = parseRestrictedInt(e.target.value, 0, 2);
-                    setOptions({...options, minBonusLetters: value} );
-                }}
-            />
-        </label>
+        <SetNumericValue
+            label="Min bonus letters"
+            value={options.minBonusLetters}
+            min={0}
+            max={2}
+            setValue={(value: number) => setOptions({...options, minBonusLetters: value} )}
+        />
 
         <label>{"Players get same letters "}
             <input type="checkbox" checked={options.playersGetSameLetters}
