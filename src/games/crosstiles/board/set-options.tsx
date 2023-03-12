@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
-import { GameOptions } from "../options";
 import { GameStage } from "../server-side/server-data";
 
 const SetOptionsDiv = styled.div`
@@ -31,17 +30,17 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-interface NumericOption {    
-    optionName: keyof GameOptions;
-    options: GameOptions;
-    setOptions: (arg: GameOptions) => void;
+interface NumericOption<Options> {    
+    optionName: keyof Options;
+    options: Options;
+    setOptions: (arg: Options) => void;
 
     label: string;
     min?: number;
     max?: number;
 }
 
-function SetNumericOption(props: NumericOption) {
+function SetNumericOption<Options>(props: NumericOption<Options>) {
     const { options, setOptions, optionName, label, min, max } = props;
 
     const value = options[optionName];
@@ -144,7 +143,6 @@ function SetOptions(props: SetOptionsProps) {
             options={options}
             setOptions={setOptions}
         />
-        
 
         <SetNumericOption
             label="Min bonus letters"
@@ -173,7 +171,6 @@ function SetOptions(props: SetOptionsProps) {
                 onChange={() => setOptions({...options, checkSpelling: !options.checkSpelling})} 
             />
         </label>
-
 
         <button onClick={() => moves.setOptions(options)}>Set Options</button>
     </SetOptionsDiv>;
