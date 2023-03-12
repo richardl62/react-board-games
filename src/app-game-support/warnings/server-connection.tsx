@@ -21,14 +21,12 @@ export function ServerConnection() : JSX.Element {
     }
 
     if(wasConnected !== isConnected) {
+        console.log("Connection to server", isConnected ? "restored" : "lost",
+            (new Date()).toLocaleTimeString());
         if(isConnected) {
             setReconnectionCount(reconnectionCount+1);
         }
         setWasConnected(isConnected);
-    }
-
-    if(reconnectionCount > 0) {
-        warnings.push(`Server reconnection count: ${reconnectionCount}`);
     }
 
     return <div>
