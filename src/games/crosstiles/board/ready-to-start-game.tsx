@@ -55,9 +55,7 @@ export function ReadyToStartGame() : JSX.Element | null {
     addOption("Min bonus letters", options.minBonusLetters);
     addOption("All players get same letters", options.playersGetSameLetters);
     addOption("Warn when recording non-scoring grid", options.checkGridBeforeRecoding);  
-    if(!options.checkSpelling) {
-        addOption("Spelling checks disabled (debug)", true);
-    }
+    addOption("Spelling checks disabled (debug)", options.checkSpelling);
     
     const ready = playerData[playerID].readyToStartGame;
     return <OuterDiv>
