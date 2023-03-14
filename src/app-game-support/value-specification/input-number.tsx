@@ -1,6 +1,4 @@
 import React, { ChangeEvent } from "react";
-import { sAssert } from "../../utils/assert";
-import { InputNumberProps } from "./props";
 
 function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     let val = parseInt(str);
@@ -19,24 +17,18 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-// KLUDGE: The props here are an edited copy of the props for InputBoolean
-export function InputNumber(props: InputNumberProps) : JSX.Element {
-    const { values, setValues, valueName, label, min, max } = props;
+export function InputNumber(props: {
+    value: number;
+    label: string;
 
-    const value = values[valueName];
-    sAssert(typeof value === "number");
+    min?: number;
+    max?: number;
 
-    const setValue = (newValue: number) => {
-        // Use 'any' to avoid typescript error due (I assume) to it's not
-        // knowing that newValues[valueName] is a number.
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const newValues = {...values} as any;
-        newValues[valueName] = newValue;
-        setValues(newValues);
-    };
+    setValue: (value: number) => void;
+}) : JSX.Element {
+    const { value, setValue,  label, min, max } = props;
 
     const minMaxText = () => {
-
         if (min === undefined && max === undefined) {
             return "";
         }
@@ -52,7 +44,6 @@ export function InputNumber(props: InputNumberProps) : JSX.Element {
         
         return `[${txt}] `;
     }; 
-
 
     return <label>
         {label+" "+minMaxText()}

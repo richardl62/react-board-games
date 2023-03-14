@@ -1,13 +1,11 @@
-interface BaseValueSpecification {
-    label: string;
+interface BooleanValueSpecification  {   
+    default: boolean;
+    label: string; 
 }
 
-interface BooleanValueSpecification extends BaseValueSpecification {   
-    default: boolean; 
-}
-
-interface NumericValueSpecification extends BaseValueSpecification {   
-    default: number; 
+interface NumericValueSpecification {   
+    default: number;
+    label: string; 
     min?: number;
     max?: number;
 }

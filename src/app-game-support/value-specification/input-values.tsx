@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { InputBoolean } from "./input-boolean";
 import { InputNumber } from "./input-number";
-import { InputProps, makeInputProps } from "./props";
 import { defaultValues, SpecifiedValues } from "./tools";
 import { ValueSpecifications } from "./types";
 
@@ -11,15 +10,6 @@ const OuterDiv = styled.div`
     flex-direction: column;
 `;
 
-function makeInput(props: InputProps) {
-    const value = props.values[props.valueName];
-    if(typeof value === "boolean") {
-        return <InputBoolean key={props.valueName} {...props}/>;
-    } else {
-        return <InputNumber key={props.valueName} {...props}/>;
-    }
-}
-
 export function InputValues<Spec extends ValueSpecifications>(props: {
     specification: Spec,
     setValues: (values: SpecifiedValues<Spec>) => void,
@@ -27,9 +17,25 @@ export function InputValues<Spec extends ValueSpecifications>(props: {
     const {specification, setValues: inputSetValues } = props;
     const [ localValues, setLocalValues ] = useState(defaultValues(specification));
 
-    const inputProps = makeInputProps(specification, localValues, setLocalValues);
+    const makeInput = (key: keyof Spec) => {
+        const spec = specification[key];
+        const value = localValues[key];
+        
+        const setValue = (arg: typeof value) => {
+            const newValues = {...localValues};
+            newValues[key] = arg;
+            setLocalValues(newValues);
+        };
+
+        if(typeof value === "boolean") {
+            return <InputBoolean value={value} setValue={setValue} {... spec} />;
+        } else {
+            return <InputNumber value={value} setValue={setValue} {... spec} />;
+        }
+    };
+
     return <OuterDiv>
-        {inputProps.map(p => makeInput(p))}
+        {Object.keys(specification).map(key => makeInput(key))}
         <button onClick={()=>inputSetValues(localValues)}>Set</button>
     </OuterDiv>;
 }
