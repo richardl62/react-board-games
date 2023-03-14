@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { sAssert } from "../../utils/assert";
 
+
 function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     let val = parseInt(str);
     if(isNaN(val)) {
@@ -18,17 +19,19 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-interface BaseOption<Options> {    
-    optionName: keyof Options;
+type OptionValues = {[key:string] : boolean|number};
+
+interface BaseOption {    
+    optionName: string;
     label: string;
 
-    options: Options;
-    setOptions: (arg: Options) => void;
+    options: OptionValues;
+    setOptions: (arg: OptionValues) => void;
 }
 
-type BooleanOption<Options> = BaseOption<Options>;
+type BooleanOption = BaseOption;
 
-export function SetBooleanOption<Options>(props: BooleanOption<Options>) : JSX.Element {
+export function SetBooleanOption(props: BooleanOption) : JSX.Element {
     const { options, setOptions, optionName, label } = props;
 
     const value = options[optionName];
@@ -49,12 +52,12 @@ export function SetBooleanOption<Options>(props: BooleanOption<Options>) : JSX.E
     </label>;
 }
 
-interface NumericOption<Options> extends BaseOption<Options> {    
+interface NumericOption extends BaseOption {    
     min?: number;
     max?: number;
 }
 
-export function SetNumericOption<Options>(props: NumericOption<Options>) : JSX.Element {
+export function SetNumericOption(props: NumericOption) : JSX.Element {
     const { options, setOptions, optionName, label, min, max } = props;
 
     const value = options[optionName];

@@ -13,3 +13,5 @@ interface NumericOptionDefinition extends BaseOptionDefinition {
 }
 
 export type OptionDefinition = BooleanOptionDefinition | NumericOptionDefinition;
+
+export type OptionsClass = {[arg:string]: OptionDefinition};

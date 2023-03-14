@@ -16,26 +16,29 @@ interface SetOptionsProps {
 function SetOptions(props: SetOptionsProps) {
     const { gameProps: {moves, G} } = props;
 
-    const [options, setOptions] = useState(G.options);
+    const [gameOptions, setGameOptions] = useState(G.options);
+
+    const doSetGameOptions = (arg: {[key:string] : boolean|number}) =>  {
+        setGameOptions(arg as typeof gameOptions);
+    };
 
     // To do. Think about simplifying this code, in particular
     // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
-        <br/>
         <SetNumericOption
             label="Time to make grid"
             optionName="timeToMakeGrid"
 
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetNumericOption
             label="Make grid countdown"
             optionName="makeGridCountdown"
 
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetNumericOption
@@ -44,8 +47,8 @@ function SetOptions(props: SetOptionsProps) {
             min={6}
             max={8}
             
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetNumericOption
@@ -54,8 +57,8 @@ function SetOptions(props: SetOptionsProps) {
             min={0}
             max={2}
             
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetNumericOption
@@ -64,8 +67,8 @@ function SetOptions(props: SetOptionsProps) {
             min={0}
             max={4}
             
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetNumericOption
@@ -74,35 +77,35 @@ function SetOptions(props: SetOptionsProps) {
             min={0}
             max={2}
             
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetBooleanOption
             label="Players get same letters"
             optionName="playersGetSameLetters"
 
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetBooleanOption
             label="Warn when recording non-scoring grid"
             optionName="checkGridBeforeRecoding"
 
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
         <SetBooleanOption
             label="Suppress spelling checks (debug)"
             optionName="checkSpelling"
 
-            options={options}
-            setOptions={setOptions}
+            options={gameOptions}
+            setOptions={doSetGameOptions}
         />
 
-        <button onClick={() => moves.setOptions(options)}>Set Options</button>
+        <button onClick={() => moves.setOptions(gameOptions)}>Set Options</button>
     </SetOptionsDiv>;
 }
 

@@ -1,6 +1,4 @@
-import { OptionDefinition } from "./types";
-
-export type OptionsClass = {[arg:string]: OptionDefinition};
+import { OptionsClass } from "./types";
 
 export type OptionValues<Opts extends OptionsClass> = {
     [Property in keyof Opts]: Opts[Property]["default"];
