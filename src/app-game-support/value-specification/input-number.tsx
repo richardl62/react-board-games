@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { sAssert } from "../../utils/assert";
-import { Values } from "./types";
+import { InputNumberProps } from "./props";
 
 function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     let val = parseInt(str);
@@ -20,16 +20,7 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
 }
 
 // KLUDGE: The props here are an edited copy of the props for InputBoolean
-export function InputNumber(props: {    
-    valueName: string;
-    label: string;
-
-    min?: number;
-    max?: number;
-
-    values: Values;
-    setValues: (arg: Values) => void;
-}) : JSX.Element {
+export function InputNumber(props: InputNumberProps) : JSX.Element {
     const { values, setValues, valueName, label, min, max } = props;
 
     const value = values[valueName];

@@ -1,15 +1,9 @@
 import React from "react";
 import { sAssert } from "../../utils/assert";
-import { Values } from "./types";
+import { InputBoolProps } from "./props";
 
 // KLUDGE: The props here are an edited copy of the props for InputNumber
-export function InputBoolean(props: {    
-    valueName: string;
-    label: string;
-
-    values: Values;
-    setValues: (arg: Values) => void;
-}): JSX.Element {
+export function InputBoolean(props: InputBoolProps): JSX.Element {
     const { values, setValues, valueName, label } = props;
 
     const value = values[valueName];

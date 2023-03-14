@@ -1,7 +1,7 @@
 
 import { defaultValues, SpecifiedValues } from "../../app-game-support/value-specification/tools";
 
-export const options = {
+export const optionsSpecication = {
     timeToMakeGrid: {
         default: 60,
         label: "Time to make grid",
@@ -48,7 +48,7 @@ export const options = {
     }
 };
 
-export type GameOptions = SpecifiedValues<typeof options>;
+export type GameOptions = SpecifiedValues<typeof optionsSpecication>;
 
-export const defaultOptions : GameOptions = defaultValues(options);
+export const defaultOptions : GameOptions = defaultValues(optionsSpecication);
 
