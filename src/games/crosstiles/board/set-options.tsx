@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { InputNumber } from "../../../app-game-support/options/input-number";
-import { InputBoolean } from "../../../app-game-support/options/input-boolean";
+import { InputNumber } from "../../../app-game-support/value-specification/input-number";
+import { InputBoolean } from "../../../app-game-support/value-specification/input-boolean";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { GameStage } from "../server-side/server-data";
 

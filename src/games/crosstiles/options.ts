@@ -1,5 +1,5 @@
 
-import { defaultValues, SpecifiedValues } from "../../app-game-support/options/tools";
+import { defaultValues, SpecifiedValues } from "../../app-game-support/value-specification/tools";
 
 export const options = {
     timeToMakeGrid: {
