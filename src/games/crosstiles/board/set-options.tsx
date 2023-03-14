@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { SetBooleanOption, SetNumericOption } from "../../../app-game-support/options/set-option";
+import { InputNumber } from "../../../app-game-support/options/input-number";
+import { InputBoolean } from "../../../app-game-support/options/input-boolean";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { GameStage } from "../server-side/server-data";
 
@@ -25,84 +26,84 @@ function SetOptions(props: SetOptionsProps) {
     // To do. Think about simplifying this code, in particular
     // reducing the amount of ccopy and paste.
     return <SetOptionsDiv>
-        <SetNumericOption
+        <InputNumber
             label="Time to make grid"
-            optionName="timeToMakeGrid"
+            valueName="timeToMakeGrid"
 
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetNumericOption
+        <InputNumber
             label="Make grid countdown"
-            optionName="makeGridCountdown"
+            valueName="makeGridCountdown"
 
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetNumericOption
+        <InputNumber
             label="Rack size"
-            optionName="rackSize"
+            valueName="rackSize"
             min={6}
             max={8}
             
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetNumericOption
+        <InputNumber
             label="Min vowels"
-            optionName="minVowels"
+            valueName="minVowels"
             min={0}
             max={2}
             
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetNumericOption
+        <InputNumber
             label="Min consonsants"
-            optionName="minConsonants"
+            valueName="minConsonants"
             min={0}
             max={4}
             
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetNumericOption
+        <InputNumber
             label="Min bonus letters"
-            optionName="minBonusLetters"
+            valueName="minBonusLetters"
             min={0}
             max={2}
             
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetBooleanOption
+        <InputBoolean
             label="Players get same letters"
-            optionName="playersGetSameLetters"
+            valueName="playersGetSameLetters"
 
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetBooleanOption
+        <InputBoolean
             label="Warn when recording non-scoring grid"
-            optionName="checkGridBeforeRecoding"
+            valueName="checkGridBeforeRecoding"
 
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
-        <SetBooleanOption
+        <InputBoolean
             label="Suppress spelling checks (debug)"
-            optionName="checkSpelling"
+            valueName="checkSpelling"
 
-            options={gameOptions}
-            setOptions={doSetGameOptions}
+            values={gameOptions}
+            setValues={doSetGameOptions}
         />
 
         <button onClick={() => moves.setOptions(gameOptions)}>Set Options</button>

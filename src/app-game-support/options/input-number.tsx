@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { sAssert } from "../../utils/assert";
-
+import { Values } from "./types";
 
 function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     let val = parseInt(str);
@@ -19,57 +19,29 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-type OptionValues = {[key:string] : boolean|number};
-
-interface BaseOption {    
-    optionName: string;
+// KLUDGE: The props here are an edited copy of the props for InputBoolean
+export function InputNumber(props: {    
+    valueName: string;
     label: string;
 
-    options: OptionValues;
-    setOptions: (arg: OptionValues) => void;
-}
-
-type BooleanOption = BaseOption;
-
-export function SetBooleanOption(props: BooleanOption) : JSX.Element {
-    const { options, setOptions, optionName, label } = props;
-
-    const value = options[optionName];
-    sAssert(typeof value === "boolean");
-
-    const toggleValue = () => {
-        // Use 'any' to avoid typescript error due (I assume) to it's not
-        // knowing that newOptions[optionName] is a boolean.
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const newOptions = {...options} as any;
-        newOptions[optionName] = !value;
-        setOptions(newOptions);
-    };
-
-    return <label>
-        {label+" "}
-        <input type="checkbox" checked={value} onChange={toggleValue} />
-    </label>;
-}
-
-interface NumericOption extends BaseOption {    
     min?: number;
     max?: number;
-}
 
-export function SetNumericOption(props: NumericOption) : JSX.Element {
-    const { options, setOptions, optionName, label, min, max } = props;
+    values: Values;
+    setValues: (arg: Values) => void;
+}) : JSX.Element {
+    const { values, setValues, valueName, label, min, max } = props;
 
-    const value = options[optionName];
+    const value = values[valueName];
     sAssert(typeof value === "number");
 
     const setValue = (newValue: number) => {
         // Use 'any' to avoid typescript error due (I assume) to it's not
-        // knowing that newOptions[optionName] is a number.
+        // knowing that newValues[valueName] is a number.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const newOptions = {...options} as any;
-        newOptions[optionName] = newValue;
-        setOptions(newOptions);
+        const newValues = {...values} as any;
+        newValues[valueName] = newValue;
+        setValues(newValues);
     };
 
     const minMaxText = () => {

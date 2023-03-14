@@ -1,13 +1,13 @@
-import { OptionsClass } from "./types";
+import { ValueSpecifications } from "./types";
 
-export type OptionValues<Opts extends OptionsClass> = {
-    [Property in keyof Opts]: Opts[Property]["default"];
+export type SpecifiedValues<Specs extends ValueSpecifications> = {
+    [Property in keyof Specs]: Specs[Property]["default"];
 };
 
-export function defaultValues<Opts extends OptionsClass>(opts: Opts) : OptionValues<Opts> {
+export function defaultValues<Specs extends ValueSpecifications>(specs: Specs) : SpecifiedValues<Specs> {
     const defaults = Object.fromEntries(
-        Object.entries(opts).map(
+        Object.entries(specs).map(
             ([k, v]) => [k, v.default]
         ));
-    return defaults as OptionValues<Opts>;
+    return defaults as SpecifiedValues<Specs>;
 }
