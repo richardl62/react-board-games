@@ -28,9 +28,9 @@ export function InputValues<Spec extends ValueSpecifications>(props: {
         };
 
         if(typeof value === "boolean") {
-            return <InputBoolean value={value} setValue={setValue} {... spec} />;
+            return <InputBoolean key={key.toString()} value={value} setValue={setValue} {... spec} />;
         } else {
-            return <InputNumber value={value} setValue={setValue} {... spec} />;
+            return <InputNumber key={key.toString()} value={value} setValue={setValue} {... spec} />;
         }
     };
 
