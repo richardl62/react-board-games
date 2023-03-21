@@ -11,7 +11,9 @@ export function standardBoard(
     LazyBoard: ReturnType<typeof React.lazy>, 
     props: WrappedGameProps,
 
-    /** Passed to the board. Intended for configuration settings. */
+    /** Passed to the board. Intended for static configuration settings. 
+     * (e.g. to distguish Scrabble from Simple Scrabble)
+    */
     customData?: unknown,
 ) : JSX.Element
 {   

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { defaultValues, SpecifiedValues, ValueSpecifications } from ".";
 import { InputBoolean } from "./input-boolean";
 import { InputNumber } from "./input-number";
-import { defaultValues, SpecifiedValues } from "./tools";
-import { ValueSpecifications } from "./types";
 
 const OuterDiv = styled.div`
     display: flex;
