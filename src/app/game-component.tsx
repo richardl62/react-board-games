@@ -1,7 +1,7 @@
 import React from "react";
 import { AppGame } from "../app-game-support";
-import { GameLobby } from "./game-lobby";
-import { MatchLobby } from "./match-lobby";
+import { GameLobby } from "./lobby/game-lobby";
+import { MatchLobby } from "./lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
 import { MatchPlayOnline } from "./match-play-online";
 import * as UrlParams from "./url-params";
@@ -28,5 +28,3 @@ export function gameComponent(game : AppGame): JSX.Element {
 
     return <GameLobby game={game}/>;
 }
-
-

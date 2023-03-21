@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import styled from "styled-components";
-import { AppGame } from "../app-game-support";
-import { loadingOrError, LoadingOrError } from "../utils/async-status";
-import { BoxWithLegend } from "../utils/box-with-legend";
+import { AppGame } from "../../app-game-support";
+import { loadingOrError, LoadingOrError } from "../../utils/async-status";
+import { BoxWithLegend } from "../../utils/box-with-legend";
 import { createMatch } from "./lobby-tools";
-import { getOfflineMatchLink, openOnlineMatchPage } from "./url-params";
+import { getOfflineMatchLink, openOnlineMatchPage } from "../url-params";
+
 const OuterDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
