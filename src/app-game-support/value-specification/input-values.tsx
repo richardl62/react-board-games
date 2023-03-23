@@ -5,7 +5,7 @@ import { InputBoolean } from "./input-boolean";
 import { InputNumber } from "./input-number";
 
 const OuterDiv = styled.div`
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
 `;
 
