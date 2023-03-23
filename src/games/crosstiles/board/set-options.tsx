@@ -21,7 +21,11 @@ export function SetOptionsOrWait(props: SetOptionsProps) : JSX.Element | null {
 
     const firstPlayer = ctx.playOrder[0];
     if(playerID === firstPlayer) {
-        return <InputValues specification={optionsSpecication} setValues={moves.setOptions}/>;
+        return <InputValues 
+            specification={optionsSpecication}
+            buttonText={"Set options"} 
+            onButtonClick={moves.setOptions}
+        />;
     }
 
     return <div>{`Waiting for ${getPlayerName(firstPlayer)} to set options`}</div>;

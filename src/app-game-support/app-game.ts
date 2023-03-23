@@ -30,3 +30,17 @@ export interface AppGame extends Game {
 
   board: (props: WrappedGameProps) => JSX.Element;
 }
+
+export function defaultNumPlayers(game: AppGame): number {
+    let num = 2; //Arbitrary
+
+    if (num < game.minPlayers) {
+        num = game.minPlayers;
+    }
+
+    if (num > game.maxPlayers) {
+        num = game.maxPlayers;
+    }
+    
+    return num;
+}

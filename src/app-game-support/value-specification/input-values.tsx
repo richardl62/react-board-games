@@ -11,9 +11,10 @@ const OuterDiv = styled.div`
 
 export function InputValues<Spec extends ValueSpecifications>(props: {
     specification: Spec,
-    setValues: (values: SpecifiedValues<Spec>) => void,
+    buttonText: string,
+    onButtonClick: (values: SpecifiedValues<Spec>) => void,
 }) : JSX.Element {
-    const {specification, setValues: inputSetValues } = props;
+    const {specification, buttonText, onButtonClick } = props;
     const [ localValues, setLocalValues ] = useState(defaultValues(specification));
 
     const makeInput = (key: keyof Spec) => {
@@ -35,6 +36,6 @@ export function InputValues<Spec extends ValueSpecifications>(props: {
 
     return <OuterDiv>
         {Object.keys(specification).map(key => makeInput(key))}
-        <button onClick={()=>inputSetValues(localValues)}>Set</button>
+        <button onClick={()=>onButtonClick(localValues)}>{buttonText}</button>
     </OuterDiv>;
 }

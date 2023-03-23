@@ -8,16 +8,7 @@ import { openOnlineMatchPage } from "../url-params";
 import { OfflineOptions } from "../offline-options";
 import { SpecifiedValues } from "../../app-game-support/value-specification";
 import { InputValues } from "../../app-game-support/value-specification/input-values";
-
-function snapToRange(val: number, low: number, high: number) : number {
-    if (val < low) {
-        return low;
-    }
-    if (val > high) {
-        return high;
-    }
-    return val;
-}
+import { defaultNumPlayers } from "../../app-game-support/app-game";
 
 export function StartMatch(props: {
     game: AppGame;
@@ -29,7 +20,7 @@ export function StartMatch(props: {
     const optionsSpec = {
         numPlayers: {
             label: "Number of players",
-            default: snapToRange(2 /*arbitrary*/, minPlayers, maxPlayers),
+            default: defaultNumPlayers(game),
             min: minPlayers,
             max: maxPlayers,
         },
@@ -60,6 +51,9 @@ export function StartMatch(props: {
     };
 
     return <BoxWithLegend legend="Start New Game">
-        <InputValues specification={optionsSpec} setValues={startGame} />
+        <InputValues specification={optionsSpec} 
+            buttonText={"Start Game"}
+            onButtonClick={startGame} 
+        />
     </BoxWithLegend>;
 }
