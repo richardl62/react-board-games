@@ -2,25 +2,26 @@ import React from "react";
 import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
 import { AppGame } from "../app-game-support";
-import * as UrlParams from "./url-params";
 import { GameBoard } from "./game-board";
+import { OfflineOptions } from "./offline-options";
 
 
-interface MatchPlayLocalProps {
-  game: AppGame;
-  nPlayers : number;
-  persist: boolean;
-}
+export function MatchPlayOffline(props: {
+    game:AppGame,
+    options: OfflineOptions,
+}): JSX.Element {
 
-
-export function MatchPlayOffline({ game, nPlayers: numPlayers, persist}: MatchPlayLocalProps): JSX.Element {
+    const { 
+        game,
+        options: {numPlayers, debugPanel}
+    } = props;
 
     const GameClient = Client({
-        game: game,
+        game,
         board: (props: BgioBoardProps) => <GameBoard game={game} bgioProps={props} />,
-        multiplayer: Local({persist:persist}),
-        numPlayers: numPlayers,
-        debug: UrlParams.bgioDebugPanel,
+        multiplayer: Local(),
+        numPlayers,
+        debug: debugPanel,
     });
 
     const games = [];

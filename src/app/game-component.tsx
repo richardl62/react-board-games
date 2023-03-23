@@ -6,12 +6,13 @@ import { MatchPlayOffline } from "./match-play-offline";
 import { MatchPlayOnline } from "./match-play-online";
 import * as UrlParams from "./url-params";
 
-export function gameComponent(game : AppGame): JSX.Element {
-
+export function GameComponent(props: {game : AppGame} ): JSX.Element {
+    const { game } = props;
     const {matchID, offline, player} = UrlParams;
 
+
     if (offline) {
-        return <MatchPlayOffline game={game} {...offline} />;
+        return <MatchPlayOffline game={game} options={offline} />;
     }
 
     if ( player && matchID ) {

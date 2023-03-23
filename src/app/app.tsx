@@ -5,7 +5,7 @@ import { AppGame, GameCategory } from "../app-game-support";
 import { standardOuterMargin } from "../app-game-support/styles";
 import { games as appGames } from "../games";
 import "./app.css";
-import { gameComponent } from "./game-component";
+import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";
 
 const HomePageStyles = styled.div`
@@ -110,7 +110,7 @@ function App(): JSX.Element {
                 {appGames.map(appGame => <Route
                     key={appGame.name}
                     path={gamePath(appGame)} exact
-                    component={() => gameComponent(appGame)}
+                    component={() => <GameComponent game={appGame}/>}
                 />)}
 
                 <Route key="pageNotFound" component={renderPageNotFound} />

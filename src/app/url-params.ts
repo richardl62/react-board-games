@@ -2,6 +2,7 @@
 // If not set, give default value.
 import { AppGame, MatchID, Player } from "../app-game-support";
 import { sAssert } from "../utils/assert";
+import { OfflineOptions } from "./offline-options";
 
 const keys = {
     credentials: "cred",
@@ -49,18 +50,14 @@ export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 const server = getAndDelete(keys.server);
 
-export interface OfflineGameData {
-  nPlayers:number;
-  persist: boolean;
-}
-
-export let offline : null | OfflineGameData= null;
+export let offline : null | OfflineOptions = null;
 if(getAndDeleteFlag(keys.offline)){
     const numPlayers = getAndDelete(keys.nPlayers);
     if(numPlayers){
         offline = {
-            nPlayers: parseInt(numPlayers),
-            persist: getAndDeleteFlag(keys.persist),
+            numPlayers: parseInt(numPlayers),
+            debugPanel: bgioDebugPanel,
+            
         };
     } else {
         console.warn("URL does to specify number of players (required for offline game)");
