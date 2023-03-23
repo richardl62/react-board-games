@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppGame } from "../app-game-support";
 import { GameLobby } from "./lobby/game-lobby";
 import { MatchLobby } from "./lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
 import { MatchPlayOnline } from "./match-play-online";
+import { OfflineOptions } from "./offline-options";
 import * as UrlParams from "./url-params";
 
 export function GameComponent(props: {game : AppGame} ): JSX.Element {
     const { game } = props;
-    const {matchID, offline, player} = UrlParams;
+    const {matchID, offline: offlineOptionsFromUrl, player} = UrlParams;
 
+    const [ offlineOptions, setOfflineOptions ] = useState<OfflineOptions | null>(null);
 
-    if (offline) {
-        return <MatchPlayOffline game={game} options={offline} />;
+    if (offlineOptions) {
+        return <MatchPlayOffline game={game} options={offlineOptions} />;
+    }
+
+    if (offlineOptionsFromUrl) {
+        return <MatchPlayOffline game={game} options={offlineOptionsFromUrl} />;
     }
 
     if ( player && matchID ) {
@@ -27,5 +33,5 @@ export function GameComponent(props: {game : AppGame} ): JSX.Element {
         return <MatchLobby game={game} matchID={matchID} />;
     }
 
-    return <GameLobby game={game}/>;
+    return <GameLobby game={game} setOfflineOptions={setOfflineOptions}/>;
 }

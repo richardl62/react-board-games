@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AppGame } from "../../app-game-support";
 import { standardOuterMargin } from "../../app-game-support/styles";
 import { LoadingOrError } from "../../utils/async-status";
+import { OfflineOptions } from "../offline-options";
 import { makeLobbyClient } from "./lobby-tools";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";
@@ -14,12 +15,13 @@ const GameLobbyDiv = styled.div`
 
     margin: ${standardOuterMargin};
 `;
-interface GameLobbyProps {
-    game: AppGame;
-}
 
-export function GameLobby(props: GameLobbyProps): JSX.Element {
-    const { game } = props;
+
+export function GameLobby(props: {
+    game: AppGame;
+    setOfflineOptions: (opts: OfflineOptions) => void;
+}): JSX.Element {
+    const { game, setOfflineOptions } = props;
     const asyncMatchList = useAsync(() => makeLobbyClient().listMatches(game.name), []);
 
     const matches = asyncMatchList.result?.matches;
@@ -30,7 +32,7 @@ export function GameLobby(props: GameLobbyProps): JSX.Element {
             <MatchLobbyWithApiInfo key={match.matchID} game={game} match={match} />
         )}
 
-        <StartMatch game={game} />
+        <StartMatch game={game} setOfflineOptions={setOfflineOptions} />
     </GameLobbyDiv>;
      
 }
