@@ -50,7 +50,7 @@ export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 const server = getAndDelete(keys.server);
 
-export let offline : null | OfflineOptions = null;
+export let offline : null | Omit<OfflineOptions,"startupData"> = null;
 if(getAndDeleteFlag(keys.offline)){
     const numPlayers = getAndDelete(keys.nPlayers);
     if(numPlayers){

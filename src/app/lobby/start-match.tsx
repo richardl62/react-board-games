@@ -49,7 +49,12 @@ export function StartMatch(props: {
 
     const startGame=(options: SpecifiedValues<typeof optionsSpec>) => {
         if(options.offline) {
-            setOfflineOptions(options);
+            setOfflineOptions({
+                ...options,
+
+                // KLUDGE - includes more that just the values from game.startupValues
+                startupData: options,
+            });
         } else {
             asyncCreateMatch.execute(options);
         }

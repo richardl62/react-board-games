@@ -1,19 +1,11 @@
 import { AppGame, GameCategory } from "../../app-game-support";
-import { Ctx } from "boardgame.io";
 import { startingServerData } from "./server-side/server-data";
 import { bgioMoves } from "./server-side/moves";
 import { standardBoard } from "../../app-game-support/standard-board";
 
 import React from "react";
+import { gameOptions } from "./options";
 
-const options = {
-    rackSize: {
-        default: 2,
-        label: "Starting value",
-        min: 0,
-        max: 10,
-    },
-};
 
 const LazyBoard = React.lazy(() => import("./board/board"));
 
@@ -22,12 +14,9 @@ export const appGame: AppGame = {
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    startupValues: options,
+    startupValues: gameOptions,
 
-    setup: (ctx: Ctx, startupData: unknown) => {
-        console.log("startupData", startupData);
-        return startingServerData(ctx);
-    }, 
+    setup: startingServerData,
     
     minPlayers: 1,
     maxPlayers: 8,

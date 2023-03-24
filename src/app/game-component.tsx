@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AppGame } from "../app-game-support";
+import { defaultValues } from "../app-game-support/value-specification";
 import { GameLobby } from "./lobby/game-lobby";
 import { MatchLobby } from "./lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
@@ -18,7 +19,11 @@ export function GameComponent(props: {game : AppGame} ): JSX.Element {
     }
 
     if (offlineOptionsFromUrl) {
-        return <MatchPlayOffline game={game} options={offlineOptionsFromUrl} />;
+        const options = {
+            ...offlineOptionsFromUrl,
+            startupData: defaultValues(game.startupValues || {}),
+        };
+        return <MatchPlayOffline game={game} options={options} />;
     }
 
     if ( player && matchID ) {
