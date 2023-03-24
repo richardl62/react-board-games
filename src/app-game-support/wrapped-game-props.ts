@@ -43,13 +43,13 @@ export interface WrappedGameProps<G extends RequiredServerData = RequiredServerD
 export function makeWrappedGameProps<G extends RequiredServerData>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
-    const {offline} = UrlParams;
+    const {isOffline} = UrlParams;
 
     let allJoined = true;
     let allConnected = true;
 
     // KLUDGE?: Assume all players in an offline game are connected
-    if (!offline) {
+    if (!isOffline) {
         for (const playerID in playerData) {
             const pd = playerData[playerID];
             if (pd.status !== "connected") {
@@ -72,7 +72,7 @@ export function makeWrappedGameProps<G extends RequiredServerData>(bgioProps: Bo
         ...bgioProps,
         events: events,
         playerData: playerData,
-        offline: Boolean(offline),
+        offline: isOffline,
         allJoined: allJoined,
         allConnected: allConnected,
         playerID: bgioProps.playerID,

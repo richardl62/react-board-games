@@ -10,7 +10,7 @@ import * as UrlParams from "./url-params";
 
 export function GameComponent(props: {game : AppGame} ): JSX.Element {
     const { game } = props;
-    const {matchID, offline: offlineOptionsFromUrl, player} = UrlParams;
+    const {matchID, offlineData: offlineOptionsFromUrl, player} = UrlParams;
 
     const [ offlineOptions, setOfflineOptions ] = useState<OfflineOptions | null>(null);
 

@@ -50,20 +50,6 @@ export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 const server = getAndDelete(keys.server);
 
-export let offline : null | Omit<OfflineOptions,"setupData"> = null;
-if(getAndDeleteFlag(keys.offline)){
-    const numPlayers = getAndDelete(keys.nPlayers);
-    if(numPlayers){
-        offline = {
-            numPlayers: parseInt(numPlayers),
-            debugPanel: bgioDebugPanel,
-            
-        };
-    } else {
-        console.warn("URL does not specify number of players (required for offline game)");
-    }
-}
-
 function getAndDeletePlayer() : Player | null {
     const pid = getAndDelete(keys.pid);
     const credentials = getAndDelete(keys.credentials);
@@ -84,7 +70,24 @@ function getAndDeletePlayer() : Player | null {
 
 export const player = getAndDeletePlayer();
 
-  
+// NOTE: use isOffline rather than offlineData to check if a game is offline.
+// (offlineData is set only when the "offline" URL parameter is set.)
+export let offlineData : null | Omit<OfflineOptions,"setupData"> = null;
+if(getAndDeleteFlag(keys.offline)){
+    const numPlayers = getAndDelete(keys.nPlayers);
+    if(numPlayers){
+        offlineData = {
+            numPlayers: parseInt(numPlayers),
+            debugPanel: bgioDebugPanel,
+            
+        };
+    } else {
+        console.warn("URL does not specify number of players (required for offline game)");
+    }
+}
+
+export const isOffline = player === null;
+
 if (usp.toString()) {
     console.warn("Unrecongised url parameters", usp.toString());
 }
