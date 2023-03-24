@@ -17,6 +17,8 @@ export function StartMatch(props: {
     const { game, setOfflineOptions } = props;
     const {minPlayers, maxPlayers } = game;
 
+    const gameOptions = game.startupValues || {};
+
     const optionsSpec = {
         numPlayers: {
             label: "Number of players",
@@ -24,6 +26,9 @@ export function StartMatch(props: {
             min: minPlayers,
             max: maxPlayers,
         },
+
+        ...gameOptions,
+        
         offline: {
             label: "Play offline (test/debug)",
             default: false,

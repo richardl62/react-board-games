@@ -6,6 +6,15 @@ import { standardBoard } from "../../app-game-support/standard-board";
 
 import React from "react";
 
+const options = {
+    rackSize: {
+        default: 2,
+        label: "Starting value",
+        min: 0,
+        max: 10,
+    },
+};
+
 const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
@@ -13,9 +22,13 @@ export const appGame: AppGame = {
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    setup: (ctx: Ctx) => startingServerData(ctx), 
-    
+    startupValues: options,
 
+    setup: (ctx: Ctx, startupData: unknown) => {
+        console.log("startupData", startupData);
+        return startingServerData(ctx);
+    }, 
+    
     minPlayers: 1,
     maxPlayers: 8,
 
