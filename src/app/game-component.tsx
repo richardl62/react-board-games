@@ -21,7 +21,7 @@ export function GameComponent(props: {game : AppGame} ): JSX.Element {
     if (offlineOptionsFromUrl) {
         const options = {
             ...offlineOptionsFromUrl,
-            startupData: defaultValues(game.startupValues || {}),
+            setupData: defaultValues(game.setupValues || {}),
         };
         return <MatchPlayOffline game={game} options={options} />;
     }

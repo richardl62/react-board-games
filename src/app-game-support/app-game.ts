@@ -22,7 +22,7 @@ export interface AppGame extends Game {
 
   moves: Required<Game>["moves"];
 
-  startupValues?: ValueSpecifications;
+  setupValues?: ValueSpecifications;
 
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.

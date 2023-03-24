@@ -4,7 +4,7 @@ import { bgioMoves } from "./server-side/moves";
 import { standardBoard } from "../../app-game-support/standard-board";
 
 import React from "react";
-import { gameOptions } from "./options";
+import { setupOptions } from "./options";
 
 
 const LazyBoard = React.lazy(() => import("./board/board"));
@@ -14,7 +14,7 @@ export const appGame: AppGame = {
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    startupValues: gameOptions,
+    setupValues: setupOptions,
 
     setup: startingServerData,
     

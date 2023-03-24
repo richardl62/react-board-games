@@ -1,7 +1,7 @@
 import { SpecifiedValues } from "../../app-game-support/value-specification";
 import { sAssert } from "../../utils/assert";
 
-export const gameOptions = {
+export const setupOptions = {
     startingValue: {
         default: 2,
         label: "Starting value",
@@ -10,10 +10,10 @@ export const gameOptions = {
     },
 };
 
-export type GameOptions = SpecifiedValues<typeof gameOptions>;
+export type SetupOptions = SpecifiedValues<typeof setupOptions>;
 
-export function toGameOptions(arg: unknown) : GameOptions {
-    const options = arg as GameOptions;
+export function toSetupOptions(arg: unknown) : SetupOptions {
+    const options = arg as SetupOptions;
     sAssert(
         typeof options === "object" &&
         typeof options.startingValue === "number", 

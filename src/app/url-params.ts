@@ -50,7 +50,7 @@ export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 const server = getAndDelete(keys.server);
 
-export let offline : null | Omit<OfflineOptions,"startupData"> = null;
+export let offline : null | Omit<OfflineOptions,"setupData"> = null;
 if(getAndDeleteFlag(keys.offline)){
     const numPlayers = getAndDelete(keys.nPlayers);
     if(numPlayers){
@@ -60,7 +60,7 @@ if(getAndDeleteFlag(keys.offline)){
             
         };
     } else {
-        console.warn("URL does to specify number of players (required for offline game)");
+        console.warn("URL does not specify number of players (required for offline game)");
     }
 }
 

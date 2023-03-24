@@ -17,7 +17,7 @@ export function StartMatch(props: {
     const { game, setOfflineOptions } = props;
     const {minPlayers, maxPlayers } = game;
 
-    const gameOptions = game.startupValues || {};
+    const gameOptions = game.setupValues || {};
 
     const optionsSpec = {
         numPlayers: {
@@ -52,8 +52,8 @@ export function StartMatch(props: {
             setOfflineOptions({
                 ...options,
 
-                // KLUDGE - includes more that just the values from game.startupValues
-                startupData: options,
+                // KLUDGE - includes more that just the values from game.setupValues
+                setupData: options,
             });
         } else {
             asyncCreateMatch.execute({

@@ -14,10 +14,10 @@ export function MatchPlayOffline(props: {
 
     const { 
         game,
-        options: {numPlayers, debugPanel, startupData}
+        options: {numPlayers, debugPanel, setupData}
     } = props;
 
-    const wrappedSetup = (ctx: Ctx) => game.setup(ctx, startupData);
+    const wrappedSetup = (ctx: Ctx) => game.setup(ctx, setupData);
 
     const GameClient = Client({
         game: {...game, setup: wrappedSetup},
