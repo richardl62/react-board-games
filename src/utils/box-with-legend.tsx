@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import styled from "styled-components";
 
 const borderRadius = "5px";
-const legendFontSize = "15px";
+const legendFontSize = "0.9em";
 
 const Box = styled.div`
   display: inline-block;

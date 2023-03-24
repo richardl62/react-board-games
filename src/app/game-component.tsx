@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { AppGame } from "../app-game-support";
 import { defaultValues } from "../app-game-support/value-specification";
 import { GameLobby } from "./lobby/game-lobby";
@@ -8,7 +9,15 @@ import { MatchPlayOnline } from "./match-play-online";
 import { OfflineOptions } from "./offline-options";
 import * as UrlParams from "./url-params";
 
-export function GameComponent(props: {game : AppGame} ): JSX.Element {
+const OuterDiv = styled.div`
+    font-size: 18px;
+    font-family: "Times New Roman";
+
+    button, input {
+        font-size: 1em;
+    }
+`;
+function InnerGameComponent(props: {game : AppGame} ) {
     const { game } = props;
     const {matchID, offlineData: offlineOptionsFromUrl, player} = UrlParams;
 
@@ -39,4 +48,10 @@ export function GameComponent(props: {game : AppGame} ): JSX.Element {
     }
 
     return <GameLobby game={game} setOfflineOptions={setOfflineOptions}/>;
+}
+
+export function GameComponent(props: {game : AppGame} ): JSX.Element {
+    return <OuterDiv>
+        <InnerGameComponent {...props} />;
+    </OuterDiv>;
 }
