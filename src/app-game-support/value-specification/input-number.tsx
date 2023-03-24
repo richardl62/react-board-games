@@ -1,5 +1,11 @@
 import React, { ChangeEvent } from "react";
 
+import styled from "styled-components";
+
+const Input = styled.input`
+    width: 6em;
+`;
+
 function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     let val = parseInt(str);
     if(isNaN(val)) {
@@ -17,23 +23,19 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-export function InputNumber(props: {
-    value: number;
-    label: string;
+export function inputNumber(
+    value: number,
+    setValue: (value: number) => void,
+    {label, min, max}: {label: string, min?: number, max?: number},
+) : [JSX.Element, JSX.Element] {
 
-    min?: number;
-    max?: number;
-
-    setValue: (value: number) => void;
-}) : JSX.Element {
-    const { value, setValue,  label, min, max } = props;
 
     const minMaxText = () => {
         if (min === undefined && max === undefined) {
             return "";
         }
 
-        let txt;
+        let txt : string;
         if ( min === undefined ) {
             txt = `<=${max}`;
         } else if ( max === undefined ) {
@@ -42,12 +44,14 @@ export function InputNumber(props: {
             txt = `${min}-${max}`;
         }
         
-        return `[${txt}] `;
+        return ` [${txt}]`;
     }; 
 
-    return <label>
-        {label+" "+minMaxText()}
-        <input
+    return [
+        <label htmlFor={label} key={label+"label"}> {label + minMaxText()} </label>,
+        <Input
+            id={label} 
+            key={label+"input"}
             type="number"
             defaultValue={value}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -57,5 +61,6 @@ export function InputNumber(props: {
             min={min}
             max={max}
         />
-    </label>;
+    ];
+
 }
