@@ -1,12 +1,7 @@
 import { sAssert } from "../../../utils/assert";
+import { SpecifiedValues } from "../../../app-game-support/value-specification";
 
 export const handSize = 5;
-
-/** The initial size of the main piles, i.e. the cards that players
- * want to get rid of */
-export const mainPileSize = 24;
-
-export const nSharedPilesAtStart = 3;
 
 // The debug iptions should be set to false for normal play.
 export const debugOptions = {
@@ -26,3 +21,19 @@ export function debugOptionsInUse() : boolean {
 
     return false;
 }
+
+export const setupOptions = {
+    mainPileSize: {
+        label: "Size of players' piles",
+        default: 24,
+        min: 1,
+    },
+    nSharedPilesAtStart: {
+        label: "No of shared piles at start",
+        default: 3,
+        min: 0,
+    },
+
+};
+
+export type SetupValues = SpecifiedValues<typeof setupOptions>;

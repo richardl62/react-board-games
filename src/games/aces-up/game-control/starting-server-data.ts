@@ -1,15 +1,19 @@
 import { Ctx } from "boardgame.io";
-import { debugOptions, handSize, mainPileSize, nSharedPilesAtStart } from "../game-support/config";
+import { debugOptions, handSize, setupOptions, SetupValues } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
+import { toSpecifiedValues } from "../../../app-game-support/value-specification";
+import { sAssert } from "../../../utils/assert";
 
-function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck) : PlayerData {
+
+function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
+    options: SetupValues) : PlayerData {
 
     const res : PlayerData = {
-        mainPile: mainPileDeck.drawN(mainPileSize, "noKings"),
+        mainPile: mainPileDeck.drawN(options.mainPileSize, "noKings"),
 
         hand: handDeck.drawN(handSize),
 
@@ -39,7 +43,9 @@ export const turnStartServerData: PerTurnServerData = {
     undoItems:[],
 };
 
-export function startingServerData(ctx: Ctx): ServerData {
+export function startingServerData(ctx: Ctx, setupData: unknown): ServerData {
+    const options = toSpecifiedValues(setupData, setupOptions);
+    sAssert(options, "setupData does not have the expected type");
 
     const sd: ServerData = {
         deck: [],
@@ -56,7 +62,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     const handDeck = new ExtendingDeck(ctx, sd.deck);
 
 
-    for (let i = 0; i < nSharedPilesAtStart; ++i) {
+    for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
         const card = handDeck.draw("noKings");
         sd.sharedPiles.push(makeSharedPile(card));
     }
@@ -68,7 +74,7 @@ export function startingServerData(ctx: Ctx): ServerData {
     sd.sharedPiles.push({cards: null, rank: null});
 
     for (const pid in ctx.playOrder) {
-        sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck);
+        sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
     }
 
     return sd;
