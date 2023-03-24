@@ -97,7 +97,6 @@ interface MatchLobbyProps {
 export function MatchLobby(props: MatchLobbyProps): JSX.Element {
     const { game, matchID } = props;
 
-    console.log("MatchLobby", game.name,  matchID.mid);
     const asyncMatch = useAsync(()=>makeLobbyClient().getMatch(game.name, matchID.mid), []);
 
     const match = asyncMatch.result;

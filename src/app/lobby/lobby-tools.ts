@@ -6,8 +6,11 @@ export function makeLobbyClient() : LobbyClient {
     return new LobbyClient({ server: lobbyServer() });
 }
 
-export async function createMatch(game: AppGame, numPlayers: number): Promise<MatchID> {
-    const p = makeLobbyClient().createMatch(game.name, { numPlayers: numPlayers });
+export async function createMatch(
+    game: AppGame,
+    options: { numPlayers: number, setupData: unknown },
+): Promise<MatchID> {
+    const p = makeLobbyClient().createMatch(game.name, options);
     const m = await p;
     return { mid: m.matchID };
 }

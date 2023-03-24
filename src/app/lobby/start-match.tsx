@@ -39,8 +39,8 @@ export function StartMatch(props: {
         }
     };
     
-    const asyncCreateMatch = useAsyncCallback((arg: {numPlayers: number}) =>
-        createMatch(game, arg.numPlayers).then(openOnlineMatchPage)
+    const asyncCreateMatch = useAsyncCallback((arg: {numPlayers: number, setupData: unknown}) =>
+        createMatch(game, arg).then(openOnlineMatchPage)
     );
 
     if(loadingOrError(asyncCreateMatch)) {
@@ -56,7 +56,10 @@ export function StartMatch(props: {
                 startupData: options,
             });
         } else {
-            asyncCreateMatch.execute(options);
+            asyncCreateMatch.execute({
+                numPlayers: options.numPlayers,
+                setupData: options,
+            });
         }
     };
 
