@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { WaitingForPlayers } from "../../../app-game-support";
 import { ShowValues } from "../../../app-game-support/value-specification/show-values";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { optionsSpecication } from "../options";
+import { setupOptions } from "../options";
 import { GameStage } from "../server-side/server-data";
 import { PlayerStatus } from "./player-status";
 
@@ -33,7 +33,7 @@ export function ReadyToStartGame() : JSX.Element | null {
     
     const ready = playerData[playerID].readyToStartGame;
     return <OuterDiv>
-        <ShowValues specification={optionsSpecication} values={options}/>
+        <ShowValues specification={setupOptions} values={options}/>
 
         {allJoined ?
             <div>

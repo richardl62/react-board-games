@@ -2,13 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import ContextProviderPlus from "./context-provider-plus";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
-import { GameStage } from "../server-side/server-data";
 import { EndOfGame } from "./end-of-game";
 import { MakeGrid } from "./make-grid";
 import { ReadyToStartGame } from "./ready-to-start-game";
 import { ScoreCards } from "./score-cards";
 import { Scoring } from "./scoring";
-import { SetOptionsOrWait } from "./set-options";
 import { aboveScoreCardsHeight } from "./style";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 
@@ -50,12 +48,8 @@ function GameStages(props: GameStagesProps) {
 function Board(): JSX.Element {
     const crossTilesGameProps = useStandardBoardContext() as CrossTilesGameProps;
 
-    const { G: { stage } } = crossTilesGameProps;
-
     return <BoardDiv>
-        {stage === GameStage.setup ?  
-            <SetOptionsOrWait gameProps={crossTilesGameProps} /> : 
-            <GameStages gameProps={crossTilesGameProps} />}
+        <GameStages gameProps={crossTilesGameProps} />
     </BoardDiv>;
 }
 

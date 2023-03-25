@@ -16,8 +16,7 @@ export function readyForNewGame(G: ServerData, ctx: Ctx, _option: void): void {
     }
 
     if (allReady) {
-        const newG = startingServerData(ctx);
-        newG.options = G.options;
+        const newG = startingServerData(ctx, G.options);
         Object.assign(G, newG);
 
         G.stage = GameStage.makingGrids;

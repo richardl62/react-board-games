@@ -39,7 +39,7 @@ export function ScoreCards(): JSX.Element | null {
         isLegalWord } = context;
     const { getPlayerName, playerID, moves } = wrappedGameProps;
 
-    if (stage === GameStage.setup || stage === GameStage.starting) {
+    if (stage === GameStage.starting) {
         return null;
     }
 
@@ -48,7 +48,7 @@ export function ScoreCards(): JSX.Element | null {
     
 
     const scoreAndABonus = (pid: string, category: ScoreCategory) => {
-        let score = null;
+        let score : number | null = null;
         let bonus = 0;
         if(scoreOptions && !playerData[pid].chosenCategory) {
             score = scoreOptions.scoreOption(pid, category);

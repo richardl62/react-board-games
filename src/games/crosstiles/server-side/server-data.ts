@@ -5,12 +5,13 @@ import { startingScoreCard } from "./score-card";
 import { ScoreCategory } from "../score-categories";
 import { ScoreWithCategory } from "./set-score";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
-import { GameOptions, defaultOptions } from "../options";
+import { GameOptions, setupOptions } from "../options";
+import { toSpecifiedValues } from "../../../app-game-support/value-specification";
+import { sAssert } from "../../../utils/assert";
 
 
 /* Use string values to add with debugging */
 export enum GameStage {
-    setup = "setup",
     starting = "starting",
     makingGrids = "making grids",
     scoring = "scoring",
@@ -62,7 +63,9 @@ export function startingPlayerData() : PlayerData {
     };
 }
 
-export function startingServerData(ctx: Ctx): ServerData {
+export function startingServerData(ctx: Ctx, setupData: unknown): ServerData {
+    const options = toSpecifiedValues(setupData, setupOptions);
+    sAssert(options, "setupData does not have the expected type");
 
     const playerData : {[playerID: string]: PlayerData } = {};
     
@@ -71,13 +74,13 @@ export function startingServerData(ctx: Ctx): ServerData {
     }
 
     const G : ServerData = {
-        options: defaultOptions,
-        stage: GameStage.setup,
+        stage: GameStage.starting,
         round: 0,
         playerData: playerData,
-        
+        options,
         ...startingRequiredState(),
     };
+
 
     return G;
 }
