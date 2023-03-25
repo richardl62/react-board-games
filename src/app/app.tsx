@@ -9,14 +9,15 @@ import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";
 
 const HomePageStyles = styled.div`
+    font-size: 18px;
     h1 {
-        font-size: 14pt;
+        font-size: 1.2em;
         font-weight: bold;
     }
     
     h2 {
-        margin-top: 6px;
-        font-size: 12pt;
+        margin-top: 0.5em;
+        font-size: 18px;
         font-weight: 600;
     }
 
