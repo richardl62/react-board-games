@@ -7,6 +7,7 @@ import { games as appGames } from "../games";
 import "./app.css";
 import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";
+import http from "http";
 
 const HomePageStyles = styled.div`
     font-size: 18px;
@@ -100,6 +101,14 @@ function App(): JSX.Element {
     useEffect(() => {
         document.title = "Games";
     });
+
+    // Keep heroku eco dyno awake.
+    useEffect(() => {
+        const origin = window.location.origin;
+        setInterval(function () {
+            http.get(origin);
+        }, 300000 /* 5 Mins */);
+    },[]);
 
     const renderHomePage = () => <HomePage games={appGames} />;
     const renderPageNotFound = () => <PageNotFound games={appGames} />;
