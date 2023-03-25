@@ -52,6 +52,6 @@ function InnerGameComponent(props: {game : AppGame} ) {
 
 export function GameComponent(props: {game : AppGame} ): JSX.Element {
     return <OuterDiv>
-        <InnerGameComponent {...props} />;
+        <InnerGameComponent {...props} />
     </OuterDiv>;
 }

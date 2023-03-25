@@ -55,8 +55,8 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const { game, match: { players, matchID: matchID_ } } = props;
     const matchID = { mid: matchID_ };
 
-    const allNames = [];
-    const notConnected = [];
+    const allNames : JSX.Element[] = [];
+    const notConnected : JSX.Element[] = [];
     let gameFull = true;
 
     for(const index in players) {
