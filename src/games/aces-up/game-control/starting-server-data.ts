@@ -5,8 +5,8 @@ import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
-import { toSpecifiedValues } from "../../../app-game-support/value-specification";
 import { sAssert } from "../../../utils/assert";
+import { toSpecifiedValues } from "../../../app/option-specification";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,

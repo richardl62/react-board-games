@@ -1,6 +1,6 @@
 import { Ctx, Game } from "boardgame.io";
 import { RequiredServerData } from "./required-server-data";
-import { ValueSpecifications } from "./value-specification";
+import { ValueSpecifications } from "../app/option-specification";
 import { WrappedGameProps } from "./wrapped-game-props";
 
 // The string values are uses as section headers when displaying the list of

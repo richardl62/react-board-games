@@ -1,6 +1,6 @@
 import { Ctx } from "boardgame.io";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
-import { toSpecifiedValues } from "../../../app-game-support/value-specification";
+import { toSpecifiedValues } from "../../../app/option-specification";
 import { sAssert } from "../../../utils/assert";
 import { setupOptions } from "../options";
 

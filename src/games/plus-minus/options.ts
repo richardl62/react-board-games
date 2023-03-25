@@ -1,4 +1,5 @@
-import { SpecifiedValues } from "../../app-game-support/value-specification";
+import { SpecifiedValues } from "../../app/option-specification";
+
 
 export const setupOptions = {
     startingValue: {

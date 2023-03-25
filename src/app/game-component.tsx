@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { AppGame } from "../app-game-support";
-import { defaultValues } from "../app-game-support/value-specification";
+import { defaultValues } from "./option-specification";
 import { GameLobby } from "./lobby/game-lobby";
 import { MatchLobby } from "./lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";

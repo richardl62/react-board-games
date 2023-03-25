@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../../../app-game-support";
-import { ShowValues } from "../../../app-game-support/value-specification/show-values";
+import { ShowValues } from "../../../app/option-specification/show-values";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { setupOptions } from "../options";
 import { GameStage } from "../server-side/server-data";

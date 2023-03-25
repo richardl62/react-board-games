@@ -1,5 +1,5 @@
+import { SpecifiedValues } from "../../../app/option-specification";
 import { sAssert } from "../../../utils/assert";
-import { SpecifiedValues } from "../../../app-game-support/value-specification";
 
 export const handSize = 5;
 
