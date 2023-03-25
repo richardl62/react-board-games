@@ -30,7 +30,7 @@ function InnerGameComponent(props: {game : AppGame} ) {
     if (offlineOptionsFromUrl) {
         const options = {
             ...offlineOptionsFromUrl,
-            setupData: defaultValues(game.setupValues || {}),
+            setupData: defaultValues(game.options || {}),
         };
         return <MatchPlayOffline game={game} options={options} />;
     }

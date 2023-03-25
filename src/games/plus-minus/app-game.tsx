@@ -14,8 +14,7 @@ export const appGame: AppGame = {
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    setupValues: setupOptions,
-
+    options: setupOptions,
     setup: startingServerData,
     
     minPlayers: 1,

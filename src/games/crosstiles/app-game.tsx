@@ -19,8 +19,9 @@ export const appGame: AppGame = {
     minPlayers: 1,
     maxPlayers: 99,
 
-    setupValues: setupOptions,
+    options: setupOptions,
     setup: startingServerData,
+
     moves: bgioMoves,
 
     // BGIO does not impose turn order

@@ -6,7 +6,7 @@ import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { sAssert } from "../../../utils/assert";
-import { toSpecifiedValues } from "../../../app/option-specification";
+import { asSpecifiedValues } from "../../../app/option-specification";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
@@ -44,7 +44,7 @@ export const turnStartServerData: PerTurnServerData = {
 };
 
 export function startingServerData(ctx: Ctx, setupData: unknown): ServerData {
-    const options = toSpecifiedValues(setupData, setupOptions);
+    const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
 
     const sd: ServerData = {

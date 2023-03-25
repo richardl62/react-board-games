@@ -17,7 +17,7 @@ export function StartMatch(props: {
     const { game, setOfflineOptions } = props;
     const {minPlayers, maxPlayers } = game;
 
-    const gameOptions = game.setupValues || {};
+    const gameOptions = game.options || {};
 
     const optionsSpec = {
         numPlayers: {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { defaultValues, SpecifiedValues, ValueSpecifications } from ".";
+import { defaultValues, SpecifiedValues, OptionSpecifications } from ".";
 import { inputBoolean } from "./input-boolean";
 import { inputNumber } from "./input-number";
 
@@ -22,7 +22,7 @@ const LabelAndInputs = styled.div`
     }
 `;
 
-export function InputValues<Spec extends ValueSpecifications>(props: {
+export function InputValues<Spec extends OptionSpecifications>(props: {
     specification: Spec,
     buttonText: string,
     onButtonClick: (values: SpecifiedValues<Spec>) => void,

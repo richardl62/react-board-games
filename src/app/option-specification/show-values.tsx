@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { SpecifiedValues, ValueSpecifications } from ".";
+import { SpecifiedValues, OptionSpecifications } from ".";
 
 const ValueTable = styled.div`
     display: grid;
@@ -8,7 +8,7 @@ const ValueTable = styled.div`
     column-gap: 1em;
 `;
 
-export function ShowValues<Spec extends ValueSpecifications>(props: {
+export function ShowValues<Spec extends OptionSpecifications>(props: {
     specification: Spec,
     values: SpecifiedValues<Spec>,
 }) : JSX.Element {

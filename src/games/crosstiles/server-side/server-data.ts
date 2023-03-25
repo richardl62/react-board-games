@@ -6,7 +6,7 @@ import { ScoreCategory } from "../score-categories";
 import { ScoreWithCategory } from "./set-score";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { GameOptions, setupOptions } from "../options";
-import { toSpecifiedValues } from "../../../app/option-specification";
+import { asSpecifiedValues } from "../../../app/option-specification";
 import { sAssert } from "../../../utils/assert";
 
 
@@ -64,7 +64,7 @@ export function startingPlayerData() : PlayerData {
 }
 
 export function startingServerData(ctx: Ctx, setupData: unknown): ServerData {
-    const options = toSpecifiedValues(setupData, setupOptions);
+    const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
 
     const playerData : {[playerID: string]: PlayerData } = {};

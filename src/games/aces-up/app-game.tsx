@@ -13,12 +13,13 @@ export const appGame: AppGame = {
     displayName: "Aces Up",
     category: GameCategory.development,
 
+    options: setupOptions,
     setup: startingServerData,
 
     minPlayers: 1,
     maxPlayers: 8,
 
-    setupValues: setupOptions,
+
 
     moves: bgioMoves,
 

@@ -1,23 +1,23 @@
-interface BooleanValueSpecification  {   
+interface BooleanSpecification  {   
     default: boolean;
     label: string; 
 }
 
-interface NumericValueSpecification {   
+interface NumericSpecification {   
     default: number;
     label: string; 
     min?: number;
     max?: number;
 }
 
-export type ValueSpecifications = {[arg:string]: BooleanValueSpecification | NumericValueSpecification};
-export type Values = {[arg:string]: boolean | number};
+export type OptionSpecifications = {[arg:string]: BooleanSpecification | NumericSpecification};
+export type OptionValues = {[arg:string]: boolean | number};
 
-export type SpecifiedValues<Specs extends ValueSpecifications> = {
+export type SpecifiedValues<Specs extends OptionSpecifications> = {
     [Property in keyof Specs]: Specs[Property]["default"];
 };
 
-export function defaultValues<Specs extends ValueSpecifications>(specs: Specs) : SpecifiedValues<Specs> {
+export function defaultValues<Specs extends OptionSpecifications>(specs: Specs) : SpecifiedValues<Specs> {
     const defaults = Object.fromEntries(
         Object.entries(specs).map(
             ([k, v]) => [k, v.default]
@@ -28,7 +28,7 @@ export function defaultValues<Specs extends ValueSpecifications>(specs: Specs) :
 /** If obj has type SpecifiedValues<Spec> return if as that type.
  * If not, return null.
  */
-export function toSpecifiedValues<Spec extends ValueSpecifications>(
+export function asSpecifiedValues<Spec extends OptionSpecifications>(
     obj: unknown,
     spec: Spec,
 ) : SpecifiedValues<Spec> | null {
