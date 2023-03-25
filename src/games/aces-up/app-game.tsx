@@ -11,7 +11,7 @@ const LazyBoard = React.lazy(() => import("./board/inner-board"));
 export const appGame: AppGame = {
     name: "acesup",
     displayName: "Aces Up",
-    category: GameCategory.development,
+    category: GameCategory.standard,
 
     options: setupOptions,
     setup: startingServerData,
