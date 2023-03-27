@@ -63,7 +63,7 @@ export default function Board(): JSX.Element {
         <DndProvider>
             <div>
                 <BoarderedGrid 
-                    nCols={3} 
+                    nCols={G.options.numColumns} 
                     backgroundColor={"brown"} 
                     gridGap={"3px"}
                     borderWidth={"6px"}
