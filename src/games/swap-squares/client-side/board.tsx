@@ -1,10 +1,8 @@
 import React from "react";
-import { DndProvider } from "../../utils/board/drag-drop";
-import { BoarderedGrid } from "../../utils/board/boardered-grid";
-import { DragDrop, PieceHolder } from "../../utils/board/piece-holder";
-import { useStandardBoardContext } from "../../app-game-support/standard-board";
-import { WrappedGameProps, DefaultMovesType } from "../../app-game-support/wrapped-game-props";
-import { ServerData } from "./server-data";
+import { DndProvider } from "../../../utils/board/drag-drop";
+import { BoarderedGrid } from "../../../utils/board/boardered-grid";
+import { DragDrop, PieceHolder } from "../../../utils/board/piece-holder";
+import { useGameContext } from "./game-context";
 
 interface SquareProps {
     value: number;
@@ -47,14 +45,14 @@ function Square(props: SquareProps) : JSX.Element {
 }
 
 export default function Board(): JSX.Element {
-    const ctx = useStandardBoardContext() as WrappedGameProps<ServerData, DefaultMovesType /*KLUDGE*/>;
+    const ctx = useGameContext();
     const { G, moves } = ctx;
     const onReset = () => {
         moves.reset();
     };
 
     const onMove = (from: number, to: number) => {
-        moves.swap(from, to);
+        moves.swap({from, to});
     };
 
     const squareElems = G.squares.map((sq, index) => 

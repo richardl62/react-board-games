@@ -1,4 +1,4 @@
-import { RequiredServerData, startingRequiredState } from "../../app-game-support/required-server-data";
+import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 
 export interface ServerData extends RequiredServerData {
     squares: number[];
