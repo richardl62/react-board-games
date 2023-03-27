@@ -27,7 +27,7 @@ export function MatchPlayOffline(props: {
         debug: debugPanel,
     });
 
-    const games = [];
+    const games : JSX.Element[] = [];
     for(let id = 0; id < numPlayers; ++id) {
         games[id] = <GameClient key={id} playerID={id.toString()} />;
     }

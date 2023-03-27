@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { SpecifiedValues, OptionSpecifications } from ".";
+import { SpecifiedValues, OptionSpecifications } from "./types";
 
 const ValueTable = styled.div`
     display: grid;

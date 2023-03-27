@@ -1,4 +1,4 @@
-import { SpecifiedValues } from "../../../app/option-specification";
+import { SpecifiedValues } from "../../../app/option-specification/types";
 import { sAssert } from "../../../utils/assert";
 
 export const handSize = 5;

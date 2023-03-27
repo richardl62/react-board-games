@@ -6,7 +6,7 @@ import { ScoreCategory } from "../score-categories";
 import { ScoreWithCategory } from "./set-score";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { GameOptions, setupOptions } from "../options";
-import { asSpecifiedValues } from "../../../app/option-specification";
+import { asSpecifiedValues } from "../../../app/option-specification/tools";
 import { sAssert } from "../../../utils/assert";
 
 

@@ -1,16 +1,22 @@
-import { SpecifiedValues } from "../../app/option-specification";
+import { SpecifiedValues } from "../../app/option-specification/types";
 
 export const setupOptions = {
     numRows: {
-        default: 4,
         label: "Number of rows",
+        default: 4,
+
         min: 1,
     },
     numColumns: {
-        default: 4,
         label: "Number of columns",
+        default: 4,
         min: 1,
     },
+    startingOrder: {
+        label: "Starting order for numbers",
+        default: "backwards",
+        options: ["forward", "backwards", "reverse"],
+    }
 };
 
 export type SetupOptions = SpecifiedValues<typeof setupOptions>;

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { defaultValues, SpecifiedValues, OptionSpecifications } from ".";
+import { SpecifiedValues, OptionSpecifications, FixedStringSpecification } from "./types";
+import { defaultValues } from "./tools";
 import { inputBoolean } from "./input-boolean";
 import { inputNumber } from "./input-number";
+import { inputFixedString } from "./input-fixed-string";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -41,12 +43,17 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
             setLocalValues(newValues);
         };
 
-        if(typeof value === "boolean") {
-            labelsAndInputs.push(...inputBoolean(value, setValue, spec));
+        const elements = () => {
+            if (typeof value === "boolean") {
+                return inputBoolean(value, setValue, spec);
+            } else if (typeof value === "number") {
+                return inputNumber(value, setValue, spec);
+            } else {
+                return inputFixedString(value, setValue, spec as FixedStringSpecification);
+            }
+        };
 
-        } else {
-            labelsAndInputs.push(...inputNumber(value, setValue, spec));
-        }
+        labelsAndInputs.push(...elements());
     }
 
     return <OuterDiv>

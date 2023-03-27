@@ -1,5 +1,6 @@
 
-import { defaultValues, SpecifiedValues } from "../../app/option-specification";
+import { SpecifiedValues } from "../../app/option-specification/types";
+import { defaultValues } from "../../app/option-specification/tools";
 
 export const setupOptions = {
     timeToMakeGrid: {

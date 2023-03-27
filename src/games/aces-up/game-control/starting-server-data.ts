@@ -6,7 +6,7 @@ import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { sAssert } from "../../../utils/assert";
-import { asSpecifiedValues } from "../../../app/option-specification";
+import { asSpecifiedValues } from "../../../app/option-specification/tools";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
