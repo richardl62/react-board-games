@@ -5,6 +5,7 @@ import { defaultValues } from "./tools";
 import { inputBoolean } from "./input-boolean";
 import { inputNumber } from "./input-number";
 import { inputFixedString } from "./input-fixed-string";
+import { sAssert } from "../../utils/assert";
 
 const OuterDiv = styled.div`
     display: inline-flex;
@@ -37,9 +38,11 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
         const spec = specification[key];
         const value = localValues[key];
 
-        const setValue = (arg: typeof value) => {
+        const setValue = (arg: unknown) => { // Use of unknown is a KLUDGE
+            sAssert(typeof arg === typeof value);
+            
             const newValues = {...localValues};
-            newValues[key as keyof Spec] = arg;
+            newValues[key as keyof Spec] = arg as typeof value;
             setLocalValues(newValues);
         };
 

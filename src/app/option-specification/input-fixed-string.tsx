@@ -4,7 +4,7 @@ import { sAssert } from "../../utils/assert";
 export function inputFixedString(
     value: string,
     setValue: (value: string) => void,
-    {label, options}: {label: string, options: string[]},
+    {label, options}: {label: string, options: readonly string[]},
 ) : [JSX.Element, JSX.Element] {
 
     sAssert(options.includes(value), "String value does not match given options");
