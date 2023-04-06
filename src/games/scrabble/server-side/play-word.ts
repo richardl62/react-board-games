@@ -1,7 +1,7 @@
-import { Ctx } from "boardgame.io";
 import { Letter } from "../config";
 import { BoardData, GameState } from "./game-state";
 import { WordsPlayedInfo } from "./move-hstory";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export interface PlayWordParam {
     board: BoardData;
@@ -11,8 +11,7 @@ export interface PlayWordParam {
 } 
 
 export function playWord(
-    state: GameState, 
-    ctx: Ctx,
+    {G: state, ctx} : MoveArg0<GameState>, 
     { board, rack: inputRack, playedWordinfo, score }: PlayWordParam
 ) : void
 {

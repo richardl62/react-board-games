@@ -1,8 +1,10 @@
-import { Ctx } from "boardgame.io";
 import { processGameRequest } from "./process-game-request";
 import { GameRequest, GameStage, PlayerID, ServerData } from "./server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-export function requestRevealHands(G: ServerData, ctx: Ctx, playerID: PlayerID): void {
+export function requestRevealHands(
+    {G, ctx} : MoveArg0<ServerData>, 
+    playerID: PlayerID): void {
 
     if (processGameRequest(G, GameRequest.RevealHand, ctx, playerID)) {
         G.player0.hand = [...G.player0.fullHand];

@@ -2,7 +2,7 @@
 import { Server, Origins } from "boardgame.io/server";
 import path from "path";
 import serve from "koa-static";
-import { games } from "./games";
+import { games } from "./games/app-games-no-board";
 
 console.log("Starting games server");
 

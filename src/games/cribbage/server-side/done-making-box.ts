@@ -1,9 +1,11 @@
-import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { processGameRequest } from "./process-game-request";
 import { GameRequest, GameStage, PlayerID, ServerData } from "./server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-export function doneMakingBox(G: ServerData, ctx: Ctx, playerID: PlayerID): void {
+export function doneMakingBox(
+    {G, ctx} : MoveArg0<ServerData>, 
+    playerID: PlayerID): void {
     sAssert(G.stage === GameStage.SettingBox);
 
     if (processGameRequest(G, GameRequest.FinishSettingBox, ctx, playerID)) {

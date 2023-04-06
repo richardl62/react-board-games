@@ -1,8 +1,8 @@
-import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { ServerData, GameStage, makeCardSetID, CardSetID } from "./server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 interface FromTo {
     from:  {cardSetID: CardSetID, index: number};
@@ -50,7 +50,10 @@ function moveBetweenCardSets(
     }
 }
 
-export function drag(state: ServerData, ctx: Ctx, { to, from }: FromTo): void {
+export function drag(
+    {G: state} : MoveArg0<ServerData>, 
+    { to, from }: FromTo
+): void {
 
     if(!dragPermitted(state, { to, from })) {
         console.log("Attempted drag is not pemitted: from ", from, " to ", to);

@@ -1,15 +1,13 @@
-import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { GameStage, ServerData } from "./server-data";
 import { startRound } from "./start-round";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-export function readyToStartGame(G: ServerData, ctx: Ctx, _arg: void): void {
+export function readyToStartGame(
+    { G, ctx, playerID } : MoveArg0<ServerData>,
+    _arg: void): void {
     if (G.stage !== GameStage.starting) {
         throw new Error("Unexpected call to readyToStartGame");
     }
-
-    const { playerID } = ctx;
-    sAssert(playerID);
 
     G.playerData[playerID].readyToStartGame = true;
     G.playerData[playerID].gridRackAndScore = null;

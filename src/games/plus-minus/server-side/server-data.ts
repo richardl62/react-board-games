@@ -8,7 +8,7 @@ export interface ServerData extends RequiredServerData{
     count: number;
 }
 
-export function startingServerData(_ctx: Ctx, setupData: unknown): ServerData {
+export function startingServerData(_arg0: {ctx: Ctx}, setupData: unknown): ServerData {
     const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
     

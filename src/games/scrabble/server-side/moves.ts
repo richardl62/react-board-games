@@ -6,14 +6,17 @@ import { GameState } from "./game-state";
 import { playWord } from "./play-word";
 import { ServerData } from "./server-data";
 import { swapTiles } from "./swap-tiles";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 type PassParam = void;
-function pass(state: GameState, ctx: Ctx, _param: PassParam) : void {
+function pass(
+    {G: state, ctx} : MoveArg0<GameState>,
+    _param: PassParam) : void {
     state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 }
 
-type SimpleMoveFunc<P> = (state: GameState, ctx: Ctx, param: P) => void;
-type WrappedMoveFunc<P> = (G: ServerData, ctx: Ctx, param: P) => void;
+type SimpleMoveFunc<P> = (arg0: MoveArg0<GameState>, param: P) => void;
+type WrappedMoveFunc<P> = (arg0: MoveArg0<ServerData>, param: P) => void;
 
 function nextPlayer(ctx: Ctx) {
     const {currentPlayer, playOrder, playOrderPos} = ctx;
@@ -24,20 +27,21 @@ function nextPlayer(ctx: Ctx) {
 }
 
 function customWrappedMoveFunction<P>(func: SimpleMoveFunc<P>): WrappedMoveFunc<P> {
-    return standardWrapMoveFunction((G, ctx, param) => {
+    return standardWrapMoveFunction((arg0, param) => {
+        const { G, ctx, events } = arg0;
         const currentState = G.states[G.states.length - 1];
         sAssert(currentState.currentPlayer === ctx.currentPlayer);
 
         // KLUDGE/defensive - ensure copied state is fully independant.
         const newState: GameState = JSON.parse(JSON.stringify(currentState));
         newState.currentPlayer = nextPlayer(ctx);
-        func(newState, ctx, param);
+        func({...arg0, G: newState}, param);
 
         G.states.push(newState);
         checkForWinner(newState, ctx);
 
-        if (ctx.events) {
-            ctx.events.endTurn();
+        if (events) {
+            events.endTurn();
         } else {
             throw new Error("Cannot end turn (internal error)");
         }

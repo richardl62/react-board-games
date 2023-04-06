@@ -1,5 +1,4 @@
 import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { CardNonJoker } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 
@@ -21,9 +20,10 @@ export class ExtendingDeck {
                 // Draw a new deck
                 const newCards = deckNoJokers();
 
-                sAssert(this.ctx.random);
+                //sAssert(this.ctx.random);
                 this.deck.splice(this.deck.length, 0,
-                    ...this.ctx.random.Shuffle(newCards)
+                    ...newCards
+                    //...this.ctx.random.Shuffle(newCards)
                 );
             } else if(c.rank !== "K" || option !== "noKings") {
                 card = c;

@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { AppGame, GameCategory } from "../app-game-support";
 import { standardOuterMargin } from "../app-game-support/styles";
-import { games as appGames } from "../games";
+import { games as appGames } from "../games/app-games";
 import "./app.css";
 import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";
-import http from "http";
 
 const HomePageStyles = styled.div`
     font-size: 18px;
@@ -106,25 +105,26 @@ function App(): JSX.Element {
     useEffect(() => {
         const origin = window.location.origin;
         setInterval(function () {
-            http.get(origin);
+            fetch(origin)
+                .catch((err) => {
+                    console.warn(`fetch(${origin} failed`, err.message);
+                });
         }, 300000 /* 5 Mins */);
     },[]);
 
-    const renderHomePage = () => <HomePage games={appGames} />;
-    const renderPageNotFound = () => <PageNotFound games={appGames} />;
     return (
         <BrowserRouter>
-            <Switch>
-                <Route key="/" exact path="/" component={renderHomePage} />
+            <Routes>
+                <Route key="/" path="/" element={<HomePage games={appGames} />} />
 
                 {appGames.map(appGame => <Route
                     key={appGame.name}
-                    path={gamePath(appGame)} exact
-                    component={() => <GameComponent game={appGame}/>}
+                    path={gamePath(appGame)}
+                    element={<GameComponent game={appGame}/>}
                 />)}
 
-                <Route key="pageNotFound" component={renderPageNotFound} />
-            </Switch>
+                <Route key="pageNotFound" path="/*" element={<PageNotFound games={appGames} />} />
+            </Routes>
         </BrowserRouter>
     );
 }

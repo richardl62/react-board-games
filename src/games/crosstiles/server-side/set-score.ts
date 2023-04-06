@@ -1,7 +1,6 @@
-import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { ScoreCategory } from "../score-categories";
 import { ServerData, GameStage } from "./server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export interface ScoreWithCategory {
     category: ScoreCategory;
@@ -23,12 +22,13 @@ export function doSetScore(G: ServerData, playerID: string, arg: ScoreWithCatego
     G.playerData[playerID].chosenCategory = category;
 }
 
-export function setScore(G: ServerData, ctx: Ctx, arg: ScoreWithCategory): void {
+export function setScore(
+    { G, playerID } : MoveArg0<ServerData>,
+    arg: ScoreWithCategory
+): void {
     if (G.stage !== GameStage.scoring) {
         throw new Error("Unexpected call to recordGrid");
     }
-    const { playerID } = ctx;
-    sAssert(playerID);
 
     doSetScore(G, playerID, arg);
 }

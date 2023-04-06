@@ -1,5 +1,5 @@
-import { Ctx } from "boardgame.io";
 import {  PegPositions, PlayerID, ServerData } from "./server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 interface Arg {
     who: PlayerID;
@@ -28,6 +28,9 @@ function movePeg(pegs: PegPositions, moveTo:number)  {
     }
 }
 
-export function pegClick(G: ServerData, ctx: Ctx, {who, score}: Arg): void {
+export function pegClick(
+    {G} : MoveArg0<ServerData>, 
+    {who, score}: Arg
+): void {
     movePeg(G[who], score);
 }

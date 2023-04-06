@@ -1,9 +1,11 @@
-import { Ctx } from "boardgame.io";
 import { processGameRequest } from "./process-game-request";   
 import { GameRequest, PlayerID, ServerData } from "./server-data";
 import { newDealData } from "./starting-server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-export function requestNewDeal(inputG: ServerData, ctx: Ctx, playerID: PlayerID): ServerData {
+export function requestNewDeal(
+    {G: inputG, ctx} : MoveArg0<ServerData>,  
+    playerID: PlayerID): ServerData {
     // If returning a new G, the existing G must not be changed.
     const newG = JSON.parse(JSON.stringify(inputG));
 

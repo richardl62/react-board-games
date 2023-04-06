@@ -25,7 +25,7 @@ interface HandProps {
     draggable: (index: number) => boolean;
     dropTarget: (index?: number) => boolean;
 
-    /** Function to call at end of a drag of a card in this hand.
+    /** function to call at end of a drag of a card in this hand.
      * 
      * (Strictly speaking, from.handID is redundant as it will always be the
      * same function to be supplied to multipled.)

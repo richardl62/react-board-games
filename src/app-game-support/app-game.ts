@@ -11,7 +11,7 @@ export enum GameCategory {
   test = "Test/Debug",
 }
 
-export interface AppGame extends Game { 
+export interface AppGameNoBoard extends Game { 
   // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
   // display purposes.
   displayName: string;
@@ -26,12 +26,15 @@ export interface AppGame extends Game {
 
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.
-  setup: (ctx: Ctx, setupData?: unknown) => RequiredServerData;
+  setup: ({ctx}: {ctx: Ctx}, setupData?: unknown) => RequiredServerData; 
 
   minPlayers: number,
   maxPlayers: number,
+}
 
-  board: (props: WrappedGameProps) => JSX.Element;
+// Not used in the server. (Seperating the board avoids some build problems.)
+export interface AppGame extends AppGameNoBoard { 
+  boardX: (props: WrappedGameProps) => JSX.Element;
 }
 
 export function defaultNumPlayers(game: AppGame): number {

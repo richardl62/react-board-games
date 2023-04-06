@@ -1,19 +1,18 @@
-import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { recordEmptyGrid } from "./record-grid";
 import { ServerData, GameStage } from "./server-data";
 import { doSetScore } from "./set-score";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-export function doneRecordingGrid(G: ServerData, ctx: Ctx, _arg: void): void {
+export function doneRecordingGrid(
+    {G, playerID} : MoveArg0<ServerData>,
+    _arg: void
+): void {
     if (G.stage !== GameStage.makingGrids) {
         throw new Error("Unexpected call to doneRecordingGrid - " + G.stage);
     }
     
-    const { playerID } = ctx;
-    sAssert(playerID);
-
     if(!G.playerData[playerID].gridRackAndScore) {
-        recordEmptyGrid(G, ctx);
+        recordEmptyGrid(G, playerID);
     }
     G.playerData[playerID].doneRecordingGrid = true;
 

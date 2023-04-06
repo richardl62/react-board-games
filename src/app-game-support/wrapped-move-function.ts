@@ -1,19 +1,20 @@
-import { Ctx } from "boardgame.io";
 import { RequiredServerData } from "./required-server-data";
+import { MoveArg0 } from "./bgio-types";
 
-type BgioMoveFunction<State, Param> = (state: State, ctx: Ctx, param: Param) => void | State;
+type BgioMoveFunction<State, Param> = (arg0: MoveArg0<State>, param: Param) => void | State;
 
 export function wrapMoveFunction<State extends RequiredServerData, Param>(func: BgioMoveFunction<State, Param>): BgioMoveFunction<State, Param> {
-    return (G, ctx, param) => {
+    return (arg0, param) => {
         let errorMessage = null;
         let funcResult = undefined;
         try {
-            funcResult = func(G, ctx, param);
+            funcResult = func(arg0, param);
         } catch (error) {
             errorMessage = error instanceof Error ? error.message :
                 "unknown error";
         }
 
+        const { G } = arg0;
         if (funcResult) {
             return {
                 ...funcResult,
@@ -26,6 +27,7 @@ export function wrapMoveFunction<State extends RequiredServerData, Param>(func: 
         }
     };
 }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type BgioMoveFunctions<S extends RequiredServerData> = { [key: string]: BgioMoveFunction<S, any>; };
 
@@ -43,7 +45,7 @@ export function wrapMoveFunctions<S extends RequiredServerData>(
 
 export type ClientMoveFunctions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Functions extends { [key: string]: BgioMoveFunction<any, any>; }
+    functions extends { [key: string]: BgioMoveFunction<any, any>; }
 > = {
-        [Name in keyof Functions]: (arg: Parameters<Functions[Name]>[2]) => void;
+        [Name in keyof functions]: (arg: Parameters<functions[Name]>[1]) => void;
     };

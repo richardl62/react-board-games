@@ -5,7 +5,7 @@ export interface ServerData extends RequiredServerData {
     count: number;
 }
 
-export function startingServerData(_ctx: Ctx): ServerData {
+export function startingServerData(_arg0: {ctx: Ctx}): ServerData {
     return {
         count: 0,
         

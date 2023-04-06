@@ -1,29 +1,13 @@
-import { ActivePlayers } from "boardgame.io/core";
-import { AppGame, GameCategory } from "../../app-game-support";
-import { startingServerData } from "./server-side/starting-server-data";
-import { bgioMoves } from "./server-side/moves";
-import { Ctx } from "boardgame.io";
-import { standardBoard } from "../../app-game-support/standard-board";
 import React from "react";
+import { AppGame } from "../../app-game-support";
+import { standardBoard } from "../../app-game-support/standard-board";
+import { appGameNoBoard } from "./app-game-no-board";
 
 const LazyBoard = React.lazy(() => import("./board/board"));
 
+
 export const appGame: AppGame = {
-    name: "Cribbage",
-    displayName: "Cribbage",
-    category: GameCategory.development,
+    ...appGameNoBoard,
 
-    setup: (ctx: Ctx) => startingServerData(ctx),
-
-    minPlayers: 2,
-    maxPlayers: 2,
-
-    moves: bgioMoves,
-
-    // BGIO does not impose turn order
-    turn: {
-        activePlayers: ActivePlayers.ALL,
-    },
-
-    board: (props) => standardBoard(LazyBoard, props),
+    boardX: (props) => standardBoard(LazyBoard, props),
 };

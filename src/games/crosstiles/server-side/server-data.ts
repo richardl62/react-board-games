@@ -63,7 +63,7 @@ export function startingPlayerData() : PlayerData {
     };
 }
 
-export function startingServerData(ctx: Ctx, setupData: unknown): ServerData {
+export function startingServerData({ctx}: {ctx: Ctx}, setupData: unknown): ServerData {
     const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
 

@@ -1,5 +1,4 @@
 import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
 import { GameOptions } from "../options";
 
@@ -20,10 +19,11 @@ const letterSet = (() => {
 })();
 Object.freeze(letterSet);
 
-function selectLettersUnchecked(ctx: Ctx, opts: GameOptions) : Letter[] {
-    const random = ctx.random;
-    sAssert(random);
-    return random.Shuffle([...letterSet]).slice(0, opts.rackSize);
+function selectLettersUnchecked(_ctx: Ctx, _opts: GameOptions) : Letter[] {
+    // const random = ctx.random;
+    // sAssert(random);
+    // return random.Shuffle([...letterSet]).slice(0, opts.rackSize);
+    return [];
 }
 
 function selectionOK(letters: Letter[], opts: GameOptions) {

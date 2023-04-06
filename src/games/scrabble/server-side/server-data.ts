@@ -18,7 +18,7 @@ export function isServerData(arg: unknown): boolean {
         isGameState(serverData.states[0]);
 }
 
-export function startingServerData(ctx: Ctx, config: ScrabbleConfig): ServerData {
+export function startingServerData({ctx}: {ctx: Ctx}, config: ScrabbleConfig): ServerData {
 
     return {
         states: [startingGameState(ctx, config)],

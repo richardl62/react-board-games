@@ -1,7 +1,8 @@
-import { Ctx, PlayerID } from "boardgame.io";
+import { PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { copyJSON } from "../../../utils/copy-json";
 import { ServerData, UndoItem } from "./server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {
@@ -13,8 +14,7 @@ export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
 }
 
 export function undo(
-    G: ServerData, 
-    _ctx: Ctx, 
+    { G } : MoveArg0<ServerData>, 
     _arg: void,
 ) : void {
     const undoItem = G.undoItems.pop();

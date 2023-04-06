@@ -1,12 +1,10 @@
-import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { GameStage, ServerData, startingServerData } from "./server-data";
 import { startRound } from "./start-round";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-export function readyForNewGame(G: ServerData, ctx: Ctx, _option: void): void {
-
-    const { playerID } = ctx;
-    sAssert(playerID);
+export function readyForNewGame(
+    { G, ctx, playerID } : MoveArg0<ServerData>,
+    _option: void): void {
     
     G.playerData[playerID].readyForNewGame = true;
 
@@ -16,7 +14,7 @@ export function readyForNewGame(G: ServerData, ctx: Ctx, _option: void): void {
     }
 
     if (allReady) {
-        const newG = startingServerData(ctx, G.options);
+        const newG = startingServerData({ctx}, G.options);
         Object.assign(G, newG);
 
         G.stage = GameStage.makingGrids;

@@ -1,7 +1,6 @@
-import { Ctx } from "boardgame.io";
-import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { GameState } from "./game-state";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export interface SwapTilesParam {
     /**
@@ -18,7 +17,8 @@ export interface SwapTilesParam {
     toSwap: boolean[];
 } 
 
-export function swapTiles(state: GameState, ctx: Ctx, 
+export function swapTiles(
+    {G: state, ctx, random} : MoveArg0<GameState>, 
     { rack: inputRack, toSwap }: SwapTilesParam
 ) : void {
     const newBag = [... state.bag];
@@ -32,8 +32,7 @@ export function swapTiles(state: GameState, ctx: Ctx,
             ++nSwapped;
         }
     }
-    const { random } = ctx;
-    sAssert(random);
+
     random.Shuffle(newBag);
 
     state.playerData[ctx.currentPlayer].rack = newRack;

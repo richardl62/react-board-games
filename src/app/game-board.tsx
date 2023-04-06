@@ -31,6 +31,6 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
         document.title = `${status} - ${game.displayName}`;
     });
 
-    return game.board(gameProps);
+    return game.boardX(gameProps);
 }
 

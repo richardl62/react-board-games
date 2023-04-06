@@ -4,6 +4,7 @@ import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -20,8 +21,7 @@ export function refillHand(G: ServerData, ctx: Ctx, playerID: PlayerID) : void {
 }
 
 export function endTurn(
-    G: ServerData, 
-    ctx: Ctx,
+    {G, ctx, events} : MoveArg0<ServerData>, 
 ) : void {
 
     Object.assign(G, turnStartServerData);
@@ -42,6 +42,5 @@ export function endTurn(
         }
     }
             
-    sAssert(ctx.events);
-    ctx.events.endTurn();
+    events.endTurn();
 }

@@ -1,4 +1,4 @@
-import { Ctx, PlayerID } from "boardgame.io";
+import { PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { debugOptions } from "../game-support/config";
@@ -8,6 +8,7 @@ import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
 import { PlayerData, ServerData, UndoItem } from "./server-data";
 import { makeUndoItem } from "./undo";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.moveToSharedPile !== "done" &&
@@ -34,11 +35,11 @@ function moveWithinSharedPiles(
 }
 
 export function moveCard(
-    G: ServerData, 
-    ctx: Ctx, 
+    arg0 : MoveArg0<ServerData>, 
     /** PlayerID is the ID of the play who requested the move */
     {from, to}: {from: CardID, to: CardID},
 ) : void {
+    const { G, ctx } = arg0;
     const playerID = ctx.currentPlayer;
     sAssert(from.area !== "sharedPiles", "Card played from shared piles" );
     sAssert(from.owner === playerID, "Unexpected card owner");
@@ -78,7 +79,7 @@ export function moveCard(
 
     // Post-move actions
     if(endOfTurn) {
-        endTurn(G, ctx);
+        endTurn(arg0);
     } else {
         if (playerData.hand.length === 0) {
             refillHand(G, ctx, playerID);

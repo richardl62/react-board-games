@@ -1,6 +1,6 @@
-import { Ctx } from "boardgame.io";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
+import { shuffle } from "../../../utils/shuffle";
 
 export const startingOrders = [
     "forward",
@@ -13,7 +13,11 @@ export interface ServerData extends RequiredServerData {
     options: SetupOptions;
 }
 
-export function setSquares(G: ServerData, ctx: Ctx) : void {
+export function setSquares(
+    G: ServerData, 
+    // Return a shuffled copy of the input array. Can shuffle in place.
+    shuffle: (array: number[]) => number[]
+) : void {
     
     const makeSquares = () => {
         const nSquares = G.options.numRows * G.options.numColumns;
@@ -29,21 +33,21 @@ export function setSquares(G: ServerData, ctx: Ctx) : void {
         case "backwards":
             return squares.reverse();
         case "random":
-            return ctx.random!.Shuffle(squares);
+            return shuffle(squares);
         }
     };
 
     G.squares = makeSquares();
 }
 
-export function startingServerData(ctx: Ctx, options: SetupOptions): ServerData {
+export function startingServerData(_arg0: unknown, options: SetupOptions): ServerData {
     const G : ServerData = {
         squares: [],
         options,
         ...startingRequiredState(),
     };
 
-    setSquares(G, ctx);
+    setSquares(G, shuffle);
 
     return G;
 }

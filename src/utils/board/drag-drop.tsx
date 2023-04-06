@@ -86,7 +86,7 @@ interface UseDropArg<ID = UnknownObject> {
 }
 /**
  * Wrapper for react-dnd onDrop
- * @param onDrop - Function to call on drop.
+ * @param onDrop - function to call on drop.
  * 
  * Warning: UseDrag And UseDrop should be give the same type parameter.
  */

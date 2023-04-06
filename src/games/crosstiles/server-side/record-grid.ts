@@ -1,25 +1,25 @@
-import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "./server-data";
 import { ScoreWithCategory } from "./set-score";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { PlayerID } from "boardgame.io";
 
-export function recordGrid(
-    G: ServerData,
-    ctx: Ctx,
-    gridAndScore: {
-        grid: (Letter | null)[][],
-        rack:  (Letter | null)[],
-        score: ScoreWithCategory | null,
-    }
+interface GridAndScore {
+    grid: (Letter | null)[][],
+    rack:  (Letter | null)[],
+    score: ScoreWithCategory | null, 
+}
+
+export function doRecordGrid(
+    G :ServerData,
+    playerID: PlayerID,
+    gridAndScore: GridAndScore,
 ): void {
     if (G.stage !== GameStage.makingGrids) {
         throw new Error("Unexpected call to recordGrid - " + G.stage);
     }
-
-    const { playerID } = ctx;
-    sAssert(playerID);
 
     const {grid, rack, score} = gridAndScore;
 
@@ -30,19 +30,23 @@ export function recordGrid(
     };
 }
 
+export function recordGrid(
+    { G, playerID } : MoveArg0<ServerData>,
+    gridAndScore: GridAndScore,
+): void {
+    doRecordGrid(G, playerID, gridAndScore);
+}
+
 export function recordEmptyGrid(
     G: ServerData,
-    ctx: Ctx,
+    playerID: PlayerID,
 ): void {
-
-    const { playerID } = ctx;
-    sAssert(playerID);
-
     const { selectedLetters } = G.playerData[playerID];
     sAssert(selectedLetters);
 
-    recordGrid(
-        G, ctx,
+    doRecordGrid(
+        G,
+        playerID,
         {
             grid: makeEmptyGrid(),
             rack: selectedLetters,
