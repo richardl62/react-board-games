@@ -2,12 +2,12 @@
 import { Server, Origins } from "boardgame.io/server";
 import path from "path";
 import serve from "koa-static";
-import { games } from "./games/app-games-no-board";
+import { gamesNoBoard } from "./games/app-games-no-board";
 
 console.log("Starting games server");
 
 const server = Server({ 
-    games: games,
+    games: gamesNoBoard,
     origins: [
         // Allow your game site to connect.
         "https://richards-board-games.herokuapp.com",
