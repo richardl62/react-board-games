@@ -1,18 +1,16 @@
-import { Ctx } from "boardgame.io";
 import { CardNonJoker } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 
+type Shuffle = (arr: CardNonJoker[]) => CardNonJoker[];
 type Option = "noKings";
 export class ExtendingDeck {
-    constructor(ctx: Ctx, deck: CardNonJoker[]) {
+    constructor(deck: CardNonJoker[]) {
  
-        this.ctx = ctx;
         this.deck = deck;
     }
-    ctx: Ctx;
     deck: CardNonJoker[];
 
-    draw(option?: Option) : CardNonJoker {
+    draw(shuffle: Shuffle, option?: Option) : CardNonJoker {
         let card;
         while (!card) {
             const c = this.deck.pop();
@@ -20,11 +18,7 @@ export class ExtendingDeck {
                 // Draw a new deck
                 const newCards = deckNoJokers();
 
-                //sAssert(this.ctx.random);
-                this.deck.splice(this.deck.length, 0,
-                    ...newCards
-                    //...this.ctx.random.Shuffle(newCards)
-                );
+                this.deck.splice(this.deck.length, 0, ...shuffle(newCards));
             } else if(c.rank !== "K" || option !== "noKings") {
                 card = c;
             }
@@ -33,10 +27,10 @@ export class ExtendingDeck {
         return card;
     }
 
-    drawN(count: number, option?: Option) : CardNonJoker[] {
+    drawN(count: number, shuffle: Shuffle, option?: Option) : CardNonJoker[] {
         const cards = [];
         for(let i = 0; i < count; ++i) {
-            cards.push(this.draw(option));
+            cards.push(this.draw(shuffle, option));
         }
         return cards;
     }

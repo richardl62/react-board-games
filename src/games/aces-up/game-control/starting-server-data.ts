@@ -7,15 +7,16 @@ import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { sAssert } from "../../../utils/assert";
 import { asSpecifiedValues } from "../../../app/option-specification/tools";
+import { shuffle } from "../../../utils/shuffle";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
     options: SetupValues) : PlayerData {
 
     const res : PlayerData = {
-        mainPile: mainPileDeck.drawN(options.mainPileSize, "noKings"),
+        mainPile: mainPileDeck.drawN(options.mainPileSize, shuffle, "noKings"),
 
-        hand: handDeck.drawN(handSize),
+        hand: handDeck.drawN(handSize, shuffle),
 
         discards: [[], [], []],
 
@@ -28,8 +29,8 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
             res.discards[1].push({rank, suit: "D"});
         }
     } else if (debugOptions.prepopulateRandom) {
-        res.discards[0] = mainPileDeck.drawN(6);
-        res.discards[1] = mainPileDeck.drawN(1);
+        res.discards[0] = mainPileDeck.drawN(6, shuffle);
+        res.discards[1] = mainPileDeck.drawN(1, shuffle);
         res.discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
             {rank: "K", suit: "H"}, {rank: "K", suit: "S"} ];
     }
@@ -58,12 +59,12 @@ export function startingServerData({ctx}: {ctx: Ctx}, setupData: unknown): Serve
         ...startingRequiredState(),
     };
 
-    const mainPileDeck = new ExtendingDeck(ctx, []);
-    const handDeck = new ExtendingDeck(ctx, sd.deck);
+    const mainPileDeck = new ExtendingDeck([]);
+    const handDeck = new ExtendingDeck(sd.deck);
 
 
     for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
-        const card = handDeck.draw("noKings");
+        const card = handDeck.draw(shuffle, "noKings");
         sd.sharedPiles.push(makeSharedPile(card));
     }
 

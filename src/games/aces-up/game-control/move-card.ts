@@ -82,7 +82,7 @@ export function moveCard(
         endTurn(arg0);
     } else {
         if (playerData.hand.length === 0) {
-            refillHand(G, ctx, playerID);
+            refillHand(arg0, playerID);
             G.undoItems = [];
         } else {
             if(undoItem) {

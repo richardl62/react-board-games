@@ -11,24 +11,27 @@ function nextPlayerID(ctx: Ctx) {
     return ctx.playOrder[nextPlayerPos];
 }
 
-export function refillHand(G: ServerData, ctx: Ctx, playerID: PlayerID) : void {
+export function refillHand(
+    {G, random} : MoveArg0<ServerData>,
+    playerID: PlayerID
+) : void {
     const playerData = G.playerData[playerID];
-    const deck = new ExtendingDeck(ctx, G.deck);
+    const deck = new ExtendingDeck(G.deck);
 
     while(playerData.hand.length < handSize) {
-        playerData.hand.push(deck.draw());
+        playerData.hand.push(deck.draw(random.Shuffle));
     }
 }
 
 export function endTurn(
-    {G, ctx, events} : MoveArg0<ServerData>, 
+    arg0 : MoveArg0<ServerData>, 
 ) : void {
-
+    const {G, ctx, events} = arg0;
     Object.assign(G, turnStartServerData);
     
     const nextPlayerID_ = nextPlayerID(ctx);
         
-    refillHand(G, ctx, nextPlayerID_);
+    refillHand(arg0, nextPlayerID_);
 
     // Clear any full shared piles
     G.sharedPiles = G.sharedPiles.filter(p => p.rank !== "Q");
