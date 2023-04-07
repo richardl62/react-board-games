@@ -6,7 +6,6 @@ import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { sAssert } from "../../../utils/assert";
 import { asSpecifiedValues } from "../../../app/option-specification/tools";
-import { shuffle } from "../../../utils/shuffle";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 
@@ -14,9 +13,9 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     options: SetupValues) : PlayerData {
 
     const res : PlayerData = {
-        mainPile: mainPileDeck.drawN(options.mainPileSize, shuffle, "noKings"),
+        mainPile: mainPileDeck.drawN(options.mainPileSize, "noKings"),
 
-        hand: handDeck.drawN(handSize, shuffle),
+        hand: handDeck.drawN(handSize),
 
         discards: [[], [], []],
 
@@ -29,8 +28,8 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
             res.discards[1].push({rank, suit: "D"});
         }
     } else if (debugOptions.prepopulateRandom) {
-        res.discards[0] = mainPileDeck.drawN(6, shuffle);
-        res.discards[1] = mainPileDeck.drawN(1, shuffle);
+        res.discards[0] = mainPileDeck.drawN(6);
+        res.discards[1] = mainPileDeck.drawN(1);
         res.discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
             {rank: "K", suit: "H"}, {rank: "K", suit: "S"} ];
     }
@@ -44,7 +43,7 @@ export const turnStartServerData: PerTurnServerData = {
     undoItems:[],
 };
 
-export function startingServerData({ctx}: SetupArg0, setupData: unknown): ServerData {
+export function startingServerData({ctx, random}: SetupArg0, setupData: unknown): ServerData {
     const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
 
@@ -59,12 +58,12 @@ export function startingServerData({ctx}: SetupArg0, setupData: unknown): Server
         ...startingRequiredState(),
     };
 
-    const mainPileDeck = new ExtendingDeck([]);
-    const handDeck = new ExtendingDeck(sd.deck);
+    const mainPileDeck = new ExtendingDeck(random, []);
+    const handDeck = new ExtendingDeck(random, sd.deck);
 
 
     for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
-        const card = handDeck.draw(shuffle, "noKings");
+        const card = handDeck.draw("noKings");
         sd.sharedPiles.push(makeSharedPile(card));
     }
 

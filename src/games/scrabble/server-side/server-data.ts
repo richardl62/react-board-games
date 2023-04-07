@@ -18,10 +18,10 @@ export function isServerData(arg: unknown): boolean {
         isGameState(serverData.states[0]);
 }
 
-export function startingServerData({ctx}: SetupArg0, config: ScrabbleConfig): ServerData {
+export function startingServerData(arg0: SetupArg0, config: ScrabbleConfig): ServerData {
 
     return {
-        states: [startingGameState(ctx, config)],
+        states: [startingGameState(arg0, config)],
         ...startingRequiredState(),
     };
 }

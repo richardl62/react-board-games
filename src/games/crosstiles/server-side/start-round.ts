@@ -2,11 +2,11 @@ import { sAssert } from "../../../utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
 import { GameStage, ServerData, startingPlayerData } from "./server-data";
-import { Letter } from "../config";
+import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 
 export function startRound(
     G: ServerData, 
-    shuffle: (arr: Letter[]) => Letter[]
+    random: RandomAPI
 ): void {
     const { stage, playerData, options } = G;
 
@@ -31,13 +31,13 @@ export function startRound(
         G.round = G.round + 1;
 
         if(G.options.playersGetSameLetters) {
-            const sharedLetters = selectLetters(options, shuffle);
+            const sharedLetters = selectLetters(options, random);
             for (const pid in G.playerData) {
                 G.playerData[pid].selectedLetters = sharedLetters;
             }
         } else {
             for (const pid in G.playerData) {
-                G.playerData[pid].selectedLetters = selectLetters(options, shuffle);
+                G.playerData[pid].selectedLetters = selectLetters(options, random);
             }
         }
     }

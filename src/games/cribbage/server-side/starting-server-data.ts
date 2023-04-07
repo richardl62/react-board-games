@@ -3,8 +3,8 @@ import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
-import { shuffle } from "../../../utils/shuffle";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
+import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 
 interface PlayerPegPositions {
     player0: PegPositions;
@@ -30,9 +30,9 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
 
 export function newDealData(
     pegPos: PlayerPegPositions,
-    shuffle: (arr: Card[]) => Card[], 
+    random: RandomAPI, 
 ): Omit<ServerData, keyof RequiredServerData> {
-    const cards = shuffle(deck());
+    const cards = random.Shuffle(deck());
 
     return {
         player0: playerData(cards, pegPos.player0),
@@ -53,7 +53,7 @@ export function newDealData(
     };
 }
 
-export function startingServerData(_arg0: SetupArg0): ServerData {
+export function startingServerData({ random }: SetupArg0): ServerData {
     const startingPegPos : PlayerPegPositions = {
         player0: {
             score: 0,
@@ -66,7 +66,7 @@ export function startingServerData(_arg0: SetupArg0): ServerData {
     };
 
     return {
-        ...newDealData(startingPegPos, shuffle),
+        ...newDealData(startingPegPos, random),
         ...startingRequiredState(),
     };
 }

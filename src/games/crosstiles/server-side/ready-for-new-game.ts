@@ -20,6 +20,6 @@ export function readyForNewGame(
         Object.assign(G, newG);
 
         G.stage = GameStage.makingGrids;
-        startRound(G, random.Shuffle);
+        startRound(G, random);
     }
 }

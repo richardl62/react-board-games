@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { AppGame, GameCategory } from "../../../app-game-support";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
-import { shuffle } from "../../../utils/shuffle";
+import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;
@@ -24,7 +24,7 @@ export interface ScrabbleConfig {
      * The bag in always shuffled after an exchange of tile (even when
      * this would be unhelpful for testing.)  Aug 2021
      */
-    makeFullBag : () => Letter[];
+    makeFullBag : (random: RandomAPI) => Letter[];
     boardLayout: SquareType[][];
     rackSize: number;
 
@@ -39,8 +39,9 @@ const standard : ScrabbleConfig = {
     maxPlayers: 4, 
 
     makeFullBag(
+        random: RandomAPI
     ) : Letter[] {
-        return shuffle([...standardLetterSet]);
+        return random.Shuffle([...standardLetterSet]); 
     },
 
     boardLayout: [

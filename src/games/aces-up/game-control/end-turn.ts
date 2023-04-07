@@ -11,15 +11,12 @@ function nextPlayerID(ctx: Ctx) {
     return ctx.playOrder[nextPlayerPos];
 }
 
-export function refillHand(
-    {G, random} : MoveArg0<ServerData>,
-    playerID: PlayerID
-) : void {
+export function refillHand({ G, random }: MoveArg0<ServerData>, playerID: PlayerID) : void {
     const playerData = G.playerData[playerID];
-    const deck = new ExtendingDeck(G.deck);
+    const deck = new ExtendingDeck(random, G.deck);
 
     while(playerData.hand.length < handSize) {
-        playerData.hand.push(deck.draw(random.Shuffle));
+        playerData.hand.push(deck.draw());
     }
 }
 

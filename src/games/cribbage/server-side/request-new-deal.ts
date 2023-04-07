@@ -10,7 +10,7 @@ export function requestNewDeal(
     const newG = JSON.parse(JSON.stringify(inputG));
 
     if (processGameRequest(newG, GameRequest.NewDeal, ctx, playerID)) {
-        const ndd = newDealData(newG, random.Shuffle);
+        const ndd = newDealData(newG, random);
 
         const res = {
             ...newG,

@@ -4,7 +4,7 @@ import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "../client-side/extended-letter";
 import { MoveHistoryElement } from "./move-hstory";
-import { Ctx } from "boardgame.io";
+import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 export interface BoardSquareData extends ExtendedLetter {
 
@@ -65,8 +65,8 @@ export function isGameState(arg: unknown) : boolean {
         isPlayerDataDictionary(state.playerData);
 }
 
-export function startingGameState(ctx: Ctx, config: ScrabbleConfig): GameState {
-    const bag = config.makeFullBag(); 
+export function startingGameState({ctx, random}: SetupArg0, config: ScrabbleConfig): GameState {
+    const bag = config.makeFullBag(random); 
 
     const rack = () => {
         const tiles : Letter[] = [];

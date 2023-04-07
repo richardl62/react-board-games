@@ -4,5 +4,5 @@ import { MoveArg0 } from "../../../app-game-support/bgio-types";
 export function reset(
     { G, random }: MoveArg0<ServerData>,  
     _arg: void) : void {
-    setSquares(G, random.Shuffle);
+    setSquares(G, random);
 }

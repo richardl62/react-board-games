@@ -1,3 +1,4 @@
+import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
 import { GameOptions } from "../options";
 
@@ -20,10 +21,10 @@ Object.freeze(letterSet);
 
 function selectLettersUnchecked(
     opts: GameOptions,
-    shuffle: (arr: Letter[]) => Letter[]
+    random: RandomAPI
 ) : Letter[] {
 
-    return shuffle([...letterSet]).slice(0, opts.rackSize);
+    return random.Shuffle([...letterSet]).slice(0, opts.rackSize);
 }
 
 function selectionOK(letters: Letter[], opts: GameOptions) {
@@ -50,11 +51,11 @@ function selectionOK(letters: Letter[], opts: GameOptions) {
 
 export function selectLetters(
     opts: GameOptions,
-    shuffle: (arr: Letter[]) => Letter[]
+    random: RandomAPI
 ) : Letter[] {
-    let selected = selectLettersUnchecked(opts, shuffle);
+    let selected = selectLettersUnchecked(opts, random);
     while(!selectionOK(selected, opts)) {
-        selected = selectLettersUnchecked(opts, shuffle);
+        selected = selectLettersUnchecked(opts, random);
     }
     
     return selected;

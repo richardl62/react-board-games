@@ -1,7 +1,7 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
-import { shuffle } from "../../../utils/shuffle";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
+import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 
 export const startingOrders = [
     "forward",
@@ -16,8 +16,7 @@ export interface ServerData extends RequiredServerData {
 
 export function setSquares(
     G: ServerData, 
-    // Return a shuffled copy of the input array. Can shuffle in place.
-    shuffle: (array: number[]) => number[]
+    random: RandomAPI
 ) : void {
     
     const makeSquares = () => {
@@ -34,21 +33,21 @@ export function setSquares(
         case "backwards":
             return squares.reverse();
         case "random":
-            return shuffle(squares);
+            return random.Shuffle(squares);
         }
     };
 
     G.squares = makeSquares();
 }
 
-export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({random}: SetupArg0, options: SetupOptions): ServerData {
     const G : ServerData = {
         squares: [],
         options,
         ...startingRequiredState(),
     };
 
-    setSquares(G, shuffle);
+    setSquares(G, random);
 
     return G;
 }

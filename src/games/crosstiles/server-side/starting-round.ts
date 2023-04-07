@@ -19,6 +19,6 @@ export function readyForNextRound(
 
     if (allReady) {
         G.stage = GameStage.makingGrids;
-        startRound(G, random.Shuffle);
+        startRound(G, random);
     }
 }
