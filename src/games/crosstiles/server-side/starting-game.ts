@@ -3,7 +3,7 @@ import { startRound } from "./start-round";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export function readyToStartGame(
-    { G, ctx, playerID } : MoveArg0<ServerData>,
+    { G, playerID, random } : MoveArg0<ServerData>,
     _arg: void): void {
     if (G.stage !== GameStage.starting) {
         throw new Error("Unexpected call to readyToStartGame");
@@ -19,6 +19,6 @@ export function readyToStartGame(
 
     if (allReady) {
         G.stage = GameStage.makingGrids;
-        startRound(G, ctx);
+        startRound(G, random.Shuffle);
     }
 }

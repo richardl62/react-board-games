@@ -1,9 +1,9 @@
-import { Ctx } from "boardgame.io";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { Card } from "../../../utils/cards";
 import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
+import { shuffle } from "../../../utils/shuffle";
 
 interface PlayerPegPositions {
     player0: PegPositions;
@@ -27,10 +27,11 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
     };
 }
 
-export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerData, keyof RequiredServerData> {
-    //sAssert(ctx.random);
-    //const cards = ctx.random.Shuffle(deck());
-    const cards = deck();
+export function newDealData(
+    pegPos: PlayerPegPositions,
+    shuffle: (arr: Card[]) => Card[], 
+): Omit<ServerData, keyof RequiredServerData> {
+    const cards = shuffle(deck());
 
     return {
         player0: playerData(cards, pegPos.player0),
@@ -51,7 +52,7 @@ export function newDealData(ctx: Ctx, pegPos: PlayerPegPositions): Omit<ServerDa
     };
 }
 
-export function startingServerData({ctx}: {ctx: Ctx}): ServerData {
+export function startingServerData(): ServerData {
     const startingPegPos : PlayerPegPositions = {
         player0: {
             score: 0,
@@ -64,7 +65,7 @@ export function startingServerData({ctx}: {ctx: Ctx}): ServerData {
     };
 
     return {
-        ...newDealData(ctx, startingPegPos),
+        ...newDealData(startingPegPos, shuffle),
         ...startingRequiredState(),
     };
 }

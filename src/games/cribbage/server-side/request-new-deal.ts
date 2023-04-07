@@ -4,13 +4,13 @@ import { newDealData } from "./starting-server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export function requestNewDeal(
-    {G: inputG, ctx} : MoveArg0<ServerData>,  
+    {G: inputG, ctx, random} : MoveArg0<ServerData>,  
     playerID: PlayerID): ServerData {
     // If returning a new G, the existing G must not be changed.
     const newG = JSON.parse(JSON.stringify(inputG));
 
     if (processGameRequest(newG, GameRequest.NewDeal, ctx, playerID)) {
-        const ndd = newDealData(ctx, newG);
+        const ndd = newDealData(newG, random.Shuffle);
 
         const res = {
             ...newG,

@@ -1,7 +1,6 @@
 import { ServerData } from "./server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
-
 export function add(
     { G }: MoveArg0<ServerData>,  
     value: number): void {

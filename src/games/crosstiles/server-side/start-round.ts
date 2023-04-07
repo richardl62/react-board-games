@@ -1,10 +1,13 @@
-import { Ctx } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
 import { GameStage, ServerData, startingPlayerData } from "./server-data";
+import { Letter } from "../config";
 
-export function startRound(G: ServerData, ctx: Ctx): void {
+export function startRound(
+    G: ServerData, 
+    shuffle: (arr: Letter[]) => Letter[]
+): void {
     const { stage, playerData, options } = G;
 
     sAssert(stage === GameStage.makingGrids);
@@ -28,13 +31,13 @@ export function startRound(G: ServerData, ctx: Ctx): void {
         G.round = G.round + 1;
 
         if(G.options.playersGetSameLetters) {
-            const sharedLetters = selectLetters(ctx, options);
+            const sharedLetters = selectLetters(options, shuffle);
             for (const pid in G.playerData) {
                 G.playerData[pid].selectedLetters = sharedLetters;
             }
         } else {
             for (const pid in G.playerData) {
-                G.playerData[pid].selectedLetters = selectLetters(ctx, options);
+                G.playerData[pid].selectedLetters = selectLetters(options, shuffle);
             }
         }
     }

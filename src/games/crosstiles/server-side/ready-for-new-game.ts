@@ -3,7 +3,7 @@ import { startRound } from "./start-round";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export function readyForNewGame(
-    { G, ctx, playerID } : MoveArg0<ServerData>,
+    { G, ctx, playerID, random } : MoveArg0<ServerData>,
     _option: void): void {
     
     G.playerData[playerID].readyForNewGame = true;
@@ -18,6 +18,6 @@ export function readyForNewGame(
         Object.assign(G, newG);
 
         G.stage = GameStage.makingGrids;
-        startRound(G, ctx);
+        startRound(G, random.Shuffle);
     }
 }

@@ -26,7 +26,7 @@ export interface AppGameNoBoard extends Game {
 
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.
-  setup: ({ctx}: {ctx: Ctx}, setupData?: unknown) => RequiredServerData; 
+  setup: ({ctx}: {ctx: Ctx}, setupData?: unknown) => RequiredServerData;
 
   minPlayers: number,
   maxPlayers: number,
