@@ -9,7 +9,7 @@ const LazyBoard = React.lazy(() => import("./board/inner-board"));
 export const appGame: AppGame = {
     ...appGameNoBoard,
 
-    boardX: (props: WrappedGameProps) => <OuterBoard {...props}>
+    board: (props: WrappedGameProps) => <OuterBoard {...props}>
         {standardBoard(LazyBoard, props)}
     </OuterBoard>,
 };

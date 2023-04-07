@@ -34,7 +34,7 @@ export interface AppGameNoBoard extends Game {
 
 // Not used in the server. (Seperating the board avoids some build problems.)
 export interface AppGame extends AppGameNoBoard { 
-  boardX: (props: WrappedGameProps) => JSX.Element;
+  board: (props: WrappedGameProps) => JSX.Element;
 }
 
 export function defaultNumPlayers(game: AppGame): number {
