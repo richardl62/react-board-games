@@ -4,7 +4,7 @@ import { Local } from "boardgame.io/multiplayer";
 import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
-import { Ctx } from "boardgame.io";
+import { SetupArg0 } from "../app-game-support/bgio-types";
 
 
 export function MatchPlayOffline(props: {
@@ -17,7 +17,7 @@ export function MatchPlayOffline(props: {
         options: {numPlayers, debugPanel, setupData}
     } = props;
 
-    const wrappedSetup = (arg: {ctx: Ctx}) => game.setup(arg, setupData);
+    const wrappedSetup = (arg0: SetupArg0) => game.setup(arg0, setupData);
 
     const GameClient = Client({
         game: {...game, setup: wrappedSetup},

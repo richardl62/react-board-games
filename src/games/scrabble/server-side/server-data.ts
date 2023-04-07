@@ -1,7 +1,7 @@
-import { Ctx } from "boardgame.io";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { ScrabbleConfig } from "../config";
 import { GameState, isGameState, startingGameState } from "./game-state";
+import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 /** Data recorded and shared via BGIO */
 
@@ -18,7 +18,7 @@ export function isServerData(arg: unknown): boolean {
         isGameState(serverData.states[0]);
 }
 
-export function startingServerData({ctx}: {ctx: Ctx}, config: ScrabbleConfig): ServerData {
+export function startingServerData({ctx}: SetupArg0, config: ScrabbleConfig): ServerData {
 
     return {
         states: [startingGameState(ctx, config)],

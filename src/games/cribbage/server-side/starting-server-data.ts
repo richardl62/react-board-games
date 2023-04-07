@@ -4,6 +4,7 @@ import { deck } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
 import { shuffle } from "../../../utils/shuffle";
+import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 interface PlayerPegPositions {
     player0: PegPositions;
@@ -52,7 +53,7 @@ export function newDealData(
     };
 }
 
-export function startingServerData(): ServerData {
+export function startingServerData(_arg0: SetupArg0): ServerData {
     const startingPegPos : PlayerPegPositions = {
         player0: {
             score: 0,

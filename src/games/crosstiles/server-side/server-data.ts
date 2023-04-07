@@ -1,4 +1,3 @@
-import { Ctx } from "boardgame.io";
 import { ScoreCard } from "./score-card";
 import { Letter } from "../config";
 import { startingScoreCard } from "./score-card";
@@ -8,6 +7,7 @@ import { RequiredServerData, startingRequiredState } from "../../../app-game-sup
 import { GameOptions, setupOptions } from "../options";
 import { asSpecifiedValues } from "../../../app/option-specification/tools";
 import { sAssert } from "../../../utils/assert";
+import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 
 /* Use string values to add with debugging */
@@ -63,7 +63,7 @@ export function startingPlayerData() : PlayerData {
     };
 }
 
-export function startingServerData({ctx}: {ctx: Ctx}, setupData: unknown): ServerData {
+export function startingServerData({ctx}: SetupArg0, setupData: unknown): ServerData {
     const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
 

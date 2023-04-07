@@ -1,4 +1,3 @@
-import { Ctx } from "boardgame.io";
 import { debugOptions, handSize, setupOptions, SetupValues } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
@@ -8,6 +7,7 @@ import { startingRequiredState } from "../../../app-game-support/required-server
 import { sAssert } from "../../../utils/assert";
 import { asSpecifiedValues } from "../../../app/option-specification/tools";
 import { shuffle } from "../../../utils/shuffle";
+import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
@@ -44,7 +44,7 @@ export const turnStartServerData: PerTurnServerData = {
     undoItems:[],
 };
 
-export function startingServerData({ctx}: {ctx: Ctx}, setupData: unknown): ServerData {
+export function startingServerData({ctx}: SetupArg0, setupData: unknown): ServerData {
     const options = asSpecifiedValues(setupData, setupOptions);
     sAssert(options, "setupData does not have the expected type");
 

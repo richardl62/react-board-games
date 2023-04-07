@@ -1,6 +1,7 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
 import { shuffle } from "../../../utils/shuffle";
+import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 export const startingOrders = [
     "forward",
@@ -40,7 +41,7 @@ export function setSquares(
     G.squares = makeSquares();
 }
 
-export function startingServerData(_arg0: unknown, options: SetupOptions): ServerData {
+export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
     const G : ServerData = {
         squares: [],
         options,

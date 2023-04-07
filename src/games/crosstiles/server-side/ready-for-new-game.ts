@@ -3,9 +3,11 @@ import { startRound } from "./start-round";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export function readyForNewGame(
-    { G, ctx, playerID, random } : MoveArg0<ServerData>,
-    _option: void): void {
-    
+    arg0 : MoveArg0<ServerData>,
+    _option: void
+): void {
+    const { G, playerID, random } = arg0;
+
     G.playerData[playerID].readyForNewGame = true;
 
     let allReady = true;
@@ -14,7 +16,7 @@ export function readyForNewGame(
     }
 
     if (allReady) {
-        const newG = startingServerData({ctx}, G.options);
+        const newG = startingServerData(arg0, G.options);
         Object.assign(G, newG);
 
         G.stage = GameStage.makingGrids;

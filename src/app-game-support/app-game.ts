@@ -1,7 +1,8 @@
-import { Ctx, Game } from "boardgame.io";
+import { Game } from "boardgame.io";
 import { RequiredServerData } from "./required-server-data";
 import { OptionSpecifications } from "../app/option-specification/types";
 import { WrappedGameProps } from "./wrapped-game-props";
+import { SetupArg0 } from "./bgio-types";
 
 // The string values are uses as section headers when displaying the list of
 // games.
@@ -26,7 +27,7 @@ export interface AppGameNoBoard extends Game {
 
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.
-  setup: ({ctx}: {ctx: Ctx}, setupData?: unknown) => RequiredServerData;
+  setup: (arg0: SetupArg0, setupData?: unknown) => RequiredServerData;
 
   minPlayers: number,
   maxPlayers: number,
