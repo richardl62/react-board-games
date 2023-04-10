@@ -10,7 +10,7 @@ export const appGameNoBoard: AppGameNoBoard = {
     category: GameCategory.standard,
 
     options: setupOptions,
-    setup: startingServerData,
+    setup: startingServerData as AppGameNoBoard["setup"],
 
     minPlayers: 1,
     maxPlayers: 8,

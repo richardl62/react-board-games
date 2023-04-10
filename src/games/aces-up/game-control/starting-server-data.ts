@@ -1,11 +1,9 @@
-import { debugOptions, handSize, setupOptions, GameOptions } from "../game-support/options";
+import { debugOptions, handSize,  GameOptions } from "../game-support/options";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { ranks } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
-import { sAssert } from "../../../utils/assert";
-import { asSpecifiedValues } from "../../../app/option-specification/tools";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 
@@ -43,9 +41,7 @@ export const turnStartServerData: PerTurnServerData = {
     undoItems:[],
 };
 
-export function startingServerData({ctx, random}: SetupArg0, setupData: unknown): ServerData {
-    const options = asSpecifiedValues(setupData, setupOptions);
-    sAssert(options, "setupData does not have the expected type");
+export function startingServerData({ctx, random}: SetupArg0, options: GameOptions): ServerData {
 
     const sd: ServerData = {
         deck: [],
@@ -56,6 +52,8 @@ export function startingServerData({ctx, random}: SetupArg0, setupData: unknown)
         ...turnStartServerData,
 
         ...startingRequiredState(),
+
+        options,
     };
 
     const mainPileDeck = new ExtendingDeck(random, []);

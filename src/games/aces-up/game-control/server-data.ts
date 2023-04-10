@@ -2,6 +2,7 @@ import { PlayerID } from "boardgame.io";
 import { RequiredServerData } from "../../../app-game-support/required-server-data";
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPile } from "./shared-pile";
+import { GameOptions } from "../game-support/options";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.
@@ -41,6 +42,8 @@ export interface ServerData extends PerTurnServerData, RequiredServerData {
     sharedPiles: SharedPile[];
 
     playerData: PlayerDataDictionary;
+
+    options: GameOptions;
 }
 
 
