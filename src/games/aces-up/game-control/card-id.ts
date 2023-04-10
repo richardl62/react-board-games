@@ -4,6 +4,7 @@ import { sAssert } from "../../../utils/assert";
 export type CardID = {
     area: "sharedPiles",
     index: number,
+    owner?: undefined,
 } | {
     area: "playerPile",
     owner: PlayerID,

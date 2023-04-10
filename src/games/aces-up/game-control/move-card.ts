@@ -41,11 +41,8 @@ export function moveCard(
 ) : void {
     const { G, ctx } = arg0;
     const playerID = ctx.currentPlayer;
-    sAssert(from.area !== "sharedPiles", "Card played from shared piles" );
-    sAssert(from.owner === playerID, "Unexpected card owner");
-    sAssert(to.area === "sharedPiles" || to.owner === playerID, "Unexpected card owner");
 
-    // Check move is valid. (Must of the checking is done in canDrag()/canDrop(). 
+    // Check move is valid. (Most of the checking is done in canDrag()/canDrop(). 
     // But the check that cards are played to discard piles before ending
     // the turn is done here.)
     const endOfTurn = to.area === "discardPileAll";
@@ -55,7 +52,6 @@ export function moveCard(
             return;
         }
     }
-
     
     const playerData = G.playerData[playerID];
 
@@ -73,7 +69,7 @@ export function moveCard(
         addCard(G, to, card);
     }
     
-    if (to.area === "sharedPiles") {
+    if (from.owner === playerID && to.area === "sharedPiles") {
         G.moveToSharedPile = "done";
     }
 

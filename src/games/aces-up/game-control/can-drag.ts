@@ -10,7 +10,7 @@ export function canDrag(
         return false;
     }
 
-    if(id.owner !== gameContext.playerID) {
+    if(id.owner !== gameContext.playerID && id.area !== "playerPile") {
         // Not this players card.
         return false;
     }
