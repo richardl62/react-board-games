@@ -1,6 +1,6 @@
 import { Ctx, PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
-import { handSize } from "../game-support/config";
+import { handSize } from "../game-support/options";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";

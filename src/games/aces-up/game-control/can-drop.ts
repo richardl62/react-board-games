@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker, nextRank } from "../../../utils/cards/types";
-import { debugOptions } from "../game-support/config";
+import { debugOptions } from "../game-support/options";
 import { GameContext } from "../game-support/game-context";
 import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";

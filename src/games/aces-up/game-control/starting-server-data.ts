@@ -1,4 +1,4 @@
-import { debugOptions, handSize, setupOptions, SetupValues } from "../game-support/config";
+import { debugOptions, handSize, setupOptions, GameOptions } from "../game-support/options";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
@@ -10,7 +10,7 @@ import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
-    options: SetupValues) : PlayerData {
+    options: GameOptions) : PlayerData {
 
     const res : PlayerData = {
         mainPile: mainPileDeck.drawN(options.mainPileSize, "noKings"),

@@ -36,4 +36,4 @@ export const setupOptions = {
 
 };
 
-export type SetupValues = SpecifiedValues<typeof setupOptions>;
+export type GameOptions = SpecifiedValues<typeof setupOptions>;
