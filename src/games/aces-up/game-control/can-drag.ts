@@ -10,7 +10,8 @@ export function canDrag(
         return false;
     }
 
-    if(id.owner !== gameContext.playerID && id.area !== "playerPile") {
+    if(id.owner !== gameContext.playerID && id.area !== "playerPile"
+        && !gameContext.G.options.canUseOpponentsWastePiles) {
         // Not this players card.
         return false;
     }

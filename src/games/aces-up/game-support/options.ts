@@ -6,8 +6,8 @@ export const handSize = 5;
 // The debug iptions should be set to false for normal play.
 export const debugOptions = {
     prepopulateRandom: false,
-    prepopulateOrdered: false, // Takes precedence over prepopulateRandom
-    skipCheckOnAddedToSharedPiles: false,
+    prepopulateOrdered: true, // Takes precedence over prepopulateRandom
+    skipCheckOnAddedToSharedPiles: true,
 };
 
 export function debugOptionsInUse() : boolean {
@@ -35,8 +35,11 @@ export const setupOptions = {
     addToSharedPileEachTurn: {
         label: "Must add to shared pile each turn",
         default: true,
+    },
+    canUseOpponentsWastePiles: {
+        label: "Can use opponents waste piles",
+        default: false,
     }
-
 };
 
 export type GameOptions = SpecifiedValues<typeof setupOptions>;
