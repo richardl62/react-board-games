@@ -8,7 +8,6 @@ export const debugOptions = {
     prepopulateRandom: false,
     prepopulateOrdered: false, // Takes precedence over prepopulateRandom
     skipCheckOnAddedToSharedPiles: false,
-    skipRequirementToAddToSharedPiles: false,
 };
 
 export function debugOptionsInUse() : boolean {
@@ -33,6 +32,10 @@ export const setupOptions = {
         default: 3,
         min: 0,
     },
+    addToSharedPileEachTurn: {
+        label: "Must add to shared pile each turn",
+        default: true,
+    }
 
 };
 

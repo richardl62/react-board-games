@@ -25,5 +25,5 @@ export function undo(
     
     // We don't want the move required message after an undo
     G.moveToSharedPile = 
-        undoItem.moveToSharedPile === "required" ? "pending" : "done";
+        undoItem.moveToSharedPile === "done" ? "done" : "not done";
 }

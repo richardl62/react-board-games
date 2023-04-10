@@ -1,7 +1,6 @@
 import { PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { debugOptions } from "../game-support/options";
 import { addCard, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
@@ -11,9 +10,9 @@ import { makeUndoItem } from "./undo";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
-    return G.moveToSharedPile !== "done" &&
-        cardsMovableToSharedPile(G, playerID).length !== 0 && 
-        !debugOptions.skipRequirementToAddToSharedPiles; 
+    return G.options.addToSharedPileEachTurn &&
+        G.moveToSharedPile !== "done" &&
+        cardsMovableToSharedPile(G, playerID).length !== 0; 
 }
 
 function moveWithinSharedPiles(
@@ -48,7 +47,7 @@ export function moveCard(
     const endOfTurn = to.area === "discardPileAll";
     if (endOfTurn){
         if (moveToSharedPileRequired(G, playerID)) {
-            G.moveToSharedPile = "required";
+            G.moveToSharedPile = "omitted";
             return;
         }
     }

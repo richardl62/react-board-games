@@ -19,7 +19,11 @@ export interface PlayerData {
 }
 
 type PlayerDataDictionary =  {[playerID: string]: PlayerData }
-type MoveToSharedPile = "pending" | "done" | "required";
+type MoveToSharedPile = 
+    "not done" | 
+    "done" |
+    "omitted" // Not dome when it should have been, so user should be told.
+    ;
 
 export interface UndoItem {
     sharedPiles: SharedPile[];

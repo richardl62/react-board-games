@@ -15,7 +15,7 @@ export function IllegalMoveNotification(props: Props) : JSX.Element | null {
     
     const {G} = useGameContext();
 
-    if (G.moveToSharedPile !== "required") {
+    if (G.moveToSharedPile !== "omitted") {
         // No notification needed
         return null;
     }
