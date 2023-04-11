@@ -39,6 +39,10 @@ export const setupOptions = {
     canUseOpponentsWastePiles: {
         label: "Can use opponents waste piles",
         default: false,
+    },
+    jacksAndQueensSpecial: {
+        label: "Jacks and queens special",
+        default: false,
     }
 };
 
