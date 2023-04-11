@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { rowGap } from "../game-support/styles";
 import { SharedArea } from "./shared-area";
 import { PlayerAreas } from "./player-areas";
+import { debugOptionsInUse } from "../game-support/options";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -23,6 +24,10 @@ const OuterDiv = styled.div`
 
 export default function Board() : JSX.Element {
     return <OuterDiv>
+        {debugOptionsInUse() &&
+            <div> Warning: Debug options in use </div>
+        }
+
         <SharedArea />
         <PlayerAreas />
     </OuterDiv>;

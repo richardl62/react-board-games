@@ -6,8 +6,8 @@ export const handSize = 5;
 // The debug iptions should be set to false for normal play.
 export const debugOptions = {
     prepopulateRandom: false,
-    prepopulateOrdered: true, // Takes precedence over prepopulateRandom
-    skipCheckOnAddedToSharedPiles: true,
+    prepopulateOrdered: false,
+    skipCheckOnAddedToSharedPiles: false,
 };
 
 export function debugOptionsInUse() : boolean {
