@@ -30,7 +30,8 @@
     "eject": "react-scripts eject"
   },
   "engines": {
-    "node": "18.15"
+    "node": "18.15",
+    "npm": "9.6.4"
   },
   "browserslist": {
     "production": [
