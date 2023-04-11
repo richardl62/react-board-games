@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { cardShortName } from "../../../utils/cards/types";
 import { useGameContext } from "../game-support/game-context";
 import { SharedPile as SharedPileType } from "../game-control/shared-pile";
 import { columnGap } from "../game-support/styles";
 import { SharedPile } from "./shared-pile";
+import { CardNonJoker } from "../../../utils/cards";
+import { cardShortName } from "../../../utils/cards/types";
 
 export const TextDiv = styled.div`
     text-align: center;
@@ -20,11 +21,12 @@ const SharedPilesDiv = styled.div`
 export function SharedPiles() : JSX.Element {
     const { G: {sharedPiles} } = useGameContext();
 
+    // Kludge
     const key = (pile: SharedPileType, index: number) => {
-        if(!pile.cards) {
-            return index;
-        }
-        return pile.cards.reduce((str, card) => str + cardShortName(card), String(index));
+        const names = (cards: CardNonJoker[]) =>
+            cards.reduce((str, card) => str + cardShortName(card), String(index));
+
+        return `${names(pile.oldCards)}-${names(pile.cardsPushedThisRound)}-${index}}`; 
     };
         
     return <SharedPilesDiv> {

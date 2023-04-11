@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { rankName } from "../../../utils/cards/types";
-import { SharedPile as SharedPileType } from "../game-control/shared-pile";
+import { SharedPile as SharedPileType, rank } from "../game-control/shared-pile";
 import { CardStack, cardStackHeight } from "./card-stack";
 import { TextDiv } from "./shared-piles";
 
@@ -14,18 +14,24 @@ export function SharedPile(props: {
     pileIndex: number;
 }): JSX.Element  {
     const { pile, pileIndex } = props;
+    const { oldCards, cardsPushedThisRound } = pile;
+    
 
-    const topCard = pile.cards && pile.cards[pile.cards.length - 1];
-    const showRank = topCard && pile.rank != topCard.rank;
+    const oldTop = oldCards.at(-1);
+    const newTop = cardsPushedThisRound.at(-1);
 
-    const allCards = pile.cards || [];
-    const displayCards = allCards.length <= 2 ? allCards :
-        [allCards[0], allCards[allCards.length - 1]]; // first and last card
+    // Get the top cards, if any, of the two sub-piles
+    const displayCards = [oldTop ? oldTop : null];
+    if ( newTop ) {
+        displayCards.push(newTop);
+    }
+
+    const kingOnTop = displayCards.at(-1)?.rank === "K";
 
     return <SharedPileDiv height={`calc(${cardStackHeight(2)}px + 1em)`}>
         <CardStack
             cards={displayCards}
             dropID={{ area: "sharedPiles", index: pileIndex }} />
-        <TextDiv> {showRank && rankName(pile.rank)} </TextDiv>
+        <TextDiv> {kingOnTop && rankName(rank(pile)!)} </TextDiv>
     </SharedPileDiv>;
 }

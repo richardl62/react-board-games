@@ -1,8 +1,8 @@
 import { debugOptions, handSize,  GameOptions } from "../game-support/options";
 import { ExtendingDeck } from "./extendable-deck";
-import { makeSharedPile } from "./shared-pile";
+import { makeRandomSharedPile, makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
-import { ranks } from "../../../utils/cards/types";
+import { ranks, suits } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 
@@ -23,7 +23,12 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     if (debugOptions.prepopulateOrdered) {
         for(const rank of ranks.slice(0,6)) {
             res.discards[0].push({rank, suit: "C"});
-            res.discards[1].push({rank, suit: "D"});
+        }
+        for(let i = 0; i < 10; i++) {
+            res.discards[1].push({
+                rank: "K", 
+                suit: suits[i%suits.length],
+            });
         }
     } else if (debugOptions.prepopulateRandom) {
         res.discards[0] = mainPileDeck.drawN(6);
@@ -61,15 +66,16 @@ export function startingServerData({ctx, random}: SetupArg0, options: GameOption
 
 
     for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
-        const card = handDeck.draw("noKings");
-        sd.sharedPiles.push(makeSharedPile(card));
+        sd.sharedPiles.push(makeRandomSharedPile(random));
     }
 
-    if(debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {
-        sd.sharedPiles.push(makeSharedPile({ rank: "K", suit: "C" }));
+    if (debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {
+        const kc = { rank: "K", suit: "C" } as const;
+        sd.sharedPiles.push(makeSharedPile([kc,kc,kc,kc,kc,kc,kc,kc,]));
+
     }
 
-    sd.sharedPiles.push({cards: null, rank: null});
+    sd.sharedPiles.push(makeSharedPile([]));
 
     for (const pid in ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);

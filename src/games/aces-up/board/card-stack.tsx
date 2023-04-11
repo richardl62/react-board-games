@@ -16,7 +16,7 @@ const SubStackDiv = styled.div`
 `;
 
 function SubStack(props: {
-    cards: CardNonJoker[],
+    cards: (CardNonJoker|null)[],
     cardIndex: number,
     dragID?: (index: number) => CardID,
 }) {
@@ -54,7 +54,7 @@ const CardStackDiv = styled.div<{height: number}>`
  * but lowest in terms of z-index (so low index cards are partially hidden by low index cards).
  */
 export function CardStack(props: {
-    cards: CardNonJoker[];
+    cards: (CardNonJoker|null)[];
     dragID?: (index: number) => CardID;
     dropID?: CardID | null;
 

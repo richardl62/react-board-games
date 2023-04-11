@@ -1,9 +1,8 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker } from "../../../utils/cards";
-import { nextRank } from "../../../utils/cards/types";
 import { CardID } from "./card-id";
 import { ServerData } from "./server-data";
-import { SharedPile } from "./shared-pile";
+import { SharedPile, makeSharedPile, topCard } from "./shared-pile";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     const card = cards.splice(index,1)[0];
@@ -12,34 +11,22 @@ function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
 }
 
 function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNonJoker) {
-    const sp = sharedPiles[index];
-
-    const newRank = card.rank === "K" ? nextRank(sp.rank) : card.rank;
-    sAssert(newRank);
-    
-    if(sp.cards) {
-        sp.cards.push(card);
-        sp.rank = newRank;
-    } else {
-        sharedPiles[index] = {
-            cards: [card],
-            rank: newRank,
-        };
-    }
+    sharedPiles[index].cardsPushedThisRound.push(card);
 
     // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
     // moved. )
-    if(sharedPiles[sharedPiles.length-1].cards !== null) {
-        sharedPiles.push({cards: null, rank: null});
+    // Kludge?: Reply on topCard() returning undefined when given an empty pile.
+    if (topCard(sharedPiles.at(-1)!)) {
+        sharedPiles.push(makeSharedPile([]));
     }
 }
 
 export function getCard(G: ServerData,  id: CardID) : CardNonJoker {
 
     if(id.area === "sharedPiles") {
-        const sp = G.sharedPiles[id.index];
-        sAssert(sp.cards);
-        return sp.cards[sp.cards.length-1];
+        const top = topCard(G.sharedPiles[id.index]);
+        sAssert(top);
+        return top;
     }
 
     const playerData = G.playerData[id.owner];

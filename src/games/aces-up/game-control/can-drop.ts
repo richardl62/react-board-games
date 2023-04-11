@@ -4,19 +4,19 @@ import { debugOptions } from "../game-support/options";
 import { GameContext } from "../game-support/game-context";
 import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
-import { SharedPile } from "./shared-pile";
+import { SharedPile, rank } from "./shared-pile";
 
 export function moveableToSharedPile(card: CardNonJoker, pile: SharedPile) : boolean {
     if(debugOptions.skipCheckOnAddedToSharedPiles) {
         return true;
     }
 
-    if(pile.rank === "Q") {
+    if(rank(pile) === "Q") {
         // You can't add to a full pile
         return false;
     } 
     
-    return card.rank === "K" || card.rank === nextRank(pile.rank);
+    return card.rank === "K" || card.rank === nextRank(rank(pile));
 }
 
 export function canDrop(
