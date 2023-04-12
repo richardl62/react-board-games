@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { ErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 import App from "./app";
@@ -49,7 +49,8 @@ function ErrorFallback({ error }: { error: Error }) {
     );
 }
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+root.render(
     <React.StrictMode>
         <ErrorBoundary
             FallbackComponent={ErrorFallback}
@@ -57,5 +58,4 @@ ReactDOM.render(
             <App />
         </ErrorBoundary>
     </React.StrictMode>,
-    document.getElementById("root")
 );
