@@ -2,7 +2,7 @@ import { GameCategory } from "../../app-game-support";
 import { AppGameNoBoard } from "../../app-game-support/app-game";
 import { bgioMoves } from "./game-control/moves";
 import { startingServerData } from "./game-control/starting-server-data";
-import { setupOptions } from "./game-support/options";
+import { setupOptions } from "./game-support/setup-options";
 
 export const appGameNoBoard: AppGameNoBoard = {
     name: "acesup",

@@ -1,8 +1,7 @@
 import { PlayerID } from "boardgame.io";
 import { CardNonJoker } from "../../../utils/cards";
 import { moveableToSharedPile } from "./can-drop";
-import { PlayerData } from "./server-data";
-import { WrappedServerData } from "./wrapped-server-data";
+import { PlayerData, ServerData } from "./server-data";
 
 function moveableCards(playerData: PlayerData) {
     const moveable: CardNonJoker[] = [];
@@ -24,7 +23,7 @@ function moveableCards(playerData: PlayerData) {
 }
 
 export function cardsMovableToSharedPile(
-    G: WrappedServerData, 
+    G: ServerData, 
     playerID: PlayerID
 ) : CardNonJoker[] {
     

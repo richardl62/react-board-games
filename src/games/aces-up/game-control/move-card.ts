@@ -8,9 +8,8 @@ import { endTurn, refillHand } from "./end-turn";
 import { PlayerData, ServerData, UndoItem } from "./server-data";
 import { makeUndoItem } from "./undo";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { WrappedServerData, makeWrappedServerData } from "./wrapped-server-data";
 
-function moveToSharedPileRequired(G: WrappedServerData, playerID: PlayerID) {
+function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.options.addToSharedPileEachTurn &&
         G.moveToSharedPile !== "done" &&
         cardsMovableToSharedPile(G, playerID).length !== 0; 
@@ -39,9 +38,8 @@ export function moveCard(
     /** PlayerID is the ID of the play who requested the move */
     {from, to}: {from: CardID, to: CardID},
 ) : void {
-    const { ctx } = arg0;
+    const { G, ctx } = arg0;
     const playerID = ctx.currentPlayer;
-    const G = makeWrappedServerData(arg0.G);
 
     // Check move is valid. (Most of the checking is done in canDrag()/canDrop(). 
     // But the check that cards are played to discard piles before ending

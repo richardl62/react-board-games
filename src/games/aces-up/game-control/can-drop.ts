@@ -1,22 +1,24 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker, nextRank } from "../../../utils/cards/types";
-import { debugOptions } from "../game-support/options";
+import { debugOptions } from "../game-support/config";
 import { GameContext } from "../game-support/game-context";
 import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
-import { WrappedServerData } from "./wrapped-server-data";
+import { ServerData } from "./server-data";
+import { OptionWrapper } from "../game-support/game-options";
 
 export function moveableToSharedPile(
-    G: WrappedServerData,
+    G: ServerData,
     card: CardNonJoker, 
     pile: SharedPile
 ) : boolean {
+
     if(debugOptions.skipCheckOnAddedToSharedPiles) {
         return true;
     }
 
-    if(rank(pile) === G.topRank) {
+    if(rank(pile) === G.options.topRank) {
         // You can't add to a full pile
         return false;
     } 
@@ -28,18 +30,26 @@ export function canDrop(
     gameContext: GameContext,
     {to, from}: {to: CardID, from: CardID}
 ) : boolean {
+    const { G } = gameContext;
+    const options = new OptionWrapper(G.options);
+    
+    const fromCard = getCard(G, from);
+
+    if ( options.isKiller(fromCard) || options.isThief(fromCard)) {
+        return true;
+    }
+
     if (to.area === "sharedPiles") {
         if(from.area === "discardPileCard") {
-            const fromPile = gameContext.G.playerData[from.owner].discards[from.pileIndex];
+            const fromPile = G.playerData[from.owner].discards[from.pileIndex];
             if(from.cardIndex !== fromPile.length-1) {
                 return false;
             }
         }
 
-        const card = getCard(gameContext.G, from);
-        const toPile = gameContext.G.sharedPiles[to.index];
+        const toPile = G.sharedPiles[to.index];
 
-        return moveableToSharedPile(gameContext.G, card, toPile);
+        return moveableToSharedPile(G, fromCard, toPile);
     }
 
     if (from.area === "sharedPiles") {
@@ -87,3 +97,4 @@ export function canDrop(
 
     sAssert(false, "Cannot determine if drop is permissable");
 }
+

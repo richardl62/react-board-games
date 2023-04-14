@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { rowGap } from "../game-support/styles";
 import { SharedArea } from "./shared-area";
 import { PlayerAreas } from "./player-areas";
-import { debugOptionsInUse } from "../game-support/options";
+import { debugOptionsInUse } from "../game-support/config";
 
 const OuterDiv = styled.div`
     display: flex;
