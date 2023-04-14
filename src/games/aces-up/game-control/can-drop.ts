@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { CardNonJoker, nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/config";
 import { GameContext } from "../game-support/game-context";
-import { getCard } from "./add-remove-card";
+import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
 import { ServerData } from "./server-data";
@@ -34,9 +34,11 @@ export function canDrop(
     const options = new OptionWrapper(G.options);
     
     const fromCard = getCard(G, from);
+    sAssert(fromCard);
 
     if ( options.isKiller(fromCard) || options.isThief(fromCard)) {
-        return true;
+        // Special cards can't be moved to empty piles.
+        return !emptyPile(G, to);
     }
 
     if (to.area === "sharedPiles") {

@@ -21,12 +21,19 @@ function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNon
     }
 }
 
-export function getCard(G: ServerData,  id: CardID) : CardNonJoker {
+export function emptyPile(G: ServerData,  id: CardID) : boolean {
+    if(id.area === "discardPileAll") {
+        const playerData = G.playerData[id.owner];
+        return playerData.discards[id.pileIndex].length === 0;
+    }
+
+    return !getCard(G,id);
+}
+
+export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 
     if(id.area === "sharedPiles") {
-        const top = topCard(G.sharedPiles[id.index]);
-        sAssert(top);
-        return top;
+        return topCard(G.sharedPiles[id.index]);
     }
 
     const playerData = G.playerData[id.owner];
@@ -39,7 +46,7 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker {
     }
 
     if(id.area === "playerPile") {
-        return playerData.mainPile.slice(-1)[0]; // The last element
+        return playerData.mainPile.at(-1);
     }
 
     throw new Error("Unexpected card ID");
