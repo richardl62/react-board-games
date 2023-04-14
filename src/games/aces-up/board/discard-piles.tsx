@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CardID } from "../game-control/card-id";
-import { usePlayerData } from "../game-support/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
 import { CardStack } from "./card-stack";
@@ -20,7 +20,7 @@ interface Props {
 export function Discards(props: Props) : JSX.Element {
     const { playerInfo: { owner } } = props;
 
-    const { discards } = usePlayerData(owner);
+    const { discards } = useGameContext().G.getPlayerData(owner);
 
     const discardPiles = discards.map((cards,pileIndex) => {
         const dropID: CardID = {area:"discardPileAll", pileIndex, owner};

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { usePlayerData } from "../game-support/game-context";
+import { useGameContext } from "../game-support/game-context";
 import { CardDraggable } from "./drag-drop";
 import { PlayerInfo } from "./player-info";
 
@@ -17,7 +17,7 @@ interface Props {
 export function MainPile(props: Props) : JSX.Element {
     const { playerInfo } = props;
 
-    const { mainPile } = usePlayerData(playerInfo.owner);
+    const { mainPile } = useGameContext().G.getPlayerData(playerInfo.owner);
 
     const message = `${mainPile.length} cards`;
 
