@@ -5,13 +5,18 @@ import { GameContext } from "../game-support/game-context";
 import { getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
+import { WrappedServerData } from "./wrapped-server-data";
 
-export function moveableToSharedPile(card: CardNonJoker, pile: SharedPile) : boolean {
+export function moveableToSharedPile(
+    G: WrappedServerData,
+    card: CardNonJoker, 
+    pile: SharedPile
+) : boolean {
     if(debugOptions.skipCheckOnAddedToSharedPiles) {
         return true;
     }
 
-    if(rank(pile) === "Q") {
+    if(rank(pile) === G.topRank) {
         // You can't add to a full pile
         return false;
     } 
@@ -34,7 +39,7 @@ export function canDrop(
         const card = getCard(gameContext.G, from);
         const toPile = gameContext.G.sharedPiles[to.index];
 
-        return moveableToSharedPile(card, toPile);
+        return moveableToSharedPile(gameContext.G, card, toPile);
     }
 
     if (from.area === "sharedPiles") {
