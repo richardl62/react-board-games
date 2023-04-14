@@ -70,7 +70,7 @@ export function startingServerData({ctx, random}: SetupArg0,
 
 
     for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
-        sd.sharedPiles.push(makeRandomSharedPile(random));
+        sd.sharedPiles.push(makeRandomSharedPile(options, random));
     }
 
     if (debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {

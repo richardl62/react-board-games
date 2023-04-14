@@ -2,6 +2,7 @@ import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 import { CardNonJoker, Rank, nextRank} from "../../../utils/cards/types";
 import { ranks } from "../../../utils/cards/types";
 import { suits } from "../../../utils/cards/types";
+import { GameOptions, OptionWrapper } from "../game-support/game-options";
 
 export interface SharedPile {
     oldCards: CardNonJoker[];
@@ -39,12 +40,16 @@ export function makeSharedPile(cards: CardNonJoker[]) : SharedPile {
     };
 } 
 
-export function makeRandomSharedPile(random: RandomAPI) : SharedPile {
-    const usableRanks = ranks.filter(r => r !== "K");
-
-    const topRankIndex = random.Die(usableRanks.length) -1;
-    const suit = suits[random.Die(suits.length) -1];
+export function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) : SharedPile {
+    const options = new OptionWrapper(gameOptions);
     
+    const nonSpecialRanks = ranks.filter(rank => !options.isSpecial(
+        {rank, suit: "C"/*arbitary*/}
+    ));
+
+    const topRankIndex = random.Die(nonSpecialRanks.length) -1;
+    const suit = suits[random.Die(suits.length) -1];
+    //KLUDGE: Assumes the special ranks have higher index than non-special.
     const cards : CardNonJoker[] = [];
     for(let index = 0; index <= topRankIndex; ++index) {
         const rank = ranks[index];
