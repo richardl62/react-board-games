@@ -63,6 +63,11 @@ export function moveType(
             return null;
         }
 
+        if ( to.area === "playerPile" && to.owner === playerID) {
+            // Players can't steal from there own player piles
+            return null;
+        }
+
         return "steal";
     }
 

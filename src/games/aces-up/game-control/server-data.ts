@@ -28,7 +28,7 @@ type MoveToSharedPile =
 export interface UndoItem {
     sharedPiles: SharedPile[];
     playerID: PlayerID;
-    playerData: PlayerData;
+    playerData: PlayerDataDictionary;
     moveToSharedPile: MoveToSharedPile; 
 }
 

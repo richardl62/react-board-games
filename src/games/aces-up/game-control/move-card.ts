@@ -34,6 +34,44 @@ function moveWithinSharedPiles(
     toPile.push(...movedCards);
 }
 
+
+function doMoveCard(
+    arg0 : MoveArg0<ServerData>, 
+    /** PlayerID is the ID of the play who requested the move */
+    {from, to}: {from: CardID, to: CardID},
+) : UndoItem | null
+{
+    const { G, ctx } = arg0;
+    const playerID = ctx.currentPlayer;
+    const playerData = G.playerData[playerID];
+
+    let undoItem : UndoItem | null = makeUndoItem(G, playerID);
+
+    const fromCard = getCard(G, from);
+    sAssert(fromCard);
+    const moveType = getMoveType(arg0, {from, to});
+    if (moveType === "steal") {
+        removeCard(G, from);
+        const toCard = removeCard(G, to);
+        addCard(G,from,toCard);
+    } else if (moveType === "kill") {
+        removeCard(G, from);
+        clearPile(G, to);
+    } else if(to.area === "hand" && from.area === "hand") {
+        sAssert(to.owner === playerID && from.owner === playerID);
+        reorderFollowingDrag(playerData.hand, from.index, to.index);
+        undoItem = null;
+    } else if(to.area === "discardPileAll" && from.area === "discardPileCard") {
+        moveWithinSharedPiles(playerData, {from, to});
+    } else {
+        const card = removeCard(G, from);
+        addCard(G, to, card);
+    }
+    
+    return undoItem;
+
+}
+
 export function moveCard(
     arg0 : MoveArg0<ServerData>, 
     /** PlayerID is the ID of the play who requested the move */
@@ -42,11 +80,7 @@ export function moveCard(
     const { G, ctx } = arg0;
     const playerID = ctx.currentPlayer;
 
-    const fromCard = getCard(G, from);
-    sAssert(fromCard);
-
     const moveType = getMoveType(arg0, {from, to});
-    sAssert(moveType);
 
     // Check move is valid. (Most of the checking is done in canDrag()/canDrop(). 
     // But the check that cards are played to discard piles before ending
@@ -59,36 +93,10 @@ export function moveCard(
             return;
         }
     }
-    
-    const playerData = G.playerData[playerID];
 
-    let undoItem : UndoItem | null = makeUndoItem(G, playerID);
-
-    if (moveType === "steal") {
-        removeCard(G, from);
-        const toCard = removeCard(G, to);
-        addCard(G,from,toCard);
-        return;
-    } 
+    const undoItem = doMoveCard(arg0, {from, to});
     
-    if (moveType === "kill") {
-        removeCard(G, from);
-        clearPile(G, to);
-        return;
-    }
 
-    sAssert(moveType === "move");
-    if(to.area === "hand" && from.area === "hand") {
-        sAssert(to.owner === playerID && from.owner === playerID);
-        reorderFollowingDrag(playerData.hand, from.index, to.index);
-        undoItem = null;
-    } else if(to.area === "discardPileAll" && from.area === "discardPileCard") {
-        moveWithinSharedPiles(playerData, {from, to});
-    } else {
-        const card = removeCard(G, from);
-        addCard(G, to, card);
-    }
-    
     if (from.owner === playerID && to.area === "sharedPiles") {
         G.moveToSharedPile = "done";
     }
@@ -97,6 +105,7 @@ export function moveCard(
     if(endOfTurn) {
         endTurn(arg0);
     } else {
+        const playerData = G.playerData[playerID];
         if (playerData.hand.length === 0) {
             refillHand(arg0, playerID);
             G.undoItems = [];

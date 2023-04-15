@@ -8,7 +8,7 @@ export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {
         sharedPiles: copyJSON(G.sharedPiles),
         playerID,
-        playerData: copyJSON(G.playerData[playerID]),
+        playerData: copyJSON(G.playerData),
         moveToSharedPile: G.moveToSharedPile,
     };
 }
@@ -21,7 +21,7 @@ export function undo(
     sAssert(undoItem, "No undo data available");
 
     G.sharedPiles = undoItem.sharedPiles;
-    G.playerData[undoItem.playerID] = undoItem.playerData;
+    G.playerData = undoItem.playerData;
     
     // We don't want the move required message after an undo
     G.moveToSharedPile = 
