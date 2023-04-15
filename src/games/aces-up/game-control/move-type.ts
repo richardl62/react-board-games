@@ -1,13 +1,12 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker, nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/config";
-import { GameContext } from "../game-support/game-context";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
 import { ServerData } from "./server-data";
 import { OptionWrapper } from "../game-support/game-options";
-import { PlayerID } from "boardgame.io";
+import { Ctx, PlayerID } from "boardgame.io";
 
 export function moveableToSharedPile(
     G: ServerData,
@@ -27,91 +26,97 @@ export function moveableToSharedPile(
     return card.rank === "K" || card.rank === nextRank(rank(pile));
 }
 
-export function isPlayersDiscardPile(playerID: PlayerID, cardID: CardID) {
+function isPlayersDiscardPile(playerID: PlayerID, cardID: CardID) {
     return (cardID.area === "discardPileAll" || cardID.area === "discardPileCard")
         && cardID.owner === playerID;
 }
 
-export function canDrop(
-    gameContext: GameContext,
+type MoveType = "move" | "steal" | "kill" | null;
+
+export function moveType(
+    {G, ctx, playerID}: {G: ServerData, ctx: Ctx, playerID: PlayerID},
     {to, from}: {to: CardID, from: CardID}
-) : boolean {
-    const { G, playerID } = gameContext;
+) : MoveType {
     const options = new OptionWrapper(G.options);
     
     const fromCard = getCard(G, from);
     sAssert(fromCard);
 
     if ( options.isKiller(fromCard) ) {
-        if (to.area === "playerPile") {
-            return false;
+        if ( isPlayersDiscardPile(playerID, to) ) {
+            return "move";
         }
-        if (isPlayersDiscardPile(playerID, to)) {
-            return true;
+
+        if ( to.area === "playerPile" || emptyPile(G, to) ) {
+            return null;
         }
-        return !emptyPile(G, to);
+
+        return "kill";
     }
 
     if ( options.isThief(fromCard) ) {
-        if (isPlayersDiscardPile(playerID, to)) {
-            return true;
+        if ( isPlayersDiscardPile(playerID, to) ) {
+            return "move";
         }
-        return !emptyPile(G, to);
+
+        if ( emptyPile(G, to) ) {
+            return null;
+        }
+
+        return "steal";
     }
 
     if (to.area === "sharedPiles") {
         if(from.area === "discardPileCard") {
             const fromPile = G.playerData[from.owner].discards[from.pileIndex];
             if(from.cardIndex !== fromPile.length-1) {
-                return false;
+                return null;
             }
         }
 
         const toPile = G.sharedPiles[to.index];
 
-        return moveableToSharedPile(G, fromCard, toPile);
+        return moveableToSharedPile(G, fromCard, toPile) ? "move" : null;
     }
 
     if (from.area === "sharedPiles") {
-        console.warn("Attempt to drag from shared piles");
-        return false;
+        return null;
     }
 
-    if(to.owner !== gameContext.ctx.currentPlayer) {
-        return false;
+    if(to.owner !== ctx.currentPlayer) {
+        return null;
     }
 
-    if(from.owner !== gameContext.ctx.currentPlayer) {
-        console.warn("Attempt to drag from another players pile");
-        return false;
+    if(from.owner !== ctx.currentPlayer) {
+        return null;
     }
 
     if(from.area === "discardPileCard") {
         // Drops from discard piles to shared piles are handled above.
-        // This case is from drops from one discard pile to another
+        // This case is for drops from one discard pile to another
         return to.area === "discardPileAll"
-            && from.pileIndex !== to.pileIndex;
+            && from.pileIndex !== to.pileIndex ? "move" : null;
     }
 
     if(to.area === "hand") {
         return from.area === "hand" &&
-            from.index !== to.index;
+            from.index !== to.index ? "move" : null;
     }
 
     if (to.area === "playerPile") {
-        return false;
+        return null;
     }
 
     if (to.area === "discardPileAll") {
         // Dropping is supported on the pile as a whole rather than
         // on individual cards in the pile.
-        return from.area === "hand";
+        return from.area === "hand" ? "move" : null;
     }
 
     if (to.area === "discardPileCard") {
         // Dropping is supported on the pile as a whole rather than
         // on individual cards in the pile.
-        return false;
+        return null;
     }
 
 

@@ -1,6 +1,6 @@
 import { PlayerID } from "boardgame.io";
 import { CardNonJoker } from "../../../utils/cards";
-import { moveableToSharedPile } from "./can-drop";
+import { moveableToSharedPile } from "./move-type";
 import { PlayerData, ServerData } from "./server-data";
 
 function moveableCards(playerData: PlayerData) {

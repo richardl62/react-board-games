@@ -4,7 +4,7 @@ import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../game-support/game-context";
 import { canDrag } from "../game-control/can-drag";
 import { CardID, getCardID } from "../game-control/card-id";
-import { canDrop } from "../game-control/can-drop";
+import { moveType } from "../game-control/move-type";
 import styled from "styled-components";
 import { cardSize } from "../../../utils/cards/styles";
 import { sAssert } from "../../../utils/assert";
@@ -28,7 +28,7 @@ export function useCardDropRef(id: CardID | null) : DropRef | null {
         },
         canDrop: (item) => {
             sAssert(id);
-            return canDrop(ctx, {from: getCardID(item), to: id});
+            return moveType(ctx, {from: getCardID(item), to: id}) !== null;
         },
 
     }), [id]);
