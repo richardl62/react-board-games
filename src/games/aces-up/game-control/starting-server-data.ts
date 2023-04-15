@@ -1,9 +1,9 @@
 import { debugOptions, handSize } from "../game-support/config";
-import { GameOptions, makeGameOptions } from "../game-support/game-options";
+import { GameOptions, OptionWrapper, makeGameOptions } from "../game-support/game-options";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeRandomSharedPile, makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
-import { ranks, suits } from "../../../utils/cards/types";
+import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 import { SetupOptions } from "../game-support/setup-options";
@@ -12,8 +12,11 @@ import { SetupOptions } from "../game-support/setup-options";
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
     options: GameOptions) : PlayerData {
 
+    const optionsWrapper = new OptionWrapper(options);
+    const notSpecial = (c: CardNonJoker) => !optionsWrapper.isSpecial(c);
+
     const res : PlayerData = {
-        mainPile: mainPileDeck.drawN(options.mainPileSize, "noKings"),
+        mainPile: mainPileDeck.drawN(options.mainPileSize, notSpecial),
 
         hand: handDeck.drawN(handSize),
 

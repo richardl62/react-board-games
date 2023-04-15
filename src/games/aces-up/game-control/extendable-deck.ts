@@ -2,7 +2,7 @@ import { CardNonJoker } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 
-type Option = "noKings";
+type Filter = (c: CardNonJoker) => boolean;
 export class ExtendingDeck {
     constructor(random: RandomAPI, deck: CardNonJoker[]) {
  
@@ -12,7 +12,9 @@ export class ExtendingDeck {
     random: RandomAPI;
     deck: CardNonJoker[];
 
-    draw(option?: Option) : CardNonJoker {
+    // If a filter is supplied only cards for which filter returns true
+    // will be returned.
+    draw(filter?: Filter) : CardNonJoker {
         let card;
         while (!card) {
             const c = this.deck.pop();
@@ -23,7 +25,7 @@ export class ExtendingDeck {
                 this.deck.splice(this.deck.length, 0,
                     ...this.random.Shuffle(newCards)
                 );
-            } else if(c.rank !== "K" || option !== "noKings") {
+            } else if(!filter || filter(c)) {
                 card = c;
             }
         }
@@ -31,10 +33,11 @@ export class ExtendingDeck {
         return card;
     }
 
-    drawN(count: number, option?: Option) : CardNonJoker[] {
+    // See draw for commint on filter.
+    drawN(count: number, filter?: Filter) : CardNonJoker[] {
         const cards = [];
         for(let i = 0; i < count; ++i) {
-            cards.push(this.draw(option));
+            cards.push(this.draw(filter));
         }
         return cards;
     }
