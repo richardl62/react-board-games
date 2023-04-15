@@ -7,6 +7,7 @@ import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
 import { ServerData } from "./server-data";
 import { OptionWrapper } from "../game-support/game-options";
+import { PlayerID } from "boardgame.io";
 
 export function moveableToSharedPile(
     G: ServerData,
@@ -26,18 +27,35 @@ export function moveableToSharedPile(
     return card.rank === "K" || card.rank === nextRank(rank(pile));
 }
 
+export function isPlayersDiscardPile(playerID: PlayerID, cardID: CardID) {
+    return (cardID.area === "discardPileAll" || cardID.area === "discardPileCard")
+        && cardID.owner === playerID;
+}
+
 export function canDrop(
     gameContext: GameContext,
     {to, from}: {to: CardID, from: CardID}
 ) : boolean {
-    const { G } = gameContext;
+    const { G, playerID } = gameContext;
     const options = new OptionWrapper(G.options);
     
     const fromCard = getCard(G, from);
     sAssert(fromCard);
 
-    if ( options.isKiller(fromCard) || options.isThief(fromCard)) {
-        // Special cards can't be moved to empty piles.
+    if ( options.isKiller(fromCard) ) {
+        if (to.area === "playerPile") {
+            return false;
+        }
+        if (isPlayersDiscardPile(playerID, to)) {
+            return true;
+        }
+        return !emptyPile(G, to);
+    }
+
+    if ( options.isThief(fromCard) ) {
+        if (isPlayersDiscardPile(playerID, to)) {
+            return true;
+        }
         return !emptyPile(G, to);
     }
 

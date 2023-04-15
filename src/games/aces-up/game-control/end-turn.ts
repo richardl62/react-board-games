@@ -4,7 +4,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { rank, resetForStartOfRound } from "./shared-pile";
+import { makeSharedPile, rank, resetForStartOfRound } from "./shared-pile";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -32,10 +32,14 @@ export function endTurn(
     refillHand(arg0, nextPlayerID_);
 
 
-    // Clear any full shared piles (Change G.sharedPiles rather than
-    // wrappedG.sharedPiles to ensure change has an effect.)
-    G.sharedPiles = G.sharedPiles.filter(p => rank(p) !== G.options.topRank);
+    // Clear any full or empty shared piles.
+    G.sharedPiles = G.sharedPiles.filter(p => 
+        rank(p) !== G.options.topRank && rank(p) !== null
+    );
 
+    // Add one empty shared pile (to allow aces to be moved)
+    G.sharedPiles.push(makeSharedPile());
+    
     for(const sharedPile of G.sharedPiles) {
         resetForStartOfRound(sharedPile);
     }

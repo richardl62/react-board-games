@@ -33,7 +33,7 @@ export function rank(pile: SharedPile): Rank | null {
     return getRank([...pile.oldCards, ...pile.cardsPushedThisRound]);
 }
 
-export function makeSharedPile(cards: CardNonJoker[]) : SharedPile {
+export function makeSharedPile(cards: CardNonJoker[] = []) : SharedPile {
     return {
         oldCards: cards,
         cardsPushedThisRound: [],
@@ -69,6 +69,14 @@ export function topCard(pile: SharedPile) : CardNonJoker | undefined {
     return pile.cardsPushedThisRound.at(-1) || pile.oldCards.at(-1);
 }
 
+/** Return the top card, or undefined if there are no cards. */
+export function removeTopCard(pile: SharedPile) : CardNonJoker | undefined {
+    if(pile.cardsPushedThisRound.length > 0) {
+        return pile.cardsPushedThisRound.pop();
+    }
+
+    return pile.oldCards.pop();
+}
  
 
 

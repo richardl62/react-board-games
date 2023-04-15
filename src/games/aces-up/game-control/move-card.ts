@@ -1,13 +1,15 @@
 import { PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { addCard, removeCard } from "./add-remove-card";
+import { addCard, clearPile, getCard, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
 import { PlayerData, ServerData, UndoItem } from "./server-data";
 import { makeUndoItem } from "./undo";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { OptionWrapper } from "../game-support/game-options";
+import { isPlayersDiscardPile } from "./can-drop";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.options.addToSharedPileEachTurn &&
@@ -40,11 +42,18 @@ export function moveCard(
 ) : void {
     const { G, ctx } = arg0;
     const playerID = ctx.currentPlayer;
+    const options = new OptionWrapper(G.options);
 
+    const fromCard = getCard(G, from);
+    sAssert(fromCard);
+    
     // Check move is valid. (Most of the checking is done in canDrag()/canDrop(). 
     // But the check that cards are played to discard piles before ending
     // the turn is done here.)
-    const endOfTurn = to.area === "discardPileAll";
+    const endOfTurn = to.area === "discardPileAll"
+        && !options.isThief(fromCard)
+        && !options.isKiller(fromCard);
+
     if (endOfTurn){
         if (moveToSharedPileRequired(G, playerID)) {
             G.moveToSharedPile = "omitted";
@@ -61,6 +70,13 @@ export function moveCard(
         sAssert(to.owner === playerID && from.owner === playerID);
         reorderFollowingDrag(playerData.hand, from.index, to.index);
         undoItem = null;
+    } else if(options.isThief(fromCard) && !isPlayersDiscardPile(playerID, to)) {
+        removeCard(G, from);
+        const toCard = removeCard(G, to);
+        addCard(G,from,toCard);
+    } else if(options.isKiller(fromCard) && !isPlayersDiscardPile(playerID, to)) {
+        removeCard(G, from);
+        clearPile(G, to);
     } else if(to.area === "discardPileAll" && from.area === "discardPileCard") {
         moveWithinSharedPiles(playerData, {from, to});
     } else {
