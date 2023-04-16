@@ -9,6 +9,7 @@ import { PlayerData, ServerData, UndoItem } from "./server-data";
 import { makeUndoItem } from "./undo";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 import { moveType as getMoveType } from "./move-type";
+import { sameJSON } from "../../../utils/same-json";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.options.addToSharedPileEachTurn &&
@@ -80,6 +81,10 @@ export function moveCard(
     const { G, ctx } = arg0;
     const playerID = ctx.currentPlayer;
 
+    if (sameJSON(from, to)) {
+        return;
+    }
+    
     const moveType = getMoveType(arg0, {from, to});
 
     // Check move is valid. (Most of the checking is done in canDrag()/canDrop(). 

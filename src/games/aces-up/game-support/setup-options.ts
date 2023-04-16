@@ -13,7 +13,7 @@ export const setupOptions = {
     },
     addToSharedPileEachTurn: {
         label: "Must add to shared pile each turn",
-        default: false,
+        default: true,
     },
     canUseOpponentsWastePiles: {
         label: "Can use opponents waste piles",
@@ -21,7 +21,7 @@ export const setupOptions = {
     },
     jacksAndQueensSpecial: {
         label: "Jacks and queens special (beta)",
-        default: true,
+        default: false,
     }
 };
 
