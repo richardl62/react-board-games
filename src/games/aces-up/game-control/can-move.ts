@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { GameContext } from "../game-support/game-context";
 import { CardID } from "./card-id";
 
-export function canDrag(
+export function canMove(
     gameContext: GameContext,
     id: CardID) : boolean {
 
