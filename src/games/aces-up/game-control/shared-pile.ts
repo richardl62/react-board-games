@@ -1,8 +1,4 @@
-import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
-import { CardNonJoker, Rank, nextRank} from "../../../utils/cards/types";
-import { ranks } from "../../../utils/cards/types";
-import { suits } from "../../../utils/cards/types";
-import { GameOptions, OptionWrapper } from "../game-support/game-options";
+import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
 
 export interface SharedPile {
     oldCards: CardNonJoker[];
@@ -39,25 +35,6 @@ export function makeSharedPile(cards: CardNonJoker[] = []) : SharedPile {
         cardsPushedThisRound: [],
     };
 } 
-
-export function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) : SharedPile {
-    const options = new OptionWrapper(gameOptions);
-    
-    const nonSpecialRanks = ranks.filter(rank => !options.isSpecial(
-        {rank, suit: "C"/*arbitary*/}
-    ));
-
-    const topRankIndex = random.Die(nonSpecialRanks.length) -1;
-    const suit = suits[random.Die(suits.length) -1];
-    //KLUDGE: Assumes the special ranks have higher index than non-special.
-    const cards : CardNonJoker[] = [];
-    for(let index = 0; index <= topRankIndex; ++index) {
-        const rank = ranks[index];
-        cards.push({rank,suit});
-    }
-
-    return makeSharedPile(cards);
-}
 
 export function resetForStartOfRound(pile: SharedPile) {
     pile.oldCards.push(...pile.cardsPushedThisRound);

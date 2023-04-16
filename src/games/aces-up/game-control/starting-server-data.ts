@@ -1,12 +1,13 @@
 import { debugOptions, handSize } from "../game-support/config";
 import { GameOptions, OptionWrapper, makeGameOptions } from "../game-support/game-options";
 import { ExtendingDeck } from "./extendable-deck";
-import { makeRandomSharedPile, makeSharedPile } from "./shared-pile";
+import { makeSharedPile } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 import { SetupOptions } from "../game-support/setup-options";
+import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
@@ -50,6 +51,26 @@ export const turnStartServerData: PerTurnServerData = {
     moveToSharedPile: "not done",
     undoItems:[],
 };
+
+function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) {
+    const options = new OptionWrapper(gameOptions);
+    
+    const nonSpecialRanks = ranks.filter(rank => 
+        !options.isSpecial({rank, suit: "C"/*arbitary*/})
+        && rank !== gameOptions.topRank
+    );
+
+    const topRankIndex = random.Die(nonSpecialRanks.length) -1;
+    const suit = suits[random.Die(suits.length) -1];
+    //KLUDGE: Assumes the special ranks have higher index than non-special.
+    const cards : CardNonJoker[] = [];
+    for(let index = 0; index <= topRankIndex; ++index) {
+        const rank = ranks[index];
+        cards.push({rank,suit});
+    }
+
+    return makeSharedPile(cards);
+}
 
 export function startingServerData({ctx, random}: SetupArg0,
     setupOptions: SetupOptions

@@ -54,7 +54,7 @@ function doMoveCard(
         removeCard(G, from);
         const toCard = removeCard(G, to);
         addCard(G,from,toCard);
-    } else if (moveType === "kill") {
+    } else if (moveType === "clear") {
         removeCard(G, from);
         clearPile(G, to);
     } else if(to.area === "hand" && from.area === "hand") {

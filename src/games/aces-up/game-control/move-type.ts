@@ -31,7 +31,7 @@ function isPlayersDiscardPile(playerID: PlayerID, cardID: CardID) {
         && cardID.owner === playerID;
 }
 
-type MoveType = "move" | "steal" | "kill" | null;
+type MoveType = "move" | "steal" | "clear" | null;
 
 export function moveType(
     {G, ctx, playerID}: {G: ServerData, ctx: Ctx, playerID: PlayerID},
@@ -42,33 +42,38 @@ export function moveType(
     const fromCard = getCard(G, from);
     sAssert(fromCard);
 
-    if ( options.isKiller(fromCard) ) {
+
+    if ( options.isThief(fromCard) || options.isKiller(fromCard)) {
         if ( isPlayersDiscardPile(playerID, to) ) {
             return "move";
         }
 
-        if ( to.area === "playerPile" || emptyPile(G, to) ) {
-            return null;
-        }
-
-        return "kill";
-    }
-
-    if ( options.isThief(fromCard) ) {
-        if ( isPlayersDiscardPile(playerID, to) ) {
-            return "move";
+        if ( to.area === "hand" ) {
+            return to.owner === playerID ? "move" : null;
         }
 
         if ( emptyPile(G, to) ) {
             return null;
         }
 
-        if ( to.area === "playerPile" && to.owner === playerID) {
-            // Players can't steal from there own player piles
+        if (to.area === "playerPile") {
+            if (options.isThief(fromCard) && to.owner !== playerID) {
+                // Players can't steal from there own player piles
+                return "steal";
+            }
+
             return null;
         }
 
-        return "steal";
+        if(options.isKiller(fromCard)) {
+            return "clear";
+        } 
+
+        if(options.isThief(fromCard)) {
+            return "steal";
+        } 
+
+        sAssert(false);
     }
 
     if (to.area === "sharedPiles") {
