@@ -20,7 +20,7 @@ export const setupOptions = {
         default: false,
     },
     jacksAndQueensSpecial: {
-        label: "Jacks and queens special (beta)",
+        label: "Jacks and queens special",
         default: false,
     }
 };
