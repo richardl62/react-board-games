@@ -1,27 +1,30 @@
-interface BooleanSpecification  { 
-    label: string;   
+export type OptionSpecifications = {[arg:string]: BooleanSpecification | NumericSpecification | FixedStringSpecification };
+export type OptionValue = boolean | number | string;
+export type OptionValues = {[arg:string]: OptionValue};
+
+interface BaseSpecification {
+    label: string;
+    showIf?: (arg: OptionValues) => unknown;
+}
+interface BooleanSpecification extends BaseSpecification   { 
     default: boolean;
 
 }
 
-interface NumericSpecification {
-    label: string;    
+interface NumericSpecification extends BaseSpecification  {
     default: number;
 
     min?: number;
     max?: number;
 }
 
-export interface FixedStringSpecification {   
-    label: string; 
+export interface FixedStringSpecification extends BaseSpecification  {   
     default: string; // Must be a member of values.
 
     options: readonly string[];
 }
 
-export type OptionSpecifications = {[arg:string]: BooleanSpecification | NumericSpecification | FixedStringSpecification };
-export type OptionValue = boolean | number | string;
-export type OptionValues = {[arg:string]: OptionValue};
+
 
 
 /*

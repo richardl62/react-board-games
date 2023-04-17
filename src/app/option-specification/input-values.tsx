@@ -55,8 +55,10 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
                 return inputFixedString(value, setValue, spec as FixedStringSpecification);
             }
         };
-
-        labelsAndInputs.push(...elements());
+        
+        if(!spec.showIf || spec.showIf(localValues)) {
+            labelsAndInputs.push(...elements());
+        }
     }
 
     return <OuterDiv>

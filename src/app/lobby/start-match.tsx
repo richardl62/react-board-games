@@ -6,9 +6,10 @@ import { BoxWithLegend } from "../../utils/box-with-legend";
 import { createMatch } from "./lobby-tools";
 import { openOnlineMatchPage } from "../url-params";
 import { OfflineOptions } from "../offline-options";
-import { SpecifiedValues } from "../option-specification/types";
+import { OptionValues, SpecifiedValues } from "../option-specification/types";
 import { InputValues } from "../option-specification/input-values";
 import { defaultNumPlayers } from "../../app-game-support/app-game";
+import { sAssert } from "../../utils/assert";
 
 export function StartMatch(props: {
     game: AppGame;
@@ -28,16 +29,22 @@ export function StartMatch(props: {
         },
 
         ...gameOptions,
-        
+
+        showDebugOptions: {
+            label: "Show debug options",
+            default: false,
+        },
         offline: {
             label: "Play offline (test/debug)",
             default: false,
+            showIf: showDebugOptions,
         },
         debugPanel: {
             label: "Debug panel (offline only)",
             default: false,
+            showIf: showDebugOptions,
         }
-    };
+    } as const;
     
     const asyncCreateMatch = useAsyncCallback((arg: {numPlayers: number, setupData: unknown}) =>
         createMatch(game, arg).then(openOnlineMatchPage)
@@ -69,4 +76,11 @@ export function StartMatch(props: {
             onButtonClick={startGame} 
         />
     </BoxWithLegend>;
+}
+
+function showDebugOptions(values: OptionValues) {
+    const res = values.showDebugOptions;
+    sAssert(typeof res === "boolean");
+
+    return res;
 }
