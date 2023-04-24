@@ -39,10 +39,15 @@ export function StartMatch(props: {
             default: false,
             showIf: showDebugOptions,
         },
+        passAndPlay: {
+            label: "Pass and play (offline only)",
+            default: true,
+            showIf: showOfflineOptions,
+        },
         debugPanel: {
             label: "Debug panel (offline only)",
             default: false,
-            showIf: showDebugOptions,
+            showIf: showOfflineOptions,
         }
     } as const;
     
@@ -76,6 +81,13 @@ export function StartMatch(props: {
             onButtonClick={startGame} 
         />
     </BoxWithLegend>;
+}
+
+function showOfflineOptions(values: OptionValues) {
+    const res = values.offline;
+    sAssert(typeof res === "boolean");
+
+    return res;
 }
 
 function showDebugOptions(values: OptionValues) {

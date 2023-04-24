@@ -78,6 +78,7 @@ if(getAndDeleteFlag(keys.offline)){
     if(numPlayers){
         offlineData = {
             numPlayers: parseInt(numPlayers),
+            passAndPlay: true,
             debugPanel: bgioDebugPanel,
             
         };

@@ -14,14 +14,19 @@ export function MatchPlayOffline(props: {
 
     const { 
         game,
-        options: {numPlayers, debugPanel, setupData}
+        options: {numPlayers, passAndPlay, debugPanel, setupData}
     } = props;
 
     const wrappedSetup = (arg0: SetupArg0) => game.setup(arg0, setupData);
+    
+    const showBoard = (props: BgioBoardProps) =>
+        !passAndPlay || props.playerID === props.ctx.currentPlayer;
 
     const GameClient = Client({
         game: {...game, setup: wrappedSetup},
-        board: (props: BgioBoardProps) => <GameBoard game={game} bgioProps={props} />,
+        board: (props: BgioBoardProps) => showBoard(props) ?
+            <GameBoard game={game} bgioProps={props} /> : 
+            <></>,
         multiplayer: Local(),
         numPlayers,
         debug: debugPanel,
