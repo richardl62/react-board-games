@@ -95,8 +95,6 @@ export function rankName(rank: Rank) : string {
     }
 
     return rank;
-
-    sAssert(false);
 }
 
 export function cardName(card: Card) : string {
