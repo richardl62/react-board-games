@@ -1,14 +1,10 @@
-import { ScoreCard } from "./score-card";
-import { Letter } from "../config";
-import { startingScoreCard } from "./score-card";
-import { ScoreCategory } from "../score-categories";
-import { ScoreWithCategory } from "./set-score";
-import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
-import { GameOptions, setupOptions } from "../options";
-import { asSpecifiedValues } from "../../../app/option-specification/tools";
-import { sAssert } from "../../../utils/assert";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
-
+import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
+import { Letter } from "../config";
+import { SetupOptions } from "../options";
+import { ScoreCategory } from "../score-categories";
+import { ScoreCard, startingScoreCard } from "./score-card";
+import { ScoreWithCategory } from "./set-score";
 
 /* Use string values to add with debugging */
 export enum GameStage {
@@ -42,7 +38,7 @@ interface PlayerData {
 }
 
 export interface ServerData extends RequiredServerData {
-    options: GameOptions;
+    options: SetupOptions;
     stage: GameStage;
     round: number;
 
@@ -63,10 +59,8 @@ export function startingPlayerData() : PlayerData {
     };
 }
 
-export function startingServerData({ctx}: SetupArg0, setupData: unknown): ServerData {
-    const options = asSpecifiedValues(setupData, setupOptions);
-    sAssert(options, "setupData does not have the expected type");
-
+export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData 
+{
     const playerData : {[playerID: string]: PlayerData } = {};
     
     for(const pid in ctx.playOrder) {

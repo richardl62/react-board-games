@@ -10,15 +10,10 @@ export const appGameNoBoard: AppGameNoBoard = {
     category: GameCategory.test,
 
     options: setupOptions,
-    setup: startingServerData,
+    setup: startingServerData as AppGameNoBoard["setup"],
     
     minPlayers: 1,
     maxPlayers: 8,
 
     moves: bgioMoves,
-
-    // BGIO does not impose turn order
-    // turn: {
-    //     activePlayers: ActivePlayers.ALL,
-    // },
 };

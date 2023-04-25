@@ -17,7 +17,7 @@ export const appGameNoBoard: AppGameNoBoard = {
     maxPlayers: 99,
 
     options: setupOptions,
-    setup: startingServerData,
+    setup: startingServerData as AppGameNoBoard["setup"],
 
     moves: bgioMoves,
 

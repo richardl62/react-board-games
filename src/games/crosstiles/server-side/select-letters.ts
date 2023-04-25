@@ -1,6 +1,6 @@
 import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
-import { GameOptions } from "../options";
+import { SetupOptions } from "../options";
 
 const vowels = ["A","E","I","O","U"];
 
@@ -20,14 +20,14 @@ const letterSet = (() => {
 Object.freeze(letterSet);
 
 function selectLettersUnchecked(
-    opts: GameOptions,
+    opts: SetupOptions,
     random: RandomAPI
 ) : Letter[] {
 
     return random.Shuffle([...letterSet]).slice(0, opts.rackSize);
 }
 
-function selectionOK(letters: Letter[], opts: GameOptions) {
+function selectionOK(letters: Letter[], opts: SetupOptions) {
     let nVowels = 0;
     let nConsonants = 0;
     let nBonusLetters = 0;
@@ -50,7 +50,7 @@ function selectionOK(letters: Letter[], opts: GameOptions) {
 }
 
 export function selectLetters(
-    opts: GameOptions,
+    opts: SetupOptions,
     random: RandomAPI
 ) : Letter[] {
     let selected = selectLettersUnchecked(opts, random);

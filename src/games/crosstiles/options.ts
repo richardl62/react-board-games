@@ -49,7 +49,7 @@ export const setupOptions = {
     }
 };
 
-export type GameOptions = SpecifiedValues<typeof setupOptions>;
+export type SetupOptions = SpecifiedValues<typeof setupOptions>;
 
-export const defaultOptions : GameOptions = defaultValues(setupOptions);
+export const defaultOptions : SetupOptions = defaultValues(setupOptions);
 
