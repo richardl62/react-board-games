@@ -9,6 +9,7 @@ import { appGame as plusMinus } from "./plus-minus/app-game";
 import { appGames as scrabble } from "./scrabble/app-games";
 import { appGame as swapSquares } from "./swap-squares/app-game";
 import { appGame as ticker } from "./ticker/app-game";
+import { appGame as dice } from "./dice/app-game";
 
 export const games : Array<AppGame> = [
     acesUp,
@@ -18,6 +19,7 @@ export const games : Array<AppGame> = [
     ...scrabble,
     swapSquares, 
     ticker,
+    dice,
 ];
 
 function sameGames(g1: AppGameNoBoard[], g2: AppGameNoBoard[]) {
