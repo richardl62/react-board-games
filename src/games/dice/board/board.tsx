@@ -1,12 +1,12 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
-import { Dice } from "../../../utils/dice";
+import { DiceSet } from "../../../utils/dice-set";
 
 function Board() : JSX.Element {
     const {G: {faces}, moves} = useGameContext();
  
     return <div>
-        <Dice faces={faces} />
+        <DiceSet faces={faces} />
         <button onClick={() => moves.roll()}>Roll</button>
     </div>;
 }
