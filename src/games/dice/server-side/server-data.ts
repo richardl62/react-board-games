@@ -3,12 +3,17 @@ import { RequiredServerData, startingRequiredState } from "../../../app-game-sup
 import { SetupOptions } from "../options";
 
 export interface ServerData extends RequiredServerData{
-    count: number;
+    faces: number[];
 }
 
 export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
+    const faces = [];
+    for (let i = 0; i < options.numberOfDice; i++) {
+        faces.push((i % 6) + 1); // For now
+    }
+
     return {
-        count: options.startingValue,
+        faces,
         
         ...startingRequiredState(),
     };

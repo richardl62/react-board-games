@@ -1,8 +1,8 @@
 import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
-import { add } from "./add";
+import { roll } from "./roll";
 
 export const allFuncs = {
-    add
+    roll
 };
 
 export const bgioMoves = wrapMoveFunctions(allFuncs);

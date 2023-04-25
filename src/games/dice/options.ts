@@ -2,11 +2,10 @@ import { SpecifiedValues } from "../../app/option-specification/types";
 
 
 export const setupOptions = {
-    startingValue: {
-        default: 2,
-        label: "Starting value",
-        min: 0,
-        max: 10,
+    numberOfDice: {
+        default: 6,
+        label: "Number of dice",
+        min: 1,
     },
 };
 

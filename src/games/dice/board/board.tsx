@@ -1,41 +1,14 @@
 import React from "react";
-import styled from "styled-components";
-import { standardOuterMargin } from "../../../app-game-support/styles";
 import { useGameContext } from "../client-side/game-context";
-
-const OuterDiv = styled.div`
-    margin: ${standardOuterMargin};
-`;
+import { Dice } from "../../../utils/dice";
 
 function Board() : JSX.Element {
-    const context = useGameContext();
-    const {G: {count}, moves, events, playerID, getPlayerName} = context;
-    
-    const current = context.ctx.currentPlayer === playerID;
-
-    return <OuterDiv>
-        <div>{getPlayerName(playerID)}</div>
-        
-        <button 
-            onClick={()=>moves.add(1)} 
-            disabled={!current}>
-            +1
-        </button>
-
-        <button 
-            onClick={()=>moves.add(-1)} 
-            disabled={!current}>
-            -1
-        </button>
-
-        <button 
-            onClick={() => events.endTurn()} 
-            disabled={!current}>
-            End Turn
-        </button>
-        
-        <div>{count}</div>
-    </OuterDiv>;
+    const {G: {faces}, moves} = useGameContext();
+ 
+    return <div>
+        <Dice faces={faces} />
+        <button onClick={() => moves.roll()}>Roll</button>
+    </div>;
 }
 
 export default Board;

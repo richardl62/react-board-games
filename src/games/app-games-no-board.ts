@@ -13,9 +13,9 @@ export const gamesNoBoard : Array<AppGameNoBoard> = [
     acesUp,
     cribbage,
     crosstiles,
+    dice,
     plusMinus,
     ...scrabble,
     swapSquares, 
     ticker,
-    dice,
 ];

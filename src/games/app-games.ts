@@ -14,12 +14,12 @@ import { appGame as dice } from "./dice/app-game";
 export const games : Array<AppGame> = [
     acesUp,
     cribbage,
+    dice,
     plusMinus,
     crosstiles,
     ...scrabble,
     swapSquares, 
     ticker,
-    dice,
 ];
 
 function sameGames(g1: AppGameNoBoard[], g2: AppGameNoBoard[]) {
