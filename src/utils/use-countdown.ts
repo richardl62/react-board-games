@@ -29,7 +29,7 @@ interface useTickerResult {
     /** Seconds since started or reset.  Can be fractional. 
      * Updated after (approximately) the given interval
      */
-    count: number;
+    ellapsedTime: number;
     stop: () => void;
     reset: () => void;
 }
@@ -55,7 +55,7 @@ export function useTicker(
     });
 
     return {
-        count: (now - start) / 1000, 
+        ellapsedTime: (now - start) / 1000, 
         /** I thought that the 'active &&' was unneccessary. But react seemed to trigger 
          * an update even when state was already false */
         stop : () => active && setActive(false),
@@ -67,6 +67,7 @@ export function useTicker(
 }
 
 interface useCountdownResult {
+    ellapsedTime: number; // seconds, can be fractional.
     timeLeft: number; // seconds, can be fractional.
     stop: () => void;
     reset: () => void;
@@ -80,12 +81,12 @@ export function useCountdown({time, tickInterval, onEnd: onDone} : {
     sAssert(time >= 0, "Bad time");
     sAssert(tickInterval === undefined || tickInterval >= 0, "Bad tick interval");
 
-    const { count, stop, reset} = useTicker(tickInterval);
-    const timeLeft = time - count;
+    const { ellapsedTime, stop, reset} = useTicker(tickInterval);
+    const timeLeft = time - ellapsedTime;
     if(timeLeft <= 0) {
         stop();
         onDone && onDone();
     }
 
-    return {timeLeft, stop, reset};
+    return {ellapsedTime, timeLeft, stop, reset};
 }

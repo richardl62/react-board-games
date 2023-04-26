@@ -59,20 +59,20 @@ function Ticks(props: {
 function BoardCurrentPlayer() : JSX.Element {
     const { moves } = useGameContext();
 
-    const {count: tickerCount} = useTicker();
+    const {ellapsedTime} = useTicker();
     const [lastIncrement, setLastIncrement] = useState(0);
     const [localCount, setLocalCount] = useState(0);
 
     const [tickInterval, setTickInterval] = useState(10);
 
     useEffect(()=>{
-        if(lastIncrement + tickInterval <= tickerCount) {
+        if(lastIncrement + tickInterval <= ellapsedTime) {
             moves.incrementCount();
   
-            setLastIncrement(tickerCount);
+            setLastIncrement(ellapsedTime);
             setLocalCount(localCount + 1);
         } 
-    },[tickerCount, tickInterval]);
+    },[ellapsedTime, tickInterval]);
 
     return <div>
 
