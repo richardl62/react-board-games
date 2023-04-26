@@ -21,14 +21,18 @@ function useDiceRotation(
     rollIfChanged?: number 
 ) : number | null {
     const spinTime = 1; // seconds
-    const timePerRotation = 0.2; // seconds
+    const numberOfRotations = 1; // seconds
+    const anglePerStep = 30; // degrees
+
+    const numSteps = numberOfRotations * (360 / anglePerStep);
+    const tickInterval = spinTime * 1000 / numSteps;
 
     const [spinning, setSpinning] = React.useState(false);
     const [prevRollIfChanged, setPrevRollIfChanged] = React.useState<number|undefined>();
     
-    const { timeLeft, reset: resetSpinCountdown } = useCountdown({
+    const { ellapsedTime, reset: resetSpinCountdown } = useCountdown({
         time: spinTime, 
-        tickInterval: 100,
+        tickInterval: tickInterval,
         onEnd: () => spinning && setSpinning(false),
     });
 
@@ -40,7 +44,16 @@ function useDiceRotation(
         }
     }
 
-    return spinning ? ((spinTime - timeLeft) / timePerRotation) * 360 : null;
+    if (!spinning) {
+        return null;
+    }
+    
+    const timePerRotation = spinTime / numberOfRotations;
+    const rotation = ((ellapsedTime / timePerRotation) * 360) % 360;
+
+    // return rotation rounddd to the nearest anglePerStep. (This seems to give
+    // better performance.)
+    return Math.round(rotation / anglePerStep) * anglePerStep;
 }
 
 export function DiceSet({faces, rollIfChanged, held, setHeld}: { 
