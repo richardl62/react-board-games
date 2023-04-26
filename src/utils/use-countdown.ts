@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { sAssert } from "./assert";
 
+const defaultIntervalLength = 1000;
+
 export function useNowTicker(
     /** interval in milliseconds.  Defaults to 1000. */
     optionalIntervalLenght?: number
@@ -32,16 +34,11 @@ interface useTickerResult {
     reset: () => void;
 }
 
-const defaultIntervalLength = 1000;
-
 export function useTicker(
-    /** interval in milliseconds.  Defaults to 1000. */
-    optionalIntervalLenght?: number
+    intervalLenght?: number, // milliseconds, defaults to 1000 (i.e 1 second)
 ) : useTickerResult {
-    
-    const intervalLenght = optionalIntervalLenght === undefined ? 
-        defaultIntervalLength : optionalIntervalLenght;
-    sAssert(intervalLenght >= 0, "Bad interval length");
+
+    sAssert(intervalLenght === undefined || intervalLenght >= 0, "Bad interval length");
         
     const [start, setStart] = useState(Date.now());
     const [now, setNow] = useState(Date.now());
@@ -70,18 +67,25 @@ export function useTicker(
 }
 
 interface useCountdownResult {
-    /** Can be factional */
-    secondsLeft: number;
+    timeLeft: number; // seconds, can be fractional.
     stop: () => void;
     reset: () => void;
 }
 
-export function useCountdown(initialSeconds: number) : useCountdownResult {
-    const { count, stop, reset} = useTicker();
-    const secondsLeft = initialSeconds - count;
-    if(secondsLeft <= 0) {
+export function useCountdown({time, tickInterval, onEnd: onDone} : {
+    time: number, // seconds
+    tickInterval?: number, // milliseconds
+    onEnd?: () => void,
+}) : useCountdownResult {
+    sAssert(time >= 0, "Bad time");
+    sAssert(tickInterval === undefined || tickInterval >= 0, "Bad tick interval");
+
+    const { count, stop, reset} = useTicker(tickInterval);
+    const timeLeft = time - count;
+    if(timeLeft <= 0) {
         stop();
+        onDone && onDone();
     }
 
-    return {secondsLeft, stop, reset};
+    return {timeLeft, stop, reset};
 }
