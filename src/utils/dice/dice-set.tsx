@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Dice } from "./dice";
-import { useCountdown } from "./use-countdown";
-import { sAssert } from "./assert";
+import { useCountdown } from "../use-countdown";
+import { sAssert } from "../assert";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -63,6 +63,7 @@ function HoldableDice({face, rotation, held, setHeld}: {
         <div>{held ? "held" : "not held"}</div>
     </div>;
 }
+
 export function DiceSet({faces, rollIfChanged, held, setHeld}: { 
     faces: number[];
     // If set, and if the value has changed since the last render, the dice

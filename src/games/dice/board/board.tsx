@@ -1,6 +1,6 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
-import { DiceSet } from "../../../utils/dice-set";
+import { DiceSet } from "../../../utils/dice/dice-set";
 
 function Board() : JSX.Element {
     const {G: {faces, rollCount, held}, moves} = useGameContext();
