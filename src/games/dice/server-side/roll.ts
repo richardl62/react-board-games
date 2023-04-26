@@ -7,7 +7,9 @@ export function roll(
 ): void {
     const faces = G.faces;
     for (let i = 0; i < faces.length; i++) {
-        faces[i] = random.Die(6);
+        if (!G.held[i]) {
+            faces[i] = random.Die(6);
+        }
     }
     G.rollCount++;
 }
