@@ -9,4 +9,5 @@ export function roll(
     for (let i = 0; i < faces.length; i++) {
         faces[i] = random.Die(6);
     }
+    G.rollCount++;
 }

@@ -4,6 +4,7 @@ import { SetupOptions } from "../options";
 
 export interface ServerData extends RequiredServerData{
     faces: number[];
+    rollCount: number;
 }
 
 export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
@@ -14,7 +15,7 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
 
     return {
         faces,
-        
+        rollCount: 0,
         ...startingRequiredState(),
     };
 }
