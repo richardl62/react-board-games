@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Dice } from "./dice";
 import { useCountdown } from "../use-countdown";
 import { sAssert } from "../assert";
+import { HoldableDice } from "./holdable-dice";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -42,28 +43,6 @@ function useDiceRotation(
     return spinning ? ((spinTime - timeLeft) / timePerRotation) * 360 : null;
 }
 
-// A dice that can be held. Rotation is ignored if held is true.
-function HoldableDice({face, rotation, held, setHeld}: {
-    face: number;
-    rotation: number | null;
-    held?: boolean;
-    setHeld?: (hold: boolean) => void;
-}) {
-    const onClick = () => setHeld && setHeld(!held);
-
-    if(held) {
-        rotation = null; // KLUDGE?
-    }
-
-    return <div onClick={onClick}>
-        <Dice 
-            rotation={rotation || 0} 
-            face={rotation === null ? face : "allSpots"} 
-        />
-        <div>{held ? "held" : "not held"}</div>
-    </div>;
-}
-
 export function DiceSet({faces, rollIfChanged, held, setHeld}: { 
     faces: number[];
     // If set, and if the value has changed since the last render, the dice
@@ -71,12 +50,10 @@ export function DiceSet({faces, rollIfChanged, held, setHeld}: {
     // condition is just that the value is set. )
     rollIfChanged?: number;
 
-    held?: boolean[];
-    setHeld?: (i: number, hold: boolean) => void;
+    held: boolean[];
+    setHeld: (i: number, hold: boolean) => void;
  }) {
-    sAssert(!held || held.length === faces.length);
-    sAssert((held === undefined) === (setHeld === undefined), 
-        "both held and setHeld must be set or neither");
+    sAssert(held.length === faces.length);
 
     const rotation = useDiceRotation(rollIfChanged);
     return (
@@ -85,8 +62,8 @@ export function DiceSet({faces, rollIfChanged, held, setHeld}: {
                 <HoldableDice 
                     rotation={rotation} 
                     face={face}
-                    held={held && held[i]}
-                    setHeld={setHeld && ((hold) => setHeld(i, hold))} 
+                    held={ held[i]}
+                    setHeld={(hold) => setHeld(i, hold)} 
                     key={i} 
                 />
             ))}

@@ -30,9 +30,9 @@ function spotOffset(index: number) {
     sAssert(false);
 }
 
-const DiceDiv = styled.div<{rotation: number}>`
+const DiceDiv = styled.div<{rotation: number, color: string}>`
     position: relative;
-    background-color: darkred;
+    background-color: ${props => props.color};
     border-radius: 10px;
 
     height: ${diceSize}px;
@@ -52,9 +52,10 @@ const Spot = styled.div<{row: number, col: number}>`
     background-color: white;
 `;
 
-export function Dice({face, rotation}: {
+export function Dice({face, rotation, color}: {
     face: number | "allSpots", // allSpots is intended for use when the die is spinning.
-    rotation?: number, // degrees 
+    color: string, // For now at least, the spots are always white.
+    rotation: number, // degrees 
 }) {
     const spotPos = face === "allSpots" ? allSpots : spotPositions[face];
     sAssert(spotPos);
@@ -68,6 +69,11 @@ export function Dice({face, rotation}: {
         }
     }
 
-    return <DiceDiv rotation={rotation || 0}>{spots}</DiceDiv>;
+    return <DiceDiv 
+        rotation={rotation}
+        color={color}
+    >
+        {spots}
+    </DiceDiv>;
 }
 Dice.diceSize = diceSize;
