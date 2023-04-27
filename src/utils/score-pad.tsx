@@ -1,11 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
+const borderColor = {
+    inactive: "rgb(139, 0, 0, .5)", /* based on darkred */
+    active: "rgba(139, 0, 0)", /* darkred */
+};
+
 const ScorePadDiv = styled.div<{active: boolean}>`
     display: inline-block;
-    border: 4px solid ${props => props.active ? "darkred" : "orange"};
+    border: 4px solid ${props => props.active ? borderColor.active : borderColor.inactive};
     background-color: cornsilk;
-    
+    font-family: Arial;
+
     > * + * {
         border-top: 1px solid black;
     };
@@ -18,6 +24,9 @@ const TotalScoresDiv = styled.div`
         border-left: 1px solid black;
     };
 
+    font-weight: bolder;
+    font-size: large;
+
     > * {
         flex: 1;
         font-family: "courier new", monospace;
@@ -29,18 +38,30 @@ const TotalScoresDiv = styled.div`
 `;
 
 const NameDiv = styled.div`
-    font-size: 1.4em;
+    font-size: x-large;
+    font-weight: bold;
+    padding-left: 0.2em;
+    opacity: 0.7;
 `;
 
-const SingleScoreDiv = styled.div`
+const SingleScoreDiv = styled.div<{showingText: boolean}>`
+    padding-left: 0.2em;
+    font-size: large;
     background-color: white;
+    opacity: ${props => props.showingText ? 0.8 : 1};
+    font-family: ${props => props.showingText ? "inherit" : "courier new, monospace"};
+    font-weight: ${props => props.showingText ? "inherit" : "bolder"};
 `;  
 
 function singleScore(text: string, score: number | null | undefined) {
     if(score === undefined) {
         return null;
     }
-    return <SingleScoreDiv>{score === null ? text : score}</SingleScoreDiv>;
+    return <SingleScoreDiv 
+        showingText={score === null}
+    >
+        {score === null ? text : score}
+    </SingleScoreDiv>;
 }
 
 export function ScorePad({name, active, score, partialScore, previousScores}: {
@@ -100,7 +121,7 @@ const SampleScorePadsDiv = styled.div`
 // Some ScorePad samples
 export function SampleScorePads() : JSX.Element {
     return <SampleScorePadsDiv>
-        <ScorePad name="Player 1" active={true} score={10} partialScore={null} previousScores={[1, 2, 3, 4, 5]} />
+        <ScorePad name="Player 1" active={true} score={10} partialScore={null} previousScores={[1000, 2, 3, 4, 5]} />
         <ScorePad name="Player 2" active={false} score={null} partialScore={20} previousScores={[1, 2, 3, 4, 5]} />
     </SampleScorePadsDiv>;
 }
