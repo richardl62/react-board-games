@@ -1,14 +1,7 @@
-interface DiceScore {
-    allSame: number;
-    allDifferent: number;
-    threeOfAKind: number;
-    threePairs: number;
-    aces: number;
-    fives: number;
-}
+import { DiceScore } from "./dice-score";
 
 // Get the highest score available from the dice
-export function getScore(faces: number[]): DiceScore {
+export function getScores(faces: number[]): DiceScore {
 
     const scores : DiceScore ={
         allSame: 0,
@@ -119,7 +112,7 @@ function doOneTest(
     faces: number[],
     expectedScores: Partial<DiceScore>)
 {
-    const scores = getScore(faces);
+    const scores = getScores(faces);
     let message = `${JSON.stringify(faces)} ${nonZeroValues(scores)}`;
     
     let pass = true;
