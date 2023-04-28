@@ -3,17 +3,11 @@ import { sAssert } from "../../../utils/assert";
 import { compareRank, rankName } from "../../../utils/cards/types";
 import { removeDuplicates } from "../../../utils/remove-duplicated";
 import { cardsMovableToSharedPile } from "../game-control/cards-movable-to-shared-pile";
-import { useGameContext } from "../game-support/game-context";
 import { PlayerInfo } from "./player-info";
+import { ServerData } from "../game-control/server-data";
 
-interface Props {
-    playerInfo: PlayerInfo;
-}
 
-export function IllegalMoveNotification(props: Props) : JSX.Element | null {
-    const {playerInfo} = props;
-    
-    const {G} = useGameContext();
+export function illegalMoveNotication(G: ServerData, playerInfo: PlayerInfo) : string | null {
 
     if (G.moveToSharedPile !== "omitted") {
         // No notification needed
@@ -37,9 +31,7 @@ export function IllegalMoveNotification(props: Props) : JSX.Element | null {
         return removeDuplicates(ranks).map(rankName);
     };
 
-    return <div>
-        <span>You must move card to a shared pile</span>
-        <span>{` (Your movable ranks: ${moveableRanks().join(", ")})`}</span>
-    </div>;
+    return "You must move card to a shared pile" +
+        ` (Your movable ranks: ${moveableRanks().join(", ")})`;
 }
 

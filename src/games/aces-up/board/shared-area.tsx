@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { cardSize } from "../../../utils/cards/styles";
 import { SharedPiles } from "./shared-piles";
+import { AreaLabelBelow } from "./area-label";
 
 const OuterDiv = styled.div`
     align-self: start;
@@ -15,5 +16,6 @@ const OuterDiv = styled.div`
 export function SharedArea(): JSX.Element {
     return <OuterDiv>
         <SharedPiles />
+        <AreaLabelBelow>Shared Piles</AreaLabelBelow>
     </OuterDiv>;
 }
