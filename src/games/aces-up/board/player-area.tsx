@@ -8,15 +8,16 @@ import { Hand } from "./hand";
 import { MainPile } from "./main-pile";
 import { PlayerInfo } from "./player-info";
 
-const HeaderLine = styled.div<{hideButton: boolean, errorMessage: boolean}>`
+const HeaderLine = styled.div<{errorMessage: boolean}>`
     display: flex;
     margin-bottom: 2px;
 
     color: ${props => props.errorMessage ? "yellow" : "currentcolor"};
-    button {
-        margin-left: 0.5em;
-        visibility: ${props => props.hideButton ? "hidden" : "visible"};
-    };
+`;
+
+const UndoButton = styled.button<{visible: boolean}>`
+    margin-left: 0.5em;
+    visibility: ${props => props.visible ? "visible" : "hidden"};
 `;
 
 const OuterDiv = styled.div`
@@ -39,16 +40,16 @@ interface Props {
 
 export function PlayerArea(props: Props) : JSX.Element {
     const { playerInfo } = props;
-    const { getPlayerName, moves, G } = useGameContext();
+    const { getPlayerName, moves, G, ctx: {currentPlayer} } = useGameContext();
     const { undoItems } = G;
 
-    let canUndo = false;
+    let allowUndo = false;
     const standardMessage = () => {
         let message = getPlayerName(playerInfo.owner);
-        if (playerInfo.owner === playerInfo.currentPlayer) {
+        if (playerInfo.owner === currentPlayer) {
             if (playerInfo.owner === playerInfo.viewer) {
                 message += " (Your turn)";
-                canUndo = undoItems.length > 0;
+                allowUndo = undoItems.length > 0;
             }
             else {
                 message += " (Their turn)";
@@ -60,12 +61,14 @@ export function PlayerArea(props: Props) : JSX.Element {
     const notification = illegalMoveNotication(G, playerInfo);
 
     return <OuterDiv>
-        <HeaderLine 
-            hideButton={!canUndo} 
-            errorMessage={Boolean(notification)}
-        >
+        <HeaderLine errorMessage={Boolean(notification)} >
             <span>{notification || standardMessage()}</span>
-            <button onClick={() => moves.undo()}>Undo</button>
+            <UndoButton 
+                visible={allowUndo}
+                onClick={() => moves.undo()}
+            >
+                Undo
+            </UndoButton>
         </HeaderLine>
 
         <InnerDiv>

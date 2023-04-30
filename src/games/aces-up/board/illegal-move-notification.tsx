@@ -1,11 +1,9 @@
-import React from "react";
 import { sAssert } from "../../../utils/assert";
 import { compareRank, rankName } from "../../../utils/cards/types";
 import { removeDuplicates } from "../../../utils/remove-duplicated";
 import { cardsMovableToSharedPile } from "../game-control/cards-movable-to-shared-pile";
 import { PlayerInfo } from "./player-info";
 import { ServerData } from "../game-control/server-data";
-
 
 export function illegalMoveNotication(G: ServerData, playerInfo: PlayerInfo) : string | null {
 
