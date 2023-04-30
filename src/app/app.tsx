@@ -101,17 +101,6 @@ function App(): JSX.Element {
         document.title = "Games";
     });
 
-    // Keep heroku eco dyno awake.
-    useEffect(() => {
-        const origin = window.location.origin;
-        setInterval(function () {
-            fetch(origin)
-                .catch((err) => {
-                    console.warn(`fetch(${origin} failed`, err.message);
-                });
-        }, 300000 /* 5 Mins */);
-    },[]);
-
     return (
         <BrowserRouter>
             <Routes>
