@@ -5,10 +5,6 @@ import { SharedPile as SharedPileType, rank } from "../game-control/shared-pile"
 import { CardStack, cardStackHeight } from "./card-stack";
 import { TextDiv } from "./shared-piles";
 
-const SharedPileDiv = styled.div<{height: string}>`
-    height: ${props => props.height};
-`;
-
 export function SharedPile(props: {
     pile: SharedPileType;
     pileIndex: number;
@@ -28,10 +24,11 @@ export function SharedPile(props: {
 
     const kingOnTop = displayCards.at(-1)?.rank === "K";
 
-    return <SharedPileDiv height={`calc(${cardStackHeight(2)}px + 1em)`}>
+    return <div>
         <CardStack
             cards={displayCards}
-            dropID={{ area: "sharedPiles", index: pileIndex }} />
+            dropID={{ area: "sharedPiles", index: pileIndex }}
+        />
         <TextDiv> {kingOnTop && rankName(rank(pile)!)} </TextDiv>
-    </SharedPileDiv>;
+    </div>;
 }

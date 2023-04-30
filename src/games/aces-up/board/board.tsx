@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { rowGap } from "../game-support/styles";
-import { SharedArea } from "./shared-area";
 import { PlayerAreas } from "./player-areas";
 import { debugOptionsInUse } from "../game-support/config";
+import { SharedPiles } from "./shared-piles";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -28,7 +28,7 @@ export default function Board() : JSX.Element {
             <div> Warning: Debug options in use </div>
         }
 
-        <SharedArea />
+        <SharedPiles />
         <PlayerAreas />
     </OuterDiv>;
 }
