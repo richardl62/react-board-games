@@ -1,8 +1,7 @@
 import React from "react";
-import styled from "styled-components";
 import { rankName } from "../../../utils/cards/types";
 import { SharedPile as SharedPileType, rank } from "../game-control/shared-pile";
-import { CardStack, cardStackHeight } from "./card-stack";
+import { CardStack } from "./card-stack";
 import { TextDiv } from "./shared-piles";
 
 export function SharedPile(props: {
