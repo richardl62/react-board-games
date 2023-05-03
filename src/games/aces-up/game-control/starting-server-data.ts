@@ -1,4 +1,5 @@
-import { debugOptions, handSize } from "../game-support/config";
+import { debugOptions } from "../game-support/debug-options";
+import { handSize } from "../game-support/config";
 import { GameOptions, OptionWrapper, makeGameOptions } from "../game-support/game-options";
 import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPile } from "./shared-pile";

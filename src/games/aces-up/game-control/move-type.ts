@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker, nextRank } from "../../../utils/cards/types";
-import { debugOptions } from "../game-support/config";
+import { debugOptions } from "../game-support/debug-options";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
