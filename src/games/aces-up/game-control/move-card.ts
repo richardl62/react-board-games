@@ -17,7 +17,7 @@ function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
         cardsMovableToSharedPile(G, playerID).length !== 0; 
 }
 
-function moveWithinSharedPiles(
+function moveWithinDiscardPiles(
     playerData: PlayerData, 
     {from, to}: {from: CardID, to: CardID},
 )
@@ -63,7 +63,7 @@ function doMoveCard(
         reorderFollowingDrag(playerData.hand, from.index, to.index);
         undoItem = null;
     } else if(to.area === "discardPileAll" && from.area === "discardPileCard") {
-        moveWithinSharedPiles(playerData, {from, to});
+        moveWithinDiscardPiles(playerData, {from, to});
     } else {
         const card = removeCard(G, from);
         addCard(G, to, card);
