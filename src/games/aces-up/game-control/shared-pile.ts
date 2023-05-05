@@ -54,17 +54,17 @@ export class SharedPile {
         return getRank(cards);
     }
 
-    get oldTop() : CardNonJoker | undefined {
+    get topLastTerm() : CardNonJoker | undefined {
         return this._oldCards.at(-1);
     }
 
-    get newTop() : CardNonJoker | undefined {
+    get topThisTerm() : CardNonJoker | undefined {
         return this._cardsPushedThisRound.at(-1);
     }
 
     /** Return the top card, or undefined if there are no cards. */
-    get topCard() : CardNonJoker | undefined {
-        return this._cardsPushedThisRound.at(-1) || this._oldCards.at(-1);
+    get top() : CardNonJoker | undefined {
+        return this.topThisTerm || this.topLastTerm;
     }
 
     removeTopCard() : CardNonJoker | undefined {

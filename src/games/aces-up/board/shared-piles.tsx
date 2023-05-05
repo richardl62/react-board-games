@@ -40,7 +40,7 @@ export function SharedPiles() : JSX.Element {
         const name = (card: CardNonJoker | undefined ) =>
             card && cardShortName(card);
 
-        return `${name(pile.oldTop)}-${name(pile.newTop)}-${index}`; 
+        return `${name(pile.topLastTerm)}-${name(pile.topThisTerm)}-${index}`; 
     };
         
     return <OuterDiv>

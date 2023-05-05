@@ -38,10 +38,10 @@ export function endTurn(
 
     // Clear any full or empty shared piles.
     const nonEmptysharedPiles = sharedPiles.filter(p => {
-        if(!p.topCard) {
+        if(!p.top) {
             return false;
         }
-        return p.topCard.rank !== G.options.topRank;
+        return p.top.rank !== G.options.topRank;
     });
     G.sharedPileData = nonEmptysharedPiles.map(p => p.data);
     // Add one empty shared pile (to allow aces to be moved)
