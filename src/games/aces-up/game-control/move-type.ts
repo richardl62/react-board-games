@@ -1,7 +1,7 @@
 import { sAssert } from "../../../utils/assert";
 import { CardNonJoker, nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/debug-options";
-import { emptyPile, getCard } from "./add-remove-card";
+import { emptyPile, getCard, getTopCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { SharedPile, rank } from "./shared-pile";
 import { ServerData } from "./server-data";
@@ -53,6 +53,14 @@ export function moveType(
     if ( to.area === "discardPileAll" && from.area === "hand"
             && isCurrentPlayer(to) && isCurrentPlayer(from)) {
         return "move";
+    }
+
+    const toCard = getTopCard(G, to);
+    if ( toCard && options.isKiller(toCard)) {
+        // With the exception of a players own discard piles,
+        // a pile with a killer at the top is considered full and
+        // cannot be moved to.
+        return null;
     }
 
     if ( options.isThief(fromCard)) {

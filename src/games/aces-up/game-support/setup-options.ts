@@ -21,7 +21,7 @@ export const setupOptions = {
     },
     jacksAndQueensSpecial: {
         label: "Jacks and queens special",
-        default: false,
+        default: true,
     }
 };
 

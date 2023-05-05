@@ -53,6 +53,28 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
     throw new Error("Problem getting cards - unexpected card ID");
 }
 
+export function getTopCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
+
+    sAssert(id.area !== "hand", "Can't get top card of a hand");
+
+    if(id.area === "sharedPiles") {
+        return topCard(G.sharedPiles[id.index]);
+    }
+
+    const playerData = G.playerData[id.owner];
+
+
+    if(id.area === "discardPileCard"  || id.area === "discardPileAll") {
+        return playerData.discards[id.pileIndex].at(-1);
+    }
+
+    if(id.area === "playerPile") {
+        return playerData.mainPile.at(-1);
+    }
+
+    throw new Error("Problem getting top cards");
+}
+
 export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 
     if(id.area === "sharedPiles") {
