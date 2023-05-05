@@ -33,19 +33,16 @@ export function endTurn(
     refillHand(arg0, nextPlayerID_);
 
 
-    // Clear any full or empty shared piles.
-    sharedPiles = sharedPiles.filter(p => {
-        const rank = p.topCard?.rank;
-        return rank !== G.options.topRank && rank !== null;
-    });
-
     for(const sharedPile of sharedPiles) {
         sharedPile.resetForStartOfRound();
     }
 
+    // Clear any full or empty shared piles, then add a new empty one.
+    sharedPiles = sharedPiles.filter(p => {
+        const rank = p.topCard?.rank;
+        return rank !== G.options.topRank && rank !== null;
+    });
     G.sharedPileData = sharedPiles.map(p => p.data);
-
-    // Add one empty shared pile (to allow aces to be moved)
     G.sharedPileData.push(makeSharedPileData());
             
     events.endTurn();

@@ -9,16 +9,12 @@ export function SharedPile(props: {
     pileIndex: number;
 }): JSX.Element  {
     const { pile, pileIndex } = props;
-    const { oldCards, cardsPushedThisRound } = pile;
-    
 
-    const oldTop = oldCards.at(-1);
-    const newTop = cardsPushedThisRound.at(-1);
 
     // Get the top cards, if any, of the two sub-piles
-    const displayCards = [oldTop ? oldTop : null];
-    if ( newTop ) {
-        displayCards.push(newTop);
+    const displayCards = [pile.oldTop || null];
+    if ( pile.newTop ) {
+        displayCards.push(pile.newTop);
     }
 
     const kingOnTop = displayCards.at(-1)?.rank === "K";

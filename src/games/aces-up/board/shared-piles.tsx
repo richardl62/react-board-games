@@ -37,10 +37,10 @@ export function SharedPiles() : JSX.Element {
 
     // Kludge
     const key = (pile: SharedPileClass, index: number) => {
-        const names = (cards: CardNonJoker[]) =>
-            cards.reduce((str, card) => str + cardShortName(card), String(index));
+        const name = (card: CardNonJoker | undefined ) =>
+            card && cardShortName(card);
 
-        return `${names(pile.oldCards)}-${names(pile.cardsPushedThisRound)}-${index}}`; 
+        return `${name(pile.oldTop)}-${name(pile.newTop)}-${index}`; 
     };
         
     return <OuterDiv>

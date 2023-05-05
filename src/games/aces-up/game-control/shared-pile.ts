@@ -21,19 +21,12 @@ export class SharedPile {
         this._cardsPushedThisRound = data.cardsPushedThisRound;
     }
 
+    // Intended for limited use only
     get data(): SharedPileData {
         return {
             oldCards: this._oldCards,
             cardsPushedThisRound: this._cardsPushedThisRound,
         };
-    }
-
-    get oldCards(): CardNonJoker[] {
-        return this._oldCards;
-    }
-
-    get cardsPushedThisRound(): CardNonJoker[] {
-        return this._cardsPushedThisRound;
     }
 
     /** Return the effective rank of the top card in the pile,
@@ -59,6 +52,14 @@ export class SharedPile {
         
         const cards = [...this._oldCards, ...this._cardsPushedThisRound];
         return getRank(cards);
+    }
+
+    get oldTop() : CardNonJoker | undefined {
+        return this._oldCards.at(-1);
+    }
+
+    get newTop() : CardNonJoker | undefined {
+        return this._cardsPushedThisRound.at(-1);
     }
 
     /** Return the top card, or undefined if there are no cards. */
