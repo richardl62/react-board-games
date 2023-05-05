@@ -24,7 +24,7 @@ export function endTurn(
     arg0 : MoveArg0<ServerData>, 
 ) : void {
     const {ctx, G, events} = arg0;
-    const sharedPiles = G.sharedPileData.map(makeSharedPile);
+    let sharedPiles = G.sharedPileData.map(makeSharedPile);
 
     Object.assign(G, turnStartServerData);
     
@@ -36,15 +36,16 @@ export function endTurn(
         sharedPile.resetForStartOfRound();
     }
 
-    // Clear any full or empty shared piles.
-    const nonEmptysharedPiles = sharedPiles.filter(p => {
-        if(!p.topCard) {
-            return false;
-        }
-        return p.topCard.rank !== G.options.topRank;
+    for(const sharedPile of sharedPiles) {
+        sharedPile.resetForStartOfRound();
+    }
+
+    // Clear any full or empty shared piles, then add a new empty one.
+    sharedPiles = sharedPiles.filter(p => {
+        const rank = p.topCard?.rank;
+        return rank !== G.options.topRank && rank !== null;
     });
-    G.sharedPileData = nonEmptysharedPiles.map(p => p.data);
-    // Add one empty shared pile (to allow aces to be moved)
+    G.sharedPileData = sharedPiles.map(p => p.data);
     G.sharedPileData.push(makeSharedPileData());
             
     events.endTurn();
