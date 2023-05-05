@@ -2,7 +2,13 @@ import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
 
 export interface SharedPile {
     oldCards: CardNonJoker[];
-    cardsPushedThisRound: CardNonJoker[];
+    cardsPushedThisRound: {
+        // normal cards include kings
+        normal: CardNonJoker[];
+        
+        // jacks and queens when 'jack and queen are special' is set.
+        special: CardNonJoker[];
+    };
 }
 
 
@@ -26,30 +32,36 @@ export function getRank(cards: CardNonJoker[]): Rank | null {
  * actual ranks are ... 3, K, K the effective rank is 5.
  */
 export function rank(pile: SharedPile): Rank | null {
-    return getRank([...pile.oldCards, ...pile.cardsPushedThisRound]);
+    return getRank([...pile.oldCards, ...pile.cardsPushedThisRound.normal]);
 }
 
 export function makeSharedPile(cards: CardNonJoker[] = []) : SharedPile {
     return {
         oldCards: cards,
-        cardsPushedThisRound: [],
+        cardsPushedThisRound: {
+            normal: [],
+            special: [],
+        },
     };
 } 
 
 export function resetForStartOfRound(pile: SharedPile) {
-    pile.oldCards.push(...pile.cardsPushedThisRound);
-    pile.cardsPushedThisRound = [];
+    pile.oldCards.push(...pile.cardsPushedThisRound.normal);
+    pile.cardsPushedThisRound = {
+        normal: [],
+        special: [],
+    };
 }
 
 /** Return the top card, or undefined if there are no cards. */
 export function topCard(pile: SharedPile) : CardNonJoker | undefined {
-    return pile.cardsPushedThisRound.at(-1) || pile.oldCards.at(-1);
+    return pile.cardsPushedThisRound.normal.at(-1) || pile.oldCards.at(-1);
 }
 
 /** Return the top card, or undefined if there are no cards. */
 export function removeTopCard(pile: SharedPile) : CardNonJoker | undefined {
-    if(pile.cardsPushedThisRound.length > 0) {
-        return pile.cardsPushedThisRound.pop();
+    if(pile.cardsPushedThisRound.normal.length > 0) {
+        return pile.cardsPushedThisRound.normal.pop();
     }
 
     return pile.oldCards.pop();

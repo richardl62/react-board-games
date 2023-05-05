@@ -66,7 +66,12 @@ function doMoveCard(
         const card = removeCard(G, from);
         addCard(G, to, card);
     }
-    
+
+    if(moveType === "steal" || moveType === "clear") {
+        if (to.area === "sharedPiles") {
+            G.sharedPiles[to.index].cardsPushedThisRound.special.push(fromCard);
+        }
+    }   
     return undoItem;
 
 }

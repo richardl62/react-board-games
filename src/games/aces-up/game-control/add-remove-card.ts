@@ -12,10 +12,10 @@ function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
 }
 
 function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNonJoker) {
-    sharedPiles[index].cardsPushedThisRound.push(card);
+    sharedPiles[index].cardsPushedThisRound.normal.push(card);
 
     // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
-    // moved. )
+    // moved.)
     // Kludge?: Reply on topCard() returning undefined when given an empty pile.
     if (topCard(sharedPiles.at(-1)!)) {
         sharedPiles.push(makeSharedPile([]));

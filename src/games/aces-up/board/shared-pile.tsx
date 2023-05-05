@@ -3,6 +3,11 @@ import { rankName } from "../../../utils/cards/types";
 import { SharedPile as SharedPileType, rank } from "../game-control/shared-pile";
 import { CardStack } from "./card-stack";
 import { TextDiv } from "./shared-piles";
+import styled from "styled-components";
+
+const Specials = styled.div`
+    border: 1px solid yellow; /* For now */
+`;
 
 export function SharedPile(props: {
     pile: SharedPileType;
@@ -13,7 +18,7 @@ export function SharedPile(props: {
     
 
     const oldTop = oldCards.at(-1);
-    const newTop = cardsPushedThisRound.at(-1);
+    const newTop = cardsPushedThisRound.normal.at(-1);
 
     // Get the top cards, if any, of the two sub-piles
     const displayCards = [oldTop ? oldTop : null];
@@ -29,5 +34,9 @@ export function SharedPile(props: {
             dropID={{ area: "sharedPiles", index: pileIndex }}
         />
         <TextDiv> {kingOnTop && rankName(rank(pile)!)} </TextDiv>
+
+        <Specials>
+            <CardStack cards={cardsPushedThisRound.special} />
+        </Specials>
     </div>;
 }
