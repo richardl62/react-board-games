@@ -6,7 +6,7 @@ import { MoveArg0 } from "../../../app-game-support/bgio-types";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {
-        sharedPiles: copyJSON(G.sharedPiles),
+        sharedPileData: copyJSON(G.sharedPileData),
         playerID,
         playerData: copyJSON(G.playerData),
         moveToSharedPile: G.moveToSharedPile,
@@ -20,7 +20,7 @@ export function undo(
     const undoItem = G.undoItems.pop();
     sAssert(undoItem, "No undo data available");
 
-    G.sharedPiles = undoItem.sharedPiles;
+    G.sharedPileData = undoItem.sharedPileData;
     G.playerData = undoItem.playerData;
     
     // We don't want the move required message after an undo

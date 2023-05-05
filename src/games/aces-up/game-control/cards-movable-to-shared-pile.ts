@@ -2,6 +2,7 @@ import { PlayerID } from "boardgame.io";
 import { CardNonJoker } from "../../../utils/cards";
 import { moveableToSharedPile } from "./move-type";
 import { PlayerData, ServerData } from "./server-data";
+import { makeSharedPile } from "./shared-pile";
 
 function moveableCards(playerData: PlayerData) {
     const moveable: CardNonJoker[] = [];
@@ -26,10 +27,11 @@ export function cardsMovableToSharedPile(
     G: ServerData, 
     playerID: PlayerID
 ) : CardNonJoker[] {
-    
+    const sharedPiles = G.sharedPileData.map(makeSharedPile);
+
     const moveable = (card: CardNonJoker) => {
-        for(const pile of G.sharedPiles) {
-            if(moveableToSharedPile(G,card, pile)) {
+        for(const pile of sharedPiles) {
+            if(moveableToSharedPile(G.options, card, pile)) {
                 return true;
             }
         }

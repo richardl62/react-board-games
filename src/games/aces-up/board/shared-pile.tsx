@@ -1,11 +1,11 @@
 import React from "react";
 import { rankName } from "../../../utils/cards/types";
-import { SharedPile as SharedPileType, rank } from "../game-control/shared-pile";
+import { SharedPile as SharedPileClass } from "../game-control/shared-pile";
 import { CardStack } from "./card-stack";
 import { TextDiv } from "./shared-piles";
 
 export function SharedPile(props: {
-    pile: SharedPileType;
+    pile: SharedPileClass;
     pileIndex: number;
 }): JSX.Element  {
     const { pile, pileIndex } = props;
@@ -28,6 +28,6 @@ export function SharedPile(props: {
             cards={displayCards}
             dropID={{ area: "sharedPiles", index: pileIndex }}
         />
-        <TextDiv> {kingOnTop && rankName(rank(pile)!)} </TextDiv>
+        <TextDiv> {kingOnTop && rankName(pile.rank!)} </TextDiv>
     </div>;
 }

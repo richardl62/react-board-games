@@ -3,7 +3,7 @@ import { CardNonJoker } from "../../../utils/cards";
 import { handSize } from "../game-support/config";
 import { CardID } from "./card-id";
 import { ServerData } from "./server-data";
-import { SharedPile, makeSharedPile, removeTopCard, topCard } from "./shared-pile";
+import { SharedPileData, makeSharedPileData, makeSharedPile } from "./shared-pile";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     const card = cards.splice(index,1)[0];
@@ -11,14 +11,14 @@ function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     return card;
 }
 
-function addToSharedPile(sharedPiles: SharedPile[], index: number, card: CardNonJoker) {
-    sharedPiles[index].cardsPushedThisRound.push(card);
+function addToSharedPile(sharedPileData: SharedPileData[], index: number, card: CardNonJoker) {
+    sharedPileData[index].cardsPushedThisRound.push(card);
 
     // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
     // moved. )
     // Kludge?: Reply on topCard() returning undefined when given an empty pile.
-    if (topCard(sharedPiles.at(-1)!)) {
-        sharedPiles.push(makeSharedPile([]));
+    if (makeSharedPile(sharedPileData.at(-1)!).topCard) {
+        sharedPileData.push(makeSharedPileData([]));
     }
 }
 
@@ -34,7 +34,7 @@ export function emptyPile(G: ServerData,  id: CardID) : boolean {
 export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 
     if(id.area === "sharedPiles") {
-        return topCard(G.sharedPiles[id.index]);
+        return makeSharedPile(G.sharedPileData[id.index]).topCard;
     }
 
     const playerData = G.playerData[id.owner];
@@ -56,7 +56,7 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 
     if(id.area === "sharedPiles") {
-        const card = removeTopCard(G.sharedPiles[id.index]);
+        const card = makeSharedPile(G.sharedPileData[id.index]).removeTopCard();
         sAssert(card);
         return card;
     }
@@ -88,7 +88,7 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
 
     if(id.area === "sharedPiles") {
-        addToSharedPile(G.sharedPiles, id.index, card);
+        addToSharedPile(G.sharedPileData, id.index, card);
         return;
     }
 
@@ -117,7 +117,7 @@ export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
 export function clearPile(G: ServerData,  id: CardID) : void {
 
     if(id.area === "sharedPiles") {
-        G.sharedPiles[id.index] = makeSharedPile();
+        G.sharedPileData[id.index] = makeSharedPileData();
         return;
     }
 
