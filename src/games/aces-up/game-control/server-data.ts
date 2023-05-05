@@ -1,7 +1,7 @@
 import { PlayerID } from "boardgame.io";
 import { RequiredServerData } from "../../../app-game-support/required-server-data";
 import { CardNonJoker } from "../../../utils/cards";
-import { SharedPile } from "./shared-pile";
+import { SharedPileData } from "./shared-pile";
 import { GameOptions } from "../game-support/game-options";
 
 export interface PlayerData {
@@ -26,7 +26,7 @@ type MoveToSharedPile =
     ;
 
 export interface UndoItem {
-    sharedPiles: SharedPile[];
+    sharedPileData: SharedPileData[];
     playerID: PlayerID;
     playerData: PlayerDataDictionary;
     moveToSharedPile: MoveToSharedPile; 
@@ -43,7 +43,7 @@ export interface ServerData extends PerTurnServerData, RequiredServerData {
     deck: CardNonJoker[];
 
     /** The piles that any play can add to */
-    sharedPiles: SharedPile[];
+    sharedPileData: SharedPileData[];
 
     playerData: PlayerDataDictionary;
 

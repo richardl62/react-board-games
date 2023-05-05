@@ -2,14 +2,13 @@ import { debugOptions } from "../game-support/debug-options";
 import { handSize } from "../game-support/config";
 import { GameOptions, OptionWrapper, makeGameOptions } from "../game-support/game-options";
 import { ExtendingDeck } from "./extendable-deck";
-import { makeSharedPile } from "./shared-pile";
+import { makeSharedPileData } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 import { SetupOptions } from "../game-support/setup-options";
 import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
-
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
     options: GameOptions) : PlayerData {
@@ -70,7 +69,7 @@ function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) {
         cards.push({rank,suit});
     }
 
-    return makeSharedPile(cards);
+    return makeSharedPileData(cards);
 }
 
 export function startingServerData({ctx, random}: SetupArg0,
@@ -79,7 +78,7 @@ export function startingServerData({ctx, random}: SetupArg0,
     const options = makeGameOptions(setupOptions);
     const sd: ServerData = {
         deck: [],
-        sharedPiles: [],
+        sharedPileData: [],
 
         playerData: {},
 
@@ -95,16 +94,16 @@ export function startingServerData({ctx, random}: SetupArg0,
 
 
     for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
-        sd.sharedPiles.push(makeRandomSharedPile(options, random));
+        sd.sharedPileData.push(makeRandomSharedPile(options, random));
     }
 
     if (debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {
         const kc = { rank: "K", suit: "C" } as const;
-        sd.sharedPiles.push(makeSharedPile([kc,kc,kc,kc,kc,kc,kc,kc,]));
+        sd.sharedPileData.push(makeSharedPileData([kc,kc,kc,kc,kc,kc,kc,kc,]));
 
     }
 
-    sd.sharedPiles.push(makeSharedPile([]));
+    sd.sharedPileData.push(makeSharedPileData([]));
 
     for (const pid in ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);

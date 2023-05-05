@@ -4,7 +4,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { makeSharedPile, rank, resetForStartOfRound } from "./shared-pile";
+import { makeSharedPile, makeSharedPileData } from "./shared-pile";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -24,6 +24,7 @@ export function endTurn(
     arg0 : MoveArg0<ServerData>, 
 ) : void {
     const {ctx, G, events} = arg0;
+    let sharedPiles = G.sharedPileData.map(makeSharedPile);
 
     Object.assign(G, turnStartServerData);
     
@@ -33,16 +34,19 @@ export function endTurn(
 
 
     // Clear any full or empty shared piles.
-    G.sharedPiles = G.sharedPiles.filter(p => 
-        rank(p) !== G.options.topRank && rank(p) !== null
-    );
+    sharedPiles = sharedPiles.filter(p => {
+        const rank = p.topCard?.rank;
+        return rank !== G.options.topRank && rank !== null;
+    });
+
+    for(const sharedPile of sharedPiles) {
+        sharedPile.resetForStartOfRound();
+    }
+
+    G.sharedPileData = sharedPiles.map(p => p.data);
 
     // Add one empty shared pile (to allow aces to be moved)
-    G.sharedPiles.push(makeSharedPile());
-    
-    for(const sharedPile of G.sharedPiles) {
-        resetForStartOfRound(sharedPile);
-    }
+    G.sharedPileData.push(makeSharedPileData());
             
     events.endTurn();
 }

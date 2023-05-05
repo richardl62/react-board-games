@@ -3,13 +3,13 @@ import { CardNonJoker, nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/debug-options";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
-import { SharedPile, rank } from "./shared-pile";
+import { SharedPile, makeSharedPile } from "./shared-pile";
 import { ServerData } from "./server-data";
-import { OptionWrapper } from "../game-support/game-options";
+import { GameOptions, OptionWrapper } from "../game-support/game-options";
 import { Ctx, PlayerID } from "boardgame.io";
 
 export function moveableToSharedPile(
-    G: ServerData,
+    options: GameOptions,
     card: CardNonJoker, 
     pile: SharedPile
 ) : boolean {
@@ -18,14 +18,13 @@ export function moveableToSharedPile(
         return true;
     }
 
-    if(rank(pile) === G.options.topRank) {
+    if(pile.rank === options.topRank) {
         // You can't add to a full pile
         return false;
     } 
     
-    return card.rank === "K" || card.rank === nextRank(rank(pile));
+    return card.rank === "K" || card.rank === nextRank(pile.rank);
 }
-
 
 type MoveType = "move" | "steal" | "clear" | null;
 
@@ -120,8 +119,8 @@ export function moveType(
     // With the expection special cards, which are handled above, only cards of the
     // correct rank can be moved to a player pile.
     if (to.area === "sharedPiles") {
-        const toPile = G.sharedPiles[to.index];
-        return moveableToSharedPile(G, fromCard, toPile) ? "move" : null;
+        const toPile = makeSharedPile(G.sharedPileData[to.index]);
+        return moveableToSharedPile(G.options, fromCard, toPile) ? "move" : null;
     }
 
 
