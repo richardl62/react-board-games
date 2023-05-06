@@ -37,13 +37,9 @@ export function endTurn(
     }
 
     // Clear any full or empty shared piles.
-    const nonEmptysharedPiles = sharedPiles.filter(p => {
-        if(!p.top) {
-            return false;
-        }
-        return p.top.rank !== G.options.topRank;
-    });
-    G.sharedPileData = nonEmptysharedPiles.map(p => p.data);
+    const keep = sharedPiles.filter(p => !p.isEmpty && !p.isFull);
+    G.sharedPileData = keep.map(p => p.data);
+    
     // Add one empty shared pile (to allow aces to be moved)
     G.sharedPileData.push(makeSharedPileData());
             

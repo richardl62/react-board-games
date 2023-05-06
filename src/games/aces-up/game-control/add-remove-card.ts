@@ -84,7 +84,7 @@ export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
         // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
         // moved. )
         // Kludge?: Reply on topCard() returning undefined when given an empty pile.
-        if (sharedPiles.at(-1)!.top) {
+        if (!sharedPiles.at(-1)!.isEmpty) {
             G.sharedPileData.push(makeSharedPileData([]));
         }
         return;

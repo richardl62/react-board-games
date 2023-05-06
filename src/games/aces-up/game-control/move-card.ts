@@ -1,7 +1,7 @@
 import { PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { addCard, clearPile, getCard, removeCard } from "./add-remove-card";
+import { addCard, clearPile, removeCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
@@ -48,8 +48,6 @@ function doMoveCard(
 
     let undoItem : UndoItem | null = makeUndoItem(G, playerID);
 
-    const fromCard = getCard(G, from);
-    sAssert(fromCard);
     const moveType = getMoveType(arg0, {from, to});
     if (moveType === "steal") {
         removeCard(G, from);

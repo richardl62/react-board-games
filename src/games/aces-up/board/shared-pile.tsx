@@ -11,9 +11,9 @@ export function SharedPile(props: {
     const { pile, pileIndex } = props;
 
     // Get the top cards, if any, of the two sub-piles
-    const displayCards = [pile.topLastTerm || null];
-    if ( pile.topThisTerm ) {
-        displayCards.push(pile.topThisTerm);
+    const displayCards = [pile.topLastTurn || null];
+    if ( pile.topThisTurn ) {
+        displayCards.push(pile.topThisTurn);
     }
 
     const kingOnTop = displayCards.at(-1)?.rank === "K";

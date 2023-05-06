@@ -57,18 +57,27 @@ export class SharedPile {
         return getRank(cards);
     }
 
-    get topLastTerm() : CardNonJoker | undefined {
+    get topLastTurn() : CardNonJoker | undefined {
         return this._oldCards.at(-1);
     }
 
-    get topThisTerm() : CardNonJoker | undefined {
+    get topThisTurn() : CardNonJoker | undefined {
         return this._cardsAddedThisRound.at(-1);
     }
 
     /** Return the top card, or undefined if there are no cards. */
     get top() : CardNonJoker | undefined {
-        return this.topThisTerm || this.topLastTerm;
+        return this.topThisTurn || this.topLastTurn;
     }
+
+    get isEmpty() : boolean {
+        return this.top === undefined;
+    }
+
+    get isFull() : boolean {
+        const rank = this.rank;
+        return rank === this._options.topRank;
+    }               
 
     removeTopCard() : CardNonJoker | undefined {
         if(this._cardsAddedThisRound.length > 0) {
