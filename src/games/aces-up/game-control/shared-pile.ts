@@ -2,33 +2,44 @@ import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
 import { GameOptions } from "../game-support/game-options";
 
 export interface SharedPileData {
-    oldCards: CardNonJoker[];
-    cardsAddedThisRound: CardNonJoker[];
+    old: CardNonJoker[];
+    thisTurnStandard: CardNonJoker[];
+        
+    /** Jacks and Queens with 'Jacks and Queens' option */
+    thisTurnSpecial: CardNonJoker[];
 }
 
 export function makeSharedPileData(cards: CardNonJoker[] = []) : SharedPileData {
     return {
-        oldCards: cards,
-        cardsAddedThisRound: [],
+        old: cards,
+        thisTurnStandard: [],
+
+        /** Jacks and Queens with 'Jacks and Queens' option.
+         *  They are recorded mainly for display purposes.
+         */
+        thisTurnSpecial: [],
     };
 } 
 
 export class SharedPile {
-    private _oldCards: CardNonJoker[];
-    private _cardsAddedThisRound: CardNonJoker[];
+    private _old: CardNonJoker[];
+    private _thisTurnStandard: CardNonJoker[];
+    private _thisTurnSpecial: CardNonJoker[];
     private _options: GameOptions;
     
     constructor(data: SharedPileData, options: GameOptions) {
-        this._oldCards = data.oldCards;
-        this._cardsAddedThisRound = data.cardsAddedThisRound;
+        this._old = data.old;
+        this._thisTurnStandard = data.thisTurnStandard;
+        this._thisTurnSpecial = data.thisTurnSpecial;
         this._options = options;
     }
 
     // Intended for limited use only
     get data(): SharedPileData {
         return {
-            oldCards: this._oldCards,
-            cardsAddedThisRound: this._cardsAddedThisRound,
+            old: this._old,
+            thisTurnStandard: this._thisTurnStandard,
+            thisTurnSpecial: this._thisTurnSpecial,
         };
     }
 
@@ -53,21 +64,25 @@ export class SharedPile {
             return nextRank(getRank(topRemoved))!;
         }
         
-        const cards = [...this._oldCards, ...this._cardsAddedThisRound];
+        const cards = [...this._old, ...this._thisTurnStandard];
         return getRank(cards);
     }
 
-    get topLastTurn() : CardNonJoker | undefined {
-        return this._oldCards.at(-1);
-    }
-
-    get topThisTurn() : CardNonJoker | undefined {
-        return this._cardsAddedThisRound.at(-1);
+    tops() : {
+        old: CardNonJoker | undefined,
+        thisTurnStandard: CardNonJoker | undefined,
+        thisTurnSpecials: CardNonJoker | undefined,    
+        } {
+        return {
+            old: this._old.at(-1),
+            thisTurnStandard: this._thisTurnStandard.at(-1),
+            thisTurnSpecials: this._thisTurnSpecial.at(-1),
+        };
     }
 
     /** Return the top card, or undefined if there are no cards. */
     get top() : CardNonJoker | undefined {
-        return this.topThisTurn || this.topLastTurn;
+        return this._thisTurnStandard.at(-1) || this._old.at(-1);
     }
 
     get isEmpty() : boolean {
@@ -80,21 +95,22 @@ export class SharedPile {
     }               
 
     removeTopCard() : CardNonJoker | undefined {
-        if(this._cardsAddedThisRound.length > 0) {
-            return this._cardsAddedThisRound.pop();
+        if(this._thisTurnSpecial.length > 0) {
+            return this._thisTurnSpecial.pop();
         }
 
-        return this._oldCards.pop();
+        return this._old.pop();
     }
 
     /** Add card played this round */
     add(card: CardNonJoker) {
-        return this._cardsAddedThisRound.push(card);
+        return this._thisTurnStandard.push(card);
     }
 
     resetForStartOfRound() {
-        this._oldCards.push(...this._cardsAddedThisRound);
-        this._cardsAddedThisRound = [];
+        this._old.push(...this._thisTurnStandard);
+        this._thisTurnStandard = [];
+        this._thisTurnSpecial = [];
     }
 }
 

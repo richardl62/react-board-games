@@ -39,8 +39,8 @@ export function SharedPiles() : JSX.Element {
     const key = (pile: SharedPileClass, index: number) => {
         const name = (card: CardNonJoker | undefined ) =>
             card && cardShortName(card);
-
-        return `${name(pile.topLastTurn)}-${name(pile.topThisTurn)}-${index}`; 
+        const {old, thisTurnStandard: thisRoundStandard} = pile.tops();
+        return `${name(old)}-${name(thisRoundStandard)}-${index}`; 
     };
         
     return <OuterDiv>

@@ -26,8 +26,6 @@ export function canMove(
         return id.area === "discardPileCard" 
             && gameContext.G.options.canUseOpponentsWastePiles;
     }
-        
-
 
     if (id.area === "hand") {
         return true;
