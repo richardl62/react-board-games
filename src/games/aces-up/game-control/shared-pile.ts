@@ -3,36 +3,32 @@ import { GameOptions } from "../game-support/game-options";
 
 export interface SharedPileData {
     oldCards: CardNonJoker[];
-    cardsPushedThisRound: CardNonJoker[];
+    cardsAddedThisRound: CardNonJoker[];
 }
 
 export function makeSharedPileData(cards: CardNonJoker[] = []) : SharedPileData {
     return {
         oldCards: cards,
-        cardsPushedThisRound: [],
+        cardsAddedThisRound: [],
     };
 } 
 
 export class SharedPile {
     private _oldCards: CardNonJoker[];
-    private _cardsPushedThisRound: CardNonJoker[];
+    private _cardsAddedThisRound: CardNonJoker[];
     private _options: GameOptions;
     
     constructor(data: SharedPileData, options: GameOptions) {
         this._oldCards = data.oldCards;
-        this._cardsPushedThisRound = data.cardsPushedThisRound;
+        this._cardsAddedThisRound = data.cardsAddedThisRound;
         this._options = options;
-    }
-
-    get cardsPushedThisRound() : CardNonJoker[] { // TEMPORARY
-        return this._cardsPushedThisRound;
     }
 
     // Intended for limited use only
     get data(): SharedPileData {
         return {
             oldCards: this._oldCards,
-            cardsPushedThisRound: this._cardsPushedThisRound,
+            cardsAddedThisRound: this._cardsAddedThisRound,
         };
     }
 
@@ -57,7 +53,7 @@ export class SharedPile {
             return nextRank(getRank(topRemoved))!;
         }
         
-        const cards = [...this._oldCards, ...this._cardsPushedThisRound];
+        const cards = [...this._oldCards, ...this._cardsAddedThisRound];
         return getRank(cards);
     }
 
@@ -66,7 +62,7 @@ export class SharedPile {
     }
 
     get topThisTerm() : CardNonJoker | undefined {
-        return this._cardsPushedThisRound.at(-1);
+        return this._cardsAddedThisRound.at(-1);
     }
 
     /** Return the top card, or undefined if there are no cards. */
@@ -75,16 +71,21 @@ export class SharedPile {
     }
 
     removeTopCard() : CardNonJoker | undefined {
-        if(this._cardsPushedThisRound.length > 0) {
-            return this._cardsPushedThisRound.pop();
+        if(this._cardsAddedThisRound.length > 0) {
+            return this._cardsAddedThisRound.pop();
         }
 
         return this._oldCards.pop();
     }
 
+    /** Add card played this round */
+    add(card: CardNonJoker) {
+        return this._cardsAddedThisRound.push(card);
+    }
+
     resetForStartOfRound() {
-        this._oldCards.push(...this._cardsPushedThisRound);
-        this._cardsPushedThisRound = [];
+        this._oldCards.push(...this._cardsAddedThisRound);
+        this._cardsAddedThisRound = [];
     }
 }
 

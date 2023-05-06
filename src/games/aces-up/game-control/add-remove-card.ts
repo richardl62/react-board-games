@@ -79,7 +79,7 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
     const sharedPiles = makeSharedPiles(G);
     if(id.area === "sharedPiles") {
-        sharedPiles[id.index].cardsPushedThisRound.push(card);
+        sharedPiles[id.index].add(card);
 
         // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
         // moved. )
