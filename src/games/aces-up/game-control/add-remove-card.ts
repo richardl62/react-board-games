@@ -42,15 +42,23 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 
     throw new Error("Problem getting cards - unexpected card ID");
 }
-
-export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
+export function stealCard(G: ServerData,  id: CardID, thiefCard: CardNonJoker) : CardNonJoker {
 
     if(id.area === "sharedPiles") {
         const sp = makeSharedPiles(G)[id.index];
-        const card = sp.removeTopCard();
-        sAssert(card);
-        return card;
+        return sp.stealTopCard(thiefCard);
     }
+
+    if(id.area === "discardPileCard" || id.area === "discardPileAll") {
+        return removeCard(G, id);
+    }
+
+    throw new Error("Problem removing card - unexpected card ID");
+}
+
+export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
+
+    sAssert(id.area !== "sharedPiles", "removeCard: sharedPiles not supported");
 
     const playerData = G.playerData[id.owner];
     if(id.area === "hand") {
@@ -79,7 +87,7 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
     const sharedPiles = makeSharedPiles(G);
     if(id.area === "sharedPiles") {
-        sharedPiles[id.index].add(card);
+        sharedPiles[id.index].addStandardCard(card);
 
         // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
         // moved. )
@@ -94,7 +102,7 @@ export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
 
     if(id.area === "hand") {
         sAssert(playerData.hand.length < handSize,
-            "Cannot at card to full hand");
+            "Cannot add card to full hand");
         playerData.hand.splice(id.index,0,card);
         return;
     }
@@ -112,10 +120,10 @@ export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
     throw new Error("Cannot add card - unexpected card ID");
 }
 
-export function clearPile(G: ServerData,  id: CardID) : void {
+export function clearPile(G: ServerData,  id: CardID, killerCard: CardNonJoker) : void {
 
     if(id.area === "sharedPiles") {
-        G.sharedPileData[id.index] = makeSharedPileData();
+        makeSharedPiles(G)[id.index].clear(killerCard);
         return;
     }
 

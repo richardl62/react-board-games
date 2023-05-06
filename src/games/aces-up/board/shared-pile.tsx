@@ -10,20 +10,25 @@ export function SharedPile(props: {
 }): JSX.Element  {
     const { pile, pileIndex } = props;
 
-    const { old, thisTurnStandard } = pile.tops();
+    const { old, thisTurnStandard, thisTurnSpecials } = pile.tops();
     // Get the top cards, if any, of the two sub-piles
     const displayCards = [old || null];
-    if ( thisTurnStandard ) {
+    if ( thisTurnSpecials ) {
+        displayCards.push(thisTurnSpecials);
+    } else if ( thisTurnStandard ) {
         displayCards.push(thisTurnStandard);
     }
 
-    const kingOnTop = displayCards.at(-1)?.rank === "K";
+    const displayRank = () => {
+        const topCard = displayCards.at(-1);
+        return topCard && topCard.rank !== pile.rank;
+    };
 
     return <div>
         <CardStack
             cards={displayCards}
             dropID={{ area: "sharedPiles", index: pileIndex }}
         />
-        <TextDiv> {kingOnTop && rankName(pile.rank!)} </TextDiv>
+        <TextDiv> {displayRank() && rankName(pile.rank!)} </TextDiv>
     </div>;
 }

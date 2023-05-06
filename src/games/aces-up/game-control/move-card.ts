@@ -1,7 +1,7 @@
 import { PlayerID } from "boardgame.io";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { addCard, clearPile, removeCard } from "./add-remove-card";
+import { addCard, clearPile, removeCard, stealCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
 import { endTurn, refillHand } from "./end-turn";
@@ -50,12 +50,12 @@ function doMoveCard(
 
     const moveType = getMoveType(arg0, {from, to});
     if (moveType === "steal") {
-        removeCard(G, from);
-        const toCard = removeCard(G, to);
-        addCard(G,from,toCard);
+        const fromCard = removeCard(G, from);
+        const stollenCard = stealCard(G, to, fromCard);
+        addCard(G,from,stollenCard);
     } else if (moveType === "clear") {
-        removeCard(G, from);
-        clearPile(G, to);
+        const fromCard = removeCard(G, from);
+        clearPile(G, to, fromCard);
     } else if(to.area === "hand" && from.area === "hand") {
         sAssert(to.owner === playerID && from.owner === playerID);
         reorderFollowingDrag(playerData.hand, from.index, to.index);
