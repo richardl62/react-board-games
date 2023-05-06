@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
-import { SharedPile as SharedPileClass, makeSharedPile } from "../game-control/shared-pile";
+import { SharedPile as SharedPileClass, makeSharedPiles } from "../game-control/shared-pile";
 import { columnGap } from "../game-support/styles";
 import { SharedPile } from "./shared-pile";
 import { CardNonJoker } from "../../../utils/cards";
@@ -33,8 +33,8 @@ const Piles = styled.div`
 
 export function SharedPiles() : JSX.Element {
     const { G } = useGameContext();
-    const sharedPiles = G.sharedPileData.map(makeSharedPile);
-
+    const sharedPiles = makeSharedPiles(G);
+    
     // Kludge
     const key = (pile: SharedPileClass, index: number) => {
         const name = (card: CardNonJoker | undefined ) =>

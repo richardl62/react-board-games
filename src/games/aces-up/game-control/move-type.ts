@@ -3,7 +3,7 @@ import { CardNonJoker, nextRank } from "../../../utils/cards/types";
 import { debugOptions } from "../game-support/debug-options";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
-import { SharedPile, makeSharedPile } from "./shared-pile";
+import { SharedPile, makeSharedPiles } from "./shared-pile";
 import { ServerData } from "./server-data";
 import { GameOptions, OptionWrapper } from "../game-support/game-options";
 import { Ctx, PlayerID } from "boardgame.io";
@@ -119,10 +119,9 @@ export function moveType(
     // With the expection special cards, which are handled above, only cards of the
     // correct rank can be moved to a player pile.
     if (to.area === "sharedPiles") {
-        const toPile = makeSharedPile(G.sharedPileData[to.index]);
+        const toPile = makeSharedPiles(G)[to.index];
         return moveableToSharedPile(G.options, fromCard, toPile) ? "move" : null;
     }
-
 
     sAssert(false, "Cannot determine if drop is permissable");
 }

@@ -1,4 +1,5 @@
 import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
+import { GameOptions } from "../game-support/game-options";
 
 export interface SharedPileData {
     oldCards: CardNonJoker[];
@@ -15,10 +16,16 @@ export function makeSharedPileData(cards: CardNonJoker[] = []) : SharedPileData 
 export class SharedPile {
     private _oldCards: CardNonJoker[];
     private _cardsPushedThisRound: CardNonJoker[];
+    private _options: GameOptions;
     
-    constructor(data: SharedPileData) {
+    constructor(data: SharedPileData, options: GameOptions) {
         this._oldCards = data.oldCards;
         this._cardsPushedThisRound = data.cardsPushedThisRound;
+        this._options = options;
+    }
+
+    get cardsPushedThisRound() : CardNonJoker[] { // TEMPORARY
+        return this._cardsPushedThisRound;
     }
 
     // Intended for limited use only
@@ -81,9 +88,16 @@ export class SharedPile {
     }
 }
 
-export function makeSharedPile(data: SharedPileData) : SharedPile {
-    return new SharedPile(data);
+// Intended for use with ServerData. But it is not explicitly use
+// to avoid a circular dependency.
+export function makeSharedPiles({sharedPileData, options} :
+    {sharedPileData: SharedPileData[], options: GameOptions}
+) : SharedPile [] {
+    return sharedPileData.map(
+        (data) => new SharedPile(data, options)
+    );  
 }
- 
+
+
 
 

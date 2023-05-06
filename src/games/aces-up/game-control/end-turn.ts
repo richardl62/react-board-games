@@ -4,7 +4,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { makeSharedPile, makeSharedPileData } from "./shared-pile";
+import { makeSharedPileData, makeSharedPiles } from "./shared-pile";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -24,7 +24,7 @@ export function endTurn(
     arg0 : MoveArg0<ServerData>, 
 ) : void {
     const {ctx, G, events} = arg0;
-    const sharedPiles = G.sharedPileData.map(makeSharedPile);
+    const sharedPiles = makeSharedPiles(G);
 
     Object.assign(G, turnStartServerData);
     

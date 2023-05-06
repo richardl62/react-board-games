@@ -3,23 +3,12 @@ import { CardNonJoker } from "../../../utils/cards";
 import { handSize } from "../game-support/config";
 import { CardID } from "./card-id";
 import { ServerData } from "./server-data";
-import { SharedPileData, makeSharedPileData, makeSharedPile } from "./shared-pile";
+import { makeSharedPileData, makeSharedPiles, SharedPile } from "./shared-pile";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     const card = cards.splice(index,1)[0];
     sAssert(card);
     return card;
-}
-
-function addToSharedPile(sharedPileData: SharedPileData[], index: number, card: CardNonJoker) {
-    sharedPileData[index].cardsPushedThisRound.push(card);
-
-    // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
-    // moved. )
-    // Kludge?: Reply on topCard() returning undefined when given an empty pile.
-    if (makeSharedPile(sharedPileData.at(-1)!).top) {
-        sharedPileData.push(makeSharedPileData([]));
-    }
 }
 
 export function emptyPile(G: ServerData,  id: CardID) : boolean {
@@ -34,7 +23,8 @@ export function emptyPile(G: ServerData,  id: CardID) : boolean {
 export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 
     if(id.area === "sharedPiles") {
-        return makeSharedPile(G.sharedPileData[id.index]).top;
+        const sp = new SharedPile(G.sharedPileData[id.index], G.options);
+        return sp.top;
     }
 
     const playerData = G.playerData[id.owner];
@@ -56,7 +46,8 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 
     if(id.area === "sharedPiles") {
-        const card = makeSharedPile(G.sharedPileData[id.index]).removeTopCard();
+        const sp = makeSharedPiles(G)[id.index];
+        const card = sp.removeTopCard();
         sAssert(card);
         return card;
     }
@@ -86,9 +77,16 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 }
 
 export function addCard(G: ServerData,  id: CardID, card: CardNonJoker) : void {
-
+    const sharedPiles = makeSharedPiles(G);
     if(id.area === "sharedPiles") {
-        addToSharedPile(G.sharedPileData, id.index, card);
+        sharedPiles[id.index].cardsPushedThisRound.push(card);
+
+        // Ensure that the last shared pile is empty. (Having an empty pile allows aces to be
+        // moved. )
+        // Kludge?: Reply on topCard() returning undefined when given an empty pile.
+        if (sharedPiles.at(-1)!.top) {
+            G.sharedPileData.push(makeSharedPileData([]));
+        }
         return;
     }
 
