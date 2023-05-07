@@ -6,6 +6,7 @@ import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
 import { CardStack } from "./card-stack";
 import { PlayerInfo } from "./player-info";
+import { makeDiscardPiles } from "../game-control/make-discard-pile";
 
 const PilesDiv = styled.div`
     display: flex;
@@ -18,23 +19,25 @@ interface Props {
 }
 
 export function Discards(props: Props) : JSX.Element {
-    const { playerInfo: { owner } } = props;
+    const { playerInfo: { owner } } = props;    
+    const { G } = useGameContext();
 
-    const { discards } = useGameContext().G.getPlayerData(owner);
+    const discardPiles = makeDiscardPiles(G, owner);
+    
 
-    const discardPiles = discards.map((cards,pileIndex) => {
+    const discardPilesElems = discardPiles.map((pile,pileIndex) => {
         const dropID: CardID = {area:"discardPileAll", pileIndex, owner};
         const dragID = (cardIndex: number) : CardID => {
             return {area:"discardPileCard", pileIndex, cardIndex, owner};
         };
 
-        return <CardStack key={pileIndex} cards={cards} 
+        return <CardStack key={pileIndex} cards={pile.cards} 
             dropID={dropID}
             dragID={dragID}/>;
     });
 
     return <div>
-        <PilesDiv> {discardPiles} </PilesDiv>
+        <PilesDiv> {discardPilesElems} </PilesDiv>
         <AreaLabelBelow>Discards</AreaLabelBelow>
     </div>;
 }

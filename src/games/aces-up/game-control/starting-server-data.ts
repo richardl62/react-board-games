@@ -9,6 +9,7 @@ import { startingRequiredState } from "../../../app-game-support/required-server
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
 import { SetupOptions } from "../game-support/setup-options";
 import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
+import { makeDiscardPileData } from "./discard-pile";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
     options: GameOptions) : PlayerData {
@@ -16,36 +17,38 @@ function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck
     const optionsWrapper = new OptionWrapper(options);
     const notSpecial = (c: CardNonJoker) => !optionsWrapper.isSpecial(c);
 
-    const res : PlayerData = {
-        mainPile: mainPileDeck.drawN(options.mainPileSize, notSpecial),
-
-        hand: handDeck.drawN(handSize),
-
-        discards: [[], [], []],
-
-        cardPlayedToSharedPiles: false,
-    };
+    const discards : CardNonJoker[][] = [[], [], []];
 
     if (debugOptions.prepopulateOrdered) {
         for(const rank of ranks.slice(0,6)) {
-            res.discards[0].push({rank, suit: "C"});
+            discards[0].push({rank, suit: "C"});
         }
         for(let i = 0; i < 10; i++) {
-            res.discards[1].push({
+            discards[1].push({
                 rank: "K", 
                 suit: suits[i%suits.length],
             });
         }
     } else if (debugOptions.prepopulateRandom) {
-        res.discards[0] = mainPileDeck.drawN(6);
-        res.discards[1] = mainPileDeck.drawN(1);
-        res.discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
+        discards[0] = mainPileDeck.drawN(6);
+        discards[1] = mainPileDeck.drawN(1);
+        discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
             {rank: "K", suit: "H"}, {rank: "K", suit: "S"} ];
     }
 
-    return res;
-}
+    return {
+        mainPile: mainPileDeck.drawN(options.mainPileSize, notSpecial),
 
+        hand: handDeck.drawN(handSize),
+
+        discardPileData: [
+            makeDiscardPileData(discards[0]),
+            makeDiscardPileData(discards[1]),
+            makeDiscardPileData(discards[2]),
+        ],
+        cardPlayedToSharedPiles: false,
+    };
+}
 
 export const turnStartServerData: PerTurnServerData = {
     moveToSharedPile: "not done",
@@ -91,7 +94,6 @@ export function startingServerData({ctx, random}: SetupArg0,
 
     const mainPileDeck = new ExtendingDeck(random, []);
     const handDeck = new ExtendingDeck(random, sd.deck);
-
 
     for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
         sd.sharedPileData.push(makeRandomSharedPile(options, random));

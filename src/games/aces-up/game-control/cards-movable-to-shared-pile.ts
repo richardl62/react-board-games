@@ -1,17 +1,22 @@
 import { PlayerID } from "boardgame.io";
 import { CardNonJoker } from "../../../utils/cards";
 import { moveableToSharedPile } from "./move-type";
-import { PlayerData, ServerData } from "./server-data";
+import { ServerData } from "./server-data";
 import { makeSharedPiles } from "./shared-pile";
+import { makeDiscardPiles } from "./make-discard-pile";
 
-function moveableCards(playerData: PlayerData) {
+function moveableCards(G: ServerData, playerID: PlayerID) : CardNonJoker[] {
     const moveable: CardNonJoker[] = [];
-    for(const discardPile of playerData.discards) {
-        if(discardPile.length > 0) {
-            moveable.push(discardPile[discardPile.length-1]);
+
+    const discardPiles = makeDiscardPiles(G, playerID);
+    for(const pile of discardPiles) {
+        const topCard = pile.topCard;
+        if(topCard) {
+            moveable.push(topCard);
         }
     }
 
+    const playerData = G.playerData[playerID];
     for(const card of playerData.hand) {
         moveable.push(card);
     }
@@ -39,5 +44,5 @@ export function cardsMovableToSharedPile(
         return false;
     };
     
-    return moveableCards(G.playerData[playerID]).filter(moveable);
+    return moveableCards(G, playerID).filter(moveable);
 }

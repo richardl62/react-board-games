@@ -3,6 +3,7 @@ import { RequiredServerData } from "../../../app-game-support/required-server-da
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPileData } from "./shared-pile";
 import { GameOptions } from "../game-support/game-options";
+import { DiscardPileData } from "./discard-pile";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.
@@ -13,7 +14,7 @@ export interface PlayerData {
     hand: CardNonJoker[];
 
     /* For each discard pile, the card with index 0 is the most deeply burried. */
-    discards: [CardNonJoker[], CardNonJoker[], CardNonJoker[]];
+    discardPileData: [DiscardPileData, DiscardPileData, DiscardPileData];
 
     cardPlayedToSharedPiles: boolean;
 }

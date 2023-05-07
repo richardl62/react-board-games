@@ -7,6 +7,7 @@ import { SharedPile, makeSharedPiles } from "./shared-pile";
 import { ServerData } from "./server-data";
 import { GameOptions, OptionWrapper } from "../game-support/game-options";
 import { Ctx, PlayerID } from "boardgame.io";
+import { makeDiscardPile } from "./make-discard-pile";
 
 export function moveableToSharedPile(
     options: GameOptions,
@@ -82,7 +83,7 @@ export function moveType(
         return "clear";
     }
 
-    // Moves within a players own discard piles and permitted even if it
+    // Moves within a players own discard piles are permitted even if it
     // is not the top of a pile that is being moved.
     if (isDiscardPile(from) && isDiscardPile(to)) {
         return isCurrentPlayer(from) && isCurrentPlayer(to) ? "move" : null;
@@ -90,8 +91,8 @@ export function moveType(
 
     // With the exception above, only the top card of a discard pile can be moved.
     if(from.area === "discardPileCard") {
-        const fromPile = G.playerData[from.owner].discards[from.pileIndex];
-        if (from.cardIndex !== fromPile.length - 1) {
+        const fromPile = makeDiscardPile(G, from.owner, from.pileIndex);
+        if (from.cardIndex !== fromPile.cards.length - 1) {
             // Not the top of the pile.
             return null;
         }

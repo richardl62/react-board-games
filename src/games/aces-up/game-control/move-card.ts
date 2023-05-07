@@ -1,15 +1,17 @@
 import { PlayerID } from "boardgame.io";
+import { MoveArg0 } from "../../../app-game-support/bgio-types";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { addCard, clearPile, removeCard, stealCard } from "./add-remove-card";
+import { sameJSON } from "../../../utils/same-json";
+import { addCard, clearPile, removeCard, stealTopCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
+import { DiscardPile } from "./discard-pile";
 import { endTurn, refillHand } from "./end-turn";
-import { PlayerData, ServerData, UndoItem } from "./server-data";
-import { makeUndoItem } from "./undo";
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { makeDiscardPiles } from "./make-discard-pile";
 import { moveType as getMoveType } from "./move-type";
-import { sameJSON } from "../../../utils/same-json";
+import { ServerData, UndoItem } from "./server-data";
+import { makeUndoItem } from "./undo";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.options.addToSharedPileEachTurn &&
@@ -18,23 +20,22 @@ function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
 }
 
 function moveWithinDiscardPiles(
-    playerData: PlayerData, 
+    discardPiles: DiscardPile[],
     {from, to}: {from: CardID, to: CardID},
 )
 {
     sAssert(from.area === "discardPileCard");
     sAssert(to.area === "discardPileAll");
-    sAssert(from.pileIndex != to.pileIndex);
+    sAssert(from.pileIndex !== to.pileIndex);
 
-    const fromPile = playerData.discards[from.pileIndex];
-    const toPile = playerData.discards[to.pileIndex];
+    const fromPile = discardPiles[from.pileIndex];
+    const toPile = discardPiles[to.pileIndex];
 
-    const movedCards = fromPile.splice(
-        from.cardIndex, 
-        fromPile.length - from.cardIndex);
-    toPile.push(...movedCards);
+    const movedCards = fromPile.removeFromTop(
+        fromPile.length - from.cardIndex
+    );
+    toPile.add(...movedCards);
 }
-
 
 function doMoveCard(
     arg0 : MoveArg0<ServerData>, 
@@ -51,7 +52,7 @@ function doMoveCard(
     const moveType = getMoveType(arg0, {from, to});
     if (moveType === "steal") {
         const fromCard = removeCard(G, from);
-        const stollenCard = stealCard(G, to, fromCard);
+        const stollenCard = stealTopCard(G, to, fromCard);
         addCard(G,from,stollenCard);
     } else if (moveType === "clear") {
         const fromCard = removeCard(G, from);
@@ -61,7 +62,7 @@ function doMoveCard(
         reorderFollowingDrag(playerData.hand, from.index, to.index);
         undoItem = null;
     } else if(to.area === "discardPileAll" && from.area === "discardPileCard") {
-        moveWithinDiscardPiles(playerData, {from, to});
+        moveWithinDiscardPiles(makeDiscardPiles(G, playerID), {from, to});
     } else {
         const card = removeCard(G, from);
         addCard(G, to, card);

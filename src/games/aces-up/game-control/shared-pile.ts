@@ -109,13 +109,13 @@ export class SharedPile {
     stealTopCard(thiefCard: CardNonJoker) : CardNonJoker {
         sAssert(thiefCard.rank === this._options.thiefRank);
 
-        const stollen = this._thisTurnStandard.pop() ||
+        const stolen = this._thisTurnStandard.pop() ||
             this._old.pop()!;
-        sAssert(stollen, "SharedPile.stealTopCard: no card to steal");
+        sAssert(stolen, "SharedPile.stealTopCard: no card to steal");
 
         this._recentSpecials.push(thiefCard);
 
-        return stollen;
+        return stolen;
     }
 
     /** Add card played this round */

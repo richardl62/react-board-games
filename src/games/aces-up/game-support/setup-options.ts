@@ -8,20 +8,20 @@ export const setupOptions = {
     },
     nSharedPilesAtStart: {
         label: "No of shared piles at start",
-        default: 3,
+        default: 6, // TEMPORARY
         min: 0,
     },
     addToSharedPileEachTurn: {
         label: "Must add to shared pile each turn",
-        default: true,
+        default: false, // TEMPORARY
     },
     canUseOpponentsWastePiles: {
         label: "Can use opponents waste piles",
-        default: false,
+        default: true, // TEMPORARY
     },
     jacksAndQueensSpecial: {
         label: "Jacks and queens special",
-        default: true,
+        default: true, // TEMPORARY
     }
 };
 
