@@ -92,7 +92,7 @@ export function moveType(
     // With the exception above, only the top card of a discard pile can be moved.
     if(from.area === "discardPileCard") {
         const fromPile = makeDiscardPile(G, from.owner, from.pileIndex);
-        if (from.cardIndex !== fromPile.cards.length - 1) {
+        if (from.cardIndex !== fromPile.length - 1) {
             // Not the top of the pile.
             return null;
         }

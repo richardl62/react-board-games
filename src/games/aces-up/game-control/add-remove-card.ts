@@ -34,7 +34,9 @@ export function getCard(G: ServerData,  id: CardID) : CardNonJoker | undefined {
 
     if(id.area === "discardPileCard") {
         const pile = makeDiscardPile(G, id.owner, id.pileIndex);
-        return pile.cards[id.cardIndex];
+        sAssert(pile.length === id.cardIndex + 1, 
+            "getCard: unexpected card index in discard pile");
+        return pile.topCard;
     }
 
     if(id.area === "playerPile") {
@@ -69,7 +71,7 @@ export function removeCard(G: ServerData,  id: CardID) : CardNonJoker {
 
     if(id.area === "discardPileCard") {
         const pile = makeDiscardPile(G, id.owner, id.pileIndex);
-        sAssert(pile.cards.length === id.cardIndex + 1,  
+        sAssert(pile.length === id.cardIndex + 1,  
             "removeCard: attempt to remove non-top card from discard pile");
         return pile.removeFromTop(1)[0];
     }

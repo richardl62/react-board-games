@@ -5,6 +5,7 @@ import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 import { makeSharedPileData, makeSharedPiles } from "./shared-pile";
+import { makeDiscardPiles } from "./make-discard-pile";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
@@ -34,6 +35,14 @@ export function endTurn(
 
     for(const sharedPile of sharedPiles) {
         sharedPile.resetForStartOfRound();
+    }
+
+    // Iterate over all players and all discard piles, resetting them.
+    for (const playerID of Object.keys(G.playerData)) {
+        const discardPiles = makeDiscardPiles(G, playerID);
+        for(const discardPile of discardPiles) {
+            discardPile.resetForStartOfRound();
+        }
     }
 
     // Clear any full or empty shared piles.

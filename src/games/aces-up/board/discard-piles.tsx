@@ -7,6 +7,7 @@ import { AreaLabelBelow } from "./area-label";
 import { CardStack } from "./card-stack";
 import { PlayerInfo } from "./player-info";
 import { makeDiscardPiles } from "../game-control/make-discard-pile";
+import { DiscardPile as DiscardPileClass } from "../game-control/discard-pile";
 
 const PilesDiv = styled.div`
     display: flex;
@@ -14,30 +15,39 @@ const PilesDiv = styled.div`
     column-gap: ${columnGap.betweenCards};
 `;
 
-interface Props {
-    playerInfo: PlayerInfo;
+function DiscardPile({pile, pileIndex, owner}: {
+    pile: DiscardPileClass;
+    pileIndex: number;
+    owner: string;
+}) : JSX.Element {
+    const  {standard, recentSpecials} = pile.cards;
+    const cards = [...standard, ...recentSpecials];
+
+    const dropID: CardID = {area:"discardPileAll", pileIndex, owner};
+    const dragID = (cardIndex: number) : CardID => {
+        return {area:"discardPileCard", pileIndex, cardIndex, owner};
+    };
+
+    return <CardStack key={pileIndex} cards={cards} 
+        dropID={dropID}
+        dragID={dragID}/>;
 }
 
-export function Discards(props: Props) : JSX.Element {
+export function Discards(props: {
+    playerInfo: PlayerInfo;
+}) : JSX.Element {
     const { playerInfo: { owner } } = props;    
     const { G } = useGameContext();
 
     const discardPiles = makeDiscardPiles(G, owner);
     
 
-    const discardPilesElems = discardPiles.map((pile,pileIndex) => {
-        const dropID: CardID = {area:"discardPileAll", pileIndex, owner};
-        const dragID = (cardIndex: number) : CardID => {
-            return {area:"discardPileCard", pileIndex, cardIndex, owner};
-        };
-
-        return <CardStack key={pileIndex} cards={pile.cards} 
-            dropID={dropID}
-            dragID={dragID}/>;
-    });
-
     return <div>
-        <PilesDiv> {discardPilesElems} </PilesDiv>
+        <PilesDiv> 
+            {discardPiles.map((pile, pileIndex) =>
+                <DiscardPile key={pileIndex} pile={pile} pileIndex={pileIndex} owner={owner}/>
+            )}
+        </PilesDiv>
         <AreaLabelBelow>Discards</AreaLabelBelow>
     </div>;
 }
