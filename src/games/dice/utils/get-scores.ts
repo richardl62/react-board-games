@@ -1,25 +1,41 @@
-import { DiceScore } from "./dice-score";
 
-// Get the highest score available from the dice
+import { DiceScore, zeroScore, totalScore } from "./dice-score";
+
+/** Get a score for the given dice faces.
+ * This will use all the dice if possible, and within that constraint
+ * will give the hightest score possible.  For example
+ * 1, 1, 1, 1, 2, 2 scores 500 (not 1100) but
+ * 1, 1, 1, 1, 5, 5 scores 1200 (not 500).
+*/ 
 export function getScores(faces: number[]): DiceScore {
 
-    const scores : DiceScore ={
-        allSame: 0,
-        allDifferent: 0,
-        threeOfAKind: 0,
-        threePairs: 0,
-        aces: 0,
-        fives: 0
+    const doGetScores = (
+        { includeThreePairs }: { includeThreePairs: boolean }) => {
+        
+        const sortedFaces = [...faces].sort();    
+        const scores: DiceScore = { ...zeroScore };
+
+        checkAllSame(sortedFaces, scores);
+        checkAllDifferent(sortedFaces, scores);
+        includeThreePairs && checkThreePairs(sortedFaces, scores);
+        checkThreeOfAKind(sortedFaces, scores);
+        checkAces(sortedFaces, scores);
+        checkFives(sortedFaces, scores);
+
+        return {scores, unusedFaces: sortedFaces};
     };
 
-    const sortedFaces = [...faces].sort();
+    let { scores } = doGetScores({ includeThreePairs: true });
+    
+    if ( scores.threePairs > 0) {
+        // Check if a higher score is possible while still using all the faces
+        const { scores: alternateScores, unusedFaces }
+            = doGetScores({ includeThreePairs: false });
 
-    checkAllSame(sortedFaces, scores);
-    checkAllDifferent(sortedFaces, scores);
-    checkThreeOfAKind(sortedFaces, scores);
-    checkThreePairs(sortedFaces, scores);
-    checkAces(sortedFaces, scores);
-    checkFives(sortedFaces, scores);
+        if (unusedFaces.length === 0 && totalScore(alternateScores) > totalScore(scores)) {
+            scores = alternateScores;
+        }
+    }
 
     return scores;
 }
@@ -29,7 +45,7 @@ function checkAllSame(sortedFaces: number[], scores: DiceScore) {
     if ( sortedFaces.length === 6 &&
         sortedFaces.every(face => face === sortedFaces[0])) {
         scores.allSame += 5000;
-        sortedFaces.splice(0, sortedFaces.length);
+        sortedFaces.splice(0);
     }
 }
 
@@ -42,22 +58,7 @@ function checkAllDifferent(sortedFaces: number[], scores: DiceScore) {
     }
 
     scores.allDifferent += 1500;
-    sortedFaces.splice(0, sortedFaces.length);
-}
-
-function checkThreeOfAKind(sortedFaces: number[], scores: DiceScore) {
-
-    const doCheck = () => {
-        for (let i = 0; i < sortedFaces.length; ++i) {
-            if (sortedFaces[i] === sortedFaces[i + 2]) {
-                scores.threeOfAKind += sortedFaces[0] === 1 ? 1000 : sortedFaces[0] * 100;
-                sortedFaces.splice(i, 3);
-                return true;
-            }
-        }
-    };
-
-    while(doCheck());
+    sortedFaces.splice(0);
 }
 
 function checkThreePairs(sortedFaces: number[], scores: DiceScore) {
@@ -68,8 +69,24 @@ function checkThreePairs(sortedFaces: number[], scores: DiceScore) {
         sortedFaces[4] === sortedFaces[5])
     {
         scores.threePairs += 500;
-        sortedFaces.splice(0, sortedFaces.length);
+        sortedFaces.splice(0);
     }
+}
+
+function checkThreeOfAKind(sortedFaces: number[], scores: DiceScore) {
+
+    const doCheck = () => {
+        for (let i = 0; i < sortedFaces.length; ++i) {
+            if (sortedFaces[i] === sortedFaces[i + 2]) {
+                const spliced = sortedFaces.splice(i, 3);
+                scores.threeOfAKind += spliced[0] === 1 ? 1000 : spliced[0] * 100;
+
+                return true; 
+            }
+        }
+    };
+
+    while(doCheck());
 }
 
 function removeAllMatches(arr: number[], value: number) : number {

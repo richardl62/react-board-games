@@ -26,3 +26,7 @@ export const zeroScore: DiceScore = {
     aces: 0,
     fives: 0
 };
+
+export function totalScore(score: DiceScore): number {
+    return Object.values(score).reduce((a, b) => a + b);
+}
