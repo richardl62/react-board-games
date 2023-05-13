@@ -17,3 +17,12 @@ export function categoryName(category: keyof DiceScore): string {
     case "fives": return "Fives";
     }
 }
+
+export const zeroScore: DiceScore = {
+    allSame: 0, 
+    allDifferent: 0,
+    threeOfAKind: 0,
+    threePairs: 0,
+    aces: 0,
+    fives: 0
+};
