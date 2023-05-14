@@ -20,7 +20,7 @@ const sharedPilesHeight = `calc(${cardStackHeight(2)}px + 2em)`;
 
 const OuterDiv = styled.div`
     align-self: start;
-    height: ${sharedPilesHeight};
+    min-height: ${sharedPilesHeight};
 
     margin-left: ${cardSize.width/2}px;
 `;
