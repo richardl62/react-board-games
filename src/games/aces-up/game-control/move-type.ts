@@ -42,6 +42,11 @@ export function moveType(
     const isDiscardPile = (card: CardID) => card.area === "discardPileAll" ||
         card.area === "discardPileCard";
 
+    const discardPileIndex = (card: CardID) => {
+        sAssert(card.area === "discardPileAll" || card.area === "discardPileCard");
+        return card.pileIndex;
+    };
+
     // Move within a hand
     if ( to.area === "hand" && from.area === "hand" ) {
         sAssert(isCurrentPlayer(to) && isCurrentPlayer(from));
@@ -86,7 +91,8 @@ export function moveType(
     // Moves within a players own discard piles are permitted even if it
     // is not the top of a pile that is being moved.
     if (isDiscardPile(from) && isDiscardPile(to)) {
-        return isCurrentPlayer(from) && isCurrentPlayer(to) ? "move" : null;
+        return isCurrentPlayer(from) && isCurrentPlayer(to) &&
+            discardPileIndex(from) !== discardPileIndex(to) ? "move" : null;
     }
 
     // With the exception above, only the top card of a discard pile can be moved.
