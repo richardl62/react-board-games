@@ -5,6 +5,11 @@ import { SetupOptions } from "../options";
 export interface ServerData extends RequiredServerData{
     faces: number[];
     held: boolean[];
+    scoreToBeat: number;
+    scoreThisTurn: {
+        dice: number;
+        heldOver: number;
+    }
     rollCount: number;
 }
 
@@ -20,6 +25,11 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
         faces,
         held,
         rollCount: 0,
+        scoreToBeat: 0,
+        scoreThisTurn: {
+            dice: 0,
+            heldOver: 0,
+        },
         ...startingRequiredState(),
     };
 }
