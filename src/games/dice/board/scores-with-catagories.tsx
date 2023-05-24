@@ -13,7 +13,7 @@ const Score = styled.div`
     }
 `;
 
-export function ShowScores({faces, held}: {
+export function ShowWithCategories({faces, held}: {
     faces: number[];
     held: boolean[];
 }) :  JSX.Element 
