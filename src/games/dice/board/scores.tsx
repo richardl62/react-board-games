@@ -1,6 +1,7 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
-import { ShowWithCategories } from "./scores-with-catagories";
+import { getScores } from "../utils/get-scores";
+import { scoringCategoryNames, totalScore } from "../utils/dice-score";
 
 function score(text: string, score: number) {
     return <span>{`${text}: ${score} `}</span>;
@@ -8,17 +9,27 @@ function score(text: string, score: number) {
 
 export function Scores() : JSX.Element {
     const {G: {faces, held, scoreToBeat, 
-        scoreThisTurn: {dice, heldOver}, 
+        scoreThisTurn: {current, carriedOver: heldOver}, 
     }} = useGameContext();
+
+    const heldFaces = faces.filter((_, index) => held[index]);
+    const heldScores = getScores(heldFaces);
+
+    const totalHeld = totalScore(heldScores);
+    const categoryNames = scoringCategoryNames(heldScores).join(", ");
 
     return <div>
         <div>{score("Score to beat", scoreToBeat)}</div>
 
         <div>
-            {score("Dice this turn", dice)}
-            {score("Previous", heldOver)}
-            {score("total", dice+heldOver)}
+            {score("Previous dice score", current)}
+            {score("Carried over", heldOver)} 
+            {score("Total", current + heldOver)}
         </div>
-        <ShowWithCategories faces={faces} held={held} />
+        <div>
+            {score("Held dice", totalHeld)}
+            {totalHeld > 0 && `(${categoryNames})`}
+
+        </div>
     </div>;
 }

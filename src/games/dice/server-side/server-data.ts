@@ -7,8 +7,8 @@ export interface ServerData extends RequiredServerData{
     held: boolean[];
     scoreToBeat: number;
     scoreThisTurn: {
-        dice: number;
-        heldOver: number;
+        current: number;
+        carriedOver: number;
     }
     rollCount: number;
 }
@@ -27,8 +27,11 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
         rollCount: 0,
         scoreToBeat: 0,
         scoreThisTurn: {
-            dice: 0,
-            heldOver: 0,
+            /** The score from the dice, excludes scores carried over from earlier in the turn */
+            current: 0,
+
+            /** The score carried over from earlier in the turn */
+            carriedOver: 0,
         },
         ...startingRequiredState(),
     };
