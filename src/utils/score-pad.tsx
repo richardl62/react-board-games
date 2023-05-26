@@ -107,21 +107,3 @@ export function ScorePad({name, active, score, partialScore, previousScores}: {
         </TotalScoresDiv>
     </ScorePadDiv>;
 }
-
-const SampleScorePadsDiv = styled.div`
-    display: block;
-    > * {
-        min-width: 10em;
-    }
-    /* Set gap between children */
-    > * + * {
-        margin-left: 1em;
-    }
-`;
-// Some ScorePad samples
-export function SampleScorePads() : JSX.Element {
-    return <SampleScorePadsDiv>
-        <ScorePad name="Player 1" active={true} score={10} partialScore={null} previousScores={[1000, 2, 3, 4, 5]} />
-        <ScorePad name="Player 2" active={false} score={null} partialScore={20} previousScores={[1, 2, 3, 4, 5]} />
-    </SampleScorePadsDiv>;
-}

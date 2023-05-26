@@ -16,16 +16,24 @@ export interface ServerData extends RequiredServerData{
         prevRollHeld: number;
     }
 
+    playerScores: {[playerID: string]: number[]};
+
     rollCount: number;
     bustRollCount: number;
 }
 
-export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData {
     const faces = [];
     const held = [];
     for (let i = 0; i < options.numberOfDice; i++) {
         faces.push((i % 6) + 1); // For now
         held.push(false);
+    }
+    
+    const playerScores : ServerData["playerScores"] = {};
+
+    for(const pid in ctx.playOrder) {
+        playerScores[pid] = [1000, 750];
     }
 
     return {
@@ -44,6 +52,8 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
 
             prevRollHeld: 0,
         },
+
+        playerScores,
         
         rollCount: 0,
         bustRollCount: -1,

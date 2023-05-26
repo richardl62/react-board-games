@@ -1,9 +1,9 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
 import { DiceSet } from "../../../utils/dice/dice-set";
-import { SampleScorePads } from "../../../utils/score-pad";
 import { Scores } from "./scores";
 import { RollBustStop } from "./roll-bust-stop";
+import { ScorePads } from "./score-pads";
 
 function Board() : JSX.Element {
     const {G: {faces, rollCount, held }, moves} = useGameContext();
@@ -17,7 +17,7 @@ function Board() : JSX.Element {
         />
         <Scores/>
         <RollBustStop/>
-        <SampleScorePads />
+        <ScorePads />
     </div>;
 }
 
