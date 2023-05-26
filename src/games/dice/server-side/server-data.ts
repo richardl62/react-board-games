@@ -6,10 +6,16 @@ export interface ServerData extends RequiredServerData{
     faces: number[];
     held: boolean[];
     scoreToBeat: number;
-    scoreThisTurn: {
-        current: number;
-        carriedOver: number;
+    scoreCarriedOver: number;
+
+    /** The score from the dice, excludes scores carried over from earlier in the turn */
+    diceScores: {
+        held: number;
+        heldCategories: string[];
+        max: number;
+        prevRollHeld: number;
     }
+
     rollCount: number;
 }
 
@@ -25,13 +31,18 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
         faces,
         held,
         rollCount: 0,
-        scoreToBeat: 0,
-        scoreThisTurn: {
-            /** The score from the dice, excludes scores carried over from earlier in the turn */
-            current: 0,
 
-            /** The score carried over from earlier in the turn */
-            carriedOver: 0,
+        scoreToBeat: 0,
+        scoreCarriedOver: 0,
+
+        /** The score from the dice, excludes scores carried over from earlier in the turn */
+        diceScores: {
+            held: 0,
+            heldCategories: [],
+
+            max: 0,
+
+            prevRollHeld: 0,
         },
         ...startingRequiredState(),
     };

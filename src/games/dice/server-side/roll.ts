@@ -1,5 +1,6 @@
 import { ServerData } from "./server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { getDiceScores } from "./get-dice-scores";
 
 export function roll(
     { G, random }: MoveArg0<ServerData>,
@@ -23,6 +24,13 @@ export function roll(
 
     G.faces = newFaces;
     G.held = newHeld;
+
+    // Calculate the score from the dice
+    G.diceScores = {
+        prevRollHeld: G.diceScores.held,
+        ...getDiceScores(G.faces, G.held),
+    };
+
 
     G.rollCount++;
 }
