@@ -17,6 +17,7 @@ export interface ServerData extends RequiredServerData{
     }
 
     rollCount: number;
+    bustRollCount: number;
 }
 
 export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
@@ -30,7 +31,6 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
     return {
         faces,
         held,
-        rollCount: 0,
 
         scoreToBeat: 0,
         scoreCarriedOver: 0,
@@ -44,6 +44,10 @@ export function startingServerData(_arg0: SetupArg0, options: SetupOptions): Ser
 
             prevRollHeld: 0,
         },
+        
+        rollCount: 0,
+        bustRollCount: -1,
+
         ...startingRequiredState(),
     };
 }
