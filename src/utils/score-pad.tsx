@@ -72,7 +72,7 @@ export function ScorePad({name, active, score, partialScore, previousScores}: {
     active: boolean,
     
     /** The current score, excluding partial scores */
-    score: number | null,
+    score?: number | null,
 
     /** The current partial score. Not displayed if undefined */
     partialScore?: number | null,

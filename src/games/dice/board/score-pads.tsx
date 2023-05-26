@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ScorePad } from "../../../utils/score-pad";
+import { useGameContext } from "../client-side/game-context";
 
 const ScorePadsDiv = styled.div`
     display: block;
@@ -15,8 +16,18 @@ const ScorePadsDiv = styled.div`
 `;
 // Some ScorePad samples
 export function ScorePads() : JSX.Element {
-    return <ScorePadsDiv>
-        <ScorePad name="Player 1" active={true} score={10} partialScore={null} previousScores={[1000, 2, 3, 4, 5]} />
-        <ScorePad name="Player 2" active={false} score={null} partialScore={20} previousScores={[1, 2, 3, 4, 5]} />
-    </ScorePadsDiv>;
+    const { playerID, G : { playerScores}, getPlayerName } = useGameContext();
+
+    const scorePads = [];
+    for (const pid in playerScores) {
+        const playerScore = playerScores[pid];
+        scorePads.push(<ScorePad
+            key={pid}
+            name={getPlayerName(pid)}
+            active={pid === playerID}
+            previousScores={playerScore}
+        />);
+    }
+
+    return <ScorePadsDiv> {scorePads} </ScorePadsDiv>;
 }
