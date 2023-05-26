@@ -1,28 +1,39 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
+import { PlayerActions, availablePlayerActions } from "../utils/available-player-actions";
 
 export function RollBustStop() : JSX.Element {
-    const { 
-        G: {rollCount, turnOverRollCount, diceScores, scoreCarriedOver}, 
-        moves, playerID 
-    } = useGameContext();
-    const turnOver = turnOverRollCount === rollCount;
+    const { G, moves, playerID } = useGameContext();
 
-    const onBust = () => {
-        moves.turnOver();
-    };
-
-    const onDone = () => {
-        moves.recordScore({playerID, 
-            score: diceScores.held + scoreCarriedOver,
-        });
-        moves.turnOver();
+    const availableActions = availablePlayerActions(G);
+    
+    const onClick = (action: PlayerActions) => {
+        if(action === "roll") {
+            moves.roll();
+        } else if (action === "rollAll") {
+            moves.rollAll();
+        } else if (action === "bust") {
+            moves.turnOver();
+        } else if (action === "done") {
+            moves.recordScore({
+                playerID,
+                score: G.diceScores.held + G.scoreCarriedOver,
+            });
+            moves.turnOver();
+        } else {
+            throw new Error(`Unrecognised action: ${action}`);
+        }
     };
 
     return <div>
-        <button onClick={() => moves.roll()} disabled={turnOver}>Roll</button>
-        <button onClick={() => moves.rollAll()}>Roll All</button>
-        <button onClick={onDone}>Done</button>
-        <button onClick={onBust}>Bust</button>
+        {availableActions.map(action => 
+            <button
+                type="button" 
+                key={action} 
+                onClick={() => onClick(action)}
+            >
+                {action}
+            </button>
+        )}
     </div>;
 }

@@ -56,7 +56,8 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         playerScores,
         
         rollCount: 0,
-        turnOverRollCount: -1,
+        // Kludge?: Treat the start of the game as the end of a turn.
+        turnOverRollCount: 0,
 
         ...startingRequiredState(),
     };
