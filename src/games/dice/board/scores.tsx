@@ -19,7 +19,9 @@ export function Scores() : JSX.Element {
         <div>
             {score("Held dice", diceScores.held)}
             {diceScores.held > 0 && `(${diceScores.heldCategories.join(", ")})`}
-
+        </div>
+        <div>
+            Non-scoring dice: {diceScores.nonScoringFaces}
         </div>
     </div>;
 }

@@ -10,6 +10,7 @@ export function turnOver (
     G.diceScores = {
         held: 0,
         heldCategories: [],
+        nonScoringFaces: [...G.faces],
         max: 0,
         prevRollHeld: 0,
     };

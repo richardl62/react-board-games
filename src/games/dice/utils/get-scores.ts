@@ -7,8 +7,9 @@ import { DiceScore, zeroScore, totalScore } from "./dice-score";
  * 1, 1, 1, 1, 2, 2 scores 500 (not 1100) but
  * 1, 1, 1, 1, 5, 5 scores 1200 (not 500).
 */ 
-export function getScores(faces: number[]): DiceScore {
-
+export function getScores(faces: number[]): 
+    {scores: DiceScore, unusedFaces: number[]} 
+{
     const doGetScores = (
         { includeThreePairs }: { includeThreePairs: boolean }) => {
         
@@ -25,7 +26,10 @@ export function getScores(faces: number[]): DiceScore {
         return {scores, unusedFaces: sortedFaces};
     };
 
-    let { scores } = doGetScores({ includeThreePairs: true });
+    let { scores, 
+        // eslint-disable-next-line prefer-const
+        unusedFaces: originalUnusedFaces, 
+    } = doGetScores({ includeThreePairs: true });
     
     if ( scores.threePairs > 0) {
         // Check if a higher score is possible while still using all the faces
@@ -37,7 +41,7 @@ export function getScores(faces: number[]): DiceScore {
         }
     }
 
-    return scores;
+    return {scores, unusedFaces: originalUnusedFaces};
 }
 
 

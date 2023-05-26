@@ -8,12 +8,15 @@ export function getDiceScores(
     held: boolean[],
 )  : Omit<ServerData["diceScores"],"prevRollHeld"> {
     const heldFaces = faces.filter((_, i) => held[i]);
-    const heldScores = getScores(heldFaces);
+    const unheldFaces = faces.filter((_, i) => !held[i]);
 
+    const {scores: heldScores, unusedFaces: unusedHeldFaces} = getScores(heldFaces);
+    const {scores: allDiceScores} = getScores(faces);
     return {
         held: totalScore(heldScores),
         heldCategories: scoringCategoryNames(heldScores),
-        max: totalScore(getScores(faces)),
+        nonScoringFaces: [...unheldFaces, ...unusedHeldFaces,],
+        max: totalScore(allDiceScores),
     };
 }
 

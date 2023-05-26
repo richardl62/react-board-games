@@ -12,6 +12,9 @@ export interface ServerData extends RequiredServerData{
     diceScores: {
         held: number;
         heldCategories: string[];
+
+        nonScoringFaces: number[];
+
         max: number;
         prevRollHeld: number;
     }
@@ -47,6 +50,7 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         diceScores: {
             held: 0,
             heldCategories: [],
+            nonScoringFaces: [...faces],
 
             max: 0,
 
