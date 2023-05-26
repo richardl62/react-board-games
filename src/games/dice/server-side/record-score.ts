@@ -1,9 +1,9 @@
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
 import { ServerData } from "./server-data";
 
-export function bust (
+export function recordScore (
     { G }: MoveArg0<ServerData>,
-    _arg: void,  
+    { playerID, score}: {playerID: string, score: number},
 ): void {
-    G.bustRollCount = G.rollCount;
+    G.playerScores[playerID].push(score);
 }

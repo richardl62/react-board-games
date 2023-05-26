@@ -1,14 +1,16 @@
 import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
-import { bust } from "./bust";
+import { recordScore } from "./record-score";
 import { roll } from "./roll";
 import { rollAll } from "./roll-all";
 import { setHeld } from "./set-held";
+import { turnOver } from "./turn-over";
 
 export const allFuncs = {
-    bust,
+    recordScore,
     roll,
-    rollAll: rollAll,
+    rollAll,
     setHeld,
+    turnOver,
 };
 
 export const bgioMoves = wrapMoveFunctions(allFuncs);

@@ -19,7 +19,7 @@ export interface ServerData extends RequiredServerData{
     playerScores: {[playerID: string]: number[]};
 
     rollCount: number;
-    bustRollCount: number;
+    turnOverRollCount: number;
 }
 
 export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData {
@@ -33,7 +33,7 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
     const playerScores : ServerData["playerScores"] = {};
 
     for(const pid in ctx.playOrder) {
-        playerScores[pid] = [1000, 750];
+        playerScores[pid] = [];
     }
 
     return {
@@ -56,7 +56,7 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         playerScores,
         
         rollCount: 0,
-        bustRollCount: -1,
+        turnOverRollCount: -1,
 
         ...startingRequiredState(),
     };
