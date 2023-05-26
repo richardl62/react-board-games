@@ -3,5 +3,8 @@ import { useGameContext } from "../client-side/game-context";
 
 export function RollBustStop() : JSX.Element {
     const { moves } = useGameContext();
-    return <button onClick={() => moves.roll()}>Roll</button>;
+    return <div>
+        <button onClick={() => moves.roll()}>Roll</button>
+        <button onClick={() => moves.rollAll()}>Roll All</button>
+    </div>;
 }
