@@ -6,14 +6,15 @@ import { RollBustStop } from "./roll-bust-stop";
 import { ScorePads } from "./score-pads";
 
 function Board() : JSX.Element {
-    const {G: {faces, rollCount, held }, moves} = useGameContext();
-
+    const {G: {faces, rollCount, held, turnOverRollCount }, moves} = useGameContext();
+    const turnOver = turnOverRollCount === rollCount;
+    
     return <div>
         <DiceSet 
             faces={faces} 
             rollIfChanged={rollCount === 0 ? undefined : rollCount}
             held={held}
-            setHeld={(index, held) => moves.setHeld({index, held})}
+            setHeld={(index, held) => turnOver || moves.setHeld({index, held})}
         />
         <Scores/>
         <RollBustStop/>
