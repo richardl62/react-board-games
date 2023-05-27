@@ -16,16 +16,19 @@ const ScorePadsDiv = styled.div`
 `;
 // Some ScorePad samples
 export function ScorePads() : JSX.Element {
-    const { playerID, G : { playerScores}, getPlayerName } = useGameContext();
+    const { playerID, G : { playerScores, diceScores, scoreCarriedOver}, getPlayerName } = useGameContext();
 
     const scorePads = [];
     for (const pid in playerScores) {
         const playerScore = playerScores[pid];
+        const active = pid === playerID;
+        const score = active ? diceScores.held + scoreCarriedOver : undefined;
         scorePads.push(<ScorePad
             key={pid}
             name={getPlayerName(pid)}
-            active={pid === playerID}
+            active={active}
             previousScores={playerScore}
+            score={score}
         />);
     }
 

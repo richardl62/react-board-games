@@ -90,7 +90,7 @@ function showOfflineOptions(values: OptionValues) {
     return res;
 }
 
-function showDebugOptions(values: OptionValues) {
+export function showDebugOptions(values: OptionValues) {
     const res = values.showDebugOptions;
     sAssert(typeof res === "boolean");
 

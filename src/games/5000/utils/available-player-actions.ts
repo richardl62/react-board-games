@@ -9,14 +9,15 @@ export interface PlayerActions {
 
 // Return the available actions for the current player
 export function availablePlayerActions(
-    { diceScores, held, turnOverRollCount, rollCount, scoreCarriedOver, scoreToBeat }: ServerData
+    { diceScores, held, turnOverRollCount, rollCount, scoreCarriedOver, 
+        scoreToBeat, options }: ServerData
 ): PlayerActions {
     const actions : PlayerActions = {};
     if (turnOverRollCount === rollCount) {
         actions.rollAll = true;
-    } else if (diceScores.max <= diceScores.prevRollHeld) {
+    } else if (diceScores.max <= diceScores.prevRollHeld && !options.neverBust) {
         actions.bust = true;
-    } else if (diceScores.held <= diceScores.prevRollHeld) {
+    } else if (diceScores.held <= diceScores.prevRollHeld && !options.neverBust) {
         // No available actions.
     } else {
         const stb = scoreToBeat? scoreToBeat.value : 0;
