@@ -12,7 +12,7 @@ const Label = styled.span`
 `;
 
 export function Scores() : JSX.Element {
-    const {G: {scoreCarriedOver, diceScores, scoreToBeat}, getPlayerName} = useGameContext();
+    const {G: {scoreCarriedOver, diceScores, scoreToBeat, held}, getPlayerName} = useGameContext();
 
     let scoreToBeatText = "";
     if(scoreToBeat) {
@@ -22,11 +22,7 @@ export function Scores() : JSX.Element {
         }
     }
 
-    let scoreLastRollText = `${diceScores.prevRollHeld}`;
-    if (scoreCarriedOver > 0) {
-        scoreLastRollText += ` + ${scoreCarriedOver} carried over`;
-    }
-    
+
     let heldText = `${diceScores.held}`;
     if(diceScores.held > 0) {
         heldText += ` (${diceScores.heldCategories.join(", ")})`;
@@ -37,12 +33,20 @@ export function Scores() : JSX.Element {
             <Label>Score to beat: </Label>
             <span>{scoreToBeatText}</span>
         </div>}
-        <div>
+
+        {diceScores.prevRollHeld > 0 && <div>
             <Label>Last roll: </Label>
-            <span>{scoreLastRollText}</span>
-        </div>
-        <div>
-            Held: {heldText}
-        </div>
+            <span>{diceScores.prevRollHeld}</span>
+        </div>}
+
+        {held.includes(true) && <div>
+            <Label>Held dice: </Label>
+            <span>{heldText}</span>
+        </div>}
+
+        {scoreCarriedOver > 0 && <div>
+            <Label>Carried over: </Label>
+            <span>{scoreCarriedOver}</span>
+        </div>}
     </OuterDiv>;
 }

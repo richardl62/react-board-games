@@ -5,6 +5,7 @@ import { useGameContext } from "../client-side/game-context";
 
 const ScorePadsDiv = styled.div`
     display: block;
+    background-color: #333;
     /* Set min width of the individual ScorePads */
     > * {
         min-width: 10em;
@@ -14,7 +15,7 @@ const ScorePadsDiv = styled.div`
         margin-left: 1em;
     }
 `;
-// Some ScorePad samples
+
 export function ScorePads() : JSX.Element {
     const { playerID, G : { playerScores, diceScores, scoreCarriedOver}, getPlayerName } = useGameContext();
 
