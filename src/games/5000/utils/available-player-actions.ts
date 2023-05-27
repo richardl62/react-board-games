@@ -1,29 +1,35 @@
 import { ServerData } from "../server-side/server-data";
 
-export type PlayerActions = "roll" | "rollAll" | "done" | "bust"; 
+export interface PlayerActions {
+    roll?: boolean;
+    rollAll?: boolean;
+    endTurn?: boolean;
+    bust?: boolean;
+}
 
 // Return the available actions for the current player
 export function availablePlayerActions(
     { diceScores, held, turnOverRollCount, rollCount, scoreCarriedOver, scoreToBeat }: ServerData
-): PlayerActions[] {
+): PlayerActions {
+    const actions : PlayerActions = {};
     if (turnOverRollCount === rollCount) {
-        return ["rollAll"];
+        actions.rollAll = true;
     } else if (diceScores.max <= diceScores.prevRollHeld) {
-        return ["bust"];
+        actions.bust = true;
     } else if (diceScores.held <= diceScores.prevRollHeld) {
-        return [];
+        // No available actions.
     } else {
-        const actions: PlayerActions[] = [];
         const stb = scoreToBeat? scoreToBeat.value : 0;
         if (diceScores.held + scoreCarriedOver > stb) {
-            actions.push("done");
+            actions.endTurn = true;
         }
 
         if (diceScores.nonScoringFaces.length === 0) {
-            actions.push("rollAll");
+            actions.rollAll = true;
         } else if (held.includes(false)) {
-            actions.push("roll");
+            actions.roll = true;
         } 
-        return actions;
     }
+
+    return actions;
 }

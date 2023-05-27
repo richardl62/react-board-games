@@ -2,7 +2,7 @@ import React from "react";
 import { useGameContext } from "../client-side/game-context";
 import { DiceSet } from "../../../utils/dice/dice-set";
 import { Scores } from "./scores";
-import { RollBustStop } from "./roll-bust-stop";
+import { PlayerOptions } from "./player-options";
 import { ScorePads } from "./score-pads";
 
 function Board() : JSX.Element {
@@ -17,7 +17,7 @@ function Board() : JSX.Element {
             setHeld={(index, held) => turnOver || moves.setHeld({index, held})}
         />
         <Scores/>
-        <RollBustStop/>
+        <PlayerOptions/>
         <ScorePads />
     </div>;
 }

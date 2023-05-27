@@ -2,11 +2,11 @@ import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-suppor
 import { roll } from "./roll";
 import { rollAll } from "./roll-all";
 import { setHeld } from "./set-held";
-import { bust, endTurnWithScore } from "./end-turn";
+import { endTurnBust, endTurnNotBust } from "./end-turn";
 
 export const allFuncs = {
-    bust,
-    endTurnWithScore,
+    endTurnBust,
+    endTurnNotBust,
     roll,
     rollAll,
     setHeld,

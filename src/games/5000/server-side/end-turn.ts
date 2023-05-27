@@ -17,30 +17,31 @@ function turnOver (
     events.endTurn();
 }
 
-export function endTurnWithScore (
+export function endTurnNotBust (
     arg0: MoveArg0<ServerData>,
-    score: number,  
+    _arg1: void,  
 ): void {
-    const { G: {scoreToBeat, playerScores}, playerID } = arg0;
+    const { G, playerID } = arg0;
 
-    if(scoreToBeat) {
-        scoreToBeat.value = score;
-        scoreToBeat.setBy = playerID;
+    const score = G.scoreCarriedOver + G.diceScores.held;
+    if(G.scoreToBeat) {
+        G.scoreToBeat.value = score;
+        G.scoreToBeat.setBy = playerID;
     }
 
-    playerScores[playerID].push(score);
+    G.playerScores[playerID].push(score);
 
     turnOver(arg0);
 }
 
-export function bust (
+export function endTurnBust (
     arg0: MoveArg0<ServerData>,
-    _arg: void,  
+    _arg1: void,  
 ): void {
-    const { G: {scoreToBeat}, playerID } = arg0;
+    const { G, playerID } = arg0;
 
-    if(scoreToBeat?.setBy === playerID) {
-        scoreToBeat.value = 0;
+    if(G.scoreToBeat?.setBy === playerID) {
+        G.scoreToBeat.value = 0;
     }
 
     turnOver(arg0);
