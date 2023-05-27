@@ -6,4 +6,9 @@ export function recordScore (
     { playerID, score}: {playerID: string, score: number},
 ): void {
     G.playerScores[playerID].push(score);
+    
+    if(G.scoreToBeat) {
+        G.scoreToBeat.value = score;
+        G.scoreToBeat.setBy = playerID;
+    }
 }

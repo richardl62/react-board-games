@@ -2,10 +2,9 @@ import { SpecifiedValues } from "../../app/option-specification/types";
 
 
 export const setupOptions = {
-    numberOfDice: {
-        default: 6,
-        label: "Number of dice",
-        min: 1,
+    mustBeatPreviousScores: {
+        default: true,
+        label: "Must beat previous scores",
     },
 };
 

@@ -9,7 +9,7 @@ export function Scores() : JSX.Element {
     const {G: {scoreToBeat, scoreCarriedOver, diceScores}} = useGameContext();
 
     return <div>
-        <div>{score("Score to beat", scoreToBeat)}</div>
+        <div>{scoreToBeat && score("Score to beat", scoreToBeat.value)}</div>
 
         <div>
             {score("Previous dice score", diceScores.prevRollHeld)}
