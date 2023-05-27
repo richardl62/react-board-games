@@ -5,9 +5,9 @@ import { AppGameNoBoard } from "../../app-game-support/app-game";
 import { setupOptions } from "./options";
 
 export const appGameNoBoard: AppGameNoBoard = {
-    name: "dice",
-    displayName: "Dice",
-    category: GameCategory.test,
+    name: "5000",
+    displayName: "5000",
+    category: GameCategory.development,
 
     options: setupOptions,
     setup: startingServerData as AppGameNoBoard["setup"],

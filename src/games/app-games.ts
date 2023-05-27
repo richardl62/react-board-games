@@ -9,12 +9,12 @@ import { appGame as plusMinus } from "./plus-minus/app-game";
 import { appGames as scrabble } from "./scrabble/app-games";
 import { appGame as swapSquares } from "./swap-squares/app-game";
 import { appGame as ticker } from "./ticker/app-game";
-import { appGame as dice } from "./dice/app-game";
+import { appGame as g5000 } from "./5000/app-game";
 
 export const games : Array<AppGame> = [
     acesUp,
     cribbage,
-    dice,
+    g5000,
     plusMinus,
     crosstiles,
     ...scrabble,

@@ -7,13 +7,13 @@ import { appGameNoBoard as plusMinus } from "./plus-minus/app-game-no-board";
 import { appGamesNoBoard as scrabble } from "./scrabble/app-games-no-board";
 import { appGameNoBoard as swapSquares } from "./swap-squares/app-game-no-board";
 import { appGameNoBoard as ticker } from "./ticker/app-game-no-board";
-import { appGameNoBoard as dice } from "./dice/app-game-no-board";
+import { appGameNoBoard as g5000 } from "./5000/app-game-no-board";
 
 export const gamesNoBoard : Array<AppGameNoBoard> = [
     acesUp,
     cribbage,
     crosstiles,
-    dice,
+    g5000,
     plusMinus,
     ...scrabble,
     swapSquares, 
