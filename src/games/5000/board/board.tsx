@@ -16,8 +16,8 @@ function Board() : JSX.Element {
             held={held}
             setHeld={(index, held) => turnOver || moves.setHeld({index, held})}
         />
-        <Scores/>
         <PlayerOptions/>
+        <Scores/>
         <ScorePads />
     </div>;
 }

@@ -1,27 +1,48 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
+import styled from "styled-components";
 
-function score(text: string, score: number) {
-    return <span>{`${text}: ${score} `}</span>;
-}
+const OuterDiv = styled.div`
+    font-family: Arial;
+    font-size: 16px;
+`;
+
+const Label = styled.span`
+    font-weight: bold;
+`;
 
 export function Scores() : JSX.Element {
-    const {G: {scoreToBeat, scoreCarriedOver, diceScores}} = useGameContext();
+    const {G: {scoreCarriedOver, diceScores, scoreToBeat}, getPlayerName} = useGameContext();
 
-    return <div>
-        <div>{scoreToBeat && score("Score to beat", scoreToBeat.value)}</div>
+    let scoreToBeatText = "";
+    if(scoreToBeat) {
+        scoreToBeatText = `${scoreToBeat.value}`;
+        if(scoreToBeat.value > 0) {
+            scoreToBeatText += ` (set by ${getPlayerName(scoreToBeat.setBy)})`;
+        }
+    }
 
+    let scoreLastRollText = `${diceScores.prevRollHeld}`;
+    if (scoreCarriedOver > 0) {
+        scoreLastRollText += ` + ${scoreCarriedOver} carried over`;
+    }
+    
+    let heldText = `${diceScores.held}`;
+    if(diceScores.held > 0) {
+        heldText += ` (${diceScores.heldCategories.join(", ")})`;
+    }
+
+    return <OuterDiv>
+        {scoreToBeat && <div> 
+            <Label>Score to beat: </Label>
+            <span>{scoreToBeatText}</span>
+        </div>}
         <div>
-            {score("Previous dice score", diceScores.prevRollHeld)}
-            {score("Carried over", scoreCarriedOver)} 
-            {score("Total", diceScores.prevRollHeld + scoreCarriedOver)}
+            <Label>Last roll: </Label>
+            <span>{scoreLastRollText}</span>
         </div>
         <div>
-            {score("Held dice", diceScores.held)}
-            {diceScores.held > 0 && `(${diceScores.heldCategories.join(", ")})`}
+            Held: {heldText}
         </div>
-        <div>
-            Non-scoring dice: {diceScores.nonScoringFaces}
-        </div>
-    </div>;
+    </OuterDiv>;
 }

@@ -43,6 +43,7 @@ export function endTurnBust (
     if(G.scoreToBeat?.setBy === playerID) {
         G.scoreToBeat.value = 0;
     }
-
+    G.playerScores[playerID].push(0);
+    
     turnOver(arg0);
 }
