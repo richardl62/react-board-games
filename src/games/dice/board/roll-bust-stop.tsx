@@ -3,7 +3,7 @@ import { useGameContext } from "../client-side/game-context";
 import { PlayerActions, availablePlayerActions } from "../utils/available-player-actions";
 
 export function RollBustStop() : JSX.Element {
-    const { G, moves, playerID } = useGameContext();
+    const { G, moves } = useGameContext();
 
     const availableActions = availablePlayerActions(G);
     
@@ -13,13 +13,9 @@ export function RollBustStop() : JSX.Element {
         } else if (action === "rollAll") {
             moves.rollAll();
         } else if (action === "bust") {
-            moves.turnOver();
+            moves.bust();
         } else if (action === "done") {
-            moves.recordScore({
-                playerID,
-                score: G.diceScores.held + G.scoreCarriedOver,
-            });
-            moves.turnOver();
+            moves.endTurnWithScore(G.diceScores.held + G.scoreCarriedOver);
         } else {
             throw new Error(`Unrecognised action: ${action}`);
         }
