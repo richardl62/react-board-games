@@ -4,7 +4,8 @@ import { ScorePad } from "../../../utils/score-pad";
 import { useGameContext } from "../client-side/game-context";
 
 const ScorePadsDiv = styled.div`
-    display: block;
+    display: flex;
+    align-items: flex-start;
     /* Set min width of the individual ScorePads */
     > * {
         min-width: 10em;

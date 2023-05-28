@@ -7,7 +7,7 @@ const borderColor = {
 };
 
 const ScorePadDiv = styled.div<{active: boolean}>`
-    display: inline-block;
+    display: block;
     border: 4px solid ${props => props.active ? borderColor.active : borderColor.inactive};
     background-color: cornsilk;
     font-family: Arial;
