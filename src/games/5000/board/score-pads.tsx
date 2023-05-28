@@ -5,7 +5,6 @@ import { useGameContext } from "../client-side/game-context";
 
 const ScorePadsDiv = styled.div`
     display: block;
-    background-color: #333;
     /* Set min width of the individual ScorePads */
     > * {
         min-width: 10em;

@@ -15,7 +15,19 @@ const keys = {
     server: "server",
 };
 
-const usp = new URLSearchParams(window.location.search);
+function searchString() {
+    // KLUDGE: window is undefined when run as a server, but is defined when run using
+    // "npm start". This is a hack to allow the server to run while keeping the 
+    // URL functionality for "npm start".
+    // For background on this issue see
+    // see https://dev.to/vvo/how-to-solve-window-is-not-defined-errors-in-react-and-next-js-5f97
+    if(typeof window === "undefined") {
+        console.warn("window is undefined - URL parameters are not available");
+        return undefined;
+    }
+    return window.location.search;
+}
+const usp = new URLSearchParams(searchString());
 
 const getAndDelete = (key: string) => {
     const val = usp.get(key);
