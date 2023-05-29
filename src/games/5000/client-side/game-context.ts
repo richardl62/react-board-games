@@ -3,9 +3,16 @@ import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { ClientMoves } from "../server-side/moves";
 import { ServerData } from "../server-side/server-data";
 
+
 type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
-export function useGameContext() : TypedGameProps {
-    return useStandardBoardContext() as TypedGameProps;
+interface GameContext extends TypedGameProps {
+    diceSpin: number;
+}
+
+export function useGameContext() : GameContext {
+    const diceSpin = 0;
+    const props = useStandardBoardContext() as TypedGameProps;
+    return { ...props, diceSpin };
 }
 
