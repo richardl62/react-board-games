@@ -15,7 +15,7 @@ const Held = styled.div<{ visible: boolean }>`
 // A dice with a toggle-able hold.
 export function HoldableDice({ face, rotation, held, setHeld }: {
     face: number;
-    rotation: number | null; // If set, and the dice are not held, 
+    rotation?: number | null; // If set, and the dice are not held, 
         // the dice will be show all 7 spots.
     held: boolean; // If set, the rotation is ignored.
     setHeld: (hold: boolean) => void;

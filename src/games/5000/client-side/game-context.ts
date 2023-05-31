@@ -1,38 +1,37 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { ClientMoves } from "../server-side/moves";
 import { ServerData } from "../server-side/server-data";
+import { useTimedSteps } from "../../../utils/use-timed-steps";
+
+const spinTime = 1000; // milliseconds
+const nRotations = 1;
+const stepSize = 30;
+
 
 type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
 interface GameContext extends TypedGameProps {
-    diceSpin: number | null;
-}
-
-function useStep(from: number, to: number, step: number, delay: number) : [number | null, () => void]
-{
-    const [value, setValue] = useState(to);
-    useEffect(() => {
-        if (value < to) {
-            const timer = setTimeout(() => setValue(value + step), delay);
-            return () => clearTimeout(timer);
-        }
-    }, [value, to, delay]);
-    
-    return [
-        value < to ? value : null,
-        () => setValue(from),
-    ];
+    diceRotation: number | null;
 }
 
 export function useGameContext() : GameContext {
-    const [diceSpin, start] = useStep(0, 360, 10, 100);
-    if(diceSpin === null) {
-        start();
+    const from = 0;
+    const to = nRotations * 360;
+    const nSteps = (to - from) / stepSize;
+    const stepTime = spinTime / nSteps;
+
+    const [diceRotation, startRotation] = useTimedSteps({from, to, stepSize, stepTime});
+
+    const gameProps = useStandardBoardContext() as TypedGameProps;
+    const [ rollCoutdown, setRollCountdown ] = useState(gameProps.G.rollCount); 
+    
+    if(rollCoutdown !== gameProps.G.rollCount) {
+        setRollCountdown(gameProps.G.rollCount);
+        startRotation();
     }
 
-    const props = useStandardBoardContext() as TypedGameProps;
-    return { ...props, diceSpin  };
+    return { ...gameProps, diceRotation };
 }
 
