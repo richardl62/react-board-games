@@ -4,6 +4,13 @@ export type OptionValues = {[arg:string]: OptionValue};
 
 interface BaseSpecification {
     label: string;
+    /** If true
+     * 1) The option is shown only if 'show debug options' is
+     * enabled (and if any condition specificied by showIf is meet). 
+     * 2) The options will appear after any options for which debugOnly
+     * is not true.
+     */
+    debugOnly?: boolean;
     showIf?: (arg: OptionValues) => unknown;
 }
 interface BooleanSpecification extends BaseSpecification   { 

@@ -1,4 +1,3 @@
-import { showDebugOptions } from "../../app/lobby/start-match";
 import { OptionSpecifications, SpecifiedValues } from "../../app/option-specification/types";
 
 
@@ -10,7 +9,7 @@ export const setupOptions : OptionSpecifications = {
     neverBust: {
         default: false,
         label: "Never bust",
-        showIf: showDebugOptions,
+        debugOnly: true,
     },
 } as const;
 

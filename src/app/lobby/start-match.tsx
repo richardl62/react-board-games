@@ -37,16 +37,17 @@ export function StartMatch(props: {
         offline: {
             label: "Play offline (test/debug)",
             default: false,
-            showIf: showDebugOptions,
+            debugOnly: true,
         },
         passAndPlay: {
             label: "Pass and play (offline only)",
             default: true,
-            showIf: showOfflineOptions,
+            debugOnly: true,
         },
         debugPanel: {
             label: "Debug panel (offline only)",
             default: false,
+            debugOnly: true,
             showIf: showOfflineOptions,
         }
     } as const;
@@ -85,13 +86,6 @@ export function StartMatch(props: {
 
 function showOfflineOptions(values: OptionValues) {
     const res = values.offline;
-    sAssert(typeof res === "boolean");
-
-    return res;
-}
-
-export function showDebugOptions(values: OptionValues) {
-    const res = values.showDebugOptions;
     sAssert(typeof res === "boolean");
 
     return res;

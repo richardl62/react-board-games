@@ -33,9 +33,17 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
     const {specification, buttonText, onButtonClick } = props;
     const [ localValues, setLocalValues ] = useState(defaultValues(specification));
 
-    const inputAndLabel = (key: keyof Spec) => {
+    const inputAndLabel = (key: keyof Spec, debugOnly: boolean) => {
         const spec = specification[key];
         const value = localValues[key];
+
+        if (Boolean(spec.debugOnly) !== debugOnly) {
+            return [];
+        }
+
+        if(spec.debugOnly && !localValues.showDebugOptions) {
+            return [];
+        }
 
         if(spec.showIf && !spec.showIf(localValues)) {
             return [];
@@ -60,7 +68,8 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
 
     return <OuterDiv>
         <LabelAndInputs>
-            {Object.keys(specification).map(key => inputAndLabel(key))}
+            {Object.keys(specification).map(key => inputAndLabel(key, false))}
+            {Object.keys(specification).map(key => inputAndLabel(key, true))}
         </LabelAndInputs>
         <button onClick={()=>onButtonClick(localValues)}>{buttonText}</button>
     </OuterDiv>;
