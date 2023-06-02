@@ -37,6 +37,10 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
         const spec = specification[key];
         const value = localValues[key];
 
+        if(spec.showIf && !spec.showIf(localValues)) {
+            return [];
+        }
+
         const setValue = (arg: unknown) => { // Use of unknown is a KLUDGE
             sAssert(typeof arg === typeof value);
             
@@ -54,17 +58,10 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
         }
     };
 
-    const labelsAndInputs : JSX.Element[] = [];
-    for(const key of Object.keys(specification)) {
-        const spec = specification[key];
-
-        if(!spec.showIf || spec.showIf(localValues)) {
-            labelsAndInputs.push(...inputAndLabel(key));
-        }
-    }
-
     return <OuterDiv>
-        <LabelAndInputs>{labelsAndInputs}</LabelAndInputs>
+        <LabelAndInputs>
+            {Object.keys(specification).map(key => inputAndLabel(key))}
+        </LabelAndInputs>
         <button onClick={()=>onButtonClick(localValues)}>{buttonText}</button>
     </OuterDiv>;
 }
