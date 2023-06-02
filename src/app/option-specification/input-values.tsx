@@ -33,8 +33,7 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
     const {specification, buttonText, onButtonClick } = props;
     const [ localValues, setLocalValues ] = useState(defaultValues(specification));
 
-    const labelsAndInputs : JSX.Element[] = [];
-    for(const key of Object.keys(specification)) {
+    const inputAndLabel = (key: keyof Spec) => {
         const spec = specification[key];
         const value = localValues[key];
 
@@ -46,18 +45,21 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
             setLocalValues(newValues);
         };
 
-        const elements = () => {
-            if (typeof value === "boolean") {
-                return inputBoolean(value, setValue, spec);
-            } else if (typeof value === "number") {
-                return inputNumber(value, setValue, spec);
-            } else {
-                return inputFixedString(value, setValue, spec as FixedStringSpecification);
-            }
-        };
-        
+        if (typeof value === "boolean") {
+            return inputBoolean(value, setValue, spec);
+        } else if (typeof value === "number") {
+            return inputNumber(value, setValue, spec);
+        } else {
+            return inputFixedString(value, setValue, spec as FixedStringSpecification);
+        }
+    };
+
+    const labelsAndInputs : JSX.Element[] = [];
+    for(const key of Object.keys(specification)) {
+        const spec = specification[key];
+
         if(!spec.showIf || spec.showIf(localValues)) {
-            labelsAndInputs.push(...elements());
+            labelsAndInputs.push(...inputAndLabel(key));
         }
     }
 
