@@ -1,6 +1,6 @@
 import React from "react";
 
-export function inputBoolean(
+export function labelAndInputBoolean(
     value: boolean,
     setValue: (value: boolean) => void,
     {label}: {label: string},

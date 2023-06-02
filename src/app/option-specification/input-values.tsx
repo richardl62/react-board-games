@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SpecifiedValues, OptionSpecifications, FixedStringSpecification } from "./types";
 import { defaultValues } from "./tools";
-import { inputBoolean } from "./input-boolean";
-import { inputNumber } from "./input-number";
-import { inputFixedString } from "./input-fixed-string";
+import { labelAndInputBoolean } from "./label-and-input-boolean";
+import { labelAndInputNumber } from "./label-and-input-number";
+import { labelAndInputFixedString } from "./label-and-input-fixed-string";
 import { sAssert } from "../../utils/assert";
 
 const OuterDiv = styled.div`
@@ -46,11 +46,11 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
         };
 
         if (typeof value === "boolean") {
-            return inputBoolean(value, setValue, spec);
+            return labelAndInputBoolean(value, setValue, spec);
         } else if (typeof value === "number") {
-            return inputNumber(value, setValue, spec);
+            return labelAndInputNumber(value, setValue, spec);
         } else {
-            return inputFixedString(value, setValue, spec as FixedStringSpecification);
+            return labelAndInputFixedString(value, setValue, spec as FixedStringSpecification);
         }
     };
 

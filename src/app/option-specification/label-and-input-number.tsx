@@ -23,7 +23,7 @@ function parseRestrictedInt(str: string, low?: number, high?: number) : number {
     return val;
 }
 
-export function inputNumber(
+export function labelAndInputNumber(
     value: number,
     setValue: (value: number) => void,
     {label, min, max}: {label: string, min?: number, max?: number},

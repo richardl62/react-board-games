@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { sAssert } from "../../utils/assert";
 
-export function inputFixedString(
+export function labelAndInputFixedString(
     value: string,
     setValue: (value: string) => void,
     {label, options}: {label: string, options: readonly string[]},
