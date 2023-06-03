@@ -1,52 +1,71 @@
 import React from "react";
 import { useGameContext } from "../client-side/game-context";
 import styled from "styled-components";
+import { sAssert } from "../../../utils/assert";
 
 const OuterDiv = styled.div`
     font-family: Arial;
     font-size: 16px;
 `;
 
-const Label = styled.span`
+const Padding = styled.div<{height: string}>`
+    height: ${props => props.height};
+`;
+
+
+const Label = styled.span<{leftPadding?: boolean}>`
+    padding-left: ${props => props.leftPadding ? "1em" : "0px"};
     font-weight: bold;
 `;
 
 export function Scores() : JSX.Element {
-    const {G: {scoreCarriedOver, diceScores, scoreToBeat, held}, getPlayerName} = useGameContext();
+    const {G: {scoreCarriedOver, diceScores, scoreToBeat}, getPlayerName} = useGameContext();
 
-    let scoreToBeatText = "";
-    if(scoreToBeat) {
-        scoreToBeatText = `${scoreToBeat.value}`;
-        if(scoreToBeat.value > 0) {
-            scoreToBeatText += ` (set by ${getPlayerName(scoreToBeat.setBy)})`;
+    const scoreToBeatText = () => {
+        sAssert(scoreToBeat);
+        if(scoreToBeat.value === 0) {
+            return "0";
         }
-    }
+        return `${scoreToBeat.value} (set by ${getPlayerName(scoreToBeat.setBy)})`;
+    };
 
+    const heldText = () => {
+        if(diceScores.held === 0) {
+            return "";
+        }
+        return `${diceScores.held} (${diceScores.heldCategories.join(", ")})`;
+    };
 
-    let heldText = `${diceScores.held}`;
-    if(diceScores.held > 0) {
-        heldText += ` (${diceScores.heldCategories.join(", ")})`;
-    }
+    const scoreThisTurnText = () => {
+        if(scoreCarriedOver === 0) {
+            return `${diceScores.held}`;
+        }
+        const total = scoreCarriedOver + diceScores.held;
+        return `${total} (includes ${scoreCarriedOver} carried over)`;
+    };
 
     return <OuterDiv>
         {scoreToBeat && <div> 
             <Label>Score to beat: </Label>
-            <span>{scoreToBeatText}</span>
+            <span>{scoreToBeatText()}</span>
         </div>}
+        <Padding height="8px"/>
 
-        {diceScores.prevRollHeld > 0 && <div>
-            <Label>Last roll: </Label>
-            <span>{diceScores.prevRollHeld}</span>
-        </div>}
+        <Label>Held dice:</Label>
+        <div>
+            <Label leftPadding={true}>last roll: </Label>
+            <span>{diceScores.prevRollHeld || ""}</span>
+        </div>
+        <div>
+            <Label leftPadding={true}>this roll: </Label>
+            <span>{heldText()}</span>
+        </div>
 
-        {held.includes(true) && <div>
-            <Label>Held dice: </Label>
-            <span>{heldText}</span>
-        </div>}
-
-        {scoreCarriedOver > 0 && <div>
-            <Label>Carried over: </Label>
-            <span>{scoreCarriedOver}</span>
-        </div>}
+        <Padding height="8px"/>
+        <div>        
+            <Label>Score this turn: </Label>
+            <span>{scoreThisTurnText()}</span>
+        </div>
+        <Padding height="8px"/>
     </OuterDiv>;
 }
