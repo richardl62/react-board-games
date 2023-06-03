@@ -1,6 +1,6 @@
 import React from "react";
 import { Scores } from "./scores";
-import { PlayerOptions } from "./player-options";
+import { GameButtons } from "./game-buttons";
 import { ScorePads } from "./score-pads";
 import styled from "styled-components";
 import { GameDiceSet } from "./game-dice-set";
@@ -12,8 +12,8 @@ const OuterDiv = styled.div`
 function Board() : JSX.Element {
  
     return <OuterDiv>
+        <GameButtons/>
         <GameDiceSet/>
-        <PlayerOptions/>
         <Scores/>
         <ScorePads />
     </OuterDiv>;

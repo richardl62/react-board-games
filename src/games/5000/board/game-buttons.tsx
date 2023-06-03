@@ -5,9 +5,18 @@ import styled from "styled-components";
 
 const OuterDiv = styled.div<{visible: boolean}>`
     visibility: ${props => props.visible ? "visible" : "hidden"};
+    //Add padding between buttons
+    button {
+        margin-right: 6px;
+    }
+    padding-bottom: 6px;
 `;
 
-export function PlayerOptions() : JSX.Element {
+const BustButton = styled.button`
+    color: red;
+`;
+
+export function GameButtons() : JSX.Element {
     const { G, moves, playerID, ctx: {currentPlayer} } = useGameContext();
     const isActivePlayer = playerID === currentPlayer;
     const availableActions = availablePlayerActions(G);
@@ -32,10 +41,10 @@ export function PlayerOptions() : JSX.Element {
             </button>
         }
         {availableActions.bust && 
-            <button 
+            <BustButton 
                 onClick={() => moves.endTurnBust()}>
-            Bust
-            </button>
+            Bust!
+            </BustButton>
         }
     </OuterDiv>;
 }

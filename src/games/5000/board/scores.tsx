@@ -45,10 +45,6 @@ export function Scores() : JSX.Element {
     };
 
     return <OuterDiv>
-        {scoreToBeat && <div> 
-            <Label>Score to beat: </Label>
-            <span>{scoreToBeatText()}</span>
-        </div>}
         <Padding height="8px"/>
 
         <Label>Held dice:</Label>
@@ -62,6 +58,11 @@ export function Scores() : JSX.Element {
         </div>
 
         <Padding height="8px"/>
+        {scoreToBeat && <div> 
+            <Label>Score to beat: </Label>
+            <span>{scoreToBeatText()}</span>
+        </div>}
+        
         <div>        
             <Label>Score this turn: </Label>
             <span>{scoreThisTurnText()}</span>

@@ -33,12 +33,8 @@ export interface ServerData extends RequiredServerData{
 }
 
 export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData {
-    const faces = [];
-    const held = [];
-    for (let i = 0; i < numberOfDice; i++) {
-        faces.push((i % 6) + 1); // For now
-        held.push(false);
-    }
+    const faces = Array(numberOfDice).fill(1);
+    const held = Array(numberOfDice).fill(false);
     
     const playerScores : ServerData["playerScores"] = {};
 
