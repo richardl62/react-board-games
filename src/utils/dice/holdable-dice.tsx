@@ -13,14 +13,15 @@ const Held = styled.div<{ visible: boolean }>`
 `;
 
 // A dice with a toggle-able hold.
-export function HoldableDice({ face, rotation, held, setHeld }: {
+// Intended just for use in DiceSet.
+export function HoldableDice({ face, rotation, held, onClick }: {
     face: number;
-    rotation?: number | null; // If set, and the dice are not held, 
-        // the dice will be show all 7 spots.
-    held: boolean; // If set, the rotation is ignored.
-    setHeld: (hold: boolean) => void;
+    held: boolean;
+
+    // Rotation is ignored if the dice is held. 
+    rotation?: number | null;
+    onClick?: () => void;
 }) {
-    const onClick = () => setHeld && setHeld(!held);
 
     if (held) {
         rotation = null; // KLUDGE?

@@ -1,26 +1,22 @@
 import React from "react";
-import { useGameContext } from "../client-side/game-context";
-import { DiceSet } from "../../../utils/dice/dice-set";
 import { Scores } from "./scores";
 import { PlayerOptions } from "./player-options";
 import { ScorePads } from "./score-pads";
+import styled from "styled-components";
+import { GameDiceSet } from "./game-dice-set";
+
+const OuterDiv = styled.div`
+    padding: 10px;
+`;
 
 function Board() : JSX.Element {
-    const {G: {faces,  rollCount, held, turnOverRollCount }, diceRotation, moves} = useGameContext();
-    const turnOver = turnOverRollCount === rollCount;
-    
-    return <div>
-
-        <DiceSet 
-            faces={faces} 
-            rotation={diceRotation}
-            held={held}
-            setHeld={(index, held) => turnOver || moves.setHeld({index, held})}
-        />
+ 
+    return <OuterDiv>
+        <GameDiceSet/>
         <PlayerOptions/>
         <Scores/>
         <ScorePads />
-    </div>;
+    </OuterDiv>;
 }
 
 export default Board;

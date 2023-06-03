@@ -13,15 +13,15 @@ const OuterDiv = styled.div`
     };
 `;
 
-export function DiceSet({faces, rotation, held, setHeld}: { 
+export function DiceSet({faces, rotation, held, onDiceClick}: { 
     faces: number[];
-    // If set, and if the value has changed since the last render, the dice
-    // will be shown spinning before the values are shown. (On the first render, the
-    // condition is just that the value is set. )
+    held: boolean[];
+
+    // If non-null, any non-held dice are shown as rotated by this angle
+    // (in degrees), and all 7 possible dice spots are shown.
     rotation?: number | null;
 
-    held: boolean[];
-    setHeld: (i: number, hold: boolean) => void;
+    onDiceClick?: (i: number) => void;
  }) {
     sAssert(held.length === faces.length);
 
@@ -32,7 +32,7 @@ export function DiceSet({faces, rotation, held, setHeld}: {
                     rotation={rotation} 
                     face={face}
                     held={ held[i]}
-                    setHeld={(hold) => setHeld(i, hold)} 
+                    onClick={onDiceClick && (() => onDiceClick(i))} 
                     key={i} 
                 />
             ))}
