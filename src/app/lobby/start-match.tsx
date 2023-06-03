@@ -35,7 +35,7 @@ export function StartMatch(props: {
             default: false,
         },
         offline: {
-            label: "Play offline (test/debug)",
+            label: "Play offline",
             default: false,
             debugOnly: true,
         },
@@ -43,6 +43,7 @@ export function StartMatch(props: {
             label: "Pass and play (offline only)",
             default: true,
             debugOnly: true,
+            showIf: showOfflineOptions,
         },
         debugPanel: {
             label: "Debug panel (offline only)",
