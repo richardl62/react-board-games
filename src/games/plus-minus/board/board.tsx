@@ -7,15 +7,32 @@ const OuterDiv = styled.div`
     margin: ${standardOuterMargin};
 `;
 
+const Name = styled.span<{active: boolean}>`
+    // underline if active
+    text-decoration: ${props => props.active ? "underline" : "none"};
+    margin-right: 1em;
+`;
+
+function PlayerNames() : JSX.Element {
+    const {ctx: {playOrder}, playerID, getPlayerName} =  useGameContext();
+    return <div>
+        {playOrder.map((id) => 
+            <Name key={id} active={id === playerID}>
+                {getPlayerName(id)}
+            </Name>
+        )}
+    </div>; 
+}
+
 function Board() : JSX.Element {
     const context = useGameContext();
-    const {G: {count}, moves, events, playerID, getPlayerName} = context;
+    const {G: {count}, moves, events, playerID} = context;
     
     const current = context.ctx.currentPlayer === playerID;
 
     return <OuterDiv>
-        <div>{getPlayerName(playerID)}</div>
-        
+        <PlayerNames/>
+
         <button 
             onClick={()=>moves.add(1)} 
             disabled={!current}>
