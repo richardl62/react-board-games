@@ -12,10 +12,14 @@ const Padding = styled.div<{height: string}>`
     height: ${props => props.height};
 `;
 
+const Visiblity = styled.div<{visible: boolean}>`
+    visibility: ${props => props.visible ? "visible" : "hidden"};
+`;
 
 const Label = styled.span<{leftPadding?: boolean}>`
     padding-left: ${props => props.leftPadding ? "1em" : "0px"};
     font-weight: bold;
+    width: 500px; // Hard coding is a KLUDGE
 `;
 
 export function Scores() : JSX.Element {
@@ -47,7 +51,7 @@ export function Scores() : JSX.Element {
     return <OuterDiv>
         <Padding height="8px"/>
 
-        <Label>Held dice:</Label>
+        <Label>Score:</Label>
         <div>
             <Label leftPadding={true}>last roll: </Label>
             <span>{diceScores.prevRollHeld || ""}</span>
@@ -57,16 +61,17 @@ export function Scores() : JSX.Element {
             <span>{heldText()}</span>
         </div>
 
+        <Visiblity visible={scoreCarriedOver > 0}>        
+            <Label leftPadding={true}>total: </Label>
+            <span>{scoreThisTurnText()}</span>
+        </Visiblity>
+
         <Padding height="8px"/>
         {scoreToBeat && <div> 
             <Label>Score to beat: </Label>
             <span>{scoreToBeatText()}</span>
         </div>}
-        
-        <div>        
-            <Label>Score this turn: </Label>
-            <span>{scoreThisTurnText()}</span>
-        </div>
+
         <Padding height="8px"/>
     </OuterDiv>;
 }
