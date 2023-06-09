@@ -14,10 +14,11 @@ export function GameDiceSet(): JSX.Element {
     if (!turnOver && playerID === currentPlayer && diceRotation === null) {
         onDiceClick = (i: number) => moves.setHeld({ index: i, held: !held[i] });
     }
-
+    const rotateAll = diceRotation && diceRotation.allDice;
     return <DiceSet
         faces={faces}
-        rotation={diceRotation}
-        held={held}
-        onDiceClick={onDiceClick} />;
+        rotation={diceRotation && diceRotation.angle}
+        held={rotateAll? Array(6).fill(false) : held}
+        onDiceClick={onDiceClick}
+    />;
 }

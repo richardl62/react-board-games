@@ -21,17 +21,22 @@ function diceRotationSteps() {
 type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
 interface GameContext extends TypedGameProps {
-    diceRotation: number | null;
+    diceRotation: {
+        angle: number,
+        // If true, all dice should be rollled. If false, only the
+        // dice that were not held should be rolled.
+        allDice: boolean,
+    } | null;
 }
 
 export function useGameContext() : GameContext {
     const gameProps = useStandardBoardContext() as TypedGameProps;
     const [ oldGameProps, setOldGameProps ] = useState(gameProps);
     const [ oldRollCount, setOldRollCount ] = useState(gameProps.G.rollCount);
-    const [diceRotation, startRotation] = useTimedSteps(diceRotationSteps());
+    const [rotationAngle, startRotation] = useTimedSteps(diceRotationSteps());
 
     // Start the dice roll if the roll count has changed
-    let rolling = diceRotation !== null;
+    let rolling = rotationAngle !== null;
     if(oldRollCount !== gameProps.G.rollCount) {
         setOldRollCount(gameProps.G.rollCount);
         startRotation();
@@ -47,6 +52,12 @@ export function useGameContext() : GameContext {
 
     const returnedGameProps = rolling ? oldGameProps : gameProps;
 
-    return { ...returnedGameProps, diceRotation };
+    const diceRotation = rolling ? {
+        angle: rotationAngle!,
+        // If all dice were held, then assume this is a roll all.
+        allDice: !oldGameProps.G.held.includes(false),
+    } : null;  
+
+    return { ...returnedGameProps, diceRotation};
 }
 
