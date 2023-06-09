@@ -5,8 +5,18 @@ import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
 
 export function roll(
     { G, random }: MoveArg0<ServerData>,
-    _arg: void,  
+    type: "all" | "unheld",  
 ): void {
+    if(type === "all") {
+        //set all dice to unheld
+        for (let i = 0; i < G.faces.length; i++) {
+            G.held[i] = false;
+        }
+        
+        // Add the score from the previous roll to the carried over score
+        G.scoreCarriedOver += G.diceScores.held;
+    }
+
     // Move held dice to start before rolling
     const {faces, held} = moveHeldFacesToStart(G);
     for (let i = 0; i < faces.length; i++) {
@@ -20,7 +30,7 @@ export function roll(
 
     // Calculate the score from the dice
     G.diceScores = {
-        prevRollHeld: G.diceScores.held,
+        prevRollHeld: type === "unheld" ? G.diceScores.held : 0,
         ...getDiceScores(faces, held),
     };
 

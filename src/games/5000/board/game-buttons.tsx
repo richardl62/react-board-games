@@ -23,14 +23,14 @@ export function GameButtons() : JSX.Element {
     const showRoll = !availableActions.bust;
     return <OuterDiv visible={isActivePlayer}>
         {showRoll && <button 
-            onClick={() => moves.roll()} 
+            onClick={() => moves.roll("unheld")} 
             disabled={!availableActions.roll}>
             Roll
         </button>
         }
         {availableActions.rollAll && 
             <button 
-                onClick={() => moves.rollAll()}>
+                onClick={() => moves.roll("all")}>
                 Roll All
             </button>
         }
