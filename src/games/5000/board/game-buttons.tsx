@@ -2,8 +2,7 @@ import React from "react";
 import { useGameContext } from "../client-side/game-context";
 import { availablePlayerActions } from "../utils/available-player-actions";
 import styled from "styled-components";
-import { getScores } from "../utils/get-scores";
-import { sAssert } from "../../../utils/assert";
+import { HoldScoringDiceButton } from "./hold-scoring-dice-button";
 
 const OuterDiv = styled.div<{visible: boolean}>`
     display: flex;
@@ -20,45 +19,6 @@ const OuterDiv = styled.div<{visible: boolean}>`
 const BustButton = styled.button`
     color: red;
 `;
-
-function HoldScoredDiceButton() {
-    const { G, holdAllowed, moves } = useGameContext(); 
-    const {faces, held} = G;
-
-    const {unusedFaces: nonScoringFaces} = getScores(faces);
-
-    const toHold : boolean[] = Array(held.length).fill(true);
-
-    const unHold = (face: number) => {
-        for (let i = held.length - 1; i >= 0; i--) {
-            if(toHold[i] && faces[i] === face) {
-                toHold[i] = false;
-                return;
-            }
-        }
-        sAssert(false, "Could not find face to hold");
-    };
-
-    // Check if hold and toHold are the same
-    let same = true;
-    for(let i = 0; i < held.length; i++) {
-        if(held[i] !== toHold[i]) {
-            same = false;
-            break;
-        }
-    }
-
-    for(const face of nonScoringFaces) {
-        unHold(face);
-    }
-
-    return <button 
-        onClick={() => moves.setHeld(toHold)}
-        disabled={same || !holdAllowed}
-    >
-        Hold Scoring Dice
-    </button>;
-}
 
 export function GameButtons() : JSX.Element {
     const { G, moves, playerID, ctx: {currentPlayer} } = useGameContext();
@@ -90,7 +50,7 @@ export function GameButtons() : JSX.Element {
     const availableActions = availablePlayerActions(G);
     const showRoll = !availableActions.bust;
     return <OuterDiv visible={isActivePlayer}>
-        <HoldScoredDiceButton/>
+        <HoldScoringDiceButton/>
         {showRoll && <button 
             onClick={() => roll("unheld")} 
             disabled={!availableActions.roll}>
