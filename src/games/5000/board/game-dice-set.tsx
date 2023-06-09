@@ -5,14 +5,17 @@ import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
 
 export function GameDiceSet(): JSX.Element {
     const {
-        G, ctx: { currentPlayer }, playerID, diceRotation, moves
+        G, holdAllowed, diceRotation, moves
     } = useGameContext();
-    const turnOver = G.turnOverRollCount === G.rollCount;
     const { faces, held } = diceRotation ? moveHeldFacesToStart(G) : G;
 
     let onDiceClick;
-    if (!turnOver && playerID === currentPlayer && diceRotation === null) {
-        onDiceClick = (i: number) => moves.setHeld({ index: i, held: !held[i] });
+    if (holdAllowed) {
+        onDiceClick = (i: number) => {
+            const newHeld = [...held];
+            newHeld[i] = !newHeld[i]; 
+            moves.setHeld(newHeld);
+        };
     }
     const rotateAll = diceRotation && diceRotation.allDice;
     return <DiceSet

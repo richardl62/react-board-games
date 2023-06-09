@@ -27,6 +27,7 @@ interface GameContext extends TypedGameProps {
         // dice that were not held should be rolled.
         allDice: boolean,
     } | null;
+    holdAllowed: boolean;
 }
 
 export function useGameContext() : GameContext {
@@ -34,6 +35,10 @@ export function useGameContext() : GameContext {
     const [ oldGameProps, setOldGameProps ] = useState(gameProps);
     const [ oldRollCount, setOldRollCount ] = useState(gameProps.G.rollCount);
     const [rotationAngle, startRotation] = useTimedSteps(diceRotationSteps());
+
+    const { playerID } = gameProps;
+    const { currentPlayer } = gameProps.ctx;
+    const { turnOverRollCount, rollCount } = gameProps.G;
 
     // Start the dice roll if the roll count has changed
     let rolling = rotationAngle !== null;
@@ -56,8 +61,10 @@ export function useGameContext() : GameContext {
         angle: rotationAngle!,
         // If all dice were held, then assume this is a roll all.
         allDice: !oldGameProps.G.held.includes(false),
-    } : null;  
+    } : null; 
 
-    return { ...returnedGameProps, diceRotation};
+    const turnOver = turnOverRollCount === rollCount;
+    const holdAllowed = !turnOver && playerID === currentPlayer && diceRotation === null;
+    return {...returnedGameProps, diceRotation, holdAllowed};
 }
 

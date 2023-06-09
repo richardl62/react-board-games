@@ -8,7 +8,11 @@ import { DiceScore, zeroScore, totalScore } from "./dice-score";
  * 1, 1, 1, 1, 5, 5 scores 1200 (not 500).
 */ 
 export function getScores(faces: number[]): 
-    {scores: DiceScore, unusedFaces: number[]} 
+    {
+        scores: DiceScore,
+        // Values (rather then indices) of unused faces 
+        unusedFaces: number[]
+    } 
 {
     const doGetScores = (
         { includeThreePairs }: { includeThreePairs: boolean }) => {
