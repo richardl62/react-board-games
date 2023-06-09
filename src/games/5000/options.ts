@@ -6,6 +6,11 @@ export const setupOptions : OptionSpecifications = {
         default: true,
         label: "Must beat previous scores",
     },
+    manualDiceRolls: {
+        default: false,
+        label: "Allow manual dice rolls",
+        debugOnly: true,
+    },
     neverBust: {
         default: false,
         label: "Never bust",
