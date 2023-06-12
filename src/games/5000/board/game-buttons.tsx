@@ -12,8 +12,6 @@ const OuterDiv = styled.div<{visible: boolean}>`
     & > * {
         margin-right: 6px;
     }
-
-    padding-bottom: 6px;
 `;
 
 const BustButton = styled.button`

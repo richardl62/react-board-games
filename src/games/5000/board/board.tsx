@@ -17,6 +17,11 @@ const OuterDiv = styled.div`
     a {
         font-size: 18px;
     }
+    
+    //Add padding between items, EXCEPT the last item
+    & > *:not(:last-child) {
+        margin-bottom: 6px;
+    }
 `;
 
 const rulesDoc = "https://docs.google.com/document/d/154dxhfUP_---wevKJ9IqzHMG9XLPxKbJWsoA3Vbi--Y/edit?usp=sharing";
