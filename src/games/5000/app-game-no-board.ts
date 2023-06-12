@@ -7,7 +7,7 @@ import { setupOptions } from "./options";
 export const appGameNoBoard: AppGameNoBoard = {
     name: "5000",
     displayName: "5000",
-    category: GameCategory.development,
+    category: GameCategory.standard,
 
     options: setupOptions,
     setup: startingServerData as AppGameNoBoard["setup"],

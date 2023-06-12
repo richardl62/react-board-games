@@ -12,9 +12,9 @@ import { appGame as ticker } from "./ticker/app-game";
 import { appGame as g5000 } from "./5000/app-game";
 
 export const games : Array<AppGame> = [
+    g5000,
     acesUp,
     cribbage,
-    g5000,
     plusMinus,
     crosstiles,
     ...scrabble,
