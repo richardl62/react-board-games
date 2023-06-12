@@ -4,10 +4,9 @@ import { availablePlayerActions } from "../utils/available-player-actions";
 import styled from "styled-components";
 import { HoldScoringDiceButton } from "./hold-scoring-dice-button";
 
-const OuterDiv = styled.div<{visible: boolean}>`
+const OuterDiv = styled.div`
     display: flex;
 
-    visibility: ${props => props.visible ? "visible" : "hidden"};
     //Add padding between items
     & > * {
         margin-right: 6px;
@@ -47,29 +46,36 @@ export function GameButtons() : JSX.Element {
     const isActivePlayer = playerID === currentPlayer;
     const availableActions = availablePlayerActions(G);
     const showRoll = !availableActions.bust;
-    return <OuterDiv visible={isActivePlayer}>
+    return <OuterDiv>
         <HoldScoringDiceButton/>
         {showRoll && <button 
             onClick={() => roll("unheld")} 
-            disabled={!availableActions.roll}>
+            disabled={!isActivePlayer || !availableActions.roll}
+        >
             Roll
         </button>
         }
         {availableActions.rollAll && 
             <button 
-                onClick={() => roll("all")}>
+                onClick={() => roll("all")}
+                disabled={!isActivePlayer}
+            >
                 Roll All
             </button>
         }
         {availableActions.endTurn && 
             <button 
-                onClick={() => moves.endTurnNotBust()}>
+                onClick={() => moves.endTurnNotBust()}
+                disabled={!isActivePlayer}
+            >
                 Done
             </button>
         }
         {availableActions.bust && 
             <BustButton 
-                onClick={() => moves.endTurnBust()}>
+                onClick={() => moves.endTurnBust()}
+                disabled={!isActivePlayer}
+            >
             Bust!
             </BustButton>
         }
@@ -77,6 +83,7 @@ export function GameButtons() : JSX.Element {
             type="text"
             value={diceText}
             onChange={onChangeDiceText}
+            disabled={!isActivePlayer}
         />}
         {badDiceText && <div>Invalid dice values</div>}
     
