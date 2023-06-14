@@ -1,3 +1,5 @@
+import { LetterSet } from "./letter-set";
+
 class TrieNode {
     isWord: boolean;
     children: Map<string, TrieNode>;
@@ -25,7 +27,7 @@ export class Trie {
             this.addWord(word);
         }
     }
-    
+
     // Add a word to the trie
     addWord(word: string) {
         let node = this.root;
@@ -35,7 +37,7 @@ export class Trie {
         node.isWord = true;
     }
     // Find all the words that can be made from the letters
-    findWords(letters: string) {
+    findWords(letters: LetterSet) {
         const words : string[] = [];
         const node = this.root;
         // Find all the words that can be made from the letters
@@ -44,20 +46,20 @@ export class Trie {
     }   
 
     // Find all the words that can be made from the letters
-    findWordsRecursive(node: TrieNode, letters: string, word: string, words: string[]) {
+    private findWordsRecursive(
+        node: TrieNode, 
+        letters: LetterSet, 
+        word: string, 
+        words: string[]
+    ) {
         // If the node is a word then add it to the list of words
         if (node.isWord) {
             words.push(word);
         }
         // Iterate through all the letters
         for (const [letter, child] of node.children) {
-            // If the letter is in the letters then call recursively
-            if (letters.includes(letter)) {
-                // Find the index of the letter in the letters
-                const index = letters.indexOf(letter);
-                // Remove the letter from the letters
-                const newLetters = letters.slice(0, index) + letters.slice(index + 1);
-                // Call recursively
+            const newLetters = letters.removeLetter(letter);
+            if (newLetters) {
                 this.findWordsRecursive(child, newLetters, word + letter, words);
             }
         }
