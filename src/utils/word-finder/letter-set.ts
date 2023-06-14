@@ -1,20 +1,22 @@
-// Class to represent a set of letters and option wildcards.
+// Class to record the letters available to form a word.
+// Intended for use with Trie.
 export class LetterSet {
-    letters: string;
-    wildcards: number;
+    private letters: string;
+    private wildcards: number;
     
     constructor(letters: string, wildcards = 0) {
         this.letters = letters;
-        this.wildcards = wildcards;     
+        this.wildcards = wildcards;   
     }
 
-    // Return a copy of the letter set with a give letter removed,
-    // or undefined if the letter is not in the set.
-    removeLetter(letter: string) : LetterSet | undefined {
+    // Called when there is a requirement to use a particular letter.
+    // If the letter is avaible then return a copy of the letter set with the letter removed.
+    // If the letter is not available then return null.
+    useLetter(letter: string) : LetterSet | null {
+
         // If the letter is in the set then remove it
-        if (this.letters.includes(letter)) {
-            // Find the index of the letter in the letters
-            const index = this.letters.indexOf(letter);
+        const index = this.letters.indexOf(letter);
+        if (index >= 0) {
             // Remove the letter from the letters
             const newLetters = this.letters.slice(0, index) + this.letters.slice(index + 1);
             // Return a copy of the letter set with the letter removed
@@ -25,6 +27,6 @@ export class LetterSet {
             return new LetterSet(this.letters, this.wildcards - 1);
         }
         // Not found
-        return undefined;
+        return null;
     }
 }

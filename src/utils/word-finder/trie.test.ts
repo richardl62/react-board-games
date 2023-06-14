@@ -10,28 +10,27 @@ describe("Trie.addWord", () => {
     });
 });
 
-describe("Trie(['cat', 'dog', 'catdog']).findWord", () => {  
-    const trie = new Trie(["cat", "dog", "catdog"]);
-    const findWords = (letters: string) => {
+describe("Trie.findWords", () => {  
+    const trie = new Trie(["cat", "dog", "good", "catdog"]);
+
+
+    const testData: [string, string[]][] = [
+        ["cat", ["cat"]],
+        ["xogd", ["dog"]],
+        ["oogd", ["dog", "good"]],
+        ["acdtog", ["cat", "catdog", "dog"]],
+        ["?at", ["cat"]],
+        ["?????", ["cat", "dog", "good"]],
+    ];
+
+    test.each(testData)("%s", (letters, expected) => {
         const regularCharacters = letters.replace(/\?/g, "");
         const wildcards = letters.length - regularCharacters.length;
-        return trie.findWords(new LetterSet(regularCharacters, wildcards));
-    };
-    test("findWords('cat')", () => {
-        expect(findWords("cat")).toEqual(["cat"]);
+        
+        const found = trie.findWords(new LetterSet(regularCharacters, wildcards));
+        expect(found).toEqual(expected);
     });
-    test("findWords('xogd')", () => {
-        expect(findWords("xogd")).toEqual(["dog"]);
-    });
-    test("findWords('acdtog')", () => {
-        expect(findWords("catdog")).toEqual(["cat", "catdog", "dog"]);
-    });
-    test("findWords('?at')", () => {
-        expect(findWords("?at")).toEqual(["cat"]);
-    });
-    test("findWords('???')", () => {
-        expect(findWords("?????")).toEqual(["cat", "dog"]);
-    });
+
 });
 
     

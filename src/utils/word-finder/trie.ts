@@ -1,4 +1,9 @@
-import { LetterSet } from "./letter-set";
+// Class to represent a set of letters and option wildcards.
+interface LetterSet {
+    // Return a copy of the letter set with a give letter removed,
+    // or undefined if the letter is not in the set.
+    useLetter: (letter: string) => LetterSet | null;
+}
 
 class TrieNode {
     isWord: boolean;
@@ -37,7 +42,7 @@ export class Trie {
         node.isWord = true;
     }
     // Find all the words that can be made from the letters
-    findWords(letters: LetterSet) {
+    findWords<T extends LetterSet>(letters: T) {
         const words : string[] = [];
         const node = this.root;
         // Find all the words that can be made from the letters
@@ -46,9 +51,9 @@ export class Trie {
     }   
 
     // Find all the words that can be made from the letters
-    private findWordsRecursive(
+    private findWordsRecursive<T extends LetterSet>(
         node: TrieNode, 
-        letters: LetterSet, 
+        letters: T, 
         word: string, 
         words: string[]
     ) {
@@ -58,7 +63,7 @@ export class Trie {
         }
         // Iterate through all the letters
         for (const [letter, child] of node.children) {
-            const newLetters = letters.removeLetter(letter);
+            const newLetters = letters.useLetter(letter);
             if (newLetters) {
                 this.findWordsRecursive(child, newLetters, word + letter, words);
             }
