@@ -24,7 +24,6 @@ const OuterDiv = styled.div`
     }
 `;
 
-const rulesDoc = "https://docs.google.com/document/d/154dxhfUP_---wevKJ9IqzHMG9XLPxKbJWsoA3Vbi--Y/edit?usp=sharing";
 function Board() : JSX.Element {
  
     return <OuterDiv>
@@ -33,7 +32,6 @@ function Board() : JSX.Element {
         <Scores/>
         <ScorePads />
         <ScoringCombinations/>
-        <a href={rulesDoc} target="blank">Rules (work in progress)</a>
     </OuterDiv>;
 }
 
