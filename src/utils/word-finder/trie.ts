@@ -1,8 +1,9 @@
-// Class to represent a set of letters and option wildcards.
-interface LetterSet {
-    // Return a copy of the letter set with a give letter removed,
-    // or undefined if the letter is not in the set.
-    useLetter: (letter: string) => LetterSet | null;
+// Class to represent the constraints on a word.
+interface WordContraint {
+    // Called when there is a requirement to use a particular letter.
+    // If this is permitted then return a ConstrainedWord for the rest of the word.
+    // If the letter is not permitted then return null.
+    advance: (letter: string) => WordContraint | null;
 }
 
 class TrieNode {
@@ -41,8 +42,9 @@ export class Trie {
         }
         node.isWord = true;
     }
+    
     // Find all the words that can be made from the letters
-    findWords<T extends LetterSet>(letters: T) {
+    findWords<T extends WordContraint>(letters: T) {
         const words : string[] = [];
         const node = this.root;
         // Find all the words that can be made from the letters
@@ -51,7 +53,7 @@ export class Trie {
     }   
 
     // Find all the words that can be made from the letters
-    private findWordsRecursive<T extends LetterSet>(
+    private findWordsRecursive<T extends WordContraint>(
         node: TrieNode, 
         letters: T, 
         word: string, 
@@ -63,7 +65,7 @@ export class Trie {
         }
         // Iterate through all the letters
         for (const [letter, child] of node.children) {
-            const newLetters = letters.useLetter(letter);
+            const newLetters = letters.advance(letter);
             if (newLetters) {
                 this.findWordsRecursive(child, newLetters, word + letter, words);
             }

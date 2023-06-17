@@ -1,5 +1,6 @@
 // Class to record the letters available to form a word.
-// Intended for use with Trie.
+// Intended for use with ContraintWord. Also suitable for direct
+// use with Trie.
 export class LetterSet {
     private letters: string;
     private wildcards: number;
@@ -9,10 +10,8 @@ export class LetterSet {
         this.wildcards = wildcards;   
     }
 
-    // Called when there is a requirement to use a particular letter.
-    // If the letter is avaible then return a copy of the letter set with the letter removed.
-    // If the letter is not available then return null.
-    useLetter(letter: string) : LetterSet | null {
+    // See comment in Trie
+    advance(letter: string) : LetterSet | null {
 
         // If the letter is in the set then remove it
         const index = this.letters.indexOf(letter);
@@ -28,5 +27,10 @@ export class LetterSet {
         }
         // Not found
         return null;
+    }
+
+    // Return a copy of the letter set.
+    makeCopy() : LetterSet {
+        return new LetterSet(this.letters, this.wildcards);
     }
 }
