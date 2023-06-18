@@ -17,7 +17,7 @@ export interface ServerData extends RequiredServerData{
     heldDice: {
         score: number;
         categories: string[];
-        nonScoringFaces: number[];
+        numScoringFaces: number;
     };
     
     maxDiceScore: number;
@@ -54,7 +54,7 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         heldDice: {
             score: 0,
             categories: [],
-            nonScoringFaces: [],
+            numScoringFaces: 0,
         },
         
         maxDiceScore: 0,

@@ -9,7 +9,7 @@ export interface PlayerActions {
 
 // Return the available actions for the current player
 export function availablePlayerActions(
-    { heldDice, prevRollHeldScore, held, maxDiceScore, turnOverRollCount, rollCount, 
+    { faces, heldDice, prevRollHeldScore, held, maxDiceScore, turnOverRollCount, rollCount, 
         scoreCarriedOver, scoreToBeat, options }: ServerData
 ): PlayerActions {
     const actions : PlayerActions = {};
@@ -25,7 +25,7 @@ export function availablePlayerActions(
             actions.endTurn = true;
         }
 
-        if (heldDice.nonScoringFaces.length === 0) {
+        if (heldDice.numScoringFaces === faces.length) {
             actions.rollAll = true;
         } else if (held.includes(false)) {
             actions.roll = true;

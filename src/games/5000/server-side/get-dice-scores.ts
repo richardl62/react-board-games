@@ -9,7 +9,6 @@ export function setDiceScores(
     G: Pick<ServerData, "heldDice" | "maxDiceScore">
 )  : void {
     const heldFaces = faces.filter((_, i) => held[i]);
-    const unheldFaces = faces.filter((_, i) => !held[i]);
 
     const {scores: heldScores, unusedFaces: unusedHeldFaces} = 
         getScores({faces: heldFaces, preferSixDiceScore: true});
@@ -18,7 +17,7 @@ export function setDiceScores(
     G.heldDice = {
         score:totalScore(heldScores),
         categories: scoringCategoryNames(heldScores),
-        nonScoringFaces: [...unheldFaces, ...unusedHeldFaces,],
+        numScoringFaces: heldFaces.length - unusedHeldFaces.length,
     };
     G.maxDiceScore = totalScore(maxScore);
 }

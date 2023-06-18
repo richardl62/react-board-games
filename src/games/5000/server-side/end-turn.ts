@@ -9,11 +9,11 @@ function turnOver (
     G.heldDice = {
         score: 0,
         categories: [],
-        nonScoringFaces: [...G.faces],
+        numScoringFaces: 0,
     },
     G.maxDiceScore = 0;
     G.prevRollHeldScore = 0;
-    
+
     G.turnOverRollCount = G.rollCount;
     events.endTurn();
 }
