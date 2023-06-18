@@ -181,7 +181,7 @@ export function getWordsAndScore(context: ScrabbleContext, active: RowCol[]): Wo
 
     const words = candidateWords.map(cw => getWord(context.board, cw));
   
-    let illegalWords : string[] | null = words.filter(wd => !context.isLegalWord(wd));
+    let illegalWords : string[] | null = words.filter(wd => !context.legalWords.hasWord(wd));
     if(illegalWords.length === 0) {
         illegalWords = null;
     }

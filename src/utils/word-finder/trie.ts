@@ -3,7 +3,7 @@ interface WordContraint {
     // Called when there is a requirement to use a particular letter.
     // If this is permitted then return a ConstrainedWord for the rest of the word.
     // If the letter is not permitted then return null.
-    advance: (letter: string) => WordContraint | null;
+    advance: (lowerCaseletter: string) => WordContraint | null;
 }
 
 class TrieNode {
@@ -24,7 +24,7 @@ class TrieNode {
     }
 }
 
-// Trie data structure for use wuth the WordFinder class
+// Trie data structure for storing words. For now at least it is case insensitive.
 export class Trie {
     root: TrieNode;
     constructor(words: string[] = []) {
@@ -35,12 +35,27 @@ export class Trie {
     }
 
     // Add a word to the trie
-    addWord(word: string) {
+    addWord(inWord: string) {
+        const word = inWord.toLowerCase();
         let node = this.root;
         for (const letter of word) {
             node = node.addChild(letter);
         }
         node.isWord = true;
+    }
+
+    // Check if a word is in the trie
+    hasWord(inWord: string) {
+        const word = inWord.toLowerCase();
+
+        let node = this.root;
+        for (const letter of word) {
+            if (!node.children.has(letter)) {
+                return false;
+            }
+            node = node.children.get(letter)!;
+        }
+        return node.isWord;
     }
     
     // Find all the words that can be made from the letters

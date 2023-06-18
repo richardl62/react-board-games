@@ -19,7 +19,7 @@ function Validity({ valid }: { valid: boolean; }) {
 export function WordChecker(): JSX.Element {
     const [word, setEnteredWord] = useState("");
     const [valid, setValid] = useState<boolean | "unknown">("unknown");
-    const { dispatch, isLegalWord } = useScrabbleContext();
+    const { dispatch, legalWords } = useScrabbleContext();
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const rawWord = e.target.value;
@@ -29,7 +29,7 @@ export function WordChecker(): JSX.Element {
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        setValid(isLegalWord(word));
+        setValid(legalWords.hasWord(word));
         e.preventDefault();
     };
 

@@ -1,3 +1,5 @@
+import { Trie } from "./word-finder/trie";
+
 const wordListURL = "https://raw.githubusercontent.com/richardl62/scrabble-words/main/legal-words.txt";
 
 export async function getLegalWordList(): Promise<string[]> {
@@ -6,6 +8,11 @@ export async function getLegalWordList(): Promise<string[]> {
         throw new Error(`${response.status} ${response.statusText}`);
     }
     return (await response.text()).split("\n");
+}
+
+export async function getLegalWordTrie(): Promise<Trie> {
+    const legalWords = await getLegalWordList();
+    return new Trie(legalWords);
 }
 
 /**

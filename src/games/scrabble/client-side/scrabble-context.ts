@@ -9,6 +9,7 @@ import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { RequiredServerData } from "../../../app-game-support/required-server-data";
+import { Trie } from "../../../utils/word-finder/trie";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data
@@ -17,7 +18,7 @@ export interface ScrabbleContext extends ReducerState {
 
     readonly config: ScrabbleConfig;
     readonly dispatch:  Dispatch<ActionType>;
-    readonly isLegalWord: (word: string) => boolean;
+    readonly legalWords: Trie;
 
     readonly historyLength: number;
     readonly moveHistory: GameState["moveHistory"];
@@ -41,7 +42,7 @@ export function makeScrabbleContext(
     config: ScrabbleConfig,
     reducerState: ReducerState,
     dispatch: React.Dispatch<ActionType>,
-    isLegalWord: (word: string) => boolean,
+    legalWords: Trie,
 ) : ScrabbleContext {
     const G = scrabbleGameProps.G;
     sAssert(isServerData(G), "Game state appears to be invalid");
@@ -67,16 +68,16 @@ export function makeScrabbleContext(
         ...reducerState,
         wrappedGameProps: scrabbleGameProps, //kludge? Note that 'G' is not available to clients
 
-        playerID: playerID,
-        currentPlayer: currentPlayer,
+        playerID,
+        currentPlayer,
 
-        config: config,
-        dispatch: dispatch,
+        config,
+        dispatch,
 
         historyLength: G.states.length,
-        moveHistory: moveHistory,
+        moveHistory,
 
-        isLegalWord: isLegalWord,
+        legalWords,
 
         winnerIds: finalGameState.winnerIds,
     

@@ -11,6 +11,27 @@ describe("Trie.addWord", () => {
     });
 });
 
+describe("Trie.hasWord", () => {
+    const words = ["cat", "dog", "CoW", "catdog"];  
+    const trie = new Trie(words);
+
+    const testData: [string, boolean][] = [
+        ["cat", true],
+        ["DOG", true],
+        ["cOw", true],
+        ["catdog", true],
+        ["catd", false],
+        ["catdogcow", false],
+        ["", false],
+        ["c", false],
+    ];
+
+    test.each(testData)("%s", (word, expected) => {
+        expect(trie.hasWord(word)).toBe(expected);
+    });   
+
+});
+
 describe("Trie with LetterSet", () => {  
     const trie = new Trie(["cat", "dog", "good", "catdog"]);
 
