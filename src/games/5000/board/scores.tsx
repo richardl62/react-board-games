@@ -23,7 +23,10 @@ const Label = styled.span<{leftPadding?: boolean}>`
 `;
 
 export function Scores() : JSX.Element {
-    const {G: {scoreCarriedOver, diceScores, scoreToBeat}, getPlayerName} = useGameContext();
+    const {
+        G: {scoreCarriedOver, heldDice, scoreToBeat, prevRollHeldScore}, 
+        getPlayerName
+    } = useGameContext();
 
     const scoreToBeatText = () => {
         sAssert(scoreToBeat);
@@ -34,17 +37,17 @@ export function Scores() : JSX.Element {
     };
 
     const heldText = () => {
-        if(diceScores.held === 0) {
+        if(heldDice.score === 0) {
             return "";
         }
-        return `${diceScores.held} (${diceScores.heldCategories.join(", ")})`;
+        return `${heldDice.score} (${heldDice.categories.join(", ")})`;
     };
 
     const scoreThisTurnText = () => {
         if(scoreCarriedOver === 0) {
-            return `${diceScores.held}`;
+            return `${heldDice.score}`;
         }
-        const total = scoreCarriedOver + diceScores.held;
+        const total = scoreCarriedOver + heldDice.score;
         return `${total} (includes ${scoreCarriedOver} carried over)`;
     };
 
@@ -54,7 +57,7 @@ export function Scores() : JSX.Element {
         <Label>Score:</Label>
         <div>
             <Label leftPadding={true}>last roll: </Label>
-            <span>{diceScores.prevRollHeld || ""}</span>
+            <span>{prevRollHeldScore || ""}</span>
         </div>
         <div>
             <Label leftPadding={true}>this roll: </Label>

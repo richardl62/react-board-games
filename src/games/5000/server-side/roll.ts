@@ -1,6 +1,6 @@
 import { ServerData } from "./server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { getDiceScores } from "./get-dice-scores";
+import { setDiceScores } from "./get-dice-scores";
 import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
 import { sAssert } from "../../../utils/assert";
 
@@ -24,7 +24,7 @@ export function roll(
         }
         
         // Add the score from the previous roll to the carried over score
-        G.scoreCarriedOver += G.diceScores.held;
+        G.scoreCarriedOver += G.heldDice.score;
     }
 
     const {faces, held} = moveHeldFacesToStart(G);
@@ -39,10 +39,9 @@ export function roll(
     G.held = held;
 
     // Calculate the score from the dice
-    G.diceScores = {
-        prevRollHeld: type === "unheld" ? G.diceScores.held : 0,
-        ...getDiceScores(faces, held),
-    };
+    G.prevRollHeldScore = type === "unheld" ? G.heldDice.score : 0,
+    
+    setDiceScores(faces, held, G),
 
     G.rollCount++;
 }

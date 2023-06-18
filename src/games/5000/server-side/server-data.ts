@@ -14,15 +14,15 @@ export interface ServerData extends RequiredServerData{
     scoreCarriedOver: number;
 
     /** The score from the dice, excludes scores carried over from earlier in the turn */
-    diceScores: {
-        held: number;
-        heldCategories: string[];
-
+    heldDice: {
+        score: number;
+        categories: string[];
         nonScoringFaces: number[];
+    };
+    
+    maxDiceScore: number;
 
-        max: number;
-        prevRollHeld: number;
-    }
+    prevRollHeldScore: number;
 
     playerScores: {[playerID: string]: number[]};
 
@@ -51,16 +51,16 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         scoreToBeat,
         scoreCarriedOver: 0,
 
-        /** The score from the dice, excludes scores carried over from earlier in the turn */
-        diceScores: {
-            held: 0,
-            heldCategories: [],
-            nonScoringFaces: [...faces],
-
-            max: 0,
-
-            prevRollHeld: 0,
+        heldDice: {
+            score: 0,
+            categories: [],
+            nonScoringFaces: [],
         },
+        
+        maxDiceScore: 0,
+
+        prevRollHeldScore: 0,
+
 
         playerScores,
         

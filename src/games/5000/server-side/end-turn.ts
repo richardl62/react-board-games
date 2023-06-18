@@ -6,13 +6,14 @@ function turnOver (
 ): void {
     G.scoreCarriedOver = 0;
     G.held.fill(false);
-    G.diceScores = {
-        held: 0,
-        heldCategories: [],
+    G.heldDice = {
+        score: 0,
+        categories: [],
         nonScoringFaces: [...G.faces],
-        max: 0,
-        prevRollHeld: 0,
-    };
+    },
+    G.maxDiceScore = 0;
+    G.prevRollHeldScore = 0;
+    
     G.turnOverRollCount = G.rollCount;
     events.endTurn();
 }
@@ -23,7 +24,7 @@ export function endTurnNotBust (
 ): void {
     const { G, playerID } = arg0;
 
-    const score = G.scoreCarriedOver + G.diceScores.held;
+    const score = G.scoreCarriedOver + G.heldDice.score;
     if(G.scoreToBeat) {
         G.scoreToBeat.value = score;
         G.scoreToBeat.setBy = playerID;

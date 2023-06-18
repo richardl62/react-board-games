@@ -18,7 +18,7 @@ const ScorePadsDiv = styled.div`
 
 export function ScorePads() : JSX.Element {
     const { 
-        G : { playerScores, diceScores, scoreCarriedOver}, 
+        G : { playerScores, heldDice, scoreCarriedOver}, 
         ctx : { currentPlayer },
         getPlayerName 
     } = useGameContext();
@@ -27,7 +27,7 @@ export function ScorePads() : JSX.Element {
     for (const pid in playerScores) {
         const playerScore = playerScores[pid];
         const active = pid === currentPlayer;
-        const score = active ? diceScores.held + scoreCarriedOver : undefined;
+        const score = active ? heldDice.score + scoreCarriedOver : undefined;
         scorePads.push(<ScorePad
             key={pid}
             name={getPlayerName(pid)}

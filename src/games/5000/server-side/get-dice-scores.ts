@@ -3,21 +3,23 @@ import { getScores } from "../utils/get-scores";
 import { scoringCategoryNames } from "../utils/scoring-category-names";
 import { ServerData } from "./server-data";
 
-export function getDiceScores(
+export function setDiceScores(
     faces: number[],
     held: boolean[],
-)  : Omit<ServerData["diceScores"],"prevRollHeld"> {
+    G: Pick<ServerData, "heldDice" | "maxDiceScore">
+)  : void {
     const heldFaces = faces.filter((_, i) => held[i]);
     const unheldFaces = faces.filter((_, i) => !held[i]);
 
     const {scores: heldScores, unusedFaces: unusedHeldFaces} = 
         getScores({faces: heldFaces, preferSixDiceScore: true});
     const {scores: maxScore} = getScores({faces, preferSixDiceScore: false});
-    return {
-        held: totalScore(heldScores),
-        heldCategories: scoringCategoryNames(heldScores),
+    
+    G.heldDice = {
+        score:totalScore(heldScores),
+        categories: scoringCategoryNames(heldScores),
         nonScoringFaces: [...unheldFaces, ...unusedHeldFaces,],
-        max: totalScore(maxScore),
     };
+    G.maxDiceScore = totalScore(maxScore);
 }
 
