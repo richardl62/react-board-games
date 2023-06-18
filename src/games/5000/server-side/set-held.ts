@@ -1,6 +1,6 @@
 import { ServerData } from "./server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { setDiceScores } from "./get-dice-scores";
+import { setDiceScores } from "./set-dice-scores";
 
 export function setHeld(
     { G }: MoveArg0<ServerData>,
@@ -8,5 +8,5 @@ export function setHeld(
 ): void {
     G.held = held;
 
-    setDiceScores(G.faces, G.held,  G);
+    setDiceScores(G);
 }

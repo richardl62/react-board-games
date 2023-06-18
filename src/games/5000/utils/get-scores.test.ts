@@ -25,11 +25,13 @@ const testData: [number[], "prefer6" | "", Partial<DiceScore>][] = [
     [[2, 3, 4, 4, 6, 6], "prefer6",  {}],
 ];
 
-test.each(testData)("%j %j score %j", (faces, prefer6, expectedScore) => {
-    const actualScore = getScores({faces,
+test.each(testData)("%j %j score %j", (faces, prefer6, expected) => {
+    const actualScore: DiceScore = getScores({faces,
         preferSixDiceScore: prefer6 === "prefer6"
-    });
-    expect(actualScore.scores).toEqual({...zeroScore, ...expectedScore});
+    }).scores;
+    const expectedScore: DiceScore = {...zeroScore, ...expected};
+    
+    expect(actualScore).toEqual(expectedScore);
 });
 
 

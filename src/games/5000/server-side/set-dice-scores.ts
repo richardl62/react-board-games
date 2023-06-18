@@ -3,11 +3,11 @@ import { getScores } from "../utils/get-scores";
 import { scoringCategoryNames } from "../utils/scoring-category-names";
 import { ServerData } from "./server-data";
 
+/** Sets G.heldDice and G.maxDiceScore based on G.faces and G.held. */
 export function setDiceScores(
-    faces: number[],
-    held: boolean[],
-    G: Pick<ServerData, "heldDice" | "maxDiceScore">
+    G: ServerData
 )  : void {
+    const {faces, held} = G;
     const heldFaces = faces.filter((_, i) => held[i]);
 
     const {scores: heldScores, unusedFaces: unusedHeldFaces} = 

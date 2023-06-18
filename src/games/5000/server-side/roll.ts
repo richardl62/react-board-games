@@ -1,6 +1,6 @@
 import { ServerData } from "./server-data";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { setDiceScores } from "./get-dice-scores";
+import { setDiceScores } from "./set-dice-scores";
 import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
 import { sAssert } from "../../../utils/assert";
 
@@ -41,7 +41,7 @@ export function roll(
     // Calculate the score from the dice
     G.prevRollHeldScore = type === "unheld" ? G.heldDice.score : 0,
     
-    setDiceScores(faces, held, G),
+    setDiceScores(G);
 
     G.rollCount++;
 }
