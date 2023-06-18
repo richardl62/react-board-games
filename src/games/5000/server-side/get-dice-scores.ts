@@ -10,13 +10,14 @@ export function getDiceScores(
     const heldFaces = faces.filter((_, i) => held[i]);
     const unheldFaces = faces.filter((_, i) => !held[i]);
 
-    const {scores: heldScores, unusedFaces: unusedHeldFaces} = getScores(heldFaces);
-    const {scores: allDiceScores} = getScores(faces);
+    const {scores: heldScores, unusedFaces: unusedHeldFaces} = 
+        getScores({faces: heldFaces, preferSixDiceScore: true});
+    const {scores: maxScore} = getScores({faces, preferSixDiceScore: false});
     return {
         held: totalScore(heldScores),
         heldCategories: scoringCategoryNames(heldScores),
         nonScoringFaces: [...unheldFaces, ...unusedHeldFaces,],
-        max: totalScore(allDiceScores),
+        max: totalScore(maxScore),
     };
 }
 

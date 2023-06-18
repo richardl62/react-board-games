@@ -16,6 +16,7 @@ export function availablePlayerActions(
     if (turnOverRollCount === rollCount) {
         actions.rollAll = true;
     } else if (diceScores.max <= diceScores.prevRollHeld && !options.neverBust) {
+        console.log(diceScores);
         actions.bust = true;
     } else if (diceScores.held <= diceScores.prevRollHeld && !options.neverBust) {
         // No available actions.

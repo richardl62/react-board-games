@@ -7,7 +7,7 @@ export function HoldScoringDiceButton() {
     const { G, holdAllowed, moves } = useGameContext();
     const { faces, held } = G;
 
-    const { unusedFaces: nonScoringFaces } = getScores(faces);
+    const { unusedFaces: nonScoringFaces } = getScores({faces, preferSixDiceScore: false});
 
     const toHold: boolean[] = Array(held.length).fill(true);
 

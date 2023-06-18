@@ -2,50 +2,54 @@
 import { DiceScore, zeroScore, totalScore } from "./dice-score";
 
 /** Get a score for the given dice faces.
- * This will use all the dice if possible, and within that constraint
- * will give the hightest score possible.  For example
- * 1, 1, 1, 1, 2, 2 scores 500 (not 1100) but
- * 1, 1, 1, 1, 5, 5 scores 1200 (not 500).
+ * In general, this will be the highest score possible,
+ * but if preferSixDiceScore is true, then using all six
+ * dice (even if it means a lower score) is preferred.
+ * For example, with the option set
+ * 1, 1, 1, 1, 2, 2 scores 500 (not 1100).
 */ 
-export function getScores(faces: number[]): 
+export function getScores({faces, preferSixDiceScore}: {
+    faces: number[], preferSixDiceScore: boolean
+}): 
     {
         scores: DiceScore,
         // Values (rather then indices) of unused faces 
         unusedFaces: number[]
     } 
 {
-    const doGetScores = (
-        { includeThreePairs }: { includeThreePairs: boolean }) => {
-        
+    const scoreExcludingThreePairs = (() => {
         const sortedFaces = [...faces].sort();    
         const scores: DiceScore = { ...zeroScore };
 
         checkAllSame(sortedFaces, scores);
         checkAllDifferent(sortedFaces, scores);
-        includeThreePairs && checkThreePairs(sortedFaces, scores);
         checkThreeOfAKind(sortedFaces, scores);
         checkAces(sortedFaces, scores);
         checkFives(sortedFaces, scores);
 
         return {scores, unusedFaces: sortedFaces};
-    };
+    })();
 
-    let { scores, 
-        // eslint-disable-next-line prefer-const
-        unusedFaces: originalUnusedFaces, 
-    } = doGetScores({ includeThreePairs: true });
+    const scoreOnlyThreePairs = (() => {
+        const sortedFaces = [...faces].sort();
+        const scores: DiceScore = { ...zeroScore };
+        checkThreePairs(sortedFaces, scores);
+        return {scores, unusedFaces: sortedFaces};
+    })();
+
     
-    if ( scores.threePairs > 0) {
-        // Check if a higher score is possible while still using all the faces
-        const { scores: alternateScores, unusedFaces }
-            = doGetScores({ includeThreePairs: false });
+    if(scoreOnlyThreePairs.scores.threePairs > 0) {
+        if(totalScore(scoreOnlyThreePairs.scores) >=
+            totalScore(scoreExcludingThreePairs.scores)) {
+            return scoreOnlyThreePairs;
+        }
 
-        if (unusedFaces.length === 0 && totalScore(alternateScores) > totalScore(scores)) {
-            scores = alternateScores;
+        if(preferSixDiceScore && scoreExcludingThreePairs.unusedFaces.length > 0) {
+            return scoreOnlyThreePairs;
         }
     }
-
-    return {scores, unusedFaces: originalUnusedFaces};
+    
+    return scoreExcludingThreePairs;
 }
 
 
