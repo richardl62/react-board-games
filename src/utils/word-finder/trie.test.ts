@@ -37,7 +37,7 @@ describe("Trie with LetterSet", () => {
 
 
     const testData: [string, string[]][] = [
-        ["cat", ["cat"]],
+        ["CAT", ["cat"]],
         ["xogd", ["dog"]],
         ["oogd", ["dog", "good"]],
         ["acdtog", ["cat", "catdog", "dog"]],

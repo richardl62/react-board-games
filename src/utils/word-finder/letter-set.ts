@@ -6,7 +6,7 @@ export class LetterSet {
     private wildcards: number;
     
     constructor(letters: string, wildcards = 0) {
-        this.letters = letters;
+        this.letters = letters.toLocaleLowerCase();
         this.wildcards = wildcards;   
     }
 
