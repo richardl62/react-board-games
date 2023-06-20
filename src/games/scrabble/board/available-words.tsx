@@ -4,7 +4,14 @@ import { LetterSet } from "../../../utils/word-finder/letter-set";
 
 export function AvailableWords(): JSX.Element | null {
     const {rack, legalWords, reviewGameHistory } = useScrabbleContext();
-    const [words, setWords] = React.useState<string[]>([]);
+
+    type State = {rackLetters: string, words: string[]}
+    const [{words, rackLetters: recordedRackLetters}, setState] = React.useState<State>({words: [], rackLetters: ""});
+
+    const currentRackLetters = rack.join("");
+    if(recordedRackLetters !== currentRackLetters) {
+        setState({words: [], rackLetters: currentRackLetters});
+    }
 
     //KLUDGE?: Make available words available only when reviewing game history.
     if(!reviewGameHistory) {
@@ -23,11 +30,21 @@ export function AvailableWords(): JSX.Element | null {
         }
         
         const words = legalWords.findWords(new LetterSet(letters, nWildcards));
+
+        if (words.length === 0) {
+            return ["No words found"];
+        }
+
         // Return words sorted by length, longest first, and uppercase.
         return words.sort((a, b) => b.length - a.length).map((word) => word.toUpperCase());
     };
+
+    const onButtonClick = () => {
+        const words = getWords();
+        setState({words, rackLetters: currentRackLetters});
+    };
     return <div>
-        <button onClick={() => setWords(getWords())}>Show Available Words</button>
+        <button onClick={onButtonClick}>Show Available Words</button>
         {words.map((word) => <div key={word}>{word}</div>)}
     </div>;
 }
