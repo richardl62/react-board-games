@@ -16,6 +16,16 @@ export const letters : Letter [] = ["A", "B", "C", "D", "E", "F", "G", "H", "I",
     blank];   
 Object.freeze(letters);
 
+// Convert a string to a Letter if possible, otherwise return null.
+// The case of the input string is ignored.
+export function makeLetter(str: string) : Letter | null {
+    const letter = str.toUpperCase() as Letter;
+    if(letters.indexOf(letter)) {
+        return letter;
+    }
+    return null;
+}
+
 // For now at least, all scrabble configurations use the same letter scores.
 const letterScores: { [L in Letter]: number } = {
     A: 1, E: 1, I: 1, L: 1, N: 1, O: 1, R: 1, S: 1, T: 1, U: 1,

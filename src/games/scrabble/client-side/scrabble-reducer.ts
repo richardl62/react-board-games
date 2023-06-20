@@ -1,5 +1,6 @@
 import { ClickMoveDirection } from "../../../utils/board/click-move-marker";
-import { Letter } from "../config";
+import { blank, Letter } from "../config";
+import { makeLetter } from "../config/letters";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
 import { ClickMoveStart, newReducerState, ReducerState } from "./reducer-state";
@@ -67,10 +68,10 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         br.moveToRack(action.data);
     } 
     else if(action.type === "keydown") {
-        if( !state.focusInWordChecker && state.clickMoveStart ) {
-            const rackPos = br.findInRack(action.data.key);
-            if (rackPos !== null) {
-                br.moveFromRack({start: state.clickMoveStart, rackPos: rackPos});
+        if( !state.focusInWordChecker) {
+            const letter = makeLetter(action.data.key);
+            if( letter ) {
+                moveFromRack(br, letter, state.clickMoveStart);
             }
         }
     } else if(action.type === "recallRack") {
@@ -91,6 +92,25 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     };
 
     return newState;
+}
+
+function moveFromRack(br: BoardAndRack, letter: Letter, clickMoveStart: ClickMoveStart | null) {
+    if( !clickMoveStart ) {
+        return;
+    }
+
+    const letterPos = br.findInRack(letter);
+    if (letterPos !== null) {
+        br.moveFromRack({start: clickMoveStart, rackPos: letterPos});
+    } else {
+        const blackPos = br.findInRack(blank);
+        if (blackPos !== null) {
+            const newBlankPos = br.moveFromRack({ start: clickMoveStart, rackPos: blackPos });
+            if (newBlankPos !== null) {
+                br.setBlack(newBlankPos, letter);
+            }
+        }
+    }
 }
 
 function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | null): ClickMoveStart | null {

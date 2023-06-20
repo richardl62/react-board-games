@@ -201,7 +201,7 @@ export class BoardAndRack {
         }
     }
 
-    moveFromRack({start, rackPos} : {start: ClickMoveStart, rackPos: number}) : void {
+    moveFromRack({start, rackPos} : {start: ClickMoveStart, rackPos: number}) : SquareID | null {
         let { row, col } = start;
 
         if( start.direction === "right") {
@@ -216,6 +216,7 @@ export class BoardAndRack {
 
         if( this.evalBoard(row,col) === undefined ) {
             // [row][col] off the board. Do nothing in this case.
+            return null;
         } else {
             const rackLetter = this.rack[rackPos];
             this.setActiveTile(
@@ -223,6 +224,7 @@ export class BoardAndRack {
                 rackLetter && makeExtendedLetter(rackLetter),
             );
             this.rack[rackPos] = null;
+            return {boardID: boardIDs.main, row: row, col: col};
         }
     }
 
