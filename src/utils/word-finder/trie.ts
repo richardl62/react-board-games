@@ -69,24 +69,21 @@ export class Trie {
 
     // Find all the words that can be made from the letters
     private findWordsRecursive<T extends WordContraint>(
-        _node: TrieNode, 
-        _letters: T, 
-        _word: string, 
-        _words: string[]
+        node: TrieNode, 
+        letters: T, 
+        word: string, 
+        words: string[]
     ) {
-        //npm run build and heroku deploy fails with the following error
-        // TS2802: Type 'IterableIterator<[string, TrieNode]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-        throw new Error("Not implemented");
-        // // If the node is a word then add it to the list of words
-        // if (node.isWord) {
-        //     words.push(word);
-        // }
-        // // Iterate through all the letters
-        // for (const [letter, child] of node.children) {
-        //     const newLetters = letters.advance(letter);
-        //     if (newLetters) {
-        //         this.findWordsRecursive(child, newLetters, word + letter, words);
-        //     }
-        // }
+        // If the node is a word then add it to the list of words
+        if (node.isWord) {
+            words.push(word);
+        }
+        // Iterate through all the letters
+        for (const [letter, child] of node.children) {
+            const newLetters = letters.advance(letter);
+            if (newLetters) {
+                this.findWordsRecursive(child, newLetters, word + letter, words);
+            }
+        }
     }
 }
