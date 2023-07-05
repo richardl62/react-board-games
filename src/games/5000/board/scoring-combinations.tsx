@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useGameContext } from "../client-side/game-context";
 type DiceScore = [
     //dice values
     number[] | string | null,
@@ -7,7 +8,7 @@ type DiceScore = [
     number | null
 ];
 
-const diceScores : DiceScore[][] = [
+const diceScores  = (allSameScore: number) : DiceScore[][] => [
     [
         [[1], 100],
         [[5], 50],
@@ -27,7 +28,7 @@ const diceScores : DiceScore[][] = [
     [
         [[1, 2, 3, 4, 5, 6], 1500],
         ["Three pairs", 500],
-        ["All the same", 5000],
+        ["All the same", allSameScore],
         [null, null],
         [null, null],
         [null, null],
@@ -92,15 +93,18 @@ const ColumnsDiv = styled.div`
     background-color: cornsilk;
 `;
 export function ScoringCombinations() : JSX.Element {
+    const {G: {options}} = useGameContext();
+
     const [show, setShow] = React.useState(false);
     const toggleShow = () => setShow(!show);
+
     return <div>
         <label>
             <input type="checkbox" checked={show} onChange={toggleShow}/>
             Show scoring combinations
         </label>
         {show && <ColumnsDiv>
-            {diceScores.map((scores, index) =>
+            {diceScores(options.scoreToWin).map((scores, index) =>
                 <Column key={index} diceScores={scores} />
             )}
         </ColumnsDiv>}

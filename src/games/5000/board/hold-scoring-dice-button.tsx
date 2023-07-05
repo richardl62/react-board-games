@@ -5,9 +5,13 @@ import { sAssert } from "../../../utils/assert";
 
 export function HoldScoringDiceButton() {
     const { G, holdAllowed, moves } = useGameContext();
-    const { faces, held } = G;
+    const { faces, held, options } = G;
 
-    const { unusedFaces: nonScoringFaces } = getScores({faces, preferSixDiceScore: false});
+    const { unusedFaces: nonScoringFaces } = getScores({
+        faces,
+        preferSixDiceScore: false,
+        allSameScore: options.scoreToWin
+    });
 
     const toHold: boolean[] = Array(held.length).fill(true);
 

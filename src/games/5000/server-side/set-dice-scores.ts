@@ -9,10 +9,10 @@ export function setDiceScores(
 )  : void {
     const {faces, held} = G;
     const heldFaces = faces.filter((_, i) => held[i]);
-
+    const allSameScore = G.options.scoreToWin;
     const {scores: heldScores, unusedFaces: unusedHeldFaces} = 
-        getScores({faces: heldFaces, preferSixDiceScore: true});
-    const {scores: maxScore} = getScores({faces, preferSixDiceScore: false});
+        getScores({faces: heldFaces, preferSixDiceScore: true, allSameScore});
+    const {scores: maxScore} = getScores({faces, preferSixDiceScore: false, allSameScore});
     
     G.heldDice = {
         score:totalScore(heldScores),

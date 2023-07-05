@@ -34,7 +34,7 @@ export function endTurnNotBust (
     scores.push(score);
 
     const totalScore = scores.reduce((a, b) => a + b, 0);
-    if(totalScore >= 100 /* for now */) {
+    if(totalScore >= G.options.scoreToWin ) {
         arg0.events.endGame("win");
         return;
     }

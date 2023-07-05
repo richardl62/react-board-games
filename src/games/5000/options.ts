@@ -1,7 +1,11 @@
-import { OptionSpecifications, SpecifiedValues } from "../../app/option-specification/types";
+import { SpecifiedValues } from "../../app/option-specification/types";
 
 
-export const setupOptions : OptionSpecifications = {
+export const setupOptions = {
+    scoreToWin: {
+        default: 5000,
+        label: "Score to win",
+    },
     mustBeatPreviousScores: {
         default: true,
         label: "Must beat previous scores",

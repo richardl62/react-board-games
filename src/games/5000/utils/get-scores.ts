@@ -8,8 +8,9 @@ import { DiceScore, zeroScore, totalScore } from "./dice-score";
  * For example, with the option set
  * 1, 1, 1, 1, 2, 2 scores 500 (not 1100).
 */ 
-export function getScores({faces, preferSixDiceScore}: {
-    faces: number[], preferSixDiceScore: boolean
+export function getScores({faces, preferSixDiceScore, allSameScore}: {
+    faces: number[], preferSixDiceScore: boolean,
+    allSameScore: number,
 }): 
     {
         scores: DiceScore,
@@ -21,7 +22,7 @@ export function getScores({faces, preferSixDiceScore}: {
         const sortedFaces = [...faces].sort();    
         const scores: DiceScore = { ...zeroScore };
 
-        checkAllSame(sortedFaces, scores);
+        checkAllSame(sortedFaces, scores, allSameScore);
         checkAllDifferent(sortedFaces, scores);
         checkThreeOfAKind(sortedFaces, scores);
         checkAces(sortedFaces, scores);
@@ -52,11 +53,11 @@ export function getScores({faces, preferSixDiceScore}: {
     return scoreExcludingThreePairs;
 }
 
-
-function checkAllSame(sortedFaces: number[], scores: DiceScore) {
+function checkAllSame(sortedFaces: number[], scores: DiceScore, 
+    allSameScore: number) {
     if ( sortedFaces.length === 6 &&
         sortedFaces.every(face => face === sortedFaces[0])) {
-        scores.allSame += 5000;
+        scores.allSame += allSameScore;
         sortedFaces.splice(0);
     }
 }
