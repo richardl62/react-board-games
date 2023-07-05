@@ -5,6 +5,8 @@ import { ScorePads } from "./score-pads";
 import styled from "styled-components";
 import { GameDiceSet } from "./game-dice-set";
 import { ScoringCombinations } from "./scoring-combinations";
+import { useGameContext } from "../client-side/game-context";
+import { GameOver } from "./game-over";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -25,11 +27,11 @@ const OuterDiv = styled.div`
 `;
 
 function Board() : JSX.Element {
- 
+    const {ctx: {gameover}} = useGameContext();
     return <OuterDiv>
         <GameButtons/>
         <GameDiceSet/>
-        <Scores/>
+        {gameover ? <GameOver /> : <Scores/>}
         <ScorePads />
         <ScoringCombinations/>
     </OuterDiv>;

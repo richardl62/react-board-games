@@ -30,7 +30,14 @@ export function endTurnNotBust (
         G.scoreToBeat.setBy = playerID;
     }
 
-    G.playerScores[playerID].push(score);
+    const scores = G.playerScores[playerID];
+    scores.push(score);
+
+    const totalScore = scores.reduce((a, b) => a + b, 0);
+    if(totalScore >= 100 /* for now */) {
+        arg0.events.endGame("win");
+        return;
+    }
 
     turnOver(arg0);
 }
