@@ -10,6 +10,10 @@ export const setupOptions = {
         default: true,
         label: "Must beat previous scores",
     },
+    alwaysFinishRound: {
+        default: true,
+        label: "Always finish round",
+    },
     manualDiceRolls: {
         default: false,
         label: "Allow manual dice rolls",

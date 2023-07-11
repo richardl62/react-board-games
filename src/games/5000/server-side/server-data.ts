@@ -26,6 +26,8 @@ export interface ServerData extends RequiredServerData{
 
     playerScores: {[playerID: string]: number[]};
 
+    lastRound: boolean;
+
     options: SetupOptions;
 
     rollCount: number;
@@ -68,6 +70,8 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         // Kludge?: Treat the start of the game as the end of a turn.
         turnOverRollCount: 0,
 
+        lastRound: false,
+        
         options,
         
         ...startingRequiredState(),

@@ -35,8 +35,15 @@ export function endTurnNotBust (
 
     const totalScore = scores.reduce((a, b) => a + b, 0);
     if(totalScore >= G.options.scoreToWin ) {
-        arg0.events.endGame("win");
-        return;
+        G.lastRound = true;
+    }
+
+    if(G.lastRound) {
+        //Get last element of playOrder
+        const lastPlayer = arg0.ctx.playOrder.at(-1);
+        if(!G.options.alwaysFinishRound || lastPlayer === playerID) {
+            arg0.events.endGame("win");
+        }
     }
 
     turnOver(arg0);

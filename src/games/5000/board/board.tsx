@@ -7,6 +7,7 @@ import { GameDiceSet } from "./game-dice-set";
 import { ScoringCombinations } from "./scoring-combinations";
 import { useGameContext } from "../client-side/game-context";
 import { GameOver } from "./game-over";
+import { LastRoundNotice } from "./last-round-notice";
 
 const OuterDiv = styled.div`
     display: flex;
@@ -27,8 +28,13 @@ const OuterDiv = styled.div`
 `;
 
 function Board() : JSX.Element {
-    const {ctx: {gameover}} = useGameContext();
+    const {
+        G: {lastRound},
+        ctx: {gameover}
+    } = useGameContext();
+
     return <OuterDiv>
+        {lastRound && !gameover && <LastRoundNotice/>}
         <GameButtons/>
         <GameDiceSet/>
         {gameover ? <GameOver /> : <Scores/>}
