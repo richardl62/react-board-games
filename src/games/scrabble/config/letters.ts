@@ -20,7 +20,7 @@ Object.freeze(letters);
 // The case of the input string is ignored.
 export function makeLetter(str: string) : Letter | null {
     const letter = str.toUpperCase() as Letter;
-    if(letters.indexOf(letter)) {
+    if(letters.indexOf(letter) >= 0) {
         return letter;
     }
     return null;
