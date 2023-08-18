@@ -1,6 +1,6 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { Card } from "../../../utils/cards";
-import { deck } from "../../../utils/cards/deck";
+import { deckNoJokers } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
@@ -32,7 +32,7 @@ export function newDealData(
     pegPos: PlayerPegPositions,
     random: RandomAPI, 
 ): Omit<ServerData, keyof RequiredServerData> {
-    const cards = random.Shuffle(deck());
+    const cards = random.Shuffle(deckNoJokers());
 
     return {
         player0: playerData(cards, pegPos.player0),
