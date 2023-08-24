@@ -42,9 +42,9 @@ export function WordChecker(): JSX.Element {
 
             <WordInput
                 type="text"
+                spellCheck={false}
                 placeholder={"Word to check"}
                 value={word}
-                spellCheck={false}
                 onChange={onWordChange} 
                 onFocus={()=>focusIn(true)}
                 onBlur={()=>focusIn(false)}
