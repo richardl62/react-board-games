@@ -1,15 +1,16 @@
 import React, { ReactNode } from "react";
 import * as ReactDnd from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider as DndProviderMB } from "react-dnd-multi-backend";
+import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { sAssert } from "../assert";
 import { sameJSON } from "../same-json";
 const PIECE = "piece";
 
 export function DndProvider(props: {children: ReactNode}): JSX.Element {
     return (
-        <ReactDnd.DndProvider backend={HTML5Backend}>
+        <DndProviderMB options={HTML5toTouch}>
             {props.children}
-        </ReactDnd.DndProvider>
+        </DndProviderMB>
     );
 }
 
