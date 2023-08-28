@@ -1,5 +1,4 @@
 import React from "react";
-import { DndProvider } from "../../../utils/board/drag-drop";
 import { BoarderedGrid } from "../../../utils/board/boardered-grid";
 import { DragDrop, PieceHolder } from "../../../utils/board/piece-holder";
 import { useGameContext } from "./game-context";
@@ -59,20 +58,18 @@ export default function Board(): JSX.Element {
         <Square key={index} value={sq} position={index} onMove={onMove} />
     );
 
-    return (
-        <DndProvider>
-            <div>
-                <BoarderedGrid 
-                    nCols={G.options.numColumns} 
-                    backgroundColor={"brown"} 
-                    gridGap={"3px"}
-                    borderWidth={"6px"}
-                >
-                    {squareElems}
-                </BoarderedGrid>
-            </div>
+    return <div>
+        <div>
+            <BoarderedGrid
+                nCols={G.options.numColumns}
+                backgroundColor={"brown"}
+                gridGap={"3px"}
+                borderWidth={"6px"}
+            >
+                {squareElems}
+            </BoarderedGrid>
+        </div>
 
-            <button type='button' onClick={onReset}>Reset</button>
-        </DndProvider>
-    );
+        <button type='button' onClick={onReset}>Reset</button>
+    </div>;
 }

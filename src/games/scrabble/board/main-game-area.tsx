@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { DndProvider } from "../../../utils/board/drag-drop";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { MainBoard } from "./main-board";
 import { RackAndControls } from "./rack-and-controls";
@@ -37,20 +36,18 @@ function BagInfo(): JSX.Element {
 
 export function MainGameArea(): JSX.Element {
     const { reviewGameHistory, winnerIds } = useScrabbleContext();
-    return <DndProvider>
-        <Game>
-            <ScoresEtc/>
-            <RackAndControls/>
-            <Centered>
-                <MainBoard/>
-            </Centered>
-            <SpaceBetween>
-                <WordChecker />
-                <BagInfo/>
-            </SpaceBetween>
+    return <Game>
+        <ScoresEtc />
+        <RackAndControls />
+        <Centered>
+            <MainBoard />
+        </Centered>
+        <SpaceBetween>
+            <WordChecker />
+            <BagInfo />
+        </SpaceBetween>
 
-            {reviewGameHistory ? <RewindControls/> : <TurnControl/> }
-            { winnerIds && <EnableMoveHistoryToggle/>}
-        </Game>
-    </DndProvider>;
+        {reviewGameHistory ? <RewindControls /> : <TurnControl />}
+        {winnerIds && <EnableMoveHistoryToggle />}
+    </Game>;
 }

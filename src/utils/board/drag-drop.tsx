@@ -1,17 +1,7 @@
-import React, { ReactNode } from "react";
 import * as ReactDnd from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { sAssert } from "../assert";
 import { sameJSON } from "../same-json";
 const PIECE = "piece";
-
-export function DndProvider(props: {children: ReactNode}): JSX.Element {
-    return (
-        <ReactDnd.DndProvider backend={HTML5Backend}>
-            {props.children}
-        </ReactDnd.DndProvider>
-    );
-}
 
 type UnknownObject = Record<string, unknown>;
 
