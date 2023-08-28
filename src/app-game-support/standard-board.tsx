@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider  } from "react-dnd-multi-backend";
+import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { sAssert } from "../utils/assert";
 import { Warnings } from "./warnings/warnings";
 import { WrappedGameProps } from "./wrapped-game-props";
@@ -21,7 +21,7 @@ export function standardBoard(
 
         <ReactBasicsContext.Provider value={props}>
             <Warnings />
-            <DndProvider backend={HTML5Backend}>
+            <DndProvider options={HTML5toTouch}>
                 <LazyBoard customData={customData}/>
             </DndProvider>
         </ReactBasicsContext.Provider>
