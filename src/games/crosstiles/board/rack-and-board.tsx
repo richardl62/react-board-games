@@ -1,6 +1,4 @@
 import React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
@@ -39,13 +37,11 @@ export function RackAndBoard() : JSX.Element | null {
     }
 
     return <OuterDiv>
-        <DndProvider backend={HTML5Backend}>
-            <RackDiv>
-                <TileGrid letters={[rack]} container="rack" />
-                <button onClick={()=>dispatch({type: "recallToRack"})}>Recall</button>
-                <button onClick={()=>dispatch({type: "shuffleRack"})}>Shuffle</button>
-            </RackDiv>
-            <TileGrid letters={board} container="grid" clickMoveStart={clickMoveStart}/>
-        </DndProvider>
+        <RackDiv>
+            <TileGrid letters={[rack]} container="rack" />
+            <button onClick={() => dispatch({ type: "recallToRack" })}>Recall</button>
+            <button onClick={() => dispatch({ type: "shuffleRack" })}>Shuffle</button>
+        </RackDiv>
+        <TileGrid letters={board} container="grid" clickMoveStart={clickMoveStart} />
     </OuterDiv>;
 }

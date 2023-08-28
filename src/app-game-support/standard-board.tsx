@@ -10,6 +10,7 @@ export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(nu
 export function standardBoard(
     LazyBoard: ReturnType<typeof React.lazy>, 
     props: WrappedGameProps,
+    {provideDnD} : {provideDnD: boolean},
 
     /** Passed to the board. Intended for static configuration settings. 
      * (e.g. to distguish Scrabble from Simple Scrabble)
@@ -17,13 +18,22 @@ export function standardBoard(
     customData?: unknown,
 ) : JSX.Element
 {   
+    const boardWithDnD = () => {
+        const lazyBoard = <LazyBoard customData={customData} />;
+        if (provideDnD) {
+            return <DndProvider backend={HTML5Backend}>
+                {lazyBoard}
+            </DndProvider>;
+        }
+
+        return lazyBoard;
+    };
+
     return <Suspense fallback={<div>Loading...</div>}>
 
         <ReactBasicsContext.Provider value={props}>
             <Warnings />
-            <DndProvider backend={HTML5Backend}>
-                <LazyBoard customData={customData}/>
-            </DndProvider>
+            {boardWithDnD()}
         </ReactBasicsContext.Provider>
     </Suspense>;
 }

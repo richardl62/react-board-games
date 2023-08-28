@@ -7,5 +7,5 @@ const LazyBoard = React.lazy(() => import("./board/board"));
 export const appGame: AppGame = {
     ...appGameNoBoard,
 
-    board: props => standardBoard(LazyBoard, props),
+    board: props => standardBoard(LazyBoard, props, {provideDnD: true}),
 };

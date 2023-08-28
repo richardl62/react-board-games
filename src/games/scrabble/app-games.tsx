@@ -10,7 +10,7 @@ export const appGames: AppGame [] =
     appGamesNoBoard.map(game => {
         return {
             ...game,
-            board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, game),
+            board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, {provideDnD: false}, game),
         };
     });
 
