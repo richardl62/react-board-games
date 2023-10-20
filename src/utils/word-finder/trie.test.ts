@@ -58,12 +58,11 @@ describe("Trie with LetterSet", () => {
 describe("Trie with ConstrainedWord", () => {  
     const trie = new Trie(["cat", "dog", "cow", "catdog"]);
 
-
     const testData: [string, LetterConstraint[], string[]][] = [
-        ["?????", [], ["cat", "cow", "dog"]],
-        ["atdog", [{required: "c"}], ["cat", "catdog"]],
-        ["catdogcow", [{},{},{allowed: "wt"}], ["cat", "catdog", "cow"]],
-        ["catdogcow", [{},{},{},{allowed:""}], ["cat", "cow", "dog"]],
+        ["?????", [{},{},{}], ["cat", "cow", "dog"]],
+        ["atdog", [{required: "c"},{},{},{},{},{}], ["cat", "catdog"]],
+        ["catdogcow", [{},{},{allowed: "wt"},{},{},{}], ["cat", "catdog", "cow"]],
+        ["catdogcow", [{},{},{}], ["cat", "cow", "dog"]],
     ];
 
     test.each(testData)("%s %s", (letters, constraints, expected) => {
