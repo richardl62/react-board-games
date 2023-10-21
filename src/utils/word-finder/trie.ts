@@ -1,9 +1,10 @@
 // Class to represent the constraints on a word.
-interface WordContraint {
+export interface WordContraint {
     // Called when there is a requirement to use a particular letter.
     // If this is permitted then return a ConstrainedWord for the rest of the word.
     // If the letter is not permitted then return null.
     advance: (lowerCaseletter: string) => WordContraint | null;
+    minLengthReached: boolean;
 }
 
 class TrieNode {
@@ -59,28 +60,28 @@ export class Trie {
     }
     
     // Find all the words that can be made from the letters
-    findWords<T extends WordContraint>(letters: T) {
+    findWords<T extends WordContraint>(constraint: T) {
         const words : string[] = [];
         const node = this.root;
         // Find all the words that can be made from the letters
-        this.findWordsRecursive(node, letters, "", words);
+        this.findWordsRecursive(node, constraint, "", words);
         return words;
     }   
 
     // Find all the words that can be made from the letters
     private findWordsRecursive<T extends WordContraint>(
         node: TrieNode, 
-        letters: T, 
+        constraint: T, 
         word: string, 
         words: string[]
     ) {
         // If the node is a word then add it to the list of words
-        if (node.isWord) {
+        if (node.isWord && constraint.minLengthReached) {
             words.push(word);
         }
         // Iterate through all the letters
         for (const [letter, child] of node.children) {
-            const newLetters = letters.advance(letter);
+            const newLetters = constraint.advance(letter);
             if (newLetters) {
                 this.findWordsRecursive(child, newLetters, word + letter, words);
             }

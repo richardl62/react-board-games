@@ -1,7 +1,9 @@
+import { WordContraint as TrieWordConstraint } from "./trie";
+
 // Class to record the letters available to form a word.
 // Intended for use with ContraintWord. Also suitable for direct
 // use with Trie.
-export class LetterSet {
+export class LetterSet implements TrieWordConstraint {
     private letters: string;
     private wildcards: number;
     
@@ -28,6 +30,9 @@ export class LetterSet {
         // Not found
         return null;
     }
+
+    // No constraint on word length
+    get minLengthReached() {return true;}
 
     // Return a copy of the letter set.
     makeCopy() : LetterSet {
