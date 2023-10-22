@@ -8,6 +8,7 @@ import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
 import { EnableMoveHistoryToggle } from "./move-history";
 import { RewindControls } from "./rewind-controls";
+import { HighScoringWordsControls } from "./high-scoring-words-controls";
 
 const SpaceBetween = styled.div`
   display: flex;
@@ -39,6 +40,7 @@ export function MainGameArea(): JSX.Element {
     return <Game>
         <ScoresEtc />
         <RackAndControls />
+        <HighScoringWordsControls />
         <Centered>
             <MainBoard />
         </Centered>
