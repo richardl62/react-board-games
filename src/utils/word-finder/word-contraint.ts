@@ -23,7 +23,7 @@ export class WordConstraint implements TrieWordConstraint {
     get minLengthReached(): boolean {return this.minLength === 0;}
 
     // Called by Trie when there is a requirement to use a particular letter.
-    // If this is permitted then return an indepentant WordConstraint for the
+    // If this is permitted then return an indepentent WordConstraint for the
     // rest of the word.
     // If the letter is not permitted then return null.
     advance(letter: string) : WordConstraint | null {
