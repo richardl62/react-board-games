@@ -1,3 +1,4 @@
+import { sAssert } from "../../../utils/assert";
 import { blank, Letter } from "../config";
 import { makeLetter } from "../config/letters";
 import { BoardAndRack } from "./board-and-rack";
@@ -18,6 +19,8 @@ export type ActionType =
     | { type: "keydown", data: {key: string}}
     | { type: "enableGameHistory", data: {enable: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
+    | { type: "enableHighScoringWords", data: {enable: boolean}}
+    | { type: "setHighScoringWordsPosition", data: {position: number}}
     | { type: "focusInWordChecker", data: {focusIn: boolean}}
 
 export function scrabbleReducer(state : ReducerState, action: ActionType) : ReducerState {
@@ -51,6 +54,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     const br = new BoardAndRack(state.board, state.rack);
     
     let clickMoveStart = state.clickMoveStart;
+    let highScoringWords = state.highestScoringWords;
 
     if(action.type === "setClickMoveStart") {
         const {row, col} = action.data;
@@ -80,8 +84,29 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         br.shuffleRack();
     } else if(action.type === "setBlank") {
         br.setBlank(action.data.id, action.data.letter);
+    } else if(action.type === "enableHighScoringWords") {
+        if(action.data.enable) {
+            highScoringWords = {
+                possibleWords: getHighScoringWords(br),
+                position: 0,
+            };
+        } else {
+            highScoringWords = null;
+        }
+    }
+    else if(action.type === "setHighScoringWordsPosition") {
+        sAssert(highScoringWords);
+        highScoringWords.position = action.data.position;
     } else {
         console.warn("Unrecognised action in reducer:", action);
+    }
+
+    if(highScoringWords) {
+        const {possibleWords, position} = highScoringWords;
+        if(possibleWords.length === 0) {
+            sAssert(possibleWords[position]);
+            applyPossibleWord(br, possibleWords[position]);
+        }
     }
 
     const newState : ReducerState = {
@@ -89,6 +114,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         board: br.getBoard(),
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
+        highestScoringWords: highScoringWords,
     };
 
     return newState;

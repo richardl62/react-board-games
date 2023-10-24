@@ -3,6 +3,7 @@ import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
 import { WordPosition } from "./word-position";
+import { PossibleWord } from "./high-scoring-words";
 
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];
@@ -16,6 +17,11 @@ export interface ReducerState extends LocalGameState {
     focusInWordChecker: boolean;
 
     reviewGameHistory: { historyPosition: number } | false;
+    
+    highestScoringWords: { 
+        possibleWords: PossibleWord[],
+        position: number; 
+    } | null;
 
     clickMoveStart: WordPosition | null;
 }
@@ -62,6 +68,8 @@ export function newReducerState(
         focusInWordChecker: false,
         
         gameStates: states,
+
+        highestScoringWords: null,
 
         externalTimestamp: moveCount,
         scrabbleGameProps: scrabbleGameProps,
