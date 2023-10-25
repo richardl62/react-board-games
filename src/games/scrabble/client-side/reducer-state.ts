@@ -18,7 +18,7 @@ export interface ReducerState extends LocalGameState {
 
     reviewGameHistory: { historyPosition: number } | false;
     
-    highestScoringWords: { 
+    highScoringWords: { 
         possibleWords: PossibleWord[],
         position: number; 
     } | null;
@@ -69,7 +69,7 @@ export function newReducerState(
         
         gameStates: states,
 
-        highestScoringWords: null,
+        highScoringWords: null,
 
         externalTimestamp: moveCount,
         scrabbleGameProps: scrabbleGameProps,

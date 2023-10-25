@@ -54,7 +54,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     const br = new BoardAndRack(state.board, state.rack);
     
     let clickMoveStart = state.clickMoveStart;
-    let highScoringWords = state.highestScoringWords;
+    let highScoringWords = state.highScoringWords;
 
     if(action.type === "setClickMoveStart") {
         const {row, col} = action.data;
@@ -95,7 +95,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         }
     }
     else if(action.type === "setHighScoringWordsPosition") {
-        sAssert(highScoringWords);
+        sAssert(highScoringWords && highScoringWords.possibleWords[action.data.position]);
         highScoringWords.position = action.data.position;
     } else {
         console.warn("Unrecognised action in reducer:", action);
@@ -103,7 +103,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
 
     if(highScoringWords) {
         const {possibleWords, position} = highScoringWords;
-        if(possibleWords.length === 0) {
+        if(possibleWords.length !== 0) {
             sAssert(possibleWords[position]);
             applyPossibleWord(br, possibleWords[position]);
         }
@@ -114,7 +114,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         board: br.getBoard(),
         rack: br.getRack(),
         clickMoveStart: clickMoveStart,
-        highestScoringWords: highScoringWords,
+        highScoringWords: highScoringWords,
     };
 
     return newState;
