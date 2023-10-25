@@ -4,9 +4,11 @@ import { BoardAndRack } from "../board-and-rack";
 import { PossibleWord } from "./types";
 
 export function getHighScoringWords(boardAndRack: BoardAndRack) : PossibleWord[] {
+    boardAndRack.recallRack();
+
     const rackLetter = (ind: number) : Letter => {
         const letter = boardAndRack.getRack()[ind];
-        sAssert(letter);
+        sAssert(letter, "getHighScoringWords: null letter in rack");
         return letter;
     };
 
