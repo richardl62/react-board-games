@@ -5,6 +5,8 @@ import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
 import { newReducerState, ReducerState } from "./reducer-state";
 import { WordDirection, WordPosition } from "./word-position";
+import { applyPossibleWord } from "./high-scoring-words";
+import { getHighScoringWords } from "./high-scoring-words";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 
 export type ActionType =
