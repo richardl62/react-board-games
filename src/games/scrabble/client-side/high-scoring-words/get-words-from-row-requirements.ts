@@ -15,13 +15,13 @@ export function getWordsFromRowRequirements(
     const result: WordAndStart[] = [];
     for(let start = 0; start < rowRequirements.length; ++start) {
         const wordRequirements = rowRequirements.slice(start);
-        const firstRequirement = wordRequirements.findIndex(req => req !== null);
+        const firstRequirementIndex = wordRequirements.findIndex(req => req !== null);
         //console.log("start:",start, "wordRequirements", wordRequirements, "firstRequirement", firstRequirement);
-        if(typeof firstRequirement === "number") {
+        if(firstRequirementIndex >= 0) {
             const wordConstraint = new WordConstraint(
                 availableLetters,
                 wordRequirements,
-                firstRequirement + 1, // min length
+                firstRequirementIndex + 1, // min length
             );
 
             const words = trie.findWords(wordConstraint);
