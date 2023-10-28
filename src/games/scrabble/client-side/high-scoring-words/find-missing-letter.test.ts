@@ -1,5 +1,5 @@
 import { Trie } from "../../../../utils/word-finder/trie";
-import { findMissingLetter } from "./find-missing-letter";
+import { findMissingLetters } from "./find-missing-letter";
 
 describe("Find possible letters", () => {
     const trie = new Trie([
@@ -18,7 +18,7 @@ describe("Find possible letters", () => {
         ];
 
     test.each(testData)("%s %s %s", (before, after, expected) => {
-        const found = findMissingLetter({before, after}, trie);
+        const found = findMissingLetters({before, after}, trie);
 
         expect(found.join("")).toEqual(expected);
     });

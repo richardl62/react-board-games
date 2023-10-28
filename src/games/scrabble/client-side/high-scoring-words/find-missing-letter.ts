@@ -6,7 +6,7 @@ import { WordConstraint } from "../../../../utils/word-finder/word-contraint";
 /** Find the letter(s) that can come between 'before' and 'after' to form a word.
  * ('before' and 'after' can be zero length.)
  */
-export function findMissingLetter(
+export function findMissingLetters(
     {before, after} : {before: string, after: string},
     trie: Trie
 ) : string [] // Each string records a single letter
