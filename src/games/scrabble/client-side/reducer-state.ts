@@ -3,7 +3,7 @@ import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
 import { WordPosition } from "./word-position";
-import { PossibleWord } from "./high-scoring-words";
+import { PossibleWord } from "../high-scoring-words";
 
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];

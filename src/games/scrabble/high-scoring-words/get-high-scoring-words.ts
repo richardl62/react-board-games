@@ -1,5 +1,5 @@
-import { sAssert } from "../../../../utils/assert";
-import { BoardAndRack } from "../board-and-rack";
+import { sAssert } from "../../../utils/assert";
+import { BoardAndRack } from "../client-side/board-and-rack";
 import { PossibleWord } from "./types";
 
 export function getHighScoringWords(boardAndRack: BoardAndRack) : PossibleWord[] {

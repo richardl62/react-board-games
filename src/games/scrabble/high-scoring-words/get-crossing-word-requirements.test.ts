@@ -1,5 +1,5 @@
-import { allowedLetters, givenLetter } from "../../../../utils/word-finder/letter-requirement";
-import { Trie } from "../../../../utils/word-finder/trie";
+import { allowedLetters, givenLetter } from "../../../utils/word-finder/letter-requirement";
+import { Trie } from "../../../utils/word-finder/trie";
 import { getCrossingWordRequirements } from "./get-crossing-word-requirements";
 
 const g = givenLetter;

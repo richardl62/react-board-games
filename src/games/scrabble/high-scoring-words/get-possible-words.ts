@@ -1,6 +1,6 @@
-import { transpose } from "../../../../utils/transpose";
-import { LetterSet } from "../../../../utils/word-finder/letter-set";
-import { Trie } from "../../../../utils/word-finder/trie";
+import { transpose } from "../../../utils/transpose";
+import { LetterSet } from "../../../utils/word-finder/letter-set";
+import { Trie } from "../../../utils/word-finder/trie";
 import { getVerticalWords } from "./get-possible-vertical-words";
 import { PossibleWord } from "./types";
 

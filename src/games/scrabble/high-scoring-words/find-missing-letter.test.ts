@@ -1,4 +1,4 @@
-import { Trie } from "../../../../utils/word-finder/trie";
+import { Trie } from "../../../utils/word-finder/trie";
 import { findMissingLetters } from "./find-missing-letter";
 
 describe("Find possible letters", () => {

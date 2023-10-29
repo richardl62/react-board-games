@@ -1,6 +1,6 @@
-import { givenLetter } from "../../../../utils/word-finder/letter-requirement";
-import { LetterSet } from "../../../../utils/word-finder/letter-set";
-import { Trie } from "../../../../utils/word-finder/trie";
+import { givenLetter } from "../../../utils/word-finder/letter-requirement";
+import { LetterSet } from "../../../utils/word-finder/letter-set";
+import { Trie } from "../../../utils/word-finder/trie";
 import { getWordsFromRowRequirements } from "./get-words-from-row-requirements";
 
 const g = givenLetter;

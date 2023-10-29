@@ -1,5 +1,5 @@
-import { LetterSet } from "../../../../utils/word-finder/letter-set";
-import { Trie } from "../../../../utils/word-finder/trie";
+import { LetterSet } from "../../../utils/word-finder/letter-set";
+import { Trie } from "../../../utils/word-finder/trie";
 import { getPossibleWords } from "./get-possible-words";
 import { PossibleWord } from "./types";
 

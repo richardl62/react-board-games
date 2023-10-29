@@ -3,10 +3,10 @@ import { blank, Letter } from "../config";
 import { makeLetter } from "../config/letters";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
+import { applyPossibleWord } from "../high-scoring-words";
+import { getHighScoringWords } from "../high-scoring-words";
 import { newReducerState, ReducerState } from "./reducer-state";
 import { WordDirection, WordPosition } from "./word-position";
-import { applyPossibleWord } from "./high-scoring-words";
-import { getHighScoringWords } from "./high-scoring-words";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 
 export type ActionType =
