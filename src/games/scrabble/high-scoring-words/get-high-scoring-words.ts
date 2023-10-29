@@ -1,5 +1,5 @@
-import { sAssert } from "../../../utils/assert";
 import { BoardAndRack } from "../client-side/board-and-rack";
+import { blank } from "../config";
 import { PossibleWord } from "./types";
 
 export function getHighScoringWords(boardAndRack: BoardAndRack) : PossibleWord[] {
@@ -7,8 +7,10 @@ export function getHighScoringWords(boardAndRack: BoardAndRack) : PossibleWord[]
 
     const rackLetter = (ind: number) : string => {
         const letter = boardAndRack.getRack()[ind];
-        sAssert(letter, "getHighScoringWords: null letter in rack");
-        return letter;
+        if(letter === null) {
+            return "";
+        }
+        return letter === blank ? "X" : letter;
     };
 
     return [
