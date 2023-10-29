@@ -1,6 +1,6 @@
 import { LetterSet } from "../../../../utils/word-finder/letter-set";
 import { Trie } from "../../../../utils/word-finder/trie";
-import { getVerticalWords } from "./get-vertical-words";
+import { PossibleVerticalWord, getVerticalWords } from "./get-possible-vertical-words";
 
 test("get vertical words 1", () => {
     const trie = new Trie(["ab","bbb", "bc"]);
@@ -11,10 +11,10 @@ test("get vertical words 1", () => {
         [null, null, null],
     ];
 
-    const expected = [
-        {start: {row:0, col: 1}, word: "ab"},
-        {start: {row:0, col: 2}, word: "bbb"},
-        {start: {row:0, col: 2}, word: "bc"},
+    const expected : PossibleVerticalWord [] = [
+        { row:0, col: 1, word: "ab"},
+        { row:0, col: 2, word: "bbb"},
+        { row:0, col: 2, word: "bc"},
     ];
 
     const result = getVerticalWords(board, availableLetters, trie);
@@ -31,11 +31,11 @@ test("get vertical words 2", () => {
         [null, null, null],
     ];
 
-    const expected = [
-        { start: { row: 1, col: 0 }, word: "ab" },
-        { start: { row: 0, col: 1 }, word: "ab" },
-        { start: { row: 0, col: 1 }, word: "bbb" },
-        { start: { row: 1, col: 1 }, word: "bc" }
+    const expected : PossibleVerticalWord [] = [
+        {  row: 1, col: 0, word: "ab" },
+        {  row: 0, col: 1, word: "ab" },
+        { row: 0, col: 1, word: "bbb" },
+        { row: 1, col: 1, word: "bc" }
     ];
 
     const result = getVerticalWords(board, availableLetters, trie);
