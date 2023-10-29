@@ -4,7 +4,7 @@ import { Trie } from "../../../../utils/word-finder/trie";
 import { getCrossingWordRequirements } from "./get-crossing-word-requirements";
 import { getWordsFromRowRequirements } from "./get-words-from-row-requirements";
 
-interface PositionAndWord {
+interface Word {
     start: {row: number, col: number},
     word: string;
 }
@@ -13,9 +13,10 @@ interface PositionAndWord {
  * (A vertical word is one of which the letter positions vary in the first board index)
  */
 export function getVerticalWords(letters: (string| null)[][], availableLetters: LetterSet, trie: Trie) 
-: PositionAndWord[]
+: Word[]
 {
-    const result: PositionAndWord[] = [];
+    console.log("In getVerticalWords");
+    const result: Word[] = [];
 
     const rowRequirements = letters.map(row => getCrossingWordRequirements(row, trie));
     const colRequirements = transpose(rowRequirements);
