@@ -2,13 +2,7 @@ import { ScrabbleGameProps } from "./srcabble-game-props";
 import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
-import { ClickMoveDirection } from "../../../utils/board/click-move-marker";
-
-export interface ClickMoveStart {
-    row: number;
-    col: number;
-    direction: ClickMoveDirection;
-} 
+import { WordPosition } from "./word-position";
 
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];
@@ -23,7 +17,7 @@ export interface ReducerState extends LocalGameState {
 
     reviewGameHistory: { historyPosition: number } | false;
 
-    clickMoveStart: ClickMoveStart | null;
+    clickMoveStart: WordPosition | null;
 }
 
 interface SimplifedReducerState {
@@ -56,7 +50,7 @@ export function newReducerState(
 
     let playerID;
     if(simplifiedState.reviewGameHistory) {
-        // View the game from the perspective of he current player
+        // View the game from the perspective of the current player
         playerID = states[simplifiedState.reviewGameHistory.historyPosition].currentPlayer;
     } else {
         playerID = scrabbleGameProps.playerID;

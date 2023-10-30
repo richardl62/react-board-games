@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { squareSize } from "../../games/scrabble/board/style";
+import { WordDirection } from "../../games/scrabble/client-side/word-position";
 
 const OuterDiv = styled.div<{rotation: string}>`
     display: flex;
@@ -11,8 +12,6 @@ const OuterDiv = styled.div<{rotation: string}>`
 
     height: ${squareSize};
     width: ${squareSize};
-
-    
 `;
 
 const ArrowHead = styled.div`
@@ -22,11 +21,9 @@ const ArrowHead = styled.div`
     border-left: calc(${squareSize}*0.6) solid #77a81c;
     border-bottom: calc(${squareSize}*0.3) solid transparent;
 `;
-       
+    
 
-export type ClickMoveDirection = "right" | "down";
-
-export function nextCickMoveDirection(current: ClickMoveDirection| null) : ClickMoveDirection | null {
+export function nextCickMoveDirection(current: WordDirection| null) : WordDirection | null {
     if(current === null) {
         return "right";
     }
@@ -39,7 +36,7 @@ export function nextCickMoveDirection(current: ClickMoveDirection| null) : Click
 }
 
 interface ClickMoveMarkerProps {
-    direction: ClickMoveDirection;
+    direction: WordDirection;
 }
 
 export function ClickMoveMarker(props: ClickMoveMarkerProps) : JSX.Element {

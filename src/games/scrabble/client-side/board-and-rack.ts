@@ -4,7 +4,7 @@ import { blank, Letter } from "../config";
 import { shuffle } from "../../../utils/shuffle";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
 import { BoardData, BoardSquareData } from "../server-side/game-state";
-import { ClickMoveStart } from "./reducer-state";
+import { WordPosition } from "./word-position";
 
 export type Rack = (Letter | null)[];
 
@@ -148,10 +148,6 @@ export class BoardAndRack {
         return this.board;
     }
 
-    getRackFromState(): Rack {
-        return this.rack;
-    }
-
     /** 
      * Moves should be from an active square to an empty or active square.
      * This function does nothing if thid rule is broken. (The rule might
@@ -201,7 +197,7 @@ export class BoardAndRack {
         }
     }
 
-    moveFromRack({start, rackPos} : {start: ClickMoveStart, rackPos: number}) : SquareID | null {
+    moveFromRack({start, rackPos} : {start: WordPosition, rackPos: number}) : SquareID | null {
         let { row, col } = start;
 
         if( start.direction === "right") {
@@ -271,7 +267,7 @@ export class BoardAndRack {
         compactRack(this.rack);
     }
     
-    setBlack(id: SquareID, letter: Letter) : void {
+    setBlank(id: SquareID, letter: Letter) : void {
         sAssert(!onRack(id));
 
         const sq = this.board[id.row][id.col];

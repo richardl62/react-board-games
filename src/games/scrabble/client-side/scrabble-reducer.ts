@@ -1,9 +1,9 @@
-import { ClickMoveDirection } from "../../../utils/board/click-move-marker";
 import { blank, Letter } from "../config";
 import { makeLetter } from "../config/letters";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
-import { ClickMoveStart, newReducerState, ReducerState } from "./reducer-state";
+import { newReducerState, ReducerState } from "./reducer-state";
+import { WordDirection, WordPosition } from "./word-position";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 
 export type ActionType =
@@ -79,12 +79,12 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     } else if(action.type === "shuffleRack") {
         br.shuffleRack();
     } else if(action.type === "setBlank") {
-        br.setBlack(action.data.id, action.data.letter);
+        br.setBlank(action.data.id, action.data.letter);
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
 
-    const newState = {
+    const newState : ReducerState = {
         ...state,
         board: br.getBoard(),
         rack: br.getRack(),
@@ -94,7 +94,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     return newState;
 }
 
-function moveFromRack(br: BoardAndRack, letter: Letter, clickMoveStart: ClickMoveStart | null) {
+function moveFromRack(br: BoardAndRack, letter: Letter, clickMoveStart: WordPosition | null) {
     if( !clickMoveStart ) {
         return;
     }
@@ -107,14 +107,14 @@ function moveFromRack(br: BoardAndRack, letter: Letter, clickMoveStart: ClickMov
         if (blackPos !== null) {
             const newBlankPos = br.moveFromRack({ start: clickMoveStart, rackPos: blackPos });
             if (newBlankPos !== null) {
-                br.setBlack(newBlankPos, letter);
+                br.setBlank(newBlankPos, letter);
             }
         }
     }
 }
 
-function newClickMoveState(row: number, col: number, oldCMS: ClickMoveStart | null): ClickMoveStart | null {
-    let direction : ClickMoveDirection | null;
+function newClickMoveState(row: number, col: number, oldCMS: WordPosition | null): WordPosition | null {
+    let direction : WordDirection | null;
 
     // If the same square is clicked multiple times, the arrow cycles
     // in the order right, down, none.

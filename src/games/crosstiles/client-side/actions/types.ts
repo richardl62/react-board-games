@@ -1,4 +1,4 @@
-import { ClickMoveDirection } from "../../../../utils/board/click-move-marker";
+import { WordDirection } from "../../../scrabble/client-side/word-position";
 
 interface RackID {
     row?: undefined,
@@ -23,5 +23,5 @@ export function sameSquareID(s1: SquareID, s2: SquareID) : boolean {
 export interface ClickMoveStart {
     row: number;
     col: number;
-    direction: ClickMoveDirection;
+    direction: WordDirection;
 } 
