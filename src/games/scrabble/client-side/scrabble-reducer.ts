@@ -8,6 +8,7 @@ import { getHighScoringWords } from "../high-scoring-words";
 import { newReducerState, ReducerState } from "./reducer-state";
 import { WordDirection, WordPosition } from "./word-position";
 import { ScrabbleGameProps } from "./srcabble-game-props";
+import { Trie } from "../../../utils/word-finder/trie";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
@@ -21,7 +22,7 @@ export type ActionType =
     | { type: "keydown", data: {key: string}}
     | { type: "enableGameHistory", data: {enable: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
-    | { type: "enableHighScoringWords", data: {enable: boolean}}
+    | { type: "enableHighScoringWords", data: {enable: boolean, legalWords: Trie}} // Kludge? Should the Trie be supplied here?
     | { type: "setHighScoringWordsPosition", data: {position: number}}
     | { type: "focusInWordChecker", data: {focusIn: boolean}}
 
@@ -89,7 +90,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     } else if(action.type === "enableHighScoringWords") {
         if(action.data.enable) {
             highScoringWords = {
-                possibleWords: getHighScoringWords(br),
+                possibleWords: getHighScoringWords(br, action.data.legalWords),
                 position: 0,
             };
         } else {

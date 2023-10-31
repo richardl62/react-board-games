@@ -43,7 +43,7 @@ function Arrows() {
     </>;
 }
 export function HighScoringWordsControls() : JSX.Element {
-    const  { highScoringWords, dispatch } = useScrabbleContext();
+    const  { highScoringWords, dispatch, legalWords} = useScrabbleContext();
     const enabled = highScoringWords !== null;
     const noWordsFound = highScoringWords && 
         highScoringWords?.possibleWords.length === 0;
@@ -54,7 +54,7 @@ export function HighScoringWordsControls() : JSX.Element {
                 checked={enabled} 
                 onChange={()=>dispatch({
                     type:"enableHighScoringWords",
-                    data: {enable: !enabled}
+                    data: {enable: !enabled, legalWords}
                 })} 
             />
         </label>

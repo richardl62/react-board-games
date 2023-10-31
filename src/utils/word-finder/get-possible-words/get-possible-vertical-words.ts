@@ -16,7 +16,6 @@ export interface PossibleVerticalWord {
 export function getVerticalWords(letters: (string| null)[][], availableLetters: LetterSet, trie: Trie) 
 : PossibleVerticalWord[]
 {
-    console.log("In getVerticalWords");
     const result: PossibleVerticalWord[] = [];
 
     const rowRequirements = letters.map(row => getCrossingWordRequirements(row, trie));
