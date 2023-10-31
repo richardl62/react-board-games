@@ -1,6 +1,6 @@
-import { transpose } from "../../../utils/transpose";
-import { LetterSet } from "../../../utils/word-finder/letter-set";
-import { Trie } from "../../../utils/word-finder/trie";
+import { transpose } from "../../transpose";
+import { LetterSet } from "../letter-set";
+import { Trie } from "../trie";
 import { getCrossingWordRequirements } from "./get-crossing-word-requirements";
 import { getWordsFromRowRequirements } from "./get-words-from-row-requirements";
 

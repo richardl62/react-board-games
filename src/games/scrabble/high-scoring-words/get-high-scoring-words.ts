@@ -1,6 +1,6 @@
+import { PossibleWord } from "../../../utils/word-finder/get-possible-words/get-possible-words";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { blank } from "../config";
-import { PossibleWord } from "./types";
 
 export function getHighScoringWords(boardAndRack: BoardAndRack) : PossibleWord[] {
     boardAndRack.recallRack();

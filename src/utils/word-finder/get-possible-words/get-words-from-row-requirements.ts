@@ -1,7 +1,7 @@
-import { LetterRequirement } from "../../../utils/word-finder/letter-requirement";
-import { LetterSet } from "../../../utils/word-finder/letter-set";
-import { Trie } from "../../../utils/word-finder/trie";
-import { WordConstraint } from "../../../utils/word-finder/word-contraint";
+import { LetterRequirement } from "../letter-requirement";
+import { LetterSet } from "../letter-set";
+import { Trie } from "../trie";
+import { WordConstraint } from "../word-contraint";
 
 type WordAndStart = {start: number; word: string};
 

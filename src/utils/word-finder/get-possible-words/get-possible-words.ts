@@ -1,8 +1,19 @@
-import { transpose } from "../../../utils/transpose";
-import { LetterSet } from "../../../utils/word-finder/letter-set";
-import { Trie } from "../../../utils/word-finder/trie";
+import { transpose } from "../../transpose";
+import { LetterSet } from "../letter-set";
+import { Trie } from "../trie";
 import { getVerticalWords } from "./get-possible-vertical-words";
-import { PossibleWord } from "./types";
+
+export type WordDirection = "right" | "down";
+
+export interface WordPosition {
+    row: number;
+    col: number;
+    direction: WordDirection;
+}
+
+export interface PossibleWord extends WordPosition {
+    word: string;
+}
 
 export function getPossibleWords(letters: (string| null)[][], availableLetters: LetterSet, trie: Trie) 
 : PossibleWord[]

@@ -1,5 +1,5 @@
-import { LetterRequirement, allowedLetters, givenLetter } from "../../../utils/word-finder/letter-requirement";
-import { Trie } from "../../../utils/word-finder/trie";
+import { LetterRequirement, allowedLetters, givenLetter } from "../letter-requirement";
+import { Trie } from "../trie";
 import { findMissingLetters } from "./find-missing-letter";
 
 /**

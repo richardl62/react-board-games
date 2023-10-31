@@ -1,5 +1,5 @@
-import { LetterSet } from "../../../utils/word-finder/letter-set";
-import { Trie } from "../../../utils/word-finder/trie";
+import { LetterSet } from "../letter-set";
+import { Trie } from "../trie";
 import { PossibleVerticalWord, getVerticalWords } from "./get-possible-vertical-words";
 
 test("get vertical words 1", () => {

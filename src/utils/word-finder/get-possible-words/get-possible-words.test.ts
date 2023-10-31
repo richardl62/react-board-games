@@ -1,7 +1,6 @@
-import { LetterSet } from "../../../utils/word-finder/letter-set";
-import { Trie } from "../../../utils/word-finder/trie";
-import { getPossibleWords } from "./get-possible-words";
-import { PossibleWord } from "./types";
+import { LetterSet } from "../letter-set";
+import { Trie } from "../trie";
+import { getPossibleWords, PossibleWord } from "./get-possible-words";
 
 test("get playable words", () => {
     const trie = new Trie(["ab","bbb", "bc"]);

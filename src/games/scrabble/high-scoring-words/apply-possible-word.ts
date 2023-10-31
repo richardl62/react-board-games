@@ -3,7 +3,7 @@ import { boardIDs } from "../client-side";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { blank } from "../config";
 import { makeLetter } from "../config/letters";
-import { PossibleWord } from "./types";
+import { PossibleWord } from "../../../utils/word-finder/get-possible-words/get-possible-words";
 
 export function applyPossibleWord(br: BoardAndRack, possibleWord: PossibleWord) : void {
     br.recallRack();
