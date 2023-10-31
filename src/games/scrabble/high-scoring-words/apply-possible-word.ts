@@ -5,7 +5,6 @@ import { blank } from "../config";
 import { makeLetter } from "../config/letters";
 import { PossibleWord } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function applyPossibleWord(br: BoardAndRack, possibleWord: PossibleWord) : void {
     br.recallRack();
 

@@ -148,6 +148,10 @@ export class BoardAndRack {
         return this.board;
     }
 
+    getBoardLetters() : (Letter|null)[][] {
+        return this.board.map(row => row.map(sq => sq && sq.letter));
+    }
+
     /** 
      * Moves should be from an active square to an empty or active square.
      * This function does nothing if thid rule is broken. (The rule might
