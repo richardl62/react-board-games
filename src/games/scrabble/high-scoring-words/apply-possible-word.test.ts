@@ -20,6 +20,7 @@ function makeBoardAndRack(
 }
 
 test("Apply possible Word 1",() => {
+    // At one time this test crashed due to a problem with setting blanks.
 
     const br = makeBoardAndRack(
         [
@@ -29,11 +30,11 @@ test("Apply possible Word 1",() => {
     );
 
     applyPossibleWord(br,
-        {row:0, col: 0, direction: "right", word: "AB"},
+        {row:0, col: 0, direction: "right", word: "BX"},
     );
 
     expect(br.getBoardLetters()).toEqual([
-        ["A", "B"]
+        ["B","X"]
     ]);
 
     expect(br.getRack()).toEqual([null, null]);
@@ -47,7 +48,6 @@ test("Apply possible Word 2",() => {
         ],
         [null, "?", "B", "C", "C", "A"]
     );
-
 
     applyPossibleWord(br,
         {row:0, col: 1, direction: "right", word: "AXC"},

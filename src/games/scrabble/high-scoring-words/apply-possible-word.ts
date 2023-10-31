@@ -30,7 +30,7 @@ export function applyPossibleWord(br: BoardAndRack, possibleWord: PossibleWord) 
             br.moveFromRack({start:possibleWord, rackPos});
             if(usingBlank) {
                 br.setBlank(
-                    {...possibleWord, boardID: boardIDs.main}, 
+                    {row, col, boardID: boardIDs.main}, 
                     letter
                 );
             }
