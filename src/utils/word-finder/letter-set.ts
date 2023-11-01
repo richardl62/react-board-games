@@ -4,8 +4,8 @@ import { WordContraint as TrieWordConstraint } from "./trie";
 // Intended for use with ContraintWord. Also suitable for direct
 // use with Trie.
 export class LetterSet implements TrieWordConstraint {
-    private letters: string;
-    private wildcards: number;
+    private readonly letters: string;
+    private readonly wildcards: number;
     
     constructor(letters: string, wildcards = 0) {
         this.letters = letters;

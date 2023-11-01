@@ -1,7 +1,8 @@
 // Class to represent the constraints on a word.
 export interface WordContraint {
     // Called when there is a requirement to use a particular letter.
-    // If this is permitted then return a ConstrainedWord for the rest of the word.
+    // If this is permitted then return a copy of the WordConstraint
+    // with the letter (or wildCard) removed.
     // If the letter is not permitted then return null.
     advance: (letter: string) => WordContraint | null;
     minLengthReached: boolean;
