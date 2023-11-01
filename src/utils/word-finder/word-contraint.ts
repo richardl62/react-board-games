@@ -6,7 +6,7 @@ import { WordContraint as TrieWordConstraint } from "./trie";
  * The length on the 'requirements' array gives a maximum length for the word.
 **/
 export class WordConstraint implements TrieWordConstraint {
-    private availableLetters: LetterSet;
+    private availableLetters: LetterSet; 
     private requirements: (LetterRequirement|null)[];
     private minLength: number;
 

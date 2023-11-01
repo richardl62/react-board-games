@@ -6,9 +6,9 @@ import { SquareID } from "./game-actions";
 import { applyPossibleWord } from "../high-scoring-words";
 import { getHighScoringWords } from "../high-scoring-words";
 import { newReducerState, ReducerState } from "./reducer-state";
-import { WordDirection, WordPosition } from "./word-position";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { Trie } from "../../../utils/word-finder/trie";
+import { WordPosition, WordDirection } from "../../../utils/word-finder/get-legal-words/word-position";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}
@@ -148,10 +148,10 @@ function newClickMoveState(row: number, col: number, oldCMS: WordPosition | null
     // If the same square is clicked multiple times, the arrow cycles
     // in the order right, down, none.
     if (oldCMS && oldCMS.row === row && oldCMS.col === col ) {
-        direction = (oldCMS.direction === "right") ? "down" : null;
+        direction = (oldCMS.direction === "row") ? "column" : null;
     } else {
         // A new square has been picked so choice the default direction.
-        direction = "right";
+        direction = "row";
     }
 
     return direction && {row: row, col: col, direction: direction };

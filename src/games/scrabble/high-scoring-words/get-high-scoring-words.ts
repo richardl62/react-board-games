@@ -1,4 +1,4 @@
-import { PossibleWord, getPossibleWords } from "../../../utils/word-finder/get-possible-words/get-possible-words";
+import { PossibleWord, getLegalWordsForBoard } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
 import { LetterSet } from "../../../utils/word-finder/letter-set";
 import { Trie } from "../../../utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
@@ -21,7 +21,7 @@ function makeLetterSet(letters: (Letter|null)[]) {
 export function getHighScoringWords(br: BoardAndRack, trie: Trie) : PossibleWord[] {
     const board = br.getBoardLetters();
     const letterSet = makeLetterSet(br.getRack());
-    const words = getPossibleWords(board, letterSet, trie);
+    const words = getLegalWordsForBoard(board, letterSet, trie);
 
     //console.log("board", br.getBoardLetters(), "rack", br.getRack(), "letterSet", letterSet,"nWords:", words.length);
 

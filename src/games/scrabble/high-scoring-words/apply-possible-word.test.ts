@@ -30,7 +30,7 @@ test("Apply possible Word 1",() => {
     );
 
     applyPossibleWord(br,
-        {row:0, col: 0, direction: "right", word: "BX"},
+        {row:0, col: 0, direction: "row", word: "BX"},
     );
 
     expect(br.getBoardLetters()).toEqual([
@@ -50,7 +50,7 @@ test("Apply possible Word 2",() => {
     );
 
     applyPossibleWord(br,
-        {row:0, col: 1, direction: "right", word: "AXC"},
+        {row:0, col: 1, direction: "row", word: "AXC"},
     );
 
     expect(br.getBoardLetters()).toEqual([

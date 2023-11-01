@@ -4,7 +4,7 @@ import { blank, Letter } from "../config";
 import { shuffle } from "../../../utils/shuffle";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
 import { BoardData, BoardSquareData } from "../server-side/game-state";
-import { WordPosition } from "./word-position";
+import { WordPosition } from "../../../utils/word-finder/get-legal-words/word-position";
 
 export type Rack = (Letter | null)[];
 
@@ -204,7 +204,7 @@ export class BoardAndRack {
     moveFromRack({start, rackPos} : {start: WordPosition, rackPos: number}) : SquareID | null {
         let { row, col } = start;
 
-        if( start.direction === "right") {
+        if( start.direction === "row") {
             while(this.evalBoard(row,col)) {
                 col++;
             }

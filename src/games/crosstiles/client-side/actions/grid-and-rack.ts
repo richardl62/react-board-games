@@ -133,7 +133,7 @@ export class GridAndRack {
         sAssert(this.rack[rackPos], "Unexpected null tile in moveFromRack");
 
         let { row, col } = start;
-        if( start.direction === "right") {
+        if( start.direction === "row") {
             while(this.grid[row][col]) {
                 col++;
             }

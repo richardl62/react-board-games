@@ -2,8 +2,8 @@ import { ScrabbleGameProps } from "./srcabble-game-props";
 import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
-import { WordPosition } from "./word-position";
 import { PossibleWord } from "../high-scoring-words";
+import { WordPosition } from "../../../utils/word-finder/get-legal-words/word-position";
 
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];

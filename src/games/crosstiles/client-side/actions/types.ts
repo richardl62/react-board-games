@@ -1,4 +1,4 @@
-import { WordDirection } from "../../../scrabble/client-side/word-position";
+import { WordDirection } from "../../../../utils/word-finder/get-legal-words/word-position";
 
 interface RackID {
     row?: undefined,

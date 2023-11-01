@@ -3,7 +3,7 @@ import { boardIDs } from "../client-side";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { blank } from "../config";
 import { makeLetter } from "../config/letters";
-import { PossibleWord } from "../../../utils/word-finder/get-possible-words/get-possible-words";
+import { PossibleWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
 
 export function applyPossibleWord(br: BoardAndRack, possibleWord: PossibleWord) : void {
     br.recallRack();
@@ -36,7 +36,7 @@ export function applyPossibleWord(br: BoardAndRack, possibleWord: PossibleWord) 
             }
         }
         
-        if(direction === "right") {
+        if(direction === "row") {
             ++col;
         } else {
             ++row;

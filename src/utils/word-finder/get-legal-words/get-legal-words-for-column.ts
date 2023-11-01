@@ -10,10 +10,8 @@ export interface PossibleVerticalWord {
     word: string;
 }
 
-/** Return the vertical words that can be played onto the given board.
- * (A vertical word is one of which the letter positions vary in the first board index)
- */
-export function getVerticalWords(letters: (string| null)[][], availableLetters: LetterSet, trie: Trie) 
+/** As getLegalWordsForBoard, but restricted to letters in a column (rather than a row). */
+export function getLegalWordsForColumn(letters: (string| null)[][], availableLetters: LetterSet, trie: Trie) 
 : PossibleVerticalWord[]
 {
     const result: PossibleVerticalWord[] = [];
