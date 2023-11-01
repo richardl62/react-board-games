@@ -52,3 +52,42 @@ test("words from row requirements 3", () => {
 
     expect(result).toEqual(expected);
 });
+
+test("words from row requirements 4", () => {
+    const trie = new Trie(["aa","ab","bb"]);
+    const requirements = [a("ab"), a("ab")];
+    const letters = new LetterSet("aab");
+    
+    const expected = [
+        {start: 0, word: "aa"},
+        {start: 0, word: "ab"},
+    ];
+
+    const result = getWordsFromRowRequirements(letters, requirements, trie);
+
+    expect(result).toEqual(expected);
+});
+
+test("words from row requirements 5", () => {
+    // Check that words can start next to allowed constraints, but not next given 
+    // constraints. (This is because a given constraint comes form a letter on the
+    // board wheras allowed constraints are implied by neighbouring words.)
+    const trie = new Trie(["ab"]);
+    const requirements = [
+        a("x"), a("a"), null, null, a("b"), a("x"),
+        g("x"), a("a"), null, null, a("b"), g("x")
+    ];
+    const letters = new LetterSet("ab");
+    
+    // Expect a word that starts at 0, but not at 4 or 7.  This is because words can
+    // start or end next to allowed squares, but not next to given squares.
+    const expected = [
+        {start: 1, word: "ab"},
+        {start: 3, word: "ab"},
+        {start: 7, word: "ab"}, // Would be expected without the g("x")
+        {start: 9, word: "ab"}, // Would be expected without the g("x")
+    ];
+
+    const result = getWordsFromRowRequirements(letters, requirements, trie);
+    expect(result).toEqual(expected);
+});
