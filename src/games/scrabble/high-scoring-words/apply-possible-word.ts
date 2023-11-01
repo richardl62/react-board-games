@@ -3,9 +3,9 @@ import { boardIDs } from "../client-side";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { blank } from "../config";
 import { makeLetter } from "../config/letters";
-import { PossibleWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
+import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
 
-export function applyPossibleWord(br: BoardAndRack, possibleWord: PossibleWord) : void {
+export function applyPossibleWord(br: BoardAndRack, possibleWord: LegalWord) : void {
     br.recallRack();
 
     const { word, direction } = possibleWord;

@@ -1,6 +1,6 @@
 import { LetterSet } from "../letter-set";
 import { Trie } from "../trie";
-import { getLegalWordsForColumns } from "./get-legal-words-for-column";
+import { getLegalWordsForColumns } from "./get-legal-words-for-columns";
 
 type Result = ReturnType<typeof getLegalWordsForColumns>;
 

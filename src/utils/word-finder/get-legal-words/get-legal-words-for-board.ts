@@ -2,9 +2,9 @@ import { transpose } from "../../transpose";
 import { LetterSet } from "../letter-set";
 import { Trie } from "../trie";
 import { WordPosition } from "./word-position";
-import { getLegalWordsForColumn } from "./get-legal-words-for-column";
+import { getLegalWordsForColumns } from "./get-legal-words-for-columns";
 
-export interface PossibleWord extends WordPosition {
+export interface LegalWord extends WordPosition {
     word: string;
 }
 
@@ -19,16 +19,16 @@ export interface PossibleWord extends WordPosition {
  */
 
 export function getLegalWordsForBoard(letters: (string| null)[][], availableLetters: LetterSet, trie: Trie) 
-: PossibleWord[]
+: LegalWord[]
 {
-    const result: PossibleWord[] = [];
+    const result: LegalWord[] = [];
 
-    const verticalWords = getLegalWordsForColumn(letters, availableLetters, trie);
+    const verticalWords = getLegalWordsForColumns(letters, availableLetters, trie);
     for(const {row, col, word} of verticalWords) {
         result.push({row, col, direction: "column", word});
     }
 
-    const horizontalWords = getLegalWordsForColumn(transpose(letters), availableLetters, trie);
+    const horizontalWords = getLegalWordsForColumns(transpose(letters), availableLetters, trie);
     for(const {row, col, word} of horizontalWords) {
         result.push({row:col, col:row, direction: "row", word});
     }

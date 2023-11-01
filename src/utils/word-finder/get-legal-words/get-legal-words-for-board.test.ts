@@ -1,6 +1,6 @@
 import { LetterSet } from "../letter-set";
 import { Trie } from "../trie";
-import { getLegalWordsForBoard, PossibleWord } from "./get-legal-words-for-board";
+import { getLegalWordsForBoard, LegalWord } from "./get-legal-words-for-board";
 
 test("get possible words", () => {
     const trie = new Trie(["ab"]);
@@ -11,7 +11,7 @@ test("get possible words", () => {
     ];
 
     //Kludge: The order of elements is choosen to make the test work.
-    const expected : PossibleWord [] = [
+    const expected : LegalWord [] = [
         { row: 0, col: 1, direction: "row", word: "ab" },
     ];
 
