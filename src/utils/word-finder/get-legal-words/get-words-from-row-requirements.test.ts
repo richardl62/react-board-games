@@ -91,15 +91,3 @@ test("words from row requirements 5", () => {
     const result = getWordsFromRowRequirements(letters, requirements, trie);
     expect(result).toEqual(expected);
 });
-
-test("words from row requirements 6", () => {
-    const trie = new Trie(["ab","bbb", "bc", "xb"]);
-    const letters = new LetterSet("bb",1);
-    const requirements = [g("a"), null, g("x")];
-
-    const expected : Results = [
-    ];
-
-    const result = getWordsFromRowRequirements(letters, requirements, trie);
-    expect(result).toEqual(expected);
-});

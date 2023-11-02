@@ -1,48 +1,48 @@
+import { compareJSON } from "../../compare-JSON";
 import { LetterSet } from "../letter-set";
 import { Trie } from "../trie";
-import { getLegalWordsForBoard, LegalWord } from "./get-legal-words-for-board";
+import { getLegalWordsForBoard } from "./get-legal-words-for-board";
+
+type Results = ReturnType<typeof getLegalWordsForBoard>;
 
 test("get possible words", () => {
     const trie = new Trie(["ab"]);
     const availableLetters = new LetterSet("",10);
     const board = [
-        // [null, null, null], <- uncomment for bug
+        [null, null, null],
         [null, "a", null],
     ];
 
     //Kludge: The order of elements is choosen to make the test work.
-    const expected : LegalWord [] = [
-        { row: 0, col: 1, direction: "row", word: "ab" },
+    const expected : Results = [
+        { row: 0, col: 2, direction: "column", word: "ab" },
+        { row: 1, col: 1, direction: "row", word: "ab" },
     ];
 
-    const result = getLegalWordsForBoard(board, availableLetters, trie);
+    const results = getLegalWordsForBoard(board, availableLetters, trie).sort(compareJSON);
 
-    expect(result).toEqual(expected);
+    expect(results).toEqual(expected);
 });
 
-// test("get possible words", () => {
-//     const trie = new Trie(["ab","bbb", "bc"]);
-//     const availableLetters = new LetterSet("",10);
-//     const board = [
-//         [null, null, null],
-//         [null, "a", null],
-//         [null, null, null],
-//         [null, null, null],
-//     ];
+test("get possible words", () => {
+    const trie = new Trie(["ab","bbb", "bc"]);
+    const availableLetters = new LetterSet("",10);
+    const board = [
+        [null, null, null],
+        [null, "a", null],
+        [null, null, "b"],
+        [null, null, "b"],
+    ];
 
-//     //Kludge: The order of elements is choosen to make the test work.
-//     const expected : PossibleWord [] = [
-//         { row: 1, col: 1, direction: "down", word: "ab" },
-//         { row: 1, col: 2, direction: "down", word: "bbb" },
-//         { row: 1, col: 2, direction: "down", word: "bc" },
+    const expected : Results = [
+        { row: 1, col: 1, direction: "row", word: "ab" },
+        { row: 1, col: 2, direction: "column", word: "bbb" },
+        { row: 2, col: 0, direction: "row", word: "bbb" },
+        { row: 3, col: 0, direction: "row", word: "bbb" },
+        { row: 3, col: 1, direction: "row", word: "ab" }
+    ];
 
-//         { row: 1, col: 1, direction: "right", word: "ab" },
-//         { row: 2, col: 0, direction: "right", word: "ab" },
-//         { row: 2, col: 0, direction: "right", word: "bbb" },
-//         { row: 2, col: 1, direction: "right", word: "bc" }
-//     ];
-
-//     const result = getPossibleWords(board, availableLetters, trie);
-
-//     expect(result).toEqual(expected);
-// });
+    const results = getLegalWordsForBoard(board, availableLetters, trie).sort(compareJSON);
+    console.log("results:", results );
+    expect(results).toEqual(expected);
+});
