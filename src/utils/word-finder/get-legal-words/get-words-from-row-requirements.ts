@@ -5,6 +5,9 @@ import { WordConstraint } from "../word-contraint";
 
 type WordAndStart = {start: number; word: string};
 
+function isGiven(r: null | undefined | LetterRequirement) : boolean {
+    return Boolean(r?.given);
+}
 /**
  * Find words that meet the give letter requirements. Words are limited in lenght
  * by the length of the requirements array, and must include at least one letter
@@ -21,7 +24,9 @@ export function getWordsFromRowRequirements(
         const wordRequirements = requirements.slice(start);
         const firstRequirementIndex = wordRequirements.findIndex(req => req !== null);
 
-        if(firstRequirementIndex >= 0) {
+        // Words must not start/end immedidately after/before a given letter (if they did that
+        // letter would be part of the word)
+        if(firstRequirementIndex >= 0 && !isGiven(requirements[start-1])) {
             const wordConstraint = new WordConstraint(
                 availableLetters,
                 wordRequirements,
@@ -30,7 +35,9 @@ export function getWordsFromRowRequirements(
 
             const words = trie.findWords(wordConstraint);
             for(const word of words) {
-                result.push({word, start});
+                if(!isGiven(wordRequirements[word.length])) {
+                    result.push({word, start});
+                }
             }
         }
     }

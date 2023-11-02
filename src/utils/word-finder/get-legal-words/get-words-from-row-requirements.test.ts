@@ -6,6 +6,8 @@ import { getWordsFromRowRequirements } from "./get-words-from-row-requirements";
 const g = givenLetter;
 const a = allowedLetters;
 
+type Results = ReturnType<typeof getWordsFromRowRequirements>;
+
 test("words from row requirements 1", () => {
     const trie = new Trie(["aa","ab","bb", "abc"]);
     const requirements = [null, g("a"), null];
@@ -28,7 +30,7 @@ test("words from row requirements 2", () => {
     const requirements = [null, null, null, g("a"), null, null, null, g("b")];
     const letters = new LetterSet("",1);
     
-    const expected = [
+    const expected : Results = [
         {start: 3, word: "ab"},
         {start: 6, word: "ab"},
     ];
@@ -43,7 +45,7 @@ test("words from row requirements 3", () => {
     const requirements = [a("ab"), a("ab")];
     const letters = new LetterSet("aab");
     
-    const expected = [
+    const expected : Results = [
         {start: 0, word: "aa"},
         {start: 0, word: "ab"},
     ];
@@ -58,7 +60,7 @@ test("words from row requirements 4", () => {
     const requirements = [a("ab"), a("ab")];
     const letters = new LetterSet("aab");
     
-    const expected = [
+    const expected : Results = [
         {start: 0, word: "aa"},
         {start: 0, word: "ab"},
     ];
@@ -81,11 +83,21 @@ test("words from row requirements 5", () => {
     
     // Expect a word that starts at 0, but not at 4 or 7.  This is because words can
     // start or end next to allowed squares, but not next to given squares.
-    const expected = [
+    const expected : Results = [
         {start: 1, word: "ab"},
         {start: 3, word: "ab"},
-        {start: 7, word: "ab"}, // Would be expected without the g("x")
-        {start: 9, word: "ab"}, // Would be expected without the g("x")
+    ];
+
+    const result = getWordsFromRowRequirements(letters, requirements, trie);
+    expect(result).toEqual(expected);
+});
+
+test("words from row requirements 6", () => {
+    const trie = new Trie(["ab","bbb", "bc", "xb"]);
+    const letters = new LetterSet("bb",1);
+    const requirements = [g("a"), null, g("x")];
+
+    const expected : Results = [
     ];
 
     const result = getWordsFromRowRequirements(letters, requirements, trie);
