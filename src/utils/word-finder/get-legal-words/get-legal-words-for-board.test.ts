@@ -43,6 +43,5 @@ test("get possible words", () => {
     ];
 
     const results = getLegalWordsForBoard(board, availableLetters, trie).sort(compareJSON);
-    console.log("results:", results );
     expect(results).toEqual(expected);
 });

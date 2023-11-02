@@ -16,8 +16,9 @@ function Arrows() {
     sAssert(highScoringWords);
 
     const nWords = highScoringWords.possibleWords.length;
-    const position = highScoringWords.position ;
-    sAssert(position >= 0 && position < nWords);
+    const position = highScoringWords.position;
+    sAssert(position >= 0 && position < nWords, 
+        `HSW: Bad postion ${position} with ${nWords} words`);
 
     const selectWord = (index: number) => {
         dispatch({
@@ -45,11 +46,11 @@ function Arrows() {
 export function HighScoringWordsControls() : JSX.Element {
     const  { highScoringWords, dispatch, legalWords} = useScrabbleContext();
     const enabled = highScoringWords !== null;
-    const noWordsFound = highScoringWords && 
-        highScoringWords?.possibleWords.length === 0;
+    const position = highScoringWords?.position;
+    const nWordsFound = highScoringWords?.possibleWords.length;
 
     return <OuterDiv>
-        <label>{"Show high scroring word"}
+        <label>{"Show high scroring words"}
             <input type="checkbox" 
                 checked={enabled} 
                 onChange={()=>dispatch({
@@ -60,8 +61,12 @@ export function HighScoringWordsControls() : JSX.Element {
         </label>
         
         {enabled &&
-            (noWordsFound ?
-                <div>No words found</div> : <Arrows/>
+            (nWordsFound === 0?
+                <div>No legal words found</div> :
+                <>
+                    <Arrows />
+                    <div>{` (Showing word ${position} of ${nWordsFound})`}</div>
+                </>
             )
         }
 

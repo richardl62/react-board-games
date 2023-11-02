@@ -18,10 +18,37 @@ function makeLetterSet(letters: (Letter|null)[]) {
     return new LetterSet(allLetters, nBlanks);
 }
 
+function isEmptyBoard(board: (Letter|null)[][]) {
+    const result = board.flat().findIndex((l) => l !== null) < 0;
+    return result;
+}
+
+function getWordsForEmptyBoard(board: (Letter|null)[][], letterSet: LetterSet, trie: Trie) {
+    const words = trie.findWords(letterSet);
+    
+    const row = Math.trunc(board.length/2);
+    const midCol = Math.trunc(board[0].length/2);
+
+    const result : LegalWord[] = [];
+    for(let col = 0; col <= midCol; ++col) {
+        for(const word of words) {
+            if(col + word.length > midCol) {
+                result.push({row, col, direction:"row", word});
+            }
+        }
+    }
+
+    console.log(result);
+
+    return result;
+}
+
 export function getHighScoringWords(br: BoardAndRack, trie: Trie) : LegalWord[] {
     const board = br.getBoardLetters();
     const letterSet = makeLetterSet(br.getRack());
-    const words = getLegalWordsForBoard(board, letterSet, trie);
+    const words = isEmptyBoard(board) ?
+        getWordsForEmptyBoard(board, letterSet, trie) :
+        getLegalWordsForBoard(board, letterSet, trie);
 
     //console.log("board", br.getBoardLetters(), "rack", br.getRack(), "letterSet", letterSet,"nWords:", words.length);
 
