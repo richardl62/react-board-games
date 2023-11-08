@@ -43,9 +43,10 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
     const asyncLegalWords = useAsync(config.getLegalWords, []);
 
     const legalWords = asyncLegalWords.result;
-    if(!asyncLegalWords) {
+    if(!legalWords) {
         return <AsyncStatus status={asyncLegalWords} activity="loading dictionary" />;
     }
+    const trie = new Trie(legalWords.map(w => w.toUpperCase()));
 
     if (scrabbleGameProps.G.moveCount !== reducerState.externalTimestamp) {
         dispatch({
@@ -58,9 +59,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         // }
     } 
 
-    const context = makeScrabbleContext(scrabbleGameProps, config, reducerState, dispatch, 
-        new Trie(legalWords)
-    );
+    const context = makeScrabbleContext(scrabbleGameProps, config, reducerState, dispatch, trie);
 
     return <ReactScrabbleContext.Provider value={context}>
         <Board />

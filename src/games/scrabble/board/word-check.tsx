@@ -29,7 +29,8 @@ export function WordChecker(): JSX.Element {
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        setValid(legalWords.hasWord(word));
+        // legalWords records upper case words
+        setValid(legalWords.hasWord(word.toUpperCase()));
         e.preventDefault();
     };
 

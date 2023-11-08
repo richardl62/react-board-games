@@ -3,7 +3,7 @@ export interface WordContraint {
     // Called when there is a requirement to use a particular letter.
     // If this is permitted then return a ConstrainedWord for the rest of the word.
     // If the letter is not permitted then return null.
-    advance: (lowerCaseletter: string) => WordContraint | null;
+    advance: (letter: string) => WordContraint | null;
     minLengthReached: boolean;
 }
 
@@ -36,8 +36,7 @@ export class Trie {
     }
 
     // Add a word to the trie
-    addWord(inWord: string) {
-        const word = inWord.toLowerCase();
+    addWord(word: string) {
         let node = this.root;
         for (const letter of word) {
             node = node.addChild(letter);
@@ -46,9 +45,7 @@ export class Trie {
     }
 
     // Check if a word is in the trie
-    hasWord(inWord: string) {
-        const word = inWord.toLowerCase();
-
+    hasWord(word: string) {
         let node = this.root;
         for (const letter of word) {
             if (!node.children.has(letter)) {

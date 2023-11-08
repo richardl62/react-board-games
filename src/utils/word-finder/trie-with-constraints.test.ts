@@ -37,18 +37,19 @@ describe("Trie word length", () => {
 });
 
 describe("Trie letter set", () => {
-    const trie = new Trie(["a", "bb", "cba"]);
+    const trie = new Trie(["a", "bb", "Cba"]);
 
     const testData: [
             string, // letters
             string[] // Expected result
         ][] = [
-            ["bbca", ["a", "bb", "cba"]],
-            ["xabc", ["a", "cba"]],
+            ["bbCa", ["a", "bb", "Cba"]],
+            ["xabC", ["a", "Cba"]],
+            ["xabc", ["a"]],
             ["", []],
             ["a?", ["a"]],
             ["b?", ["a", "bb"]],
-            ["b??", ["a", "bb", "cba"]],
+            ["b??", ["a", "bb", "Cba"]],
         ];
 
     test.each(testData)("%s", (letters, expected) => {
@@ -60,11 +61,10 @@ describe("Trie letter set", () => {
 
         expect(found).toEqual(expected);
     });
-
 });
 
 describe("Trie given letter", () => {
-    const trie = new Trie(["aa", "bb", "cba", "ccc"]);
+    const trie = new Trie(["aa", "bb", "cba", "ccC"]);
 
     const testData: [
             string, // letter set
@@ -72,8 +72,10 @@ describe("Trie given letter", () => {
             string[] // Expected result
         ][] = [
             ["abc", ".b.", ["bb", "cba"]],
+            ["abc", ".B.", []],
             ["c", "..c", []],
-            ["cc", "..c", ["ccc"]],
+            ["cc", "..c", []],
+            ["cc", "..C", ["ccC"]],
         ];
 
     const makeConstraint = (str: string) => {

@@ -8,7 +8,7 @@ export class LetterSet implements TrieWordConstraint {
     private wildcards: number;
     
     constructor(letters: string, wildcards = 0) {
-        this.letters = letters.toLocaleLowerCase();
+        this.letters = letters;
         this.wildcards = wildcards;   
     }
 

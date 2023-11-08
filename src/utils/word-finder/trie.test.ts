@@ -16,8 +16,9 @@ describe("Trie.hasWord", () => {
 
     const testData: [string, boolean][] = [
         ["cat", true],
-        ["DOG", true],
-        ["cOw", true],
+        ["cow", false],
+        ["COW", false],
+        ["CoW", true],
         ["catdog", true],
         ["catd", false],
         ["catdogcow", false],
@@ -28,20 +29,22 @@ describe("Trie.hasWord", () => {
     test.each(testData)("%s", (word, expected) => {
         expect(trie.hasWord(word)).toBe(expected);
     });   
-
 });
 
 describe("Trie with LetterSet", () => {  
-    const trie = new Trie(["cat", "dog", "good", "catdog"]);
+    const trie = new Trie(["cat", "PIG", "dog", "good", "catdog"]);
 
 
     const testData: [string, string[]][] = [
-        ["CAT", ["cat"]],
+        ["cat", ["cat"]],
+        ["CAT", []],
+        ["pig", []],
+        ["PIG", ["PIG"]],
         ["xogd", ["dog"]],
         ["oogd", ["dog", "good"]],
         ["acdtog", ["cat", "catdog", "dog"]],
         ["?at", ["cat"]],
-        ["?????", ["cat", "dog", "good"]],
+        ["?????", ["cat", "PIG", "dog", "good"]],
     ];
 
     test.each(testData)("%s", (letters, expected) => {
