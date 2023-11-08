@@ -15,10 +15,12 @@ export function applyPossibleWord(br: BoardAndRack, possibleWord: LegalWord) : v
         sAssert(letter, `Unexpected letter "${letter}" in applyPossibleWord`);
 
         const boardValue = br.evalBoard(row, col);
-        if (boardValue) {
+        if (boardValue?.letter === letter) {
+            // Skip an existing letter
+        } else {
             // There is already a letter on the board.
-            sAssert(boardValue.letter === letter, "Unexpected letter found on board");
-        } {
+            sAssert(!boardValue, "Unexpected letter found on board");
+  
             let usingBlank = false;
             let rackPos = br.findInRack(letter);
             if (rackPos === null) {
