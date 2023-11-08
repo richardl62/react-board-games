@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../../utils/async-status";
-import { getLegalWordTrie } from "../../../utils/get-word-checker";
 import { Board } from ".";
 import { ScrabbleGameProps } from "../client-side/srcabble-game-props";
 import { initialReducerState } from "../client-side/reducer-state";
@@ -11,6 +10,7 @@ import { makeScrabbleContext, ReactScrabbleContext } from "../client-side/scrabb
 import { isScrabbleConfig } from "../config/scrabble-config";
 import { sAssert } from "../../../utils/assert";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
+import { Trie } from "../../../utils/word-finder/trie";
 
 // import { beep } from "./sounds";
 
@@ -40,11 +40,11 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         };
     }, []); // Empty array ensures that effect is only run on mount and unmount
 
-    const asyncTrie = useAsync(getLegalWordTrie, []);
+    const asyncLegalWords = useAsync(config.getLegalWords, []);
 
-    const trie = asyncTrie.result;
-    if(!trie) {
-        return <AsyncStatus status={asyncTrie} activity="loading dictionary" />;
+    const legalWords = asyncLegalWords.result;
+    if(!asyncLegalWords) {
+        return <AsyncStatus status={asyncLegalWords} activity="loading dictionary" />;
     }
 
     if (scrabbleGameProps.G.moveCount !== reducerState.externalTimestamp) {
@@ -58,7 +58,9 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         // }
     } 
 
-    const context = makeScrabbleContext(scrabbleGameProps, config, reducerState, dispatch, trie);
+    const context = makeScrabbleContext(scrabbleGameProps, config, reducerState, dispatch, 
+        new Trie(legalWords)
+    );
 
     return <ReactScrabbleContext.Provider value={context}>
         <Board />

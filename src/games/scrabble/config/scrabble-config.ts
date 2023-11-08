@@ -3,6 +3,7 @@ import { AppGame, GameCategory } from "../../../app-game-support";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
+import { getLegalWordList } from "../../../utils/get-word-checker";
 
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;
@@ -17,6 +18,8 @@ export interface ScrabbleConfig {
     minPlayers: number,
     maxPlayers: number, 
     
+    getLegalWords: () => Promise<string[]>;
+
     /** Make a full bag of letters suitable for use at the start
      * of a game. The returned bag is shuffled if appropriate.
      * (In general the letters should be shuffled. But for some test purposes,
@@ -37,6 +40,8 @@ const standard : ScrabbleConfig = {
     category: GameCategory.standard,
     minPlayers: 1,
     maxPlayers: 4, 
+
+    getLegalWords: getLegalWordList,
 
     makeFullBag(
         random: RandomAPI
@@ -73,6 +78,18 @@ sAssert(standard.boardLayout.length === 15);
 standard.boardLayout.forEach(row => sAssert(row.length === 15));
 
 
+const simpleScrabbleWords = [
+    "aa",
+    "ab",
+    "bc",
+    "abc",
+];
+
+const simpleScrabbleLettersForBag : Letter []= [
+    "?","A","B","C",
+    "A","B","C","D",
+];
+
 const simple: ScrabbleConfig = {
     name: "scrabble-simple",
     displayName: "Simple Scrabble",
@@ -81,13 +98,8 @@ const simple: ScrabbleConfig = {
     maxPlayers: 4,
     rackSize: 4,
 
-    makeFullBag: () : Letter[] => {
-        // Unshuffled to help with testing
-        const letters : Letter[] = ["?", "O", "R", "D", 
-            "D",  "A", "T", "E"];
-            
-        return letters.reverse();
-    },
+    getLegalWords: async () => simpleScrabbleWords,
+    makeFullBag: () : Letter[] => [...simpleScrabbleLettersForBag].reverse(),
 
     boardLayout: [
         [t, s, s, s, t,],
