@@ -8,16 +8,29 @@ const a = allowedLetters;
 
 type Results = ReturnType<typeof getWordsFromRowRequirements>;
 
-test("words from row requirements 1", () => {
+test("words from row requirements 1a", () => {
     const trie = new Trie(["aa","ab","bb", "abc"]);
     const requirements = [null, g("a"), null];
     const letters = new LetterSet("ab",0);
     
-    const expected = [
+    const expected : Results = [
         {start: 0, word: "aa"},
         {start: 1, word: "aa"},
         {start: 1, word: "ab"}
     ];
+
+    const result = getWordsFromRowRequirements(letters, requirements, trie);
+
+    expect(result).toEqual(expected);
+});
+
+test("words from row requirements 1b", () => {
+    // Check the pre-existing words are not reported
+    const trie = new Trie(["ab"]);
+    const requirements = [g("a"), g("b")];
+    const letters = new LetterSet("", 10);
+    
+    const expected: Results = [];
 
     const result = getWordsFromRowRequirements(letters, requirements, trie);
 
