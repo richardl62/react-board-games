@@ -48,6 +48,7 @@ export function HighScoringWordsControls() : JSX.Element {
     const enabled = highScoringWords !== null;
     const position = highScoringWords?.position;
     const nWordsFound = highScoringWords?.possibleWords.length;
+    const score = highScoringWords && highScoringWords.possibleWords[highScoringWords.position].score;
 
     return <OuterDiv>
         <label>{"Show high scroring words"}
@@ -65,7 +66,7 @@ export function HighScoringWordsControls() : JSX.Element {
                 <div>No legal words found</div> :
                 <>
                     <Arrows />
-                    <div>{` (Showing word ${position} of ${nWordsFound})`}</div>
+                    <div>{` (Showing word ${position!+1} of ${nWordsFound} - score ${score})`}</div>
                 </>
             )
         }

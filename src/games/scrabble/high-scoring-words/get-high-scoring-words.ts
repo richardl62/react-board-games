@@ -2,7 +2,8 @@ import { LegalWord, getLegalWordsForBoard } from "../../../utils/word-finder/get
 import { LetterSet } from "../../../utils/word-finder/letter-set";
 import { Trie } from "../../../utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
-import { Letter, blank } from "../config";
+import { wordScore } from "../client-side/get-words-and-score";
+import { Letter, ScrabbleConfig, blank } from "../config";
 
 function makeLetterSet(letters: (Letter|null)[]) {
     let allLetters = "";
@@ -43,14 +44,30 @@ function getWordsForEmptyBoard(board: (Letter|null)[][], letterSet: LetterSet, t
     return result;
 }
 
-export function getHighScoringWords(br: BoardAndRack, trie: Trie) : LegalWord[] {
+function getAllWords(br: BoardAndRack, trie: Trie) : LegalWord[] {
     const board = br.getBoardLetters();
     const letterSet = makeLetterSet(br.getRack());
     const words = isEmptyBoard(board) ?
         getWordsForEmptyBoard(board, letterSet, trie) :
         getLegalWordsForBoard(board, letterSet, trie);
 
-    //console.log("board", br.getBoardLetters(), "rack", br.getRack(), "letterSet", letterSet,"nWords:", words.length);
+    return words;
+}
+
+export interface LegalWordAndScore extends LegalWord {
+    score: number;
+}
+export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: ScrabbleConfig) : LegalWordAndScore[] {
+    const allWords = getAllWords(br, trie);
+    const words = allWords.map(word => {
+        return {
+            ...word,
+            score: wordScore(br.getBoard(), word, config),
+        };
+    });
+
+    words.sort((w1, w2) => w2.score - w1.score);
+    console.log(words);
 
     return words;
 }

@@ -90,7 +90,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     } else if(action.type === "enableHighScoringWords") {
         if(action.data.enable) {
             highScoringWords = {
-                possibleWords: getHighScoringWords(br, action.data.legalWords),
+                possibleWords: getHighScoringWords(br, action.data.legalWords, state.config),
                 position: 0,
             };
         } else {

@@ -3,6 +3,8 @@ import { BoardData, BoardSquareData } from "../server-side/game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { ScrabbleContext } from "./scrabble-context";
+import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
+import { Letter, ScrabbleConfig } from "../config";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
@@ -170,14 +172,31 @@ interface WordsAndScore {
     /** For later convenience, use null rather than an empty array */
     illegalWords: string[] | null;
   }
+  
+type ReducedScrabbleContext = Pick<ScrabbleContext, "board" | "config" | "legalWords">
 
-export function getWordsAndScore(context: ScrabbleContext, active: RowCol[]): WordsAndScore | null {
+function getScore(board: BoardData, active: RowCol[], config: ScrabbleConfig) : number {
+    const candidateWords = findCandidateWords(board, active);
+    if(!candidateWords) {
+        return 0;
+    }
+
+    let score = scoreWords(board, candidateWords, config);
+    if (active.length === config.rackSize) {
+        score += config.allLetterBonus;
+    }
+    return score;
+}
+
+export function getWordsAndScore(context: ReducedScrabbleContext, active: RowCol[]): WordsAndScore | null {
     const candidateWords = findCandidateWords(context.board, active);
     const config = context.config;
 
     if (!candidateWords) {
         return null;
     }
+
+    const score = getScore(context.board, active, config);
 
     const words = candidateWords.map(cw => getWord(context.board, cw));
   
@@ -186,14 +205,43 @@ export function getWordsAndScore(context: ScrabbleContext, active: RowCol[]): Wo
         illegalWords = null;
     }
 
-    let score = scoreWords(context.board, candidateWords, config);
-    if (active.length === config.rackSize) {
-        score += config.allLetterBonus;
-    }
-
     return {
         words: words,
         illegalWords: illegalWords,
         score: score,
     };
+}
+
+export function wordScore(inputBoard: BoardData, possbileWord: LegalWord, config: ScrabbleConfig) : number {
+    // Inefficient
+    const board = inputBoard.map(row => [...row]);
+    const {word, direction} = possbileWord;
+    let {row, col} = possbileWord;
+
+    const active : RowCol[] = [];
+    for(const letter of word) {
+        const square = board[row][col];
+        sAssert(square !== undefined);
+
+        if(square) {
+            sAssert(square.letter === letter, "Unexpected letter on board");
+        } else {
+            active.push({row, col});
+            board[row][col] = {
+                letter: letter as Letter, 
+                active:true, 
+                isBlank: false //KLUDGE/bug
+            };
+        }
+
+        if(direction === "row") {
+            ++col;
+        } else {
+            ++row;
+        }
+    }
+
+    const score = getScore(board, active, config);
+
+    return score;
 }

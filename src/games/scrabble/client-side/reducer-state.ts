@@ -2,8 +2,8 @@ import { ScrabbleGameProps } from "./srcabble-game-props";
 import { ScrabbleConfig } from "../config";
 import { GameState } from "../server-side/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
-import { PossibleWord } from "../high-scoring-words";
 import { WordPosition } from "../../../utils/word-finder/get-legal-words/word-position";
+import { LegalWordAndScore } from "../high-scoring-words/get-high-scoring-words";
 
 export interface ReducerState extends LocalGameState {
     gameStates: GameState[];
@@ -19,7 +19,7 @@ export interface ReducerState extends LocalGameState {
     reviewGameHistory: { historyPosition: number } | false;
     
     highScoringWords: { 
-        possibleWords: PossibleWord[],
+        possibleWords: LegalWordAndScore[],
         position: number; 
     } | null;
 
