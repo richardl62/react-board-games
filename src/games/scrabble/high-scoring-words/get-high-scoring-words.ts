@@ -58,6 +58,8 @@ export interface LegalWordAndScore extends LegalWord {
     score: number;
 }
 export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: ScrabbleConfig) : LegalWordAndScore[] {
+    br.recallRack();
+    
     const allWords = getAllWords(br, trie);
     const words = allWords.map(word => {
         return {
