@@ -42,11 +42,16 @@ function Controls() {
         {`(Showing word ${position!+1} of ${nWordFounds})`}
     </ControlDiv>;
 }
-export function HighScoringWordsControls() : JSX.Element {
-    const  { highScoringWords, dispatch, legalWords} = useScrabbleContext();
+
+export function HighScoringWordsControls() : JSX.Element | null {
+    const  { highScoringWords, dispatch, legalWords, reviewGameHistory} = useScrabbleContext();
     const enabled = highScoringWords !== null;
     const nWordsFound = highScoringWords?.possibleWords.length;
 
+    if(!reviewGameHistory) {
+        return null;
+    }
+    
     return <div>
         <div>
             <label>{"Show high scroring words "}
