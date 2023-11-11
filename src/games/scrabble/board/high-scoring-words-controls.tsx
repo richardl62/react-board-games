@@ -1,24 +1,23 @@
 import React from "react";
-import styled from "styled-components";
 import { GoToStart, StepBackwards, StepForwards } from "./forward-back-arrows";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { sAssert } from "../../../utils/assert";
+import styled from "styled-components";
 
-const OuterDiv = styled.div`
-    display: flex;
-    > *:not(:last-child) {
+const ControlDiv = styled.div`
+    button {
         margin-right: 5px;
     }
 `;
 
-function Arrows() {
+function Controls() {
     const  { highScoringWords, dispatch } = useScrabbleContext();
     sAssert(highScoringWords);
 
-    const nWords = highScoringWords.possibleWords.length;
+    const nWordFounds = highScoringWords.possibleWords.length;
     const position = highScoringWords.position;
-    sAssert(position >= 0 && position < nWords, 
-        `HSW: Bad postion ${position} with ${nWords} words`);
+    sAssert(position >= 0 && position < nWordFounds, 
+        `HSW: Bad postion ${position} with ${nWordFounds} words`);
 
     const selectWord = (index: number) => {
         dispatch({
@@ -27,7 +26,7 @@ function Arrows() {
         });
     };
 
-    return <>
+    return <ControlDiv>
         <button onClick={() => selectWord(0)} disabled={position === 0}>
             <GoToStart />
         </button>
@@ -36,40 +35,34 @@ function Arrows() {
             <StepBackwards />
         </button>
 
-        <button onClick={() => selectWord(position+1)} disabled={position === nWords-1}>
+        <button onClick={() => selectWord(position+1)} disabled={position === nWordFounds-1}>
             <StepForwards />
         </button>
 
-        <div>{position}</div>
-    </>;
+        {`(Showing word ${position!+1} of ${nWordFounds})`}
+    </ControlDiv>;
 }
 export function HighScoringWordsControls() : JSX.Element {
     const  { highScoringWords, dispatch, legalWords} = useScrabbleContext();
     const enabled = highScoringWords !== null;
-    const position = highScoringWords?.position;
     const nWordsFound = highScoringWords?.possibleWords.length;
-    const score = highScoringWords && highScoringWords.possibleWords[highScoringWords.position].score;
 
-    return <OuterDiv>
-        <label>{"Show high scroring words"}
-            <input type="checkbox" 
-                checked={enabled} 
-                onChange={()=>dispatch({
-                    type:"enableHighScoringWords",
-                    data: {enable: !enabled, legalWords}
-                })} 
-            />
-        </label>
+    return <div>
+        <div>
+            <label>{"Show high scroring words "}
+                <input type="checkbox"
+                    checked={enabled}
+                    onChange={() => dispatch({
+                        type: "enableHighScoringWords",
+                        data: { enable: !enabled, legalWords }
+                    })}
+                />
+            </label>
+        </div>
         
         {enabled &&
-            (nWordsFound === 0?
-                <div>No legal words found</div> :
-                <>
-                    <Arrows />
-                    <div>{` (Showing word ${position!+1} of ${nWordsFound} - score ${score})`}</div>
-                </>
-            )
+            (nWordsFound === 0 ? <div>No legal words found</div> : <Controls />)
         }
 
-    </OuterDiv>;
+    </div>;
 }
