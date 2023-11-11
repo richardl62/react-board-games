@@ -59,6 +59,12 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     let clickMoveStart = state.clickMoveStart;
     let highScoringWords = state.highScoringWords;
 
+    // For simplicity (?) most action disable high scoring words.
+    // (The motive is to allow players to do things like moving letters without switching off
+    // the option. Previously this sort of move would not work because the high scoring word
+    // was reapplied.)
+    let preserveHighScoringWords = false;
+    
     if(action.type === "setClickMoveStart") {
         const {row, col} = action.data;
         clickMoveStart = newClickMoveState(row, col, clickMoveStart);
@@ -93,6 +99,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
                 possibleWords: getHighScoringWords(br, action.data.legalWords, state.config),
                 position: 0,
             };
+            preserveHighScoringWords = true;
         } else {
             highScoringWords = null;
         }
@@ -100,10 +107,15 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     else if(action.type === "setHighScoringWordsPosition") {
         sAssert(highScoringWords && highScoringWords.possibleWords[action.data.position]);
         highScoringWords.position = action.data.position;
+        preserveHighScoringWords = true;
     } else {
         console.warn("Unrecognised action in reducer:", action);
     }
 
+    if (!preserveHighScoringWords) {
+        highScoringWords = null;
+    }
+    
     if(highScoringWords) {
         const {possibleWords, position} = highScoringWords;
         if(possibleWords.length !== 0) {
