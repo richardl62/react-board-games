@@ -9,7 +9,6 @@ function sameWordList(words1: string[], words2: string[]): boolean {
 }
 
 export interface TurnControlData {
-    score?: number | "-";
     illegalWords?: string[];
     onPass?: (() => void);
 
@@ -50,17 +49,12 @@ export function useTurnControlData(): TurnControlData {
             return {};
         }
     } else if (!wordsAndScore) {
-        return {
-            score: "-",
-        };
+        return {};
     } else {
 
-        const { score, words, illegalWords } = wordsAndScore;
-
+        const { words, illegalWords } = wordsAndScore;
 
         const result: TurnControlData = {};
-
-        result.score = score;
 
         if (illegalWordsData) {
             result.illegalWords = illegalWordsData.illegal;

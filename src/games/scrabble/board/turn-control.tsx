@@ -46,7 +46,7 @@ function PassDialog() {
 
 /** 'Dumb' class that does the formatting for TurnControl */
 export function TurnControl(): JSX.Element {
-    const { score, illegalWords, onDone, onSetBlank, doSetBlank } = useTurnControlData();
+    const { illegalWords, onDone, onSetBlank, doSetBlank } = useTurnControlData();
     const doButtonText = illegalWords ?
         "Done (permitting illegal words)" :
         "Done"
@@ -66,7 +66,6 @@ export function TurnControl(): JSX.Element {
             }
 
             <StyledScoreLine>
-                {score && <span>{"Score this turn: " + score}</span>}
                 <PassDialog/>
                 {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
                 {onDone && <button onClick={onDone}> {doButtonText} </button>}
