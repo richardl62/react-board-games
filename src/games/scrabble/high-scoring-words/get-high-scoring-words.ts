@@ -62,7 +62,7 @@ export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: Scrabb
     const words = allWords.map(word => {
         return {
             ...word,
-            score: wordScore(br.getBoard(), word, config),
+            score: wordScore(br, word, config),
         };
     });
 

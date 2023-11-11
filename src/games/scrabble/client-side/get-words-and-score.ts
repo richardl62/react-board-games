@@ -4,7 +4,8 @@ import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { ScrabbleContext } from "./scrabble-context";
 import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
-import { Letter, ScrabbleConfig } from "../config";
+import { Letter, ScrabbleConfig, blank } from "../config";
+import { BoardAndRack } from "./board-and-rack";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {
@@ -212,9 +213,27 @@ export function getWordsAndScore(context: ReducedScrabbleContext, active: RowCol
     };
 }
 
-export function wordScore(inputBoard: BoardData, possbileWord: LegalWord, config: ScrabbleConfig) : number {
+export function wordScore(br: BoardAndRack, possbileWord: LegalWord, config: ScrabbleConfig) : number {
     // Inefficient
-    const board = inputBoard.map(row => [...row]);
+    const board = br.getBoard().map(row => [...row]);
+    const rack = [...br.getRack()];
+
+    const removeFromRack = (required: string) : "letter" | "blank" => {
+        const index = rack.findIndex(l => l === required);
+        if(index >= 0) {
+            rack[index] = null;
+            return "letter";
+        }
+
+        /* Start of sanity check */
+        const blankIndex = rack.findIndex(l => l === blank);
+        sAssert(blankIndex >= 0);
+        rack[blankIndex] = null;
+        /* End of sanity check */
+
+        return "blank";
+    };
+
     const {word, direction} = possbileWord;
     let {row, col} = possbileWord;
 
@@ -230,7 +249,7 @@ export function wordScore(inputBoard: BoardData, possbileWord: LegalWord, config
             board[row][col] = {
                 letter: letter as Letter, 
                 active:true, 
-                isBlank: false //KLUDGE/bug
+                isBlank: removeFromRack(letter) === "blank",
             };
         }
 
