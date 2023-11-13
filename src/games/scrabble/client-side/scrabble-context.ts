@@ -10,13 +10,16 @@ import { GameState } from "../server-side/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { RequiredServerData } from "../../../app-game-support/required-server-data";
 import { Trie } from "../../../utils/word-finder/trie";
+import { SetupOptions } from "../options";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data
     playerID: string;
     currentPlayer: string;
 
+    readonly options: SetupOptions,
     readonly config: ScrabbleConfig;
+
     readonly dispatch:  Dispatch<ActionType>;
     readonly legalWords: Trie;
 
@@ -71,6 +74,7 @@ export function makeScrabbleContext(
         playerID,
         currentPlayer,
 
+        options: G.options,
         config,
         dispatch,
 

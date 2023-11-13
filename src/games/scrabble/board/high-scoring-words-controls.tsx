@@ -44,11 +44,11 @@ function Controls() {
 }
 
 export function HighScoringWordsControls() : JSX.Element | null {
-    const  { highScoringWords, dispatch, legalWords, reviewGameHistory} = useScrabbleContext();
+    const  { highScoringWords, options, dispatch, legalWords, reviewGameHistory} = useScrabbleContext();
     const enabled = highScoringWords !== null;
     const nWordsFound = highScoringWords?.possibleWords.length;
 
-    if(!reviewGameHistory) {
+    if(!options.enableHighScoringWords && !reviewGameHistory) {
         return null;
     }
     
