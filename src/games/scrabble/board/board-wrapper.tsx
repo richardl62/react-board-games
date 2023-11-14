@@ -1,6 +1,4 @@
-import React, { useEffect, useReducer } from "react";
-import { useAsync } from "react-async-hook";
-import { AsyncStatus } from "../../../utils/async-status";
+import React, { useEffect, useReducer, useState } from "react";
 import { Board } from ".";
 import { ScrabbleGameProps } from "../client-side/srcabble-game-props";
 import { initialReducerState } from "../client-side/reducer-state";
@@ -40,13 +38,22 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         };
     }, []); // Empty array ensures that effect is only run on mount and unmount
 
-    const asyncLegalWords = useAsync(config.getLegalWords, []);
+    const [trie, setTrie] = useState<Trie|null>(null);
+    const [loadError, setLoadError] = useState<Error|null>(null);
+    
+    useEffect(()=>{
+        config.getLegalWords().then(
+            legalWords => setTrie(new Trie(legalWords.map(w => w.toUpperCase())))
+        ).catch(setLoadError);
+    }, []);
 
-    const legalWords = asyncLegalWords.result;
-    if(!legalWords) {
-        return <AsyncStatus status={asyncLegalWords} activity="loading dictionary" />;
+    if(loadError) {
+        return <div>ERROR: Cannot load dictionary ({loadError.message})</div>;
     }
-    const trie = new Trie(legalWords.map(w => w.toUpperCase()));
+
+    if(!trie) {
+        return <div>Loading dictionary...</div>;
+    }
 
     if (scrabbleGameProps.G.moveCount !== reducerState.externalTimestamp) {
         dispatch({
