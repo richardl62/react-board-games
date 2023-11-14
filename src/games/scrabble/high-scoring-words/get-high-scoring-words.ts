@@ -1,4 +1,5 @@
 import { LegalWord, getLegalWordsForBoard } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
+import { WordDirection } from "../../../utils/word-finder/get-legal-words/word-position";
 import { LetterSet } from "../../../utils/word-finder/letter-set";
 import { Trie } from "../../../utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
@@ -68,8 +69,25 @@ export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: Scrabb
         };
     });
 
-    words.sort((w1, w2) => w2.score - w1.score);
+    words.sort(compareWords);
     console.log(words);
 
     return words;
+}
+
+function compareWords(word1: LegalWordAndScore, word2: LegalWordAndScore) {
+    
+    const rowsFirst = (dir1: WordDirection, dir2: WordDirection) => {
+        if(dir1 === dir2) {
+            return 0;
+        }
+        return dir1 === "row" ? -1 : 1;
+    };
+
+    return word2.score - word1.score ||
+        rowsFirst(word1.direction, word2.direction) || 
+        word1.col - word2.col ||
+        word1.row - word2.row ||
+        word1.word.length - word2.word.length || // Shorter words first
+        word1.word.localeCompare(word2.word); 
 }
