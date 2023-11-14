@@ -40,8 +40,6 @@ function getWordsForEmptyBoard(board: (Letter|null)[][], letterSet: LetterSet, t
         }
     }
 
-    console.log(result);
-
     return result;
 }
 
@@ -70,7 +68,6 @@ export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: Scrabb
     });
 
     words.sort(compareWords);
-    console.log(words);
 
     return words;
 }
