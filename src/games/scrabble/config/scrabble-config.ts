@@ -3,7 +3,7 @@ import { AppGame, GameCategory } from "../../../app-game-support";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
-import { getLegalWordList } from "../../../utils/get-word-checker";
+import { getScrabbleWords } from "../../../utils/get-scrabble-words";
 
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;
@@ -41,7 +41,7 @@ const standard : ScrabbleConfig = {
     minPlayers: 1,
     maxPlayers: 4, 
 
-    getLegalWords: getLegalWordList,
+    getLegalWords: getScrabbleWords,
 
     makeFullBag(
         random: RandomAPI

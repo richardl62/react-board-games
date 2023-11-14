@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../../utils/async-status";
-import { getWordChecker } from "../../../utils/get-word-checker";
+import { getScrabbleWords } from "../../../utils/get-scrabble-words";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { crossTilesReducer, initialReducerState } from "../client-side/actions/cross-tiles-reducer";
@@ -12,6 +12,17 @@ export interface ContextProviderPlusProps {
     gameProps: CrossTilesGameProps;
     children: React.ReactNode;
 }
+
+async function getWordChecker(): Promise<(word: string) => boolean> {
+    const legalWords = await getScrabbleWords();
+
+    return (word: string) => {
+        const revisedWord = word.trim().toLocaleLowerCase();
+
+        return legalWords.includes(revisedWord);
+    };
+}
+
 
 function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
     const { gameProps, children } = props;
