@@ -227,7 +227,7 @@ export function wordScore(br: BoardAndRack, possbileWord: LegalWord, config: Sco
 
         /* Start of sanity check */
         const blankIndex = rack.findIndex(l => l === blank);
-        sAssert(blankIndex >= 0);
+        sAssert(blankIndex >= 0, "blank not found in rack");
         rack[blankIndex] = null;
         /* End of sanity check */
 
@@ -240,7 +240,7 @@ export function wordScore(br: BoardAndRack, possbileWord: LegalWord, config: Sco
     const active : RowCol[] = [];
     for(const letter of word) {
         const square = board[row][col];
-        sAssert(square !== undefined);
+        sAssert(square !== undefined, `board[${row}][${col}] is undefined`);
 
         if(square) {
             sAssert(square.letter === letter, "Unexpected letter on board");

@@ -29,12 +29,14 @@ function getWordsForEmptyBoard(board: (Letter|null)[][], letterSet: LetterSet, t
     const words = trie.findWords(letterSet);
     
     const row = Math.trunc(board.length/2);
-    const midCol = Math.trunc(board[0].length/2);
+    const rowLength = board[0].length;
+    const midCol = Math.trunc(rowLength/2);
 
-    const result : LegalWord[] = [];
+    const result: LegalWord[] = [];
     for(let col = 0; col <= midCol; ++col) {
         for(const word of words) {
-            if(col + word.length > midCol) {
+            const wordEnd = col + word.length - 1;
+            if(wordEnd >= midCol && wordEnd < rowLength) {
                 result.push({row, col, direction:"row", word});
             }
         }

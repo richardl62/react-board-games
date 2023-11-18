@@ -5,7 +5,7 @@ import { getLegalWordsForBoard } from "./get-legal-words-for-board";
 
 type Results = ReturnType<typeof getLegalWordsForBoard>;
 
-test("get possible words", () => {
+test("get possible words 1", () => {
     const trie = new Trie(["ab"]);
     const availableLetters = new LetterSet("",10);
     const board = [
@@ -24,7 +24,7 @@ test("get possible words", () => {
     expect(results).toEqual(expected);
 });
 
-test("get possible words", () => {
+test("get possible words 2", () => {
     const trie = new Trie(["ab","bbb", "bc"]);
     const availableLetters = new LetterSet("",10);
     const board = [
