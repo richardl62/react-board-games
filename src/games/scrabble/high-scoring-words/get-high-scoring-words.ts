@@ -3,7 +3,7 @@ import { WordDirection } from "../../../utils/word-finder/get-legal-words/word-p
 import { LetterSet } from "../../../utils/word-finder/letter-set";
 import { Trie } from "../../../utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
-import { wordScore } from "../client-side/get-words-and-score";
+import { wordScore } from "./word-score";
 import { Letter, ScoringConfig, blank } from "../config";
 import { getAllWords } from "./get-all-words";
 
@@ -26,18 +26,21 @@ export interface LegalWordAndScore extends LegalWord {
 }
 export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: ScoringConfig) : LegalWordAndScore[] {
     br.recallRack();
-    
-    const allWords = getAllWords(br, trie);
-    const words = allWords.map(word => {
-        return {
+
+
+    const result : LegalWordAndScore[] = [];
+
+    const words = getAllWords(br, trie);
+    for(const word of words) {
+        result.push({
             ...word,
             score: wordScore(br, word, config),
-        };
-    });
+        });
+    }
 
-    words.sort(compareWords);
+    result.sort(compareWords);
 
-    return words;
+    return result;
 }
 
 function compareWords(word1: LegalWordAndScore, word2: LegalWordAndScore) {
