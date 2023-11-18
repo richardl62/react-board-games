@@ -4,7 +4,7 @@ import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { ScrabbleContext } from "./scrabble-context";
 import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
-import { Letter, ScrabbleConfig, blank } from "../config";
+import { Letter, ScoringConfig, blank } from "../config";
 import { BoardAndRack } from "./board-and-rack";
 
 /** Row and Column numbers for use on grid-based board. */
@@ -176,7 +176,7 @@ interface WordsAndScore {
   
 type ReducedScrabbleContext = Pick<ScrabbleContext, "board" | "config" | "legalWords">
 
-function getScore(board: BoardData, active: RowCol[], config: ScrabbleConfig) : number {
+function getScore(board: BoardData, active: RowCol[], config: ScoringConfig) : number {
     const candidateWords = findCandidateWords(board, active);
     if(!candidateWords) {
         return 0;
@@ -213,7 +213,7 @@ export function getWordsAndScore(context: ReducedScrabbleContext, active: RowCol
     };
 }
 
-export function wordScore(br: BoardAndRack, possbileWord: LegalWord, config: ScrabbleConfig) : number {
+export function wordScore(br: BoardAndRack, possbileWord: LegalWord, config: ScoringConfig) : number {
     // Inefficient
     const board = br.getBoard().map(row => [...row]);
     const rack = [...br.getRack()];

@@ -4,7 +4,7 @@ import { LetterSet } from "../../../utils/word-finder/letter-set";
 import { Trie } from "../../../utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { wordScore } from "../client-side/get-words-and-score";
-import { Letter, ScrabbleConfig, blank } from "../config";
+import { Letter, ScoringConfig, blank } from "../config";
 
 function makeLetterSet(letters: (Letter|null)[]) {
     let allLetters = "";
@@ -56,7 +56,7 @@ function getAllWords(br: BoardAndRack, trie: Trie) : LegalWord[] {
 export interface LegalWordAndScore extends LegalWord {
     score: number;
 }
-export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: ScrabbleConfig) : LegalWordAndScore[] {
+export function getHighScoringWords(br: BoardAndRack, trie: Trie, config: ScoringConfig) : LegalWordAndScore[] {
     br.recallRack();
     
     const allWords = getAllWords(br, trie);

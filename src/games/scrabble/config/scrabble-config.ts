@@ -11,7 +11,14 @@ const d = SquareType.doubleLetter;
 const t = SquareType.tripleLetter;
 const s = SquareType.simple;
 
-export interface ScrabbleConfig {
+/** Info needed to score a word */
+export interface ScoringConfig {
+    boardLayout: SquareType[][];
+    rackSize: number;
+    allLetterBonus: number,
+}
+
+export interface ScrabbleConfig extends ScoringConfig {
     name: string,
     displayName: string,
     category: AppGame["category"],
@@ -28,10 +35,6 @@ export interface ScrabbleConfig {
      * this would be unhelpful for testing.)  Aug 2021
      */
     makeFullBag : (random: RandomAPI) => Letter[];
-    boardLayout: SquareType[][];
-    rackSize: number;
-
-    allLetterBonus: number,
 }
 
 const standard : ScrabbleConfig = {
