@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { MoveHistory } from "./move-history";
 import { MainGameArea } from "./main-game-area";
 import { useScrabbleContext } from "../client-side/scrabble-context";
-import { standardOuterMargin } from "../../../app-game-support/styles";
 import { AvailableWords } from "./available-words";
 
 const Game = styled.div`
@@ -14,8 +13,8 @@ const Game = styled.div`
         margin-left: 10px;
     }
 
-
-    margin: ${standardOuterMargin};
+    margin: 6px;
+    margin-left:30px;
 `;
 
 const RightSide = styled.div`
