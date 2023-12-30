@@ -40,7 +40,6 @@ export function MainGameArea(): JSX.Element {
     return <Game>
         <ScoresEtc />
         <RackAndControls />
-        <HighScoringWordsControls />
         <Centered>
             <MainBoard />
         </Centered>
@@ -50,6 +49,7 @@ export function MainGameArea(): JSX.Element {
         </SpaceBetween>
 
         {reviewGameHistory ? <RewindControls /> : <TurnControl />}
+        <HighScoringWordsControls />
         <ScoreLine/>
     </Game>;
 }

@@ -4,6 +4,15 @@ import { useScrabbleContext } from "../client-side/scrabble-context";
 import { sAssert } from "../../../utils/assert";
 import styled from "styled-components";
 
+const OuterDiv = styled.div`
+    margin-top: 5px;
+    display: flex;
+
+    > * + * {
+        margin-left: 5px;
+    }
+`;
+
 const ControlDiv = styled.div`
     button {
         margin-right: 5px;
@@ -52,22 +61,20 @@ export function HighScoringWordsControls() : JSX.Element | null {
         return null;
     }
     
-    return <div>
-        <div>
-            <label>{"Show high scroring words "}
-                <input type="checkbox"
-                    checked={enabled}
-                    onChange={() => dispatch({
-                        type: "enableHighScoringWords",
-                        data: { enable: !enabled, legalWords }
-                    })}
-                />
-            </label>
-        </div>
-        
+    return <OuterDiv>
+        <label>{"Show high scroring word "}
+            <input type="checkbox"
+                checked={enabled}
+                onChange={() => dispatch({
+                    type: "enableHighScoringWords",
+                    data: { enable: !enabled, legalWords }
+                })}
+            />
+        </label>
+
         {enabled &&
             (nWordsFound === 0 ? <div>No legal words found</div> : <Controls />)
         }
 
-    </div>;
+    </OuterDiv>;
 }
