@@ -6,7 +6,6 @@ import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
 import { TurnControl } from "./turn-control";
 import { WordChecker } from "./word-check";
-import { EnableMoveHistoryToggle } from "./move-history";
 import { RewindControls } from "./rewind-controls";
 import { HighScoringWordsControls } from "./high-scoring-words-controls";
 import { ScoreLine } from "./score-line";
@@ -37,7 +36,7 @@ function BagInfo(): JSX.Element {
 }
 
 export function MainGameArea(): JSX.Element {
-    const { reviewGameHistory, winnerIds } = useScrabbleContext();
+    const { reviewGameHistory } = useScrabbleContext();
     return <Game>
         <ScoresEtc />
         <RackAndControls />
@@ -52,6 +51,5 @@ export function MainGameArea(): JSX.Element {
 
         {reviewGameHistory ? <RewindControls /> : <TurnControl />}
         <ScoreLine/>
-        {winnerIds && <EnableMoveHistoryToggle />}
     </Game>;
 }

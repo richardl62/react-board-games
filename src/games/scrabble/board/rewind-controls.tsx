@@ -2,20 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { useScrabbleContext } from "../client-side/scrabble-context";
-import { GoToStart, GoToEnd, StepForwards, StepBackwards, arrowHeight } from "./forward-back-arrows";
-
-const HistoryButtons = styled.div`
-  margin-top: calc(${arrowHeight}*0.5);
-  margin-bottom: calc(${arrowHeight}*0.2);
-
-  > *:not(:last-child) {
-    margin-right: calc(${arrowHeight}*0.5);
-  }
-`;
+import { GoToStart, GoToEnd, StepForwards, StepBackwards } from "./forward-back-arrows";
 
 const Controls = styled.div`
     display: flex;
-    flex-direction: column;
+    button {
+        margin-left: 0.2em;
+    }
 `;
 
 export function RewindControls() : JSX.Element {
@@ -33,23 +26,24 @@ export function RewindControls() : JSX.Element {
     const atHistoryEnd = historyPosition === historyLength - 1;
 
     return <Controls>
-        <HistoryButtons>
-            <button onClick={() => setHistoryPosition(0)} disabled={atHistoryStart}>
-                <GoToStart />
-            </button>
+        <div>Game history</div>
+ 
+        <button onClick={() => setHistoryPosition(0)} disabled={atHistoryStart}>
+            <GoToStart />
+        </button>
 
-            <button onClick={() => setHistoryPosition(historyPosition - 1)} disabled={atHistoryStart}>
-                <StepBackwards/> 
-            </button>
+        <button onClick={() => setHistoryPosition(historyPosition - 1)} disabled={atHistoryStart}>
+            <StepBackwards />
+        </button>
 
-            <button onClick={() => setHistoryPosition(historyPosition + 1)} disabled={atHistoryEnd}>
-                <StepForwards/> 
-            </button>
+        <button onClick={() => setHistoryPosition(historyPosition + 1)} disabled={atHistoryEnd}>
+            <StepForwards />
+        </button>
 
-            <button onClick={() => setHistoryPosition(historyLength - 1)} disabled={atHistoryEnd}>
-                <GoToEnd/>
-            </button>
-        </HistoryButtons>
+        <button onClick={() => setHistoryPosition(historyLength - 1)} disabled={atHistoryEnd}>
+            <GoToEnd />
+        </button>
+
 
     </Controls>;
 }

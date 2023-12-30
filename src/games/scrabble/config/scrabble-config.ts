@@ -86,6 +86,7 @@ const simpleScrabbleWords = [
     "ab",
     "bc",
     "abc",
+    "abcd",
 ];
 
 const simpleScrabbleLettersForBag : Letter []= [

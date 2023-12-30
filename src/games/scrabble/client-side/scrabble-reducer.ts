@@ -20,7 +20,6 @@ export type ActionType =
     | { type: "moveToRack", data:  {row: number, col: number} }
     | { type: "clickMove", data: {rackPos: number}}
     | { type: "keydown", data: {key: string}}
-    | { type: "enableGameHistory", data: {enable: boolean}}
     | { type: "setHistoryPosition", data: {position: number}}
     | { type: "enableHighScoringWords", data: {enable: boolean, legalWords: Trie}} // Kludge? Should the Trie be supplied here?
     | { type: "setHighScoringWordsPosition", data: {position: number}}
@@ -29,9 +28,17 @@ export type ActionType =
 export function scrabbleReducer(state : ReducerState, action: ActionType) : ReducerState {
 
     if(action.type === "externalStateChange") {
-        // The code is an edited copy of initialReducerState 
+        // This code is an edited copy of initialReducerState 
         const scrabbleGameProps : ScrabbleGameProps = action.data;
-        return newReducerState(scrabbleGameProps, state);
+        const newState = newReducerState(scrabbleGameProps, state);
+
+        // Enable game history if the game is over.
+        const gameOver = !!scrabbleGameProps.G.states.at(-1)?.winnerIds;
+        if(gameOver && !newState.reviewGameHistory) {
+            newState.reviewGameHistory = {historyPosition: newState.gameStates.length-1};
+        }
+
+        return newState;
     }
 
     if (action.type === "setHistoryPosition") {
@@ -39,16 +46,6 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
             { ...state, reviewGameHistory: { historyPosition: action.data.position } }
         );
     }
-
-    if(action.type === "enableGameHistory") {
-        // Reset history to lastest state (to allow moves to be made) when switching
-        // off rewind controls. KLUDGE: Also reset when switching the controls on.
-        const reviewGameHistory = action.data.enable && 
-            {historyPosition: state.gameStates.length-1};
-
-        return newReducerState(state.scrabbleGameProps, 
-            {...state, reviewGameHistory: reviewGameHistory} );
-    } 
 
     if (action.type === "focusInWordChecker") {
         return { ...state, focusInWordChecker: action.data.focusIn};

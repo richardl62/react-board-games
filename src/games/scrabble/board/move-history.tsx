@@ -158,23 +158,6 @@ interface MoveHistoryProps {
     moveHistory: MoveHistoryElement [];
 }
 
-export function EnableMoveHistoryToggle() : JSX.Element {
-    const context = useScrabbleContext();
-    const { reviewGameHistory } = context; 
-
-    const gameHistoryEnabled = Boolean(reviewGameHistory);
-
-    const toggleGameHistoryEnabled = () => {
-        context.dispatch({type: "enableGameHistory", data: {enable: !gameHistoryEnabled}});
-    };
-
-    return <div>
-        <label>{"Review game history "}
-            <input type="checkbox" checked={gameHistoryEnabled} onChange={toggleGameHistoryEnabled} />
-        </label>
-    </div>;
-}
-
 export function MoveHistory(props: MoveHistoryProps): JSX.Element {
 
     const { moveHistory } = props;
