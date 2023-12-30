@@ -91,6 +91,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
     } else if(action.type === "setBlank") {
         br.setBlank(action.data.id, action.data.letter);
     } else if(action.type === "enableHighScoringWords") {
+        br.recallRack();
         if(action.data.enable) {
             highScoringWords = {
                 possibleWords: getHighScoringWords(br, action.data.legalWords, state.config),
