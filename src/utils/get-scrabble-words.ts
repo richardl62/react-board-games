@@ -1,4 +1,4 @@
-const wordListURL = "https://raw.githubusercontent.com/richardl62/scrabble-words/main/legal-words.txt";
+const wordListURL = process.env.PUBLIC_URL + "/legal-words.txt";
 
 export async function getScrabbleWords(): Promise<string[]> {
     const response = await fetch(wordListURL);
