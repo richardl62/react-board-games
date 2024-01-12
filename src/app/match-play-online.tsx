@@ -1,5 +1,4 @@
-import { SocketIO } from "boardgame.io/multiplayer";
-import { BoardProps as BgioBoardProps, Client } from "boardgame.io/react";
+import { BoardProps as BgioBoardProps, SocketIO, Client } from "../boardgame-lib";
 import React from "react";
 import { AppGame, MatchID, Player } from "../app-game-support";
 import { GameBoard } from "./game-board";

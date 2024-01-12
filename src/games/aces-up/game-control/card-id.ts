@@ -1,4 +1,4 @@
-import { PlayerID } from "boardgame.io";
+import { PlayerID } from "../../../boardgame-lib";
 import { sAssert } from "../../../utils/assert";
 
 export type CardID = {

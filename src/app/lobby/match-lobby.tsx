@@ -1,4 +1,4 @@
-import { LobbyAPI } from "boardgame.io";
+import { LobbyAPI } from "../../boardgame-lib";
 import React, { ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import { JoinGame } from "./join-game";
 import { makeLobbyClient } from "./lobby-tools";
 
 const Names = styled.div`
-    display: flex;
+    display: flex
     /* justify-content: space-between; */
     > *:not(:first-child) {
         margin-left: 5px;

@@ -1,4 +1,4 @@
-import { PlayerID } from "boardgame.io";
+import { PlayerID } from "../../../boardgame-lib";
 import { sAssert } from "../../../utils/assert";
 import { copyJSON } from "../../../utils/copy-json";
 import { ServerData, UndoItem } from "./server-data";

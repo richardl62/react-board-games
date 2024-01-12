@@ -1,4 +1,4 @@
-import { Ctx, PlayerID } from "boardgame.io";
+import { Ctx, PlayerID } from "../../../boardgame-lib";
 import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";

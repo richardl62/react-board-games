@@ -1,6 +1,6 @@
 import React from "react";
-import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
-import { Local } from "boardgame.io/multiplayer";
+import { Client, BoardProps as BgioBoardProps} from "../boardgame-lib";
+import { Local } from "../boardgame-lib";
 import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
