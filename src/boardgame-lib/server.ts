@@ -1,0 +1,1 @@
+export { Server, Origins } from "boardgame.io/server";
