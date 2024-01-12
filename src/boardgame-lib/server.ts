@@ -1,4 +1,7 @@
-//export {  Server, Origins } from "boardgame.io/server";
+/*
+    STUB definitions - just enough to get the code to compile.
+*/
+
 import { Middleware } from "koa";
 
 function run(_port: number, _callback: () => void) : never {
