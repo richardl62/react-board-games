@@ -1,4 +1,4 @@
-import { LobbyAPI } from "../../boardgame-lib";
+import { LobbyAPI } from "../../boardgame-lib/lobby";
 import React, { ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";

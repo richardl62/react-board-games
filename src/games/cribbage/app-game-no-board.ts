@@ -1,4 +1,4 @@
-import { ActivePlayers } from "../../boardgame-lib";
+import { ActivePlayers } from "../../boardgame-lib/game-setup";
 import { GameCategory } from "../../app-game-support";
 import { AppGameNoBoard } from "../../app-game-support/app-game";
 import { bgioMoves } from "./server-side/moves";
