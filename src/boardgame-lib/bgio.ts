@@ -4,3 +4,7 @@ export type { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/rando
 export { Local } from "boardgame.io/multiplayer";
 export { Client } from "boardgame.io/react";
 export type { BoardProps } from "boardgame.io/react";
+export type { LobbyAPI } from "boardgame.io";
+export { Origins, Server } from "boardgame.io/server";
+export { SocketIO } from "boardgame.io/multiplayer";
+export { LobbyClient } from "boardgame.io/client";
