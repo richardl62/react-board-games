@@ -1,7 +1,7 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
 import { SetupArg0 } from "../../../app-game-support/bgio-types";
-import { RandomAPI } from "../../../boardgame-lib";
+import { RandomAPI } from "../../../boardgame-lib/bgio";
 
 export const startingOrders = [
     "forward",

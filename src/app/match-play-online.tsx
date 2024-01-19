@@ -1,4 +1,4 @@
-import { BoardProps as BgioBoardProps, Client } from "../boardgame-lib";
+import { BoardProps as BgioBoardProps, Client } from "../boardgame-lib/bgio";
 import React from "react";
 import { AppGame, MatchID, Player } from "../app-game-support";
 import { GameBoard } from "./game-board";

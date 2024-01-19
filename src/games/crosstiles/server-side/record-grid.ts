@@ -4,7 +4,7 @@ import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "./server-data";
 import { ScoreWithCategory } from "./set-score";
 import { MoveArg0 } from "../../../app-game-support/bgio-types";
-import { PlayerID } from "../../../boardgame-lib";
+import { PlayerID } from "../../../boardgame-lib/bgio";
 
 interface GridAndScore {
     grid: (Letter | null)[][],
