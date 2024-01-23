@@ -62,6 +62,13 @@ export function newReducerState(
         playerID = scrabbleGameProps.playerID;
     }
 
+    let { reviewGameHistory } = simplifiedState;
+    // Enable game history if the game is over.
+    const gameOver = !!states.at(-1)?.winnerIds;
+    if (gameOver && !reviewGameHistory) {
+        reviewGameHistory = { historyPosition: states.length - 1 };
+    }
+
     return {
         ...simplifiedState,
         ...getLocalGameState(states[historyPosition], playerID),
@@ -70,6 +77,7 @@ export function newReducerState(
         gameStates: states,
 
         highScoringWords: null,
+        reviewGameHistory,
 
         externalTimestamp: moveCount,
         scrabbleGameProps: scrabbleGameProps,

@@ -32,12 +32,6 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         const scrabbleGameProps : ScrabbleGameProps = action.data;
         const newState = newReducerState(scrabbleGameProps, state);
 
-        // Enable game history if the game is over.
-        const gameOver = !!scrabbleGameProps.G.states.at(-1)?.winnerIds;
-        if(gameOver && !newState.reviewGameHistory) {
-            newState.reviewGameHistory = {historyPosition: newState.gameStates.length-1};
-        }
-
         return newState;
     }
 
