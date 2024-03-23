@@ -62,7 +62,7 @@ export function HighScoringWordsControls() : JSX.Element | null {
     }
     
     return <OuterDiv>
-        <label>{"Show high scroring word "}
+        <label>{"Show high scoring word "}
             <input type="checkbox"
                 checked={enabled}
                 onChange={() => dispatch({
