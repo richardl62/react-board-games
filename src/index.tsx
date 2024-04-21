@@ -33,11 +33,6 @@ function ErrorFallback({ error }: { error: Error }) {
                 <span>{error.message}</span>
             </ErrorMessage>
 
-            <div>
-                <span>{"If you are lucky, refreshing will help "}</span>
-                <button onClick={()=>window.location.reload()}>Refresh</button>
-            </div>
-
             {error.stack &&
         <div>
             <div>Gory details:</div>
