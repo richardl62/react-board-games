@@ -5,7 +5,11 @@ import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
 import { SetupArg0 } from "../app-game-support/bgio-types";
+import styled from "styled-components";
 
+const OptionalDisplay = styled.div<{display_: boolean}>`
+    display: ${props => props.display_? "block" : "none"};
+`;
 
 export function MatchPlayOffline(props: {
     game:AppGame,
@@ -22,11 +26,20 @@ export function MatchPlayOffline(props: {
     const showBoard = (props: BgioBoardProps) =>
         !passAndPlay || props.playerID === props.ctx.currentPlayer;
 
+    // Use of OptionalDisplay can improve efficiency.  Previously, board was
+    // defined as 
+    //   (props: BgioBoardProps) => showBoard(props) ?
+    //      <GameBoard game={game} bgioProps={props} /> : 
+    //    <></>
+    // This lead to the Scrabble dictionary being reloaded each turn in
+    // pass-and-play games. At a guess, this was due to GameClient being 
+    // unmounted and remounted.  
     const GameClient = Client({
         game: {...game, setup: wrappedSetup},
-        board: (props: BgioBoardProps) => showBoard(props) ?
-            <GameBoard game={game} bgioProps={props} /> : 
-            <></>,
+        board: (props: BgioBoardProps) => 
+            <OptionalDisplay display_={showBoard(props)}>
+                <GameBoard game={game} bgioProps={props} />,
+            </OptionalDisplay>,
         multiplayer: Local(),
         numPlayers,
         debug: debugPanel,
