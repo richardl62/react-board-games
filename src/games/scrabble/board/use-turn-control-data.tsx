@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Letter } from "../config";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../client-side";
 import { findUnsetBlack } from "../client-side/board-and-rack";
 import { useScrabbleContext } from "../client-side/scrabble-context";
@@ -11,11 +10,9 @@ function sameWordList(words1: string[], words2: string[]): boolean {
 export interface TurnControlData {
     illegalWords?: string[];
     onPass?: (() => void);
-
-    onSetBlank?: () => void;
-    doSetBlank?: (arg: Letter) => void;
-
     onDone?: () => void;
+
+    unsetBlank: SquareID | null;
 }
 
 export function useTurnControlData(): TurnControlData {
@@ -25,11 +22,13 @@ export function useTurnControlData(): TurnControlData {
         all: string[]; // All words at time illegal words were recorded.
     }
     const [illegalWordsData, setIllegalWordsData] = useState<IllegalWordsData | null>(null);
-    const [blankToSet, setBlankToSet] = useState<SquareID | null>(null);
 
     const active = findActiveLetters(context);
     const wordsAndScore = getWordsAndScore(context, active);
-    const unsetBlank = findUnsetBlack(context.board);
+
+    const result : TurnControlData = {
+        unsetBlank: findUnsetBlack(context.board)
+    }; 
 
     if (illegalWordsData) {
         // Clear the illegalWord
@@ -40,38 +39,24 @@ export function useTurnControlData(): TurnControlData {
     const isMyTurn = context.playerID === context.currentPlayer; 
     if (active.length === 0) {
         if (isMyTurn) {
-            return {
-                onPass: () => {
-                    context.wrappedGameProps.moves.pass();
-                },
+            result.onPass = () => {
+                context.wrappedGameProps.moves.pass();
             };
-        } else {
-            return {};
         }
+        return result;
     } else if (!wordsAndScore) {
-        return {};
+        return result;
     } else {
 
         const { words, illegalWords } = wordsAndScore;
 
-        const result: TurnControlData = {};
 
         if (illegalWordsData) {
             result.illegalWords = illegalWordsData.illegal;
         }
 
-        if (unsetBlank) {
-            result.onSetBlank = () => setBlankToSet(unsetBlank);
-        }
-
-        if (blankToSet) {
-            result.doSetBlank = (l: Letter) => {
-                context.dispatch({ type: "setBlank", data: { id: blankToSet, letter: l } });
-                setBlankToSet(null);
-            };
-        }
         const isMyTurn = context.playerID === context.currentPlayer; 
-        if (isMyTurn && !unsetBlank) {
+        if (isMyTurn && !result.unsetBlank) {
 
             const playWord = () => {
                 

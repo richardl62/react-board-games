@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { LetterSelector } from "./letter-selector";
+import { SetBlank } from "./set-blank";
 import { useTurnControlData } from "./use-turn-control-data";
 
 export const StyledScoreLine = styled.div`
@@ -44,17 +44,12 @@ function PassDialog() {
     </>;
 }
 
-/** 'Dumb' class that does the formatting for TurnControl */
 export function TurnControl(): JSX.Element {
-    const { illegalWords, onDone, onSetBlank, doSetBlank } = useTurnControlData();
+    const { illegalWords, onDone } = useTurnControlData();
     const doButtonText = illegalWords ?
         "Done (permitting illegal words)" :
         "Done"
     ;
-
-    if(doSetBlank) {
-        return <LetterSelector recordSelection={doSetBlank} />;
-    }
 
     return (
         <div>
@@ -65,9 +60,9 @@ export function TurnControl(): JSX.Element {
         </StyledIllegalWords>
             }
 
+            <SetBlank/>
             <StyledScoreLine>
                 <PassDialog/>
-                {onSetBlank && <button onClick={onSetBlank}>Set Blank</button>}
                 {onDone && <button onClick={onDone}> {doButtonText} </button>}
             </StyledScoreLine>
         </div>
