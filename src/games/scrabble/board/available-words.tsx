@@ -32,7 +32,7 @@ function sameRack(rack1: Rack, rack2: Rack) {
 export function AvailableWords(): JSX.Element | null {
     const {rack, legalWords, reviewGameHistory } = useScrabbleContext();
 
-    const [showAvailableWords, setShowAvailableWords] = React.useState(false);
+    const [showAvailableWords, setShowAvailableWords] = React.useState(true);
     const [wordsToShow, setWordsToShow] = 
         React.useState<{words: string[], generatingRack: Rack}>({words: [], generatingRack: []});
 
