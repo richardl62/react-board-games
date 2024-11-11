@@ -1,5 +1,5 @@
 import { sAssert } from "../utils/assert";
-import { BoardProps as BgioBoardProps, MatchDataElem } from "./board-props";
+import { BoardProps as BgioBoardProps, MatchDataElem } from "../bgio-workaround/board-props";
 
 export function defaultPlayerName(playerID: string): string {
     const playerNumber = parseInt(playerID);

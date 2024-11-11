@@ -2,7 +2,7 @@
 // isConnected as an optional member. The code below is my way of add it.
 
 import { sAssert } from "../utils/assert";
-import { BoardProps } from "./board-props";
+import { BoardProps } from "../bgio-workaround/board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 import * as UrlParams from "../app/url-params";
 import { RequiredServerData } from "./required-server-data";
