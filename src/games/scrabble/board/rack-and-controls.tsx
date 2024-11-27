@@ -19,6 +19,10 @@ align-items: center;
 gap: 3%;
 `;
 
+const ButtonNoWrap = styled.button`
+    white-space: nowrap;
+`;
+
 /** 
 * Report whether there are active tiles on the board.
 * 
@@ -61,6 +65,8 @@ export function RackAndControls(): JSX.Element {
             setSelectedForSwap(null);
         };
 
+        const nToSwap = selectedForSwap.filter(s => s).length;
+        
         return (
             <StyledRackAndControls>
                 <PreRack>
@@ -69,8 +75,8 @@ export function RackAndControls(): JSX.Element {
 
                 <Rack selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
-                {selectedForSwap.includes(true) &&
-                    <button onClick={makeSwap}>Make Swap</button>}
+                {nToSwap > 0 &&
+                    <ButtonNoWrap onClick={makeSwap}>Swap {nToSwap} tiles</ButtonNoWrap>}
                 <button onClick={cancelSwap}>Cancel</button>
             </StyledRackAndControls>
         );

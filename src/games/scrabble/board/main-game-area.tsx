@@ -16,9 +16,8 @@ const SpaceBetween = styled.div`
   align-self: stretch;
 `;
 
-const Centered = styled.div`
+const MainBoardDiv = styled.div`
   display: flex;
-  align-self: center;
 `;
 
 const Game = styled.div`
@@ -40,9 +39,9 @@ export function MainGameArea(): JSX.Element {
     return <Game>
         <ScoresEtc />
         <RackAndControls />
-        <Centered>
+        <MainBoardDiv>
             <MainBoard />
-        </Centered>
+        </MainBoardDiv>
         <SpaceBetween>
             <WordChecker />
             <BagInfo />
