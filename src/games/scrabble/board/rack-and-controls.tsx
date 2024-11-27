@@ -76,7 +76,7 @@ export function RackAndControls(): JSX.Element {
                 <Rack selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
                 {nToSwap > 0 &&
-                    <ButtonNoWrap onClick={makeSwap}>Swap {nToSwap} tiles</ButtonNoWrap>}
+                    <ButtonNoWrap onClick={makeSwap}>Make swap ({nToSwap} tiles)</ButtonNoWrap>}
                 <button onClick={cancelSwap}>Cancel</button>
             </StyledRackAndControls>
         );
