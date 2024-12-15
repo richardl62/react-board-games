@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { squareSize } from "../../games/scrabble/board/style";
 import { WordDirection } from "../word-finder/get-legal-words/word-position";
+
+// KLUDGE - /utils/ should not include anything from /games/
+// As a quick and dirty fix copy the value instead
+// import { squareSize } from "../../games/scrabble/board/style";
+const squareSize = "30px";
 
 const OuterDiv = styled.div<{rotation: string}>`
     display: flex;
