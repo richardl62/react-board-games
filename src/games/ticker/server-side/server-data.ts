@@ -1,5 +1,5 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
-import { SetupArg0 } from "../../../app-game-support/bgio-types";
+import { SetupArg0 } from "../../../boardgame-lib/bgio-types";
 
 export interface ServerData extends RequiredServerData {
     count: number;

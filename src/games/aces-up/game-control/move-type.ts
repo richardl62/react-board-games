@@ -6,7 +6,7 @@ import { CardID } from "./card-id";
 import { SharedPile, makeSharedPiles } from "./shared-pile";
 import { ServerData } from "./server-data";
 import { GameOptions, OptionWrapper } from "../game-support/game-options";
-import { Ctx, PlayerID } from "boardgame.io";
+import { Ctx, PlayerID } from "../../../boardgame-lib/bgio";
 import { makeDiscardPile } from "./make-discard-pile";
 
 export function moveableToSharedPile(

@@ -1,7 +1,7 @@
 import { Letter } from "../config";
 import { BoardData, GameState } from "./game-state";
 import { WordsPlayedInfo } from "./move-hstory";
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
 
 export interface PlayWordParam {
     board: BoardData;

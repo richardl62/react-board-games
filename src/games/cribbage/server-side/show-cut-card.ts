@@ -1,5 +1,5 @@
 import { ServerData } from "./server-data";
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
 
 
 export function showCutCard(

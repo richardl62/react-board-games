@@ -1,6 +1,6 @@
 import { CardNonJoker } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
-import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
+import { RandomAPI } from "../../../boardgame-lib/bgio";
 
 type Filter = (c: CardNonJoker) => boolean;
 export class ExtendingDeck {

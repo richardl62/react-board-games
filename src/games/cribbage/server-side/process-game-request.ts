@@ -1,4 +1,4 @@
-import { Ctx } from "boardgame.io";
+import { Ctx } from "../../../boardgame-lib/bgio";
 import { GameRequest, PlayerID, ServerData } from "./server-data";
 
 /** Process a game request (e,g, from a new deal).

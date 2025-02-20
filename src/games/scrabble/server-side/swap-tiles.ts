@@ -1,6 +1,6 @@
 import { Letter } from "../config";
 import { GameState } from "./game-state";
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
 
 export interface SwapTilesParam {
     /**

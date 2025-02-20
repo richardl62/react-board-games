@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
 import { GameStage, ServerData, startingPlayerData } from "./server-data";
-import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
+import { RandomAPI } from "../../../boardgame-lib/bgio";
 
 export function startRound(
     G: ServerData, 

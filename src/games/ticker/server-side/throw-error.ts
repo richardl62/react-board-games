@@ -1,4 +1,4 @@
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
 import { ServerData } from "./server-data";
 
 export function throwError(

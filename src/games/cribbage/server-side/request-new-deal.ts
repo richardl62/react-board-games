@@ -1,7 +1,7 @@
 import { processGameRequest } from "./process-game-request";   
 import { GameRequest, PlayerID, ServerData } from "./server-data";
 import { newDealData } from "./starting-server-data";
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
 
 export function requestNewDeal(
     {G: inputG, ctx, random} : MoveArg0<ServerData>,  

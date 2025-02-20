@@ -1,9 +1,9 @@
-import { SocketIO } from "boardgame.io/multiplayer";
-import { BoardProps as BgioBoardProps, Client } from "boardgame.io/react";
+import { BoardProps as BgioBoardProps, Client, SocketIO } from "../boardgame-lib/bgio";
 import React from "react";
 import { AppGame, MatchID, Player } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import * as UrlParams from "./url-params";
+
 
 interface MatchPlayOnlineProps {
   game: AppGame;

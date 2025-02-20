@@ -1,8 +1,9 @@
 // Adapted from https://boardgame.io/documentation/#/deployment?id=heroku
-import { Server, Origins } from "boardgame.io/server";
+
 import path from "path";
 import serve from "koa-static";
 import { gamesNoBoard } from "./games/app-games-no-board";
+import { Origins, Server } from "./boardgame-lib/bgio-server";
 
 console.log("Starting games server");
 

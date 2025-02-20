@@ -1,4 +1,4 @@
-import { PlayerID } from "boardgame.io";
+import { PlayerID } from "../../../boardgame-lib/bgio";
 import { RequiredServerData } from "../../../app-game-support/required-server-data";
 import { CardNonJoker } from "../../../utils/cards";
 import { SharedPileData } from "./shared-pile";

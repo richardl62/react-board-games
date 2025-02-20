@@ -1,10 +1,10 @@
 import React from "react";
-import { Client, BoardProps as BgioBoardProps} from "boardgame.io/react";
-import { Local } from "boardgame.io/multiplayer";
+import { Client, BoardProps as BgioBoardProps} from "../boardgame-lib/bgio";
+import { Local } from "../boardgame-lib/bgio";
 import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
-import { SetupArg0 } from "../app-game-support/bgio-types";
+import { SetupArg0 } from "../boardgame-lib/bgio-types";
 import styled from "styled-components";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`

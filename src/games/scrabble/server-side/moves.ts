@@ -1,4 +1,4 @@
-import { Ctx } from "boardgame.io";
+import { Ctx } from "../../../boardgame-lib/bgio";
 import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../app-game-support/wrapped-move-function";
 import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";
@@ -6,7 +6,7 @@ import { GameState } from "./game-state";
 import { playWord } from "./play-word";
 import { ServerData } from "./server-data";
 import { swapTiles } from "./swap-tiles";
-import { MoveArg0 } from "../../../app-game-support/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
 
 type PassParam = void;
 function pass(

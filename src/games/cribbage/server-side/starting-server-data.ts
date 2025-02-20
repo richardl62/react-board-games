@@ -3,8 +3,8 @@ import { Card } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
-import { SetupArg0 } from "../../../app-game-support/bgio-types";
-import { RandomAPI } from "boardgame.io/dist/types/src/plugins/random/random";
+import { SetupArg0 } from "../../../boardgame-lib/bgio-types";
+import { RandomAPI } from "../../../boardgame-lib/bgio";
 
 interface PlayerPegPositions {
     player0: PegPositions;

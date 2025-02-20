@@ -1,4 +1,4 @@
-import { PlayerID } from "boardgame.io";
+import { PlayerID } from "../../../boardgame-lib/bgio";
 import { CardNonJoker } from "../../../utils/cards";
 import { moveableToSharedPile } from "./move-type";
 import { ServerData } from "./server-data";

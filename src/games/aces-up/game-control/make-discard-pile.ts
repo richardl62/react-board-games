@@ -1,4 +1,4 @@
-import { PlayerID } from "boardgame.io";
+import { PlayerID } from "../../../boardgame-lib/bgio";
 import { ServerData } from "./server-data";
 import { DiscardPile } from "./discard-pile";
 
