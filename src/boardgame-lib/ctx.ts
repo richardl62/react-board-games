@@ -4,4 +4,5 @@ export interface Ctx {
     playOrder: string[];
     currentPlayer: string;
     playOrderPos: number;
+    gameover?: boolean;
 }
