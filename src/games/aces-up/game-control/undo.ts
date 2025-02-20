@@ -1,8 +1,8 @@
-import { PlayerID } from "../../../boardgame-lib/bgio";
+import { PlayerID } from "../../../boardgame-lib/misc";
 import { sAssert } from "../../../utils/assert";
 import { copyJSON } from "../../../utils/copy-json";
 import { ServerData, UndoItem } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {

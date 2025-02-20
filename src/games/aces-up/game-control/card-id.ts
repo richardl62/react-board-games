@@ -1,4 +1,4 @@
-import { PlayerID } from "../../../boardgame-lib/bgio";
+import { PlayerID } from "../../../boardgame-lib/misc";
 import { sAssert } from "../../../utils/assert";
 
 export type CardID = {

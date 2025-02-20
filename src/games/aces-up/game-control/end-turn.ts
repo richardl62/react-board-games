@@ -1,9 +1,9 @@
-import { Ctx, PlayerID } from "../../../boardgame-lib/bgio";
+import { Ctx, PlayerID } from "../../../boardgame-lib/misc";
 import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 import { makeSharedPileData, makeSharedPiles } from "./shared-pile";
 import { makeDiscardPiles } from "./make-discard-pile";
 

@@ -4,7 +4,7 @@ import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "../client-side/extended-letter";
 import { MoveHistoryElement } from "./move-hstory";
-import { SetupArg0 } from "../../../boardgame-lib/bgio-types";
+import { SetupArg0 } from "../../../boardgame-lib/types";
 
 export interface BoardSquareData extends ExtendedLetter {
 

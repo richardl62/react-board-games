@@ -1,6 +1,6 @@
 // This file gives a work-around for an apparent bug in a Bgio type defition.
 
-import { BoardProps as BoardProps_} from "../boardgame-lib/bgio";
+import { BoardProps as BoardProps_} from "./misc";
 
 type MatchDataElem_ = Required<BoardProps_>["matchData"][0]; 
 

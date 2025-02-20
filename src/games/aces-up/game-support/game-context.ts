@@ -2,7 +2,7 @@ import { useStandardBoardContext } from "../../../app-game-support/standard-boar
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { PlayerData, ServerData } from "../game-control/server-data";
 import { ClientMoves } from "../game-control/moves";
-import { PlayerID } from "../../../boardgame-lib/bgio";
+import { PlayerID } from "../../../boardgame-lib/misc";
 import { sAssert } from "../../../utils/assert";
 
 interface ExtendedServerData extends ServerData {

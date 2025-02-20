@@ -1,4 +1,4 @@
-import { Ctx } from "../../../boardgame-lib/bgio";
+import { Ctx } from "../../../boardgame-lib/misc";
 import { nNonNull } from "../../../utils/n-non-null";
 import { Letter, letterScore } from "../config";
 import { GameState } from "./game-state";

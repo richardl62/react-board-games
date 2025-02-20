@@ -3,7 +3,7 @@
 import path from "path";
 import serve from "koa-static";
 import { gamesNoBoard } from "./games/app-games-no-board";
-import { Origins, Server } from "./boardgame-lib/bgio-server";
+import { Origins, Server } from "./boardgame-lib/server";
 
 console.log("Starting games server");
 

@@ -1,6 +1,6 @@
 import { processGameRequest } from "./process-game-request";
 import { GameRequest, GameStage, PlayerID, ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 
 export function requestRevealHands(
     {G, ctx} : MoveArg0<ServerData>, 

@@ -1,5 +1,5 @@
-import { PlayerID } from "../../../boardgame-lib/bgio";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { PlayerID } from "../../../boardgame-lib/misc";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { sameJSON } from "../../../utils/same-json";

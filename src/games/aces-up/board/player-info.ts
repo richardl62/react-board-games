@@ -1,4 +1,4 @@
-import { PlayerID } from "../../../boardgame-lib/bgio";
+import { PlayerID } from "../../../boardgame-lib/misc";
 import { GameContext } from "../game-support/game-context";
 
 export class PlayerInfo {

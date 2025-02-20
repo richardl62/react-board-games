@@ -1,6 +1,6 @@
 import { GameStage, ServerData, startingServerData } from "./server-data";
 import { startRound } from "./start-round";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 
 export function readyForNewGame(
     arg0 : MoveArg0<ServerData>,

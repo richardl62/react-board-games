@@ -1,7 +1,7 @@
 import { recordEmptyGrid } from "./record-grid";
 import { ServerData, GameStage } from "./server-data";
 import { doSetScore } from "./set-score";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 
 export function doneRecordingGrid(
     {G, playerID} : MoveArg0<ServerData>,

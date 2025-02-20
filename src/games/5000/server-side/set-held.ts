@@ -1,5 +1,5 @@
 import { ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 import { setDiceScores } from "./set-dice-scores";
 
 export function setHeld(

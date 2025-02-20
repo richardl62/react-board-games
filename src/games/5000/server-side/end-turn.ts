@@ -1,4 +1,4 @@
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 import { ServerData } from "./server-data";
 
 function turnOver (

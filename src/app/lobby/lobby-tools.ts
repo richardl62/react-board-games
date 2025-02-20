@@ -1,4 +1,4 @@
-import { LobbyClient } from "../../boardgame-lib/bgio";
+import { LobbyClient } from "../../boardgame-lib/misc";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
 import { lobbyServer } from "../url-params";
 

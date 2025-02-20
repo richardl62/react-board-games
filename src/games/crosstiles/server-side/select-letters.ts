@@ -1,4 +1,4 @@
-import { RandomAPI } from "../../../boardgame-lib/bgio";
+import { RandomAPI } from "../../../boardgame-lib/misc";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
 import { SetupOptions } from "../options";
 

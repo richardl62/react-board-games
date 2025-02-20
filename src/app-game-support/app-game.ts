@@ -1,8 +1,8 @@
-import { Game } from "../boardgame-lib/bgio";
+import { Game } from "../boardgame-lib/misc";
 import { RequiredServerData } from "./required-server-data";
 import { OptionSpecifications } from "../app/option-specification/types";
 import { WrappedGameProps } from "./wrapped-game-props";
-import { SetupArg0 } from "../boardgame-lib/bgio-types";
+import { SetupArg0 } from "../boardgame-lib/types";
 
 // The string values are uses as section headers when displaying the list of
 // games.

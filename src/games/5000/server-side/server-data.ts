@@ -1,4 +1,4 @@
-import { SetupArg0 } from "../../../boardgame-lib/bgio-types";
+import { SetupArg0 } from "../../../boardgame-lib/types";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
 

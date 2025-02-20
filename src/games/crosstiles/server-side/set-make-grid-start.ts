@@ -1,5 +1,5 @@
 import { GameStage, ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/bgio-types";
+import { MoveArg0 } from "../../../boardgame-lib/types";
 
 export function setMakeGridStartTime(
     { G, playerID } : MoveArg0<ServerData>,
