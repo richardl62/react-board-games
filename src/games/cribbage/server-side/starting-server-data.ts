@@ -4,7 +4,7 @@ import { deckNoJokers } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
 import { SetupArg0 } from "../../../boardgame-lib/types";
-import { RandomAPI } from "../../../boardgame-lib/misc";
+import { RandomAPI } from "../../../boardgame-lib/random";
 
 interface PlayerPegPositions {
     player0: PegPositions;
