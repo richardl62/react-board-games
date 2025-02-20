@@ -1,4 +1,4 @@
-import { PlayerID } from "../../../boardgame-lib/misc";
+import { PlayerID } from "../../../boardgame-lib/playerid";
 import { MoveArg0 } from "../../../boardgame-lib/types";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";

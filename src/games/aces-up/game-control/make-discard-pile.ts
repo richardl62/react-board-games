@@ -1,4 +1,4 @@
-import { PlayerID } from "../../../boardgame-lib/misc";
+import { PlayerID } from "../../../boardgame-lib/playerid";
 import { ServerData } from "./server-data";
 import { DiscardPile } from "./discard-pile";
 

@@ -1,4 +1,4 @@
-import { Ctx } from "../../../boardgame-lib/misc";
+import { Ctx } from "../../../boardgame-lib/ctx";
 import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../app-game-support/wrapped-move-function";
 import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";

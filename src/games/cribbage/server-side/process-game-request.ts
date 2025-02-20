@@ -1,4 +1,4 @@
-import { Ctx } from "../../../boardgame-lib/misc";
+import { Ctx } from "../../../boardgame-lib/ctx";
 import { GameRequest, PlayerID, ServerData } from "./server-data";
 
 /** Process a game request (e,g, from a new deal).

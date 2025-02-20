@@ -1,4 +1,4 @@
-import { PlayerID } from "../../../boardgame-lib/misc";
+import { PlayerID } from "../../../boardgame-lib/playerid";
 import { CardNonJoker } from "../../../utils/cards";
 import { moveableToSharedPile } from "./move-type";
 import { ServerData } from "./server-data";
