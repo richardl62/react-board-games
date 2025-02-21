@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { ServerData, GameStage, makeCardSetID, CardSetID } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/movefn";
+import { MoveArg0 } from "../../../boardgame-lib/game";
 
 interface FromTo {
     from:  {cardSetID: CardSetID, index: number};

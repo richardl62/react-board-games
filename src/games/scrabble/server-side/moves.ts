@@ -6,7 +6,7 @@ import { GameState } from "./game-state";
 import { playWord } from "./play-word";
 import { ServerData } from "./server-data";
 import { swapTiles } from "./swap-tiles";
-import { MoveArg0 } from "../../../boardgame-lib/movefn";
+import { MoveArg0 } from "../../../boardgame-lib/game";
 
 type PassParam = void;
 function pass(

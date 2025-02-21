@@ -48,5 +48,8 @@ interface Game<G = any, PluginAPIs extends Record<string, unknown> = Record<stri
 
 export type { Game };
 
+export type MoveArg0<State> = Parameters<MoveFn<State>>[0];
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SetupArg0 = any; //Parameters<Required<Game>["setup"]>[0];
+

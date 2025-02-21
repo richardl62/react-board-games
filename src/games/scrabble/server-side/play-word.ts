@@ -1,7 +1,7 @@
 import { Letter } from "../config";
 import { BoardData, GameState } from "./game-state";
 import { WordsPlayedInfo } from "./move-hstory";
-import { MoveArg0 } from "../../../boardgame-lib/movefn";
+import { MoveArg0 } from "../../../boardgame-lib/game";
 
 export interface PlayWordParam {
     board: BoardData;

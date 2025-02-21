@@ -2,7 +2,7 @@ import { PlayerID } from "../../../boardgame-lib/playerid";
 import { sAssert } from "../../../utils/assert";
 import { copyJSON } from "../../../utils/copy-json";
 import { ServerData, UndoItem } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/movefn";
+import { MoveArg0 } from "../../../boardgame-lib/game";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {

@@ -4,7 +4,7 @@ import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
-import { MoveArg0 } from "../../../boardgame-lib/movefn";
+import { MoveArg0 } from "../../../boardgame-lib/game";
 import { makeSharedPileData, makeSharedPiles } from "./shared-pile";
 import { makeDiscardPiles } from "./make-discard-pile";
 
