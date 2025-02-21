@@ -1,6 +1,6 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
-import { SetupArg0 } from "../../../boardgame-lib/types";
+import { SetupArg0 } from "../../../boardgame-lib/game";
 
 export interface ServerData extends RequiredServerData{
     count: number;

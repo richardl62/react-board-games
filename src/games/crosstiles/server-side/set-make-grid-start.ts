@@ -1,5 +1,5 @@
 import { GameStage, ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/types";
+import { MoveArg0 } from "../../../boardgame-lib/movefn";
 
 export function setMakeGridStartTime(
     { G, playerID } : MoveArg0<ServerData>,

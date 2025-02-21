@@ -3,7 +3,7 @@ import { Card } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
-import { SetupArg0 } from "../../../boardgame-lib/types";
+import { SetupArg0 } from "../../../boardgame-lib/game";
 import { RandomAPI } from "../../../boardgame-lib/random";
 
 interface PlayerPegPositions {

@@ -1,7 +1,7 @@
 import { configs, ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./server-side";
 import { AppGameNoBoard } from "../../app-game-support/app-game";
-import { SetupArg0 } from "../../boardgame-lib/types";
+import { SetupArg0 } from "../../boardgame-lib/game";
 import { SetupOptions, setupOptions } from "./options";
 
 function makeAppGame(config: ScrabbleConfig) : AppGameNoBoard

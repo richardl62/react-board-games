@@ -1,6 +1,6 @@
 import { ScoreCategory } from "../score-categories";
 import { ServerData, GameStage } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/types";
+import { MoveArg0 } from "../../../boardgame-lib/movefn";
 
 export interface ScoreWithCategory {
     category: ScoreCategory;

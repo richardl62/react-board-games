@@ -1,5 +1,5 @@
 import {  PegPositions, PlayerID, ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/types";
+import { MoveArg0 } from "../../../boardgame-lib/movefn";
 
 interface Arg {
     who: PlayerID;

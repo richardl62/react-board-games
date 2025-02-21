@@ -1,5 +1,5 @@
 import { ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/types";
+import { MoveArg0 } from "../../../boardgame-lib/movefn";
 import { setDiceScores } from "./set-dice-scores";
 import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
 import { sAssert } from "../../../utils/assert";

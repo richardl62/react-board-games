@@ -1,7 +1,7 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { ScrabbleConfig } from "../config";
 import { GameState, isGameState, startingGameState } from "./game-state";
-import { SetupArg0 } from "../../../boardgame-lib/types";
+import { SetupArg0 } from "../../../boardgame-lib/game";
 import { SetupOptions } from "../options";
 
 /** Data recorded and shared via BGIO */

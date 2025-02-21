@@ -1,5 +1,5 @@
 import { PlayerID } from "../../../boardgame-lib/playerid";
-import { MoveArg0 } from "../../../boardgame-lib/types";
+import { MoveArg0 } from "../../../boardgame-lib/movefn";
 import { sAssert } from "../../../utils/assert";
 import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { sameJSON } from "../../../utils/same-json";

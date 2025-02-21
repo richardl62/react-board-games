@@ -5,7 +5,7 @@ import { Local } from "../boardgame-lib/misc";
 import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
-import { SetupArg0 } from "../boardgame-lib/types";
+import { SetupArg0 } from "../boardgame-lib/game";
 import styled from "styled-components";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`

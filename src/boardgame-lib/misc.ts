@@ -1,4 +1,3 @@
-export type { Game, MoveFn } from "boardgame.io";
 export { ActivePlayers } from "boardgame.io/core";
 export { Local } from "boardgame.io/multiplayer";
 export { Client } from "boardgame.io/react";

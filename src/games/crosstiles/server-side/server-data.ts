@@ -1,4 +1,4 @@
-import { SetupArg0 } from "../../../boardgame-lib/types";
+import { SetupArg0 } from "../../../boardgame-lib/game";
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { Letter } from "../config";
 import { SetupOptions } from "../options";
