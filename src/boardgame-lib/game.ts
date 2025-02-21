@@ -8,39 +8,39 @@ export const ActivePlayers = {
     ALL: "all",
 };
 
-type FnContext<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = PluginAPIs & {
+type FnContext<G = any> = {
     G: G;
     ctx: Ctx;
     random: RandomAPI;
     events: Required<EventsAPI>; // Use of Required<> is a kludge.
 };
 
-type MoveFn<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = 
+type MoveFn<G = any> = 
     (
-        context: FnContext<G, PluginAPIs> & {playerID: PlayerID;}, 
+        context: FnContext<G> & {playerID: PlayerID;}, 
         ...args: any[]
     ) => void | G;
 
-type Move<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = MoveFn<G, PluginAPIs>; 
+type Move<G = any> = MoveFn<G>; 
 
-interface MoveMap<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> {
-    [moveName: string]: Move<G, PluginAPIs>;
+interface MoveMap<G = any> {
+    [moveName: string]: Move<G>;
 }
 
-interface Game<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>, SetupData = any> {
+interface Game<G = any, SetupData = any> {
     name?: string;
     minPlayers?: number;
     maxPlayers?: number;
     deltaState?: boolean;
     disableUndo?: boolean;
     seed?: string | number;
-    setup?: (context: PluginAPIs & /*DefaultPluginAPIs &*/ {
+    setup?: (context: {
         ctx: Ctx;
     }, setupData?: SetupData) => G;
     
     validateSetupData?: (setupData: SetupData | undefined, numPlayers: number) => string | undefined;
     
-    moves?: MoveMap<G, PluginAPIs>;
+    moves?: MoveMap<G>;
 
     turn?: {
         activePlayers?: any;
