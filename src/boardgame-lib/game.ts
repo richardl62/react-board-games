@@ -1,5 +1,4 @@
 import { Ctx } from "./ctx";
-//import { EventsAPI } from "./events";
 
 import { Game as BgioGameXXX } from "boardgame.io";
 export type { BgioGameXXX };
@@ -24,9 +23,6 @@ interface Game<G = any, PluginAPIs extends Record<string, unknown> = Record<stri
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moves?: any; //MoveMap<G, PluginAPIs>;  TEMPORARY
-    
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    events?: any; //EventsAPI;
 
     turn?: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
