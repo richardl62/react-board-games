@@ -1,13 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Ctx } from "./ctx";
 
-import { Game as BgioGameXXX } from "boardgame.io";
+import { Game as BgioGameXXX, DefaultPluginAPIs } from "boardgame.io";
+import { PlayerID } from "./playerid";
 export type { BgioGameXXX };
 
 export const ActivePlayers = {
     ALL: "all",
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type FnContextX<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = PluginAPIs & DefaultPluginAPIs & {
+    G: G;
+    ctx: Ctx;
+};
+
+type MoveFn<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = 
+    (
+        context: FnContextX<G, PluginAPIs> & {playerID: PlayerID;}, 
+        ...args: any[]
+    ) => void | G;
+
+type Move<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = MoveFn<G, PluginAPIs>; 
+
+interface MoveMap<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> {
+    [moveName: string]: Move<G, PluginAPIs>;
+}
+
 interface Game<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>, SetupData = any> {
     name?: string;
     minPlayers?: number;
@@ -21,11 +39,9 @@ interface Game<G = any, PluginAPIs extends Record<string, unknown> = Record<stri
     
     validateSetupData?: (setupData: SetupData | undefined, numPlayers: number) => string | undefined;
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    moves?: any; //MoveMap<G, PluginAPIs>;  TEMPORARY
+    moves?: MoveMap<G, PluginAPIs>;
 
     turn?: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         activePlayers?: any;
     },
 }
