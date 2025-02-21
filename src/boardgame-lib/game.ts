@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Ctx } from "./ctx";
-
-import { Game as BgioGameXXX, DefaultPluginAPIs } from "boardgame.io";
 import { PlayerID } from "./playerid";
-export type { BgioGameXXX };
+import { RandomAPI } from "./random";
+import { EventsAPI } from "./events";
 
 export const ActivePlayers = {
     ALL: "all",
 };
 
-type FnContextX<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = PluginAPIs & DefaultPluginAPIs & {
+type FnContext<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = PluginAPIs & {
     G: G;
     ctx: Ctx;
+    random: RandomAPI;
+    events: Required<EventsAPI>; // Use of Required<> is a kludge.
 };
 
 type MoveFn<G = any, PluginAPIs extends Record<string, unknown> = Record<string, unknown>> = 
     (
-        context: FnContextX<G, PluginAPIs> & {playerID: PlayerID;}, 
+        context: FnContext<G, PluginAPIs> & {playerID: PlayerID;}, 
         ...args: any[]
     ) => void | G;
 
