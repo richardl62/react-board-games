@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Ctx } from "./ctx";
 import { PlayerID } from "./playerid";
 import { RandomAPI } from "./random";
@@ -8,25 +7,25 @@ export const ActivePlayers = {
     ALL: "all",
 };
 
-type FnContext<G = any> = {
-    G: G;
-    ctx: Ctx;
-    random: RandomAPI;
-    events: Required<EventsAPI>; // Use of Required<> is a kludge.
-};
-
-type MoveFn<G = any> = 
+type MoveFn<G> = 
     (
-        context: FnContext<G> & {playerID: PlayerID;}, 
+        context: {
+            G: G;
+            ctx: Ctx;
+            playerID: PlayerID;
+            random: RandomAPI;
+            events: Required<EventsAPI>; // Use of Required<> is a kludge.
+        }, 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ...args: any[]
     ) => void | G;
 
-type Move<G = any> = MoveFn<G>; 
 
-interface MoveMap<G = any> {
-    [moveName: string]: Move<G>;
+interface MoveMap<G > {
+    [moveName: string]: MoveFn<G>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface Game<G = any, SetupData = any> {
     name?: string;
     minPlayers?: number;
@@ -34,15 +33,19 @@ interface Game<G = any, SetupData = any> {
     deltaState?: boolean;
     disableUndo?: boolean;
     seed?: string | number;
-    setup?: (context: {
-        ctx: Ctx;
-    }, setupData?: SetupData) => G;
+    setup?: (
+        context: {
+            ctx: Ctx;
+        }, 
+        setupData?: SetupData
+    ) => G;
     
     validateSetupData?: (setupData: SetupData | undefined, numPlayers: number) => string | undefined;
     
     moves?: MoveMap<G>;
 
     turn?: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         activePlayers?: any;
     },
 }
