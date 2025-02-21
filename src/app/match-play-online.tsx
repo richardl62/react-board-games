@@ -1,6 +1,6 @@
 import React from "react";
 import { BoardProps as BgioBoardProps } from "../boardgame-lib/board-props";
-import { Client, SocketIO } from "../boardgame-lib/misc";
+import { Client, SocketIO } from "../boardgame-lib/client";
 import { AppGame, MatchID, Player } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import * as UrlParams from "./url-params";
