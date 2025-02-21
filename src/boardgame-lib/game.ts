@@ -36,6 +36,7 @@ interface Game<G = any, SetupData = any> {
     setup?: (
         context: {
             ctx: Ctx;
+            random: RandomAPI;
         }, 
         setupData?: SetupData
     ) => G;
@@ -54,6 +55,4 @@ export type { Game };
 
 export type MoveArg0<State> = Parameters<MoveFn<State>>[0];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SetupArg0 = any; //Parameters<Required<Game>["setup"]>[0];
-
+export type SetupArg0 = Parameters<Required<Game>["setup"]>[0];
