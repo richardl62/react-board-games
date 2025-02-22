@@ -1,34 +1,19 @@
 import React from "react";
-import { BoardProps as BgioBoardProps } from "../boardgame-lib/board-props";
-import { Client, SocketIO } from "../boardgame-lib/client";
 import { AppGame, MatchID, Player } from "../app-game-support";
-import { GameBoard } from "./game-board";
 import * as UrlParams from "./url-params";
+import { OnlineMatch } from "../boardgame-lib/online-match";
 
-
-interface MatchPlayOnlineProps {
-  game: AppGame;
-  matchID: MatchID;
-  player: Player;
-}
-
-export function MatchPlayOnline({ game, matchID, player }: MatchPlayOnlineProps): JSX.Element {
+export function MatchPlayOnline({ game, matchID, player }: {
+    game: AppGame;
+    matchID: MatchID;
+    player: Player;
+}): JSX.Element {
     const server = UrlParams.lobbyServer();
-
-    const GameClient = Client({
-        game: game,
-        board: (props: BgioBoardProps) => <GameBoard game={game} bgioProps={props} />,
-        multiplayer: SocketIO({ server: server }),
-
-        //numPlayers: matchOptions.nPlayers, - is this needed for multi-player and if so why?
-        debug: UrlParams.bgioDebugPanel,
-    });
 
     return (
         <div>
-            <GameClient matchID={matchID.mid}
+            <OnlineMatch server={server} game={game} matchID={matchID.mid}
                 playerID={player.id} credentials={player.credentials} />
         </div>
     );
-
 }
