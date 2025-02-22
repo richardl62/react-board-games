@@ -1,12 +1,11 @@
 import React from "react";
-import { Client } from "../boardgame-lib/client";
 import { BoardProps as BgioBoardProps} from "../boardgame-lib/board-props";
-import { Local } from "../boardgame-lib/client";
 import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
 import { SetupArg0 } from "../boardgame-lib/game";
 import styled from "styled-components";
+import { OfflineMatch } from "../boardgame-lib/offline-match";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
@@ -19,36 +18,34 @@ export function MatchPlayOffline(props: {
 
     const { 
         game,
-        options: {numPlayers, passAndPlay, debugPanel, setupData}
+        options: {numPlayers, passAndPlay,  setupData}
     } = props;
 
-    const wrappedSetup = (arg0: SetupArg0) => game.setup(arg0, setupData);
-    
-    const showBoard = (props: BgioBoardProps) =>
-        !passAndPlay || props.playerID === props.ctx.currentPlayer;
+    // Create a board that is optionally displayed. (Early code created either a board
+    // or a blank element. However, this caused the Scrabble dictionary to be reloaded 
+    // on each move. Presumably, this was because the compoment was unloaded and reloaded
+    // each time.)
+    const OptionalBoard = (obProps: BgioBoardProps) => {
+        const show = !passAndPlay || obProps.playerID === obProps.ctx.currentPlayer;
+        return <OptionalDisplay display_={show}>
+            <GameBoard game={game} bgioProps={obProps} />,
+        </OptionalDisplay>;
+    };
 
-    // Use of OptionalDisplay can improve efficiency.  Previously, board was
-    // defined as 
-    //   (props: BgioBoardProps) => showBoard(props) ?
-    //      <GameBoard game={game} bgioProps={props} /> : 
-    //    <></>
-    // This lead to the Scrabble dictionary being reloaded each turn in
-    // pass-and-play games. At a guess, this was due to GameClient being 
-    // unmounted and remounted.  
-    const GameClient = Client({
-        game: {...game, setup: wrappedSetup},
-        board: (props: BgioBoardProps) => 
-            <OptionalDisplay display_={showBoard(props)}>
-                <GameBoard game={game} bgioProps={props} />,
-            </OptionalDisplay>,
-        multiplayer: Local(),
-        numPlayers,
-        debug: debugPanel,
-    });
+    const clientGame = {
+        ...game,
+        setup: (arg0: SetupArg0) => game.setup(arg0, setupData),
+    };
 
     const games : JSX.Element[] = [];
     for(let id = 0; id < numPlayers; ++id) {
-        games[id] = <GameClient key={id} playerID={id.toString()} />;
+        games[id] = <OfflineMatch 
+            key={id} 
+            id={id}
+            game={clientGame}
+            board={OptionalBoard}
+            numPlayers={numPlayers}
+        />;
     }
     return (
         <div>{games}</div> 
