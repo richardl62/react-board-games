@@ -163,6 +163,51 @@ function findCandidateWords(
         findCandidateWordsDirected(board, active, "col");
 }
 
+/** Check if the active letters are in a valid position.
+ * 
+ * To be valid at least one active letters must be adjacent to a previously played letter,
+ * or on the starting square (i.e. the center of the board).
+ */
+function validWordPosition(
+    board: BoardData,
+    active: RowCol[],
+): boolean {
+
+    const previouslyPlayed: RowCol[] = [];
+    for(let row = 0; row < board.length; ++row) {
+        for(let col = 0; col < board[row].length; ++col) {
+            if(board[row][col] && !board[row][col]?.active) {
+                previouslyPlayed.push(rowCol(row, col));
+            }
+        }
+    }
+
+    const stepsBetween = (rc1: RowCol, rc2: RowCol) => {
+        return Math.abs(rc1.row - rc2.row) + Math.abs(rc1.col - rc2.col);
+    };
+
+
+    if(previouslyPlayed.length === 0) {
+        // Kludge?: Use the center of the board at the starting square, rather than having the 
+        // starting square as a configurable option.
+        const startingSquare = rowCol(Math.floor(board.length / 2), Math.floor(board[0].length / 2));
+        for(const rc of active) {      
+            if(stepsBetween(rc, startingSquare) === 0) {
+                return true;
+            }
+        }
+    }
+
+    for(const rc1 of active) {
+        for(const rc2 of previouslyPlayed) {
+            if(stepsBetween(rc1, rc2) === 1) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 interface WordsAndScore {
     words: string[];
@@ -195,6 +240,10 @@ export function getWordsAndScore(context: ReducedScrabbleContext, active: RowCol
         return null;
     }
 
+    if(!validWordPosition(context.board, active)) {
+        return null;
+    }
+    
     const score = getScore(context.board, active, config);
 
     const words = candidateWords.map(cw => getWord(context.board, cw));
