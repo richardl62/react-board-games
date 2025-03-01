@@ -28,7 +28,7 @@ export function MatchPlayOffline(props: {
     const OptionalBoard = (obProps: BgioBoardProps) => {
         const show = !passAndPlay || obProps.playerID === obProps.ctx.currentPlayer;
         return <OptionalDisplay display_={show}>
-            <GameBoard game={game} bgioProps={obProps} />,
+            <GameBoard game={game} bgioProps={obProps} />
         </OptionalDisplay>;
     };
 
