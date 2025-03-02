@@ -14,7 +14,8 @@ const WarningDiv = styled.div`
 `;
 
 export function Warnings(): JSX.Element {
-    const { G: {moveError} } = useStandardBoardContext();
+    const context = useStandardBoardContext();  
+    const { moveError } = context.G;
 
     const warnings = useConnectionWarnings();
     if(moveError) {

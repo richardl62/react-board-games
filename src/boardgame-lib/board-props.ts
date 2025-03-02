@@ -5,6 +5,7 @@ import { PlayerID } from "./playerid";
 export interface MatchDataElem {
     id: number
     
+    // Optional to match boardgame.io, but required in some places.
     name?: string;
     isConnected?: boolean;
 }
@@ -21,7 +22,8 @@ export interface BoardProps<TypeG=any> {
 
     matchID: string;
 
-    matchData?: Array<MatchDataElem>;
+    // Optional to match boardgame.io, but required in some places.
+    matchData?: Array<MatchDataElem>; 
     ctx: Ctx;
 
     moves: Moves;
