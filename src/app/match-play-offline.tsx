@@ -3,7 +3,7 @@ import { BoardProps } from "../boardgame-lib/board-props";
 import { AppGame } from "../app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
-import { SetupArg0 } from "../boardgame-lib/game";
+
 import styled from "styled-components";
 import { useOfflineBoardProps } from "../boardgame-lib/use-offline-board-props";
 
@@ -21,11 +21,7 @@ export function MatchPlayOffline(props: {
         options: {numPlayers, /*passAndPlay,*/  setupData}
     } = props;
 
-    const clientGame = {
-        ...game,
-        setup: (arg0: SetupArg0) => game.setup(arg0, setupData),
-    };
-    const boardProps : BoardProps = useOfflineBoardProps({game: clientGame, numPlayers, id: 0});
+    const boardProps : BoardProps = useOfflineBoardProps({game, numPlayers, setupData, id: 0});
 
     const passAndPlay = false; // TEMPORARY
 

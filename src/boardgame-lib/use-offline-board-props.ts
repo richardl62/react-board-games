@@ -39,16 +39,15 @@ function wrapMoves(
     return wrappedMoves;
 }
 
-export function useOfflineBoardProps({game, numPlayers, id}: {
+export function useOfflineBoardProps({game, numPlayers, setupData, id}: {
     game: AppGame, 
-    numPlayers: number
+    numPlayers: number,
+    setupData: unknown,
     id: number, 
 }) : Required<BoardProps> {
     const {ctx, matchData, events} = useOfflineCtx(numPlayers);
 
-    const startingData = game.setup({ ctx, random: dummyRandomAPI}, 
-        undefined /* TEMPORARY HACK */ 
-    );
+    const startingData = game.setup({ ctx, random: dummyRandomAPI}, setupData);
     const [G, setG] = useState(startingData);
 
     return {

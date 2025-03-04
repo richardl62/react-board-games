@@ -1,4 +1,4 @@
-import { OptionValue } from "./option-specification/types";
+import { OptionValues } from "./option-specification/types";
 
 export interface OfflineOptions {
     numPlayers: number;
@@ -6,5 +6,5 @@ export interface OfflineOptions {
     debugPanel: boolean;
     // KLUDGE? An empty object (rather than null) is used when there is no
     // setup data.
-    setupData: {[key: string]: OptionValue};
+    setupData: OptionValues;
 }
