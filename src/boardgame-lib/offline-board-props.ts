@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
-import { RandomAPI } from "./random";
+import { random } from "./random";
 import { EventsAPI } from "./events";
 import { RequiredServerData } from "../app-game-support/required-server-data";
 import { useOfflineCtx } from "./use-offline-ctx";
 import { Ctx } from "./ctx";
 import { MatchDataElem } from "./board-props";
   
-const dummyRandomAPI : RandomAPI = {
-    Die: (_spotvalue) => {throw new Error("RandomAPI not implemented");},
-    Shuffle: (_deck) => {throw new Error("RandomAPI not implemented");},
-};
 
 interface SharedOfflineBoardData {
     ctx: Ctx;
@@ -28,7 +24,7 @@ export function useSharedOfflineBoardData({game, numPlayers, setupData}: {
 }) : SharedOfflineBoardData {
     const {ctx, matchData, events} = useOfflineCtx(numPlayers);
 
-    const startingData = game.setup({ ctx, random: dummyRandomAPI}, setupData);
+    const startingData = game.setup({ ctx, random }, setupData);
     const [G, setG] = useState(startingData);
 
     return {
@@ -55,7 +51,7 @@ export function offlineBoardProps(game: AppGame, sharedProps: SharedOfflineBoard
                 G: newG,
                 ctx,
                 playerID: id.toString(),
-                random: dummyRandomAPI,
+                random,
                 events: {} as Required<EventsAPI>,
             }, ...args);
             
