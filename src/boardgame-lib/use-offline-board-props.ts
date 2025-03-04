@@ -1,26 +1,11 @@
-import React, { useState } from "react";
-import { Local } from "boardgame.io/multiplayer";
-import { Client } from "boardgame.io/react";
+import { useState } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
 import { Ctx } from "./ctx";
 import { RandomAPI } from "./random";
 import { EventsAPI } from "./events";
 import { RequiredServerData } from "../app-game-support/required-server-data";
 import { useOfflineCtx } from "./use-offline-ctx";
-
-function OfflineMatchORIGINAL({ game, board, id, numPlayers }: {
-    game: AppGame;
-    board: (arg0: BoardProps) => JSX.Element;
-    id: number;
-    numPlayers: number;
-}) {
-    const multiplayer = Local();
-    const debug = true;
-    const GameClient = Client({ game, board, multiplayer, numPlayers, debug });
-
-    return <GameClient playerID={id.toString()} />;
-}
-
+  
 const dummyRandomAPI : RandomAPI = {
     Die: (_spotvalue) => {throw new Error("RandomAPI not implemented");},
     Shuffle: (_deck) => {throw new Error("RandomAPI not implemented");},
@@ -54,13 +39,11 @@ function wrapMoves(
     return wrappedMoves;
 }
 
-function OfflineMatchNEW({ game, board, id, numPlayers }: {
-    game: AppGame;
-    board: (arg0: BoardProps) => JSX.Element;
-    id: number;
-    numPlayers: number;
-}) : JSX.Element {
-    
+export function useOfflineBoardProps({game, numPlayers, id}: {
+    game: AppGame, 
+    numPlayers: number
+    id: number, 
+}) : Required<BoardProps> {
     const {ctx, matchData, events} = useOfflineCtx(numPlayers);
 
     const startingData = game.setup({ ctx, random: dummyRandomAPI}, 
@@ -68,7 +51,7 @@ function OfflineMatchNEW({ game, board, id, numPlayers }: {
     );
     const [G, setG] = useState(startingData);
 
-    const boardProps : Required<BoardProps> = {
+    return {
         playerID: id.toString(),
         credentials: "offline",
         matchID: "offline",
@@ -79,16 +62,4 @@ function OfflineMatchNEW({ game, board, id, numPlayers }: {
         isConnected: true,
         G,
     };
-
-    return <div>
-        <div>*** {id} ***</div>
-        <div>*** {JSON.stringify(G)} ***</div>
-        <div>*** {JSON.stringify(ctx)} ***</div>
-        {board(boardProps)}
-    </div>;
-}
-
-const useNewOfflineMatch = true;
-export const OfflineMatch = useNewOfflineMatch ?
-    OfflineMatchNEW :
-    OfflineMatchORIGINAL;
+} 
