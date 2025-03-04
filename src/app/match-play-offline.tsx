@@ -18,9 +18,11 @@ export function MatchPlayOffline(props: {
 
     const { 
         game,
-        options: {numPlayers, passAndPlay,  setupData}
+        options: {numPlayers, /*passAndPlay,*/  setupData}
     } = props;
 
+    const passAndPlay = false; // TEMPORARY
+    
     // Create a board that is optionally displayed. (Early code created either a board
     // or a blank element. However, this caused the Scrabble dictionary to be reloaded 
     // on each move. Presumably, this was because the compoment was unloaded and reloaded

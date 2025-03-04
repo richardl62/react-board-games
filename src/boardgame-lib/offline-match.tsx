@@ -5,8 +5,8 @@ import { AppGame, BoardProps } from "../app-game-support";
 import { Ctx } from "./ctx";
 import { RandomAPI } from "./random";
 import { EventsAPI } from "./events";
-import { MatchDataElem } from "./board-props";
 import { RequiredServerData } from "../app-game-support/required-server-data";
+import { useOfflineCtx } from "./use-offline-ctx";
 
 function OfflineMatchORIGINAL({ game, board, id, numPlayers }: {
     game: AppGame;
@@ -24,11 +24,6 @@ function OfflineMatchORIGINAL({ game, board, id, numPlayers }: {
 const dummyRandomAPI : RandomAPI = {
     Die: (_spotvalue) => {throw new Error("RandomAPI not implemented");},
     Shuffle: (_deck) => {throw new Error("RandomAPI not implemented");},
-};
-
-const dummyEventsAPI : EventsAPI = {
-    endTurn: () => {throw new Error("EventsAPI not implemented");},
-    endGame: (_arg0) => {throw new Error("EventsAPI not implemented");},
 };
 
 function wrapMoves(
@@ -65,26 +60,8 @@ function OfflineMatchNEW({ game, board, id, numPlayers }: {
     id: number;
     numPlayers: number;
 }) : JSX.Element {
-
-    const playOrder = [];
-    const matchData : Required<MatchDataElem>[] = [];
-    for (let i = 0; i < numPlayers; i++) {
-        playOrder.push(i.toString());
-        matchData.push({
-            id: i, 
-            name: "Player " + i,
-            isConnected: true, 
-        });
-    }
-
-    const ctx: Required<Ctx> = {
-        numPlayers,
-        playOrder,
-        currentPlayer: "0",
-        playOrderPos: 0,
-        gameover: false,
-    };
-
+    
+    const {ctx, matchData, events} = useOfflineCtx(numPlayers);
 
     const startingData = game.setup({ ctx, random: dummyRandomAPI}, 
         undefined /* TEMPORARY HACK */ 
@@ -98,13 +75,15 @@ function OfflineMatchNEW({ game, board, id, numPlayers }: {
         matchData,
         ctx,
         moves: wrapMoves(game.moves, ctx, id, G, setG),
-        events: dummyEventsAPI,
+        events,
         isConnected: true,
         G,
     };
 
     return <div>
-        <div>*** ${JSON.stringify(G)} ***</div>
+        <div>*** {id} ***</div>
+        <div>*** {JSON.stringify(G)} ***</div>
+        <div>*** {JSON.stringify(ctx)} ***</div>
         {board(boardProps)}
     </div>;
 }
