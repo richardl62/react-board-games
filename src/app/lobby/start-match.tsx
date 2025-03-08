@@ -3,13 +3,13 @@ import { useAsyncCallback } from "react-async-hook";
 import { AppGame } from "../../app-game-support";
 import { loadingOrError, LoadingOrError } from "../../utils/async-status";
 import { BoxWithLegend } from "../../utils/box-with-legend";
-import { createMatch } from "./lobby-tools";
 import { openOnlineMatchPage } from "../url-params";
 import { OfflineOptions } from "../offline-options";
 import { OptionValues, SpecifiedValues } from "../option-specification/types";
 import { InputValues } from "../option-specification/input-values";
 import { defaultNumPlayers } from "../../app-game-support/app-game";
 import { sAssert } from "../../utils/assert";
+import { createMatch } from "../../boardgame-lib/lobby/lobby-tools";
 
 export function StartMatch(props: {
     game: AppGame;

@@ -5,9 +5,9 @@ import { AppGame } from "../../app-game-support";
 import { standardOuterMargin } from "../../app-game-support/styles";
 import { LoadingOrError } from "../../utils/async-status";
 import { OfflineOptions } from "../offline-options";
-import { makeLobbyClient } from "./lobby-tools";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";
+import { makeLobbyClient } from "../../boardgame-lib/lobby/lobby-tools";
 
 const GameLobbyDiv = styled.div`
     display: inline-flex;

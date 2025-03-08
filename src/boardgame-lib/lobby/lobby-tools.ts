@@ -1,6 +1,6 @@
-import { LobbyClient } from "../../boardgame-lib/lobby";
+import { LobbyClient } from "./lobby";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
-import { lobbyServer } from "../url-params";
+import { lobbyServer } from "../../app/url-params";
 
 export function makeLobbyClient() : LobbyClient {
     return new LobbyClient({ server: lobbyServer() });

@@ -6,8 +6,8 @@ import { AppGame, nonJoinedPlayerName, MatchID } from "../../app-game-support";
 import { AsyncStatus } from "../../utils/async-status";
 import { BoxWithLegend } from "../../utils/box-with-legend";
 import { JoinGame } from "./join-game";
-import { makeLobbyClient } from "./lobby-tools";
-import { LobbyAPI } from "../../boardgame-lib/lobby";
+import { makeLobbyClient } from "../../boardgame-lib/lobby/lobby-tools";
+import { LobbyAPI } from "../../boardgame-lib/lobby/lobby";
 
 const Names = styled.div`
     display: flex
