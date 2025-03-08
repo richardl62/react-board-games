@@ -6,7 +6,7 @@ import { AppGame, nonJoinedPlayerName, MatchID } from "../../app-game-support";
 import { AsyncStatus } from "../../utils/async-status";
 import { BoxWithLegend } from "../../utils/box-with-legend";
 import { JoinGame } from "./join-game";
-import { makeLobbyClient } from "../../boardgame-lib/lobby/lobby-tools";
+import { getMatch } from "../../boardgame-lib/lobby/lobby-tools";
 import { LobbyAPI } from "../../boardgame-lib/lobby/lobby";
 
 const Names = styled.div`
@@ -98,7 +98,7 @@ interface MatchLobbyProps {
 export function MatchLobby(props: MatchLobbyProps): JSX.Element {
     const { game, matchID } = props;
 
-    const asyncMatch = useAsync(()=>makeLobbyClient().getMatch(game.name, matchID.mid), []);
+    const asyncMatch = useAsync(()=>getMatch(game.name, matchID.mid), []);
 
     const match = asyncMatch.result;
 
