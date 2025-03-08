@@ -1,7 +1,8 @@
 import { LobbyClient } from "boardgame.io/client";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
 import { lobbyServer } from "../../app/url-params";
-import { LobbyAPI } from "./lobby";
+import { Match, MatchList } from "./types";
+
 
 function makeLobbyClient() : LobbyClient {
     return new LobbyClient({ server: lobbyServer() });
@@ -16,12 +17,12 @@ export async function createMatch(
     return { mid: m.matchID };
 }
 
-export async function getMatch(gameName: string, matchID: string): Promise<LobbyAPI.Match>
+export async function getMatch(gameName: string, matchID: string): Promise<Match>
 {
     return makeLobbyClient().getMatch(gameName, matchID);
 }
 
-export async function listMatches(gameName: string): Promise<LobbyAPI.MatchList> {
+export async function listMatches(gameName: string): Promise<MatchList> {
     return makeLobbyClient().listMatches(gameName);
 }
 
