@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "buildServer": "tsc -b ./tsconfig.server.json",
+    "buildAndRunServer": "tsc -b ./tsconfig.server.json && npm run serve",
     "build": "tsc -b && vite build && npm run buildServer",
     "lint": "eslint .",
     "preview": "vite preview",

@@ -7,6 +7,7 @@ import { games as appGames } from "../games/app-games";
 import "./app.css";
 import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";
+import { hello } from "../../shared/hello";
 
 const HomePageStyles = styled.div`
     font-size: 18px;
@@ -77,7 +78,9 @@ function GameLinks({ games }: HomePageProps) {
 }
 
 function HomePage(props: HomePageProps) {
+    const message = hello();
     return <HomePageStyles>
+        <div>TEST MESSAGE: {message}</div>
         <h1>Available Games</h1>
         <GameLinks {...props} />
     </HomePageStyles>;
