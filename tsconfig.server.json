@@ -1,16 +1,16 @@
 {
-    "extends": "../tsconfig.json",
+    "extends": "./tsconfig.json",
     "compilerOptions": {
       "target": "ESNext",
       "module": "NodeNext",
       "moduleResolution": "NodeNext",
-      "outDir": "../dist/server",
-      "rootDir": "./src",
+      "outDir": "./dist/server",
+      "rootDir": "./server/src",
       "forceConsistentCasingInFileNames": true,
       "strict": true,
 
       // other options
       "esModuleInterop": true
     },
-    "include": ["src/**/*"]
+    "include": ["server/src/**/*"]
   }
