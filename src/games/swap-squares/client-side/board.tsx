@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { BoarderedGrid } from "../../../utils/board/boardered-grid";
 import { DragDrop, PieceHolder } from "../../../utils/board/piece-holder";
 import { useGameContext } from "./game-context";

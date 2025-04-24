@@ -1,5 +1,5 @@
 
-import React, { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { AppGame, nonJoinedPlayerName, MatchID } from "../../app-game-support";

@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { MainBoard } from "./main-board";

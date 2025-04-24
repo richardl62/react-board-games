@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { categoryDescription, displayName, FixedScoreCategory, fixedScores, ScoreCategoryOrTotal } from "../score-categories";
 import { scoreCardBackgroundColor } from "./style";

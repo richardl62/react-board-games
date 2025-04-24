@@ -8,7 +8,7 @@ export function useTimedSteps(
             const timer = setTimeout(() => setValue(value + stepSize), stepTime);
             return () => clearTimeout(timer);
         }
-    }, [value, to, stepTime]);
+    }, [value, to, stepSize, stepTime]);
 
     return [
         value < to ? value : null,

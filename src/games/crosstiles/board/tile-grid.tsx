@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { Letter } from "../config";
 import { boardBoarderColor, boardBoarderSize } from "./style";

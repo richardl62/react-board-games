@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { WaitingForPlayers } from "../../../app-game-support";
 import { ShowValues } from "../../../app/option-specification/show-values";

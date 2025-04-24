@@ -1,7 +1,7 @@
-import React from "react";
 import { useGameContext } from "../client-side/game-context";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
+import { JSX } from "react";
 
 const OuterDiv = styled.div`
     font-family: Arial;

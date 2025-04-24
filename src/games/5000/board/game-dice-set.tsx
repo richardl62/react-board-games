@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { useGameContext } from "../client-side/game-context";
 import { DiceSet } from "../../../utils/dice/dice-set";
 import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";

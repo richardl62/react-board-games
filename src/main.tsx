@@ -1,8 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
-import App from "./app";
+import App from './app/app.tsx';
+
 
 const ErrorFallbackStyled=styled.div`
   font-size: large;
@@ -25,6 +26,7 @@ const ErrorStack=styled.div`
   margin-left: 1em;
 `;
 
+// eslint-disable-next-line react-refresh/only-export-components
 function ErrorFallback({ error }: { error: Error }) {
     return (
         <ErrorFallbackStyled>
@@ -44,13 +46,12 @@ function ErrorFallback({ error }: { error: Error }) {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-root.render(
-    <React.StrictMode>
-        <ErrorBoundary
-            FallbackComponent={ErrorFallback}
-        >
-            <App />
-        </ErrorBoundary>
-    </React.StrictMode>,
-);
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+    >
+      <App />
+    </ErrorBoundary>
+  </StrictMode>,
+)

@@ -1,6 +1,7 @@
-import React, { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 import styled from "styled-components";
 import {useDrag, useDrop } from "./drag-drop";
+import { dndRefKludge } from "../dnd-ref-kludge";
 
 type UnknownObject = Record<string, unknown>;
 
@@ -182,7 +183,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
     const hideDuringDrag = dragDrop?.hide !== false;
     const hidePiece = isDragging && hideDuringDrag;
 
-    return <Container ref={dropRef}
+    return <Container ref={dndRefKludge(dropRef)}
         height={height}
         width={width}
         color={background?.textColor}
@@ -195,7 +196,7 @@ export function PieceHolder<ID = UnknownObject>(props: PieceHolderProps<ID>): JS
         border is on top of the piece (to make it visible), and without this
         kludge the border would block the drag.    
         */}
-        <FullSize ref={draggable ? dragRef : undefined}>
+        <FullSize ref={draggable ? dndRefKludge(dragRef): undefined}>
             <Piece >
                 {/* Hide the children rather than the Piece.  This avoids so bad behaviour caused, presumably,
              by the piece being unmounted during the drag. */}

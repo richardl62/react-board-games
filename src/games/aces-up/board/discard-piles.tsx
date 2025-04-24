@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { CardID } from "../game-control/card-id";
 import { useGameContext } from "../game-support/game-context";

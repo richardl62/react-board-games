@@ -39,7 +39,7 @@ export function roll(
     G.held = held;
 
     // Calculate the score from the dice
-    G.prevRollHeldScore = type === "unheld" ? G.heldDice.score : 0,
+    G.prevRollHeldScore = type === "unheld" ? G.heldDice.score : 0;
     
     setDiceScores(G);
 

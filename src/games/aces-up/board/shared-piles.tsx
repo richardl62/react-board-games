@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
 import { SharedPile as SharedPileClass, makeSharedPiles } from "../game-control/shared-pile";
@@ -17,7 +17,7 @@ export const TextDiv = styled.div`
 // Formula is a Kludge. It's atleast big enough to ensure that the lower 
 // elements dont move during the game.
 const sharedPilesHeight = `calc(${cardStackHeight(2)}px + 2em)`;
-
+ 
 const OuterDiv = styled.div`
     align-self: start;
     min-height: ${sharedPilesHeight};

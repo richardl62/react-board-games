@@ -3,6 +3,7 @@ import { RequiredServerData } from "./required-server-data";
 import { OptionSpecifications } from "../app/option-specification/types";
 import { WrappedGameProps } from "./wrapped-game-props";
 import { SetupArg0 } from "../boardgame-lib/game";
+import { JSX } from "react";
 
 // The string values are uses as section headers when displaying the list of
 // games.

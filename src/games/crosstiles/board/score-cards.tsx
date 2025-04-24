@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { ScoreOptions } from "../client-side/check-grid/score-options";

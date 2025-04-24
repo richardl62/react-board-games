@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { boxFull } from "../client-side/context-tools";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { GameRequest, GameStage } from "../server-side/server-data";

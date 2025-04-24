@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useTicker } from "../../../utils/use-countdown";
 import { useGameContext } from "../client-side/game-context";
@@ -72,6 +72,9 @@ function BoardCurrentPlayer() : JSX.Element {
             setLastIncrement(ellapsedTime);
             setLocalCount(localCount + 1);
         } 
+    // Disabling the exhaustive-deps rule here is a kludge.
+    // TO DO: Think more about this.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[ellapsedTime, tickInterval]);
 
     return <div>

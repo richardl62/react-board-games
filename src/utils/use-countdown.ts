@@ -86,7 +86,9 @@ export function useCountdown({time, tickInterval, onEnd: onDone} : {
     const timeLeft = time - ellapsedTime;
     if(timeLeft <= 0) {
         stop();
-        onDone && onDone();
+        if( onDone ) { 
+            onDone();
+        }
     }
 
     return {ellapsedTime, timeLeft, stop, reset};

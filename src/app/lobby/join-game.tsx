@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { JSX, useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import { AppGame, MatchID } from "../../app-game-support";
 import { AsyncStatus, loadingOrError } from "../../utils/async-status";

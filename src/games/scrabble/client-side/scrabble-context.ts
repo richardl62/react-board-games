@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { sAssert } from "../../../utils/assert";
 import { ReducerState } from "./reducer-state";
 import { ActionType } from "./scrabble-reducer";
@@ -11,6 +11,7 @@ import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { RequiredServerData } from "../../../app-game-support/required-server-data";
 import { Trie } from "../../../utils/word-finder/trie";
 import { SetupOptions } from "../options";
+import React from "react";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data

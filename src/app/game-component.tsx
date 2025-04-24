@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { JSX, useState } from "react";
 import styled from "styled-components";
 import { AppGame } from "../app-game-support";
 import { defaultValues } from "./option-specification/tools";

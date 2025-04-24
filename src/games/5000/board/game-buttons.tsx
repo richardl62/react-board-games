@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { useGameContext } from "../client-side/game-context";
 import { availablePlayerActions } from "../utils/available-player-actions";
 import styled from "styled-components";

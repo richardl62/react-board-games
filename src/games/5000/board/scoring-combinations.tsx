@@ -1,6 +1,7 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useGameContext } from "../client-side/game-context";
+import React from "react";
 type DiceScore = [
     //dice values
     number[] | string | null,

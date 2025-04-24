@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
 import { CardDraggable } from "./drag-drop";

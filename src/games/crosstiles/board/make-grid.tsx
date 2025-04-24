@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import {  useNowTicker } from "../../../utils/use-countdown";

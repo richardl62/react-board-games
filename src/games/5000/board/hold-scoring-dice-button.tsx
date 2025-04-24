@@ -1,4 +1,3 @@
-import React from "react";
 import { useGameContext } from "../client-side/game-context";
 import { getScores } from "../utils/get-scores";
 import { sAssert } from "../../../utils/assert";

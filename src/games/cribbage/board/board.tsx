@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { CutCard } from "./cut-card";
 import { WrappedScoreBoard } from "./wrapped-score-board";

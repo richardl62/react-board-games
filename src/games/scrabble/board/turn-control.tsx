@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { JSX, useState } from "react";
 import styled from "styled-components";
 import { SetBlank } from "./set-blank";
 import { useTurnControlData } from "./use-turn-control-data";

@@ -1,9 +1,10 @@
-import React from "react";
+import { JSX } from "react";
 import { CardDnD, getCardID, playingCard } from "./card-dnd";
 import { Card } from "./types";
 import { Spread } from "./spread";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
+import { dndRefKludge } from "../dnd-ref-kludge";
 
 const OuterDiv = styled.div`
     height: auto;
@@ -88,7 +89,7 @@ export function Hand(props: HandProps) : JSX.Element {
     />;
 
     if(dropTarget()) {
-        return <OuterDiv ref={dropRef}>
+        return <OuterDiv ref={dndRefKludge(dropRef)}>
             {spread} 
         </OuterDiv>;
     }

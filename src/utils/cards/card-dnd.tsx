@@ -1,7 +1,8 @@
-import React from "react";
+import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { sAssert } from "../assert";
 import { CardSVG } from "./card";
+import { dndRefKludge } from "../dnd-ref-kludge";
 
 type CardProps = Parameters<typeof CardSVG>[0];
 
@@ -14,6 +15,7 @@ interface CardID {
     index: number;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getCardID(arg: unknown) : CardID {
     const cid = arg as CardID;
     sAssert(typeof cid === "object" &&
@@ -57,8 +59,8 @@ export function CardDnD(props: CardDnDProps) : JSX.Element {
     }), [cardID]);
 
 
-    return <div ref={dropTarget ? dropRef : undefined}>
-        <div ref={draggable ? dragRef : undefined }>
+    return <div ref={dropTarget ? dndRefKludge(dropRef): undefined}>
+        <div ref={draggable ? dndRefKludge(dragRef): undefined }>
             <CardSVG {...props} />
         </div>
     </div>;

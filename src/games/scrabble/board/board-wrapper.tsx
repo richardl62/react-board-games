@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import { JSX, useEffect, useReducer, useState } from "react";
 import { Board } from ".";
 import { ScrabbleGameProps } from "../client-side/srcabble-game-props";
 import { initialReducerState } from "../client-side/reducer-state";
@@ -45,6 +45,10 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         config.getLegalWords().then(
             legalWords => setTrie(new Trie(legalWords.map(w => w.toUpperCase())))
         ).catch(setLoadError);
+
+    // This effect should only run on mount. Disabling the
+    // exhaustive-deps rule here is a bit of a kludge.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if(loadError) {

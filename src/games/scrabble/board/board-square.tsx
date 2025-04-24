@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { DragDrop, PieceHolder, PieceHolderStyle } from "../../../utils/board/piece-holder";
 import { squareSize, squareBackground, hoverBorderColor, hightlightBorderColor } from "./style";
 import { SquareID } from "../client-side";
