@@ -1,61 +1,46 @@
 {
-  "name": "react-board-games",
-  "version": "0.1.0",
+  "name": "vite-test",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "buildServer": "tsc -b server/tsconfig.json",
+    "build": "tsc -b && vite build && npm run buildServer",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "serve": "node dist/server/server.js"
+  },
   "dependencies": {
     "boardgame.io": "^0.50.2",
-    "chokidar": "^3.5.3",
-    "eslint-plugin-tsdoc": "^0.2.17",
+    "express": "^5.1.0",
     "koa-static": "^5.0.0",
-    "rdndmb-html5-to-touch": "^8.0.3",
-    "react": "^18.2.0",
+    "path": "^0.12.7",
+    "rdndmb-html5-to-touch": "^9.0.0",
+    "react": "^19.0.0",
     "react-async-hook": "^4.0.0",
-    "react-chess-pieces": "^1.0.5",
     "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
-    "react-dnd-multi-backend": "^8.0.3",
-    "react-dom": "^18.2.0",
-    "react-error-boundary": "^4.0.3",
-    "react-router": "^6.10.0",
-    "react-router-dom": "^6.10.0",
-    "react-scripts": "5.0.1",
-    "styled-components": "^5.3.9",
-    "typescript": "^4.9.5",
-    "web-vitals": "^3.3.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && echo transpiling ... && tsc --jsx react --project tsconfig.server.json",
-    "serve": "node dist/server.js",
-    "buildServe": "npm run build && npm run serve",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "engines": {
-    "node": "18.15",
-    "npm": "9.6"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "react-dnd-multi-backend": "^9.0.0",
+    "react-dom": "^19.0.0",
+    "react-error-boundary": "^5.0.0",
+    "react-router-dom": "^7.5.0",
+    "styled-components": "^6.1.17",
+    "vite-plugin-svgr": "^4.3.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
-    "@types/jest": "^29.5.0",
-    "@types/koa-static": "^4.0.2",
-    "@types/node": "^18.15.11",
-    "@types/react": "^18.0.35",
-    "@types/react-dom": "^18.0.11",
-    "@types/styled-components": "^5.1.26"
+    "@eslint/js": "^9.21.0",
+    "@types/jest": "^29.5.14",
+    "@types/koa-static": "^4.0.4",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "jest": "^29.7.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0"
   }
 }

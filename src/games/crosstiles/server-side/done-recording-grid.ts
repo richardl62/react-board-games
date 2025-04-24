@@ -5,6 +5,7 @@ import { MoveArg0 } from "../../../boardgame-lib/game";
 
 export function doneRecordingGrid(
     {G, playerID} : MoveArg0<ServerData>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _arg: void
 ): void {
     if (G.stage !== GameStage.makingGrids) {

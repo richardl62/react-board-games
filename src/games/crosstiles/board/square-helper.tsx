@@ -1,10 +1,11 @@
-import React from "react";
+import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
 import { ClickMoveMarker } from "../../../utils/board/click-move-marker";
 import { ClickMoveStart } from "../client-side/actions/types";
 import { Letter, bonusLetters } from "../config";
 import { squareSize, squareBackgroundColor, tileTextColor, tileBackgroundColor } from "./style";
+import { dndRefKludge } from "../../../utils/dnd-ref-kludge";
 
 const EmptySquare = styled.div`
     height: ${squareSize};
@@ -37,8 +38,8 @@ interface SquareHelperProps {
 
 export function SquareHelper(props: SquareHelperProps): JSX.Element {
     const { letter, dragRef, dropRef, onClick, clickMoveDirection } = props;
-    return <EmptySquare ref={dropRef} onClick={onClick}>
-        {letter && <TileDiv ref={dragRef} bonus={bonusLetters.includes(letter)}>
+    return <EmptySquare ref={dndRefKludge(dropRef)} onClick={onClick}>
+        {letter && <TileDiv ref={dndRefKludge(dragRef)} bonus={bonusLetters.includes(letter)}>
             {letter === "Q" ? "Qu" : letter}
         </TileDiv>
         }

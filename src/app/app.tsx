@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { JSX, useEffect } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { AppGame, GameCategory } from "../app-game-support";

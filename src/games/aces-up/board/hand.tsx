@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { CardNonJoker, CardSVG } from "../../../utils/cards";
 import { cardSize } from "../../../utils/cards/styles";

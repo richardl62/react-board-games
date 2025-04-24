@@ -4,6 +4,7 @@ import { MoveArg0 } from "../../../boardgame-lib/game";
 
 export function readyForNewGame(
     arg0 : MoveArg0<ServerData>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _option: void
 ): void {
     const { G, playerID, random } = arg0;

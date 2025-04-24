@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore, Letter } from "../config";

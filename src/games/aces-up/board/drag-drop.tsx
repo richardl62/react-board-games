@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { CardSVG } from "../../../utils/cards";
 import { useGameContext } from "../game-support/game-context";
@@ -8,6 +8,7 @@ import { moveType } from "../game-control/move-type";
 import styled from "styled-components";
 import { cardSize } from "../../../utils/cards/styles";
 import { sAssert } from "../../../utils/assert";
+import { dndRefKludge } from "../../../utils/dnd-ref-kludge";
 
 const dndType = "Card";
 
@@ -15,6 +16,7 @@ type CardSVGProps = Parameters<typeof CardSVG>[0];
 
 
 type DropRef = ReturnType<typeof useDrop>[1];
+// eslint-disable-next-line react-refresh/only-export-components
 export function useCardDropRef(id: CardID | null) : DropRef | null {
     const ctx = useGameContext();
     const { moveCard } = ctx.moves;
@@ -37,6 +39,7 @@ export function useCardDropRef(id: CardID | null) : DropRef | null {
 }
 
 type DragRef = ReturnType<typeof useDrag>[1];
+// eslint-disable-next-line react-refresh/only-export-components
 export function useCardDragRef(id: CardID | null) : DragRef | null {
 
     const ctx = useGameContext();
@@ -67,8 +70,8 @@ export function CardDraggable(props: Props): JSX.Element {
     const dropRef = useCardDropRef(id);
     const dragRef = useCardDragRef(id);
 
-    return <CD ref={dropRef}>
-        <div ref={dragRef}>
+    return <CD ref={dndRefKludge(dropRef)}>
+        <div ref={dndRefKludge(dragRef)}>
             <CardSVG {...props} />
         </div>
     </CD>;

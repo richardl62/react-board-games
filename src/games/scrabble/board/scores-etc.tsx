@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { nNonNull } from "../../../utils/n-non-null";
 import { useScrabbleContext } from "../client-side/scrabble-context";

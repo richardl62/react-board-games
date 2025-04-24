@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { Card } from "../../../utils/cards";
 import { cardSize } from "../../../utils/cards/styles";
 import { useCribbageContext } from "../client-side/cribbage-context";

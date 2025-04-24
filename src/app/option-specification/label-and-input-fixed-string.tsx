@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import { ChangeEvent, JSX } from "react";
 import { sAssert } from "../../utils/assert";
 
 export function labelAndInputFixedString(

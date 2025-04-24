@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "../../../utils/board/boardered-grid";
 import { SquareType } from "../config";

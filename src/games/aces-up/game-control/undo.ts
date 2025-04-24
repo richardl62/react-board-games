@@ -15,6 +15,7 @@ export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
 
 export function undo(
     { G } : MoveArg0<ServerData>, 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _arg: void,
 ) : void {
     const undoItem = G.undoItems.pop();

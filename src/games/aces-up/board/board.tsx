@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { rowGap } from "../game-support/styles";
 import { PlayerAreas } from "./player-areas";

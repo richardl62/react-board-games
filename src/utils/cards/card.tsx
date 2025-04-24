@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { getCardBackComponent, getCardComponent } from "./card-components";
 import { cardSize, defaultCardBack } from "./styles";
@@ -30,17 +30,13 @@ type CardProps = {
 export function CardSVG(props: CardProps): JSX.Element {
     const { card, showBack } = props;
 
-    let Component;
     if (showBack) {
         const cardBack = showBack === true ? defaultCardBack : showBack;
-        Component = getCardBackComponent(cardBack);
-        return <Component {...cardSize} />;
+        return getCardBackComponent(cardBack);
+
     } else if (card) {
-        Component = getCardComponent(card);
-        return <Component {...cardSize} />;
+        return getCardComponent(card);
     } else {
         return <EmptyCard />;
     }
-
-
 }

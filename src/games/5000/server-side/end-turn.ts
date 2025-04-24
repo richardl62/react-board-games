@@ -10,7 +10,7 @@ function turnOver (
         score: 0,
         categories: [],
         numScoringFaces: 0,
-    },
+    };
     G.maxDiceScore = 0;
     G.prevRollHeldScore = 0;
 
@@ -20,6 +20,7 @@ function turnOver (
 
 export function endTurnNotBust (
     arg0: MoveArg0<ServerData>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _arg1: void,  
 ): void {
     const { G, playerID } = arg0;
@@ -51,6 +52,7 @@ export function endTurnNotBust (
 
 export function endTurnBust (
     arg0: MoveArg0<ServerData>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _arg1: void,  
 ): void {
     const { G, playerID } = arg0;

@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { rotateArray } from "../../../utils/rotate-array";
 import { useGameContext } from "../game-support/game-context";

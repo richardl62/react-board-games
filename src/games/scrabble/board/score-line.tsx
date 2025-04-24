@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { findActiveLetters, getWordsAndScore } from "../client-side";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { blank } from "../config";

@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 

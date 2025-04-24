@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { nPreStartPegs } from "../../config";
 import { colors } from "./style";
@@ -33,10 +33,8 @@ a warnings like
     Consider using the attrs method ...
 */
 const PegContainer = styled.div.attrs<
-HoleProps, // What is consumed by .attrs()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    {style: any} // What comes out of .attrs(). Use of 'any' is a kludge. 
->((props) => {
+    HoleProps // What is consumed by .attrs() 
+ >((props) => {
     return {style: {
         position: "absolute",
         bottom: props.bottom,

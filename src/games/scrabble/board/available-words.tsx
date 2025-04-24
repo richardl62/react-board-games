@@ -1,8 +1,9 @@
-import React from "react";
+import { JSX } from "react";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { LetterSet } from "../../../utils/word-finder/letter-set";
 import { Rack } from "../client-side/board-and-rack";
 import { Trie } from "../../../utils/word-finder/trie";
+import React from "react";
 
 function getAvailableWords(rack: Rack, legalWords: Trie) {
     let letters = "";

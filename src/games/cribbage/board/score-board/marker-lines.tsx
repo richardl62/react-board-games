@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../../utils/assert";
 import { nPreStartPegs, skunkLinePos, winningLinePos } from "../../config";

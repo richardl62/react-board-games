@@ -1,5 +1,5 @@
 import { BoarderedGrid } from "../../../utils/board/boardered-grid";
-import React from "react";
+import { JSX } from "react";
 import { boardIDs, SquareID } from "../client-side";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";

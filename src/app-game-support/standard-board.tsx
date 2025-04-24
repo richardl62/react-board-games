@@ -1,9 +1,10 @@
-import React, { Suspense } from "react";
+import { JSX, Suspense } from "react";
 import { DndProvider  } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { sAssert } from "../utils/assert";
 import { Warnings } from "./warnings/warnings";
 import { WrappedGameProps } from "./wrapped-game-props";
+import React from "react";
 
 export const ReactBasicsContext = React.createContext<WrappedGameProps| null>(null);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { GameRequest, GameStage } from "../server-side/server-data";

@@ -82,7 +82,9 @@ export class GridAndRack {
 
         if (to.container === "grid") {
             this.set(from, null);
-            toVal && this.addToRack(toVal);
+            if (toVal) {
+                this.addToRack(toVal);
+            }
             this.set(to, fromVal);
         } else {
             this.set(from, null);

@@ -1,7 +1,7 @@
 // NOTE/KLUDGE:  The matchData type supplied by boardgames.io seems not have
 // isConnected as an optional member. The code below is my way of add it.
 
-import { useEffect } from "react";
+import { JSX, useEffect } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
 import { RequiredServerData } from "../app-game-support/required-server-data";
 import { WrappedGameProps, makeWrappedGameProps } from "../app-game-support/wrapped-game-props";

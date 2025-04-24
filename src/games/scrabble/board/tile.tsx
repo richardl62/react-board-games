@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { CoreTile, tileScore } from "../client-side";
 import { squareSize, tileBackgroundColor, tileTextColor } from "./style";

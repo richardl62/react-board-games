@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { JSX, useState } from "react";
 import styled from "styled-components";
 import { SpecifiedValues, OptionSpecifications, FixedStringSpecification } from "./types";
 import { defaultValues } from "./tools";

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import { JSX, useCallback, useEffect, useReducer } from "react";
 import { useAsync } from "react-async-hook";
 import { AsyncStatus } from "../../../utils/async-status";
 import { getScrabbleWords } from "../../../utils/get-scrabble-words";
@@ -33,11 +33,11 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
 
     const { stage } = gameProps.G;
 
-    const downHandler = (event: KeyboardEvent) => {
+    const downHandler = useCallback((event: KeyboardEvent) => {
         if(stage === GameStage.makingGrids) {
             dispatch({ type: "placeLetterFromRack", data: { letter: event.key } });
         }
-    };
+    }, [stage, dispatch]);
 
     // Add event listeners
     useEffect(() => {
@@ -46,7 +46,7 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
         return () => {
             window.removeEventListener("keydown", downHandler);
         };
-    }, [stage]);
+    }, [stage, downHandler]);
 
     if(reducerState.serverData?.moveCount !== gameProps.G.moveCount) {
         dispatch({type: "reflectServerData", data: gameProps.G});

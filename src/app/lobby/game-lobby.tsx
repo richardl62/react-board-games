@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { AppGame } from "../../app-game-support";

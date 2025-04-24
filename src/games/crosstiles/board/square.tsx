@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { ClickMoveStart, SquareID } from "../client-side/actions/types";

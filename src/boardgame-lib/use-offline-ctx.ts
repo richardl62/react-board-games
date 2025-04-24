@@ -38,6 +38,7 @@ export function useOfflineCtx(numPlayers: number) : {
             newCtx.currentPlayer = ctx.playOrder[newPlayOrderPos];
             setCtx(newCtx);
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         endGame: (_arg0) => {throw new Error("endGame not implemented");},
     };
     return {ctx, matchData, events};

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { JSX, useState } from "react";
 import { sAssert } from "../../../utils/assert";
 import { sameNestedArray } from "../../../utils/same-nested-array";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { JSX, useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { Rack } from "./rack";

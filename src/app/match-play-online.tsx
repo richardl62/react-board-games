@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { AppGame, MatchID, Player } from "../app-game-support";
 import * as UrlParams from "./url-params";
 import { OnlineMatch } from "../boardgame-lib/online-match";

@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { standardOuterMargin } from "../../../app-game-support/styles";
 import { useGameContext } from "../client-side/game-context";

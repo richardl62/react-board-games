@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 
 import { useConnectionWarnings } from "./use-connection-warnings";
 import { useStandardBoardContext } from "../standard-board";

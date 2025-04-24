@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { PlayerID } from "../server-side/server-data";

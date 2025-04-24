@@ -1,4 +1,3 @@
-import React from "react";
 import { Dice } from "./dice";
 import { diceColor } from "./style";
 import styled from "styled-components";

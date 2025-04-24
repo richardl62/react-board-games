@@ -1,4 +1,4 @@
-import React from "react";
+import { JSX } from "react";
 import { rankName } from "../../../utils/cards/types";
 import { SharedPile as SharedPileClass } from "../game-control/shared-pile";
 import { CardStack } from "./card-stack";

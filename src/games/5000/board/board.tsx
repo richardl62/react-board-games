@@ -1,4 +1,3 @@
-import React from "react";
 import { Scores } from "./scores";
 import { GameButtons } from "./game-buttons";
 import { ScorePads } from "./score-pads";
@@ -8,6 +7,7 @@ import { ScoringCombinations } from "./scoring-combinations";
 import { useGameContext } from "../client-side/game-context";
 import { GameOver } from "./game-over";
 import { LastRoundNotice } from "./last-round-notice";
+import { JSX } from "react";
 
 const OuterDiv = styled.div`
     display: flex;
