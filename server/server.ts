@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { hello } from '../shared/hello.js';
 
 const app = express();
 const PORT = 3000;
@@ -15,7 +16,9 @@ app.use(express.static(distPath));
 
 // API endpoint example
 app.get('/api/hello', (req, res) => {
-    res.json({ message: 'Hello, world!' });
+    const message = hello();
+    console.log('API called:', message);
+    res.json({ message });
 });
 
 // Catch-all to serve index.html for SPA routing

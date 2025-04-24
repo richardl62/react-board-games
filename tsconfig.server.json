@@ -4,13 +4,17 @@
       "target": "ESNext",
       "module": "NodeNext",
       "moduleResolution": "NodeNext",
-      "outDir": "./dist/server",
-      "rootDir": "./server/src",
+      "outDir": "./dist",
       "forceConsistentCasingInFileNames": true,
       "strict": true,
 
-      // other options
-      "esModuleInterop": true
+      "esModuleInterop": true,
+
+      "rootDir": "./",
     },
-    "include": ["server/src/**/*"]
+    "include": [
+      "server/**/*ts",
+      "shared/**/*ts"
+    ],
+    "exclude": ["node_modules"]
   }
