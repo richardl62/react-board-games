@@ -6,7 +6,7 @@
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" }, // Frontend
-    { "path": "./server/tsconfig.json" }, // Backend
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.server.json" }, // Backend
+    { "path": "./tsconfig.node.json" } // Used by vite (I think)
   ]
 }
