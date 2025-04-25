@@ -22,7 +22,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "forceConsistentCasingInFileNames": true,
 
+    /* Paths */
     "rootDir": "./",
   },
   "include": [

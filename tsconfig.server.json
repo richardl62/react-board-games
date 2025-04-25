@@ -1,20 +1,26 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
+      "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
       "target": "ESNext",
       "module": "NodeNext",
       "moduleResolution": "NodeNext",
-      "outDir": "./dist",
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-
       "esModuleInterop": true,
 
+      /* Linting */
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUncheckedSideEffectImports": true,
+      "forceConsistentCasingInFileNames": true,
+
+      /* Paths */
+      "outDir": "./dist",
       "rootDir": "./",
     },
     "include": [
       "server/**/*ts",
       "shared/**/*ts"
     ],
-    "exclude": ["node_modules"]
   }

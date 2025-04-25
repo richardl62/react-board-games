@@ -15,7 +15,7 @@ const distPath = path.resolve(__dirname, '../../dist');
 app.use(express.static(distPath));
 
 // API endpoint example
-app.get('/api/hello', (req, res) => {
+app.get('/api/hello', (_req, res) => {
     const message = hello();
     console.log('API called:', message);
     res.json({ message });
