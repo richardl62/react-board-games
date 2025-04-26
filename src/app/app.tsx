@@ -1,13 +1,13 @@
 import { JSX, useEffect } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import { AppGame, GameCategory } from "../app-game-support";
+import { AppGame, GameCategory } from "@/app-game-support";
 import { standardOuterMargin } from "../app-game-support/styles";
 import { games as appGames } from "../games/app-games";
 import "./app.css";
 import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";
-import { helloMessage } from "../../shared/hello-message";
+import { helloMessage } from "@shared/hello-message";
 
 const HomePageStyles = styled.div`
     font-size: 18px;
