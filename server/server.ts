@@ -1,7 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { hello } from '../shared/hello.js';
+import { helloMessage } from './utils/hello-message.js';
+import { helloMessage as sharedHelloMessage } from '../shared/hello-message.js';
 
 const app = express();
 const PORT = 3000;
@@ -16,15 +17,10 @@ app.use(express.static(distPath));
 
 // API endpoint example
 app.get('/api/hello', (_req, res) => {
-    const message = hello();
+    const message = helloMessage() + " and " + sharedHelloMessage();
     console.log('API called:', message);
     res.json({ message });
 });
-
-// Catch-all to serve index.html for SPA routing
-// app.get('/*', (req, res) => {
-//     res.sendFile(path.join(distPath, 'index.html'));
-// });
 
 // Start the server
 app.listen(PORT, () => {
