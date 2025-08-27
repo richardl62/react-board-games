@@ -26,6 +26,10 @@ const Game = styled.div`
   gap: 5px;
   `;
 
+const PaddingTop = styled.div`
+  padding-top: 0.5em;
+`;
+
 function BagInfo(): JSX.Element {
     const context = useScrabbleContext();
 
@@ -48,7 +52,9 @@ export function MainGameArea(): JSX.Element {
         </SpaceBetween>
 
         {reviewGameHistory ? <RewindControls /> : <TurnControl />}
-        <HighScoringWordsControls />
+        <PaddingTop >
+            <HighScoringWordsControls />
+        </PaddingTop>
         <ScoreLine/>
     </Game>;
 }

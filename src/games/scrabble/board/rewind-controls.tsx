@@ -5,9 +5,9 @@ import { useScrabbleContext } from "../client-side/scrabble-context";
 import { GoToStart, GoToEnd, StepForwards, StepBackwards } from "./forward-back-arrows";
 
 const Controls = styled.div`
-    display: block;
+    display: flex;
     button {
-        margin-right: 0.5em;
+        margin-left: 0.5em;
     }
 `;
 
