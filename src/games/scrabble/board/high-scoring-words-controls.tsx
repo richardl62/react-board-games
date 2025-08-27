@@ -19,6 +19,12 @@ const ControlDiv = styled.div`
     }
 `;
 
+// Add padding on left and right
+const Padded = styled.div<{padding: string}>`
+    padding-left: ${props => props.padding};
+    padding-right: ${props => props.padding};
+`;
+
 function Controls() {
     const  { highScoringWords, dispatch } = useScrabbleContext();
     sAssert(highScoringWords);
@@ -37,18 +43,24 @@ function Controls() {
 
     return <ControlDiv>
         <button onClick={() => selectWord(0)} disabled={position === 0}>
-            <GoToStart />
+            <Padded padding="0.2em">
+                <GoToStart />
+            </Padded>
         </button>
 
         <button onClick={() => selectWord(position-1)} disabled={position === 0}>
-            <StepBackwards />
+            <Padded padding="1.5em">
+                <StepBackwards />
+            </Padded>
         </button>
 
         <button onClick={() => selectWord(position+1)} disabled={position === nWordFounds-1}>
-            <StepForwards />
+            <Padded padding="1.5em">
+                <StepForwards />
+            </Padded>
         </button>
 
-        {`(Showing word ${position!+1} of ${nWordFounds})`}
+        {`(${position!+1} of ${nWordFounds})`}
     </ControlDiv>;
 }
 
@@ -62,7 +74,7 @@ export function HighScoringWordsControls() : JSX.Element | null {
     }
     
     return <OuterDiv>
-        <label>{"Show high scoring word "}
+        <label>{"Suggest words "}
             <input type="checkbox"
                 checked={enabled}
                 onChange={() => dispatch({

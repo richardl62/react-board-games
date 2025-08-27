@@ -5,11 +5,18 @@ import { useScrabbleContext } from "../client-side/scrabble-context";
 import { GoToStart, GoToEnd, StepForwards, StepBackwards } from "./forward-back-arrows";
 
 const Controls = styled.div`
-    display: flex;
+    display: block;
     button {
-        margin-left: 0.2em;
+        margin-right: 0.5em;
     }
 `;
+
+// Add padding on left and right
+const Padded = styled.div<{padding: string}>`
+    padding-left: ${props => props.padding};
+    padding-right: ${props => props.padding};
+`;
+
 
 export function RewindControls() : JSX.Element {
     const context = useScrabbleContext();
@@ -28,20 +35,28 @@ export function RewindControls() : JSX.Element {
     return <Controls>
         <div>Game history</div>
  
-        <button onClick={() => setHistoryPosition(0)} disabled={atHistoryStart}>
-            <GoToStart />
+        <button  onClick={() => setHistoryPosition(0)} disabled={atHistoryStart} > 
+            <Padded padding="0.2em">
+                <GoToStart />
+            </Padded >
         </button>
 
-        <button onClick={() => setHistoryPosition(historyPosition - 1)} disabled={atHistoryStart}>
-            <StepBackwards />
+        <button onClick={() => setHistoryPosition(historyPosition - 1)} disabled={atHistoryStart} >
+            <Padded padding="1.5em">
+                <StepBackwards />
+            </Padded>
         </button>
 
         <button onClick={() => setHistoryPosition(historyPosition + 1)} disabled={atHistoryEnd}>
-            <StepForwards />
+            <Padded padding="1.5em">
+                <StepForwards />
+            </Padded>
         </button>
 
         <button onClick={() => setHistoryPosition(historyLength - 1)} disabled={atHistoryEnd}>
-            <GoToEnd />
+            <Padded padding="0.2em">
+                <GoToEnd />
+            </Padded>
         </button>
 
 
