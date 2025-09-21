@@ -11,7 +11,6 @@ import { MoveArg0 } from "../../../boardgame-lib/game";
 type PassParam = void;
 function pass(
     {G: state, ctx} : MoveArg0<GameState>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _param: PassParam) : void {
     state.moveHistory.push({pass: { pid: ctx.currentPlayer}});
 }
