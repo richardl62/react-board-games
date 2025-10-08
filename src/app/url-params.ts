@@ -131,8 +131,8 @@ export function lobbyServer(): string {
     if(server) {
         result = server;
     } else {
-        if(url.hostname === "localhost" && url.port === "3000") {
-            url.port = "8000"; // kludge
+        if(url.hostname === "localhost") {
+            url.port = "8000"; // kludge?
         }
         result = url.origin;
     }
