@@ -1,8 +1,8 @@
-import { PlayerID } from "../../../boardgame-lib/playerid";
+import { PlayerID } from "@game-control/types/playerid";
 import { sAssert } from "../../../utils/assert";
 import { copyJSON } from "../../../utils/copy-json";
 import { ServerData, UndoItem } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/game";
+import { MoveArg0 } from "@game-control/types/game";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {

@@ -6,8 +6,8 @@ import { CardID } from "./card-id";
 import { SharedPile, makeSharedPiles } from "./shared-pile";
 import { ServerData } from "./server-data";
 import { GameOptions, OptionWrapper } from "../game-support/game-options";
-import { Ctx } from "../../../boardgame-lib/ctx";
-import { PlayerID } from "../../../boardgame-lib/playerid";
+import { Ctx } from "@game-control/types/ctx";
+import { PlayerID } from "@game-control/types/playerid";
 import { makeDiscardPile } from "./make-discard-pile";
 
 export function moveableToSharedPile(

@@ -1,6 +1,6 @@
 import { GameStage, ServerData } from "./server-data";
 import { startRound } from "./start-round";
-import { MoveArg0 } from "../../../boardgame-lib/game";
+import { MoveArg0 } from "@game-control/types/game";
 
 export function readyForNextRound(
     { G, playerID, random }: MoveArg0<ServerData>,

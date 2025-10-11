@@ -1,4 +1,4 @@
-import { Ctx } from "../../../boardgame-lib/ctx";
+import { Ctx } from "@game-control/types/ctx";
 import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../app-game-support/wrapped-move-function";
 import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";
@@ -6,7 +6,7 @@ import { GameState } from "./game-state";
 import { playWord } from "./play-word";
 import { ServerData } from "./server-data";
 import { swapTiles } from "./swap-tiles";
-import { MoveArg0 } from "../../../boardgame-lib/game";
+import { MoveArg0 } from "@game-control/types/game";
 
 type PassParam = void;
 function pass(

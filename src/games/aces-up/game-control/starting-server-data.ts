@@ -6,9 +6,9 @@ import { makeSharedPileData } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../app-game-support/required-server-data";
-import { SetupArg0 } from "../../../boardgame-lib/game";
+import { SetupArg0 } from "@game-control/types/game";
 import { SetupOptions } from "../game-support/setup-options";
-import { RandomAPI } from "../../../boardgame-lib/random";
+import { RandomAPI } from "@game-control/types/random-api";
 import { makeDiscardPileData } from "./discard-pile";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,

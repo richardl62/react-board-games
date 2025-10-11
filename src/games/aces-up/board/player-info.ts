@@ -1,4 +1,4 @@
-import { PlayerID } from "../../../boardgame-lib/playerid";
+import { PlayerID } from "@game-control/types/playerid";
 import { GameContext } from "../game-support/game-context";
 
 export class PlayerInfo {

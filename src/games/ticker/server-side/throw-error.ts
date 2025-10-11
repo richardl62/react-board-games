@@ -1,4 +1,4 @@
-import { MoveArg0 } from "../../../boardgame-lib/game";
+import { MoveArg0 } from "@game-control/types/game";
 import { ServerData } from "./server-data";
 
 export function throwError(

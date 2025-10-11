@@ -2,7 +2,7 @@
 // isConnected as an optional member. The code below is my way of add it.
 
 import { sAssert } from "../utils/assert";
-import { BoardProps } from "../boardgame-lib/board-props";
+import { BoardProps } from "@game-control/types/board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 import * as UrlParams from "../app/url-params";
 import { RequiredServerData } from "./required-server-data";

@@ -21,5 +21,6 @@
     },
     "include": [
       "server/**/*ts",
+      "game-controlX/**/*ts"
     ],
   }

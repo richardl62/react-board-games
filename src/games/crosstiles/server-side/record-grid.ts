@@ -3,8 +3,8 @@ import { Letter } from "../config";
 import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "./server-data";
 import { ScoreWithCategory } from "./set-score";
-import { MoveArg0 } from "../../../boardgame-lib/game";
-import { PlayerID } from "../../../boardgame-lib/playerid";
+import { MoveArg0 } from "@game-control/types/game";
+import { PlayerID } from "@game-control/types/playerid";
 
 interface GridAndScore {
     grid: (Letter | null)[][],

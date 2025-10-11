@@ -1,7 +1,7 @@
-import { Game } from "../boardgame-lib/game";
+import { Game } from "@game-control/types/game";
 import { RequiredServerData } from "./required-server-data";
 import { WrappedGameProps } from "./wrapped-game-props";
-import { SetupArg0 } from "../boardgame-lib/game";
+import { SetupArg0 } from "@game-control/types/game";
 import { JSX } from "react";
 import { OptionSpecifications } from "@/app/option-specification/types";
 

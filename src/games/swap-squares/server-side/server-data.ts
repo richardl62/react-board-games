@@ -1,7 +1,7 @@
 import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
 import { SetupOptions } from "../options";
-import { SetupArg0 } from "../../../boardgame-lib/game";
-import { RandomAPI } from "../../../boardgame-lib/random";
+import { SetupArg0 } from "@game-control/types/game";
+import { RandomAPI } from "@game-control/types/random-api";
 
 export const startingOrders = [
     "forward",

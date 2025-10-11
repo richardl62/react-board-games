@@ -1,6 +1,6 @@
 import { processGameRequest } from "./process-game-request";
 import { GameRequest, PlayerID, ServerData } from "./server-data";
-import { MoveArg0 } from "../../../boardgame-lib/game";
+import { MoveArg0 } from "@game-control/types/game";
 
 export function requestRestartPegging(
     {G, ctx} : MoveArg0<ServerData>, 

@@ -1,7 +1,7 @@
-import { Ctx } from "./ctx";
-import { PlayerID } from "./playerid";
-import { RandomAPI } from "./random";
-import { EventsAPI } from "./events";
+import { Ctx } from "./ctx.js";
+import { PlayerID } from "./playerid.js";
+import { RandomAPI } from "./random-api.js";
+import { EventsAPI } from "./events.js";
 
 export const ActivePlayers = {
     ALL: "all",

@@ -1,6 +1,6 @@
-import { Ctx } from "./ctx";
-import { EventsAPI } from "./events";
-import { PlayerID } from "./playerid";
+import { Ctx } from "./ctx.js";
+import { EventsAPI } from "./events.js";
+import { PlayerID } from "./playerid.js";
 
 export interface MatchDataElem {
     id: number

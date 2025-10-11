@@ -1,4 +1,4 @@
-import { RandomAPI } from "../../../boardgame-lib/random";
+import { RandomAPI } from "@game-control/types/random-api";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
 import { SetupOptions } from "../options";
 
