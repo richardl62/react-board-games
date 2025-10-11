@@ -28,7 +28,6 @@
     "rootDir": "./",
     "paths": {
       "@/*": ["./src/*"],
-      "@shared/*": ["./shared/*"]
     }
   },
   "include": [

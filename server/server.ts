@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { helloMessage } from './utils/hello-message.js';
-import { helloMessage as sharedHelloMessage } from '../shared/hello-message.js';
 
 const app = express();
 const PORT = 3000;
@@ -17,7 +16,7 @@ app.use(express.static(distPath));
 
 // API endpoint example
 app.get('/api/hello', (_req, res) => {
-    const message = helloMessage() + " and " + sharedHelloMessage();
+    const message = helloMessage();
     console.log('API called:', message);
     res.json({ message });
 });
