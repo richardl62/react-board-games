@@ -2,14 +2,12 @@ import { configs, ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./server-side";
 import { AppGameNoBoard } from "../../app-game-support/app-game";
 import { SetupArg0 } from "../../boardgame-lib/game";
-import { SetupOptions, setupOptions } from "./options";
+import { SetupOptions } from "./options";
 
 function makeAppGame(config: ScrabbleConfig) : AppGameNoBoard
 {
     return {
         ...config,
-
-        options: setupOptions,
   
         setup: (arg0: SetupArg0, options: unknown) => 
             startingServerData(arg0, options as SetupOptions, config),

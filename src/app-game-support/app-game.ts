@@ -1,9 +1,9 @@
 import { Game } from "../boardgame-lib/game";
 import { RequiredServerData } from "./required-server-data";
-import { OptionSpecifications } from "../app/option-specification/types";
 import { WrappedGameProps } from "./wrapped-game-props";
 import { SetupArg0 } from "../boardgame-lib/game";
 import { JSX } from "react";
+import { OptionSpecifications } from "@/app/option-specification/types";
 
 // The string values are uses as section headers when displaying the list of
 // games.
@@ -24,8 +24,6 @@ export interface AppGameNoBoard extends Game {
 
   moves: Required<Game>["moves"];
 
-  options?: OptionSpecifications;
-
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.
   setup: (arg0: SetupArg0, setupData?: unknown) => RequiredServerData;
@@ -36,6 +34,7 @@ export interface AppGameNoBoard extends Game {
 
 // Not used in the server. (Seperating the board avoids some build problems.)
 export interface AppGame extends AppGameNoBoard { 
+  options?: OptionSpecifications;
   board: (props: WrappedGameProps) => JSX.Element;
 }
 

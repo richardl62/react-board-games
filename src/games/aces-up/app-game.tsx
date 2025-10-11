@@ -2,10 +2,12 @@ import React from "react";
 import { AppGame } from "../../app-game-support/app-game";
 import { standardBoard } from "../../app-game-support/standard-board";
 import { appGameNoBoard } from "./app-game-no-board";
+import { setupOptions } from "./game-support/setup-options";
+
 const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
     ...appGameNoBoard,
-
+    options: setupOptions,
     board: props => standardBoard(LazyBoard, props),
 };

@@ -1,10 +1,8 @@
 import { ActivePlayers } from "../../boardgame-lib/game";
 import { GameCategory } from "../../app-game-support";
 import { AppGameNoBoard } from "../../app-game-support/app-game";
-import { setupOptions } from "./options";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/server-data";
-
 
 export const appGameNoBoard: AppGameNoBoard = {
 
@@ -16,7 +14,7 @@ export const appGameNoBoard: AppGameNoBoard = {
     minPlayers: 1,
     maxPlayers: 99,
 
-    options: setupOptions,
+
     setup: startingServerData as AppGameNoBoard["setup"],
 
     moves: bgioMoves,
