@@ -1,7 +1,7 @@
-import { Game } from "@game-control/types/game";
+import { Game } from "@/game-controlX/types/game";
 import { RequiredServerData } from "./required-server-data";
 import { WrappedGameProps } from "./wrapped-game-props";
-import { SetupArg0 } from "@game-control/types/game";
+import { SetupArg0 } from "@/game-controlX/types/game";
 import { JSX } from "react";
 import { OptionSpecifications } from "@/app/option-specification/types";
 
@@ -32,7 +32,7 @@ export interface AppGameNoBoard extends Game {
   maxPlayers: number,
 }
 
-// Not used in the server. (Seperating the board avoids some build problems.)
+// Not used in the server.
 export interface AppGame extends AppGameNoBoard { 
   options?: OptionSpecifications;
   board: (props: WrappedGameProps) => JSX.Element;

@@ -1,10 +1,10 @@
-import { Ctx } from "@game-control/types/ctx";
-import { PlayerID } from "@game-control/types/playerid";
+import { Ctx } from "@/game-controlX/types/ctx";
+import { PlayerID } from "@/game-controlX/types/playerid";
 import { handSize } from "../game-support/config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";
-import { MoveArg0 } from "@game-control/types/move-fn";
+import { MoveArg0 } from "@/game-controlX/types/move-fn";
 import { makeSharedPileData, makeSharedPiles } from "./shared-pile";
 import { makeDiscardPiles } from "./make-discard-pile";
 

@@ -28,11 +28,10 @@
     "rootDir": "./",
     "paths": {
       "@/*": ["./src/*"],
-      "@game-control/*": ["./game-controlX/*"]
+      "@/game-controlX/*": ["./src/game-controlX/*"],
     }
   },
   "include": [
     "src/**/*",
-    "game-controlX/**/*", 
   ],
 }

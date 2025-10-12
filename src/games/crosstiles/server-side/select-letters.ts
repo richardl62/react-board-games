@@ -1,4 +1,4 @@
-import { RandomAPI } from "@game-control/types/random-api";
+import { RandomAPI } from "@/game-controlX/types/random-api";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
 import { SetupOptions } from "../options";
 

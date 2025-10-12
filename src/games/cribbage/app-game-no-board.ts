@@ -1,4 +1,4 @@
-import { ActivePlayers } from "@game-control/types/game";
+import { ActivePlayers } from "@/game-controlX/types/game";
 import { GameCategory } from "../../app-game-support";
 import { AppGameNoBoard } from "../../app-game-support/app-game";
 import { bgioMoves } from "./server-side/moves";
