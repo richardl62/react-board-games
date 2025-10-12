@@ -13,14 +13,19 @@ export enum GameCategory {
   test = "Test/Debug",
 }
 
-export interface AppGameNoBoard extends Game { 
-  // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
-  // display purposes.
-  displayName: string;
-  category: GameCategory;
+// GameControl is used by the server and the app (c.f. AppGame which is used
+// just by the app).
+export interface GameControl extends Game { 
+  // Space-free name used to identify the game.
+  name: string
 
-  // Space-free name suitable for passing to bgio.
-  name: string;
+  // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
+  // display purposes. 
+  // KLUDGE: Could be in AppGame.
+  displayName: string;
+
+  //KLUDGE: Could be in AppGame.
+  category: GameCategory;
 
   moves: Required<Game>["moves"];
 
@@ -33,7 +38,7 @@ export interface AppGameNoBoard extends Game {
 }
 
 // Not used in the server.
-export interface AppGame extends AppGameNoBoard { 
+export interface AppGame extends GameControl { 
   options?: OptionSpecifications;
   board: (props: WrappedGameProps) => JSX.Element;
 }

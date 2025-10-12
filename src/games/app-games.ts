@@ -1,5 +1,5 @@
 import { AppGame } from "../app-game-support";
-import { AppGameNoBoard } from "../app-game-support/app-game";
+import { GameControl } from "../app-game-support/app-game";
 import { sAssert } from "../utils/assert";
 import { appGame as acesUp } from "./aces-up/app-game";
 import { gamesNoBoard } from "./app-games-no-board";
@@ -22,7 +22,7 @@ export const games : Array<AppGame> = [
     ticker,
 ];
 
-function sameGames(g1: AppGameNoBoard[], g2: AppGameNoBoard[]) {
+function sameGames(g1: GameControl[], g2: GameControl[]) {
     const names1 = g1.map(g => g.name);
     const names2 = g2.map(g => g.name);
 

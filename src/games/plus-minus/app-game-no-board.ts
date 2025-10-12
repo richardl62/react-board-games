@@ -1,14 +1,14 @@
 import { GameCategory } from "../../app-game-support";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/server-data";
-import { AppGameNoBoard } from "../../app-game-support/app-game";
+import { GameControl } from "../../app-game-support/app-game";
 
-export const appGameNoBoard: AppGameNoBoard = {
+export const appGameNoBoard: GameControl = {
     name: "plusminus",
     displayName: "Plus Minus",
     category: GameCategory.test,
 
-    setup: startingServerData as AppGameNoBoard["setup"],
+    setup: startingServerData as GameControl["setup"],
     
     minPlayers: 1,
     maxPlayers: 8,

@@ -1,10 +1,10 @@
 import { ActivePlayers } from "@/game-controlX/types/game";
 import { GameCategory } from "../../app-game-support";
-import { AppGameNoBoard } from "../../app-game-support/app-game";
+import { GameControl } from "../../app-game-support/app-game";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/server-data";
 
-export const appGameNoBoard: AppGameNoBoard = {
+export const appGameNoBoard: GameControl = {
 
     displayName: "CrossTiles",
     category: GameCategory.standard,
@@ -15,7 +15,7 @@ export const appGameNoBoard: AppGameNoBoard = {
     maxPlayers: 99,
 
 
-    setup: startingServerData as AppGameNoBoard["setup"],
+    setup: startingServerData as GameControl["setup"],
 
     moves: bgioMoves,
 

@@ -1,10 +1,10 @@
 import { ActivePlayers } from "@/game-controlX/types/game";
 import { GameCategory } from "../../app-game-support";
-import { AppGameNoBoard } from "../../app-game-support/app-game";
+import { GameControl } from "../../app-game-support/app-game";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/starting-server-data";
 
-export const appGameNoBoard: AppGameNoBoard = {
+export const appGameNoBoard: GameControl = {
     name: "Cribbage",
     displayName: "Cribbage",
     category: GameCategory.development,
