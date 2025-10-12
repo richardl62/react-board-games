@@ -3,7 +3,7 @@ import { Letter } from "../config";
 import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "./server-data";
 import { ScoreWithCategory } from "./set-score";
-import { MoveArg0 } from "@game-control/types/game";
+import { MoveArg0 } from "@game-control/types/move-fn";
 import { PlayerID } from "@game-control/types/playerid";
 
 interface GridAndScore {

@@ -1,7 +1,7 @@
 import { processGameRequest } from "./process-game-request";   
 import { GameRequest, PlayerID, ServerData } from "./server-data";
 import { newDealData } from "./starting-server-data";
-import { MoveArg0 } from "@game-control/types/game";
+import { MoveArg0 } from "@game-control/types/move-fn";
 
 export function requestNewDeal(
     {G: inputG, ctx, random} : MoveArg0<ServerData>,  

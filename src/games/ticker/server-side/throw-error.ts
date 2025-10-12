@@ -1,4 +1,4 @@
-import { MoveArg0 } from "@game-control/types/game";
+import { MoveArg0 } from "@game-control/types/move-fn";
 import { ServerData } from "./server-data";
 
 export function throwError(

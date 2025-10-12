@@ -1,7 +1,7 @@
 import { sAssert } from "../../../utils/assert";
 import { processGameRequest } from "./process-game-request";
 import { GameRequest, GameStage, PlayerID, ServerData } from "./server-data";
-import { MoveArg0 } from "@game-control/types/game";
+import { MoveArg0 } from "@game-control/types/move-fn";
 
 export function doneMakingBox(
     {G, ctx} : MoveArg0<ServerData>, 

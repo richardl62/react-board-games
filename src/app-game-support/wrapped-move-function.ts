@@ -1,5 +1,5 @@
 import { RequiredServerData } from "./required-server-data";
-import { MoveArg0 } from "@game-control/types/game";
+import { MoveArg0 } from "@game-control/types/move-fn";
 
 type BgioMoveFunction<State, Param> = (arg0: MoveArg0<State>, param: Param) => void | State;
 
