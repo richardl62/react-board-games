@@ -1,6 +1,6 @@
-import { Ctx } from "./ctx.js";
-import { RandomAPI } from "./random-api.js";
-import { MoveFn } from "./move-fn.js";
+import { Ctx } from "./ctx";
+import { RandomAPI } from "./random-api";
+import { MoveFn } from "./move-fn";
 
 export const ActivePlayers = {
     ALL: "all",

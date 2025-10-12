@@ -1,5 +1,4 @@
-import { RandomAPI } from "../types/random-api.js";
-
+import { RandomAPI } from "../types/random-api";
 
 export const random: RandomAPI = {
     Die: (spotvalue) => Math.floor(Math.random() * spotvalue) + 1,
