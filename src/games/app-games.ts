@@ -1,5 +1,5 @@
 import { AppGame } from "../app-game-support";
-import { GameControl } from "../app-game-support/app-game";
+import { GameControl } from "@/game-controlX/game-control";
 import { sAssert } from "../utils/assert";
 import { appGame as acesUp } from "./aces-up/app-game";
 import { gamesNoBoard } from "./app-games-no-board";

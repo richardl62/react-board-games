@@ -1,5 +1,5 @@
 import { ActivePlayers } from "@/game-controlX/game";
-import { GameControl } from "../../app-game-support/app-game";
+import { GameControl } from "@/game-controlX/game-control";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/server-data";
 
