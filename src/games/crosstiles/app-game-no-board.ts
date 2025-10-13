@@ -1,14 +1,9 @@
 import { ActivePlayers } from "@/game-controlX/game";
-import { GameCategory } from "../../app-game-support";
 import { GameControl } from "../../app-game-support/app-game";
 import { bgioMoves } from "./server-side/moves";
 import { startingServerData } from "./server-side/server-data";
 
 export const appGameNoBoard: GameControl = {
-
-    displayName: "CrossTiles",
-    category: GameCategory.standard,
-
     name: "crosstiles",
 
     minPlayers: 1,

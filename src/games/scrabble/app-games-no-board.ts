@@ -1,8 +1,9 @@
-import { configs, ScrabbleConfig } from "./config";
+import { ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./server-side";
 import { GameControl } from "../../app-game-support/app-game";
 import { SetupArg0 } from "@/game-controlX/game";
 import { SetupOptions } from "./options";
+import { simple, standard } from "./config/scrabble-config";
 
 function makeAppGame(config: ScrabbleConfig) : GameControl
 {
@@ -17,5 +18,8 @@ function makeAppGame(config: ScrabbleConfig) : GameControl
     };
 }
 
-export const appGamesNoBoard = configs.map(makeAppGame);
+export const appGamesNoBoardSimple = makeAppGame(simple);
+export const appGamesNoBoardStandard = makeAppGame(standard);
+
+export const appGamesNoBoard = [appGamesNoBoardSimple, appGamesNoBoardStandard];
 

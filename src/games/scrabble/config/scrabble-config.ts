@@ -1,5 +1,4 @@
 import { sAssert } from "../../../utils/assert";
-import { AppGame, GameCategory } from "../../../app-game-support";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 import { RandomAPI } from "@/game-controlX/random-api";
@@ -20,8 +19,7 @@ export interface ScoringConfig {
 
 export interface ScrabbleConfig extends ScoringConfig {
     name: string,
-    displayName: string,
-    category: AppGame["category"],
+
     minPlayers: number,
     maxPlayers: number, 
     
@@ -37,10 +35,9 @@ export interface ScrabbleConfig extends ScoringConfig {
     makeFullBag : (random: RandomAPI) => Letter[];
 }
 
-const standard : ScrabbleConfig = {
+export const standard : ScrabbleConfig = {
     name: "scrabble",
-    displayName: "Scrabble",
-    category: GameCategory.standard,
+
     minPlayers: 1,
     maxPlayers: 4, 
 
@@ -95,10 +92,9 @@ const simpleScrabbleLettersForBag : Letter []= [
     "A","B","C","D",
 ];
 
-const simple: ScrabbleConfig = {
+export const simple: ScrabbleConfig = {
     name: "scrabble-simple",
-    displayName: "Simple Scrabble",
-    category: GameCategory.test,
+
     minPlayers: 1,
     maxPlayers: 4,
     rackSize: 4,
@@ -119,7 +115,7 @@ const simple: ScrabbleConfig = {
 };
 Object.freeze(simple);
 
-export const configs = [standard, simple];
+const configs = [standard, simple];
 
 /** Quick check that an object is a ScrabbleContext */
 export function isScrabbleConfig(arg: unknown) : boolean {
@@ -128,7 +124,7 @@ export function isScrabbleConfig(arg: unknown) : boolean {
     try {
         const inputConf = arg as ScrabbleConfig;
         for (const conf of configs) {
-            if (inputConf.displayName === conf.displayName) {
+            if (inputConf.name === conf.name) {
                 valid = true;
             }
         }

@@ -16,16 +16,8 @@ export enum GameCategory {
 // GameControl is used by the server and the app (c.f. AppGame which is used
 // just by the app).
 export interface GameControl extends Game { 
-  // Space-free name used to identify the game.
+  // Space-free name used to identify the game (c.f. displayName in AppGame).
   name: string
-
-  // The name of the game, e.g. "Chess" or "Chess - 5-A-Side" etc.  Used for
-  // display purposes. 
-  // KLUDGE: Could be in AppGame.
-  displayName: string;
-
-  //KLUDGE: Could be in AppGame.
-  category: GameCategory;
 
   moves: Required<Game>["moves"];
 
@@ -39,6 +31,12 @@ export interface GameControl extends Game {
 
 // Not used in the server.
 export interface AppGame extends GameControl { 
+  // The name of the game used for display purposes (c.f. name in GameControl).
+  // KLUDGE: Could be in AppGame.
+  displayName: string;
+
+  category: GameCategory;
+
   options?: OptionSpecifications;
   board: (props: WrappedGameProps) => JSX.Element;
 }
