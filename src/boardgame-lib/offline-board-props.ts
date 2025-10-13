@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
-import { random } from "@/game-controlX/utils/random";
-import { EventsAPI } from "@/game-controlX/types/events";
+import { random } from "@/game-controlX/random-api";
+import { EventsAPI } from "@/game-controlX/events";
 import { RequiredServerData } from "../game-controlX/required-server-data";
 import { useOfflineCtx } from "./use-offline-ctx";
-import { Ctx } from "@/game-controlX/types/ctx";
-import { MatchDataElem } from "@/game-controlX/types/board-props";
+import { Ctx } from "@/game-controlX/ctx";
+import { MatchDataElem } from "@/game-controlX/board-props";
   
 interface SharedOfflineBoardData {
     ctx: Ctx;

@@ -1,4 +1,4 @@
-import { PlayerID } from "@/game-controlX/types/playerid";
+import { PlayerID } from "@/game-controlX/playerid";
 import { CardNonJoker } from "../../../utils/cards";
 import { moveableToSharedPile } from "./move-type";
 import { ServerData } from "./server-data";

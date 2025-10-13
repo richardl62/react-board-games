@@ -1,7 +1,7 @@
-import { Game } from "@/game-controlX/types/game";
+import { Game } from "@/game-controlX/game";
 import { RequiredServerData } from "../game-controlX/required-server-data";
 import { WrappedGameProps } from "./wrapped-game-props";
-import { SetupArg0 } from "@/game-controlX/types/game";
+import { SetupArg0 } from "@/game-controlX/game";
 import { JSX } from "react";
 import { OptionSpecifications } from "@/app/option-specification/types";
 

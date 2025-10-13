@@ -8,6 +8,7 @@
     "buildServer": "tsc -b ./tsconfig.server.json",
     "buildAndRunServer": "tsc -b ./tsconfig.server.json && npm run serve",
     "buildApp": "tsc -b && vite build",
+    "tsc": "tsc -b",
     "build": "npm run buildApp && npm run buildServer",
     "lint": "eslint .",
     "preview": "vite preview",

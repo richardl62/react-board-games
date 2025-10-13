@@ -1,5 +1,5 @@
 import { ServerData } from "./server-data";
-import { MoveArg0 } from "@/game-controlX/types/move-fn";
+import { MoveArg0 } from "@/game-controlX/move-fn";
 import { setDiceScores } from "./set-dice-scores";
 
 export function setHeld(

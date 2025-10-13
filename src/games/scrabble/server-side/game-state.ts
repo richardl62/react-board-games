@@ -4,7 +4,7 @@ import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
 import { ExtendedLetter } from "../client-side/extended-letter";
 import { MoveHistoryElement } from "./move-hstory";
-import { SetupArg0 } from "@/game-controlX/types/game";
+import { SetupArg0 } from "@/game-controlX/game";
 
 export interface BoardSquareData extends ExtendedLetter {
 

@@ -1,4 +1,4 @@
-import { Ctx } from "@/game-controlX/types/ctx";
+import { Ctx } from "@/game-controlX/ctx";
 import { nNonNull } from "../../../utils/n-non-null";
 import { Letter, letterScore } from "../config";
 import { GameState } from "./game-state";

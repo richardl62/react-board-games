@@ -1,5 +1,5 @@
 import { ServerData, setSquares } from "./server-data";
-import { MoveArg0 } from "@/game-controlX/types/move-fn";
+import { MoveArg0 } from "@/game-controlX/move-fn";
 
 export function reset(
     { G, random }: MoveArg0<ServerData>,  

@@ -1,5 +1,5 @@
 import {  PegPositions, PlayerID, ServerData } from "./server-data";
-import { MoveArg0 } from "@/game-controlX/types/move-fn";
+import { MoveArg0 } from "@/game-controlX/move-fn";
 
 interface Arg {
     who: PlayerID;

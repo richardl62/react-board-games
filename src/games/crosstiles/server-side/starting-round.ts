@@ -1,6 +1,6 @@
 import { GameStage, ServerData } from "./server-data";
 import { startRound } from "./start-round";
-import { MoveArg0 } from "@/game-controlX/types/move-fn";
+import { MoveArg0 } from "@/game-controlX/move-fn";
 
 export function readyForNextRound(
     { G, playerID, random }: MoveArg0<ServerData>,

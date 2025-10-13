@@ -3,8 +3,8 @@ import { Card } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";
 import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
-import { SetupArg0 } from "@/game-controlX/types/game";
-import { RandomAPI } from "@/game-controlX/types/random-api";
+import { SetupArg0 } from "@/game-controlX/game";
+import { RandomAPI } from "@/game-controlX/random-api";
 
 interface PlayerPegPositions {
     player0: PegPositions;

@@ -2,7 +2,7 @@ import { sAssert } from "../../../utils/assert";
 import { AppGame, GameCategory } from "../../../app-game-support";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
-import { RandomAPI } from "@/game-controlX/types/random-api";
+import { RandomAPI } from "@/game-controlX/random-api";
 import { getScrabbleWords } from "../../../utils/get-scrabble-words";
 
 const D = SquareType.doubleWord;

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { MatchDataElem } from "@/game-controlX/types/board-props";
-import { Ctx } from "@/game-controlX/types/ctx";
-import { EventsAPI } from "@/game-controlX/types/events";
+import { MatchDataElem } from "@/game-controlX/board-props";
+import { Ctx } from "@/game-controlX/ctx";
+import { EventsAPI } from "@/game-controlX/events";
 
 export function useOfflineCtx(numPlayers: number) : {
     ctx: Ctx, 

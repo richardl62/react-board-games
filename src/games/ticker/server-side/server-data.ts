@@ -1,5 +1,5 @@
 import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
-import { SetupArg0 } from "@/game-controlX/types/game";
+import { SetupArg0 } from "@/game-controlX/game";
 
 export interface ServerData extends RequiredServerData {
     count: number;

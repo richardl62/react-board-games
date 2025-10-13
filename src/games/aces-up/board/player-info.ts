@@ -1,4 +1,4 @@
-import { PlayerID } from "@/game-controlX/types/playerid";
+import { PlayerID } from "@/game-controlX/playerid";
 import { GameContext } from "../game-support/game-context";
 
 export class PlayerInfo {

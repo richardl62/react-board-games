@@ -1,7 +1,7 @@
 import { configs, ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./server-side";
 import { GameControl } from "../../app-game-support/app-game";
-import { SetupArg0 } from "@/game-controlX/types/game";
+import { SetupArg0 } from "@/game-controlX/game";
 import { SetupOptions } from "./options";
 
 function makeAppGame(config: ScrabbleConfig) : GameControl
