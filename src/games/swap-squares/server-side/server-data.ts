@@ -1,6 +1,6 @@
 import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
 import { SetupOptions } from "../options";
-import { SetupArg0 } from "@/game-controlX/game";
+import { SetupArg0 } from "@/game-controlX/game-control";
 import { RandomAPI } from "@/game-controlX/random-api";
 
 export const startingOrders = [

@@ -6,7 +6,7 @@ import { makeSharedPileData } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
 import { startingRequiredState } from "../../../game-controlX/required-server-data";
-import { SetupArg0 } from "@/game-controlX/game";
+import { SetupArg0 } from "@/game-controlX/game-control";
 import { SetupOptions } from "../game-support/setup-options";
 import { RandomAPI } from "@/game-controlX/random-api";
 import { makeDiscardPileData } from "./discard-pile";
