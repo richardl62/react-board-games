@@ -8,7 +8,7 @@ import { isServerData, ServerData } from "../server-side";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "../server-side/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { RequiredServerData } from "../../../app-game-support/required-server-data";
+import { RequiredServerData } from "../../../game-controlX/required-server-data";
 import { Trie } from "../../../utils/word-finder/trie";
 import { SetupOptions } from "../options";
 import React from "react";

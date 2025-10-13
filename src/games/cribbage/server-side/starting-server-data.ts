@@ -1,4 +1,4 @@
-import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
+import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
 import { Card } from "../../../utils/cards";
 import { deckNoJokers } from "../../../utils/cards/deck";
 import { cardsPerHand } from "../config";

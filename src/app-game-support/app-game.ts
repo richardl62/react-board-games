@@ -1,5 +1,5 @@
 import { Game } from "@/game-controlX/types/game";
-import { RequiredServerData } from "./required-server-data";
+import { RequiredServerData } from "../game-controlX/required-server-data";
 import { WrappedGameProps } from "./wrapped-game-props";
 import { SetupArg0 } from "@/game-controlX/types/game";
 import { JSX } from "react";

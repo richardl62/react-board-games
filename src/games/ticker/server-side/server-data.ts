@@ -1,4 +1,4 @@
-import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
+import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
 import { SetupArg0 } from "@/game-controlX/types/game";
 
 export interface ServerData extends RequiredServerData {

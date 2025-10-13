@@ -5,7 +5,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { makeSharedPileData } from "./shared-pile";
 import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
 import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
-import { startingRequiredState } from "../../../app-game-support/required-server-data";
+import { startingRequiredState } from "../../../game-controlX/required-server-data";
 import { SetupArg0 } from "@/game-controlX/types/game";
 import { SetupOptions } from "../game-support/setup-options";
 import { RandomAPI } from "@/game-controlX/types/random-api";

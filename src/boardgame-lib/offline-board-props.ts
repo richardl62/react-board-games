@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
 import { random } from "@/game-controlX/utils/random";
 import { EventsAPI } from "@/game-controlX/types/events";
-import { RequiredServerData } from "../app-game-support/required-server-data";
+import { RequiredServerData } from "../game-controlX/required-server-data";
 import { useOfflineCtx } from "./use-offline-ctx";
 import { Ctx } from "@/game-controlX/types/ctx";
 import { MatchDataElem } from "@/game-controlX/types/board-props";

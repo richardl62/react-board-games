@@ -5,7 +5,7 @@ import { sAssert } from "../utils/assert";
 import { BoardProps } from "@/game-controlX/types/board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 import * as UrlParams from "../app/url-params";
-import { RequiredServerData } from "./required-server-data";
+import { RequiredServerData } from "../game-controlX/required-server-data";
 /**
  * Bgio type definition of 'moves'.
  *

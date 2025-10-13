@@ -1,5 +1,5 @@
 import { SetupArg0 } from "@/game-controlX/types/game";
-import { RequiredServerData, startingRequiredState } from "../../../app-game-support/required-server-data";
+import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
 import { SetupOptions } from "../options";
 
 const numberOfDice = 6;

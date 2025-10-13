@@ -3,7 +3,7 @@
 
 import { JSX, useEffect } from "react";
 import { AppGame, BoardProps } from "../app-game-support";
-import { RequiredServerData } from "../app-game-support/required-server-data";
+import { RequiredServerData } from "../game-controlX/required-server-data";
 import { WrappedGameProps, makeWrappedGameProps } from "../app-game-support/wrapped-game-props";
 
 
