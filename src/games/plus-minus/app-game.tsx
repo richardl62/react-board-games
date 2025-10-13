@@ -1,13 +1,13 @@
 import React from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { standardBoard } from "../../app-game-support/standard-board";
-import { appGameNoBoard } from "./app-game-no-board";
+import { gameControl } from "@/game-controlX/games/plus-minus/game-control";
 import { setupOptions } from "./options";
 
 const LazyBoard = React.lazy(() => import("./board/board"));
 
 export const appGame: AppGame = {
-    ...appGameNoBoard,
+    ...gameControl,
 
     displayName: "Plus Minus",
     category: GameCategory.test,

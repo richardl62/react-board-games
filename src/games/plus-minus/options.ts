@@ -1,6 +1,5 @@
 import { SpecifiedValues } from "../../app/option-specification/types";
 
-
 export const setupOptions = {
     startingValue: {
         default: 2,

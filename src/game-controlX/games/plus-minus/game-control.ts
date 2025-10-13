@@ -1,8 +1,8 @@
 import { GameControl } from "@/game-controlX/game-control";
-import { bgioMoves } from "./server-side/moves";
-import { startingServerData } from "./server-side/server-data";
+import { bgioMoves } from "./moves";
+import { startingServerData } from "./server-data";
 
-export const appGameNoBoard: GameControl = {
+export const gameControl: GameControl = {
     name: "plusminus",
 
     setup: startingServerData as GameControl["setup"],
