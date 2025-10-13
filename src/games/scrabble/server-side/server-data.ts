@@ -1,4 +1,4 @@
-import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
+import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
 import { ScrabbleConfig } from "../config";
 import { GameState, isGameState, startingGameState } from "./game-state";
 import { SetupArg0 } from "@/game-controlX/game-control";

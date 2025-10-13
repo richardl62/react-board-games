@@ -1,5 +1,5 @@
 
-import { RequiredServerData } from "../../../game-controlX/required-server-data";
+import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { sAssert } from "../../../utils/assert";
 import { Card } from "../../../utils/cards";
 

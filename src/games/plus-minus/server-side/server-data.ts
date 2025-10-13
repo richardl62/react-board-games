@@ -1,4 +1,4 @@
-import { RequiredServerData, startingRequiredState } from "../../../game-controlX/required-server-data";
+import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
 import { SetupOptions } from "../options";
 import { SetupArg0 } from "@/game-controlX/game-control";
 
