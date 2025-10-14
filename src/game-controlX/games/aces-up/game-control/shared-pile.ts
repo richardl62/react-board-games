@@ -1,6 +1,6 @@
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, Rank, nextRank } from "@/utils/cards/types";
-import { OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
+import { OptionWrapper } from "../option-wrapper";
 import { StartingOptions } from "../server-data";
 
 export interface SharedPileData {

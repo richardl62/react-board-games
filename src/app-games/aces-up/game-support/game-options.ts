@@ -1,5 +1,5 @@
 import { assertType, Equal } from "@/utils/assert-type";
-import { CardNonJoker, Rank } from "../../../utils/cards/types";
+import { Rank } from "../../../utils/cards/types";
 import { SetupOptions } from "./setup-options";
 import { StartingOptions } from "@/game-controlX/games/aces-up/server-data";
 
@@ -33,25 +33,3 @@ export function makeGameOptions(opts: SetupOptions) : GameOptions {
     return { ...opts, ...specialRanks };
 }
 
-export class OptionWrapper {
-    constructor(opts: GameOptions) {
-        this.opts = opts;
-    }
-    opts: GameOptions;
-
-    isTopRank(card: CardNonJoker) : boolean {
-        return card.rank === this.opts.topRank;
-    }
-
-    isThief(card: CardNonJoker) : boolean {
-        return card.rank === this.opts.thiefRank;
-    }
-
-    isKiller(card: CardNonJoker) : boolean {
-        return card.rank === this.opts.killerRank;
-    }
-
-    isSpecial(card: CardNonJoker) : boolean {
-        return this.isKiller(card) || this.isThief(card) || card.rank === "K";
-    }
-}

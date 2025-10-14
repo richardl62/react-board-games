@@ -3,7 +3,7 @@ import { RandomAPI } from "@/game-controlX/random-api";
 import { startingRequiredState } from "@/game-controlX/required-server-data";
 import { CardNonJoker, ranks, suits } from "@/utils/cards/types";
 import { debugOptions } from "../debug-options";
-import { OptionWrapper, makeGameOptions } from "../../../../app-games/aces-up/game-support/game-options";
+import { makeGameOptions } from "../../../../app-games/aces-up/game-support/game-options";
 import { SetupOptions } from "../../../../app-games/aces-up/game-support/setup-options";
 import { handSize } from "../config";
 import { makeDiscardPileData } from "./discard-pile";
@@ -11,6 +11,7 @@ import { ExtendingDeck } from "./extendable-deck";
 import { PerTurnServerData, PlayerData, ServerData } from "../server-data";
 import { makeSharedPileData } from "./shared-pile";
 import { StartingOptions } from "../server-data";
+import { OptionWrapper } from "../option-wrapper";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
     options: StartingOptions) : PlayerData {

@@ -3,7 +3,7 @@ import { PlayerID } from "@/game-controlX/playerid";
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, nextRank } from "@/utils/cards/types";
 import { debugOptions } from "../debug-options";
-import { OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
+import { OptionWrapper } from "../option-wrapper";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
