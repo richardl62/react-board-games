@@ -1,5 +1,4 @@
 import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
-import { SetupOptions } from "../options";
 import { SetupArg0 } from "@/game-controlX/game-control";
 import { RandomAPI } from "@/game-controlX/random-api";
 
@@ -9,9 +8,15 @@ export const startingOrders = [
     "random",
 ] as const;
 
+export interface StartingOptions {
+    readonly numRows: number,
+    readonly numColumns: number,
+    readonly startingOrder: typeof startingOrders[number],
+}
+
 export interface ServerData extends RequiredServerData {
     squares: number[];
-    options: SetupOptions;
+    options: StartingOptions;
 }
 
 export function setSquares(
@@ -40,7 +45,7 @@ export function setSquares(
     G.squares = makeSquares();
 }
 
-export function startingServerData({random}: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({random}: SetupArg0, options: StartingOptions): ServerData {
     const G : ServerData = {
         squares: [],
         options,
