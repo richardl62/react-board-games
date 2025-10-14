@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { useGameContext } from "../game-support/game-context";
-import { SharedPile as SharedPileClass, makeSharedPiles } from "../../../game-controlX/games/aces-up/game-control/shared-pile";
+import { SharedPile as SharedPileClass, makeSharedPiles } from "@/game-controlX/games/aces-up/misc/shared-pile";
 import { columnGap } from "../game-support/styles";
 import { SharedPile } from "./shared-pile";
 import { CardNonJoker } from "../../../utils/cards";

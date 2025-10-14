@@ -6,7 +6,7 @@ import { sameJSON } from "@/utils/same-json";
 import { addCard, clearPile, removeCard, stealTopCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
-import { DiscardPile } from "./discard-pile";
+import { DiscardPile } from "../misc/discard-pile";
 import { endTurn, refillHand } from "./end-turn";
 import { makeDiscardPiles } from "./make-discard-pile";
 import { moveType as getMoveType } from "./move-type";

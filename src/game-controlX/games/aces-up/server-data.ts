@@ -1,10 +1,9 @@
 import { PlayerID } from "@/game-controlX/playerid";
 import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { CardNonJoker } from "@/utils/cards";
-import { SharedPileData } from "./game-control/shared-pile";
-import { DiscardPileData } from "./game-control/discard-pile";
+import { SharedPileData } from "./misc/shared-pile";
+import { DiscardPileData } from "./misc/discard-pile";
 import { Rank } from "@/utils/cards/types";
-
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.

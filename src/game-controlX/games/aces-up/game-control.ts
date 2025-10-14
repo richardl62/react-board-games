@@ -1,6 +1,6 @@
 import { GameControl } from "@/game-controlX/game-control";
-import { bgioMoves } from "./game-control/moves";
-import { startingServerData } from "./game-control/starting-server-data";
+import { moves } from "./moves/moves";
+import { startingServerData } from "./misc/starting-server-data";
 
 export const appGameNoBoard: GameControl = {
     name: "acesup",
@@ -9,5 +9,5 @@ export const appGameNoBoard: GameControl = {
     minPlayers: 1,
     maxPlayers: 8,
 
-    moves: bgioMoves,
+    moves: moves,
 };

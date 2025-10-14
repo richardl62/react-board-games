@@ -7,6 +7,6 @@ export const allFuncs = {
     undo,
 };
 
-export const bgioMoves = wrapMoveFunctions(allFuncs);
+export const moves = wrapMoveFunctions(allFuncs);
 
 export type ClientMoves = ClientMoveFunctions<typeof allFuncs>;

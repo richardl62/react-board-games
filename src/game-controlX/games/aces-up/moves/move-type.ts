@@ -8,7 +8,7 @@ import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
 import { ServerData } from "../server-data";
-import { SharedPile, makeSharedPiles } from "./shared-pile";
+import { SharedPile, makeSharedPiles } from "../misc/shared-pile";
 import { StartingOptions } from "../server-data";
 
 export function moveableToSharedPile(

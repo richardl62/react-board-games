@@ -4,7 +4,7 @@ import { handSize } from "../config";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
 import { ServerData } from "../server-data";
-import { makeSharedPileData, makeSharedPiles, SharedPile } from "./shared-pile";
+import { makeSharedPileData, makeSharedPiles, SharedPile } from "../misc/shared-pile";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     const card = cards.splice(index,1)[0];

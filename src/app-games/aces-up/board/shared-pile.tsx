@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { rankName } from "../../../utils/cards/types";
-import { SharedPile as SharedPileClass } from "../../../game-controlX/games/aces-up/game-control/shared-pile";
+import { SharedPile as SharedPileClass } from "@/game-controlX/games/aces-up/misc/shared-pile";
 import { CardStack } from "./card-stack";
 import { TextDiv } from "./shared-piles";
 

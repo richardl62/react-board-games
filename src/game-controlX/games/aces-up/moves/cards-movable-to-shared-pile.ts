@@ -2,7 +2,7 @@ import { PlayerID } from "@/game-controlX/playerid";
 import { CardNonJoker } from "@/utils/cards";
 import { moveableToSharedPile } from "./move-type";
 import { ServerData } from "../server-data";
-import { makeSharedPiles } from "./shared-pile";
+import { makeSharedPiles } from "../misc/shared-pile";
 import { makeDiscardPiles } from "./make-discard-pile";
 
 function moveableCards(G: ServerData, playerID: PlayerID) : CardNonJoker[] {
