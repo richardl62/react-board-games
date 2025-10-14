@@ -1,6 +1,7 @@
 import { sAssert } from "../../../utils/assert";
 
-// The debug iptions should be set to false for normal play.
+// The debug options should be set to false for normal play.
+// *** These options don't seem to be changed anyway.  Are they needed? 
 export const debugOptions = {
     prepopulateRandom: false,
     prepopulateOrdered: false,

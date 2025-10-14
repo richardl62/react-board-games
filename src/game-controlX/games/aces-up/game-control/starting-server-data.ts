@@ -2,7 +2,7 @@ import { SetupArg0 } from "@/game-controlX/game-control";
 import { RandomAPI } from "@/game-controlX/random-api";
 import { startingRequiredState } from "@/game-controlX/required-server-data";
 import { CardNonJoker, ranks, suits } from "@/utils/cards/types";
-import { debugOptions } from "../../../../app-games/aces-up/game-support/debug-options";
+import { debugOptions } from "../debug-options";
 import { GameOptions, OptionWrapper, makeGameOptions } from "../../../../app-games/aces-up/game-support/game-options";
 import { SetupOptions } from "../../../../app-games/aces-up/game-support/setup-options";
 import { handSize } from "../config";
