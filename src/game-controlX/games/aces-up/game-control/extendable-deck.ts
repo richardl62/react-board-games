@@ -1,5 +1,5 @@
-import { CardNonJoker } from "../../../utils/cards";
-import { deckNoJokers } from "../../../utils/cards/deck";
+import { CardNonJoker } from "@/utils/cards";
+import { deckNoJokers } from "@/utils/cards/deck";
 import { RandomAPI } from "@/game-controlX/random-api";
 
 type Filter = (c: CardNonJoker) => boolean;

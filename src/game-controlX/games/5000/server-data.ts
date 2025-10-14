@@ -1,8 +1,15 @@
 import { SetupArg0 } from "@/game-controlX/game-control";
 import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
-import { SetupOptions } from "../options";
 
 const numberOfDice = 6;
+
+export interface StartingOptions {
+    readonly scoreToWin: number,
+    readonly mustBeatPreviousScores: boolean,
+    readonly alwaysFinishRound: boolean,
+    readonly manualDiceRolls: boolean,
+    readonly neverBust: boolean,
+}
 
 export interface ServerData extends RequiredServerData{
     faces: number[];
@@ -28,13 +35,13 @@ export interface ServerData extends RequiredServerData{
 
     lastRound: boolean;
 
-    options: SetupOptions;
+    options: StartingOptions;
 
     rollCount: number;
     turnOverRollCount: number;
 }
 
-export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({ctx}: SetupArg0, options: StartingOptions): ServerData {
     const faces = Array(numberOfDice).fill(1);
     const held = Array(numberOfDice).fill(false);
     

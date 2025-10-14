@@ -1,6 +1,6 @@
-import { sAssert } from "../../../utils/assert";
-import { CardNonJoker } from "../../../utils/cards";
-import { handSize } from "../game-support/config";
+import { sAssert } from "@/utils/assert";
+import { CardNonJoker } from "@/utils/cards";
+import { handSize } from "../config";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
 import { ServerData } from "./server-data";

@@ -1,6 +1,6 @@
 import { Ctx } from "@/game-controlX/ctx";
 import { PlayerID } from "@/game-controlX/playerid";
-import { handSize } from "../game-support/config";
+import { handSize } from "../config";
 import { ExtendingDeck } from "./extendable-deck";
 import { ServerData } from "./server-data";
 import { turnStartServerData } from "./starting-server-data";

@@ -1,6 +1,6 @@
 import React, { JSX } from "react";
 import { useGameContext } from "../client-side/game-context";
-import { availablePlayerActions } from "../utils/available-player-actions";
+import { availablePlayerActions } from "../../../game-controlX/games/5000/utils/available-player-actions";
 import styled from "styled-components";
 import { HoldScoringDiceButton } from "./hold-scoring-dice-button";
 

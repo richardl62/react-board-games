@@ -1,4 +1,4 @@
-import { ServerData } from "../server-side/server-data";
+import { ServerData } from "../server-data";
 
 type FacesAndHeld = Pick<ServerData, "faces" | "held">;
 

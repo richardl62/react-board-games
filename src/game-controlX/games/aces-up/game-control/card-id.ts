@@ -1,5 +1,5 @@
 import { PlayerID } from "@/game-controlX/playerid";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@/utils/assert";
 
 export type CardID = {
     area: "sharedPiles",

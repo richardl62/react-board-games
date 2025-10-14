@@ -5,7 +5,7 @@ export interface StartingOptions {
     readonly startingValue: number;
 }
 
-    export interface ServerData extends RequiredServerData{
+export interface ServerData extends RequiredServerData{
     count: number;
 }
 

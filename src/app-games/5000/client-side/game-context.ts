@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { ClientMoves } from "../server-side/moves";
-import { ServerData } from "../server-side/server-data";
+import { ClientMoves } from "@/game-controlX/games/5000/moves/moves";
+import { ServerData } from "@/game-controlX/games/5000/server-data";
 import { useTimedSteps } from "../../../utils/use-timed-steps";
 
 const spinTime = 1000; // milliseconds

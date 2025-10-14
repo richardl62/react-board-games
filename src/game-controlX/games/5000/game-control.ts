@@ -1,5 +1,5 @@
-import { bgioMoves } from "./server-side/moves";
-import { startingServerData } from "./server-side/server-data";
+import { bgioMoves } from "./moves/moves";
+import { startingServerData } from "./server-data";
 import { GameControl } from "@/game-controlX/game-control";
 
 export const appGameNoBoard: GameControl = {

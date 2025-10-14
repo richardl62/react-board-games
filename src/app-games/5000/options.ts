@@ -1,5 +1,6 @@
+import { StartingOptions } from "@/game-controlX/games/5000/server-data";
 import { SpecifiedValues } from "../../app/option-specification/types";
-
+import { assertType, Equal } from "@/utils/assert-type";
 
 export const setupOptions = {
     scoreToWin: {
@@ -27,3 +28,5 @@ export const setupOptions = {
 } as const;
 
 export type SetupOptions = SpecifiedValues<typeof setupOptions>;
+
+assertType<Equal<StartingOptions, SetupOptions>>();

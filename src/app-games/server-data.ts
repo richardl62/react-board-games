@@ -1,6 +1,6 @@
 import { GameControl } from "@/game-controlX/game-control";
-import { appGameNoBoard as g5000 } from "./5000/app-game-no-board";
-import { appGameNoBoard as acesUp } from "./aces-up/app-game-no-board";
+import { appGameNoBoard as g5000 } from "@/game-controlX/games/5000/game-control";
+import { appGameNoBoard as acesUp } from "@/game-controlX/games/aces-up/game-control";
 import { appGameNoBoard as cribbage } from "./cribbage/app-game-no-board";
 import { appGameNoBoard as crosstiles } from "./crosstiles/app-game-no-board";
 import { gameControl as plusMinus } from "@/game-controlX/games/plus-minus/game-control";

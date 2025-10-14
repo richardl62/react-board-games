@@ -1,5 +1,5 @@
-import { sAssert } from "../../../utils/assert";
-import { GameContext } from "../game-support/game-context";
+import { sAssert } from "../../../../utils/assert";
+import { GameContext } from "../../../../app-games/aces-up/game-support/game-context";
 import { CardID } from "./card-id";
 
 export function canMove(

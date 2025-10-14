@@ -1,4 +1,4 @@
-import { ServerData } from "../server-side/server-data";
+import { ServerData } from "../server-data";
 
 export interface PlayerActions {
     roll?: boolean;

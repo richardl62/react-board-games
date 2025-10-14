@@ -1,6 +1,6 @@
-import { sAssert } from "../../../utils/assert";
-import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
-import { GameOptions, OptionWrapper } from "../game-support/game-options";
+import { sAssert } from "@/utils/assert";
+import { CardNonJoker, Rank, nextRank } from "@/utils/cards/types";
+import { GameOptions, OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
 
 export interface SharedPileData {
     old: CardNonJoker[];

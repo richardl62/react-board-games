@@ -1,8 +1,8 @@
-import { PlayerID } from "@/game-controlX/playerid";
 import { MoveArg0 } from "@/game-controlX/move-fn";
-import { sAssert } from "../../../utils/assert";
-import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { sameJSON } from "../../../utils/same-json";
+import { PlayerID } from "@/game-controlX/playerid";
+import { sAssert } from "@/utils/assert";
+import { reorderFollowingDrag } from "@/utils/reorder-following-drag";
+import { sameJSON } from "@/utils/same-json";
 import { addCard, clearPile, removeCard, stealTopCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";

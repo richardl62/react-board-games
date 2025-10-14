@@ -1,5 +1,5 @@
 import { MoveArg0 } from "@/game-controlX/move-fn";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 
 function turnOver (
     { G, events }: MoveArg0<ServerData>, 
