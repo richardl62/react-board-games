@@ -1,5 +1,5 @@
 import { Ctx } from "@/game-controlX/ctx";
-import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../app-game-support/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "@/game-controlX/wrapped-move-function";
 import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";
 import { GameState } from "./game-state";

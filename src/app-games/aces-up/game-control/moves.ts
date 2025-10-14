@@ -1,4 +1,4 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../app-game-support/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "@/game-controlX/wrapped-move-function";
 import { moveCard } from "./move-card";
 import { undo } from "./undo";
 
