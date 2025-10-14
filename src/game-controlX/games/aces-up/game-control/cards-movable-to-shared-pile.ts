@@ -1,7 +1,7 @@
 import { PlayerID } from "@/game-controlX/playerid";
 import { CardNonJoker } from "@/utils/cards";
 import { moveableToSharedPile } from "./move-type";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { makeSharedPiles } from "./shared-pile";
 import { makeDiscardPiles } from "./make-discard-pile";
 

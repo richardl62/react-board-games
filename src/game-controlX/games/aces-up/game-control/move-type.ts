@@ -7,7 +7,7 @@ import { GameOptions, OptionWrapper } from "../../../../app-games/aces-up/game-s
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { SharedPile, makeSharedPiles } from "./shared-pile";
 
 export function moveableToSharedPile(

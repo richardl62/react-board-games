@@ -10,7 +10,7 @@ import { DiscardPile } from "./discard-pile";
 import { endTurn, refillHand } from "./end-turn";
 import { makeDiscardPiles } from "./make-discard-pile";
 import { moveType as getMoveType } from "./move-type";
-import { ServerData, UndoItem } from "./server-data";
+import { ServerData, UndoItem } from "../server-data";
 import { makeUndoItem } from "./undo";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {

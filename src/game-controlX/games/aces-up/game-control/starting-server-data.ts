@@ -8,7 +8,7 @@ import { SetupOptions } from "../../../../app-games/aces-up/game-support/setup-o
 import { handSize } from "../config";
 import { makeDiscardPileData } from "./discard-pile";
 import { ExtendingDeck } from "./extendable-deck";
-import { PerTurnServerData, PlayerData, ServerData } from "./server-data";
+import { PerTurnServerData, PlayerData, ServerData } from "../server-data";
 import { makeSharedPileData } from "./shared-pile";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,

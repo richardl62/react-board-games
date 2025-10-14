@@ -2,7 +2,7 @@ import { Ctx } from "@/game-controlX/ctx";
 import { PlayerID } from "@/game-controlX/playerid";
 import { handSize } from "../config";
 import { ExtendingDeck } from "./extendable-deck";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { turnStartServerData } from "./starting-server-data";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 import { makeSharedPileData, makeSharedPiles } from "./shared-pile";

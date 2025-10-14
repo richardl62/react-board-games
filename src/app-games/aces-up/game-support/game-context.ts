@@ -1,6 +1,6 @@
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { PlayerData, ServerData } from "../../../game-controlX/games/aces-up/game-control/server-data";
+import { PlayerData, ServerData } from "../../../game-controlX/games/aces-up/server-data";
 import { ClientMoves } from "../../../game-controlX/games/aces-up/game-control/moves";
 import { PlayerID } from "@/game-controlX/playerid";
 import { sAssert } from "../../../utils/assert";

@@ -1,9 +1,9 @@
 import { PlayerID } from "@/game-controlX/playerid";
 import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { CardNonJoker } from "@/utils/cards";
-import { SharedPileData } from "./shared-pile";
-import { GameOptions } from "../../../../app-games/aces-up/game-support/game-options";
-import { DiscardPileData } from "./discard-pile";
+import { SharedPileData } from "./game-control/shared-pile";
+import { GameOptions } from "../../../app-games/aces-up/game-support/game-options";
+import { DiscardPileData } from "./game-control/discard-pile";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.

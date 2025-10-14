@@ -1,5 +1,5 @@
 import { PlayerID } from "@/game-controlX/playerid";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { DiscardPile } from "./discard-pile";
 
 export function makeDiscardPiles(

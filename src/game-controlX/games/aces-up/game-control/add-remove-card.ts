@@ -3,7 +3,7 @@ import { CardNonJoker } from "@/utils/cards";
 import { handSize } from "../config";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { makeSharedPileData, makeSharedPiles, SharedPile } from "./shared-pile";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{

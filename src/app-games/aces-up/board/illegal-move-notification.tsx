@@ -3,7 +3,7 @@ import { compareRank, rankName } from "../../../utils/cards/types";
 import { removeDuplicates } from "../../../utils/remove-duplicated";
 import { cardsMovableToSharedPile } from "../../../game-controlX/games/aces-up/game-control/cards-movable-to-shared-pile";
 import { PlayerInfo } from "./player-info";
-import { ServerData } from "../../../game-controlX/games/aces-up/game-control/server-data";
+import { ServerData } from "../../../game-controlX/games/aces-up/server-data";
 
 export function illegalMoveNotication(G: ServerData, playerInfo: PlayerInfo) : string | null {
 
