@@ -23,7 +23,7 @@ export const setupOptions = {
         label: "Jacks and queens special",
         default: false,
     }
-};
+} as const;
 
 export type SetupOptions = SpecifiedValues<typeof setupOptions>;
 

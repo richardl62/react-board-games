@@ -9,7 +9,7 @@ export const setupOptions = {
         min: 0,
         max: 10,
     },
-};
+} as const;
 
 export type SetupOptions = SpecifiedValues<typeof setupOptions>;
 

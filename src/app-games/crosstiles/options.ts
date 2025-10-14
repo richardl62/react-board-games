@@ -47,7 +47,7 @@ export const setupOptions = {
         default: true,
         label: "Check spelling",
     }
-};
+} as const
 
 export type SetupOptions = SpecifiedValues<typeof setupOptions>;
 

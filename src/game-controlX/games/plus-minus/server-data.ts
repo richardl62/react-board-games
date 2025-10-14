@@ -2,10 +2,10 @@ import { RequiredServerData, startingRequiredState } from "@/game-controlX/requi
 import { SetupArg0 } from "@/game-controlX/game-control";
 
 export interface StartingOptions {
-    startingValue: number;
+    readonly startingValue: number;
 }
 
-export interface ServerData extends RequiredServerData{
+    export interface ServerData extends RequiredServerData{
     count: number;
 }
 
