@@ -3,7 +3,7 @@ import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { AppGame, GameCategory } from "@/app-game-support";
 import { standardOuterMargin } from "../app-game-support/styles";
-import { games as appGames } from "../app-games/app-games";
+import { appGames } from "../app-games/app-games";
 import "./app.css";
 import { GameComponent } from "./game-component";
 import { gamePath } from "./url-params";

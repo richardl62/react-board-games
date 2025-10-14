@@ -11,7 +11,7 @@ import { appGame as swapSquares } from "./swap-squares/app-game";
 import { appGame as ticker } from "./ticker/app-game";
 import { appGame as g5000 } from "./5000/app-game";
 
-export const games : Array<AppGame> = [
+export const appGames : Array<AppGame> = [
     g5000,
     acesUp,
     cribbage,
@@ -29,4 +29,4 @@ function sameGames(g1: GameControl[], g2: GameControl[]) {
     return JSON.stringify(names1.sort()) === JSON.stringify(names2.sort());
 }
 
-sAssert(sameGames(games, gamesNoBoard),"List of games with and without board differ");
+sAssert(sameGames(appGames, gamesNoBoard),"List of games with and without board differ");

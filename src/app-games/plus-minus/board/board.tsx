@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { standardOuterMargin } from "../../../app-game-support/styles";
-import { useGameContext } from "../client-side/game-context";
+import { useGameContext } from "../game-context";
 
 const OuterDiv = styled.div`
     margin: ${standardOuterMargin};
