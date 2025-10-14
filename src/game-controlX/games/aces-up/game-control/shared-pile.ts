@@ -1,6 +1,7 @@
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, Rank, nextRank } from "@/utils/cards/types";
-import { GameOptions, OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
+import { OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
+import { StartingOptions } from "../server-data";
 
 export interface SharedPileData {
     old: CardNonJoker[];
@@ -27,9 +28,9 @@ export class SharedPile {
     private _old: CardNonJoker[];
     private _thisTurnStandard: CardNonJoker[];
     private _recentSpecials: CardNonJoker[];
-    private _options: GameOptions;
+    private _options: StartingOptions;
     
-    constructor(data: SharedPileData, options: GameOptions) {
+    constructor(data: SharedPileData, options: StartingOptions) {
         this._old = data.old;
         this._thisTurnStandard = data.thisTurnStandard;
         this._recentSpecials = data.recentSpecial;
@@ -137,7 +138,7 @@ export class SharedPile {
 // Intended for use with ServerData. But it is not explicitly use
 // to avoid a circular dependency.
 export function makeSharedPiles({sharedPileData, options} :
-    {sharedPileData: SharedPileData[], options: GameOptions}
+    {sharedPileData: SharedPileData[], options: StartingOptions}
 ) : SharedPile [] {
     return sharedPileData.map(
         (data) => new SharedPile(data, options)

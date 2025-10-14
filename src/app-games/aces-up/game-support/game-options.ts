@@ -1,17 +1,21 @@
+import { assertType, Equal } from "@/utils/assert-type";
 import { CardNonJoker, Rank } from "../../../utils/cards/types";
 import { SetupOptions } from "./setup-options";
+import { StartingOptions } from "@/game-controlX/games/aces-up/server-data";
 
 export interface GameOptions extends Omit<SetupOptions, "jacksAndQueensSpecial"> {
     /* The highest rank excluding special cards. When a shared
     pile reaches this rank it is full */
-    topRank: Rank;
+    readonly topRank: Rank;
 
     /* A thief steals the card it is placed on */
-    thiefRank: Rank | null;
+    readonly thiefRank: Rank | null;
 
     /* A killer clears the pile is is placed on */
-    killerRank: Rank | null;
+    readonly killerRank: Rank | null;
 }
+
+assertType<Equal<StartingOptions, GameOptions>>();
 
 export function makeGameOptions(opts: SetupOptions) : GameOptions {
     const specialRanks = opts.jacksAndQueensSpecial ?

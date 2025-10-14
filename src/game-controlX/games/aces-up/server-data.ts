@@ -2,8 +2,9 @@ import { PlayerID } from "@/game-controlX/playerid";
 import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { CardNonJoker } from "@/utils/cards";
 import { SharedPileData } from "./game-control/shared-pile";
-import { GameOptions } from "../../../app-games/aces-up/game-support/game-options";
 import { DiscardPileData } from "./game-control/discard-pile";
+import { Rank } from "@/utils/cards/types";
+
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.
@@ -39,6 +40,16 @@ export interface PerTurnServerData {
     undoItems: UndoItem[];
 }
 
+export interface StartingOptions {
+    readonly mainPileSize: number;
+    readonly nSharedPilesAtStart: number;
+    readonly addToSharedPileEachTurn: boolean;
+    readonly canUseOpponentsWastePiles: boolean;
+    readonly topRank: Rank;
+    readonly thiefRank: Rank | null;
+    readonly killerRank: Rank | null;
+}
+
 export interface ServerData extends PerTurnServerData, RequiredServerData {
     /** The deck that cards are drawn from */
     deck: CardNonJoker[];
@@ -48,7 +59,7 @@ export interface ServerData extends PerTurnServerData, RequiredServerData {
 
     playerData: PlayerDataDictionary;
 
-    options: GameOptions;
+    options: StartingOptions;
 }
 
 

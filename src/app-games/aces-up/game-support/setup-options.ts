@@ -25,5 +25,6 @@ export const setupOptions = {
     }
 } as const;
 
+// Note: GameOptions rather than this type is supplied to the server.
 export type SetupOptions = SpecifiedValues<typeof setupOptions>;
 

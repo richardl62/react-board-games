@@ -3,15 +3,16 @@ import { PlayerID } from "@/game-controlX/playerid";
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, nextRank } from "@/utils/cards/types";
 import { debugOptions } from "../debug-options";
-import { GameOptions, OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
+import { OptionWrapper } from "../../../../app-games/aces-up/game-support/game-options";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
 import { ServerData } from "../server-data";
 import { SharedPile, makeSharedPiles } from "./shared-pile";
+import { StartingOptions } from "../server-data";
 
 export function moveableToSharedPile(
-    options: GameOptions,
+    options: StartingOptions,
     card: CardNonJoker, 
     pile: SharedPile
 ) : boolean {

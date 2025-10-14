@@ -3,16 +3,17 @@ import { RandomAPI } from "@/game-controlX/random-api";
 import { startingRequiredState } from "@/game-controlX/required-server-data";
 import { CardNonJoker, ranks, suits } from "@/utils/cards/types";
 import { debugOptions } from "../debug-options";
-import { GameOptions, OptionWrapper, makeGameOptions } from "../../../../app-games/aces-up/game-support/game-options";
+import { OptionWrapper, makeGameOptions } from "../../../../app-games/aces-up/game-support/game-options";
 import { SetupOptions } from "../../../../app-games/aces-up/game-support/setup-options";
 import { handSize } from "../config";
 import { makeDiscardPileData } from "./discard-pile";
 import { ExtendingDeck } from "./extendable-deck";
 import { PerTurnServerData, PlayerData, ServerData } from "../server-data";
 import { makeSharedPileData } from "./shared-pile";
+import { StartingOptions } from "../server-data";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
-    options: GameOptions) : PlayerData {
+    options: StartingOptions) : PlayerData {
 
     const optionsWrapper = new OptionWrapper(options);
     const notSpecial = (c: CardNonJoker) => !optionsWrapper.isSpecial(c);
@@ -55,7 +56,7 @@ export const turnStartServerData: PerTurnServerData = {
     undoItems:[],
 };
 
-function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) {
+function makeRandomSharedPile(gameOptions: StartingOptions, random: RandomAPI) {
     const options = new OptionWrapper(gameOptions);
     
     const nonSpecialRanks = ranks.filter(rank => 
