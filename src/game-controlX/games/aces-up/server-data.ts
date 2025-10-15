@@ -3,7 +3,7 @@ import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { CardNonJoker } from "@/utils/cards";
 import { SharedPileData } from "./misc/shared-pile";
 import { DiscardPileData } from "./misc/discard-pile";
-import { Rank } from "@/utils/cards/types";
+import { StartingOptions } from "./starting-options";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.
@@ -37,16 +37,6 @@ export interface UndoItem {
 export interface PerTurnServerData {
     moveToSharedPile: MoveToSharedPile;
     undoItems: UndoItem[];
-}
-
-export interface StartingOptions {
-    readonly mainPileSize: number;
-    readonly nSharedPilesAtStart: number;
-    readonly addToSharedPileEachTurn: boolean;
-    readonly canUseOpponentsWastePiles: boolean;
-    readonly topRank: Rank;
-    readonly thiefRank: Rank | null;
-    readonly killerRank: Rank | null;
 }
 
 export interface ServerData extends PerTurnServerData, RequiredServerData {

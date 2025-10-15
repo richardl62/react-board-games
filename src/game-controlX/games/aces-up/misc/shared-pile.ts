@@ -1,7 +1,7 @@
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, Rank, nextRank } from "@/utils/cards/types";
-import { OptionWrapper } from "../option-wrapper";
-import { StartingOptions } from "../server-data";
+import { OptionWrapper } from "../starting-options";
+import { StartingOptions } from "../starting-options";
 
 export interface SharedPileData {
     old: CardNonJoker[];

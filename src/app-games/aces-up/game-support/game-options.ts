@@ -1,7 +1,7 @@
 import { assertType, Equal } from "@/utils/assert-type";
 import { Rank } from "../../../utils/cards/types";
 import { SetupOptions } from "./setup-options";
-import { StartingOptions } from "@/game-controlX/games/aces-up/server-data";
+import { StartingOptions } from "@/game-controlX/games/aces-up/starting-options";
 
 export interface GameOptions extends Omit<SetupOptions, "jacksAndQueensSpecial"> {
     /* The highest rank excluding special cards. When a shared

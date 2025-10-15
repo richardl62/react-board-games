@@ -1,6 +1,6 @@
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker } from "@/utils/cards/types";
-import { StartingOptions } from "../server-data";
+import { StartingOptions } from "../starting-options";
 
 export interface DiscardPileData {
     cards: CardNonJoker[];

@@ -1,5 +1,5 @@
 import { CardNonJoker } from "@/utils/cards";
-import { StartingOptions } from "./server-data";
+import { Rank } from "@/utils/cards/types";
 
 export class OptionWrapper {
     constructor(opts: StartingOptions) {
@@ -23,3 +23,14 @@ export class OptionWrapper {
         return this.isKiller(card) || this.isThief(card) || card.rank === "K";
     }
 }
+
+export interface StartingOptions {
+    readonly mainPileSize: number;
+    readonly nSharedPilesAtStart: number;
+    readonly addToSharedPileEachTurn: boolean;
+    readonly canUseOpponentsWastePiles: boolean;
+    readonly topRank: Rank;
+    readonly thiefRank: Rank | null;
+    readonly killerRank: Rank | null;
+}
+

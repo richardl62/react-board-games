@@ -2,14 +2,14 @@ import { Ctx } from "@/game-controlX/ctx";
 import { PlayerID } from "@/game-controlX/playerid";
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, nextRank } from "@/utils/cards/types";
-import { debugOptions } from "../debug-options";
-import { OptionWrapper } from "../option-wrapper";
+import { debugOptions } from "../config";
+import { OptionWrapper } from "../starting-options";
 import { emptyPile, getCard } from "./add-remove-card";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";
 import { ServerData } from "../server-data";
 import { SharedPile, makeSharedPiles } from "../misc/shared-pile";
-import { StartingOptions } from "../server-data";
+import { StartingOptions } from "../starting-options";
 
 export function moveableToSharedPile(
     options: StartingOptions,

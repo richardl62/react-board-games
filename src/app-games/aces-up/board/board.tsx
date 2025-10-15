@@ -2,7 +2,7 @@ import { JSX } from "react";
 import styled from "styled-components";
 import { rowGap } from "../game-support/styles";
 import { PlayerAreas } from "./player-areas";
-import { debugOptionsInUse } from "../../../game-controlX/games/aces-up/debug-options";
+import { debugOptionsInUse } from "@/game-controlX/games/aces-up/config";
 import { SharedPiles } from "./shared-piles";
 
 const OuterDiv = styled.div`
