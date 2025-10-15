@@ -3,7 +3,7 @@ import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { CardNonJoker } from "@/utils/cards";
 import { SharedPileData } from "./misc/shared-pile";
 import { DiscardPileData } from "./misc/discard-pile";
-import { StartingOptions } from "./starting-options";
+import { GameOptions } from "./options";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.
@@ -48,7 +48,7 @@ export interface ServerData extends PerTurnServerData, RequiredServerData {
 
     playerData: PlayerDataDictionary;
 
-    options: StartingOptions;
+    options: GameOptions;
 }
 
 

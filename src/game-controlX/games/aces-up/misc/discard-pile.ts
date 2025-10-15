@@ -1,6 +1,6 @@
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker } from "@/utils/cards/types";
-import { StartingOptions } from "../starting-options";
+import { GameOptions } from "../options";
 
 export interface DiscardPileData {
     cards: CardNonJoker[];
@@ -16,10 +16,10 @@ export function makeDiscardPileData(cards: CardNonJoker [] = []) : DiscardPileDa
 
 export class DiscardPile {
     private _cards: CardNonJoker[];
-    private _options: StartingOptions;
+    private _options: GameOptions;
     private _recentSpecials: CardNonJoker[] = [];
     
-    constructor(data: DiscardPileData, options: StartingOptions) {
+    constructor(data: DiscardPileData, options: GameOptions) {
         this._cards = data.cards;
         this._options = options;
         this._recentSpecials = data.recentSpecials;

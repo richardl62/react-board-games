@@ -1,4 +1,6 @@
-import { SpecifiedValues } from "../../../app/option-specification/types";
+import { assertType, Equal } from "@/utils/assert-type";
+import { SpecifiedValues } from "@/app/option-specification/types";
+import { SetupOptions } from "@/game-controlX/games/aces-up/options";
 
 export const setupOptions = {
     mainPileSize: {
@@ -25,6 +27,8 @@ export const setupOptions = {
     }
 } as const;
 
-// Note: GameOptions rather than this type is supplied to the server.
-export type SetupOptions = SpecifiedValues<typeof setupOptions>;
+assertType<Equal<
+    SetupOptions, 
+    SpecifiedValues<typeof setupOptions>
+>>();
 
