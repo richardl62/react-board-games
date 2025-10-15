@@ -8,7 +8,7 @@ export const startingOrders = [
     "random",
 ] as const;
 
-export interface StartingOptions {
+export interface SetupOptions {
     readonly numRows: number,
     readonly numColumns: number,
     readonly startingOrder: typeof startingOrders[number],
@@ -16,7 +16,7 @@ export interface StartingOptions {
 
 export interface ServerData extends RequiredServerData {
     squares: number[];
-    options: StartingOptions;
+    options: SetupOptions;
 }
 
 export function setSquares(
@@ -45,7 +45,7 @@ export function setSquares(
     G.squares = makeSquares();
 }
 
-export function startingServerData({random}: SetupArg0, options: StartingOptions): ServerData {
+export function startingServerData({random}: SetupArg0, options: SetupOptions): ServerData {
     const G : ServerData = {
         squares: [],
         options,

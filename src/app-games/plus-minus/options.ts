@@ -1,4 +1,4 @@
-import { StartingOptions } from "@/game-controlX/games/plus-minus/server-data";
+import { SetupOptions } from "@/game-controlX/games/plus-minus/server-data";
 import { assertType, Equal } from "@/utils/assert-type";
 import { SpecifiedValues } from "../../app/option-specification/types";
 
@@ -11,6 +11,7 @@ export const setupOptions = {
     },
 } as const;
 
-export type SetupOptions = SpecifiedValues<typeof setupOptions>;
-
-assertType<Equal<StartingOptions, SetupOptions>>();
+assertType<Equal<
+    SetupOptions, 
+    SpecifiedValues<typeof setupOptions>
+>>();
