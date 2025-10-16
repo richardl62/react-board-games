@@ -1,7 +1,7 @@
 import { Trie } from "../../../utils/word-finder/trie";
 import { BoardAndRack, Rack } from "../client-side/board-and-rack";
-import { SquareType } from "../config";
-import { BoardData } from "../server-side/game-state";
+import { SquareType } from "../../../game-controlX/games/scrabble/config";
+import { BoardData } from "../../../game-controlX/games/scrabble/moves/game-state";
 import { getHighScoringWords } from "./get-high-scoring-words";
 
 //const D = SquareType.doubleWord;

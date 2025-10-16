@@ -1,6 +1,6 @@
 import { BoardAndRack } from "../client-side/board-and-rack";
-import { Letter } from "../config";
-import { BoardSquareData } from "../server-side/game-state";
+import { Letter } from "../../../game-controlX/games/scrabble/config";
+import { BoardSquareData } from "../../../game-controlX/games/scrabble/moves/game-state";
 import { applyPossibleWord } from "./apply-possible-word";
 
 type Board = (Letter| null)[][];

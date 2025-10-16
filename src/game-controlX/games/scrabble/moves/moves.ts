@@ -1,10 +1,10 @@
 import { Ctx } from "@/game-controlX/ctx";
 import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "@/game-controlX/wrapped-move-function";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@/utils/assert";
 import { checkForWinner } from "./check-for-winner";
 import { GameState } from "./game-state";
 import { playWord } from "./play-word";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { swapTiles } from "./swap-tiles";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 

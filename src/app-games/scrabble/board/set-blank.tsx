@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
 import styled from "styled-components";
-import { Letter, letters } from "../config";
+import { Letter, letters } from "../../../game-controlX/games/scrabble/config";
 import { useTurnControlData } from "./use-turn-control-data";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 

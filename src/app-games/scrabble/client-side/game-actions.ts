@@ -1,11 +1,11 @@
 import { sAssert } from "../../../utils/assert";
-import { blank } from "../config";
+import { blank } from "../../../game-controlX/games/scrabble/config";
 
 import { Rack } from "./board-and-rack";
-import { ExtendedLetter } from "./extended-letter";
+import { ExtendedLetter } from "../../../game-controlX/games/scrabble/config/extended-letter";
 import { RowCol } from "./get-words-and-score";
-import { BoardData } from "../server-side/game-state";
-import { ServerData } from "../server-side/server-data";
+import { BoardData } from "../../../game-controlX/games/scrabble/moves/game-state";
+import { ServerData } from "../../../game-controlX/games/scrabble/server-data";
 
 export interface SquareID {
     row: number;

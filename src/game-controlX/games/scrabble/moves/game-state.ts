@@ -1,8 +1,8 @@
-import { sAssert } from "../../../utils/assert";
-import { nestedArrayMap } from "../../../utils/nested-array-map";
+import { sAssert } from "@/utils/assert";
+import { nestedArrayMap } from "@/utils/nested-array-map";
 import { ScrabbleConfig } from "../config";
 import { Letter } from "../config";
-import { ExtendedLetter } from "../client-side/extended-letter";
+import { ExtendedLetter } from "@/game-controlX/games/scrabble/config/extended-letter";
 import { MoveHistoryElement } from "./move-hstory";
 import { SetupArg0 } from "@/game-controlX/game-control";
 

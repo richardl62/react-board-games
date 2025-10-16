@@ -2,7 +2,7 @@ import { JSX, useState } from "react";
 import styled from "styled-components";
 import { sAssert } from "../../../utils/assert";
 import { Rack } from "./rack";
-import { BoardData } from "../server-side/game-state";
+import { BoardData } from "../../../game-controlX/games/scrabble/moves/game-state";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const StyledRackAndControls = styled.div`

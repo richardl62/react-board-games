@@ -1,5 +1,5 @@
 import { PieceHolderBackground } from "../../../utils/board/piece-holder";
-import { SquareType } from "../config";
+import { SquareType } from "../../../game-controlX/games/scrabble/config";
 
 export const squareSize = "30px";
 

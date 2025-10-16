@@ -1,3 +1,5 @@
+import { SetupOptions } from "@/game-controlX/games/scrabble/server-data";
+import { assertType, Equal } from "@/utils/assert-type";
 import { SpecifiedValues } from "../../app/option-specification/types";
 
 export const setupOptions = {
@@ -7,4 +9,7 @@ export const setupOptions = {
     },
 } as const;
 
-export type SetupOptions = SpecifiedValues<typeof setupOptions>;
+assertType<Equal<
+    SetupOptions, 
+    SpecifiedValues<typeof setupOptions>
+>>();

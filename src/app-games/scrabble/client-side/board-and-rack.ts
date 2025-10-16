@@ -1,9 +1,9 @@
 import { sAssert } from "../../../utils/assert";
-import { ExtendedLetter, makeExtendedLetter } from "./extended-letter";
-import { blank, Letter } from "../config";
+import { ExtendedLetter, makeExtendedLetter } from "../../../game-controlX/games/scrabble/config/extended-letter";
+import { blank, Letter } from "../../../game-controlX/games/scrabble/config";
 import { shuffle } from "../../../utils/shuffle";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
-import { BoardData, BoardSquareData } from "../server-side/game-state";
+import { BoardData, BoardSquareData } from "../../../game-controlX/games/scrabble/moves/game-state";
 import { WordPosition } from "../../../utils/word-finder/get-legal-words/word-position";
 
 export type Rack = (Letter | null)[];

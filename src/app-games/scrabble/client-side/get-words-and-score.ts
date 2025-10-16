@@ -1,9 +1,9 @@
 import { sAssert } from "../../../utils/assert";
-import { BoardData, BoardSquareData } from "../server-side/game-state";
+import { BoardData, BoardSquareData } from "../../../game-controlX/games/scrabble/moves/game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { ScrabbleContext } from "./scrabble-context";
-import { ScoringConfig } from "../config";
+import { ScoringConfig } from "../../../game-controlX/games/scrabble/config";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {

@@ -1,7 +1,7 @@
 import { sAssert } from "../../../utils/assert";
-import { tileScore } from "./extended-letter";
-import { BoardData } from "../server-side/game-state";
-import { ScoringConfig, multipliers } from "../config";
+import { tileScore } from "../../../game-controlX/games/scrabble/config/extended-letter";
+import { BoardData } from "../../../game-controlX/games/scrabble/moves/game-state";
+import { ScoringConfig, multipliers } from "../../../game-controlX/games/scrabble/config";
 
 interface RowCol {
     row: number;
