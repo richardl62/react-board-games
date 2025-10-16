@@ -1,4 +1,4 @@
-import { GameControl } from "@/game-controlX/game-control";
+import { GameControl } from "@game-control/game-control";
 import { moves } from "./moves/moves";
 import { startingServerData } from "./misc/starting-server-data";
 

@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
 import { ClickMoveMarker } from "../../../utils/board/click-move-marker";
 import { ClickMoveStart } from "../client-side/actions/types";
-import { Letter, bonusLetters } from "../../../game-controlX/games/crosstiles/config";
+import { Letter, bonusLetters } from "@game-control/games/crosstiles/config";
 import { squareSize, squareBackgroundColor, tileTextColor, tileBackgroundColor } from "./style";
 import { dndRefKludge } from "../../../utils/dnd-ref-kludge";
 

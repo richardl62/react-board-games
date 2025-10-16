@@ -1,7 +1,7 @@
 import { sAssert } from "../../../../utils/assert";
-import { Letter } from "../../../../game-controlX/games/crosstiles/config";
-import { FixedScoreCategory, fixedScores, ScoreCategory } from "@/game-controlX/games/crosstiles/score-categories";
-import { ScoreCard } from "../../../../game-controlX/games/crosstiles/moves/score-card";
+import { Letter } from "@game-control/games/crosstiles/config";
+import { FixedScoreCategory, fixedScores, ScoreCategory } from "@game-control/games/crosstiles/score-categories";
+import { ScoreCard } from "@game-control/games/crosstiles/moves/score-card";
 import { checkConnectivity } from "./check-connectivity";
 import { countBonusLetters } from "./count-bonus-letters";
 import { findIllegalWords } from "./find-illegal-words";

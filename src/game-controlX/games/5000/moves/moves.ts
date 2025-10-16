@@ -1,4 +1,4 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "@/game-controlX/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "@game-control/wrapped-move-function";
 import { roll } from "./roll";
 import { setHeld } from "./set-held";
 import { endTurnBust, endTurnNotBust } from "./end-turn";

@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { boxFull } from "../client-side/context-tools";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameRequest, GameStage } from "../../../game-controlX/games/cribbage/server-data";
+import { GameRequest, GameStage } from "@game-control/games/cribbage/server-data";
 import { OuterDiv } from "./message-and-button";
 
 export function MakingBox() : JSX.Element | null {

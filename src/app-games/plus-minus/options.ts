@@ -1,4 +1,4 @@
-import { SetupOptions } from "@/game-controlX/games/plus-minus/server-data";
+import { SetupOptions } from "@game-control/games/plus-minus/server-data";
 import { assertType, Equal } from "@/utils/assert-type";
 import { SpecifiedValues } from "../../app/option-specification/types";
 

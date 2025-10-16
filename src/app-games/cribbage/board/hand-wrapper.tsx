@@ -3,7 +3,7 @@ import { Card } from "../../../utils/cards";
 import { cardSize } from "../../../utils/cards/styles";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import * as dndControl from "../client-side/dnd-control";
-import { CardSetID, makeCardSetID } from "../../../game-controlX/games/cribbage/server-data";
+import { CardSetID, makeCardSetID } from "@game-control/games/cribbage/server-data";
 import { Hand } from "../../../utils/cards/hand";
 
 interface HandWrapperProps {

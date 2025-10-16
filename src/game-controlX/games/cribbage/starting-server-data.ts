@@ -1,7 +1,7 @@
 import { cardsPerHand } from "./config";
-import { SetupArg0 } from "@/game-controlX/game-control";
-import { RandomAPI } from "@/game-controlX/random-api";
-import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
+import { SetupArg0 } from "@game-control/game-control";
+import { RandomAPI } from "@game-control/random-api";
+import { RequiredServerData, startingRequiredState } from "@game-control/required-server-data";
 import { Card } from "@/utils/cards";
 import { deckNoJokers } from "@/utils/cards/deck";
 import { GameStage, PegPositions, PlayerData, ServerData } from "./server-data";

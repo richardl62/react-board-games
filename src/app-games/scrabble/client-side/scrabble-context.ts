@@ -2,17 +2,17 @@ import { Dispatch } from "react";
 import { sAssert } from "../../../utils/assert";
 import { ReducerState } from "./reducer-state";
 import { ActionType } from "./scrabble-reducer";
-import { ScrabbleConfig } from "../../../game-controlX/games/scrabble/config";
-import { ClientMoves } from "../../../game-controlX/games/scrabble/moves/moves";
-import { isServerData, ServerData } from "../../../game-controlX/games/scrabble/moves";
+import { ScrabbleConfig } from "@game-control/games/scrabble/config";
+import { ClientMoves } from "@game-control/games/scrabble/moves/moves";
+import { isServerData, ServerData } from "@game-control/games/scrabble/moves";
 import { ScrabbleGameProps } from "./srcabble-game-props";
-import { GameState } from "../../../game-controlX/games/scrabble/moves/game-state";
+import { GameState } from "@game-control/games/scrabble/moves/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
-import { RequiredServerData } from "@/game-controlX/required-server-data";
+import { RequiredServerData } from "@game-control/required-server-data";
 import { Trie } from "../../../utils/word-finder/trie";
 
 import React from "react";
-import { SetupOptions } from "@/game-controlX/games/scrabble/server-data";
+import { SetupOptions } from "@game-control/games/scrabble/server-data";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data

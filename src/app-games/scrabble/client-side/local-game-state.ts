@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
 import { Rack } from "./board-and-rack";
-import { BoardData, GameState } from "../../../game-controlX/games/scrabble/moves/game-state";
+import { BoardData, GameState } from "@game-control/games/scrabble/moves/game-state";
 
 export interface LocalGameState {
     board: BoardData;

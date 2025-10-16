@@ -1,7 +1,7 @@
 import { OptionSpecifications } from "@/app/option-specification/types";
 import { JSX } from "react";
 import { WrappedGameProps } from "./wrapped-game-props";
-import { GameControl } from "@/game-controlX/game-control";
+import { GameControl } from "@game-control/game-control";
 
 // The string values are uses as section headers when displaying the list of
 // games.

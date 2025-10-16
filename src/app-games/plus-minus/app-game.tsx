@@ -1,7 +1,7 @@
 import React from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { standardBoard } from "../../app-game-support/standard-board";
-import { gameControl } from "@/game-controlX/games/plus-minus/game-control";
+import { gameControl } from "@game-control/games/plus-minus/game-control";
 import { setupOptions } from "./options";
 
 const LazyBoard = React.lazy(() => import("./board/board"));

@@ -2,7 +2,7 @@ import { JSX } from "react";
 import styled from "styled-components";
 import { CutCard } from "./cut-card";
 import { WrappedScoreBoard } from "./wrapped-score-board";
-import { CardSetID } from "../../../game-controlX/games/cribbage/server-data";
+import { CardSetID } from "@game-control/games/cribbage/server-data";
 import { MessageAndButton } from "./message-and-button";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import { HandWrapper } from "./hand-wrapper";

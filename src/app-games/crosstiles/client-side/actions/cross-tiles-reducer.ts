@@ -1,8 +1,8 @@
 import { sAssert } from "../../../../utils/assert";
-import { Letter } from "../../../../game-controlX/games/crosstiles/config";
-import { ServerData } from "../../../../game-controlX/games/crosstiles/server-data";
+import { Letter } from "@game-control/games/crosstiles/config";
+import { ServerData } from "@game-control/games/crosstiles/server-data";
 import { GridAndRack } from "./grid-and-rack";
-import { makeEmptyGrid } from "../../../../game-controlX/games/crosstiles/moves/make-empty-grid";
+import { makeEmptyGrid } from "@game-control/games/crosstiles/moves/make-empty-grid";
 import { reflectServerData } from "./reflect-server-data";
 import { tileClicked } from "./tile-clicked";
 import { ClickMoveStart, SquareID } from "./types";

@@ -1,5 +1,5 @@
 import { useGameContext } from "../client-side/game-context";
-import { getScores } from "../../../game-controlX/games/5000/utils/get-scores";
+import { getScores } from "@game-control/games/5000/utils/get-scores";
 import { sAssert } from "../../../utils/assert";
 
 export function HoldScoringDiceButton() {

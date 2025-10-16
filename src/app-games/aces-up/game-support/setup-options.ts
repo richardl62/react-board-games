@@ -1,6 +1,6 @@
 import { assertType, Equal } from "@/utils/assert-type";
 import { SpecifiedValues } from "@/app/option-specification/types";
-import { SetupOptions } from "@/game-controlX/games/aces-up/options";
+import { SetupOptions } from "@game-control/games/aces-up/options";
 
 export const setupOptions = {
     mainPileSize: {

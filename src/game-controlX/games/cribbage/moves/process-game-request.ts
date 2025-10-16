@@ -1,4 +1,4 @@
-import { Ctx } from "@/game-controlX/ctx";
+import { Ctx } from "@game-control/ctx";
 import { GameRequest, PlayerID, ServerData } from "../server-data";
 
 /** Process a game request (e,g, from a new deal).

@@ -1,6 +1,6 @@
 import { sAssert } from "../../../utils/assert";
-import { blank, Letter } from "../../../game-controlX/games/scrabble/config";
-import { makeLetter } from "../../../game-controlX/games/scrabble/config/letters";
+import { blank, Letter } from "@game-control/games/scrabble/config";
+import { makeLetter } from "@game-control/games/scrabble/config/letters";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";
 import { applyPossibleWord } from "../high-scoring-words";

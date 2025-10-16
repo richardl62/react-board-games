@@ -1,4 +1,4 @@
-import { bonusLetters, Letter } from "../../../../game-controlX/games/crosstiles/config";
+import { bonusLetters, Letter } from "@game-control/games/crosstiles/config";
 
 export function countBonusLetters(    
     grid: (Letter | null)[][]

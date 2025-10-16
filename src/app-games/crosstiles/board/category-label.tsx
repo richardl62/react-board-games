@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { categoryDescription, displayName, FixedScoreCategory, 
-    fixedScores, ScoreCategoryOrTotal } from "@/game-controlX/games/crosstiles/score-categories";
+    fixedScores, ScoreCategoryOrTotal } from "@game-control/games/crosstiles/score-categories";
 import { scoreCardBackgroundColor } from "./style";
 
 const CategoryLabelDiv = styled.div`

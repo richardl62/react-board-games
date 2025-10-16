@@ -1,8 +1,8 @@
-import { PlayerID } from "@/game-controlX/playerid";
+import { PlayerID } from "@game-control/playerid";
 import { sAssert } from "@/utils/assert";
 import { copyJSON } from "@/utils/copy-json";
 import { ServerData, UndoItem } from "../server-data";
-import { MoveArg0 } from "@/game-controlX/move-fn";
+import { MoveArg0 } from "@game-control/move-fn";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {

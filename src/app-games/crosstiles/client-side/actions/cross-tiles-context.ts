@@ -1,11 +1,11 @@
 import { Dispatch } from "react";
 import { sAssert } from "../../../../utils/assert";
 import { ActionType, ReducerState } from "./cross-tiles-reducer";
-import { ClientMoves } from "../../../../game-controlX/games/crosstiles/moves/moves";
-import { ServerData } from "../../../../game-controlX/games/crosstiles/server-data";
+import { ClientMoves } from "@game-control/games/crosstiles/moves/moves";
+import { ServerData } from "@game-control/games/crosstiles/server-data";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
 import { WrappedGameProps } from "../../../../app-game-support/wrapped-game-props";
-import { RequiredServerData } from "@/game-controlX/required-server-data";
+import { RequiredServerData } from "@game-control/required-server-data";
 import React from "react";
 
 

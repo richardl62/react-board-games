@@ -1,13 +1,13 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { CardID } from "../../../game-controlX/games/aces-up/moves/card-id";
+import { CardID } from "@game-control/games/aces-up/moves/card-id";
 import { useGameContext } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
 import { CardStack } from "./card-stack";
 import { PlayerInfo } from "./player-info";
-import { makeDiscardPiles } from "../../../game-controlX/games/aces-up/moves/make-discard-pile";
-import { DiscardPile as DiscardPileClass } from "../../../game-controlX/games/aces-up/misc/discard-pile";
+import { makeDiscardPiles } from "@game-control/games/aces-up/moves/make-discard-pile";
+import { DiscardPile as DiscardPileClass } from "@game-control/games/aces-up/misc/discard-pile";
 
 const PilesDiv = styled.div`
     display: flex;

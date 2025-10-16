@@ -1,9 +1,9 @@
 import { JSX } from "react";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
-import { bonusScore, Letter } from "../../../game-controlX/games/crosstiles/config";
-import { displayName, ScoreCategory } from "@/game-controlX/games/crosstiles/score-categories";
-import { ScoreCard } from "../../../game-controlX/games/crosstiles/moves/score-card";
+import { bonusScore, Letter } from "@game-control/games/crosstiles/config";
+import { displayName, ScoreCategory } from "@game-control/games/crosstiles/score-categories";
+import { ScoreCard } from "@game-control/games/crosstiles/moves/score-card";
 import { countBonusLetters } from "../client-side/check-grid/count-bonus-letters";
 import { sAssert } from "../../../utils/assert";
 

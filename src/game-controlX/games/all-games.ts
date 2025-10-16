@@ -1,4 +1,4 @@
-import { GameControl } from "@/game-controlX/game-control";
+import { GameControl } from "@game-control/game-control";
 import { appGameNoBoard as g5000 } from "./5000/game-control";
 import { appGameNoBoard as acesUp } from "./aces-up/game-control";
 import { appGameNoBoard as cribbage } from "./cribbage/game-control";

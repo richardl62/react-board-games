@@ -1,5 +1,5 @@
-import { Ctx } from "@/game-controlX/ctx";
-import { PlayerID } from "@/game-controlX/playerid";
+import { Ctx } from "@game-control/ctx";
+import { PlayerID } from "@game-control/playerid";
 import { sAssert } from "@/utils/assert";
 import { CardNonJoker, nextRank } from "@/utils/cards/types";
 import { debugOptions } from "../config";

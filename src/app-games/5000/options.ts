@@ -1,4 +1,4 @@
-import { SetupOptions } from "@/game-controlX/games/5000/server-data";
+import { SetupOptions } from "@game-control/games/5000/server-data";
 import { SpecifiedValues } from "../../app/option-specification/types";
 import { assertType, Equal } from "@/utils/assert-type";
 

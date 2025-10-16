@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MoveHistoryElement, WordsPlayedInfo } from "../../../game-controlX/games/scrabble/moves/move-hstory";
+import { MoveHistoryElement, WordsPlayedInfo } from "@game-control/games/scrabble/moves/move-hstory";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { JSX } from "react";
 

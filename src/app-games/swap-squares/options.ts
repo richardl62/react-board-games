@@ -1,6 +1,6 @@
 import { assertType, Equal } from "@/utils/assert-type";
 import { SpecifiedValues } from "../../app/option-specification/types";
-import { SetupOptions, startingOrders } from "@/game-controlX/games/swap-squares/server-data";
+import { SetupOptions, startingOrders } from "@game-control/games/swap-squares/server-data";
 
 export const setupOptions = {
     numRows: {

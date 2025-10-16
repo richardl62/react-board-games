@@ -2,7 +2,7 @@ import React from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { standardBoard } from "../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
-import { appGamesNoBoardSimple, appGamesNoBoardStandard} from "../../game-controlX/games/scrabble/game-control";
+import { appGamesNoBoardSimple, appGamesNoBoardStandard} from "@game-control/games/scrabble/game-control";
 import { setupOptions } from "./options";
 
 const LazyBoard = React.lazy(() => import("./board/board-wrapper"));

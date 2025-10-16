@@ -1,6 +1,6 @@
 import { sAssert } from "../../../../utils/assert";
 import { shuffle } from "../../../../utils/shuffle";
-import { Letter } from "../../../../game-controlX/games/crosstiles/config";
+import { Letter } from "@game-control/games/crosstiles/config";
 import { ClickMoveStart, sameSquareID, SquareID } from "./types";
 
 type Grid = (Letter|null)[][];

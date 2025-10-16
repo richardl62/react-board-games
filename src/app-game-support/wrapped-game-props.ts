@@ -2,10 +2,10 @@
 // isConnected as an optional member. The code below is my way of add it.
 
 import { sAssert } from "../utils/assert";
-import { BoardProps } from "@/game-controlX/board-props";
+import { BoardProps } from "@game-control/board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 import * as UrlParams from "../app/url-params";
-import { RequiredServerData } from "@/game-controlX/required-server-data";
+import { RequiredServerData } from "@game-control/required-server-data";
 /**
  * Bgio type definition of 'moves'.
  *

@@ -1,4 +1,4 @@
-import { Letter } from "../../../../game-controlX/games/crosstiles/config";
+import { Letter } from "@game-control/games/crosstiles/config";
 import { transpose } from "../../../../utils/transpose";
 
 function addWordsfromRow(row: (Letter | null)[], words: string[]) {

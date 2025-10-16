@@ -1,8 +1,8 @@
 import { nonJoinedPlayerName } from "@/app-game-support";
 import { useStandardBoardContext } from "@/app-game-support/standard-board";
 import { WrappedGameProps } from "@/app-game-support/wrapped-game-props";
-import { ClientMoves } from "@/game-controlX/games/cribbage/moves/moves";
-import { CardSetID, PlayerID, ServerData } from "@/game-controlX/games/cribbage/server-data";
+import { ClientMoves } from "@game-control/games/cribbage/moves/moves";
+import { CardSetID, PlayerID, ServerData } from "@game-control/games/cribbage/server-data";
 import { sAssert } from "@/utils/assert";
 
 export interface CribbageContext extends ServerData {

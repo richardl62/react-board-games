@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { PlayerID } from "../../../game-controlX/games/cribbage/server-data";
+import { PlayerID } from "@game-control/games/cribbage/server-data";
 import { PlayerProps, ScoreBoard } from "./score-board/score-board";
 import { colors } from "./score-board/style";
 

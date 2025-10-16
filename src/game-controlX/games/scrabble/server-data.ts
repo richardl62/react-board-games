@@ -1,7 +1,7 @@
-import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
+import { RequiredServerData, startingRequiredState } from "@game-control/required-server-data";
 import { ScrabbleConfig } from "./config";
 import { GameState, isGameState, startingGameState } from "./moves/game-state";
-import { SetupArg0 } from "@/game-controlX/game-control";
+import { SetupArg0 } from "@game-control/game-control";
 
 export interface SetupOptions {
     readonly enableHighScoringWords: boolean;

@@ -1,4 +1,4 @@
-import { MoveArg0 } from "@/game-controlX/move-fn";
+import { MoveArg0 } from "@game-control/move-fn";
 import { sAssert } from "@/utils/assert";
 import { GameRequest, GameStage, PlayerID, ServerData } from "../server-data";
 import { processGameRequest } from "./process-game-request";

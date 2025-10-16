@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameRequest, GameStage } from "../../../game-controlX/games/cribbage/server-data";
+import { GameRequest, GameStage } from "@game-control/games/cribbage/server-data";
 import { OuterDiv } from "./message-and-button";
 
 function CardsLeft() {
