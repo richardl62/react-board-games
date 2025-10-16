@@ -8,7 +8,7 @@ import { appGamesNoBoard as scrabble } from "./scrabble/game-control";
 import { appGameNoBoard as swapSquares } from "./swap-squares/game-control";
 import { appGameNoBoard as ticker } from "./ticker/game-control";
 
-export const gamesNoBoard : Array<GameControl> = [
+export const allGames : Array<GameControl> = [
     acesUp,
     cribbage,
     crosstiles,

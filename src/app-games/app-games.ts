@@ -1,5 +1,5 @@
 import { GameControl } from "@game-control/game-control";
-import { gamesNoBoard } from "@game-control/games/all-games";
+import { allGames } from "@game-control/games/all-games";
 import { AppGame } from "../app-game-support";
 import { sAssert } from "../utils/assert";
 import { appGame as g5000 } from "./5000/app-game";
@@ -29,4 +29,4 @@ function sameGames(g1: GameControl[], g2: GameControl[]) {
     return JSON.stringify(names1.sort()) === JSON.stringify(names2.sort());
 }
 
-sAssert(sameGames(appGames, gamesNoBoard),"List of games with and without board differ");
+sAssert(sameGames(appGames, allGames),"List of games with and without board differ");
