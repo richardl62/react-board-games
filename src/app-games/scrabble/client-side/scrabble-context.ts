@@ -10,8 +10,9 @@ import { GameState } from "../../../game-controlX/games/scrabble/moves/game-stat
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { RequiredServerData } from "@/game-controlX/required-server-data";
 import { Trie } from "../../../utils/word-finder/trie";
-import { SetupOptions } from "../options";
+
 import React from "react";
+import { SetupOptions } from "@/game-controlX/games/scrabble/server-data";
 
 export interface ScrabbleContext extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<RequiredServerData, ClientMoves>; // Omit game-specific server data
