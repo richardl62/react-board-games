@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { Letter } from "../config";
+import { Letter } from "../../../game-controlX/games/crosstiles/config";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { Square } from "./square";
 import { sAssert } from "../../../utils/assert";

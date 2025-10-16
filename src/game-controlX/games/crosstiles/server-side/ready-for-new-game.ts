@@ -1,4 +1,4 @@
-import { GameStage, ServerData, startingServerData } from "./server-data";
+import { GameStage, ServerData, startingServerData } from "../server-data";
 import { startRound } from "./start-round";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 

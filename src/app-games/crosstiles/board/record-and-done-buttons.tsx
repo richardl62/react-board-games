@@ -3,7 +3,7 @@ import { sAssert } from "../../../utils/assert";
 import { sameNestedArray } from "../../../utils/same-nested-array";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
-import { bonusScore } from "../config";
+import { bonusScore } from "../../../game-controlX/games/crosstiles/config";
 
 export type RecordRequest = "blockedWithIllegalWords" | "cancelled" | "done";
 

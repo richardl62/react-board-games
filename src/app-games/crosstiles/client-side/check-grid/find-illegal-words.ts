@@ -1,4 +1,4 @@
-import { Letter } from "../../config";
+import { Letter } from "../../../../game-controlX/games/crosstiles/config";
 import { getWords } from "./get-words";
 
 export function findIllegalWords(

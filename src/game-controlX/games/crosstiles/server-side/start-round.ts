@@ -1,7 +1,7 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "../../../../utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
-import { GameStage, ServerData, startingPlayerData } from "./server-data";
+import { GameStage, ServerData, startingPlayerData } from "../server-data";
 import { RandomAPI } from "@/game-controlX/random-api";
 
 export function startRound(

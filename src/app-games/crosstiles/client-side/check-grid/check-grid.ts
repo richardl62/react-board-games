@@ -1,7 +1,7 @@
 import { sAssert } from "../../../../utils/assert";
-import { Letter } from "../../config";
+import { Letter } from "../../../../game-controlX/games/crosstiles/config";
 import { FixedScoreCategory, fixedScores, ScoreCategory } from "../../score-categories";
-import { ScoreCard } from "../../server-side/score-card";
+import { ScoreCard } from "../../../../game-controlX/games/crosstiles/server-side/score-card";
 import { checkConnectivity } from "./check-connectivity";
 import { countBonusLetters } from "./count-bonus-letters";
 import { findIllegalWords } from "./find-illegal-words";

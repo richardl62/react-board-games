@@ -5,7 +5,7 @@ import { getScrabbleWords } from "../../../utils/get-scrabble-words";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { crossTilesReducer, initialReducerState } from "../client-side/actions/cross-tiles-reducer";
-import { GameStage } from "../server-side/server-data";
+import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 
 
 export interface ContextProviderPlusProps {

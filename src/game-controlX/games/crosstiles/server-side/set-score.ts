@@ -1,5 +1,5 @@
-import { ScoreCategory } from "../score-categories";
-import { ServerData, GameStage } from "./server-data";
+import { ScoreCategory } from "../../../../app-games/crosstiles/score-categories";
+import { ServerData, GameStage } from "../server-data";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 
 export interface ScoreWithCategory {

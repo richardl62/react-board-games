@@ -2,7 +2,7 @@ import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { ClickMoveStart, SquareID } from "../client-side/actions/types";
-import { Letter } from "../config";
+import { Letter } from "../../../game-controlX/games/crosstiles/config";
 import { SquareHelper } from "./square-helper";
 
 const DnDType = "tile";

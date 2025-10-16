@@ -1,7 +1,7 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "../../../../utils/assert";
 import { Letter } from "../config";
 import { makeEmptyGrid } from "./make-empty-grid";
-import { ServerData, GameStage } from "./server-data";
+import { ServerData, GameStage } from "../server-data";
 import { ScoreWithCategory } from "./set-score";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 import { PlayerID } from "@/game-controlX/playerid";

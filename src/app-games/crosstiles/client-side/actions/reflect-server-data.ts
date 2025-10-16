@@ -1,6 +1,6 @@
-import { ServerData } from "../../server-side/server-data";
+import { ServerData } from "../../../../game-controlX/games/crosstiles/server-data";
 import { ReducerState } from "./cross-tiles-reducer";
-import { makeEmptyGrid } from "../../server-side/make-empty-grid";
+import { makeEmptyGrid } from "../../../../game-controlX/games/crosstiles/server-side/make-empty-grid";
 
 export function reflectServerData(state: ReducerState, newServerData: ServerData): ReducerState {
 

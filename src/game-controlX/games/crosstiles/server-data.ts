@@ -1,10 +1,10 @@
 import { SetupArg0 } from "@/game-controlX/game-control";
 import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
-import { Letter } from "../config";
-import { SetupOptions } from "../options";
-import { ScoreCategory } from "../score-categories";
-import { ScoreCard, startingScoreCard } from "./score-card";
-import { ScoreWithCategory } from "./set-score";
+import { Letter } from "./config";
+import { SetupOptions } from "../../../app-games/crosstiles/options";
+import { ScoreCategory } from "./score-categories";
+import { ScoreCard, startingScoreCard } from "./server-side/score-card";
+import { ScoreWithCategory } from "./server-side/set-score";
 
 /* Use string values to add with debugging */
 export enum GameStage {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { ScoreOptions } from "../client-side/check-grid/score-options";
 import { scoreCategories, ScoreCategory } from "../score-categories";
-import { GameStage } from "../server-side/server-data";
+import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 import { CategoryLabel } from "./category-label";
 import { ColumnHeader, KnownScore, OptionalScore } from "./score-card-elements";
 import { scoreCardBoarderColor, scoreCardBoarderSize } from "./style";

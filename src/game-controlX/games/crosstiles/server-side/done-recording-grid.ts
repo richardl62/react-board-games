@@ -1,5 +1,5 @@
 import { recordEmptyGrid } from "./record-grid";
-import { ServerData, GameStage } from "./server-data";
+import { ServerData, GameStage } from "../server-data";
 import { doSetScore } from "./set-score";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 

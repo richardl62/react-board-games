@@ -1,9 +1,9 @@
 
 import { sAssert } from "../../../../utils/assert";
-import { bonusScore } from "../../config";
+import { bonusScore } from "../../../../game-controlX/games/crosstiles/config";
 import { ScoreCategory } from "../../score-categories";
-import { ScoreCard } from "../../server-side/score-card";
-import { ServerData } from "../../server-side/server-data";
+import { ScoreCard } from "../../../../game-controlX/games/crosstiles/server-side/score-card";
+import { ServerData } from "../../../../game-controlX/games/crosstiles/server-data";
 import { checkGrid } from "./check-grid";
 
 interface ScoringData extends ReturnType<typeof checkGrid> {

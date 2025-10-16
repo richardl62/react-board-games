@@ -1,8 +1,8 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { totalScore } from "../server-side/score-card";
-import { GameStage } from "../server-side/server-data";
+import { totalScore } from "../../../game-controlX/games/crosstiles/server-side/score-card";
+import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 
 
 const GameOverDiv = styled.div`

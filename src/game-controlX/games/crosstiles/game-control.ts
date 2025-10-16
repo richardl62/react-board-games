@@ -1,6 +1,6 @@
 import { ActivePlayers, GameControl } from "@/game-controlX/game-control";
 import { bgioMoves } from "./server-side/moves";
-import { startingServerData } from "./server-side/server-data";
+import { startingServerData } from "./server-data";
 
 export const appGameNoBoard: GameControl = {
     name: "crosstiles",

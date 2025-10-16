@@ -4,7 +4,7 @@ import { WaitingForPlayers } from "../../../app-game-support";
 import { ShowValues } from "../../../app/option-specification/show-values";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { setupOptions } from "../options";
-import { GameStage } from "../server-side/server-data";
+import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 import { PlayerStatus } from "./player-status";
 
 const OuterDiv = styled.div `
