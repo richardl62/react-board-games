@@ -2,7 +2,7 @@ import { AppGame } from "../app-game-support";
 import { GameControl } from "@/game-controlX/game-control";
 import { sAssert } from "../utils/assert";
 import { appGame as acesUp } from "./aces-up/app-game";
-import { gamesNoBoard } from "./server-data";
+import { gamesNoBoard } from "./game-control";
 import { appGame as cribbage } from "./cribbage/app-game";
 import { appGame as crosstiles } from "./crosstiles/app-game";
 import { appGame as plusMinus } from "./plus-minus/app-game";

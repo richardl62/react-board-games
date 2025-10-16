@@ -1,5 +1,5 @@
 import { MoveArg0 } from "@/game-controlX/move-fn";
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 
 export function throwError(
     _arg0: MoveArg0<ServerData>,
