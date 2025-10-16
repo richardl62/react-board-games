@@ -6,7 +6,7 @@ import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context
 import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 import { GridStatus } from "./grid-status";
 import { RackAndBoard } from "./rack-and-board";
-import { makeEmptyGrid } from "../../../game-controlX/games/crosstiles/server-side/make-empty-grid";
+import { makeEmptyGrid } from "../../../game-controlX/games/crosstiles/moves/make-empty-grid";
 import { PlayerStatus } from "./player-status";
 import { RecordAndDoneButtons, RecordRequest } from "./record-and-done-buttons";
 import { MakeGridCountDown } from "./make-grid-countdown";

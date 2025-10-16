@@ -2,7 +2,7 @@ import { JSX } from "react";
 import styled from "styled-components";
 import { CrossTilesContext, useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { ScoreOptions } from "../client-side/check-grid/score-options";
-import { scoreCategories, ScoreCategory } from "../score-categories";
+import { scoreCategories, ScoreCategory } from "@/game-controlX/games/crosstiles/score-categories";
 import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 import { CategoryLabel } from "./category-label";
 import { ColumnHeader, KnownScore, OptionalScore } from "./score-card-elements";

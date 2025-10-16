@@ -1,6 +1,8 @@
 
 import { SpecifiedValues } from "../../app/option-specification/types";
 import { defaultValues } from "../../app/option-specification/tools";
+import { assertType, Equal } from "@/utils/assert-type";
+import { SetupOptions } from "@/game-controlX/games/crosstiles/server-data";
 
 export const setupOptions = {
     timeToMakeGrid: {
@@ -49,7 +51,9 @@ export const setupOptions = {
     }
 } as const
 
-export type SetupOptions = SpecifiedValues<typeof setupOptions>;
-
 export const defaultOptions : SetupOptions = defaultValues(setupOptions);
 
+assertType<Equal<
+    SetupOptions, 
+    SpecifiedValues<typeof setupOptions>
+>>();

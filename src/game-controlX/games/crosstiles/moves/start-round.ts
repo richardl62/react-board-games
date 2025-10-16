@@ -1,4 +1,4 @@
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@/utils/assert";
 import { scoreCardFull } from "./score-card";
 import { selectLetters } from "./select-letters";
 import { GameStage, ServerData, startingPlayerData } from "../server-data";

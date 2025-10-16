@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { totalScore } from "../../../game-controlX/games/crosstiles/server-side/score-card";
+import { totalScore } from "../../../game-controlX/games/crosstiles/moves/score-card";
 import { GameStage } from "../../../game-controlX/games/crosstiles/server-data";
 
 

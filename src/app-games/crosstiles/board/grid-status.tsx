@@ -2,12 +2,10 @@ import { JSX } from "react";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore, Letter } from "../../../game-controlX/games/crosstiles/config";
-import { displayName, ScoreCategory } from "../score-categories";
-import { ScoreCard } from "../../../game-controlX/games/crosstiles/server-side/score-card";
+import { displayName, ScoreCategory } from "@/game-controlX/games/crosstiles/score-categories";
+import { ScoreCard } from "../../../game-controlX/games/crosstiles/moves/score-card";
 import { countBonusLetters } from "../client-side/check-grid/count-bonus-letters";
 import { sAssert } from "../../../utils/assert";
-
-
 
 interface GridStatusProps {
     scoreCard: ScoreCard, 

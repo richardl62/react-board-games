@@ -1,6 +1,6 @@
 import { RandomAPI } from "@/game-controlX/random-api";
 import { bonusLetters, Letter, letterDistrubtion } from "../config";
-import { SetupOptions } from "../../../../app-games/crosstiles/options";
+import { SetupOptions } from "../server-data";
 
 const vowels = ["A","E","I","O","U"];
 

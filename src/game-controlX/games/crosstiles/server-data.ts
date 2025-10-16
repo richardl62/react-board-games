@@ -1,10 +1,21 @@
 import { SetupArg0 } from "@/game-controlX/game-control";
 import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
 import { Letter } from "./config";
-import { SetupOptions } from "../../../app-games/crosstiles/options";
 import { ScoreCategory } from "./score-categories";
-import { ScoreCard, startingScoreCard } from "./server-side/score-card";
-import { ScoreWithCategory } from "./server-side/set-score";
+import { ScoreCard, startingScoreCard } from "./moves/score-card";
+import { ScoreWithCategory } from "./moves/set-score";
+
+export interface SetupOptions {
+    readonly timeToMakeGrid: number;
+    readonly makeGridCountdown: number;
+    readonly rackSize: number;
+    readonly minVowels: number;
+    readonly minConsonants: number;
+    readonly minBonusLetters: number;
+    readonly playersGetSameLetters: boolean;
+    readonly checkGridBeforeRecoding: boolean;
+    readonly checkSpelling: boolean;
+}
 
 /* Use string values to add with debugging */
 export enum GameStage {
