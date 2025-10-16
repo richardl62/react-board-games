@@ -1,4 +1,4 @@
-import { nPostEndPegs, nPreStartPegs, winningLinePos } from "../../config";
+import { nPostEndPegs, nPreStartPegs, winningLinePos } from "../../../../game-controlX/games/cribbage/config";
 import { rowGap } from "./sizes";
 import { Position } from "./types";
 import { sAssert } from "../../../../utils/assert";

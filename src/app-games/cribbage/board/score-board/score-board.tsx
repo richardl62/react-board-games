@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { nPreStartPegs } from "../../config";
+import { nPreStartPegs } from "../../../../game-controlX/games/cribbage/config";
 import { colors } from "./style";
 import { MarkerLines } from "./marker-lines";
 import { boardHeight, boardWidth, pegPoints } from "./peg-points";

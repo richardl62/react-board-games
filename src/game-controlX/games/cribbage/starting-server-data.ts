@@ -1,4 +1,4 @@
-import { cardsPerHand } from "@/app-games/cribbage/config";
+import { cardsPerHand } from "./config";
 import { SetupArg0 } from "@/game-controlX/game-control";
 import { RandomAPI } from "@/game-controlX/random-api";
 import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";

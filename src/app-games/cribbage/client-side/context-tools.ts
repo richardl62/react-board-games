@@ -2,7 +2,7 @@ import { CardSetID, GameStage, PlayerID } from "@/game-controlX/games/cribbage/s
 import { sAssert } from "@/utils/assert";
 import { Card } from "@/utils/cards";
 import { compareCards } from "@/utils/cards/types";
-import { cardInBoxPerPlayer } from "../config";
+import { cardInBoxPerPlayer } from "../../../game-controlX/games/cribbage/config";
 import { CribbageContext } from "./cribbage-context";
 
 function includes(cardSet: Card[], card: Card) {
