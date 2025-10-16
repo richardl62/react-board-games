@@ -1,8 +1,8 @@
-import { sAssert } from "../../../utils/assert";
-import { Card } from "../../../utils/cards";
-import { compareCards } from "../../../utils/cards/types";
+import { CardSetID, GameStage, PlayerID } from "@/game-controlX/games/cribbage/server-data";
+import { sAssert } from "@/utils/assert";
+import { Card } from "@/utils/cards";
+import { compareCards } from "@/utils/cards/types";
 import { cardInBoxPerPlayer } from "../config";
-import { CardSetID, GameStage, PlayerID } from "../server-side/server-data";
 import { CribbageContext } from "./cribbage-context";
 
 function includes(cardSet: Card[], card: Card) {

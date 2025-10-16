@@ -1,6 +1,6 @@
 import { ActivePlayers, GameControl } from "@/game-controlX/game-control";
-import { bgioMoves } from "./server-side/moves";
-import { startingServerData } from "./server-side/starting-server-data";
+import { bgioMoves } from "./moves/moves";
+import { startingServerData } from "./starting-server-data";
 
 export const appGameNoBoard: GameControl = {
     name: "cribbage",

@@ -1,4 +1,4 @@
-import { ServerData } from "./server-data";
+import { ServerData } from "../server-data";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 
 

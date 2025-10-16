@@ -1,10 +1,10 @@
-import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
-import { Card } from "../../../utils/cards";
-import { deckNoJokers } from "../../../utils/cards/deck";
-import { cardsPerHand } from "../config";
-import { ServerData, GameStage, PegPositions, PlayerData } from "./server-data";
+import { cardsPerHand } from "@/app-games/cribbage/config";
 import { SetupArg0 } from "@/game-controlX/game-control";
 import { RandomAPI } from "@/game-controlX/random-api";
+import { RequiredServerData, startingRequiredState } from "@/game-controlX/required-server-data";
+import { Card } from "@/utils/cards";
+import { deckNoJokers } from "@/utils/cards/deck";
+import { GameStage, PegPositions, PlayerData, ServerData } from "./server-data";
 
 interface PlayerPegPositions {
     player0: PegPositions;

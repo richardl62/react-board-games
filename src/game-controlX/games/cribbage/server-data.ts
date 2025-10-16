@@ -1,7 +1,7 @@
 
 import { RequiredServerData } from "@/game-controlX/required-server-data";
-import { sAssert } from "../../../utils/assert";
-import { Card } from "../../../utils/cards";
+import { sAssert } from "@/utils/assert";
+import { Card } from "@/utils/cards";
 
 // The whole CardSetID stuff is rather kludged.
 export enum CardSetID {

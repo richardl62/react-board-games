@@ -1,7 +1,7 @@
-import { CardSetID, GameStage } from "../server-side/server-data";
-import { CribbageContext } from "./cribbage-context";
+import { CardSetID, GameStage } from "@/game-controlX/games/cribbage/server-data";
+import { sAssert } from "@/utils/assert";
 import { boxFull, owner } from "./context-tools";
-import { sAssert } from "../../../utils/assert";
+import { CribbageContext } from "./cribbage-context";
 
 export function dragAllowed(
     context: CribbageContext, 

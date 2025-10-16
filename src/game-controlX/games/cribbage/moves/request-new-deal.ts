@@ -1,6 +1,6 @@
 import { processGameRequest } from "./process-game-request";   
-import { GameRequest, PlayerID, ServerData } from "./server-data";
-import { newDealData } from "./starting-server-data";
+import { GameRequest, PlayerID, ServerData } from "../server-data";
+import { newDealData } from "../starting-server-data";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 
 export function requestNewDeal(

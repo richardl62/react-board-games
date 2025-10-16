@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { useCribbageContext } from "../client-side/cribbage-context";
-import { GameRequest, GameStage } from "../server-side/server-data";
+import { GameRequest, GameStage } from "../../../game-controlX/games/cribbage/server-data";
 import { MakingBox } from "./making-box";
 import { Pegging } from "./pegging";
 

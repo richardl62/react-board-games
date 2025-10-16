@@ -1,7 +1,7 @@
-import { sAssert } from "../../../utils/assert";
-import { Card } from "../../../utils/cards";
-import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { ServerData, GameStage, makeCardSetID, CardSetID } from "./server-data";
+import { sAssert } from "@/utils/assert";
+import { Card } from "@/utils/cards";
+import { reorderFollowingDrag } from "@/utils/reorder-following-drag";
+import { ServerData, GameStage, makeCardSetID, CardSetID } from "../server-data";
 import { MoveArg0 } from "@/game-controlX/move-fn";
 
 interface FromTo {

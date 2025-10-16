@@ -1,5 +1,5 @@
 import { Ctx } from "@/game-controlX/ctx";
-import { GameRequest, PlayerID, ServerData } from "./server-data";
+import { GameRequest, PlayerID, ServerData } from "../server-data";
 
 /** Process a game request (e,g, from a new deal).
  * If all players have made the same requestm, return true and clear the recorded
