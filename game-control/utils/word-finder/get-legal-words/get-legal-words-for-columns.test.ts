@@ -1,7 +1,7 @@
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { compareJSON } from "../../compare-JSON";
-import { getLegalWordsForColumns } from "./get-legal-words-for-columns";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { compareJSON } from "../../compare-JSON.js";
+import { getLegalWordsForColumns } from "./get-legal-words-for-columns.js";
 
 type Result = ReturnType<typeof getLegalWordsForColumns>;
 

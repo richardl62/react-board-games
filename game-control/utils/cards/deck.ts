@@ -1,4 +1,4 @@
-import { Card, CardNonJoker, ranks, suits } from "./types";
+import { Card, CardNonJoker, ranks, suits } from "./types.js";
 
 // Return a deck with or without jokers.
 // Inefficient if called multiple times (could cache a deck)

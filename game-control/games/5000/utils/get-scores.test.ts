@@ -1,5 +1,5 @@
-import { DiceScore, zeroScore } from "./dice-score";
-import { getScores } from "./get-scores";
+import { DiceScore, zeroScore } from "./dice-score.js";
+import { getScores } from "./get-scores.js";
 
 const allSameScore = 5555;
 

@@ -1,5 +1,5 @@
-import { RequiredServerData, startingRequiredState } from "../../required-server-data";
-import { SetupArg0 } from "../../game-control";
+import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
+import { SetupArg0 } from "../../game-control.js";
 
 export interface ServerData extends RequiredServerData {
     count: number;

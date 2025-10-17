@@ -1,4 +1,4 @@
-import { sAssert } from "../assert";
+import { sAssert } from "../assert.js";
 
 /** A letter that is supplied independantly of the set of available letters passed 
  * to a WordConstraint (e.g. a letter from a crossing word in Scrabble.)

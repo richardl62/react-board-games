@@ -1,6 +1,6 @@
-import { allowedLetters, givenLetter } from "../letter-requirement";
-import { Trie } from "../trie";
-import { getCrossingWordRequirements } from "./get-crossing-word-requirements";
+import { allowedLetters, givenLetter } from "../letter-requirement.js";
+import { Trie } from "../trie.js";
+import { getCrossingWordRequirements } from "./get-crossing-word-requirements.js";
 
 const g = givenLetter;
 const a = allowedLetters;

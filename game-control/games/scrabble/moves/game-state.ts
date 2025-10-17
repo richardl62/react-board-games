@@ -1,10 +1,10 @@
-import { sAssert } from "../../../utils/assert";
-import { nestedArrayMap } from "../../../utils/nested-array-map";
-import { ScrabbleConfig } from "../config/scrabble-config";
-import { Letter } from "../config/letters";
-import { ExtendedLetter } from "../../../games/scrabble/config/extended-letter";
-import { MoveHistoryElement } from "./move-hstory";
-import { SetupArg0 } from "../../../game-control";
+import { sAssert } from "../../../utils/assert.js";
+import { nestedArrayMap } from "../../../utils/nested-array-map.js";
+import { ScrabbleConfig } from "../config/scrabble-config.js";
+import { Letter } from "../config/letters.js";
+import { ExtendedLetter } from "../../../games/scrabble/config/extended-letter.js";
+import { MoveHistoryElement } from "./move-hstory.js";
+import { SetupArg0 } from "../../../game-control.js";
 
 export interface BoardSquareData extends ExtendedLetter {
 

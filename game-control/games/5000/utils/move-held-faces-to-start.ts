@@ -1,4 +1,4 @@
-import { ServerData } from "../server-data";
+import { ServerData } from "../server-data.js";
 
 type FacesAndHeld = Pick<ServerData, "faces" | "held">;
 

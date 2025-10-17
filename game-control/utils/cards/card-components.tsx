@@ -1,7 +1,7 @@
-import { Card, CardBack } from "./types";
-import { sAssert } from "../assert";
+import { Card, CardBack } from "./types.js";
+import { sAssert } from "../assert.js";
 import React, { JSX } from "react";
-import { cardSize } from "./styles";
+import { cardSize } from "./styles.js";
 
 function makeCardNames() : string[]{
     // Start with the jokers and the two back cards

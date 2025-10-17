@@ -1,6 +1,6 @@
-import { GameControl } from "../../game-control";
-import { moves } from "./moves/moves";
-import { startingServerData } from "./misc/starting-server-data";
+import { GameControl } from "../../game-control.js";
+import { moves } from "./moves/moves.js";
+import { startingServerData } from "./misc/starting-server-data.js";
 
 export const appGameNoBoard: GameControl = {
     name: "acesup",

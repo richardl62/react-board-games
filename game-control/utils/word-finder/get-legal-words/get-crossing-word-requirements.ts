@@ -1,6 +1,6 @@
-import { LetterRequirement, allowedLetters, givenLetter } from "../letter-requirement";
-import { Trie } from "../trie";
-import { findMissingLetters } from "./find-missing-letter";
+import { LetterRequirement, allowedLetters, givenLetter } from "../letter-requirement.js";
+import { Trie } from "../trie.js";
+import { findMissingLetters } from "./find-missing-letter.js";
 
 /**
  * Return letter requirements for words that cross the given set of letters

@@ -1,5 +1,5 @@
-import { SetupArg0 } from "../../game-control";
-import { RequiredServerData, startingRequiredState } from "../../required-server-data";
+import { SetupArg0 } from "../../game-control.js";
+import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 
 const numberOfDice = 6;
 

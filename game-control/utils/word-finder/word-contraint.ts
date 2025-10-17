@@ -1,6 +1,6 @@
-import { LetterRequirement, isPermitted } from "./letter-requirement";
-import { LetterSet } from "./letter-set";
-import { WordContraint as TrieWordConstraint } from "./trie";
+import { LetterRequirement, isPermitted } from "./letter-requirement.js";
+import { LetterSet } from "./letter-set.js";
+import { WordContraint as TrieWordConstraint } from "./trie.js";
 
 /** Class that records and manages the constraints on a word.
  * The length on the 'requirements' array gives a maximum length for the word.

@@ -1,10 +1,10 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { WordDirection } from "../word-finder/get-legal-words/word-position";
+import { WordDirection } from "../word-finder/get-legal-words/word-position.js";
 
 // KLUDGE - /utils/ should not include anything from /games/
 // As a quick and dirty fix copy the value instead
-// import { squareSize } from "../../games/scrabble/board/style";
+// import { squareSize } from "../../games/scrabble/board/style.js";
 const squareSize = "30px";
 
 const OuterDiv = styled.div<{rotation: string}>`

@@ -1,10 +1,10 @@
-import { sAssert } from "../../../utils/assert";
-import { CardNonJoker } from "../../../utils/cards/types";
-import { handSize } from "../config";
-import { CardID } from "./card-id";
-import { makeDiscardPile } from "./make-discard-pile";
-import { ServerData } from "../server-data";
-import { makeSharedPileData, makeSharedPiles, SharedPile } from "../misc/shared-pile";
+import { sAssert } from "../../../utils/assert.js";
+import { CardNonJoker } from "../../../utils/cards/types.js";
+import { handSize } from "../config.js";
+import { CardID } from "./card-id.js";
+import { makeDiscardPile } from "./make-discard-pile.js";
+import { ServerData } from "../server-data.js";
+import { makeSharedPileData, makeSharedPiles, SharedPile } from "../misc/shared-pile.js";
 
 function removeOneCard(cards: CardNonJoker[], index: number) : CardNonJoker{
     const card = cards.splice(index,1)[0];

@@ -1,8 +1,8 @@
-import { transpose } from "../../transpose";
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { getCrossingWordRequirements } from "./get-crossing-word-requirements";
-import { getWordsFromRowRequirements } from "./get-words-from-row-requirements";
+import { transpose } from "../../transpose.js";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { getCrossingWordRequirements } from "./get-crossing-word-requirements.js";
+import { getWordsFromRowRequirements } from "./get-words-from-row-requirements.js";
 
 interface ReturnedElement {
     row: number, 

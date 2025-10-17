@@ -1,7 +1,7 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
-import { roll } from "./roll";
-import { setHeld } from "./set-held";
-import { endTurnBust, endTurnNotBust } from "./end-turn";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { roll } from "./roll.js";
+import { setHeld } from "./set-held.js";
+import { endTurnBust, endTurnNotBust } from "./end-turn.js";
 
 export const allFuncs = {
     endTurnBust,

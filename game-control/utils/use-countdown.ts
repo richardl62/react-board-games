@@ -1,6 +1,6 @@
 // To do: Consider deleting this file and replaced usages with useTimedSteps.
 import { useState, useEffect } from "react";
-import { sAssert } from "./assert";
+import { sAssert } from "./assert.js";
 
 const defaultIntervalLength = 1000;
 

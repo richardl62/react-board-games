@@ -1,7 +1,7 @@
-import { recordEmptyGrid } from "./record-grid";
-import { ServerData, GameStage } from "../server-data";
-import { doSetScore } from "./set-score";
-import { MoveArg0 } from "../../../move-fn";
+import { recordEmptyGrid } from "./record-grid.js";
+import { ServerData, GameStage } from "../server-data.js";
+import { doSetScore } from "./set-score.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export function doneRecordingGrid(
     {G, playerID} : MoveArg0<ServerData>,

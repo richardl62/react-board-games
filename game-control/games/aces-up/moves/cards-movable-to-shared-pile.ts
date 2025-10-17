@@ -1,9 +1,9 @@
-import { PlayerID } from "../../../playerid";
-import { CardNonJoker } from "../../../utils/cards/types";
-import { moveableToSharedPile } from "./move-type";
-import { ServerData } from "../server-data";
-import { makeSharedPiles } from "../misc/shared-pile";
-import { makeDiscardPiles } from "./make-discard-pile";
+import { PlayerID } from "../../../playerid.js";
+import { CardNonJoker } from "../../../utils/cards/types.js";
+import { moveableToSharedPile } from "./move-type.js";
+import { ServerData } from "../server-data.js";
+import { makeSharedPiles } from "../misc/shared-pile.js";
+import { makeDiscardPiles } from "./make-discard-pile.js";
 
 function moveableCards(G: ServerData, playerID: PlayerID) : CardNonJoker[] {
     const moveable: CardNonJoker[] = [];

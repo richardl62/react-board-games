@@ -1,4 +1,4 @@
-import { boardColumns, boardRows, Letter } from "../config";
+import { boardColumns, boardRows, Letter } from "../config.js";
 
 
 export function makeEmptyGrid(): (Letter | null)[][] {

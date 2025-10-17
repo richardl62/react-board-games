@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { Dice } from "./dice";
-import { sAssert } from "../assert";
-import { HoldableDice } from "./holdable-dice";
+import { Dice } from "./dice.js";
+import { sAssert } from "../assert.js";
+import { HoldableDice } from "./holdable-dice.js";
 
 const OuterDiv = styled.div`
     display: flex;

@@ -1,8 +1,8 @@
-import { Ctx } from "../../../ctx";
-import { nNonNull } from "../../../utils/n-non-null";
-import { Letter, letterScore } from "../config/letters";
-import { GameState } from "./game-state";
-import { ServerData } from "../server-data";
+import { Ctx } from "../../../ctx.js";
+import { nNonNull } from "../../../utils/n-non-null.js";
+import { Letter, letterScore } from "../config/letters.js";
+import { GameState } from "./game-state.js";
+import { ServerData } from "../server-data.js";
 
 function letterValue(rack: (Letter | null)[]) {
     let value = 0;

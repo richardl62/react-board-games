@@ -1,6 +1,6 @@
-import { LetterSet } from "./letter-set";
-import { Trie } from "./trie";
-import { WordConstraint } from "./word-contraint";
+import { LetterSet } from "./letter-set.js";
+import { Trie } from "./trie.js";
+import { WordConstraint } from "./word-contraint.js";
 
 /** A "?" in the input letters denotes a wildcard*/
 function makeLetterSet(letters: string) {

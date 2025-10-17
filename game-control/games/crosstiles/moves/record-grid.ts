@@ -1,10 +1,10 @@
-import { sAssert } from "../../../utils/assert";
-import { Letter } from "../config";
-import { makeEmptyGrid } from "./make-empty-grid";
-import { ServerData, GameStage } from "../server-data";
-import { ScoreWithCategory } from "./set-score";
-import { MoveArg0 } from "../../../move-fn";
-import { PlayerID } from "../../../playerid";
+import { sAssert } from "../../../utils/assert.js";
+import { Letter } from "../config.js";
+import { makeEmptyGrid } from "./make-empty-grid.js";
+import { ServerData, GameStage } from "../server-data.js";
+import { ScoreWithCategory } from "./set-score.js";
+import { MoveArg0 } from "../../../move-fn.js";
+import { PlayerID } from "../../../playerid.js";
 
 interface GridAndScore {
     grid: (Letter | null)[][],

@@ -1,8 +1,8 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { getCardBackComponent, getCardComponent } from "./card-components";
-import { cardSize, defaultCardBack } from "./styles";
-import { Card, CardBack } from "./types";
+import { getCardBackComponent, getCardComponent } from "./card-components.js";
+import { cardSize, defaultCardBack } from "./styles.js";
+import { Card, CardBack } from "./types.js";
 
 export const EmptyCard = styled.div`
     width: ${cardSize.width}px;  

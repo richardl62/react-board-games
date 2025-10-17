@@ -1,8 +1,8 @@
-import { sAssert } from "../../../utils/assert";
-import { Letter, standardLetterSet} from "./letters";
-import { SquareType } from "./square-type";
-import { RandomAPI } from "../../../random-api";
-import { getScrabbleWords } from "../../../utils/get-scrabble-words";
+import { sAssert } from "../../../utils/assert.js";
+import { Letter, standardLetterSet} from "./letters.js";
+import { SquareType } from "./square-type.js";
+import { RandomAPI } from "../../../random-api.js";
+import { getScrabbleWords } from "../../../utils/get-scrabble-words.js";
 
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;

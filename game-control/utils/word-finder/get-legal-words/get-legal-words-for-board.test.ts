@@ -1,7 +1,7 @@
-import { compareJSON } from "../../compare-JSON";
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { getLegalWordsForBoard } from "./get-legal-words-for-board";
+import { compareJSON } from "../../compare-JSON.js";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { getLegalWordsForBoard } from "./get-legal-words-for-board.js";
 
 type Results = ReturnType<typeof getLegalWordsForBoard>;
 

@@ -1,5 +1,5 @@
-import { LetterSet } from "./letter-set";
-import { Trie } from "./trie";
+import { LetterSet } from "./letter-set.js";
+import { Trie } from "./trie.js";
 
 // Unit tests for the Trie class using Jest
 describe("Trie.addWord", () => {    

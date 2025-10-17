@@ -1,5 +1,5 @@
-import {  PegPositions, PlayerID, ServerData } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
+import {  PegPositions, PlayerID, ServerData } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 interface Arg {
     who: PlayerID;

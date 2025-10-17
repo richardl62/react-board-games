@@ -1,14 +1,14 @@
-import { Ctx } from "../../../ctx";
-import { PlayerID } from "../../../playerid";
-import { sAssert } from "../../../utils/assert";
-import { CardNonJoker, nextRank } from "../../../utils/cards/types";
-import { debugOptions } from "../config";
-import { GameOptions, OptionWrapper } from "../options";
-import { emptyPile, getCard } from "./add-remove-card";
-import { CardID } from "./card-id";
-import { makeDiscardPile } from "./make-discard-pile";
-import { ServerData } from "../server-data";
-import { SharedPile, makeSharedPiles } from "../misc/shared-pile";
+import { Ctx } from "../../../ctx.js";
+import { PlayerID } from "../../../playerid.js";
+import { sAssert } from "../../../utils/assert.js";
+import { CardNonJoker, nextRank } from "../../../utils/cards/types.js";
+import { debugOptions } from "../config.js";
+import { GameOptions, OptionWrapper } from "../options.js";
+import { emptyPile, getCard } from "./add-remove-card.js";
+import { CardID } from "./card-id.js";
+import { makeDiscardPile } from "./make-discard-pile.js";
+import { ServerData } from "../server-data.js";
+import { SharedPile, makeSharedPiles } from "../misc/shared-pile.js";
 
 export function moveableToSharedPile(
     options: GameOptions,

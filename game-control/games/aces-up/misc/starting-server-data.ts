@@ -1,14 +1,14 @@
-import { SetupArg0 } from "../../../game-control";
-import { RandomAPI } from "../../../random-api";
-import { startingRequiredState } from "../../../required-server-data";
-import { CardNonJoker, ranks, suits } from "../../../utils/cards/types";
-import { debugOptions } from "../config";
-import { handSize } from "../config";
-import { makeDiscardPileData } from "./discard-pile";
-import { ExtendingDeck } from "./extendable-deck";
-import { PerTurnServerData, PlayerData, ServerData } from "../server-data";
-import { makeSharedPileData } from "./shared-pile";
-import { GameOptions, makeGameOptions, OptionWrapper, SetupOptions } from "../options";
+import { SetupArg0 } from "../../../game-control.js";
+import { RandomAPI } from "../../../random-api.js";
+import { startingRequiredState } from "../../../required-server-data.js";
+import { CardNonJoker, ranks, suits } from "../../../utils/cards/types.js";
+import { debugOptions } from "../config.js";
+import { handSize } from "../config.js";
+import { makeDiscardPileData } from "./discard-pile.js";
+import { ExtendingDeck } from "./extendable-deck.js";
+import { PerTurnServerData, PlayerData, ServerData } from "../server-data.js";
+import { makeSharedPileData } from "./shared-pile.js";
+import { GameOptions, makeGameOptions, OptionWrapper, SetupOptions } from "../options.js";
 
 function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
     options: GameOptions) : PlayerData {

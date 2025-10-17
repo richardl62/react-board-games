@@ -1,6 +1,6 @@
-import { sAssert } from "../../../utils/assert";
-import { CardNonJoker } from "../../../utils/cards/types";
-import { GameOptions } from "../options";
+import { sAssert } from "../../../utils/assert.js";
+import { CardNonJoker } from "../../../utils/cards/types.js";
+import { GameOptions } from "../options.js";
 
 export interface DiscardPileData {
     cards: CardNonJoker[];

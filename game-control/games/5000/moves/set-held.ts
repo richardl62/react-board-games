@@ -1,6 +1,6 @@
-import { ServerData } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
-import { setDiceScores } from "./set-dice-scores";
+import { ServerData } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
+import { setDiceScores } from "./set-dice-scores.js";
 
 export function setHeld(
     { G }: MoveArg0<ServerData>,

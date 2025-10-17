@@ -1,6 +1,6 @@
-import { GameStage, ServerData } from "../server-data";
-import { startRound } from "./start-round";
-import { MoveArg0 } from "../../../move-fn";
+import { GameStage, ServerData } from "../server-data.js";
+import { startRound } from "./start-round.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export function readyToStartGame(
     { G, playerID, random } : MoveArg0<ServerData>,

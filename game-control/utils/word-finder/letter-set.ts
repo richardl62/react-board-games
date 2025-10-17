@@ -1,4 +1,4 @@
-import { WordContraint as TrieWordConstraint } from "./trie";
+import { WordContraint as TrieWordConstraint } from "./trie.js";
 
 // Class to record the letters available to form a word.
 // Intended for use with ContraintWord. Also suitable for direct

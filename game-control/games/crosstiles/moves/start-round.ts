@@ -1,8 +1,8 @@
-import { scoreCardFull } from "./score-card";
-import { selectLetters } from "./select-letters";
-import { GameStage, ServerData, startingPlayerData } from "../server-data";
-import { RandomAPI } from "../../../random-api";
-import { sAssert } from "../../../utils/assert";
+import { scoreCardFull } from "./score-card.js";
+import { selectLetters } from "./select-letters.js";
+import { GameStage, ServerData, startingPlayerData } from "../server-data.js";
+import { RandomAPI } from "../../../random-api.js";
+import { sAssert } from "../../../utils/assert.js";
 
 export function startRound(
     G: ServerData, 

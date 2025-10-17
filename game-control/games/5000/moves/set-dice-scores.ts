@@ -1,7 +1,7 @@
-import { totalScore } from "../utils/dice-score";
-import { getScores } from "../utils/get-scores";
-import { scoringCategoryNames } from "../utils/scoring-category-names";
-import { ServerData } from "../server-data";
+import { totalScore } from "../utils/dice-score.js";
+import { getScores } from "../utils/get-scores.js";
+import { scoringCategoryNames } from "../utils/scoring-category-names.js";
+import { ServerData } from "../server-data.js";
 
 /** Sets G.heldDice and G.maxDiceScore based on G.faces and G.held. */
 export function setDiceScores(

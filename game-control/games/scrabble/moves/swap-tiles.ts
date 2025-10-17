@@ -1,6 +1,6 @@
-import { Letter } from "../config/letters";
-import { GameState } from "./game-state";
-import { MoveArg0 } from "../../../move-fn";
+import { Letter } from "../config/letters.js";
+import { GameState } from "./game-state.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export interface SwapTilesParam {
     /**

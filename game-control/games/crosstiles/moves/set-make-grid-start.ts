@@ -1,5 +1,5 @@
-import { GameStage, ServerData } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
+import { GameStage, ServerData } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export function setMakeGridStartTime(
     { G, playerID } : MoveArg0<ServerData>,

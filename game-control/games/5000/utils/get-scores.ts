@@ -1,5 +1,5 @@
 
-import { DiceScore, zeroScore, totalScore } from "./dice-score";
+import { DiceScore, zeroScore, totalScore } from "./dice-score.js";
 
 /** Get a score for the given dice faces.
  * In general, this will be the highest score possible,

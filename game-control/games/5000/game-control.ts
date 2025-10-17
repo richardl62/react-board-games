@@ -1,6 +1,6 @@
-import { bgioMoves } from "./moves/moves";
-import { startingServerData } from "./server-data";
-import { GameControl } from "../../game-control";
+import { bgioMoves } from "./moves/moves.js";
+import { startingServerData } from "./server-data.js";
+import { GameControl } from "../../game-control.js";
 
 export const appGameNoBoard: GameControl = {
     name: "5000",

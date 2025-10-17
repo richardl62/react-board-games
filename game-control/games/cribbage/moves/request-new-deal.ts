@@ -1,7 +1,7 @@
-import { processGameRequest } from "./process-game-request";   
-import { GameRequest, PlayerID, ServerData } from "../server-data";
-import { newDealData } from "../starting-server-data";
-import { MoveArg0 } from "../../../move-fn";
+import { processGameRequest } from "./process-game-request.js";   
+import { GameRequest, PlayerID, ServerData } from "../server-data.js";
+import { newDealData } from "../starting-server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export function requestNewDeal(
     {G: inputG, ctx, random} : MoveArg0<ServerData>,  

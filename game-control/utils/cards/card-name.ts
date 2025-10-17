@@ -1,4 +1,4 @@
-import { Card } from "./types";
+import { Card } from "./types.js";
 
 export function cardName(card: Card) : string {
     const { rank, suit, joker } = card;

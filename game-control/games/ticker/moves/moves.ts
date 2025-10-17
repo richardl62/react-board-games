@@ -1,6 +1,6 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
-import { incrementCount } from "./increment-count";
-import { throwError } from "./throw-error";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { incrementCount } from "./increment-count.js";
+import { throwError } from "./throw-error.js";
 
 export const allFuncs = {
     incrementCount,

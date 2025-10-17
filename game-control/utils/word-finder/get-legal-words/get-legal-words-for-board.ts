@@ -1,8 +1,8 @@
-import { transpose } from "../../transpose";
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { WordPosition } from "./word-position";
-import { getLegalWordsForColumns } from "./get-legal-words-for-columns";
+import { transpose } from "../../transpose.js";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { WordPosition } from "./word-position.js";
+import { getLegalWordsForColumns } from "./get-legal-words-for-columns.js";
 
 export interface LegalWord extends WordPosition {
     word: string;

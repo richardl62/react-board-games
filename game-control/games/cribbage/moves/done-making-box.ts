@@ -1,7 +1,7 @@
-import { MoveArg0 } from "../../../move-fn";
-import { sAssert } from "../../../utils/assert";
-import { GameRequest, GameStage, PlayerID, ServerData } from "../server-data";
-import { processGameRequest } from "./process-game-request";
+import { MoveArg0 } from "../../../move-fn.js";
+import { sAssert } from "../../../utils/assert.js";
+import { GameRequest, GameStage, PlayerID, ServerData } from "../server-data.js";
+import { processGameRequest } from "./process-game-request.js";
 
 export function doneMakingBox(
     {G, ctx} : MoveArg0<ServerData>, 

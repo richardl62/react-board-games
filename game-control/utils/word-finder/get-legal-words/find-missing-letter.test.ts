@@ -1,5 +1,5 @@
-import { Trie } from "../trie";
-import { findMissingLetters } from "./find-missing-letter";
+import { Trie } from "../trie.js";
+import { findMissingLetters } from "./find-missing-letter.js";
 
 describe("Find possible letters", () => {
     const trie = new Trie([

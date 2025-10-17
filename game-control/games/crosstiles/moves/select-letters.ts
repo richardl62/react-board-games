@@ -1,6 +1,6 @@
-import { RandomAPI } from "../../../random-api";
-import { bonusLetters, Letter, letterDistrubtion } from "../config";
-import { SetupOptions } from "../server-data";
+import { RandomAPI } from "../../../random-api.js";
+import { bonusLetters, Letter, letterDistrubtion } from "../config.js";
+import { SetupOptions } from "../server-data.js";
 
 const vowels = ["A","E","I","O","U"];
 

@@ -1,5 +1,5 @@
-import { MoveArg0 } from "../../../move-fn";
-import { ServerData } from "../server-data";
+import { MoveArg0 } from "../../../move-fn.js";
+import { ServerData } from "../server-data.js";
 
 export function throwError(
     _arg0: MoveArg0<ServerData>,

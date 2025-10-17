@@ -1,8 +1,8 @@
-import { sAssert } from "../../../utils/assert";
-import { Card } from "../../../utils/cards/types";
-import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { ServerData, GameStage, makeCardSetID, CardSetID } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
+import { sAssert } from "../../../utils/assert.js";
+import { Card } from "../../../utils/cards/types.js";
+import { reorderFollowingDrag } from "../../../utils/reorder-following-drag.js";
+import { ServerData, GameStage, makeCardSetID, CardSetID } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 interface FromTo {
     from:  {cardSetID: CardSetID, index: number};

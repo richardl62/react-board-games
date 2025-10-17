@@ -1,7 +1,7 @@
-import { LetterRequirement } from "../letter-requirement";
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { WordConstraint } from "../word-contraint";
+import { LetterRequirement } from "../letter-requirement.js";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { WordConstraint } from "../word-contraint.js";
 
 type WordAndStart = {start: number; word: string};
 

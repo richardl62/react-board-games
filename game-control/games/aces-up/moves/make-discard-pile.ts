@@ -1,6 +1,6 @@
-import { PlayerID } from "../../../playerid";
-import { ServerData } from "../server-data";
-import { DiscardPile } from "../misc/discard-pile";
+import { PlayerID } from "../../../playerid.js";
+import { ServerData } from "../server-data.js";
+import { DiscardPile } from "../misc/discard-pile.js";
 
 export function makeDiscardPiles(
     G: ServerData,

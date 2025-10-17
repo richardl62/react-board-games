@@ -1,7 +1,7 @@
-import { givenLetter } from "../letter-requirement";
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { WordConstraint } from "../word-contraint";
+import { givenLetter } from "../letter-requirement.js";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { WordConstraint } from "../word-contraint.js";
 
 /** Find the letter(s) that can come between 'before' and 'after' to form a word.
  * ('before' and 'after' can be zero length.)

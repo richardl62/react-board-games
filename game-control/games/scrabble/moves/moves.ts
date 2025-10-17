@@ -1,12 +1,12 @@
-import { Ctx } from "../../../ctx";
-import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../wrapped-move-function";
-import { sAssert } from "../../../utils/assert";
-import { checkForWinner } from "./check-for-winner";
-import { GameState } from "./game-state";
-import { playWord } from "./play-word";
-import { ServerData } from "../server-data";
-import { swapTiles } from "./swap-tiles";
-import { MoveArg0 } from "../../../move-fn";
+import { Ctx } from "../../../ctx.js";
+import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../wrapped-move-function.js";
+import { sAssert } from "../../../utils/assert.js";
+import { checkForWinner } from "./check-for-winner.js";
+import { GameState } from "./game-state.js";
+import { playWord } from "./play-word.js";
+import { ServerData } from "../server-data.js";
+import { swapTiles } from "./swap-tiles.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 type PassParam = void;
 function pass(

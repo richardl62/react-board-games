@@ -1,9 +1,9 @@
-import { SetupArg0 } from "../../game-control";
-import { RequiredServerData, startingRequiredState } from "../../required-server-data";
-import { Letter } from "./config";
-import { ScoreCategory } from "./score-categories";
-import { ScoreCard, startingScoreCard } from "./moves/score-card";
-import { ScoreWithCategory } from "./moves/set-score";
+import { SetupArg0 } from "../../game-control.js";
+import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
+import { Letter } from "./config.js";
+import { ScoreCategory } from "./score-categories.js";
+import { ScoreCard, startingScoreCard } from "./moves/score-card.js";
+import { ScoreWithCategory } from "./moves/set-score.js";
 
 export interface SetupOptions {
     readonly timeToMakeGrid: number;

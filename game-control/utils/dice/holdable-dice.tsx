@@ -1,5 +1,5 @@
-import { Dice } from "./dice";
-import { diceColor } from "./style";
+import { Dice } from "./dice.js";
+import { diceColor } from "./style.js";
 import styled from "styled-components";
 
 // Text is centered justified.

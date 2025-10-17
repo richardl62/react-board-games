@@ -1,8 +1,8 @@
-import { ServerData } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
-import { setDiceScores } from "./set-dice-scores";
-import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
-import { sAssert } from "../../../utils/assert";
+import { ServerData } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
+import { setDiceScores } from "./set-dice-scores.js";
+import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start.js";
+import { sAssert } from "../../../utils/assert.js";
 
 export function roll(
     { G, random }: MoveArg0<ServerData>,

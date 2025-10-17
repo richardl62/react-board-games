@@ -1,4 +1,4 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "../../../utils/assert.js";
 
 /* For the purposed of the this file, blacks count as letters.
    (Is there a better term to exoress this?)  

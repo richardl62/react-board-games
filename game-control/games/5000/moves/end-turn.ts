@@ -1,5 +1,5 @@
-import { MoveArg0 } from "../../../move-fn";
-import { ServerData } from "../server-data";
+import { MoveArg0 } from "../../../move-fn.js";
+import { ServerData } from "../server-data.js";
 
 function turnOver (
     { G, events }: MoveArg0<ServerData>, 

@@ -1,8 +1,8 @@
-import { PlayerID } from "../../../playerid";
-import { sAssert } from "../../../utils/assert";
-import { copyJSON } from "../../../utils/copy-json";
-import { ServerData, UndoItem } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
+import { PlayerID } from "../../../playerid.js";
+import { sAssert } from "../../../utils/assert.js";
+import { copyJSON } from "../../../utils/copy-json.js";
+import { ServerData, UndoItem } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export function makeUndoItem(G: ServerData, playerID: PlayerID) : UndoItem {
     return {

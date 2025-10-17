@@ -1,9 +1,9 @@
-import { PlayerID } from "../../playerid";
-import { RequiredServerData } from "../../required-server-data";
-import { CardNonJoker } from "../../utils/cards/types";
-import { SharedPileData } from "./misc/shared-pile";
-import { DiscardPileData } from "./misc/discard-pile";
-import { GameOptions } from "./options";
+import { PlayerID } from "../../playerid.js";
+import { RequiredServerData } from "../../required-server-data.js";
+import { CardNonJoker } from "../../utils/cards/types.js";
+import { SharedPileData } from "./misc/shared-pile.js";
+import { DiscardPileData } from "./misc/discard-pile.js";
+import { GameOptions } from "./options.js";
 
 export interface PlayerData {
     /** The pile that the player in trying to get rid of.

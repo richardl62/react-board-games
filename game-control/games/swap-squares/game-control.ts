@@ -1,6 +1,6 @@
-import { startingServerData } from "./server-data";
-import { bgioMoves } from "./moves/moves";
-import { GameControl } from "../../game-control";
+import { startingServerData } from "./server-data.js";
+import { bgioMoves } from "./moves/moves.js";
+import { GameControl } from "../../game-control.js";
 
 export const appGameNoBoard: GameControl = {
     name: "swapsquares",

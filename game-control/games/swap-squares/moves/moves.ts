@@ -1,6 +1,6 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
-import { swap } from "./swap";
-import { reset } from "./reset";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { swap } from "./swap.js";
+import { reset } from "./reset.js";
 
 export const allFuncs = {
     swap,

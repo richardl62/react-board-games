@@ -1,6 +1,6 @@
-import { RequiredServerData, startingRequiredState } from "../../required-server-data";
-import { SetupArg0 } from "../../game-control";
-import { RandomAPI } from "../../random-api";
+import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
+import { SetupArg0 } from "../../game-control.js";
+import { RandomAPI } from "../../random-api.js";
 
 export const startingOrders = [
     "forward",

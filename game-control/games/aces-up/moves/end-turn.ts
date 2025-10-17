@@ -1,12 +1,12 @@
-import { Ctx } from "../../../ctx";
-import { PlayerID } from "../../../playerid";
-import { handSize } from "../config";
-import { ExtendingDeck } from "../misc/extendable-deck";
-import { ServerData } from "../server-data";
-import { turnStartServerData } from "../misc/starting-server-data";
-import { MoveArg0 } from "../../../move-fn";
-import { makeSharedPileData, makeSharedPiles } from "../misc/shared-pile";
-import { makeDiscardPiles } from "./make-discard-pile";
+import { Ctx } from "../../../ctx.js";
+import { PlayerID } from "../../../playerid.js";
+import { handSize } from "../config.js";
+import { ExtendingDeck } from "../misc/extendable-deck.js";
+import { ServerData } from "../server-data.js";
+import { turnStartServerData } from "../misc/starting-server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
+import { makeSharedPileData, makeSharedPiles } from "../misc/shared-pile.js";
+import { makeDiscardPiles } from "./make-discard-pile.js";
 
 function nextPlayerID(ctx: Ctx) {
     const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;

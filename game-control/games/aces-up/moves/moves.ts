@@ -1,6 +1,6 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
-import { moveCard } from "./move-card";
-import { undo } from "./undo";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { moveCard } from "./move-card.js";
+import { undo } from "./undo.js";
 
 export const allFuncs = {
     moveCard,

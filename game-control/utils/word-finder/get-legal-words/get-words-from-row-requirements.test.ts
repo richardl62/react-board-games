@@ -1,7 +1,7 @@
-import { allowedLetters, givenLetter } from "../letter-requirement";
-import { LetterSet } from "../letter-set";
-import { Trie } from "../trie";
-import { getWordsFromRowRequirements } from "./get-words-from-row-requirements";
+import { allowedLetters, givenLetter } from "../letter-requirement.js";
+import { LetterSet } from "../letter-set.js";
+import { Trie } from "../trie.js";
+import { getWordsFromRowRequirements } from "./get-words-from-row-requirements.js";
 
 const g = givenLetter;
 const a = allowedLetters;

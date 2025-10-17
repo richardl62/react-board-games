@@ -1,6 +1,6 @@
-import { GameControl } from "../../game-control";
-import { bgioMoves } from "./moves";
-import { startingServerData } from "./server-data";
+import { GameControl } from "../../game-control.js";
+import { bgioMoves } from "./moves.js";
+import { startingServerData } from "./server-data.js";
 
 export const gameControl: GameControl = {
     name: "plusminus",

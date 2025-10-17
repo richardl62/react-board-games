@@ -1,4 +1,4 @@
-import { DiceScore } from "./dice-score";
+import { DiceScore } from "./dice-score.js";
 
 function categoryName(category: keyof DiceScore): string {
     switch (category) {

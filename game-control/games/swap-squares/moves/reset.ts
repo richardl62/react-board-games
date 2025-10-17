@@ -1,5 +1,5 @@
-import { ServerData, setSquares } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
+import { ServerData, setSquares } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export function reset(
     { G, random }: MoveArg0<ServerData>,  

@@ -1,5 +1,5 @@
 /* Some of this code is a copy-and-edit of config code for Scrabble */
-import { sAssert } from "../../utils/assert";
+import { sAssert } from "../../utils/assert.js";
 
 // Note: Q is treated as Qu for display and spelling.
 // But it counts as a single letter for scoring categories (4-letter word etc.)

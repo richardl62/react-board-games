@@ -1,7 +1,7 @@
-import { RequiredServerData } from "./required-server-data";
-import { RandomAPI } from "./random-api";
-import { MoveFn } from "./move-fn";
-import { Ctx } from "./ctx";
+import { RequiredServerData } from "./required-server-data.js";
+import { RandomAPI } from "./random-api.js";
+import { MoveFn } from "./move-fn.js";
+import { Ctx } from "./ctx.js";
 
 export const ActivePlayers = {
     ALL: "all",

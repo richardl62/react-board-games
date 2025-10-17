@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { sAssert } from "../assert";
+import { sAssert } from "../assert.js";
 
 const spotPositions = [
     null,

@@ -1,6 +1,6 @@
-import { ScoreCategory } from "../score-categories";
-import { ServerData, GameStage } from "../server-data";
-import { MoveArg0 } from "../../../move-fn";
+import { ScoreCategory } from "../score-categories.js";
+import { ServerData, GameStage } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
 
 export interface ScoreWithCategory {
     category: ScoreCategory;

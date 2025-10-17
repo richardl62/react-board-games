@@ -1,17 +1,17 @@
-import { MoveArg0 } from "../../../move-fn";
-import { PlayerID } from "../../../playerid";
-import { sAssert } from "../../../utils/assert";
-import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
-import { sameJSON } from "../../../utils/same-json";
-import { addCard, clearPile, removeCard, stealTopCard } from "./add-remove-card";
-import { CardID } from "./card-id";
-import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile";
-import { DiscardPile } from "../misc/discard-pile";
-import { endTurn, refillHand } from "./end-turn";
-import { makeDiscardPiles } from "./make-discard-pile";
-import { moveType as getMoveType } from "./move-type";
-import { ServerData, UndoItem } from "../server-data";
-import { makeUndoItem } from "./undo";
+import { MoveArg0 } from "../../../move-fn.js";
+import { PlayerID } from "../../../playerid.js";
+import { sAssert } from "../../../utils/assert.js";
+import { reorderFollowingDrag } from "../../../utils/reorder-following-drag.js";
+import { sameJSON } from "../../../utils/same-json.js";
+import { addCard, clearPile, removeCard, stealTopCard } from "./add-remove-card.js";
+import { CardID } from "./card-id.js";
+import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile.js";
+import { DiscardPile } from "../misc/discard-pile.js";
+import { endTurn, refillHand } from "./end-turn.js";
+import { makeDiscardPiles } from "./make-discard-pile.js";
+import { moveType as getMoveType } from "./move-type.js";
+import { ServerData, UndoItem } from "../server-data.js";
+import { makeUndoItem } from "./undo.js";
 
 function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
     return G.options.addToSharedPileEachTurn &&

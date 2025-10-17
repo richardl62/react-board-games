@@ -1,6 +1,6 @@
-import { sAssert } from "../../../utils/assert";
-import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
-import { GameOptions, OptionWrapper } from "../options";
+import { sAssert } from "../../../utils/assert.js";
+import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types.js";
+import { GameOptions, OptionWrapper } from "../options.js";
 
 
 export interface SharedPileData {
