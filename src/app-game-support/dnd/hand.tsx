@@ -1,10 +1,10 @@
 import { JSX } from "react";
-import { CardDnD, getCardID, playingCard } from "./card-dnd.js";
-import { Card } from "./types.js";
-import { Spread } from "./spread.js";
+import { CardDnD, getCardID, playingCard } from "../../../src/app-game-support/dnd/card-dnd.js";
+import { Card } from "@utils/cards/types.js";
+import { Spread } from "@utils/cards/spread.js";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
-import { dndRefKludge } from "../dnd-ref-kludge.js";
+import { dndRefKludge } from "../../../src/app-game-support/dnd/dnd-ref-kludge.js";
 
 const OuterDiv = styled.div`
     height: auto;

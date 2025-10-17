@@ -5,7 +5,7 @@ import { cardSize, cardVerticalStackingOffset } from "@utils/cards/styles";
 import { CardID } from "@game-control/games/aces-up/moves/card-id";
 import { useCardDragRef, useCardDropRef } from "./drag-drop";
 import { JSX } from "react";
-import { dndRefKludge } from "@utils/dnd-ref-kludge";
+import { dndRefKludge } from "@/app-game-support/dnd/dnd-ref-kludge";
 
 const SubStackDiv = styled.div`
     position: absolute;
