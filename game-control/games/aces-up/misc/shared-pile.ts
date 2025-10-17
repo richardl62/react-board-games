@@ -1,5 +1,5 @@
-import { sAssert } from "@/utils/assert";
-import { CardNonJoker, Rank, nextRank } from "@/utils/cards/types";
+import { sAssert } from "../../../utils/assert";
+import { CardNonJoker, Rank, nextRank } from "../../../utils/cards/types";
 import { GameOptions, OptionWrapper } from "../options";
 
 

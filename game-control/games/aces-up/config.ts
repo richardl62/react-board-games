@@ -1,4 +1,4 @@
-import { assertThrow as sAssert } from "@/utils/assert";
+import { assertThrow as sAssert } from "../../utils/assert";
 
 export const handSize = 5;
 

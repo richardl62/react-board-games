@@ -1,4 +1,4 @@
-import { CardNonJoker, Rank } from "@/utils/cards/types";
+import { CardNonJoker, Rank } from "../../utils/cards/types";
 
 export interface SetupOptions {
     readonly mainPileSize: number;

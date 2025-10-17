@@ -1,5 +1,5 @@
-import { sAssert } from "@/utils/assert";
-import { CardNonJoker } from "@/utils/cards/types";
+import { sAssert } from "../../../utils/assert";
+import { CardNonJoker } from "../../../utils/cards/types";
 import { GameOptions } from "../options";
 
 export interface DiscardPileData {

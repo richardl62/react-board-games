@@ -1,6 +1,6 @@
-import { sAssert } from "@/utils/assert";
-import { Card } from "@/utils/cards";
-import { reorderFollowingDrag } from "@/utils/reorder-following-drag";
+import { sAssert } from "../../../utils/assert";
+import { Card } from "../../../utils/cards/types";
+import { reorderFollowingDrag } from "../../../utils/reorder-following-drag";
 import { ServerData, GameStage, makeCardSetID, CardSetID } from "../server-data";
 import { MoveArg0 } from "../../../move-fn";
 

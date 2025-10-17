@@ -1,6 +1,6 @@
 import { PlayerID } from "../../playerid";
 import { RequiredServerData } from "../../required-server-data";
-import { CardNonJoker } from "@/utils/cards";
+import { CardNonJoker } from "../../utils/cards/types";
 import { SharedPileData } from "./misc/shared-pile";
 import { DiscardPileData } from "./misc/discard-pile";
 import { GameOptions } from "./options";

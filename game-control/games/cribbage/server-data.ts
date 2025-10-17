@@ -1,7 +1,7 @@
 
 import { RequiredServerData } from "../../required-server-data";
-import { sAssert } from "@/utils/assert";
-import { Card } from "@/utils/cards";
+import { sAssert } from "../../utils/assert";
+import { Card } from "../../utils/cards/types";
 
 // The whole CardSetID stuff is rather kludged.
 export enum CardSetID {

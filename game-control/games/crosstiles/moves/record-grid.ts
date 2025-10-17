@@ -1,4 +1,4 @@
-import { sAssert } from "@/utils/assert";
+import { sAssert } from "../../../utils/assert";
 import { Letter } from "../config";
 import { makeEmptyGrid } from "./make-empty-grid";
 import { ServerData, GameStage } from "../server-data";

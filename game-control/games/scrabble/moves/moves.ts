@@ -1,6 +1,6 @@
 import { Ctx } from "../../../ctx";
 import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../wrapped-move-function";
-import { sAssert } from "@/utils/assert";
+import { sAssert } from "../../../utils/assert";
 import { checkForWinner } from "./check-for-winner";
 import { GameState } from "./game-state";
 import { playWord } from "./play-word";

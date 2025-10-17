@@ -1,6 +1,6 @@
 import { PlayerID } from "../../../playerid";
-import { sAssert } from "@/utils/assert";
-import { copyJSON } from "@/utils/copy-json";
+import { sAssert } from "../../../utils/assert";
+import { copyJSON } from "../../../utils/copy-json";
 import { ServerData, UndoItem } from "../server-data";
 import { MoveArg0 } from "../../../move-fn";
 

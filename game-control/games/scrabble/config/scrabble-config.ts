@@ -1,8 +1,8 @@
-import { sAssert } from "@/utils/assert";
+import { sAssert } from "../../../utils/assert";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
 import { RandomAPI } from "../../../random-api";
-import { getScrabbleWords } from "@/utils/get-scrabble-words";
+import { getScrabbleWords } from "../../../utils/get-scrabble-words";
 
 const D = SquareType.doubleWord;
 const T = SquareType.tripleWord;

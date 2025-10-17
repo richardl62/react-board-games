@@ -1,5 +1,5 @@
-import { sAssert } from "@/utils/assert";
-import { CardNonJoker } from "@/utils/cards";
+import { sAssert } from "../../../utils/assert";
+import { CardNonJoker } from "../../../utils/cards/types";
 import { handSize } from "../config";
 import { CardID } from "./card-id";
 import { makeDiscardPile } from "./make-discard-pile";

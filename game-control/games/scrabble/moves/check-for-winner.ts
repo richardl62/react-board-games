@@ -1,5 +1,5 @@
 import { Ctx } from "../../../ctx";
-import { nNonNull } from "@/utils/n-non-null";
+import { nNonNull } from "../../../utils/n-non-null";
 import { Letter, letterScore } from "../config";
 import { GameState } from "./game-state";
 import { ServerData } from "../server-data";
