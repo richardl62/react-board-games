@@ -4,7 +4,8 @@ import { LetterSet } from "@utils/word-finder/letter-set";
 import { Trie } from "@utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { wordScore } from "./word-score";
-import { Letter, ScoringConfig, blank } from "@game-control/games/scrabble/config";
+import { Letter,  blank } from "@game-control/games/scrabble/config/letters";
+import { ScoringConfig } from "@game-control/games/scrabble/config/scrabble-config";
 import { getAllWords } from "./get-all-words";
 
 export function makeLetterSet(letters: (Letter|null)[]) {

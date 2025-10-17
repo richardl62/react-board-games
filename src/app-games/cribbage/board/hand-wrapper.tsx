@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { Card } from "@utils/cards";
+import { Card } from "@utils/cards/types";
 import { cardSize } from "@utils/cards/styles";
 import { useCribbageContext } from "../client-side/cribbage-context";
 import * as dndControl from "../client-side/dnd-control";

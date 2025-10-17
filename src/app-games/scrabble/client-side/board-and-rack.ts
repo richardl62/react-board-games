@@ -1,6 +1,6 @@
 import { sAssert } from "@utils/assert";
 import { ExtendedLetter, makeExtendedLetter } from "@game-control/games/scrabble/config/extended-letter";
-import { blank, Letter } from "@game-control/games/scrabble/config";
+import { blank, Letter } from "@game-control/games/scrabble/config/letters";
 import { shuffle } from "@utils/shuffle";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
 import { BoardData, BoardSquareData } from "@game-control/games/scrabble/moves/game-state";

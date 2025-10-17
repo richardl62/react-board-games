@@ -3,7 +3,7 @@ import { BoardData, BoardSquareData } from "@game-control/games/scrabble/moves/g
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
 import { ScrabbleContext } from "./scrabble-context";
-import { ScoringConfig } from "@game-control/games/scrabble/config";
+import { ScoringConfig } from "@game-control/games/scrabble/config/scrabble-config";
 
 /** Row and Column numbers for use on grid-based board. */
 export interface RowCol {

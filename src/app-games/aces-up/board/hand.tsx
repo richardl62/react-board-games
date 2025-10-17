@@ -1,6 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { CardNonJoker, CardSVG } from "@utils/cards";
+import { CardSVG } from "@utils/cards/card";
+import { CardNonJoker } from "@utils/cards/types";
 import { cardSize } from "@utils/cards/styles";
 import { cardShortName } from "@utils/cards/types";
 import { useGameContext } from "../game-support/game-context";

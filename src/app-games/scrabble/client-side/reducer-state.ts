@@ -1,5 +1,5 @@
 import { ScrabbleGameProps } from "./srcabble-game-props";
-import { ScrabbleConfig } from "@game-control/games/scrabble/config";
+import { ScrabbleConfig } from "@game-control/games/scrabble/config/scrabble-config";
 import { GameState } from "@game-control/games/scrabble/moves/game-state";
 import { getLocalGameState, LocalGameState } from "./local-game-state";
 import { WordPosition } from "@utils/word-finder/get-legal-words/word-position";

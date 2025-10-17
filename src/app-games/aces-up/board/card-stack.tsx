@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { CardNonJoker, CardSVG } from "@utils/cards";
+import { CardSVG } from "@utils/cards/card";
+import { CardNonJoker } from "@utils/cards/types";
 import { cardSize, cardVerticalStackingOffset } from "@utils/cards/styles";
 import { CardID } from "@game-control/games/aces-up/moves/card-id";
 import { useCardDragRef, useCardDropRef } from "./drag-drop";

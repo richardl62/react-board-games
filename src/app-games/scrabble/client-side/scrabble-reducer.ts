@@ -1,5 +1,5 @@
 import { sAssert } from "@utils/assert";
-import { blank, Letter } from "@game-control/games/scrabble/config";
+import { blank, Letter } from "@game-control/games/scrabble/config/letters";
 import { makeLetter } from "@game-control/games/scrabble/config/letters";
 import { BoardAndRack } from "./board-and-rack";
 import { SquareID } from "./game-actions";

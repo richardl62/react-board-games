@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoarderedGrid } from "@utils/board/boardered-grid";
-import { SquareType } from "@game-control/games/scrabble/config";
+import { SquareType } from "@game-control/games/scrabble/config/square-type";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "@utils/assert";
 import { Tile } from "./tile";

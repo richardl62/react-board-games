@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { CardSVG } from "@utils/cards";
+import { CardSVG } from "@utils/cards/card";
 import { useGameContext } from "../game-support/game-context";
 import { canMove } from "../game-support/can-move";
 import { CardID, getCardID } from "@game-control/games/aces-up/moves/card-id";

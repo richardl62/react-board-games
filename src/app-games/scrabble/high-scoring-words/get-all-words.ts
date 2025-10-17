@@ -2,7 +2,7 @@ import { LegalWord, getLegalWordsForBoard } from "@utils/word-finder/get-legal-w
 import { LetterSet } from "@utils/word-finder/letter-set";
 import { Trie } from "@utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
-import { Letter } from "@game-control/games/scrabble/config";
+import { Letter } from "@game-control/games/scrabble/config/letters";
 import { makeLetterSet } from "./get-high-scoring-words";
 
 function isEmptyBoard(board: (Letter | null)[][]) {

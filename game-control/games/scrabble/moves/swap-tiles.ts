@@ -1,4 +1,4 @@
-import { Letter } from "../config";
+import { Letter } from "../config/letters";
 import { GameState } from "./game-state";
 import { MoveArg0 } from "../../../move-fn";
 

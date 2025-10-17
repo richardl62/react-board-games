@@ -1,6 +1,5 @@
 import { sAssert } from "@utils/assert";
-import { blank } from "@game-control/games/scrabble/config";
-
+import { blank } from "@game-control/games/scrabble/config/letters";
 import { Rack } from "./board-and-rack";
 import { ExtendedLetter } from "@game-control/games/scrabble/config/extended-letter";
 import { RowCol } from "./get-words-and-score";

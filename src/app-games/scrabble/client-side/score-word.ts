@@ -1,7 +1,8 @@
 import { sAssert } from "@utils/assert";
 import { tileScore } from "@game-control/games/scrabble/config/extended-letter";
 import { BoardData } from "@game-control/games/scrabble/moves/game-state";
-import { ScoringConfig, multipliers } from "@game-control/games/scrabble/config";
+import { ScoringConfig } from "@game-control/games/scrabble/config/scrabble-config";
+import { multipliers } from "@game-control/games/scrabble/config/square-type";
 
 interface RowCol {
     row: number;

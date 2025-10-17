@@ -1,5 +1,5 @@
 import { RequiredServerData, startingRequiredState } from "../../required-server-data";
-import { ScrabbleConfig } from "./config";
+import { ScrabbleConfig } from "./config/scrabble-config";
 import { GameState, isGameState, startingGameState } from "./moves/game-state";
 import { SetupArg0 } from "../../game-control";
 
