@@ -1,7 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { helloMessage } from './utils/hello-message.js';
+import { helloMessage } from '../dummy-module/hello.js';
+//import { allGames } from '../game-control/games/all-games.js';
 
 const app = express();
 const PORT = 3000;
@@ -16,7 +17,7 @@ app.use(express.static(distPath));
 
 // API endpoint example
 app.get('/api/hello', (_req, res) => {
-    const message = helloMessage();
+    const message = helloMessage();// + `${allGames.length} games available`;
     console.log('API called:', message);
     res.json({ message });
 });

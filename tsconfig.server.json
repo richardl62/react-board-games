@@ -15,12 +15,14 @@
       "noUncheckedSideEffectImports": true,
       "forceConsistentCasingInFileNames": true,
 
-      /* Paths */
+  
       "outDir": "./dist",
       "rootDir": "./",
     },
     "include": [
-      "server/**/*ts",
-      "game-controlX/**/*ts"
+      "server/**/*.ts",
+      //"game-control/**/*.ts",
+      "dummy-module/**/*.ts"
     ],
   }
+  
