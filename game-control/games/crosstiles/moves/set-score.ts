@@ -1,6 +1,6 @@
 import { ScoreCategory } from "../score-categories";
 import { ServerData, GameStage } from "../server-data";
-import { MoveArg0 } from "@game-control/move-fn";
+import { MoveArg0 } from "../../../move-fn";
 
 export interface ScoreWithCategory {
     category: ScoreCategory;

@@ -1,4 +1,4 @@
-import { MoveArg0 } from "@game-control/move-fn";
+import { MoveArg0 } from "../../../move-fn";
 import { ServerData } from "../server-data";
 
 function turnOver (

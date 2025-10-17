@@ -1,5 +1,5 @@
-import { SetupArg0 } from "@game-control/game-control";
-import { RequiredServerData, startingRequiredState } from "@game-control/required-server-data";
+import { SetupArg0 } from "../../game-control";
+import { RequiredServerData, startingRequiredState } from "../../required-server-data";
 import { Letter } from "./config";
 import { ScoreCategory } from "./score-categories";
 import { ScoreCard, startingScoreCard } from "./moves/score-card";

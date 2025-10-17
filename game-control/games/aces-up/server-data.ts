@@ -1,5 +1,5 @@
-import { PlayerID } from "@game-control/playerid";
-import { RequiredServerData } from "@game-control/required-server-data";
+import { PlayerID } from "../../playerid";
+import { RequiredServerData } from "../../required-server-data";
 import { CardNonJoker } from "@/utils/cards";
 import { SharedPileData } from "./misc/shared-pile";
 import { DiscardPileData } from "./misc/discard-pile";

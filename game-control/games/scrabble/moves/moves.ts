@@ -1,12 +1,12 @@
-import { Ctx } from "@game-control/ctx";
-import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "@game-control/wrapped-move-function";
+import { Ctx } from "../../../ctx";
+import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../wrapped-move-function";
 import { sAssert } from "@/utils/assert";
 import { checkForWinner } from "./check-for-winner";
 import { GameState } from "./game-state";
 import { playWord } from "./play-word";
 import { ServerData } from "../server-data";
 import { swapTiles } from "./swap-tiles";
-import { MoveArg0 } from "@game-control/move-fn";
+import { MoveArg0 } from "../../../move-fn";
 
 type PassParam = void;
 function pass(

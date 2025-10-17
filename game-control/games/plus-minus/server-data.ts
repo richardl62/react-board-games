@@ -1,5 +1,5 @@
-import { RequiredServerData, startingRequiredState } from "@game-control/required-server-data";
-import { SetupArg0 } from "@game-control/game-control";
+import { RequiredServerData, startingRequiredState } from "../../required-server-data";
+import { SetupArg0 } from "../../game-control";
 
 export interface SetupOptions {
     readonly startingValue: number;

@@ -1,7 +1,7 @@
 import { sAssert } from "@/utils/assert";
 import { Letter, standardLetterSet} from "./letters";
 import { SquareType } from "./square-type";
-import { RandomAPI } from "@game-control/random-api";
+import { RandomAPI } from "../../../random-api";
 import { getScrabbleWords } from "@/utils/get-scrabble-words";
 
 const D = SquareType.doubleWord;

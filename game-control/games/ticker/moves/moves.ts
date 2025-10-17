@@ -1,4 +1,4 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "@game-control/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
 import { incrementCount } from "./increment-count";
 import { throwError } from "./throw-error";
 

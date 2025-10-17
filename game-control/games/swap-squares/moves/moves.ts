@@ -1,4 +1,4 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "@game-control/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
 import { swap } from "./swap";
 import { reset } from "./reset";
 

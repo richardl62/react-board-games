@@ -1,7 +1,7 @@
 import { ScrabbleConfig } from "./config";
 import { bgioMoves, startingServerData } from "./moves";
-import { GameControl } from "@game-control/game-control";
-import { SetupArg0 } from "@game-control/game-control";
+import { GameControl } from "../../game-control";
+import { SetupArg0 } from "../../game-control";
 import { simple, standard } from "./config/scrabble-config";
 import { SetupOptions } from "./server-data";
 

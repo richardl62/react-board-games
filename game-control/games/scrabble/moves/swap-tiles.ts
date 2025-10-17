@@ -1,6 +1,6 @@
 import { Letter } from "../config";
 import { GameState } from "./game-state";
-import { MoveArg0 } from "@game-control/move-fn";
+import { MoveArg0 } from "../../../move-fn";
 
 export interface SwapTilesParam {
     /**

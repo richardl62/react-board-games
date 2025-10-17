@@ -1,6 +1,6 @@
-import { SetupArg0 } from "@game-control/game-control";
-import { RandomAPI } from "@game-control/random-api";
-import { startingRequiredState } from "@game-control/required-server-data";
+import { SetupArg0 } from "../../../game-control";
+import { RandomAPI } from "../../../random-api";
+import { startingRequiredState } from "../../../required-server-data";
 import { CardNonJoker, ranks, suits } from "@/utils/cards/types";
 import { debugOptions } from "../config";
 import { handSize } from "../config";

@@ -1,4 +1,4 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "@game-control/wrapped-move-function";
+import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function";
 import { doneMakingBox } from "./done-making-box";
 import { drag } from "./drag";
 import { pegClick } from "./peg-click";

@@ -1,5 +1,5 @@
-import { MoveArg0 } from "@game-control/move-fn";
-import { PlayerID } from "@game-control/playerid";
+import { MoveArg0 } from "../../../move-fn";
+import { PlayerID } from "../../../playerid";
 import { sAssert } from "@/utils/assert";
 import { reorderFollowingDrag } from "@/utils/reorder-following-drag";
 import { sameJSON } from "@/utils/same-json";

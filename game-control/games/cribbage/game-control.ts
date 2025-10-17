@@ -1,4 +1,4 @@
-import { ActivePlayers, GameControl } from "@game-control/game-control";
+import { ActivePlayers, GameControl } from "../../game-control";
 import { bgioMoves } from "./moves/moves";
 import { startingServerData } from "./starting-server-data";
 

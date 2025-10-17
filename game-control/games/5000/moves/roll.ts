@@ -1,5 +1,5 @@
 import { ServerData } from "../server-data";
-import { MoveArg0 } from "@game-control/move-fn";
+import { MoveArg0 } from "../../../move-fn";
 import { setDiceScores } from "./set-dice-scores";
 import { moveHeldFacesToStart } from "../utils/move-held-faces-to-start";
 import { sAssert } from "@/utils/assert";

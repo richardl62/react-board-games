@@ -1,4 +1,4 @@
-import { PlayerID } from "@game-control/playerid";
+import { PlayerID } from "../../../playerid";
 import { ServerData } from "../server-data";
 import { DiscardPile } from "../misc/discard-pile";
 
