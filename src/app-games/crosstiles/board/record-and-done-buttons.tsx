@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
-import { sAssert } from "../../../utils/assert";
-import { sameNestedArray } from "../../../utils/same-nested-array";
+import { sAssert } from "@utils/assert";
+import { sameNestedArray } from "@utils/same-nested-array";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { checkGrid } from "../client-side/check-grid/check-grid";
 import { bonusScore } from "@game-control/games/crosstiles/config";

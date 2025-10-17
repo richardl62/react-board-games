@@ -3,7 +3,7 @@ import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { AppGame } from "../../app-game-support";
 import { standardOuterMargin } from "../../app-game-support/styles";
-import { LoadingOrError } from "../../utils/async-status";
+import { LoadingOrError } from "@utils/async-status";
 import { OfflineOptions } from "../offline-options";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";

@@ -3,7 +3,7 @@ import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { PlayerData, ServerData } from "@game-control/games/aces-up/server-data";
 import { ClientMoves } from "@game-control/games/aces-up/moves/moves";
 import { PlayerID } from "@game-control/playerid";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 
 interface ExtendedServerData extends ServerData {
     getPlayerData: (owner: PlayerID) => PlayerData;

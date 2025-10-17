@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { CardSVG } from "../../../utils/cards";
+import { CardSVG } from "@utils/cards";
 import { useCribbageContext } from "../client-side/cribbage-context";
 
 const DeckDiv = styled.div`

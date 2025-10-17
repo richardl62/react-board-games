@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { GoToStart, StepBackwards, StepForwards } from "./forward-back-arrows";
 import { useScrabbleContext } from "../client-side/scrabble-context";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import styled from "styled-components";
 
 const OuterDiv = styled.div`

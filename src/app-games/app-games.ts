@@ -1,7 +1,7 @@
 import { GameControl } from "@game-control/game-control";
 import { allGames } from "@game-control/games/all-games";
 import { AppGame } from "../app-game-support";
-import { sAssert } from "../utils/assert";
+import { sAssert } from "@utils/assert";
 import { appGame as g5000 } from "./5000/app-game";
 import { appGame as acesUp } from "./aces-up/app-game";
 import { appGame as cribbage } from "./cribbage/app-game";

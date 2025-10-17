@@ -1,4 +1,4 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { BoardData, BoardSquareData } from "@game-control/games/scrabble/moves/game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";

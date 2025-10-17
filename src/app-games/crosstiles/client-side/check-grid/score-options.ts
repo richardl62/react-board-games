@@ -1,5 +1,5 @@
 
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { bonusScore } from "@game-control/games/crosstiles/config";
 import { ScoreCategory } from "@game-control/games/crosstiles/score-categories";
 import { ScoreCard } from "@game-control/games/crosstiles/moves/score-card";

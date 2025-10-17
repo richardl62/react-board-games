@@ -5,7 +5,7 @@ import { bonusScore, Letter } from "@game-control/games/crosstiles/config";
 import { displayName, ScoreCategory } from "@game-control/games/crosstiles/score-categories";
 import { ScoreCard } from "@game-control/games/crosstiles/moves/score-card";
 import { countBonusLetters } from "../client-side/check-grid/count-bonus-letters";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 
 interface GridStatusProps {
     scoreCard: ScoreCard, 

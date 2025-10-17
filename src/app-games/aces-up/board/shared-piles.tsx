@@ -4,11 +4,11 @@ import { useGameContext } from "../game-support/game-context";
 import { SharedPile as SharedPileClass, makeSharedPiles } from "@game-control/games/aces-up/misc/shared-pile";
 import { columnGap } from "../game-support/styles";
 import { SharedPile } from "./shared-pile";
-import { CardNonJoker } from "../../../utils/cards";
-import { cardShortName } from "../../../utils/cards/types";
+import { CardNonJoker } from "@utils/cards";
+import { cardShortName } from "@utils/cards/types";
 import { cardStackHeight } from "./card-stack";
 import { AreaLabelBelow } from "./area-label";
-import { cardSize } from "../../../utils/cards/styles";
+import { cardSize } from "@utils/cards/styles";
 
 export const TextDiv = styled.div`
     text-align: center;

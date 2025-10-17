@@ -1,4 +1,4 @@
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { Letter } from "@game-control/games/crosstiles/config";
 import { ServerData } from "@game-control/games/crosstiles/server-data";
 import { GridAndRack } from "./grid-and-rack";

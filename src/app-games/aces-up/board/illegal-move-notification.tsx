@@ -1,6 +1,6 @@
-import { sAssert } from "../../../utils/assert";
-import { compareRank, rankName } from "../../../utils/cards/types";
-import { removeDuplicates } from "../../../utils/remove-duplicated";
+import { sAssert } from "@utils/assert";
+import { compareRank, rankName } from "@utils/cards/types";
+import { removeDuplicates } from "@utils/remove-duplicated";
 import { cardsMovableToSharedPile } from "@game-control/games/aces-up/moves/cards-movable-to-shared-pile";
 import { PlayerInfo } from "./player-info";
 import { ServerData } from "@game-control/games/aces-up/server-data";

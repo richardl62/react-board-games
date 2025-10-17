@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 import { GoToStart, GoToEnd, StepForwards, StepBackwards } from "./forward-back-arrows";
 

@@ -5,7 +5,7 @@ import { defaultValues } from "./tools";
 import { labelAndInputBoolean } from "./label-and-input-boolean";
 import { labelAndInputNumber } from "./label-and-input-number";
 import { labelAndInputFixedString } from "./label-and-input-fixed-string";
-import { sAssert } from "../../utils/assert";
+import { sAssert } from "@utils/assert";
 
 const OuterDiv = styled.div`
     display: inline-flex;

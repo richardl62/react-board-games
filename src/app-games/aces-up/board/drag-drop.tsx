@@ -1,14 +1,14 @@
 import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { CardSVG } from "../../../utils/cards";
+import { CardSVG } from "@utils/cards";
 import { useGameContext } from "../game-support/game-context";
 import { canMove } from "../game-support/can-move";
 import { CardID, getCardID } from "@game-control/games/aces-up/moves/card-id";
 import { moveType } from "@game-control/games/aces-up/moves/move-type";
 import styled from "styled-components";
-import { cardSize } from "../../../utils/cards/styles";
-import { sAssert } from "../../../utils/assert";
-import { dndRefKludge } from "../../../utils/dnd-ref-kludge";
+import { cardSize } from "@utils/cards/styles";
+import { sAssert } from "@utils/assert";
+import { dndRefKludge } from "@utils/dnd-ref-kludge";
 
 const dndType = "Card";
 

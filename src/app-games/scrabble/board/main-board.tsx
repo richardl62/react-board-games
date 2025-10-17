@@ -1,10 +1,10 @@
-import { BoarderedGrid } from "../../../utils/board/boardered-grid";
+import { BoarderedGrid } from "@utils/board/boardered-grid";
 import { JSX } from "react";
 import { boardIDs, SquareID } from "../client-side";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";
 import { Tile } from "./tile";
-import { ClickMoveMarker } from "../../../utils/board/click-move-marker";
+import { ClickMoveMarker } from "@utils/board/click-move-marker";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 
 export function MainBoard(): JSX.Element {

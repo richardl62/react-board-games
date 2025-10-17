@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { CardNonJoker, CardSVG } from "../../../utils/cards";
-import { cardSize, cardVerticalStackingOffset } from "../../../utils/cards/styles";
+import { CardNonJoker, CardSVG } from "@utils/cards";
+import { cardSize, cardVerticalStackingOffset } from "@utils/cards/styles";
 import { CardID } from "@game-control/games/aces-up/moves/card-id";
 import { useCardDragRef, useCardDropRef } from "./drag-drop";
 import { JSX } from "react";
-import { dndRefKludge } from "../../../utils/dnd-ref-kludge";
+import { dndRefKludge } from "@utils/dnd-ref-kludge";
 
 const SubStackDiv = styled.div`
     position: absolute;

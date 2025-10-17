@@ -1,7 +1,7 @@
 import { JSX, useEffect, useState } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../utils/assert";
-import {  useNowTicker } from "../../../utils/use-countdown";
+import { sAssert } from "@utils/assert";
+import {  useNowTicker } from "@utils/use-countdown";
 import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { GameStage } from "@game-control/games/crosstiles/server-data";
 import { GridStatus } from "./grid-status";

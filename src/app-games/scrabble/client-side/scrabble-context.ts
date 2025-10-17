@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { ReducerState } from "./reducer-state";
 import { ActionType } from "./scrabble-reducer";
 import { ScrabbleConfig } from "@game-control/games/scrabble/config";
@@ -9,7 +9,7 @@ import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "@game-control/games/scrabble/moves/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { RequiredServerData } from "@game-control/required-server-data";
-import { Trie } from "../../../utils/word-finder/trie";
+import { Trie } from "@utils/word-finder/trie";
 
 import React from "react";
 import { SetupOptions } from "@game-control/games/scrabble/server-data";

@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { useGameContext } from "../client-side/game-context";
-import { DiceSet } from "../../../utils/dice/dice-set";
+import { DiceSet } from "@utils/dice/dice-set";
 import { moveHeldFacesToStart } from "@game-control/games/5000/utils/move-held-faces-to-start";
 
 export function GameDiceSet(): JSX.Element {

@@ -1,8 +1,8 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { CardNonJoker, CardSVG } from "../../../utils/cards";
-import { cardSize } from "../../../utils/cards/styles";
-import { cardShortName } from "../../../utils/cards/types";
+import { CardNonJoker, CardSVG } from "@utils/cards";
+import { cardSize } from "@utils/cards/styles";
+import { cardShortName } from "@utils/cards/types";
 import { useGameContext } from "../game-support/game-context";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";

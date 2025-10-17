@@ -1,7 +1,7 @@
 import { CardSetID, GameStage, PlayerID } from "@game-control/games/cribbage/server-data";
-import { sAssert } from "@/utils/assert";
-import { Card } from "@/utils/cards";
-import { compareCards } from "@/utils/cards/types";
+import { sAssert } from "@utils/assert";
+import { Card } from "@utils/cards";
+import { compareCards } from "@utils/cards/types";
 import { cardInBoxPerPlayer } from "@game-control/games/cribbage/config";
 import { CribbageContext } from "./cribbage-context";
 

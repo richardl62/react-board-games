@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { rotateArray } from "../../../utils/rotate-array";
+import { rotateArray } from "@utils/rotate-array";
 import { useGameContext } from "../game-support/game-context";
 import { rowGap } from "../game-support/styles";
 import { PlayerArea } from "./player-area";

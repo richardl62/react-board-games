@@ -1,4 +1,4 @@
-import { Trie } from "../../../utils/word-finder/trie";
+import { Trie } from "@utils/word-finder/trie";
 import { BoardAndRack, Rack } from "../client-side/board-and-rack";
 import { SquareType } from "@game-control/games/scrabble/config";
 import { BoardData } from "@game-control/games/scrabble/moves/game-state";

@@ -1,10 +1,10 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { ExtendedLetter, makeExtendedLetter } from "@game-control/games/scrabble/config/extended-letter";
 import { blank, Letter } from "@game-control/games/scrabble/config";
-import { shuffle } from "../../../utils/shuffle";
+import { shuffle } from "@utils/shuffle";
 import { addToRack, boardIDs, compactRack, onRack, sameSquareID, SquareID } from "./game-actions";
 import { BoardData, BoardSquareData } from "@game-control/games/scrabble/moves/game-state";
-import { WordPosition } from "../../../utils/word-finder/get-legal-words/word-position";
+import { WordPosition } from "@utils/word-finder/get-legal-words/word-position";
 
 export type Rack = (Letter | null)[];
 

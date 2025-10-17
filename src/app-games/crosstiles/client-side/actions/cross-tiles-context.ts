@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { ActionType, ReducerState } from "./cross-tiles-reducer";
 import { ClientMoves } from "@game-control/games/crosstiles/moves/moves";
 import { ServerData } from "@game-control/games/crosstiles/server-data";

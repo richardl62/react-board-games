@@ -28,6 +28,7 @@
     "rootDir": "./",
     "paths": {
       "@/*": ["./src/*"],
+      "@utils/*": ["./src/utils/*"],
       "@game-control/*": ["./game-control/*"],
     }
   },

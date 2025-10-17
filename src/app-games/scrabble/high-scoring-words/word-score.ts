@@ -1,5 +1,5 @@
-import { sAssert } from "../../../utils/assert";
-import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
+import { sAssert } from "@utils/assert";
+import { LegalWord } from "@utils/word-finder/get-legal-words/get-legal-words-for-board";
 import { Letter, ScoringConfig, blank } from "@game-control/games/scrabble/config";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { RowCol, getScore } from "../client-side/get-words-and-score";

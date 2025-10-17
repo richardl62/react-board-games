@@ -1,7 +1,7 @@
 import { JSX, useCallback, useEffect, useReducer } from "react";
 import { useAsync } from "react-async-hook";
-import { AsyncStatus } from "../../../utils/async-status";
-import { getScrabbleWords } from "../../../utils/get-scrabble-words";
+import { AsyncStatus } from "@utils/async-status";
+import { getScrabbleWords } from "@utils/get-scrabble-words";
 import { makeCrossTilesContext, ReactCrossTilesContext } from "../client-side/actions/cross-tiles-context";
 import { CrossTilesGameProps } from "../client-side/actions/cross-tiles-game-props";
 import { crossTilesReducer, initialReducerState } from "../client-side/actions/cross-tiles-reducer";

@@ -1,7 +1,7 @@
 // NOTE/KLUDGE:  The matchData type supplied by boardgames.io seems not have
 // isConnected as an optional member. The code below is my way of add it.
 
-import { sAssert } from "../utils/assert";
+import { sAssert } from "@utils/assert";
 import { BoardProps } from "@game-control/board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
 import * as UrlParams from "../app/url-params";

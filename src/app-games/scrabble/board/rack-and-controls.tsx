@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { Rack } from "./rack";
 import { BoardData } from "@game-control/games/scrabble/moves/game-state";
 import { useScrabbleContext } from "../client-side/scrabble-context";

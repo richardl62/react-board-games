@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { nPreStartPegs, skunkLinePos, winningLinePos } from "@game-control/games/cribbage/config";
 import { pegPoints } from "./peg-points";
 import { columnGap, holeRadius, rowGap } from "./sizes";

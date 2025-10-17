@@ -6,9 +6,9 @@ import { scrabbleReducer } from "../client-side/scrabble-reducer";
 import { ScrabbleConfig } from "@game-control/games/scrabble/config";
 import { makeScrabbleContext, ReactScrabbleContext } from "../client-side/scrabble-context";
 import { isScrabbleConfig } from "@game-control/games/scrabble/config/scrabble-config";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
-import { Trie } from "../../../utils/word-finder/trie";
+import { Trie } from "@utils/word-finder/trie";
 
 // import { beep } from "./sounds";
 

@@ -1,4 +1,4 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { blank, Letter } from "@game-control/games/scrabble/config";
 import { makeLetter } from "@game-control/games/scrabble/config/letters";
 import { BoardAndRack } from "./board-and-rack";
@@ -7,8 +7,8 @@ import { applyPossibleWord } from "../high-scoring-words";
 import { getHighScoringWords } from "../high-scoring-words";
 import { newReducerState, ReducerState } from "./reducer-state";
 import { ScrabbleGameProps } from "./srcabble-game-props";
-import { Trie } from "../../../utils/word-finder/trie";
-import { WordPosition, WordDirection } from "../../../utils/word-finder/get-legal-words/word-position";
+import { Trie } from "@utils/word-finder/trie";
+import { WordPosition, WordDirection } from "@utils/word-finder/get-legal-words/word-position";
 
 export type ActionType =
     | { type: "move", data: {from: SquareID,to: SquareID}}

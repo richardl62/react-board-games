@@ -1,6 +1,6 @@
 import { JSX, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useTicker } from "../../../utils/use-countdown";
+import { useTicker } from "@utils/use-countdown";
 import { useGameContext } from "../client-side/game-context";
 
 const OuterDiv = styled.div`

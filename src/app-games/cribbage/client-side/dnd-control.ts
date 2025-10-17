@@ -1,5 +1,5 @@
 import { CardSetID, GameStage } from "@game-control/games/cribbage/server-data";
-import { sAssert } from "@/utils/assert";
+import { sAssert } from "@utils/assert";
 import { boxFull, owner } from "./context-tools";
 import { CribbageContext } from "./cribbage-context";
 

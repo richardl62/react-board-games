@@ -1,9 +1,9 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { boardIDs } from "../client-side";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { blank } from "@game-control/games/scrabble/config";
 import { makeLetter } from "@game-control/games/scrabble/config/letters";
-import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
+import { LegalWord } from "@utils/word-finder/get-legal-words/get-legal-words-for-board";
 
 export function applyPossibleWord(br: BoardAndRack, possibleWord: LegalWord) : void {
     br.recallRack();

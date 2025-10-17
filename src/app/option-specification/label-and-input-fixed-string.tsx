@@ -1,5 +1,5 @@
 import { ChangeEvent, JSX } from "react";
-import { sAssert } from "../../utils/assert";
+import { sAssert } from "@utils/assert";
 
 export function labelAndInputFixedString(
     value: string,

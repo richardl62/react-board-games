@@ -1,5 +1,5 @@
 import { Letter } from "@game-control/games/crosstiles/config";
-import { transpose } from "../../../../utils/transpose";
+import { transpose } from "@utils/transpose";
 
 function addWordsfromRow(row: (Letter | null)[], words: string[]) {
     let str = "";

@@ -1,7 +1,7 @@
-import { LegalWord } from "../../../utils/word-finder/get-legal-words/get-legal-words-for-board";
-import { WordDirection } from "../../../utils/word-finder/get-legal-words/word-position";
-import { LetterSet } from "../../../utils/word-finder/letter-set";
-import { Trie } from "../../../utils/word-finder/trie";
+import { LegalWord } from "@utils/word-finder/get-legal-words/get-legal-words-for-board";
+import { WordDirection } from "@utils/word-finder/get-legal-words/word-position";
+import { LetterSet } from "@utils/word-finder/letter-set";
+import { Trie } from "@utils/word-finder/trie";
 import { BoardAndRack } from "../client-side/board-and-rack";
 import { wordScore } from "./word-score";
 import { Letter, ScoringConfig, blank } from "@game-control/games/scrabble/config";

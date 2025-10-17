@@ -1,5 +1,5 @@
-import { sAssert } from "../../../../utils/assert";
-import { shuffle } from "../../../../utils/shuffle";
+import { sAssert } from "@utils/assert";
+import { shuffle } from "@utils/shuffle";
 import { Letter } from "@game-control/games/crosstiles/config";
 import { ClickMoveStart, sameSquareID, SquareID } from "./types";
 

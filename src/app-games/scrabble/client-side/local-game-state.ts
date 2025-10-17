@@ -1,4 +1,4 @@
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { Rack } from "./board-and-rack";
 import { BoardData, GameState } from "@game-control/games/scrabble/moves/game-state";
 

@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { nNonNull } from "../../../utils/n-non-null";
+import { nNonNull } from "@utils/n-non-null";
 import { useScrabbleContext } from "../client-side/scrabble-context";
 
 const StyledScoresEtc=styled.div`

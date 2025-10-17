@@ -1,4 +1,4 @@
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { Letter } from "@game-control/games/crosstiles/config";
 import { FixedScoreCategory, fixedScores, ScoreCategory } from "@game-control/games/crosstiles/score-categories";
 import { ScoreCard } from "@game-control/games/crosstiles/moves/score-card";

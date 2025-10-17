@@ -1,5 +1,5 @@
 import { Card, CardBack } from "./types";
-import { sAssert } from "../../utils/assert";
+import { sAssert } from "@utils/assert";
 import React, { JSX } from "react";
 import { cardSize } from "./styles";
 

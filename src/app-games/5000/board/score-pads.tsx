@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { ScorePad } from "../../../utils/score-pad";
+import { ScorePad } from "@utils/score-pad";
 import { useGameContext } from "../client-side/game-context";
 
 const ScorePadsDiv = styled.div`

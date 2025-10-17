@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Letter } from "@game-control/games/crosstiles/config";
 import { boardBoarderColor, boardBoarderSize } from "./style";
 import { Square } from "./square";
-import { sAssert } from "../../../utils/assert";
+import { sAssert } from "@utils/assert";
 import { ClickMoveStart, SquareID } from "../client-side/actions/types";
 
 

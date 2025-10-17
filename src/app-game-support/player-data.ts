@@ -1,4 +1,4 @@
-import { sAssert } from "../utils/assert";
+import { sAssert } from "@utils/assert";
 import { BoardProps as BgioBoardProps, MatchDataElem } from "@game-control/board-props";
 
 export function defaultPlayerName(playerID: string): string {

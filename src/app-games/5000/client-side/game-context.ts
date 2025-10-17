@@ -3,7 +3,7 @@ import { useStandardBoardContext } from "../../../app-game-support/standard-boar
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
 import { ClientMoves } from "@game-control/games/5000/moves/moves";
 import { ServerData } from "@game-control/games/5000/server-data";
-import { useTimedSteps } from "../../../utils/use-timed-steps";
+import { useTimedSteps } from "@utils/use-timed-steps";
 
 const spinTime = 1000; // milliseconds
 const nRotations = 1;

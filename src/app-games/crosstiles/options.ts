@@ -1,7 +1,7 @@
 
 import { SpecifiedValues } from "../../app/option-specification/types";
 import { defaultValues } from "../../app/option-specification/tools";
-import { assertType, Equal } from "@/utils/assert-type";
+import { assertType, Equal } from "@utils/assert-type";
 import { SetupOptions } from "@game-control/games/crosstiles/server-data";
 
 export const setupOptions = {

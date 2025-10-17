@@ -1,4 +1,4 @@
-import { sAssert } from "../../../../utils/assert";
+import { sAssert } from "@utils/assert";
 
 interface RowCol {
     row: number;
