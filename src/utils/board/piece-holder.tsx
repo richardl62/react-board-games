@@ -1,7 +1,7 @@
 import { JSX, ReactNode } from "react";
 import styled from "styled-components";
-import {useDrag, useDrop } from "../../../src/app-game-support/dnd/drag-drop.js";
-import { dndRefKludge } from "../../../src/app-game-support/dnd/dnd-ref-kludge.js";
+import {useDrag, useDrop } from "../dnd/drag-drop.js";
+import { dndRefKludge } from "../dnd/dnd-ref-kludge.js";
 
 type UnknownObject = Record<string, unknown>;
 

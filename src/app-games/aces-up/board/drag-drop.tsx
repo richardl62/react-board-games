@@ -8,7 +8,7 @@ import { moveType } from "@game-control/games/aces-up/moves/move-type";
 import styled from "styled-components";
 import { cardSize } from "@utils/cards/styles";
 import { sAssert } from "@utils/assert";
-import { dndRefKludge } from "@/app-game-support/dnd/dnd-ref-kludge";
+import { dndRefKludge } from "@utils/dnd/dnd-ref-kludge";
 
 const dndType = "Card";
 

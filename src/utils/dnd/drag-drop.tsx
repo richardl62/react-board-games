@@ -1,6 +1,6 @@
 import * as ReactDnd from "react-dnd";
-import { sAssert } from "../../../game-control/utils/assert.js";
-import { sameJSON } from "../../../game-control/utils/same-json.js";
+import { sAssert } from "@utils/assert.js";
+import { sameJSON } from "@utils/same-json.js";
 const PIECE = "piece";
 
 type UnknownObject = Record<string, unknown>;

@@ -1,0 +1,1 @@
+export * from "@game-control/utils/get-scrabble-words";

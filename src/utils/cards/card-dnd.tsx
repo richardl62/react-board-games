@@ -1,8 +1,8 @@
 import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { sAssert } from "../../../game-control/utils/assert.js";
-import { CardSVG } from "../../../game-control/utils/cards/card.js";
-import { dndRefKludge } from "./dnd-ref-kludge.js";
+import { sAssert } from "@utils/assert.js";
+import { CardSVG } from "@utils/cards/card.js";
+import { dndRefKludge } from "../dnd/dnd-ref-kludge.js";
 
 type CardProps = Parameters<typeof CardSVG>[0];
 

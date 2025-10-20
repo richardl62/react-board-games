@@ -5,7 +5,7 @@ import { ClickMoveMarker } from "@utils/board/click-move-marker";
 import { ClickMoveStart } from "../client-side/actions/types";
 import { Letter, bonusLetters } from "@game-control/games/crosstiles/config";
 import { squareSize, squareBackgroundColor, tileTextColor, tileBackgroundColor } from "./style";
-import { dndRefKludge } from "@/app-game-support/dnd/dnd-ref-kludge";
+import { dndRefKludge } from "@utils/dnd/dnd-ref-kludge";
 
 const EmptySquare = styled.div`
     height: ${squareSize};
