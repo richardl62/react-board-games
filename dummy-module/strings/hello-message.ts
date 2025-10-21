@@ -1,1 +1,0 @@
-export const helloMessageStr = "Hello from dummy-module";

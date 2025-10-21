@@ -22,7 +22,6 @@
     "include": [
       "server/**/*.ts",
       "game-control/**/*.ts",
-      "dummy-module/**/*.ts"
     ],
   }
   
