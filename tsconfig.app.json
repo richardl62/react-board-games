@@ -29,11 +29,11 @@
     "paths": {
       "@/*": ["./src/*"],
       "@utils/*": ["./src/utils/*"],
-      "@game-control/*": ["./game-control/*"],
+      "@game-control/*": ["./shared/game-control/*"],
     }
   },
   "include": [
     "src/**/*",
-    "game-control/**/*",
+    "shared/**/*",
   ],
 }

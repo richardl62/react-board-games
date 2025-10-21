@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { allGames } from '../game-control/games/all-games.js';
+import { allGames } from '../shared/game-control/games/all-games.js';
 
 const app = express();
 const PORT = 3000;
