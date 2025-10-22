@@ -1,5 +1,5 @@
 import { assertType, Equal } from "@utils/assert-type";
-import { SpecifiedValues } from "../../app/option-specification/types";
+import { SpecifiedValues } from "../../option-specification/types";
 import { SetupOptions, startingOrders } from "@game-control/games/swap-squares/server-data";
 
 export const setupOptions = {

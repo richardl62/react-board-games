@@ -1,5 +1,5 @@
 import { SetupOptions } from "@game-control/games/5000/server-data";
-import { SpecifiedValues } from "../../app/option-specification/types";
+import { SpecifiedValues } from "../../option-specification/types";
 import { assertType, Equal } from "@utils/assert-type";
 
 export const setupOptions = {

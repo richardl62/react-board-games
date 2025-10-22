@@ -1,4 +1,4 @@
-import { OptionSpecifications } from "@/app/option-specification/types";
+import { OptionSpecifications } from "@/option-specification/types";
 import { JSX } from "react";
 import { WrappedGameProps } from "./wrapped-game-props";
 import { GameControl } from "@game-control/game-control";

@@ -1,6 +1,6 @@
 import { SetupOptions } from "@game-control/games/plus-minus/server-data";
 import { assertType, Equal } from "@utils/assert-type";
-import { SpecifiedValues } from "../../app/option-specification/types";
+import { SpecifiedValues } from "../../option-specification/types";
 
 export const setupOptions = {
     startingValue: {
