@@ -2,7 +2,7 @@ import { JSX, useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import { AppGame, MatchID } from "../../app-game-support";
 import { AsyncStatus, loadingOrError } from "@utils/async-status";
-import { joinMatch } from "../../boardgame-lib/lobby/lobby-tools";
+import { joinMatch } from "../lobby-functions/lobby-functions";
 import { addPlayerToHref } from "../../url-params";
 
 interface JoinGameProps {

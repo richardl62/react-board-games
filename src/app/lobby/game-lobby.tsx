@@ -7,7 +7,7 @@ import { LoadingOrError } from "@utils/async-status";
 import { OfflineOptions } from "../game-page/offline-options";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";
-import { listMatches } from "../../boardgame-lib/lobby/lobby-tools";
+import { listMatches } from "../lobby-functions/lobby-functions";
 
 const GameLobbyDiv = styled.div`
     display: inline-flex;

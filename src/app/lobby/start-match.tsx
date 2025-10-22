@@ -9,7 +9,7 @@ import { OptionValues, SpecifiedValues } from "../../option-specification/types"
 import { InputValues } from "../../option-specification/input-values";
 import { defaultNumPlayers } from "../../app-game-support/app-game";
 import { sAssert } from "@utils/assert";
-import { createMatch } from "../../boardgame-lib/lobby/lobby-tools";
+import { createMatch } from "../lobby-functions/lobby-functions";
 
 export function StartMatch(props: {
     game: AppGame;
