@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
-import App from './app/app.tsx';
+import { App } from './app/app.tsx';
 
 
 const ErrorFallbackStyled=styled.div`

@@ -95,7 +95,7 @@ function PageNotFound(props: HomePageProps) {
 /**
  * Games App.
  */
-function App(): JSX.Element {
+export function App(): JSX.Element {
     
     useEffect(() => {
         document.title = "Games";
@@ -117,5 +117,3 @@ function App(): JSX.Element {
         </BrowserRouter>
     );
 }
-
-export default App;
