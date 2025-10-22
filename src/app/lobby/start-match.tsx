@@ -4,7 +4,7 @@ import { AppGame } from "../../app-game-support";
 import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { openOnlineMatchPage } from "../../url-params";
-import { OfflineOptions } from "../offline-options";
+import { OfflineOptions } from "../game-page/offline-options";
 import { OptionValues, SpecifiedValues } from "../../option-specification/types";
 import { InputValues } from "../../option-specification/input-values";
 import { defaultNumPlayers } from "../../app-game-support/app-game";

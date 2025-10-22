@@ -1,7 +1,7 @@
 import { JSX } from "react";
-import { AppGame, MatchID, Player } from "../app-game-support";
-import * as UrlParams from "../url-params";
-import { OnlineMatch } from "../boardgame-lib/online-match";
+import { AppGame, MatchID, Player } from "../../app-game-support";
+import * as UrlParams from "../../url-params";
+import { OnlineMatch } from "../../boardgame-lib/online-match";
 
 export function MatchPlayOnline({ game, matchID, player }: {
     game: AppGame;

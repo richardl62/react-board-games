@@ -1,7 +1,7 @@
 import { Client } from "boardgame.io/react";
 import { SocketIO } from "boardgame.io/multiplayer";
 import { AppGame, BoardProps } from "../app-game-support";
-import { GameBoard } from "../app/game-board";
+import { GameBoard } from "../app/game-page/game-board";
 
 export function OnlineMatch({ server, game, matchID, playerID, credentials }: {
     server: string;

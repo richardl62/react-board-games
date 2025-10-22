@@ -2,7 +2,7 @@
 // If not set, give default value.
 import { AppGame, MatchID, Player } from "./app-game-support";
 import { sAssert } from "@utils/assert";
-import { OfflineOptions } from "./app/offline-options";
+import { OfflineOptions } from "./app/game-page/offline-options";
 
 const keys = {
     credentials: "cred",

@@ -1,13 +1,13 @@
 import { JSX, useState } from "react";
 import styled from "styled-components";
-import { AppGame } from "../app-game-support";
-import { defaultValues } from "../option-specification/tools";
-import { GameLobby } from "./lobby/game-lobby";
-import { MatchLobby } from "./lobby/match-lobby";
+import { AppGame } from "../../app-game-support";
+import { defaultValues } from "../../option-specification/tools";
+import { GameLobby } from "../lobby/game-lobby";
+import { MatchLobby } from "../lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
 import { MatchPlayOnline } from "./match-play-online";
 import { OfflineOptions } from "./offline-options";
-import * as UrlParams from "../url-params";
+import * as UrlParams from "../../url-params";
 
 const OuterDiv = styled.div`
     font-size: 18px;
@@ -17,7 +17,7 @@ const OuterDiv = styled.div`
         font-size: 1em;
     }
 `;
-function InnerGameComponent(props: {game : AppGame} ) {
+function InnerGamePage(props: {game : AppGame} ) {
     const { game } = props;
     const {matchID, offlineData: offlineOptionsFromUrl, player} = UrlParams;
 
@@ -50,8 +50,10 @@ function InnerGameComponent(props: {game : AppGame} ) {
     return <GameLobby game={game} setOfflineOptions={setOfflineOptions}/>;
 }
 
-export function GameComponent(props: {game : AppGame} ): JSX.Element {
+// The main page component for a particular game.
+// Reachable with a URL like https:/<main-address>/scrabble
+export function GamePage(props: {game : AppGame} ): JSX.Element {
     return <OuterDiv>
-        <InnerGameComponent {...props} />
+        <InnerGamePage {...props} />
     </OuterDiv>;
 }
