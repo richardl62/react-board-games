@@ -1,8 +1,8 @@
 // Get values that can be set in the url.
 // If not set, give default value.
-import { AppGame, MatchID, Player } from "../app-game-support";
+import { AppGame, MatchID, Player } from "./app-game-support";
 import { sAssert } from "@utils/assert";
-import { OfflineOptions } from "./offline-options";
+import { OfflineOptions } from "./app/offline-options";
 
 const keys = {
     credentials: "cred",

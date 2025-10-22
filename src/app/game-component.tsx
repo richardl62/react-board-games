@@ -7,7 +7,7 @@ import { MatchLobby } from "./lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
 import { MatchPlayOnline } from "./match-play-online";
 import { OfflineOptions } from "./offline-options";
-import * as UrlParams from "./url-params";
+import * as UrlParams from "../url-params";
 
 const OuterDiv = styled.div`
     font-size: 18px;

@@ -1,6 +1,6 @@
 import { LobbyClient } from "boardgame.io/client";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
-import { lobbyServer } from "../../app/url-params";
+import { lobbyServer } from "../../url-params";
 import { MatchData } from "./types";
 
 interface MatchList {
