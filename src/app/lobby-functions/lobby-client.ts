@@ -1,5 +1,6 @@
 import { LobbyInterface } from "@lobby/interface";
 import { CreatedMatch, JoinedMatch, Match, MatchList } from "@lobby/types";
+import { callLobby } from "./call-lobby";
 
 // As LobbyInterface but functions return promises. (LobbyInterface is used in the server where
 // promises are not needed.)
@@ -19,44 +20,44 @@ export class LobbyClient implements LobbyPromises {
     }
 
     listMatches(
-        _options: {
+        options: {
             gameName: string;
         })
     : Promise<MatchList> {
-        throw new Error("Not implemented");
+        return callLobby("listMatches", options);
     }
     
     getMatch(
-        _options: {
+        options: {
             gameName: string; 
             matchID: string;
         }
     ): Promise<Match> {
-        throw new Error("Not implemented");
+        return callLobby("getMatch", options);
     }
 
     createMatch(
-        _options: {
+        options: {
             gameName: string;
             numPlayers: number;
             setupData: unknown;
         }
     ): Promise<CreatedMatch> {
-        throw new Error("Not implemented");
+        return callLobby("createMatch", options);
     }
     
     joinMatch(
-        _options: {
+        options: {
             gameName: string;
             matchID: string;
             playerName: string;
         }
     ): Promise<JoinedMatch> {
-        throw new Error("Not implemented");
+        return callLobby("listMatches", options);
     }
     
     updatePlayer(
-        _options: {
+        options: {
             gameName: string;
             matchID: string;
             playerID: string;
@@ -64,6 +65,6 @@ export class LobbyClient implements LobbyPromises {
             newName: string;
         }
     ): Promise<void> {
-        throw new Error("Not implemented");
+        return callLobby("updatePlayer", options);
     }
 }
