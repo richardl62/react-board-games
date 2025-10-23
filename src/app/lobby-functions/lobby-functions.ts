@@ -11,23 +11,30 @@ export async function createMatch(
     game: AppGame,
     options: { numPlayers: number, setupData: unknown },
 ): Promise<MatchID> {
-    const p = makeLobbyClient().createMatch(game.name, options);
+    const p = makeLobbyClient().createMatch({ 
+        gameName: game.name, 
+        numPlayers: options.numPlayers,
+        setupData: options.setupData 
+    });
     const m = await p;
     return { mid: m.matchID };
 }
 
 export async function getMatch(gameName: string, matchID: string): Promise<Match>
 {
-    return makeLobbyClient().getMatch(gameName, matchID);
+    return makeLobbyClient().getMatch({ gameName, matchID });
 }
 
 export async function listMatches(gameName: string): Promise<MatchList> {
-    return makeLobbyClient().listMatches(gameName);
+    return makeLobbyClient().listMatches({ gameName });
 }
 
 export async function joinMatch(game: AppGame, matchID: MatchID, name: string | null = null): Promise<Player> {
     const lobbyClient = makeLobbyClient();
-    const match = await lobbyClient.getMatch(game.name, matchID.mid);
+    const match = await lobbyClient.getMatch({ 
+        gameName: game.name, 
+        matchID: matchID.mid
+    });
 
     const players = match.players;
     let index = 0;
@@ -38,14 +45,18 @@ export async function joinMatch(game: AppGame, matchID: MatchID, name: string | 
         }
     }
 
-    const joinMatchResult = await lobbyClient.joinMatch(game.name, matchID.mid,
-        {playerName: name || "unnamed"} );
+    const joinMatchResult = await lobbyClient.joinMatch({
+        gameName: game.name, matchID: matchID.mid,
+        playerName: name || "unnamed"
+    });
 
     const credentials = joinMatchResult.playerCredentials;
     const playerID = joinMatchResult.playerID;
 
     if(!name) {
-        await lobbyClient.updatePlayer(game.name, matchID.mid, {
+        await lobbyClient.updatePlayer({
+            gameName: game.name, 
+            matchID: matchID.mid,
             playerID: playerID,
             credentials: credentials,
             newName: defaultPlayerName(playerID),

@@ -3,34 +3,38 @@ import { MatchList, Match, CreatedMatch, JoinedMatch } from "./types";
 export interface LobbyInterface {
 
     listMatches: (
-        gameName: string
+        options: {
+            gameName: string;
+        }
     ) => MatchList;
     
-    getMatch(
-        gameName: string, 
-        matchID: string
-    ): Match;
+    getMatch: (
+        options: {
+            gameName: string;
+            matchID: string;
+        }
+    ) => Match;
     
     createMatch: (
-        gameName: string, 
-        body: {
+        options: {
+            gameName: string;
             numPlayers: number;
             setupData: unknown;
         }
     ) => CreatedMatch;
 
     joinMatch: (
-        gameName: string, 
-        matchID: string, 
-        body: {
+        options: {
+            gameName: string;
+            matchID: string;
             playerName: string;
         }
     ) => JoinedMatch;
 
     updatePlayer: (
-        gameName: string,
-        matchID: string, 
-        body: {
+        options: {
+            gameName: string;
+            matchID: string;
             playerID: string;
             credentials: string;
             newName: string;
