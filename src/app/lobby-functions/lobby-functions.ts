@@ -1,17 +1,13 @@
-import { LobbyClient } from "./lobby-client";
+import { lobbyClient } from "./lobby-client";
 import { Match, MatchList } from "@lobby/types";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
-import { lobbyServer } from "../../url-params";
 
-function makeLobbyClient() : LobbyClient {
-    return new LobbyClient({ server: lobbyServer() });
-}
 
 export async function createMatch(
     game: AppGame,
     options: { numPlayers: number, setupData: unknown },
 ): Promise<MatchID> {
-    const p = makeLobbyClient().createMatch({ 
+    const p = lobbyClient.createMatch({ 
         gameName: game.name, 
         numPlayers: options.numPlayers,
         setupData: options.setupData 
@@ -22,15 +18,14 @@ export async function createMatch(
 
 export async function getMatch(gameName: string, matchID: string): Promise<Match>
 {
-    return makeLobbyClient().getMatch({ gameName, matchID });
+    return lobbyClient.getMatch({ gameName, matchID });
 }
 
 export async function listMatches(gameName: string): Promise<MatchList> {
-    return makeLobbyClient().listMatches({ gameName });
+    return lobbyClient.listMatches({ gameName });
 }
 
 export async function joinMatch(game: AppGame, matchID: MatchID, name: string | null = null): Promise<Player> {
-    const lobbyClient = makeLobbyClient();
     const match = await lobbyClient.getMatch({ 
         gameName: game.name, 
         matchID: matchID.mid

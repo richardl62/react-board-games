@@ -1,70 +1,56 @@
 import { LobbyInterface } from "@lobby/interface";
-import { CreatedMatch, JoinedMatch, Match, MatchList } from "@lobby/types";
-import { callLobby } from "./call-lobby";
+import { lobbyServer } from "@/url-params";
 
 // As LobbyInterface but functions return promises. (LobbyInterface is used in the server where
 // promises are not needed.)
-export type LobbyPromises = {
+type LobbyPromises = {
     [P in keyof LobbyInterface]: 
         (...args: Parameters<LobbyInterface[P]>) => Promise<ReturnType<LobbyInterface[P]>>;
 };
 
-export class LobbyClient implements LobbyPromises {
-    private server: string;
-    constructor({ server }: {
-        server: string;
-    })
-    {
-        this.server = server;
-        console.log(`LobbyClient using server: ${this.server}`);
-    }
+export const lobbyClient: LobbyPromises = {
 
-    listMatches(
-        options: {
-            gameName: string;
-        })
-    : Promise<MatchList> {
+    listMatches: (options) => {
         return callLobby("listMatches", options);
-    }
-    
-    getMatch(
-        options: {
-            gameName: string; 
-            matchID: string;
-        }
-    ): Promise<Match> {
+    },
+
+    getMatch: (options) => {
         return callLobby("getMatch", options);
+    },
+
+    createMatch: (options) => {
+        return callLobby("createMatch", options);
+    },
+    
+    joinMatch : (options) => {
+        return callLobby("joinMatch", options);
+    },
+    
+    updatePlayer: (options) => {
+        return callLobby("updatePlayer", options);
+    },
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function callLobby(func: string, arg: unknown) : Promise<any> {
+    // Note: The name of the lobbyFunction ('createMatch' etc.) is passed to the
+    // server as query parameter with name 'func'.
+    const searchParams = new URLSearchParams();
+    searchParams.append("func", func);
+    searchParams.append("arg", JSON.stringify(arg));
+
+    const fullUrl = `${lobbyServer()}/lobby?${searchParams.toString()}`;
+    console.log("callLobby fetching from", fullUrl);
+
+    const response = await fetch(fullUrl);
+    // Check response status code for errors
+    if (!response.ok) {
+        const message = `${func} failed: fetch reported ${response.status}`;
+        console.log(message);
+        throw new Error(message);
     }
 
-    createMatch(
-        options: {
-            gameName: string;
-            numPlayers: number;
-            setupData: unknown;
-        }
-    ): Promise<CreatedMatch> {
-        return callLobby("createMatch", options);
-    }
-    
-    joinMatch(
-        options: {
-            gameName: string;
-            matchID: string;
-            playerName: string;
-        }
-    ): Promise<JoinedMatch> {
-        return callLobby("listMatches", options);
-    }
-    
-    updatePlayer(
-        options: {
-            gameName: string;
-            matchID: string;
-            playerID: string;
-            credentials: string;
-            newName: string;
-        }
-    ): Promise<void> {
-        return callLobby("updatePlayer", options);
-    }
+    const result = await response.json();
+    console.log(`${func} suceeded`, result);
+    return result;
 }
