@@ -1,4 +1,5 @@
-import { LobbyClient, Match, MatchList } from "./lobby-client";
+import { LobbyClient } from "./lobby-client";
+import { Match, MatchList } from "@lobby/types";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
 import { lobbyServer } from "../../url-params";
 

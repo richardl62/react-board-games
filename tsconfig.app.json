@@ -30,6 +30,7 @@
       "@/*": ["./src/*"],
       "@utils/*": ["./src/utils/*"],
       "@game-control/*": ["./shared/game-control/*"],
+      "@lobby/*": ["./shared/lobby/*"],
     }
   },
   "include": [

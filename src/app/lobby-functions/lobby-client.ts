@@ -1,39 +1,14 @@
-interface PlayerMetadata {
-    id: number;
-    name: string; 
-    credentials: string;
-    isConnected: boolean;
+import { LobbyInterface } from "@lobby/interface";
+import { CreatedMatch, JoinedMatch, Match, MatchList } from "@lobby/types";
+
+// As LobbyInterface but functions return promises. (LobbyInterface is used in the server where
+// promises are not needed.)
+export type LobbyPromises = {
+    [P in keyof LobbyInterface]: 
+        (...args: Parameters<LobbyInterface[P]>) => Promise<ReturnType<LobbyInterface[P]>>;
 };
 
-export type PublicPlayerMetadata = Omit<PlayerMetadata, 'credentials'>;
-
-export interface JoinedMatch {
-    playerID: string;
-    playerCredentials: string;
-}
-
-export interface CreatedMatch {
-    matchID: string;
-}
-
-export interface MatchData {
-    gameName: string;
-    players: {
-        [id: number]: PlayerMetadata;
-    };
-
-}
-
-export interface Match extends Omit<MatchData, 'players'> {
-    matchID: string;
-    players: PublicPlayerMetadata[];
-};
-
-export interface MatchList {
-    matches: Match[];
-}
-
-export class LobbyClient {
+export class LobbyClient implements LobbyPromises {
     private server: string;
     constructor({ server }: {
         server: string;

@@ -7,7 +7,7 @@ import { AsyncStatus } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { JoinGame } from "./join-game";
 import { getMatch } from "../lobby-functions/lobby-functions";
-import { Match } from "../lobby-functions/lobby-client";
+import { Match } from "@lobby/types";
 
 const Names = styled.div`
     display: flex
