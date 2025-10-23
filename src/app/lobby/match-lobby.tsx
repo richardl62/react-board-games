@@ -7,7 +7,7 @@ import { AsyncStatus } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { JoinGame } from "./join-game";
 import { getMatch } from "../lobby-functions/lobby-functions";
-import { MatchData } from "../lobby-functions/types";
+import { Match } from "../lobby-functions/lobby-client";
 
 const Names = styled.div`
     display: flex
@@ -49,7 +49,7 @@ function NotConnected(props: NotConnectedProps) {
 
 interface MatchLobbyWithApiInfoProps {
     game: AppGame;
-    match: MatchData;
+    match: Match;
 }
 
 export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.Element {

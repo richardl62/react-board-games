@@ -1,21 +1,18 @@
-// TO DO:
-// 1) Merge these types with ./types.ts 
-// 2) Implement lobby client methods using fetch API.
 interface PlayerMetadata {
     id: number;
-    name?: string; 
-    credentials?: string;
-    isConnected?: boolean;
+    name: string; 
+    credentials: string;
+    isConnected: boolean;
 };
 
-type PublicPlayerMetadata = Omit<PlayerMetadata, 'credentials'>;
+export type PublicPlayerMetadata = Omit<PlayerMetadata, 'credentials'>;
 
-interface JoinedMatch {
+export interface JoinedMatch {
     playerID: string;
     playerCredentials: string;
 }
 
-interface CreatedMatch {
+export interface CreatedMatch {
     matchID: string;
 }
 
@@ -27,12 +24,12 @@ export interface MatchData {
 
 }
 
-interface Match extends Omit<MatchData, 'players'> {
+export interface Match extends Omit<MatchData, 'players'> {
     matchID: string;
     players: PublicPlayerMetadata[];
 };
 
-interface MatchList {
+export interface MatchList {
     matches: Match[];
 }
 

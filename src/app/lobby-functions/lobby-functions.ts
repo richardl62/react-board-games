@@ -1,11 +1,6 @@
-import { LobbyClient } from "./lobby-client";
+import { LobbyClient, Match, MatchList } from "./lobby-client";
 import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
 import { lobbyServer } from "../../url-params";
-import { MatchData } from "./types";
-
-interface MatchList {
-    matches: MatchData[];
-}
 
 function makeLobbyClient() : LobbyClient {
     return new LobbyClient({ server: lobbyServer() });
@@ -20,7 +15,7 @@ export async function createMatch(
     return { mid: m.matchID };
 }
 
-export async function getMatch(gameName: string, matchID: string): Promise<MatchData>
+export async function getMatch(gameName: string, matchID: string): Promise<Match>
 {
     return makeLobbyClient().getMatch(gameName, matchID);
 }
