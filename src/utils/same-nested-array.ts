@@ -1,1 +1,1 @@
-export * from "@game-control/utils/same-nested-array";
+export * from "../../shared/utils/same-nested-array";

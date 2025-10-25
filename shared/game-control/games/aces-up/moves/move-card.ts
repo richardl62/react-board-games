@@ -1,8 +1,8 @@
 import { MoveArg0 } from "../../../move-fn.js";
 import { PlayerID } from "../../../playerid.js";
-import { sAssert } from "../../../utils/assert.js";
-import { reorderFollowingDrag } from "../../../utils/reorder-following-drag.js";
-import { sameJSON } from "../../../utils/same-json.js";
+import { sAssert } from "../../../../utils/assert.js";
+import { reorderFollowingDrag } from "../../../../utils/reorder-following-drag.js";
+import { sameJSON } from "../../../../utils/same-json.js";
 import { addCard, clearPile, removeCard, stealTopCard } from "./add-remove-card.js";
 import { CardID } from "./card-id.js";
 import { cardsMovableToSharedPile } from "./cards-movable-to-shared-pile.js";

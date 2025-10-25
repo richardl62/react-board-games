@@ -1,5 +1,5 @@
 import { MoveArg0 } from "../../../move-fn.js";
-import { sAssert } from "../../../utils/assert.js";
+import { sAssert } from "../../../../utils/assert.js";
 import { GameRequest, GameStage, PlayerID, ServerData } from "../server-data.js";
 import { processGameRequest } from "./process-game-request.js";
 

@@ -1,5 +1,5 @@
 import { PlayerID } from "../../../playerid.js";
-import { CardNonJoker } from "../../../utils/cards/types.js";
+import { CardNonJoker } from "../../../../utils/cards/types.js";
 import { moveableToSharedPile } from "./move-type.js";
 import { ServerData } from "../server-data.js";
 import { makeSharedPiles } from "../misc/shared-pile.js";

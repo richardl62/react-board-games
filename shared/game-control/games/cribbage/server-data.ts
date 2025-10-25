@@ -1,7 +1,7 @@
 
 import { RequiredServerData } from "../../required-server-data.js";
-import { sAssert } from "../../utils/assert.js";
-import { Card } from "../../utils/cards/types.js";
+import { sAssert } from "../../../utils/assert.js";
+import { Card } from "../../../utils/cards/types.js";
 
 // The whole CardSetID stuff is rather kludged.
 export enum CardSetID {

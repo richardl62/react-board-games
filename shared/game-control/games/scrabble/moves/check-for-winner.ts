@@ -1,5 +1,5 @@
 import { Ctx } from "../../../ctx.js";
-import { nNonNull } from "../../../utils/n-non-null.js";
+import { nNonNull } from "../../../../utils/n-non-null.js";
 import { Letter, letterScore } from "../config/letters.js";
 import { GameState } from "./game-state.js";
 import { ServerData } from "../server-data.js";

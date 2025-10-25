@@ -1,7 +1,7 @@
 import { Ctx } from "../../../ctx.js";
 import { PlayerID } from "../../../playerid.js";
-import { sAssert } from "../../../utils/assert.js";
-import { CardNonJoker, nextRank } from "../../../utils/cards/types.js";
+import { sAssert } from "../../../../utils/assert.js";
+import { CardNonJoker, nextRank } from "../../../../utils/cards/types.js";
 import { debugOptions } from "../config.js";
 import { GameOptions, OptionWrapper } from "../options.js";
 import { emptyPile, getCard } from "./add-remove-card.js";

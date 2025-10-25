@@ -1,5 +1,5 @@
 import { PlayerID } from "../../../playerid.js";
-import { sAssert } from "../../../utils/assert.js";
+import { sAssert } from "../../../../utils/assert.js";
 
 export type CardID = {
     area: "sharedPiles",

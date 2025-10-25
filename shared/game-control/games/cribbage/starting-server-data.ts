@@ -2,8 +2,8 @@ import { cardsPerHand } from "./config.js";
 import { SetupArg0 } from "../../game-control.js";
 import { RandomAPI } from "../../random-api.js";
 import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
-import { Card } from "../../utils/cards/types.js";
-import { deckNoJokers } from "../../utils/cards/deck.js";
+import { Card } from "../../../utils/cards/types.js";
+import { deckNoJokers } from "../../../utils/cards/deck.js";
 import { GameStage, PegPositions, PlayerData, ServerData } from "./server-data.js";
 
 interface PlayerPegPositions {

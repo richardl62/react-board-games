@@ -2,7 +2,7 @@ import { scoreCardFull } from "./score-card.js";
 import { selectLetters } from "./select-letters.js";
 import { GameStage, ServerData, startingPlayerData } from "../server-data.js";
 import { RandomAPI } from "../../../random-api.js";
-import { sAssert } from "../../../utils/assert.js";
+import { sAssert } from "../../../../utils/assert.js";
 
 export function startRound(
     G: ServerData, 

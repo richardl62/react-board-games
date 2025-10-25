@@ -1,6 +1,6 @@
 import { Ctx } from "../../../ctx.js";
 import { ClientMoveFunctions, wrapMoveFunction as standardWrapMoveFunction } from "../../../wrapped-move-function.js";
-import { sAssert } from "../../../utils/assert.js";
+import { sAssert } from "../../../../utils/assert.js";
 import { checkForWinner } from "./check-for-winner.js";
 import { GameState } from "./game-state.js";
 import { playWord } from "./play-word.js";

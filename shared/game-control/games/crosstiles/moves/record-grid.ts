@@ -1,4 +1,4 @@
-import { sAssert } from "../../../utils/assert.js";
+import { sAssert } from "../../../../utils/assert.js";
 import { Letter } from "../config.js";
 import { makeEmptyGrid } from "./make-empty-grid.js";
 import { ServerData, GameStage } from "../server-data.js";

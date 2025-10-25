@@ -1,5 +1,5 @@
-import { sAssert } from "../../../utils/assert.js";
-import { nestedArrayMap } from "../../../utils/nested-array-map.js";
+import { sAssert } from "../../../../utils/assert.js";
+import { nestedArrayMap } from "../../../../utils/nested-array-map.js";
 import { ScrabbleConfig } from "../config/scrabble-config.js";
 import { Letter } from "../config/letters.js";
 import { ExtendedLetter } from "../../../games/scrabble/config/extended-letter.js";

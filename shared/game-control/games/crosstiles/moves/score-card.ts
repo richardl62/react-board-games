@@ -1,4 +1,4 @@
-import { sAssert } from "../../../utils/assert.js";
+import { sAssert } from "../../../../utils/assert.js";
 import { scoreCategories, ScoreCategory } from "../score-categories.js";
 
 export type ScoreCard = {[category in ScoreCategory]? : number};
