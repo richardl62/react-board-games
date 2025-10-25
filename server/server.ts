@@ -1,10 +1,20 @@
 import express from 'express';
 import path from 'path';
+import { WebSocketServer } from 'ws';
 import { fileURLToPath } from 'url';
-import { allGames } from '../shared/game-control/games/all-games.js';
+import { runLobbyFunction } from './run-lobby-function.js';
+import { Connections } from './connections.js';
+const connections = new Connections();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 8000;
+
+// Start the server
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+const wss = new WebSocketServer({ server });
 
 // Resolve __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -14,15 +24,39 @@ const __dirname = path.dirname(__filename);
 const distPath = path.resolve(__dirname, '../../dist');
 app.use(express.static(distPath));
 
-// API endpoint example
-app.get('/api/hello', (_req, res) => {
-    const gameNames = allGames.map(g => g.name);
-    const message = `Available games: ${gameNames.join()}`;
-    console.log('API called:', message);
-    res.json({ message });
+app.use(function(_req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+// Run all the functions provided by the LobbyClient
+// The name of the function to run (createMatch, joinMatch etc)
+// is provided as a query parameter.
+app.get('/lobby', (req, res) => {
+  try {
+    const result = runLobbyFunction(/*matches,*/ req.query);
+    res.send(JSON.stringify(result));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "unknown error";
+    console.error("Error in /lobby:", message);
+    res.status(400).send(`Lobby error: ${message}`);
+  }
+});
+
+wss.on('connection', (ws, req)  => {
+
+  connections.connection(ws, req.url);
+
+  ws.on('close', () => {
+    connections.close(ws);
+  })
+
+  ws.on('error', (error) => {
+    connections.error(ws, error);
+  });
+
+  ws.on('message', message => { 
+    connections.message(ws, message.toString());
+  });
 });
