@@ -1,10 +1,9 @@
 export interface PlayerMetadata {
     id: number;
-    name: string;
+    name: string | null;
     credentials: string;
     isConnected: boolean;
 }
-;
 
 export type PublicPlayerMetadata = Omit<PlayerMetadata, 'credentials'>;
 
