@@ -7,7 +7,7 @@ import { Connections } from './connections.js';
 import { Matches } from './matches.js';
 
 const matches = new Matches();
-const connections = new Connections();
+const connections = new Connections(matches);
 
 const app = express();
 const PORT = process.env.PORT || 8000;
