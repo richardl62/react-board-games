@@ -1,4 +1,4 @@
-import { MatchList, Match, CreatedMatch, JoinedMatch } from "./types";
+import { MatchList, Match, CreatedMatch, JoinedMatch } from "./types.js";
 
 export interface LobbyInterface {
 

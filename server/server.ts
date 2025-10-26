@@ -4,6 +4,9 @@ import { WebSocketServer } from 'ws';
 import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
 import { Connections } from './connections.js';
+import { Matches } from './matches.js';
+
+const matches = new Matches();
 const connections = new Connections();
 
 const app = express();
@@ -35,7 +38,7 @@ app.use(function(_req, res, next) {
 // is provided as a query parameter.
 app.get('/lobby', (req, res) => {
   try {
-    const result = runLobbyFunction(/*matches,*/ req.query);
+    const result = runLobbyFunction(matches, req.query);
     res.send(JSON.stringify(result));
   } catch (err) {
     const message = err instanceof Error ? err.message : "unknown error";
