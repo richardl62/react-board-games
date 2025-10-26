@@ -63,7 +63,10 @@ export class Player {
     }
 
     get isConnected() {return this.ws !== null; } 
-
+    
+    getWs() : WebSocket | null {
+        return this.ws;
+    }
 
     publicMetada(): PublicPlayerMetadata {
         const { name, isConnected } = this;
