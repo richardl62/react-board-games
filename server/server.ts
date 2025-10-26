@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import { WebSocketServer } from 'ws';
 import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
@@ -11,6 +12,10 @@ const connections = new Connections(matches);
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+app.use(cors({
+  origin: 'http://localhost:5173' // Vite default port
+}));
 
 // Start the server
 const server = app.listen(PORT, () => {
@@ -27,11 +32,6 @@ const __dirname = path.dirname(__filename);
 const distPath = path.resolve(__dirname, '../../dist');
 app.use(express.static(distPath));
 
-app.use(function(_req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 // Run all the functions provided by the LobbyClient
 // The name of the function to run (createMatch, joinMatch etc)
