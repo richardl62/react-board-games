@@ -4,7 +4,7 @@ import { startingServerData } from "./misc/starting-server-data.js";
 
 export const appGameNoBoard: GameControl = {
     name: "acesup",
-    setup: startingServerData as GameControl["setup"],
+    setup: startingServerData,
 
     minPlayers: 1,
     maxPlayers: 8,

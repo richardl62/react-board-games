@@ -5,7 +5,7 @@ import { GameControl } from "../../game-control.js";
 export const appGameNoBoard: GameControl = {
     name: "swapsquares",
 
-    setup: startingServerData as GameControl["setup"],
+    setup: startingServerData,
 
     minPlayers: 1,
     maxPlayers: 1,

@@ -23,7 +23,8 @@ export interface GameControl {
 
   // KLUDGE?: The setup function is expected to return a type derived from
   // RequiredState. Specifying the return type as RequiredStates enforces this.
-  setup: (arg0: SetupArg0, setupData?: unknown) => RequiredServerData;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setup: (arg0: SetupArg0, setupData: any) => RequiredServerData;
 
   minPlayers: number,
   maxPlayers: number,

@@ -9,7 +9,7 @@ export const appGameNoBoard: GameControl = {
     maxPlayers: 99,
 
 
-    setup: startingServerData as GameControl["setup"],
+    setup: startingServerData,
 
     moves: bgioMoves,
 
