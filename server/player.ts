@@ -70,9 +70,7 @@ export class Player {
 
     publicMetada(): PublicPlayerMetadata {
         const { name, isConnected } = this;
-        if(name === null) {
-            throw new Error("Cannot create public metadata for unallocated player");
-        }
+
         return  { 
             id: this.id,
             name, 
