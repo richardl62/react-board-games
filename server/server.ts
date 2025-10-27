@@ -6,12 +6,13 @@ import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
 import { Connections } from './connections.js';
 import { Matches } from './matches.js';
+import { serverPort } from '../shared/server-address.js';
 
 const matches = new Matches();
 const connections = new Connections(matches);
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || serverPort;
 
 app.use(cors({
   origin: 'http://localhost:5173' // Vite default port

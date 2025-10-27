@@ -1,5 +1,5 @@
 import { LobbyInterface } from "@lobby/interface";
-import { lobbyServer } from "@/url-tools";
+import { serverAddress } from "@shared/server-address";
 
 // As LobbyInterface but functions return promises. (LobbyInterface is used in the server where
 // promises are not needed.)
@@ -39,7 +39,7 @@ async function callLobby(func: string, arg: unknown) : Promise<any> {
     searchParams.append("func", func);
     searchParams.append("arg", JSON.stringify(arg));
 
-    const fullUrl = `${lobbyServer()}/lobby?${searchParams.toString()}`;
+    const fullUrl = `${serverAddress()}/lobby?${searchParams.toString()}`;
     console.log("callLobby fetching from", fullUrl);
 
     const response = await fetch(fullUrl);

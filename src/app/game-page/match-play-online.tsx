@@ -1,6 +1,6 @@
+import { serverAddress } from "@shared/server-address";
 import { JSX } from "react";
 import { AppGame, MatchID, Player } from "../../app-game-support";
-import * as addPlayerToHref from "@/url-tools";
 import { OnlineMatch } from "../../boardgame-lib/online-match";
 
 export function MatchPlayOnline({ game, matchID, player }: {
@@ -8,7 +8,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
     matchID: MatchID;
     player: Player;
 }): JSX.Element {
-    const server = addPlayerToHref.lobbyServer();
+    const server = serverAddress();
 
     return (
         <div>

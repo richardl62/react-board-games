@@ -6,7 +6,6 @@ import { standardOuterMargin } from "../app-game-support/styles";
 import { appGames } from "../app-games/app-games";
 import "./app.css";
 import { GamePage } from "./game-page/game-page";
-import { gamePath } from "@/url-tools";
 
 const HomePageStyles = styled.div`
     font-size: 18px;
@@ -29,6 +28,10 @@ const ErrorMessage = styled.div`
   font-size: 200%;
   margin-bottom: 0.5em;
 `;
+
+function gamePath(game: AppGame): string {
+    return "/" + game.name;
+}
 
 interface LinkListProps {
     games: Array<AppGame>;

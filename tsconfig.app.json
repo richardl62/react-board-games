@@ -28,6 +28,8 @@
     "rootDir": "./",
     "paths": {
       "@/*": ["./src/*"],
+      "@shared/*": ["./shared/*"],
+
       "@utils/*": ["./src/utils/*"],
       "@game-control/*": ["./shared/game-control/*"],
       "@lobby/*": ["./shared/lobby/*"],
