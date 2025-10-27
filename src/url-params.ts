@@ -6,7 +6,6 @@ import { OfflineOptions } from "./app/game-page/offline-options";
 
 export const keys = {
     credentials: "cred",
-    debugPanel: "debug-panel",
     matchID: "id",
     nPlayers: "np",
     offline: "offline",
@@ -55,8 +54,6 @@ function getAndDeleteFlag(key: string) : boolean {
 
 }
 
-export const bgioDebugPanel = getAndDeleteFlag(keys.debugPanel);
-
 const matchID_ = getAndDelete(keys.matchID);
 export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
@@ -90,8 +87,7 @@ if(getAndDeleteFlag(keys.offline)){
     if(numPlayers){
         offlineData = {
             numPlayers: parseInt(numPlayers),
-            passAndPlay: true,
-            debugPanel: bgioDebugPanel,
+            passAndPlay: true
             
         };
     } else {

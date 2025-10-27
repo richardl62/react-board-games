@@ -37,14 +37,12 @@ export function lobbyServer(): string {
     return result;
 }
 
-export function getOfflineMatchLink(nPlayers: number, debugPanel: boolean): string {
+export function getOfflineMatchLink(nPlayers: number): string {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
     searchParams.set(keys.offline, "1");
     searchParams.set(keys.nPlayers, nPlayers.toString());
-    if (debugPanel) {
-        searchParams.set(keys.debugPanel, "1");
-    }
+
     url.search = searchParams.toString();
 
     return url.href;

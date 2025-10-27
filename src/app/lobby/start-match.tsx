@@ -45,12 +45,6 @@ export function StartMatch(props: {
             debugOnly: true,
             showIf: showOfflineOptions,
         },
-        debugPanel: {
-            label: "Debug panel (offline only)",
-            default: false,
-            debugOnly: true,
-            showIf: showOfflineOptions,
-        }
     } as const;
     
     const asyncCreateMatch = useAsyncCallback((arg: {numPlayers: number, setupData: unknown}) =>
