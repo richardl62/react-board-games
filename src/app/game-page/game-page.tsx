@@ -7,7 +7,7 @@ import { MatchLobby } from "../lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
 import { MatchPlayOnline } from "./match-play-online";
 import { OfflineOptions } from "./offline-options";
-import * as UrlParams from "../../url-params";
+import { queryValues } from "../../url-params";
 
 const OuterDiv = styled.div`
     font-size: 18px;
@@ -19,7 +19,7 @@ const OuterDiv = styled.div`
 `;
 function InnerGamePage(props: {game : AppGame} ) {
     const { game } = props;
-    const {matchID, offlineData: offlineOptionsFromUrl, player} = UrlParams;
+    const {matchID, offlineData: offlineOptionsFromUrl, player} = queryValues;
 
     const [ offlineOptions, setOfflineOptions ] = useState<OfflineOptions | null>(null);
 

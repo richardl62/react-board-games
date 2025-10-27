@@ -9,9 +9,7 @@ export const keys = {
     matchID: "id",
     nPlayers: "np",
     offline: "offline",
-    persist: "persist",
     pid: "pid",
-    server: "server",
 };
 
 function searchString() {
@@ -55,9 +53,7 @@ function getAndDeleteFlag(key: string) : boolean {
 }
 
 const matchID_ = getAndDelete(keys.matchID);
-export const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
-
-export const server = getAndDelete(keys.server);
+const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
 
 function getAndDeletePlayer() : Player | null {
     const pid = getAndDelete(keys.pid);
@@ -77,28 +73,30 @@ function getAndDeletePlayer() : Player | null {
     return null;
 }
 
-export const player = getAndDeletePlayer();
+const player = getAndDeletePlayer();
 
 // NOTE: use isOffline rather than offlineData to check if a game is offline.
 // (offlineData is set only when the "offline" URL parameter is set.)
-export let offlineData : null | Omit<OfflineOptions,"setupData"> = null;
+let offlineData : null | Omit<OfflineOptions,"setupData"> = null;
 if(getAndDeleteFlag(keys.offline)){
     const numPlayers = getAndDelete(keys.nPlayers);
     if(numPlayers){
         offlineData = {
             numPlayers: parseInt(numPlayers),
             passAndPlay: true
-            
         };
     } else {
         console.warn("URL does not specify number of players (required for offline game)");
     }
 }
 
-export const isOffline = player === null;
-
 if (usp.toString()) {
     console.warn("Unrecongised url parameters", usp.toString());
 }
 
-
+export const queryValues = {
+    player,
+    isOffline: player === null,
+    matchID,
+    offlineData,
+};
