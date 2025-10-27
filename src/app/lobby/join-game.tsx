@@ -3,7 +3,7 @@ import { useAsyncCallback } from "react-async-hook";
 import { AppGame, MatchID } from "../../app-game-support";
 import { AsyncStatus, loadingOrError } from "@utils/async-status";
 import { joinMatch } from "../lobby-functions/lobby-functions";
-import { addPlayerToHref } from "../../url-params";
+import { addPlayerToHref } from "@/url-tools";
 
 interface JoinGameProps {
     game: AppGame;

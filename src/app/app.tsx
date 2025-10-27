@@ -6,7 +6,7 @@ import { standardOuterMargin } from "../app-game-support/styles";
 import { appGames } from "../app-games/app-games";
 import "./app.css";
 import { GamePage } from "./game-page/game-page";
-import { gamePath } from "../url-params";
+import { gamePath } from "@/url-tools";
 
 const HomePageStyles = styled.div`
     font-size: 18px;

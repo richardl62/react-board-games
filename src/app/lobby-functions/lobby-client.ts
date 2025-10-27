@@ -1,5 +1,5 @@
 import { LobbyInterface } from "@lobby/interface";
-import { lobbyServer } from "@/url-params";
+import { lobbyServer } from "@/url-tools";
 
 // As LobbyInterface but functions return promises. (LobbyInterface is used in the server where
 // promises are not needed.)
