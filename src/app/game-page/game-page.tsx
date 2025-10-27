@@ -1,7 +1,7 @@
 import { JSX, useState } from "react";
 import styled from "styled-components";
 import { AppGame } from "../../app-game-support";
-import { defaultValues } from "../../option-specification/tools";
+
 import { GameLobby } from "../lobby/game-lobby";
 import { MatchLobby } from "../lobby/match-lobby";
 import { MatchPlayOffline } from "./match-play-offline";
@@ -19,20 +19,12 @@ const OuterDiv = styled.div`
 `;
 function InnerGamePage(props: {game : AppGame} ) {
     const { game } = props;
-    const {matchID, offlineData: offlineOptionsFromUrl, player} = queryValues;
+    const {matchID, player} = queryValues;
 
     const [ offlineOptions, setOfflineOptions ] = useState<OfflineOptions | null>(null);
 
     if (offlineOptions) {
         return <MatchPlayOffline game={game} options={offlineOptions} />;
-    }
-
-    if (offlineOptionsFromUrl) {
-        const options = {
-            ...offlineOptionsFromUrl,
-            setupData: defaultValues(game.options || {}),
-        };
-        return <MatchPlayOffline game={game} options={options} />;
     }
 
     if ( player && matchID ) {

@@ -1,14 +1,11 @@
 // Get values that can be set in the url.
 // If not set, give default value.
 import { MatchID, Player } from "./app-game-support";
-import { sAssert } from "@utils/assert";
-import { OfflineOptions } from "./app/game-page/offline-options";
 
 export const keys = {
     credentials: "cred",
     matchID: "id",
     nPlayers: "np",
-    offline: "offline",
     pid: "pid",
 };
 
@@ -31,26 +28,6 @@ const getAndDelete = (key: string) => {
     usp.delete(key);
     return val;
 };
-
-function getAndDeleteFlag(key: string) : boolean {
-    const falsey = [null, "0","false"];
-    const truthy  = ["", "1","true"];
-
-    const str = getAndDelete(key);
-
-    if (falsey.includes(str)) {
-        return false;
-    }
-  
-    sAssert(str);
-    if (truthy.includes(str)) {
-        return true;
-    }
-
-    console.warn(`Bad value for URL boolean ${key}: ${str}`);
-    return false; // Well, why not?
-
-}
 
 const matchID_ = getAndDelete(keys.matchID);
 const matchID : MatchID | null = matchID_ ? {mid: matchID_} : null;
@@ -75,20 +52,6 @@ function getAndDeletePlayer() : Player | null {
 
 const player = getAndDeletePlayer();
 
-// NOTE: use isOffline rather than offlineData to check if a game is offline.
-// (offlineData is set only when the "offline" URL parameter is set.)
-let offlineData : null | Omit<OfflineOptions,"setupData"> = null;
-if(getAndDeleteFlag(keys.offline)){
-    const numPlayers = getAndDelete(keys.nPlayers);
-    if(numPlayers){
-        offlineData = {
-            numPlayers: parseInt(numPlayers),
-            passAndPlay: true
-        };
-    } else {
-        console.warn("URL does not specify number of players (required for offline game)");
-    }
-}
 
 if (usp.toString()) {
     console.warn("Unrecongised url parameters", usp.toString());
@@ -98,5 +61,5 @@ export const queryValues = {
     player,
     isOffline: player === null,
     matchID,
-    offlineData,
+    offlineData: null,
 };
