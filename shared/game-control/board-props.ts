@@ -5,7 +5,7 @@ import { PlayerID } from "./playerid.js";
 export interface MatchDataElem {
     id: number
     
-    // Optional to match boardgame.io, but required in some places.
+    // Optional to match legacy code, but required in some places.
     name?: string;
     isConnected?: boolean;
 }
@@ -22,7 +22,7 @@ export interface BoardProps<TypeG=any> {
 
     matchID: string;
 
-    // Optional to match boardgame.io, but required in some places.
+    // Optional to match legacy code, but required in some places.
     matchData?: Array<MatchDataElem>; 
     ctx: Ctx;
 

@@ -15,7 +15,6 @@
     "serve": "node dist/server/server.js"
   },
   "dependencies": {
-    "boardgame.io": "^0.50.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "koa-static": "^5.0.0",
@@ -35,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/cors": "^2.8.19",
     "@types/jest": "^29.5.14",
     "@types/koa-static": "^4.0.4",
     "@types/react": "^19.0.10",
