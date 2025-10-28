@@ -1,3 +1,5 @@
+
+import { useSearchParams } from "react-router-dom";
 import { MatchID, Player } from "./app-game-support";
 
 export const keys = {
@@ -6,35 +8,22 @@ export const keys = {
     pid: "pid",
 } as const;
 
-export function matchDataFromUrl() {
+export function useSearchParamData() {
 
-    function searchString() {
-        // KLUDGE: window is undefined when run as a server, but is defined when run using
-        // "npm start". This is a hack to allow the server to run while keeping the 
-        // URL functionality for "npm start".
-        // For background on this issue see
-        // see https://dev.to/vvo/how-to-solve-window-is-not-defined-errors-in-react-and-next-js-5f97
-        if (typeof window === "undefined") {
-            console.warn("window is undefined - URL parameters are not available");
-            return undefined;
-        }
-        return window.location.search;
-    }
-
-    const usp = new URLSearchParams(searchString());
+    const [searchParams] = useSearchParams();
 
     const allKeys : string[]= Object.values(keys);
-    for (const key of usp.keys()) {
+    for (const key of searchParams.keys()) {
         if (!allKeys.includes(key)) {
             console.warn("Unknown URL parameter:", key);
         }
     }
 
-    const matchID_ = usp.get(keys.matchID);
+    const matchID_ = searchParams.get(keys.matchID);
     const matchID: MatchID | null = matchID_ ? { mid: matchID_ } : null;
 
-    const pid = usp.get(keys.pid);
-    const credentials = usp.get(keys.credentials);
+    const pid = searchParams.get(keys.pid);
+    const credentials = searchParams.get(keys.credentials);
 
     let player : Player | null;
     if (pid && credentials) {
@@ -56,26 +45,36 @@ export function matchDataFromUrl() {
     };
 }
 
+export function useSetSearchParam() {
 
-export function addPlayerToHref(newMatchID: MatchID, player: Player): string {
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const url = new URL(window.location.href);
-    const searchParams = new URLSearchParams(url.search);
-    searchParams.set(keys.matchID, newMatchID.mid);
-    searchParams.set(keys.pid, player.id);
-    searchParams.set(keys.credentials, player.credentials);
-    url.search = searchParams.toString();
+    function addPlayer(matchID: MatchID, player: Player): void {
+        
+        if(matchID.mid !== searchParams.get(keys.matchID)) {
+            console.warn(`Unexpected matchID in addPlayer: given ${matchID.mid}`
+                + ` but URL has ${searchParams.get(keys.matchID)}`
+            );
+        }
 
-    return url.href;
-}
+        searchParams.set(keys.matchID, matchID.mid);
+        searchParams.set(keys.pid, player.id);
+        searchParams.set(keys.credentials, player.credentials);
+        setSearchParams(searchParams);
+    }
 
-export function openOnlineMatchPage(matchID: MatchID): void {
-    // Is this a proper way to do this?  For alternative see
-    //https://chatgpt.com/c/68fe4f16-1768-8329-91b0-fcb230bb7adc
-    const url = new URL(window.location.href);
-    const searchParams = new URLSearchParams(url.search);
-    searchParams.set(keys.matchID, matchID.mid);
-    url.search = searchParams.toString();
+    function addMatchID(matchID: MatchID): void {
 
-    window.location.href = url.href;
+        if(searchParams.get(keys.matchID)) {
+            console.warn("Overwriting existing matchID in URL")
+        }
+
+        searchParams.set(keys.matchID, matchID.mid);
+        setSearchParams(searchParams);
+    }
+
+    return {
+        addPlayer,
+        addMatchID,
+    };
 }

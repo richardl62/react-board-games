@@ -3,7 +3,7 @@ import { useAsyncCallback } from "react-async-hook";
 import { AppGame } from "../../app-game-support";
 import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
-import { openOnlineMatchPage } from "@/url-tools";
+import { useSetSearchParam } from "@/url-tools";
 import { OfflineOptions } from "../game-page/offline-options";
 import { OptionValues, SpecifiedValues } from "../../option-specification/types";
 import { InputValues } from "../../option-specification/input-values";
@@ -19,6 +19,8 @@ export function StartMatch(props: {
     const {minPlayers, maxPlayers } = game;
 
     const gameOptions = game.options || {};
+
+    const { addMatchID } = useSetSearchParam();
 
     const optionsSpec = {
         numPlayers: {
@@ -48,7 +50,7 @@ export function StartMatch(props: {
     } as const;
     
     const asyncCreateMatch = useAsyncCallback((arg: {numPlayers: number, setupData: unknown}) =>
-        createMatch(game, arg).then(openOnlineMatchPage)
+        createMatch(game, arg).then(addMatchID)
     );
 
     if(loadingOrError(asyncCreateMatch)) {

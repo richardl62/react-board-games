@@ -3,7 +3,7 @@ import { useAsyncCallback } from "react-async-hook";
 import { AppGame, MatchID } from "../../app-game-support";
 import { AsyncStatus, loadingOrError } from "@utils/async-status";
 import { joinMatch } from "../lobby-functions/lobby-functions";
-import { addPlayerToHref } from "@/url-tools";
+import { useSetSearchParam } from "@/url-tools";
 
 interface JoinGameProps {
     game: AppGame;
@@ -17,11 +17,11 @@ interface JoinGameProps {
 export function JoinGame(props: JoinGameProps): JSX.Element {
     const { game, matchID, gameFull } = props;
     const [name, setName] = useState<string>("");
-    
+    const { addPlayer } = useSetSearchParam();
+
     const joinGameCallback = useAsyncCallback(() =>
         joinMatch(game, matchID, name).then(player => {
-            const newHref = addPlayerToHref(matchID, player);
-            window.location.href = newHref;
+            addPlayer(matchID, player);
         })
     );
 

@@ -4,7 +4,7 @@
 import { sAssert } from "@utils/assert";
 import { BoardProps } from "@game-control/board-props";
 import {  makePlayerData, PlayerDataDictionary } from "./player-data";
-import { matchDataFromUrl } from "../url-tools";
+import { useSearchParamData } from "../url-tools";
 import { RequiredServerData } from "@game-control/required-server-data";
 /**
  * Bgio type definition of 'moves'.
@@ -40,10 +40,10 @@ export interface WrappedGameProps<G extends RequiredServerData = RequiredServerD
     getPlayerName: (pid: string) => string;
 }
 
-export function makeWrappedGameProps<G extends RequiredServerData>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
+export function useWrappedGameProps<G extends RequiredServerData>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
  
     const playerData = makePlayerData(bgioProps);
-    const {isOffline} = matchDataFromUrl();
+    const {isOffline} = useSearchParamData();
 
     let allJoined = true;
     let allConnected = true;
