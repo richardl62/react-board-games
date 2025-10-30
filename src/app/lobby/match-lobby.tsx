@@ -1,13 +1,13 @@
 
+import { Match } from "@lobby/types";
+import { AsyncStatus } from "@utils/async-status";
+import { BoxWithLegend } from "@utils/box-with-legend";
 import { JSX, ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
-import { AppGame, nonJoinedPlayerName, MatchID } from "../../app-game-support";
-import { AsyncStatus } from "@utils/async-status";
-import { BoxWithLegend } from "@utils/box-with-legend";
+import { AppGame, MatchID, nonJoinedPlayerName } from "../../app-game-support";
 import { JoinGame } from "./join-game";
-import { getMatch } from "../lobby-functions/lobby-functions";
-import { Match } from "@lobby/types";
+import { lobbyClient } from "./lobby-client";
 
 const Names = styled.div`
     display: flex
@@ -98,7 +98,9 @@ interface MatchLobbyProps {
 export function MatchLobby(props: MatchLobbyProps): JSX.Element {
     const { game, matchID } = props;
 
-    const asyncMatch = useAsync(()=>getMatch(game.name, matchID.mid), []);
+    const asyncMatch = useAsync(()=>lobbyClient.getMatch(
+        {gameName: game.name, matchID: matchID.mid}
+    ), []);
 
     const match = asyncMatch.result;
 

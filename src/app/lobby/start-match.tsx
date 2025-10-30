@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { useAsyncCallback } from "react-async-hook";
-import { AppGame } from "../../app-game-support";
+import { AppGame, MatchID } from "../../app-game-support";
 import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { useSetSearchParam } from "@/url-tools";
@@ -9,7 +9,20 @@ import { OptionValues, SpecifiedValues } from "../../option-specification/types"
 import { InputValues } from "../../option-specification/input-values";
 import { defaultNumPlayers } from "../../app-game-support/app-game";
 import { sAssert } from "@utils/assert";
-import { createMatch } from "../lobby-functions/lobby-functions";
+import { lobbyClient } from "./lobby-client";
+
+async function createMatch(
+    game: AppGame,
+    options: { numPlayers: number, setupData: unknown },
+): Promise<MatchID> {
+    const p = lobbyClient.createMatch({ 
+        gameName: game.name, 
+        numPlayers: options.numPlayers,
+        setupData: options.setupData 
+    });
+    const m = await p;
+    return { mid: m.matchID };
+}
 
 export function StartMatch(props: {
     game: AppGame;

@@ -1,13 +1,13 @@
+import { LoadingOrError } from "@utils/async-status";
 import { JSX } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { AppGame } from "../../app-game-support";
 import { standardOuterMargin } from "../../app-game-support/styles";
-import { LoadingOrError } from "@utils/async-status";
 import { OfflineOptions } from "../game-page/offline-options";
+import { lobbyClient } from "./lobby-client";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartMatch } from "./start-match";
-import { listMatches } from "../lobby-functions/lobby-functions";
 
 const GameLobbyDiv = styled.div`
     display: inline-flex;
@@ -22,7 +22,9 @@ export function GameLobby(props: {
     setOfflineOptions: (opts: OfflineOptions) => void;
 }): JSX.Element {
     const { game, setOfflineOptions } = props;
-    const asyncMatchList = useAsync(() => listMatches(game.name), []);
+    const asyncMatchList = useAsync(() => lobbyClient.listMatches(
+        { gameName: game.name }), []
+    );
 
     const matches = asyncMatchList.result?.matches;
 
