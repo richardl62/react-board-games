@@ -1,4 +1,4 @@
-import { OptionValues } from "../../option-specification/types";
+import { OptionValues } from "@/option-specification/types";
 
 export interface OfflineOptions {
     numPlayers: number;

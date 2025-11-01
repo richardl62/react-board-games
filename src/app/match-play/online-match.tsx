@@ -1,4 +1,4 @@
-import { AppGame } from "../../app-game-support";
+import { AppGame } from "@/app-game-support";
 
 export function OnlineMatch(_props: {
     server: string;

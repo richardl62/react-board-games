@@ -1,6 +1,6 @@
 import { serverAddress } from "@shared/server-address";
 import { JSX } from "react";
-import { AppGame, MatchID, Player } from "../../app-game-support";
+import { AppGame, MatchID, Player } from "@/app-game-support";
 import { OnlineMatch } from "./online-match";
 
 export function MatchPlayOnline({ game, matchID, player }: {

@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { AppGame } from "../../app-game-support";
+import { AppGame } from "@/app-game-support";
 import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
 
