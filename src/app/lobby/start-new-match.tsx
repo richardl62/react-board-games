@@ -6,7 +6,7 @@ import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { JSX } from "react";
 import { useAsyncCallback } from "react-async-hook";
-import { OfflineOptions } from "../match-play/offline-options";
+import { OfflineOptions } from "../offline-options";
 import { fullOptionSpecification } from "./full-option-specification";
 import { lobbyClient } from "./lobby-client";
 

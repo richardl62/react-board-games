@@ -4,7 +4,7 @@ import { LoadingOrError } from "@utils/async-status";
 import { JSX } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
-import { OfflineOptions } from "../match-play/offline-options";
+import { OfflineOptions } from "../offline-options";
 import { lobbyClient } from "./lobby-client";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartNewMatch } from "./start-new-match";

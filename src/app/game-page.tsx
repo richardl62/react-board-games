@@ -4,7 +4,7 @@ import { JSX, useState } from "react";
 import styled from "styled-components";
 import { MatchPlayOffline } from "./match-play/match-play-offline";
 import { MatchPlayOnline } from "./match-play/match-play-online";
-import { OfflineOptions } from "./match-play/offline-options";
+import { OfflineOptions } from "./offline-options";
 import { GameLobby } from "./lobby/game-lobby";
 import { MatchLobby } from "./lobby/match-lobby";
 
@@ -21,6 +21,8 @@ function InnerGamePage(props: {game : AppGame} ) {
     const { game } = props;
     const {matchID, player} = useSearchParamData();
 
+    // KLUDGE: When the lobby decided that an offline match is needed, it calls setOfflineOptions.
+    // This contrasts with online matches for which the lobby simply URL parameters.
     const [ offlineOptions, setOfflineOptions ] = useState<OfflineOptions | null>(null);
 
     if (offlineOptions) {

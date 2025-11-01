@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { AppGame } from "@/app-game-support";
 import { GameBoard } from "./game-board";
-import { OfflineOptions } from "./offline-options";
+import { OfflineOptions } from "../offline-options";
 
 import styled from "styled-components";
 import { useSharedOfflineBoardData, offlineBoardProps } from "./offline-board-props";
