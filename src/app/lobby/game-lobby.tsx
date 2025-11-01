@@ -4,7 +4,7 @@ import { useAsync } from "react-async-hook";
 import styled from "styled-components";
 import { AppGame } from "../../app-game-support";
 import { standardOuterMargin } from "../../app-game-support/styles";
-import { OfflineOptions } from "../game-page/offline-options";
+import { OfflineOptions } from "../match-play/offline-options";
 import { lobbyClient } from "./lobby-client";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
 import { StartNewMatch } from "./start-new-match";

@@ -4,7 +4,7 @@ import { AppGame } from "../../app-game-support";
 import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { useSetSearchParam } from "@/url-tools";
-import { OfflineOptions } from "../game-page/offline-options";
+import { OfflineOptions } from "../match-play/offline-options";
 import { SpecifiedValues } from "../../option-specification/types";
 import { InputValues } from "../../option-specification/input-values";
 import { lobbyClient } from "./lobby-client";
