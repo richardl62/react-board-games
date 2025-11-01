@@ -1,14 +1,14 @@
-import { JSX } from "react";
-import { useAsyncCallback } from "react-async-hook";
-import { AppGame } from "../../app-game-support";
+import { AppGame } from "@/app-game-support";
+import { InputValues } from "@/option-specification/input-values";
+import { SpecifiedValues } from "@/option-specification/types";
+import { useSetSearchParam } from "@/url-tools";
 import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
-import { useSetSearchParam } from "@/url-tools";
+import { JSX } from "react";
+import { useAsyncCallback } from "react-async-hook";
 import { OfflineOptions } from "../match-play/offline-options";
-import { SpecifiedValues } from "../../option-specification/types";
-import { InputValues } from "../../option-specification/input-values";
-import { lobbyClient } from "./lobby-client";
 import { fullOptionSpecification } from "./full-option-specification";
+import { lobbyClient } from "./lobby-client";
 
 export function StartNewMatch(props: {
     game: AppGame;

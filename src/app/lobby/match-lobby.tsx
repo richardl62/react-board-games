@@ -1,11 +1,10 @@
-
+import { AppGame, MatchID, nonJoinedPlayerName } from "@/app-game-support";
 import { Match } from "@lobby/types";
 import { AsyncStatus } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { JSX, ReactNode } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
-import { AppGame, MatchID, nonJoinedPlayerName } from "../../app-game-support";
 import { JoinGame } from "./join-game";
 import { lobbyClient } from "./lobby-client";
 

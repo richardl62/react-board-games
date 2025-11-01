@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
-import { AppGame, defaultPlayerName, MatchID, Player } from "../../app-game-support";
+import { AppGame, defaultPlayerName, MatchID, Player } from "@/app-game-support";
 import { AsyncStatus, loadingOrError } from "@utils/async-status";
 import { useSetSearchParam } from "@/url-tools";
 import { lobbyClient } from "./lobby-client";

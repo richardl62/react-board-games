@@ -1,9 +1,9 @@
+import { AppGame } from "@/app-game-support";
+import { standardOuterMargin } from "@/app-game-support/styles";
 import { LoadingOrError } from "@utils/async-status";
 import { JSX } from "react";
 import { useAsync } from "react-async-hook";
 import styled from "styled-components";
-import { AppGame } from "../../app-game-support";
-import { standardOuterMargin } from "../../app-game-support/styles";
 import { OfflineOptions } from "../match-play/offline-options";
 import { lobbyClient } from "./lobby-client";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
