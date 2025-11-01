@@ -7,7 +7,7 @@ import { standardOuterMargin } from "../../app-game-support/styles";
 import { OfflineOptions } from "../game-page/offline-options";
 import { lobbyClient } from "./lobby-client";
 import { MatchLobbyWithApiInfo } from "./match-lobby";
-import { StartMatch } from "./start-match";
+import { StartNewMatch } from "./start-new-match";
 
 const GameLobbyDiv = styled.div`
     display: inline-flex;
@@ -34,7 +34,7 @@ export function GameLobby(props: {
             <MatchLobbyWithApiInfo key={match.matchID} game={game} match={match} />
         )}
 
-        <StartMatch game={game} setOfflineOptions={setOfflineOptions} />
+        <StartNewMatch game={game} setOfflineOptions={setOfflineOptions} />
     </GameLobbyDiv>;
      
 }

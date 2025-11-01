@@ -10,7 +10,7 @@ import { InputValues } from "../../option-specification/input-values";
 import { lobbyClient } from "./lobby-client";
 import { fullOptionSpecification } from "./full-option-specification";
 
-export function StartMatch(props: {
+export function StartNewMatch(props: {
     game: AppGame;
     setOfflineOptions: (opts: OfflineOptions) => void;
   }): JSX.Element {
@@ -31,7 +31,7 @@ export function StartMatch(props: {
         return <LoadingOrError status={asyncCreateMatch} activity="starting match"/>;
     }
 
-    const startGame=(options: SpecifiedValues<typeof optionsSpec>) => {
+    const doStartNewMatch=(options: SpecifiedValues<typeof optionsSpec>) => {
         if(options.offline) {
             setOfflineOptions({
                 ...options,
@@ -51,7 +51,7 @@ export function StartMatch(props: {
     return <BoxWithLegend legend="Start New Game">
         <InputValues specification={optionsSpec} 
             buttonText={"Start Game"}
-            onButtonClick={startGame} 
+            onButtonClick={doStartNewMatch} 
         />
     </BoxWithLegend>;
 }
