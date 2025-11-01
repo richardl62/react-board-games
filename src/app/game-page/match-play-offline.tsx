@@ -4,7 +4,7 @@ import { GameBoard } from "./game-board";
 import { OfflineOptions } from "./offline-options";
 
 import styled from "styled-components";
-import { useSharedOfflineBoardData, offlineBoardProps } from "../../boardgame-lib/offline-board-props";
+import { useSharedOfflineBoardData, offlineBoardProps } from "./offline-board-props";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};

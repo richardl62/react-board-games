@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppGame, BoardProps } from "../app-game-support";
+import { AppGame, BoardProps } from "../../app-game-support";
 import { random } from "@game-control/random-api";
 import { EventsAPI } from "@game-control/events";
 import { RequiredServerData } from "@game-control/required-server-data";
