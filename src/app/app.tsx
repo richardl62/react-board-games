@@ -1,11 +1,11 @@
+import { AppGame, GameCategory } from "@/app-game-support";
+import { standardOuterMargin } from "@/app-game-support/styles";
+import { appGames } from "@/app-games/app-games";
 import { JSX, useEffect } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import { AppGame, GameCategory } from "@/app-game-support";
-import { standardOuterMargin } from "../app-game-support/styles";
-import { appGames } from "../app-games/app-games";
 import "./app.css";
-import { GamePage } from "./game-page/game-page";
+import { GamePage } from "./game-page";
 
 const HomePageStyles = styled.div`
     font-size: 18px;

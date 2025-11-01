@@ -1,13 +1,12 @@
+import { AppGame } from "@/app-game-support";
+import { useSearchParamData } from "@/url-tools";
 import { JSX, useState } from "react";
 import styled from "styled-components";
-import { AppGame } from "../../app-game-support";
-
-import { GameLobby } from "../lobby/game-lobby";
-import { MatchLobby } from "../lobby/match-lobby";
-import { MatchPlayOffline } from "./match-play-offline";
-import { MatchPlayOnline } from "./match-play-online";
-import { OfflineOptions } from "./offline-options";
-import { useSearchParamData } from "../../url-tools";
+import { MatchPlayOffline } from "./game-page/match-play-offline";
+import { MatchPlayOnline } from "./game-page/match-play-online";
+import { OfflineOptions } from "./game-page/offline-options";
+import { GameLobby } from "./lobby/game-lobby";
+import { MatchLobby } from "./lobby/match-lobby";
 
 const OuterDiv = styled.div`
     font-size: 18px;
@@ -17,6 +16,7 @@ const OuterDiv = styled.div`
         font-size: 1em;
     }
 `;
+
 function InnerGamePage(props: {game : AppGame} ) {
     const { game } = props;
     const {matchID, player} = useSearchParamData();
