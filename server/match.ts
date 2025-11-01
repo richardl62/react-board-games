@@ -4,6 +4,7 @@ import { Player } from "./player.js";
 import { Ctx } from '../shared/game-control/ctx.js';
 import { random } from '../shared/game-control/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
+import { ServerMatchData, ServerMoveResponse } from '../shared/server-types.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -150,20 +151,21 @@ export class Match {
         return null;
     }
 
-    private broadcastMatchData(/*{error}*/ _data : {error : string | null}) {
-        throw new Error("Not implemented");
-        // const matchData : ServerMatchData = {
-        //     playerData: this.players.map(p => p.publicMetada()),
-        //     currentPlayer: 0,
-        //     state: this.state,
-        // };
-        
-        // const response: ServerMoveResponse = { matchData, error };
+    private broadcastMatchData({error} : {error : string | null}) {
 
-        // for (const player of this.players) {
-        //     if( player.ws ) {
-        //         player.ws.send(JSON.stringify(response));
-        //     }
-        // }
+        const matchData : ServerMatchData = {
+            playerData: this.players.map(p => p.publicMetada()),
+            currentPlayer: 0,
+            state: this.state,
+        };
+        
+        const response: ServerMoveResponse = { matchData, error };
+
+        for (const player of this.players) {
+            const ws = player.getWs();
+            if( ws ) {
+                ws.send(JSON.stringify(response));
+            }
+        }
     }
 };  
