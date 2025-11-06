@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
+import { ServerMoveResponse } from "../shared/server-types.js";
 //import { ServerMoveResponse } from "./shared/server-move-response";
 
 function errorResponse(
@@ -48,9 +49,8 @@ export class Connections {
 
             console.log('Error during connection:', message);
 
-            throw err; //KLUDGE
-            //const response: ServerMoveResponse = {error: message, matchData: null};
-            //ws.send(JSON.stringify(response));
+            const response: ServerMoveResponse = {error: message, matchData: null};
+            ws.send(JSON.stringify(response));
           }
         }
     }

@@ -14,21 +14,32 @@ function readyStatus( state: ReadyState) {
 
     return status || "unknown";
 }
-  
+
 export function MatchPlayOnline(props: {
     game: AppGame;
     matchID: MatchID;
     player: Player;
 }): JSX.Element {
-     const { readyState, match, error } = useOnlineMatch(props.game, {
-         matchID: props.matchID,
-         player: props.player,
-     });
+    const { readyState, match, error } = useOnlineMatch(props.game, {
+        matchID: props.matchID,
+        player: props.player,
+    });
 
-    return<div>
-        <div>Connection status: {readyStatus(readyState)}</div>
-        <div> Error: {error}</div>
-        <div>Game state: <pre>{JSON.stringify(match?.state, null, 2)}</pre></div>
+    if (readyState !== ReadyState.OPEN) {
+        return <div>Connection status: {readyStatus(readyState)}</div>
+    }
+
+    if (error) {
+        return <div> Server error: {error}</div>
+    }
+
+    if (!match) {
+        // Should never happem
+        return <div>Match data missing from server response!</div>
+    }
+
+    return <div>
+        <div>Game state: <pre>{JSON.stringify(match.state, null, 2)}</pre></div>
     </div>
 
 }
