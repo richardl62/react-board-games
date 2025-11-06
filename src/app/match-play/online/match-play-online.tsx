@@ -2,6 +2,12 @@ import { JSX } from "react";
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { useOnlineMatch } from "./use-match-online";
 import {ReadyState} from "react-use-websocket";
+import { BoardProps, MatchDataElem } from "@shared/game-control/board-props";
+import { PublicPlayerMetadata } from "@shared/lobby/types.js";
+import { EventsAPI } from "@shared/game-control/events";
+import { Ctx } from "@shared/game-control/ctx";
+import { ServerMatchData } from "@shared/server-types";
+import { GameBoard } from "../game-board";
 
 function readyStatus( state: ReadyState) {
     const status = {
@@ -15,17 +21,46 @@ function readyStatus( state: ReadyState) {
     return status || "unknown";
 }
 
+
+function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
+    const {id, name, isConnected} = md;
+    return {id, isConnected, name: name || undefined}
+}
+
+const dummyEvents: EventsAPI = {
+    endTurn: () => {throw new Error("endTurn not implemented")},
+    endGame: () => {throw new Error("endGame not implemented")},
+}
+
+function makeContext(_player: Player, match: ServerMatchData) : Ctx {
+    const playOrder = match.playerData.map(pd => pd.id.toString());
+    const currentPlayer = match.currentPlayer.toString();
+    const playOrderPos = playOrder.indexOf(currentPlayer);
+
+    if ( playOrderPos < 0 ) {
+        throw new Error("Cannnot compute playOrderPos");
+    }
+
+    return {
+        numPlayers: match.playerData.length,
+        playOrder,
+        currentPlayer,
+        playOrderPos,
+        gameover: false, //KLUDGE
+    }
+}
+
 export function MatchPlayOnline(props: {
     game: AppGame;
     matchID: MatchID;
     player: Player;
 }): JSX.Element {
-    const { readyState, match, error } = useOnlineMatch(props.game, {
-        matchID: props.matchID,
-        player: props.player,
-    });
+    const { game, matchID, player } = props;
+    const { readyState, match, error } = useOnlineMatch(game, {matchID, player});
 
     if (readyState !== ReadyState.OPEN) {
+        // To do: Consider recording last good state to minimise impact of a
+        // temporary lost of connection to the server.
         return <div>Connection status: {readyStatus(readyState)}</div>
     }
 
@@ -38,8 +73,24 @@ export function MatchPlayOnline(props: {
         return <div>Match data missing from server response!</div>
     }
 
-    return <div>
-        <div>Game state: <pre>{JSON.stringify(match.state, null, 2)}</pre></div>
-    </div>
+    const boardProps: BoardProps = {
+        playerID: player.id,
+        credentials: player.credentials,
+        matchID: matchID.mid,
+        
+        isConnected: true, // See earlier 'to do' comment.
 
+        ctx: makeContext(player, match),
+
+        // The need for the conversion shows soemthing isn't quite right.
+        matchData: match.playerData.map(convertPlayerData),
+
+        moves: match.moves,
+
+        events: dummyEvents,
+
+        G: match.state,
+    }
+
+    return <GameBoard game={game} bgioProps={boardProps} />
 }
