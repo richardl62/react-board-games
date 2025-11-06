@@ -46,7 +46,7 @@ function isOffline(props: BgioBoardProps) : boolean {
     const offline1 = !props.credentials;
     const offline2 = props.matchID === "default";
     if(offline1 !== offline2) {
-        console.warn("Problem checkinf if match is offline");
+        console.warn("Problem checking if match is offline");
     }
     return offline1 && offline2;
 }

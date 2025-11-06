@@ -5,9 +5,10 @@ import { PlayerID } from "./playerid.js";
 export interface MatchDataElem {
     id: number
     
-    // Optional to match legacy code, but required in some places.
+    // Undefined means the player has not joined yet.
     name?: string;
-    isConnected?: boolean;
+
+    isConnected: boolean;
 }
 
 type Moves = {
@@ -22,8 +23,7 @@ export interface BoardProps<TypeG=any> {
 
     matchID: string;
 
-    // Optional to match legacy code, but required in some places.
-    matchData?: Array<MatchDataElem>; 
+    matchData: Array<MatchDataElem>; 
     ctx: Ctx;
 
     moves: Moves;
