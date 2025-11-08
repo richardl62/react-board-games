@@ -61,6 +61,6 @@ wss.on('connection', (ws, req)  => {
   });
 
   ws.on('message', message => { 
-    connections.message(ws, message.toString());
+    connections.moveMessage(ws, message.toString());
   });
 });

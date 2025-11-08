@@ -25,6 +25,22 @@ export type ServerMoveResponse = {
 // The info sent to the server when requesting a move.
 export interface ServerMoveRequest {
     move: string;
-    activePlayer: number;
     arg: unknown;
+}
+
+export function isServerMoveRequest(obj: unknown): obj is ServerMoveRequest {
+    if (typeof obj !== "object" || obj === null)
+        return false;
+
+    const candidate = obj as Record<string, unknown>;
+
+    if (typeof candidate.move !== "string") {
+        return false;
+    }
+
+    if (!Object.keys(candidate).includes("arg")) {
+        return false;
+    }
+
+    return true;
 }

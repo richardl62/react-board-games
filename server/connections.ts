@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
-import { ServerMoveResponse } from "../shared/server-types.js";
+import { isServerMoveRequest, ServerMoveResponse } from "../shared/server-types.js";
 //import { ServerMoveResponse } from "./shared/server-move-response";
 
 function errorResponse(
@@ -55,9 +55,14 @@ export class Connections {
         }
     }
 
-    message(ws: WebSocket, str: string) {
+    moveMessage(ws: WebSocket, str: string) {
         try {
-            this.matches.makeMove(ws, str);
+            const moveRequest = JSON.parse(str);
+            if (!isServerMoveRequest(moveRequest)) {
+                 throw new Error("Unexpected data with move request: " + str);
+            }
+            
+            this.matches.makeMove(ws, moveRequest);
         } catch (err) {
             ws.send(errorResponse(err));
         }

@@ -1,6 +1,6 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { serverAddress } from "@shared/server-address";
-import { ServerMatchData, ServerMoveResponse, ServerMoveRequest } from "@shared/server-types";
+import { ServerMatchData, ServerMoveResponse, ServerMoveRequest, isServerMoveRequest } from "@shared/server-types";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 
 // A move function as run on a client.
@@ -55,6 +55,7 @@ export function useOnlineMatch(
         return { readyState, error, match: null };
     }
 
+
     // Inefficient, but simple. (Functions are recreated on every call.)
     const matchMoves: Record<string, MatchMove> = {};
     for (const moveName in appGame.moves) {
@@ -73,15 +74,17 @@ function makeMatchMove(
     moveName: string, 
     sendJsonMessage: (message: unknown) => void,
 ) : MatchMove {
-    return ({ arg, activePlayer }) => {
+    return (arg) => {
 
-        const data : ServerMoveRequest = {
+        const moveRequest : ServerMoveRequest = {
             move: moveName,
-            activePlayer,
             arg,
         };
 
-        sendJsonMessage(data);
+        if (!isServerMoveRequest(moveRequest)) {
+            console.error("Unexpected move data: " + JSON.stringify(moveRequest));
+        }   
+        sendJsonMessage(moveRequest);
     };
 }
 

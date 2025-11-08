@@ -2,6 +2,7 @@ import { WebSocket } from 'ws';
 import { Match } from "./match.js";
 import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
+import { ServerMoveRequest } from '../shared/server-types.js';
 
 
 // The Match interface is intended to be convenient for internal use.
@@ -50,19 +51,13 @@ export class Matches {
         return matches;
     }
 
-    makeMove(_ws: WebSocket, _parameterStr: string) : void {
-        throw new Error('makeMove not implemented');
-        // const match = this.getMatchByWebSocket(ws);
-        // if (!match) {
-        //     throw new Error('Player not in a match');
-        // }
-        // const moveData: ServerMoveData = JSON.parse(parameterStr);
-        // const { activePlayer, arg } = moveData;
-        // if ( typeof activePlayer !== "number" ) {
-        //     throw new Error('bad parameter string in makeMove');
-        // }
+    makeMove(ws: WebSocket, request: ServerMoveRequest) : void {
+        const match = this.getMatchByWebSocket(ws);
+        if (!match) {
+            throw new Error('Player not in a match');
+        }
 
-        // match.move(moveData.move, activePlayer, arg);
+        match.move(request);
     }
 
     playerDisconnected(ws: WebSocket) : void {

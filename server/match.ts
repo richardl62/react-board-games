@@ -2,9 +2,11 @@ import { WebSocket } from 'ws';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { Player } from "./player.js";
 import { Ctx } from '../shared/game-control/ctx.js';
-import { random } from '../shared/game-control/random-api.js';
+import { random, RandomAPI } from '../shared/game-control/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { ServerMatchData, ServerMoveResponse } from '../shared/server-types.js';
+import { ServerMatchData, ServerMoveRequest, ServerMoveResponse } from '../shared/server-types.js';
+import { EventsAPI } from '../shared/game-control/events.js';
+import { MoveArg0 } from '../shared/game-control/move-fn.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -15,6 +17,9 @@ export class Match {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private state: any;
     private ctx: Ctx
+
+    private random: RandomAPI;
+    private events: Required<EventsAPI>;
 
     constructor(
         gameControl: GameControl, 
@@ -49,9 +54,19 @@ export class Match {
             { ctx: this.ctx, random: random },
             setupData
         );
+
+        this.random = random;
+
+        this.events = {
+            endTurn: () => {throw new Error("endTurn not implemented");},
+            endGame: () => {throw new Error("endGame not implemented");},
+        }
     }
 
     get gameName() {return this.definition.name}
+
+    get currentPlayer() { return parseInt(this.ctx.currentPlayer)};
+    set currentPlayer(cp: number) { this.ctx.currentPlayer = cp.toString()};
 
     allocatePlayer(name: string) : Player {
         const player = this.players.find(p => !p.isAllocated);
@@ -96,39 +111,43 @@ export class Match {
         this.broadcastMatchData({error: null});
     }
     
-    // Simplified move function
-    move(_name: string, _activePlayer: number, _arg: unknown) {
+    move(request: ServerMoveRequest) {
         console.log("Move called with state", this.state);
-        throw new Error("Move not implemented");
-        // let error: string | null = null;
+        let error: string | null = null;
 
-        // try {
-        //     const move = this.definition.moves[name];
-        //     if (!move) {
-        //         throw new Error(`Unknown move: ${name}`);
-        //     }
+        try {
+            const { move: moveName, arg } = request;
+            const move = this.definition.moves[moveName];
+            if (!move) {
+                throw new Error(`Unknown move: ${moveName}`);
+            }
 
-        //     const { currentPlayer, state } = this;
-        //     if (activePlayer !== currentPlayer) {
-        //         // Can this happen without a bug if the client code? If not,
-        //         // is this test worth having? For the time being I regard it as a
-        //         // sanity check.
-        //         throw new Error("Illegal move - wrong player");
-        //     }
+            const { state, currentPlayer } = this;
 
-        //     this.state = move({ state, currentPlayer, activePlayer, arg });
+            const arg0 : MoveArg0<unknown> = {
+                    G: this.state,
+                    ctx: this.ctx,
+                    playerID: currentPlayer.toString(),
+                    random: this.random,
+                    events: this.events,
+            }
 
-        //     // currentPlayer should not be changed if an error has been throws.
-        //     this.currentPlayer += 1;
-        //     if (this.currentPlayer == this.players.length) {
-        //         this.currentPlayer = 0;
-        //     }
+            const moveResult = move(arg0, { state, currentPlayer, arg });
+            if(typeof moveResult !== "undefined") {
+                this.state = moveResult;
+            }
 
-        // } catch (err) {
-        //     error = err instanceof Error ? err.message : "unknown error";
-        // }
+            // currentPlayer should not be changed if an error has been throws.
+            this.currentPlayer += 1;
+            if (this.currentPlayer == this.players.length) {
+                this.currentPlayer = 0;
+            }
 
-        // this.broadcastMatchData({error});
+        } catch (err) {
+            error = err instanceof Error ? err.message : "unknown error";
+        }
+
+        this.broadcastMatchData({error});
     }
 
     findPlayerByID(id: string) : Player | null {
