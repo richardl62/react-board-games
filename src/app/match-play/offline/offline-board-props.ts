@@ -42,10 +42,6 @@ export function offlineBoardProps(game: AppGame, sharedProps: SharedOfflineBoard
 
     const wrappedMoves: BoardProps["moves"] = {};
 
-    // KLUDGE: This cast is necessary because EventsAPI has optional member functions.
-    // TO DO: Fix this in a better way.
-    const requiredEvents: Required<EventsAPI> = events as Required<EventsAPI>; 
-
     for (const moveName in unwrappedMoves) {
         wrappedMoves[moveName] = (arg: unknown) => {
             const newG = JSON.parse(JSON.stringify(G));
@@ -55,7 +51,7 @@ export function offlineBoardProps(game: AppGame, sharedProps: SharedOfflineBoard
                 ctx,
                 playerID: id.toString(),
                 random,
-                events: requiredEvents,
+                events,
             }, arg);
             
             setG(newG);

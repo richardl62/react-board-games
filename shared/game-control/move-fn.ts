@@ -8,7 +8,7 @@ export interface MoveArg0<G> {
     ctx: Ctx;
     playerID: PlayerID;
     random: RandomAPI;
-    events: Required<EventsAPI>; // Use of Required<> is a kludge.
+    events: EventsAPI;
 }
 
 export type MoveFn<G> = (
