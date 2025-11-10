@@ -47,7 +47,7 @@ export function offlineBoardProps(game: AppGame, sharedProps: SharedOfflineBoard
     const requiredEvents: Required<EventsAPI> = events as Required<EventsAPI>; 
 
     for (const moveName in unwrappedMoves) {
-        wrappedMoves[moveName] = (...args: unknown[]) => {
+        wrappedMoves[moveName] = (arg: unknown) => {
             const newG = JSON.parse(JSON.stringify(G));
             const moveFn = unwrappedMoves[moveName];
             moveFn({
@@ -56,7 +56,7 @@ export function offlineBoardProps(game: AppGame, sharedProps: SharedOfflineBoard
                 playerID: id.toString(),
                 random,
                 events: requiredEvents,
-            }, ...args);
+            }, arg);
             
             setG(newG);
         };

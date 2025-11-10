@@ -14,5 +14,5 @@ export interface MoveArg0<G> {
 export type MoveFn<G> = (
     context: MoveArg0<G>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...args: any[]
+    arg: any
 ) => void | G;
