@@ -38,8 +38,6 @@ export class Connections {
             //const credentials = urlParam("credentials");
 
             const match = this.matches.getMatch(parseInt(matchID));
-
-            console.log(`Connection made - matchID:${matchID} playerID:${playerID}`);
       
             // the match is responsible for sending data if a connection is sucessful.
             match.connectPlayer(playerID, ws);

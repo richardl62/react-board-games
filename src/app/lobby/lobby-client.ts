@@ -40,7 +40,6 @@ async function callLobby(func: string, arg: unknown) : Promise<any> {
     searchParams.append("arg", JSON.stringify(arg));
 
     const fullUrl = `${serverAddress()}/lobby?${searchParams.toString()}`;
-    console.log("callLobby fetching from", fullUrl);
 
     const response = await fetch(fullUrl);
     // Check response status code for errors
@@ -50,7 +49,5 @@ async function callLobby(func: string, arg: unknown) : Promise<any> {
         throw new Error(message);
     }
 
-    const result = await response.json();
-    console.log(`${func} suceeded`, result);
-    return result;
+    return await response.json();
 }

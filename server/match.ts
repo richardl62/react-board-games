@@ -112,7 +112,6 @@ export class Match {
     }
     
     move(request: ServerMoveRequest) {
-        console.log("Move called with state", this.state);
         let error: string | null = null;
 
         try {

@@ -43,8 +43,6 @@ export function useOnlineMatch(
     url.searchParams.append("playerID", player.id);
     url.searchParams.append("credentials", player.credentials);
 
-    //console.log(url.toString());
-
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(url.toString());
     if ( !lastJsonMessage ) {
         return { readyState, match: null, error: null };

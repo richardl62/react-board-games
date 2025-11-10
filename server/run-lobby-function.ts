@@ -3,7 +3,6 @@ import { Matches } from './matches.js';
 import { ServerLobby } from './server-lobby.js';
 
 export function runLobbyFunction(matches: Matches, query: ParsedQs) : unknown {
-  console.log("Lobby function called:", query);
   
   const func = query.func;
   if(typeof func !== "string") {
