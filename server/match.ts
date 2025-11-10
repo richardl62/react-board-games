@@ -121,17 +121,15 @@ export class Match {
                 throw new Error(`Unknown move: ${moveName}`);
             }
 
-            const { state, currentPlayer } = this;
-
             const arg0 : MoveArg0<unknown> = {
                     G: this.state,
                     ctx: this.ctx,
-                    playerID: currentPlayer.toString(),
+                    playerID: this.currentPlayer.toString(),
                     random: this.random,
                     events: this.events,
             }
 
-            const moveResult = move(arg0, { state, currentPlayer, arg });
+            const moveResult = move(arg0, arg);
             if(typeof moveResult !== "undefined") {
                 this.state = moveResult;
             }
