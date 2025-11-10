@@ -7,9 +7,9 @@ const OuterDiv = styled.div`
     margin: ${standardOuterMargin};
 `;
 
-const Name = styled.span<{active: boolean}>`
+const Name = styled.span<{$active: boolean}>`
     // underline if active
-    text-decoration: ${props => props.active ? "underline" : "none"};
+    text-decoration: ${props => props.$active ? "underline" : "none"};
     margin-right: 1em;
 `;
 
@@ -17,7 +17,7 @@ function PlayerNames() : JSX.Element {
     const {ctx: {playOrder}, playerID, getPlayerName} =  useGameContext();
     return <div>
         {playOrder.map((id) => 
-            <Name key={id} active={id === playerID}>
+            <Name key={id} $active={id === playerID}>
                 {getPlayerName(id)}
             </Name>
         )}
