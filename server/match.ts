@@ -19,7 +19,7 @@ export class Match {
     private ctx: Ctx
 
     private random: RandomAPI;
-    private events: Required<EventsAPI>;
+    private events: EventsAPI;
 
     constructor(
         gameControl: GameControl, 
@@ -171,7 +171,7 @@ export class Match {
 
         const matchData : ServerMatchData = {
             playerData: this.players.map(p => p.publicMetada()),
-            currentPlayer: 0,
+            currentPlayer: this.currentPlayer,
             state: this.state,
         };
         
