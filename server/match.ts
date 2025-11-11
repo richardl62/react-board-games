@@ -61,7 +61,6 @@ export class Match {
         // To do: Check if this can be removed.
         this.events = {
             endTurn: () => {throw new Error("endTurn not implemented");},
-            endGame: () => {throw new Error("endGame not implemented");},
         }
     }
 

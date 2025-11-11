@@ -6,7 +6,11 @@ const ListRoundDiv = styled.div`
 `;
 
 export function LastRoundNotice() : JSX.Element | null {
+    // The reason that the last round is not enforced 
+    // was to avoid having to implement the endGame event.
+    // This was a KLUDGE - see comment in endTurnNotBust.
     return <ListRoundDiv>
-        This is the last round!
+        Target score reached! (This is should be the last round,
+        but this is not enforced.)
     </ListRoundDiv>;
 }

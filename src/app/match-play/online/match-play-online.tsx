@@ -83,7 +83,6 @@ export function MatchPlayOnline(props: {
 
         events: {
             endTurn: match.endTurn,
-            endGame: () => { throw new Error("endGame not implemented") }   
         },
 
         G: match.state,

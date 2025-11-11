@@ -1,4 +1,4 @@
+// To do: Consider removing EventAPI and provide endTurn by a different means
 export interface EventsAPI {
     endTurn: () => void;
-    endGame: (arg0: string) => void; // ToDo: Rename as EndMatch
 }

@@ -38,8 +38,6 @@ export function useOfflineCtx(numPlayers: number) : {
             newCtx.currentPlayer = ctx.playOrder[newPlayOrderPos];
             setCtx(newCtx);
         },
-
-        endGame: (_arg0) => {throw new Error("endGame not implemented");},
     };
     return {ctx, matchData, events};
 }
