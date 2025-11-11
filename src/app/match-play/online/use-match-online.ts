@@ -58,10 +58,12 @@ export function useOnlineMatch(
         matchMoves[moveName] = makeMatchMove(moveName, sendJsonMessage);
     }
 
+    const endTurn: WsEndTurn = { endTurn: true };
+    
     const match : Match = {
         ...matchData,
         moves: matchMoves,
-        endTurn: () => sendJsonMessage(WsEndTurn),
+        endTurn: () => sendJsonMessage(endTurn),
     };
     
     return { readyState, error, match };

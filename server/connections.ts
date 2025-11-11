@@ -2,7 +2,7 @@ import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
 import { WsMatchResponse } from "../shared/ws-match-response.js";
-import { isWsMatchRequest, WsEndTurn } from "../shared/ws-match-request.js"
+import { isWsMatchRequest, isWsEndTurn } from "../shared/ws-match-request.js"
 import { Match } from "./match.js";
 
 export class Connections {
@@ -62,7 +62,7 @@ export class Connections {
                 throw new Error("Unexpected data with match request: " + str);
             }
 
-            if (matchRequest === WsEndTurn) { //XXX
+            if (isWsEndTurn(matchRequest)) {
                 match.endTurn();
             } else {
                 match.move(matchRequest);
