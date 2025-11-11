@@ -2,15 +2,8 @@ import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
 import { WsMatchResponse } from "../shared/ws-match-response.js";
-import { isWsMatchRequest } from "../shared/ws-match-request.js"
-
-function errorResponse(
-    err: unknown // The parameter from a catch statement 
-  )
-  {
-    const message = err instanceof Error ? err.message : "unknown error";
-    return JSON.stringify({ error: message });
-  }
+import { isWsMatchRequest, WsEndTurn } from "../shared/ws-match-request.js"
+import { Match } from "./match.js";
 
 export class Connections {
     matches: Matches;
@@ -20,56 +13,81 @@ export class Connections {
     }
 
     connection(ws: WebSocket, requestUrl: string | undefined) {
-        
+
         if (requestUrl) {
-          try {
-            const parsedUrl = url.parse(requestUrl, true);
-      
-            const urlParam = (name: string) => {
-              const param = parsedUrl.query[name];
-      
-              if (typeof param !== 'string') {
-                throw new Error(`URL parameter "${name}" missing or invalid`);
-              }
-              return param;
+            try {
+                const parsedUrl = url.parse(requestUrl, true);
+
+                const urlParam = (name: string) => {
+                    const param = parsedUrl.query[name];
+
+                    if (typeof param !== 'string') {
+                        throw new Error(`URL parameter "${name}" missing or invalid`);
+                    }
+                    return param;
+                }
+
+                const matchID = urlParam("matchID");
+                const playerID = urlParam("playerID");
+                //const credentials = urlParam("credentials");
+
+                const match = this.matches.getMatch(parseInt(matchID, 10));
+
+                match.connectPlayer(playerID, ws);
+                broadcastMatchData(match, { error: null });
             }
-      
-            const matchID = urlParam("matchID");
-            const playerID = urlParam("playerID");
-            //const credentials = urlParam("credentials");
+            catch (err) {
+                const message = err instanceof Error ? err.message : "unknown error";
 
-            const match = this.matches.getMatch(parseInt(matchID));
-      
-            // the match is responsible for sending data if a connection is sucessful.
-            match.connectPlayer(playerID, ws);
-          }
-          catch (err) {
-            const message = err instanceof Error ? err.message : "unknown error";
+                console.log('Error during connection:', message);
 
-            console.log('Error during connection:', message);
-
-            const response: WsMatchResponse = {error: message, matchData: null};
-            ws.send(JSON.stringify(response));
-          }
+                const response: WsMatchResponse = { error: message, matchData: null };
+                ws.send(JSON.stringify(response));
+            }
         }
     }
 
     matchRequest(ws: WebSocket, str: string) {
+        let error = null;
+        let match;
+
         try {
+            match = this.matches.getMatchByWebSocket(ws);
+            if (!match) {
+                throw new Error('Player not in a match');
+            }
+
             const matchRequest = JSON.parse(str);
             if (!isWsMatchRequest(matchRequest)) {
-                 throw new Error("Unexpected data with match request: " + str);
+                throw new Error("Unexpected data with match request: " + str);
             }
-            
-            this.matches.matchAction(ws, matchRequest);
+
+            if (matchRequest === WsEndTurn) { //XXX
+                match.endTurn();
+            } else {
+                match.move(matchRequest);
+            }
+
         } catch (err) {
-            ws.send(errorResponse(err));
+            error = err instanceof Error ? err.message : "unknown error";
+        }
+
+        if (match) {
+            broadcastMatchData(match, { error });
+        } else {
+            // Hmm. Not sure what to do here.
+            console.error('No match found for this WebSocket in move request');
         }
     }
 
     close(ws: WebSocket) {
         try {
-            this.matches.playerDisconnected(ws);
+            const match = this.matches.getMatchByWebSocket(ws);
+            if (!match) {
+                throw new Error('Attempt to disconnect player who is not in a match');
+            }
+            match.disconnectPlayer(ws);
+            broadcastMatchData(match, { error: null });
         } catch (err) {
             // Hmm. Not sure what to do here.
             console.error('Error during player disconnect:', err);
@@ -79,5 +97,17 @@ export class Connections {
     error(_ws: WebSocket, error: Error) {
         // What should be done here?
         console.error('WebSocket error:', error);
+    }
+}
+
+function broadcastMatchData(match: Match, { error }: { error: string | null }) {
+    const matchData = match.matchData();
+    const response: WsMatchResponse = { matchData, error };
+
+    for (const player of match.players) {
+        const ws = player.getWs();
+        if (ws) {
+            ws.send(JSON.stringify(response));
+        }
     }
 }

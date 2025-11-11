@@ -1,12 +1,11 @@
 import { WebSocket } from 'ws';
 import { Ctx } from '../shared/game-control/ctx.js';
-import { EventsAPI } from '../shared/game-control/events.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { random, RandomAPI } from '../shared/game-control/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
 import { WsMoveRequest } from "../shared/ws-match-request.js";
-import { ServerMatchData, WsMatchResponse } from "../shared/ws-match-response.js";
+import { ServerMatchData } from "../shared/ws-match-response.js";
 import { Player } from "./player.js";
 
 // A match is an instance of a game.
@@ -14,19 +13,16 @@ export class Match {
     readonly definition: GameControl;
     readonly id: number;
     readonly players: Player[];
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private state: any;
     private ctx: Ctx;
-
     private random: RandomAPI;
-    private events: EventsAPI;
+
+    private state: unknown; // To do: pick a better name?
 
     constructor(
-        gameControl: GameControl, 
-        {id, numPlayers, setupData}: {
-            id: number, 
-            numPlayers: number, 
+        gameControl: GameControl,
+        { id, numPlayers, setupData }: {
+            id: number,
+            numPlayers: number,
             setupData: unknown
         }
     ) {
@@ -35,9 +31,10 @@ export class Match {
 
         this.players = [];
         const playOrder: string[] = [];
+
         // For legacy reasons players IDs are set to reflect their position
         // within the match.
-        for(let id = 0; id < numPlayers; ++id) {
+        for (let id = 0; id < numPlayers; ++id) {
             this.players[id] = new Player(id);
             playOrder.push(id.toString());
         }
@@ -57,21 +54,16 @@ export class Match {
         );
 
         this.random = random;
-
-        // To do: Check if this can be removed.
-        this.events = {
-            endTurn: () => {throw new Error("endTurn not implemented");},
-        }
     }
 
-    get gameName() {return this.definition.name}
+    get gameName() { return this.definition.name }
 
-    get currentPlayer() { return parseInt(this.ctx.currentPlayer)};
-    set currentPlayer(cp: number) { this.ctx.currentPlayer = cp.toString()};
+    get currentPlayer() { return parseInt(this.ctx.currentPlayer) };
+    set currentPlayer(cp: number) { this.ctx.currentPlayer = cp.toString() };
 
-    allocatePlayer(name: string) : Player {
+    allocatePlayer(name: string): Player {
         const player = this.players.find(p => !p.isAllocated);
-        if ( !player ) {
+        if (!player) {
             throw new Error("No unallocated player found");
         }
 
@@ -80,14 +72,22 @@ export class Match {
         return player;
     }
 
-    lobbyMatch() : LobbyTypes.Match {
+    lobbyMatch(): LobbyTypes.Match {
         return {
             gameName: this.definition.name,
             matchID: this.id.toString(),
             players: this.players.map(p => p.publicMetadata()),
         }
     }
-    
+
+    matchData(): ServerMatchData {
+        return {
+            playerData: this.players.map(p => p.publicMetadata()),
+            currentPlayer: this.currentPlayer,
+            state: this.state,
+        };
+    }
+
     connectPlayer(id: string, ws: WebSocket) {
         const player = this.findPlayerByID(id);
         if (!player) {
@@ -99,58 +99,48 @@ export class Match {
         }
 
         player.connect(ws);
-        this.broadcastMatchData({error: null});
     }
 
-    disconnectPlayer(ws: WebSocket) : void {
+    disconnectPlayer(ws: WebSocket): void {
         const player = this.findPlayerByWebSocket(ws);
         if (!player) {
             throw new Error("Disconnect report when player not connected");
         }
-        
+
         player.disconnect();
-        this.broadcastMatchData({error: null});
     }
-    
+
     move(request: WsMoveRequest) {
-        let error: string | null = null;
 
-        try {
-            const { move: moveName, arg } = request;
-            const move = this.definition.moves[moveName];
-            if (!move) {
-                throw new Error(`Unknown move: ${moveName}`);
-            }
-
-            const arg0 : MoveArg0<unknown> = {
-                    G: this.state,
-                    ctx: this.ctx,
-                    playerID: this.currentPlayer.toString(),
-                    random: this.random,
-                    events: this.events,
-            }
-
-            const moveResult = move(arg0, arg);
-            if(typeof moveResult !== "undefined") {
-                this.state = moveResult;
-            }
-
-        } catch (err) {
-            error = err instanceof Error ? err.message : "unknown error";
+        const { move: moveName, arg } = request;
+        const move = this.definition.moves[moveName];
+        if (!move) {
+            throw new Error(`Unknown move: ${moveName}`);
         }
 
-        this.broadcastMatchData({error});
+        const endTurn = () => this.endTurn();
+
+        const arg0: MoveArg0<unknown> = {
+            G: this.state,
+            ctx: this.ctx,
+            playerID: this.currentPlayer.toString(),
+            random: this.random,
+            events: { endTurn },
+        }
+
+        const moveResult = move(arg0, arg);
+        if (typeof moveResult !== "undefined") {
+            this.state = moveResult;
+        }
     }
 
     endTurn() {
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
-
-        this.broadcastMatchData();
     }
 
-    findPlayerByID(id: string) : Player | null {
+    findPlayerByID(id: string): Player | null {
         for (const player of this.players) {
-            if ( player.id.toString() === id ) {
+            if (player.id.toString() === id) {
                 return player;
             }
         }
@@ -158,31 +148,13 @@ export class Match {
         return null;
     }
 
-    findPlayerByWebSocket(ws: WebSocket) : Player | null {
+    findPlayerByWebSocket(ws: WebSocket): Player | null {
         for (const player of this.players) {
-            if ( player.getWs() === ws ) {
+            if (player.getWs() === ws) {
                 return player;
             }
         }
 
         return null;
-    }
-
-    private broadcastMatchData({error} : {error : string | null} = {error: null}) {
-
-        const matchData : ServerMatchData = {
-            playerData: this.players.map(p => p.publicMetadata()),
-            currentPlayer: this.currentPlayer,
-            state: this.state,
-        };
-        
-        const response: WsMatchResponse = { matchData, error };
-
-        for (const player of this.players) {
-            const ws = player.getWs();
-            if( ws ) {
-                ws.send(JSON.stringify(response));
-            }
-        }
     }
 };  

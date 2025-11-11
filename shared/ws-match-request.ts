@@ -6,7 +6,7 @@ export interface WsMoveRequest {
     arg: unknown;
 }
 
-export const WsEndTurn = "endTurn";
+export const WsEndTurn = "endTurn"; 
 export type WsMatchRequest = typeof WsEndTurn | WsMoveRequest;
 
 export function isWsMoveRequest(obj: unknown): obj is WsMoveRequest {

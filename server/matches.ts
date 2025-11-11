@@ -1,12 +1,9 @@
 import { WebSocket } from 'ws';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
-import { WsEndTurn, WsMatchRequest } from "../shared/ws-match-request.js";
 import { Match } from "./match.js";
 
-
-// The Match interface is intended to be convenient for internal use.
-// (ServerLobby uses Match to help respond to client request.)
+// Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {
     private matches: Match[];
     
@@ -35,10 +32,10 @@ export class Matches {
             }
         }
 
-        throw new Error("Invalid Match ID");
+        throw new Error(`Invalid Match ID: ${matchID}`);
     }
 
-    /** Get all the matchs of a particular game (e.g. Scrabble) */
+    /** Get all the matches of a particular game (e.g. Scrabble) */
     getMatches(gameName: string) : Match[]
     {
         const matches: Match[] = [];
@@ -51,30 +48,8 @@ export class Matches {
         return matches;
     }
 
-    matchAction(ws: WebSocket, request: WsMatchRequest) : void {
-        const match = this.getMatchByWebSocket(ws);
-        if (!match) {
-            throw new Error('Player not in a match');
-        }
-
-        if (request === WsEndTurn) {
-            match.endTurn();
-        } else {
-            match.move(request);
-        }
-    }
-
-    playerDisconnected(ws: WebSocket) : void {
-        const match = this.getMatchByWebSocket(ws);
-        if (!match) {
-           throw new Error('Player not in a match');
-        } else {
-            match.disconnectPlayer(ws);
-        }
-    }
-
     // Get the match that a player is in
-    private getMatchByWebSocket(ws: WebSocket) : Match | null {
+    getMatchByWebSocket(ws: WebSocket) : Match | null {
         for (const match of this.matches) {
             if (match.findPlayerByWebSocket(ws)) {
                 return match;
