@@ -8,11 +8,11 @@ import { Match } from "./match.js";
 // The Match interface is intended to be convenient for internal use.
 // (ServerLobby uses Match to help respond to client request.)
 export class Matches {
+    private matches: Match[];
+    
     constructor() {
         this.matches = [];
     }
-
-    private matches: Match[];
 
     /** Create a new match and return it's ID */
     addMatch(game: string, numPlayers: number, setupData: unknown) : Match

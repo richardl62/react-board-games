@@ -15,7 +15,7 @@ export function isWsMatchRequest(obj: unknown): obj is WsMatchRequest {
         return false;
     }
 
-    if (!Object.keys(candidate).includes("arg")) {
+    if (!("arg" in candidate)) {
         return false;
     }
 

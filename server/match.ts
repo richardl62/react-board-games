@@ -17,7 +17,7 @@ export class Match {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private state: any;
-    private ctx: Ctx
+    private ctx: Ctx;
 
     private random: RandomAPI;
     private events: EventsAPI;
@@ -58,6 +58,7 @@ export class Match {
 
         this.random = random;
 
+        // To do: Check if this can be removed.
         this.events = {
             endTurn: () => {throw new Error("endTurn not implemented");},
             endGame: () => {throw new Error("endGame not implemented");},
@@ -84,7 +85,7 @@ export class Match {
         return {
             gameName: this.definition.name,
             matchID: this.id.toString(),
-            players: this.players.map(p => p.publicMetada()),
+            players: this.players.map(p => p.publicMetadata()),
         }
     }
     
@@ -171,7 +172,7 @@ export class Match {
     private broadcastMatchData({error} : {error : string | null}) {
 
         const matchData : ServerMatchData = {
-            playerData: this.players.map(p => p.publicMetada()),
+            playerData: this.players.map(p => p.publicMetadata()),
             currentPlayer: this.currentPlayer,
             state: this.state,
         };

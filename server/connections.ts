@@ -13,16 +13,17 @@ function errorResponse(
   }
 
 export class Connections {
+    matches: Matches;
+
     constructor(matches: Matches) {
         this.matches = matches;
     }
-    matches: Matches;
 
     connection(ws: WebSocket, requestUrl: string | undefined) {
         
         if (requestUrl) {
           try {
-            const parsedUrl = url.parse(requestUrl, true); // Does the 2nd parameter matter?
+            const parsedUrl = url.parse(requestUrl, true);
       
             const urlParam = (name: string) => {
               const param = parsedUrl.query[name];
@@ -70,7 +71,8 @@ export class Connections {
         try {
             this.matches.playerDisconnected(ws);
         } catch (err) {
-            ws.send(errorResponse(err)); // Does it makes sense to report an eror here?
+            // Hmm. Not sure what to do here.
+            console.error('Error during player disconnect:', err);
         }
     }
 

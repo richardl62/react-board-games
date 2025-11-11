@@ -68,7 +68,7 @@ export class Player {
         return this.ws;
     }
 
-    publicMetada(): PublicPlayerMetadata {
+    publicMetadata(): PublicPlayerMetadata {
         const { name, isConnected } = this;
 
         return  { 
