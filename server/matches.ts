@@ -1,7 +1,7 @@
 import { WebSocket } from 'ws';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
-import { WsMatchRequest } from "../shared/ws-match-request.js";
+import { WsEndTurn, WsMatchRequest } from "../shared/ws-match-request.js";
 import { Match } from "./match.js";
 
 
@@ -51,13 +51,17 @@ export class Matches {
         return matches;
     }
 
-    makeMove(ws: WebSocket, request: WsMatchRequest) : void {
+    matchAction(ws: WebSocket, request: WsMatchRequest) : void {
         const match = this.getMatchByWebSocket(ws);
         if (!match) {
             throw new Error('Player not in a match');
         }
 
-        match.move(request);
+        if (request === WsEndTurn) {
+            match.endTurn();
+        } else {
+            match.move(request);
+        }
     }
 
     playerDisconnected(ws: WebSocket) : void {

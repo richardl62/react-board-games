@@ -1,25 +1,22 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { serverAddress } from "@shared/server-address";
 import { ServerMatchData, WsMatchResponse } from "@shared/ws-match-response";
-import { WsMatchRequest, isWsMatchRequest } from "@shared/ws-match-request";
+import { WsEndTurn, WsMoveRequest, isWsMoveRequest } from "@shared/ws-match-request";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 
 // A move function as run on a client.
-export type MatchMove = (arg0: {
+type MatchMove = (arg0: {
     activePlayer: number,
     arg: unknown,
 }) => void;
 
-
-// Data and functions relating to a specifc game instance on the server
-// or pseudo-server.  The code that creates a Match differs in online and 
-// offline play.  But the code that used the Match is the same in both cases.
-export interface Match<GameState = unknown>  extends ServerMatchData<GameState> {
+interface Match<GameState = unknown>  extends ServerMatchData<GameState> {
     moves: Record<string, MatchMove>;
+    endTurn: () => void;
 }
 
 /** Status of a match on the server or psuedo-server. */
-export type ServerMatch = {
+type OnlineMatchResult = {
     readyState: ReadyState; // Use if the connection is not open
 
     match: Match | null ;  // Can be null after initial connection, or after
@@ -36,7 +33,7 @@ export type ServerMatch = {
 export function useOnlineMatch(
     appGame: AppGame,
     {matchID, player}: {matchID: MatchID, player: Player},
-): ServerMatch {
+): OnlineMatchResult {
     
     const url = new URL(serverAddress());
     url.protocol = "ws";
@@ -64,6 +61,7 @@ export function useOnlineMatch(
     const match : Match = {
         ...matchData,
         moves: matchMoves,
+        endTurn: () => sendJsonMessage(WsEndTurn),
     };
     
     return { readyState, error, match };
@@ -75,12 +73,12 @@ function makeMatchMove(
 ) : MatchMove {
     return (arg) => {
 
-        const moveRequest : WsMatchRequest = {
+        const moveRequest : WsMoveRequest = {
             move: moveName,
             arg,
         };
 
-        if (!isWsMatchRequest(moveRequest)) {
+        if (!isWsMoveRequest(moveRequest)) {
             console.error("Unexpected move data: " + JSON.stringify(moveRequest));
         }   
         sendJsonMessage(moveRequest);

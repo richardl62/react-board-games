@@ -1,11 +1,15 @@
-// Data sent over a WebSocket to request an action related to a match.
-// The action can be a move or an event.
-export interface WsMatchRequest {
+// Data sent over a WebSocket to request an action on a match.
+// The action can be a move or ending the turn.
+
+export interface WsMoveRequest {
     move: string;
     arg: unknown;
 }
 
-export function isWsMatchRequest(obj: unknown): obj is WsMatchRequest {
+export const WsEndTurn = "endTurn";
+export type WsMatchRequest = typeof WsEndTurn | WsMoveRequest;
+
+export function isWsMoveRequest(obj: unknown): obj is WsMoveRequest {
     if (typeof obj !== "object" || obj === null)
         return false;
 
@@ -21,3 +25,8 @@ export function isWsMatchRequest(obj: unknown): obj is WsMatchRequest {
 
     return true;
 }
+
+export function isWsMatchRequest(obj: unknown): obj is WsMatchRequest {
+    return obj === WsEndTurn || isWsMoveRequest(obj);
+}
+

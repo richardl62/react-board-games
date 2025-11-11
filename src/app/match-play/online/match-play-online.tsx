@@ -4,7 +4,6 @@ import { useOnlineMatch } from "./use-match-online";
 import {ReadyState} from "react-use-websocket";
 import { BoardProps, MatchDataElem } from "@shared/game-control/board-props";
 import { PublicPlayerMetadata } from "@shared/lobby/types.js";
-import { EventsAPI } from "@shared/game-control/events";
 import { Ctx } from "@shared/game-control/ctx";
 import { ServerMatchData } from "@shared/ws-match-response";
 import { GameBoard } from "../game-board";
@@ -25,11 +24,6 @@ function readyStatus( state: ReadyState) {
 function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
     const {id, name, isConnected} = md;
     return {id, isConnected, name: name || undefined}
-}
-
-const dummyEvents: EventsAPI = {
-    endTurn: () => {throw new Error("endTurn not implemented")},
-    endGame: () => {throw new Error("endGame not implemented")},
 }
 
 function makeContext(_player: Player, match: ServerMatchData) : Ctx {
@@ -87,7 +81,10 @@ export function MatchPlayOnline(props: {
 
         moves: match.moves,
 
-        events: dummyEvents,
+        events: {
+            endTurn: match.endTurn,
+            endGame: () => { throw new Error("endGame not implemented") }   
+        },
 
         G: match.state,
     }

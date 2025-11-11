@@ -2,7 +2,7 @@ import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
 import { WsMatchResponse } from "../shared/ws-match-response.js";
-import { isWsMatchRequest} from "../shared/ws-match-request.js"
+import { isWsMatchRequest } from "../shared/ws-match-request.js"
 
 function errorResponse(
     err: unknown // The parameter from a catch statement 
@@ -54,14 +54,14 @@ export class Connections {
         }
     }
 
-    moveMessage(ws: WebSocket, str: string) {
+    matchRequest(ws: WebSocket, str: string) {
         try {
             const matchRequest = JSON.parse(str);
             if (!isWsMatchRequest(matchRequest)) {
-                 throw new Error("Unexpected data with move request: " + str);
+                 throw new Error("Unexpected data with match request: " + str);
             }
             
-            this.matches.makeMove(ws, matchRequest);
+            this.matches.matchAction(ws, matchRequest);
         } catch (err) {
             ws.send(errorResponse(err));
         }

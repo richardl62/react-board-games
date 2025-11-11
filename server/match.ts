@@ -5,7 +5,7 @@ import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { random, RandomAPI } from '../shared/game-control/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { WsMatchRequest } from "../shared/ws-match-request.js";
+import { WsMoveRequest } from "../shared/ws-match-request.js";
 import { ServerMatchData, WsMatchResponse } from "../shared/ws-match-response.js";
 import { Player } from "./player.js";
 
@@ -113,7 +113,7 @@ export class Match {
         this.broadcastMatchData({error: null});
     }
     
-    move(request: WsMatchRequest) {
+    move(request: WsMoveRequest) {
         let error: string | null = null;
 
         try {
@@ -136,17 +136,17 @@ export class Match {
                 this.state = moveResult;
             }
 
-            // currentPlayer should not be changed if an error has been throws.
-            this.currentPlayer += 1;
-            if (this.currentPlayer == this.players.length) {
-                this.currentPlayer = 0;
-            }
-
         } catch (err) {
             error = err instanceof Error ? err.message : "unknown error";
         }
 
         this.broadcastMatchData({error});
+    }
+
+    endTurn() {
+        this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+
+        this.broadcastMatchData();
     }
 
     findPlayerByID(id: string) : Player | null {
@@ -169,7 +169,7 @@ export class Match {
         return null;
     }
 
-    private broadcastMatchData({error} : {error : string | null}) {
+    private broadcastMatchData({error} : {error : string | null} = {error: null}) {
 
         const matchData : ServerMatchData = {
             playerData: this.players.map(p => p.publicMetadata()),
