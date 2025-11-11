@@ -1,12 +1,13 @@
 import { WebSocket } from 'ws';
-import { GameControl } from "../shared/game-control/game-control.js";
-import { Player } from "./player.js";
 import { Ctx } from '../shared/game-control/ctx.js';
+import { EventsAPI } from '../shared/game-control/events.js';
+import { GameControl } from "../shared/game-control/game-control.js";
+import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { random, RandomAPI } from '../shared/game-control/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { ServerMatchData, ServerMoveRequest, ServerMoveResponse } from '../shared/server-types.js';
-import { EventsAPI } from '../shared/game-control/events.js';
-import { MoveArg0 } from '../shared/game-control/move-fn.js';
+import { WsMatchRequest } from "../shared/ws-match-request.js";
+import { ServerMatchData, WsMatchResponse } from "../shared/ws-match-response.js";
+import { Player } from "./player.js";
 
 // A match is an instance of a game.
 export class Match {
@@ -111,7 +112,7 @@ export class Match {
         this.broadcastMatchData({error: null});
     }
     
-    move(request: ServerMoveRequest) {
+    move(request: WsMatchRequest) {
         let error: string | null = null;
 
         try {
@@ -175,7 +176,7 @@ export class Match {
             state: this.state,
         };
         
-        const response: ServerMoveResponse = { matchData, error };
+        const response: WsMatchResponse = { matchData, error };
 
         for (const player of this.players) {
             const ws = player.getWs();

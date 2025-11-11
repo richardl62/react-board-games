@@ -1,8 +1,8 @@
 import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
-import { isServerMoveRequest, ServerMoveResponse } from "../shared/server-types.js";
-//import { ServerMoveResponse } from "./shared/server-move-response";
+import { WsMatchResponse } from "../shared/ws-match-response.js";
+import { isWsMatchRequest} from "../shared/ws-match-request.js"
 
 function errorResponse(
     err: unknown // The parameter from a catch statement 
@@ -47,7 +47,7 @@ export class Connections {
 
             console.log('Error during connection:', message);
 
-            const response: ServerMoveResponse = {error: message, matchData: null};
+            const response: WsMatchResponse = {error: message, matchData: null};
             ws.send(JSON.stringify(response));
           }
         }
@@ -55,12 +55,12 @@ export class Connections {
 
     moveMessage(ws: WebSocket, str: string) {
         try {
-            const moveRequest = JSON.parse(str);
-            if (!isServerMoveRequest(moveRequest)) {
+            const matchRequest = JSON.parse(str);
+            if (!isWsMatchRequest(matchRequest)) {
                  throw new Error("Unexpected data with move request: " + str);
             }
             
-            this.matches.makeMove(ws, moveRequest);
+            this.matches.makeMove(ws, matchRequest);
         } catch (err) {
             ws.send(errorResponse(err));
         }

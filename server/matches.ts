@@ -1,8 +1,8 @@
 import { WebSocket } from 'ws';
-import { Match } from "./match.js";
 import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
-import { ServerMoveRequest } from '../shared/server-types.js';
+import { WsMatchRequest } from "../shared/ws-match-request.js";
+import { Match } from "./match.js";
 
 
 // The Match interface is intended to be convenient for internal use.
@@ -51,7 +51,7 @@ export class Matches {
         return matches;
     }
 
-    makeMove(ws: WebSocket, request: ServerMoveRequest) : void {
+    makeMove(ws: WebSocket, request: WsMatchRequest) : void {
         const match = this.getMatchByWebSocket(ws);
         if (!match) {
             throw new Error('Player not in a match');

@@ -1,6 +1,7 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { serverAddress } from "@shared/server-address";
-import { ServerMatchData, ServerMoveResponse, ServerMoveRequest, isServerMoveRequest } from "@shared/server-types";
+import { ServerMatchData, WsMatchResponse } from "@shared/ws-match-response";
+import { WsMatchRequest, isWsMatchRequest } from "@shared/ws-match-request";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 
 // A move function as run on a client.
@@ -48,7 +49,7 @@ export function useOnlineMatch(
         return { readyState, match: null, error: null };
     }
 
-    const { error, matchData } = lastJsonMessage as ServerMoveResponse;
+    const { error, matchData } = lastJsonMessage as WsMatchResponse;
     if ( !matchData ) {
         return { readyState, error, match: null };
     }
@@ -74,12 +75,12 @@ function makeMatchMove(
 ) : MatchMove {
     return (arg) => {
 
-        const moveRequest : ServerMoveRequest = {
+        const moveRequest : WsMatchRequest = {
             move: moveName,
             arg,
         };
 
-        if (!isServerMoveRequest(moveRequest)) {
+        if (!isWsMatchRequest(moveRequest)) {
             console.error("Unexpected move data: " + JSON.stringify(moveRequest));
         }   
         sendJsonMessage(moveRequest);
