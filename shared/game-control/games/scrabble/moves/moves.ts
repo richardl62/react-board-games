@@ -20,7 +20,9 @@ type WrappedMoveFunc<P> = (arg0: MoveArg0<ServerData>, param: P) => void;
 
 function nextPlayer(ctx: Ctx) {
     const {currentPlayer, playOrder, playOrderPos} = ctx;
-    sAssert(currentPlayer === playOrder[playOrderPos]);
+    sAssert(currentPlayer === playOrder[playOrderPos], 
+        "currentPlayer mismatch in context"
+    );
 
     const next = (playOrderPos + 1) % playOrder.length;
     return playOrder[next]; 
@@ -30,7 +32,9 @@ function customWrappedMoveFunction<P>(func: SimpleMoveFunc<P>): WrappedMoveFunc<
     return standardWrapMoveFunction((arg0, param) => {
         const { G, ctx, events } = arg0;
         const currentState = G.states[G.states.length - 1];
-        sAssert(currentState.currentPlayer === ctx.currentPlayer);
+        sAssert(currentState.currentPlayer === ctx.currentPlayer,
+            "Current player mismatch in state and context"
+        );
 
         // KLUDGE/defensive - ensure copied state is fully independant.
         const newState: GameState = JSON.parse(JSON.stringify(currentState));
