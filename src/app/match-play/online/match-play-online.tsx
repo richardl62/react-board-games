@@ -5,7 +5,6 @@ import {ReadyState} from "react-use-websocket";
 import { BoardProps, MatchDataElem } from "@shared/game-control/board-props";
 import { PublicPlayerMetadata } from "@shared/lobby/types.js";
 import { Ctx } from "@shared/game-control/ctx";
-import { ServerMatchData } from "@shared/ws-match-response";
 import { GameBoard } from "../game-board";
 
 function readyStatus( state: ReadyState) {
@@ -24,24 +23,6 @@ function readyStatus( state: ReadyState) {
 function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
     const {id, name, isConnected} = md;
     return {id, isConnected, name: name || undefined}
-}
-
-function makeContext(_player: Player, match: ServerMatchData) : Ctx {
-    const playOrder = match.playerData.map(pd => pd.id.toString());
-    const currentPlayer = match.currentPlayer.toString();
-    const playOrderPos = playOrder.indexOf(currentPlayer);
-
-    if ( playOrderPos < 0 ) {
-        throw new Error("Cannnot compute playOrderPos");
-    }
-
-    return {
-        numPlayers: match.playerData.length,
-        playOrder,
-        currentPlayer,
-        playOrderPos,
-        // gameover: false - KLUDGE
-    }
 }
 
 export function MatchPlayOnline(props: {
@@ -74,7 +55,7 @@ export function MatchPlayOnline(props: {
         
         isConnected: true, // See earlier 'to do' comment.
 
-        ctx: makeContext(player, match),
+        ctx: makeCtx(),
 
         // The need for the conversion shows soemthing isn't quite right.
         matchData: match.playerData.map(convertPlayerData),
@@ -90,3 +71,9 @@ export function MatchPlayOnline(props: {
 
     return <GameBoard game={game} bgioProps={boardProps} />
 }
+
+// Placeholder.  The Ctx object should be made with data from the server.
+function makeCtx(): Ctx {
+    throw new Error("makeCtx not implemented.");
+}
+

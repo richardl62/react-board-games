@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import { Ctx } from '../shared/game-control/ctx.js';
+import { ServerCtx } from '../shared/game-control/ctx.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { random, RandomAPI } from '../shared/game-control/random-api.js';
@@ -13,7 +13,7 @@ export class Match {
     readonly definition: GameControl;
     readonly id: number;
     readonly players: Player[];
-    private ctx: Ctx;
+    private ctx: ServerCtx;
     private random: RandomAPI;
 
     private state: unknown; // To do: pick a better name?
@@ -30,23 +30,8 @@ export class Match {
         this.id = id;
 
         this.players = [];
-        const playOrder: string[] = [];
 
-        // For legacy reasons players IDs are set to reflect their position
-        // within the match.
-        for (let id = 0; id < numPlayers; ++id) {
-            this.players[id] = new Player(id);
-            playOrder.push(id.toString());
-        }
-
-        this.ctx = {
-            numPlayers: numPlayers,
-            playOrder,
-
-            //Kludge? Assume player 0 starts.
-            currentPlayer: "0",
-            playOrderPos: 0,
-        };
+        this.ctx = new ServerCtx(numPlayers);
 
         this.state = gameControl.setup(
             { ctx: this.ctx, random: random },
@@ -59,7 +44,7 @@ export class Match {
     get gameName() { return this.definition.name }
 
     get currentPlayer() { return parseInt(this.ctx.currentPlayer) };
-    set currentPlayer(cp: number) { this.ctx.currentPlayer = cp.toString() };
+    // set currentPlayer(cp: number) { this.ctx.currentPlayer = cp.toString() };
 
     allocatePlayer(name: string): Player {
         const player = this.players.find(p => !p.isAllocated);
@@ -135,7 +120,7 @@ export class Match {
     }
 
     endTurn() {
-        this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        this.ctx.endTurn();
     }
 
     findPlayerByID(id: string): Player | null {

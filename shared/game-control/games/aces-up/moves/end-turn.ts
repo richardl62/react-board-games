@@ -9,8 +9,7 @@ import { makeSharedPileData, makeSharedPiles } from "../misc/shared-pile.js";
 import { makeDiscardPiles } from "./make-discard-pile.js";
 
 function nextPlayerID(ctx: Ctx) {
-    const nextPlayerPos = (ctx.playOrderPos + 1) % ctx.playOrder.length;
-    return ctx.playOrder[nextPlayerPos];
+    return ctx.playOrder[ctx.nextPlayOrderPos()];
 }
 
 export function refillHand({ G, random }: MoveArg0<ServerData>, playerID: PlayerID) : void {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MatchDataElem } from "@game-control/board-props";
-import { Ctx } from "@game-control/ctx";
+import { Ctx, ServerCtx } from "@game-control/ctx";
 import { EventsAPI } from "@game-control/events";
 
 export function useOfflineCtx(numPlayers: number) : {
@@ -8,10 +8,9 @@ export function useOfflineCtx(numPlayers: number) : {
     matchData: MatchDataElem[], 
     events: EventsAPI
 } {
-    const playOrder = [];
+
     const matchData: Required<MatchDataElem>[] = [];
     for (let i = 0; i < numPlayers; i++) {
-        playOrder.push(i.toString());
         matchData.push({
             id: i,
             name: "Player " + i,
@@ -19,24 +18,13 @@ export function useOfflineCtx(numPlayers: number) : {
         });
     }
 
-    const startingCtx: Required<Ctx> = {
-        numPlayers,
-        playOrder,
-        currentPlayer: "0",
-        playOrderPos: 0,
-    };
-
-    //Consider using useImmer
-    const [ctx, setCtx] = useState(startingCtx);   
+    const [ctx, setCtx] = useState(new ServerCtx(numPlayers));
     
     const events : EventsAPI = {
         endTurn: () => {
-            const newPlayOrderPos = (ctx.playOrderPos + 1) % ctx.numPlayers;
-            const newCtx : Required<Ctx> = JSON.parse(JSON.stringify(ctx)); // Future proofing
-            newCtx.playOrderPos = newPlayOrderPos;
-            newCtx.currentPlayer = ctx.playOrder[newPlayOrderPos];
-            setCtx(newCtx);
-        },
+            ctx.endTurn();
+            setCtx(ctx.makeCopy());
+        }
     };
     return {ctx, matchData, events};
 }
