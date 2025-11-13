@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 import { App } from './app/app.tsx';
-
+import isPropValid from '@emotion/is-prop-valid';
+import { StyleSheetManager } from 'styled-components';
 
 const ErrorFallbackStyled=styled.div`
   font-size: large;
@@ -51,7 +52,9 @@ createRoot(document.getElementById('root')!).render(
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
     >
-      <App />
+      <StyleSheetManager shouldForwardProp={isPropValid}>
+        <App />
+      </StyleSheetManager>
     </ErrorBoundary>
   </StrictMode>,
 )

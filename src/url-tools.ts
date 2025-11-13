@@ -50,10 +50,11 @@ export function useSetSearchParam() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     function addPlayer(matchID: MatchID, player: Player): void {
-        
-        if(matchID.mid !== searchParams.get(keys.matchID)) {
+
+        const urlMatchID = searchParams.get(keys.matchID);
+        if(urlMatchID && matchID.mid !== urlMatchID) {
             console.warn(`Unexpected matchID in addPlayer: given ${matchID.mid}`
-                + ` but URL has ${searchParams.get(keys.matchID)}`
+                + ` but URL has ${urlMatchID}`
             );
         }
 
