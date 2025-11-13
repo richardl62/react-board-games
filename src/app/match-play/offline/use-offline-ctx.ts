@@ -24,7 +24,6 @@ export function useOfflineCtx(numPlayers: number) : {
         playOrder,
         currentPlayer: "0",
         playOrderPos: 0,
-        gameover: false,
     };
 
     //Consider using useImmer

@@ -40,7 +40,7 @@ function makeContext(_player: Player, match: ServerMatchData) : Ctx {
         playOrder,
         currentPlayer,
         playOrderPos,
-        gameover: false, //KLUDGE
+        // gameover: false - KLUDGE
     }
 }
 

@@ -30,8 +30,11 @@ const OuterDiv = styled.div`
 function Board() : JSX.Element {
     const {
         G: {lastRound},
-        ctx: {gameover}
+        // ctx: {gameover}
     } = useGameContext();
+
+    // KLUDGE. Ctx.gameover was removed to help with the move away from boardgame.io
+    const gameover = false; // To do: Fix this.
 
     return <OuterDiv>
         {lastRound && !gameover && <LastRoundNotice/>}
