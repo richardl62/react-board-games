@@ -29,9 +29,12 @@ export class Match {
         this.definition = gameControl;
         this.id = id;
 
-        this.players = [];
-
         this.ctx = new ServerCtx(numPlayers);
+        
+        this.players = [];
+        for (let id = 0; id < numPlayers; ++id) {
+            this.players[id] = new Player(this.ctx.playOrder[id]);
+        }
 
         this.state = gameControl.setup(
             { ctx: this.ctx, random: random },

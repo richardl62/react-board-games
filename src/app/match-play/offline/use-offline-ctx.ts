@@ -8,23 +8,24 @@ export function useOfflineCtx(numPlayers: number) : {
     matchData: MatchDataElem[], 
     events: EventsAPI
 } {
+    const [ctx, setCtx] = useState(new ServerCtx(numPlayers));
 
     const matchData: Required<MatchDataElem>[] = [];
     for (let i = 0; i < numPlayers; i++) {
+        const id = ctx.playOrder[i];
         matchData.push({
-            id: i,
-            name: "Player " + i,
+            id,
+            name: "Player " + id,
             isConnected: true,
         });
     }
 
-    const [ctx, setCtx] = useState(new ServerCtx(numPlayers));
-    
     const events : EventsAPI = {
         endTurn: () => {
             ctx.endTurn();
             setCtx(ctx.makeCopy());
         }
     };
+
     return {ctx, matchData, events};
 }

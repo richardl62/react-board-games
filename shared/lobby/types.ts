@@ -1,5 +1,5 @@
 export interface PlayerMetadata {
-    id: number;
+    id: string;
     name: string | null;
     credentials: string;
     isConnected: boolean;

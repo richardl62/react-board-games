@@ -20,9 +20,7 @@ export class ServerLobby implements LobbyInterface {
     }
 
     listMatches(
-        {gameName} : {
-            gameName: string, // TO DO: Use this to filter the returned matches.
-        }
+        {gameName} : {gameName: string}
     ): LobbyTypes.MatchList {
         const matches = this.matches.getMatches(gameName);
 

@@ -3,7 +3,7 @@ import { EventsAPI } from "./events.js";
 import { PlayerID } from "./playerid.js";
 
 export interface MatchDataElem {
-    id: number
+    id: string;
     
     // Undefined means the player has not joined yet.
     name?: string;

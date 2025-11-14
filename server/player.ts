@@ -23,7 +23,7 @@ import { sAssert } from '../shared/utils/assert.js';
 //
 export class Player {
     
-    constructor(id: number) {
+     constructor(id: string) {
         this.id = id;
         this.credentials = 'c' + this.id; // for now
         
@@ -31,7 +31,7 @@ export class Player {
         this.ws = null;
     }
 
-    readonly id: number;
+    readonly id: string;
     readonly credentials: string;
 
     private name: string | null;

@@ -20,12 +20,16 @@ export type PlayerDataDictionary = {[arg: string] : PlayerData};
 
 function makePlayerDataElem(matchData: MatchDataElem[], playerID: string, numPlayers: number,
     offline: boolean): PlayerData {
+
+    // For legacy reasons players IDs are strings which record numbers, with there numbers
+    // being the players position.  Code should rely on this, but in case some does check 
+    // the rule here.
     const playerIndex = parseInt(playerID);
     sAssert(!isNaN(playerIndex) && playerIndex >= 0 && playerIndex < numPlayers,
         `Unexpected player ID: "${playerID}"`
     );
 
-    const md = matchData.find(md => md.id === playerIndex);
+    const md = matchData.find(md => md.id === playerID);
     sAssert(md, `Cannot find player data for ID ${playerID}`);
   
     if (!md.name) {
