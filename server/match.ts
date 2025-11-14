@@ -68,7 +68,8 @@ export class Match {
     matchData(): ServerMatchData {
         return {
             playerData: this.players.map(p => p.publicMetadata()),
-            currentPlayer: this.currentPlayer,
+            playOrder: this.ctx.playOrder,
+            playOrderPos: this.ctx.playOrderPos,
             state: this.state,
         };
     }

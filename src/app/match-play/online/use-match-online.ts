@@ -1,6 +1,6 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { serverAddress } from "@shared/server-address";
-import { ServerMatchData, WsMatchResponse } from "@shared/ws-match-response";
+import { isWsMatchResponse, ServerMatchData } from "@shared/ws-match-response";
 import { WsEndTurn, WsMoveRequest, isWsMoveRequest } from "@shared/ws-match-request";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 
@@ -46,11 +46,14 @@ export function useOnlineMatch(
         return { readyState, match: null, error: null };
     }
 
-    const { error, matchData } = lastJsonMessage as WsMatchResponse;
+    if (!isWsMatchResponse(lastJsonMessage)) {
+        return { readyState, match: null, error: "Invalid message format" };
+    }
+
+    const { error, matchData } = lastJsonMessage;
     if ( !matchData ) {
         return { readyState, error, match: null };
     }
-
 
     // Inefficient, but simple. (Functions are recreated on every call.)
     const matchMoves: Record<string, MatchMove> = {};

@@ -55,7 +55,7 @@ export function MatchPlayOnline(props: {
         
         isConnected: true, // See earlier 'to do' comment.
 
-        ctx: makeCtx(),
+        ctx: new Ctx(match.playOrder, match.playOrderPos),
 
         // The need for the conversion shows soemthing isn't quite right.
         matchData: match.playerData.map(convertPlayerData),
@@ -72,8 +72,4 @@ export function MatchPlayOnline(props: {
     return <GameBoard game={game} bgioProps={boardProps} />
 }
 
-// Placeholder.  The Ctx object should be made with data from the server.
-function makeCtx(): Ctx {
-    throw new Error("makeCtx not implemented.");
-}
 
