@@ -17,17 +17,17 @@ export function fullOptionSpecification(game: AppGame) {
 
         ...gameOptions,
 
+        offline: {
+            label: "Play offline",
+            default: false,
+            debugOnly: false,
+        },
+
         showDebugOptions: {
             label: "Show debug options",
             default: false,
         },
 
-        offline: {
-            label: "Play offline",
-            default: false,
-            debugOnly: true,
-        },
-        
         passAndPlay: {
             label: "Pass and play (offline only)",
             default: true,
