@@ -7,6 +7,7 @@ import { MatchPlayOnline } from "./match-play/online/match-play-online";
 import { OfflineOptions } from "./offline-options";
 import { GameLobby } from "./lobby/game-lobby";
 import { MatchLobby } from "./lobby/match-lobby";
+import { defaultValues } from "@/option-specification/tools";
 
 const OuterDiv = styled.div`
     font-size: 18px;
@@ -21,9 +22,8 @@ function InnerGamePage(props: {game : AppGame} ) {
     const { game } = props;
     const {matchID, player} = useSearchParamData();
 
-    // KLUDGE: When the lobby decided that an offline match is needed, it calls setOfflineOptions.
-    // This contrasts with online matches for which the lobby simply URL parameters.
-    const [ offlineOptions, setOfflineOptions ] = useState<OfflineOptions | null>(null);
+    const startingOfflineOptions = useStartingOfflineOptions(game);
+    const [ offlineOptions, setOfflineOptions ] = useState(startingOfflineOptions);
 
     if (offlineOptions) {
         return <MatchPlayOffline game={game} options={offlineOptions} />;
@@ -42,6 +42,21 @@ function InnerGamePage(props: {game : AppGame} ) {
     }
 
     return <GameLobby game={game} setOfflineOptions={setOfflineOptions}/>;
+}
+
+function useStartingOfflineOptions(game : AppGame) : OfflineOptions | null {
+    const { isOffline } = useSearchParamData();
+    
+    if (!isOffline) {
+        return null;
+    }
+
+    const setupData = game.options ? defaultValues(game.options) : {};
+    return {
+        numPlayers: isOffline.numPlayers,
+        passAndPlay: true,
+        setupData,
+    };
 }
 
 // The main page component for a particular game.

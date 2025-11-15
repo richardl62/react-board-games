@@ -31,7 +31,6 @@ export interface WrappedGameProps<G extends RequiredServerData = RequiredServerD
 
     playerData: PlayerDataDictionary;
 
-    offline: boolean;
     allJoined: boolean;
     allConnected: boolean;
     
@@ -68,11 +67,10 @@ export function useWrappedGameProps<G extends RequiredServerData>(bgioProps: Boa
 
     const events : Events = {...bigoEvents, endTurn: endTurn}; 
 
-    const obj = {
+    return {
         ...bgioProps,
         events: events,
         playerData: playerData,
-        offline: isOffline,
         allJoined: allJoined,
         allConnected: allConnected,
         playerID: bgioProps.playerID,
@@ -85,6 +83,4 @@ export function useWrappedGameProps<G extends RequiredServerData>(bgioProps: Boa
             return playerData[pid].name;
         }
     };
-
-    return obj;
 }

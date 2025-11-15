@@ -6,9 +6,16 @@ export const keys = {
     credentials: "cred",
     matchID: "id",
     pid: "pid",
+    np: "np", // Number of players implies offline mode
 } as const;
 
-export function useSearchParamData() {
+export interface SearchParamData {
+    player: Player | null;
+    isOffline: {numPlayers: number} | null;
+    matchID: MatchID | null;
+}
+
+export function useSearchParamData() : SearchParamData {
 
     const [searchParams] = useSearchParams();
 
@@ -17,6 +24,29 @@ export function useSearchParamData() {
         if (!allKeys.includes(key)) {
             console.warn("Unknown URL parameter:", key);
         }
+    }
+
+    const np = searchParams.get(keys.np);
+    if (np) {
+        if(allKeys.length > 1) {
+            console.warn("Unexpected URL parameters present in offline mode - ignoring them");
+        }
+        
+        const numPlayers = parseInt(np, 10);
+        if(isNaN(numPlayers) || numPlayers < 1) {
+            console.warn("Invalid number of players in offline mode:", np);
+            return {
+                player: null,
+                isOffline: null,
+                matchID: null,
+            };
+        }
+
+        return {
+            player: null,
+            isOffline: {numPlayers},
+            matchID: null,
+        };
     }
 
     const matchID_ = searchParams.get(keys.matchID);
@@ -40,8 +70,8 @@ export function useSearchParamData() {
 
     return {
         player,
-        isOffline: player === null,
         matchID,
+        isOffline: null,
     };
 }
 
