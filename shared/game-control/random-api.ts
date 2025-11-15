@@ -1,3 +1,7 @@
+// See https://boardgame.io/documentation/#/random for a discussion 
+// of randomnness in these sorts games. 
+
+// This interface is based on RandomAPI used in boardgame.io.
 export interface RandomAPI {
     /** Pick an integer in range [1, spotValue] */
     Die(spotvalue: number): number;
@@ -6,7 +10,9 @@ export interface RandomAPI {
     Shuffle<T>(deck: T[]): T[];
 }
 
-export const random: RandomAPI = {
+// WARNING: Not suitable for use in React components because it 
+// is not deterministic. 
+export const serverRandomAPI: RandomAPI = {
     Die: (spotvalue) => Math.floor(Math.random() * spotvalue) + 1,
 
     Shuffle: <T>(deck: T[]) => {
@@ -17,4 +23,3 @@ export const random: RandomAPI = {
         return deck;
     },
 };
-

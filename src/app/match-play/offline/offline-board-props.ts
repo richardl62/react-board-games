@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AppGame, BoardProps } from "@/app-game-support";
-import { random } from "@game-control/random-api";
+import { RandomAPI, serverRandomAPI } from "@game-control/random-api";
 import { EventsAPI } from "@game-control/events";
 import { RequiredServerData } from "@game-control/required-server-data";
 import { useOfflineCtx } from "./use-offline-ctx";
@@ -13,6 +13,7 @@ interface SharedOfflineBoardData {
     events: EventsAPI;
     G: RequiredServerData;
     setG: (newG: RequiredServerData) => void;
+    random: RandomAPI;
 }
 
 // Data shared by all offline boards
@@ -23,6 +24,8 @@ export function useSharedOfflineBoardData({game, numPlayers, setupData}: {
 }) : SharedOfflineBoardData {
     const {ctx, matchData, events} = useOfflineCtx(numPlayers);
 
+    const random = serverRandomAPI; //BAD!! not deterministic.
+
     const startingData = game.setup({ ctx, random }, setupData);
     const [G, setG] = useState(startingData);
 
@@ -32,13 +35,14 @@ export function useSharedOfflineBoardData({game, numPlayers, setupData}: {
         events,
         G,
         setG,
+        random,
     };
 }
 
 // Make the props for an offline board
 export function offlineBoardProps(game: AppGame, sharedProps: SharedOfflineBoardData, id: number) : BoardProps {
     const {moves: unwrappedMoves} = game;
-    const {ctx, events, G, setG} = sharedProps;
+    const {ctx, events, G, setG, random} = sharedProps;
 
     const wrappedMoves: BoardProps["moves"] = {};
 
