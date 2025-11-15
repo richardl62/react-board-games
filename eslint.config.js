@@ -1,14 +1,18 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   { ignores: ['dist'] },
+
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+    ],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -23,16 +27,17 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      
-      // Disable the base rule as it can report incorrect errors
-      "no-unused-vars": "off",
+
+      // underscore unused vars/args (and catch params), ignore rest in destructuring
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
           argsIgnorePattern: '^_', // function arguments 
           varsIgnorePattern: '^_', // variables
+          caughtErrorsIgnorePattern: '^_',
         },
-      ]
+      ],
     },
   },
-)
+);
