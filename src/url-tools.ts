@@ -8,12 +8,17 @@ export const knownParams = {
     pid: "pid",
     credentials: "cred",
     numPlayers: "np", // implies offline mode if set
+    seed: "seed", // (Pseudo) random seed
 }
 
 export interface SearchParamData {
     player: Player | null;
     isOffline: {numPlayers: number} | null;
     matchID: MatchID | null;
+
+    // If set, the seed should be non-negative.
+    // For now at least, seeds are supported only in offline mode. 
+    seed: number | null;
 }
 
 export function useSearchParamData() : SearchParamData {
@@ -30,6 +35,7 @@ export function useSearchParamData() : SearchParamData {
         player: null,
         isOffline: null,
         matchID: null,
+        seed: null
     }
     
     const numPlayers_ = foundParams.get(knownParams.numPlayers);
@@ -54,8 +60,20 @@ export function useSearchParamData() : SearchParamData {
         } else if (pid || credentials) {
             console.warn("Only one of player id or credentials is set in URL - ignoring both");
         }
-
     }
+
+    const seed_ = foundParams.get(knownParams.seed);
+    if (seed_) {
+        const seed = parseInt(seed_, 10);
+        if (isNaN(seed) || seed < 0) {
+            console.warn("Invalid seed value in URL:", seed_);
+        } else if (!result.isOffline) {
+            console.warn("Seed specified in URL but not in offline mode - ignoring seed");
+        } else {
+            result.seed = seed;
+        }
+    }
+
     return result;
 }
 
