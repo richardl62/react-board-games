@@ -1,10 +1,11 @@
 import { JSX } from "react";
-import { AppGame } from "@/app-game-support";
+import { AppGame, BoardProps } from "@/app-game-support";
 import { GameBoard } from "../game-board";
 import { OfflineOptions } from "../../offline-options";
 
 import styled from "styled-components";
-import { useSharedOfflineBoardData, offlineBoardProps } from "./offline-board-props";
+import { wrappedMoves } from "./wrapped-moves";
+import { useSharedOfflineBoardData } from "./shared-offline-board-data";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
@@ -18,10 +19,22 @@ function Board({game, sharedData, id, show}: {
     id: number,
     show: boolean,
 }): JSX.Element {
-    const boardProps = offlineBoardProps(game, sharedData, id);
+
+    const boardProps: BoardProps = {
+        ...sharedData,
+        moves: wrappedMoves(game, sharedData, id),
+        playerID: id.toString(),
+
+        credentials: "offline",
+        matchID: "offline",
+        isConnected: true,
+    };
 
     return <OptionalDisplay display_={show}>
-        <GameBoard game={game} bgioProps={boardProps} />
+        <GameBoard 
+            game={game} 
+            bgioProps={boardProps}
+        />
     </OptionalDisplay>;
 }
 
