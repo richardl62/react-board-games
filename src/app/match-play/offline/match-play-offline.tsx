@@ -1,40 +1,42 @@
-import { JSX } from "react";
 import { AppGame, BoardProps } from "@/app-game-support";
-import { GameBoard } from "../game-board";
-import { OfflineOptions } from "../../offline-options";
-
+import { MoveArg0 } from "@shared/game-control/move-fn";
+import { RequiredServerData } from "@shared/game-control/required-server-data";
+import { JSX, useState } from "react";
 import styled from "styled-components";
+import { OfflineOptions } from "../../offline-options";
+import { GameBoard } from "../game-board";
+import { useOfflineCtx } from "./use-offline-ctx";
+import { useOfflineMatchData } from "./use-offline-match-data";
+import { useRandomAPI } from "./use-random-api";
 import { wrappedMoves } from "./wrapped-moves";
-import { useSharedOfflineBoardData } from "./shared-offline-board-data";
+import { MatchDataElem } from "@shared/game-control/board-props";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
 `;
 
-type SharedData = ReturnType<typeof useSharedOfflineBoardData>;
-
-function Board({game, sharedData, id, show}: {
+function Board({game, show, matchData, moveArg0, setG}: {
     game: AppGame,
-    sharedData: SharedData,
-    id: number,
-    show: boolean,
+    show: boolean
+    matchData: MatchDataElem[],
+    moveArg0: MoveArg0<unknown>,
+    setG: (arg: RequiredServerData) => void,
 }): JSX.Element {
 
     const boardProps: BoardProps = {
-        ...sharedData,
-        moves: wrappedMoves(game, sharedData, id),
-        playerID: id.toString(),
+        ...moveArg0, // KLUDGE?
 
+        // KLUDGE? Recomputed each render.
+        moves: wrappedMoves(game, moveArg0, setG),
+        
+        matchData,
         credentials: "offline",
         matchID: "offline",
         isConnected: true,
     };
 
     return <OptionalDisplay display_={show}>
-        <GameBoard 
-            game={game} 
-            bgioProps={boardProps}
-        />
+        <GameBoard game={game} bgioProps={boardProps} />
     </OptionalDisplay>;
 }
 
@@ -48,21 +50,38 @@ export function MatchPlayOffline(props: {
         options: {numPlayers, passAndPlay,  setupData}
     } = props;
 
-    const sharedData = useSharedOfflineBoardData({game, numPlayers, setupData});
+    const { ctx,  events } = useOfflineCtx(numPlayers);
+    const matchData = useOfflineMatchData(ctx);
 
-    const games : JSX.Element[] = [];
-    for(let id = 0; id < numPlayers; ++id) {
+    const random = useRandomAPI();
+    const [G, setG] = useState(
+        game.setup({ ctx, random }, setupData)
+    );
+
+    const boards : JSX.Element[] = [];
+    for(const playerID in ctx.playOrder ) {
         // Create a board that is optionally displayed. (Early code created either a board
         // or a blank element. However, this caused the Scrabble dictionary to be reloaded 
         // on each move. Presumably, this was because the compoment was unloaded and reloaded
         // each time.)
-        const show = !passAndPlay || id.toString() === sharedData.ctx.currentPlayer;
+        const show = !passAndPlay || playerID === ctx.currentPlayer;
 
-        games.push(<Board key={id} game={game} sharedData={sharedData} id={id} show={show} />); 
+        const moveArg0: MoveArg0<unknown> = {
+            playerID, ctx, events, G, random,
+        };
+
+        boards.push(<Board 
+            key={playerID} 
+            show={show}
+            game={game} 
+            matchData={matchData}
+            moveArg0={moveArg0} 
+            setG={setG}
+        />); 
     }
 
     return (
-        <div>{games}</div> 
+        <div>{boards}</div> 
     );
 }
 

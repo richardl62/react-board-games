@@ -1,31 +1,19 @@
-import { useState } from "react";
-import { MatchDataElem } from "@game-control/board-props";
+import { useMemo, useState } from "react";
 import { Ctx, ServerCtx } from "@game-control/ctx";
 import { EventsAPI } from "@game-control/events";
 
 export function useOfflineCtx(numPlayers: number) : {
     ctx: Ctx, 
-    matchData: MatchDataElem[], 
     events: EventsAPI
 } {
     const [ctx, setCtx] = useState(new ServerCtx(numPlayers));
 
-    const matchData: Required<MatchDataElem>[] = [];
-    for (let i = 0; i < numPlayers; i++) {
-        const id = ctx.playOrder[i];
-        matchData.push({
-            id,
-            name: "Player " + id,
-            isConnected: true,
-        });
-    }
-
-    const events : EventsAPI = {
+    const events : EventsAPI = useMemo(() => ({
         endTurn: () => {
             ctx.endTurn();
             setCtx(ctx.makeCopy());
         }
-    };
+    }), [ctx]);
 
-    return {ctx, matchData, events};
+    return {ctx, events};
 }

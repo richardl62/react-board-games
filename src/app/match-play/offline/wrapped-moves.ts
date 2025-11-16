@@ -1,24 +1,19 @@
 import { AppGame, BoardProps } from "@/app-game-support";
-import { SharedOfflineBoardData } from "./shared-offline-board-data";
+import { MoveArg0 } from "@shared/game-control/move-fn";
+import { RequiredServerData } from "@shared/game-control/required-server-data";
 
-export function wrappedMoves(game: AppGame, sharedProps: SharedOfflineBoardData, id: number) : BoardProps["moves"] {
-    const {moves: unwrapped} = game;
-    const {ctx, events, G, setG, random} = sharedProps;
+export function wrappedMoves(
+    game: AppGame, 
+    moveArg0: MoveArg0<unknown>,
+    setG: (arg: RequiredServerData) => void,
+) : BoardProps["moves"] {
 
     const wrapped: BoardProps["moves"] = {};
 
-    for (const moveName in unwrapped) {
+    for (const moveName in game.moves) {
         wrapped[moveName] = (arg: unknown) => {
-            const newG = JSON.parse(JSON.stringify(G));
-            const moveFn = unwrapped[moveName];
-            moveFn({
-                G: newG,
-                ctx,
-                playerID: id.toString(),
-                random,
-                events,
-            }, arg);
-            
+            const newG = JSON.parse(JSON.stringify(moveArg0.G));
+            game.moves[moveName]({...moveArg0, G: newG}, arg);
             setG(newG);
         };
     }
