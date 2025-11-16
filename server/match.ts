@@ -2,7 +2,7 @@ import { WebSocket } from 'ws';
 import { ServerCtx } from '../shared/game-control/ctx.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
-import { serverRandomAPI, RandomAPI } from '../shared/game-control/random-api.js';
+import { RandomAPI } from '../shared/game-control/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
 import { WsMoveRequest } from "../shared/ws-match-request.js";
 import { ServerMatchData } from "../shared/ws-match-response.js";
@@ -20,14 +20,17 @@ export class Match {
 
     constructor(
         gameControl: GameControl,
-        { id, numPlayers, setupData }: {
+        { id, numPlayers, setupData, randomAPi }: {
             id: number,
             numPlayers: number,
-            setupData: unknown
+            setupData: unknown,
+            randomAPi: RandomAPI,
         }
     ) {
         this.definition = gameControl;
         this.id = id;
+        this.random = randomAPi;
+
 
         this.ctx = new ServerCtx(numPlayers);
         
@@ -36,12 +39,11 @@ export class Match {
             this.players[id] = new Player(this.ctx.playOrder[id]);
         }
 
+
         this.state = gameControl.setup(
-            { ctx: this.ctx, random: serverRandomAPI },
+            { ctx: this.ctx, random: randomAPi },
             setupData
         );
-
-        this.random = serverRandomAPI;
     }
 
     get gameName() { return this.definition.name }

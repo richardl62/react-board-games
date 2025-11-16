@@ -7,8 +7,13 @@ import { runLobbyFunction } from './run-lobby-function.js';
 import { Connections } from './connections.js';
 import { Matches } from './matches.js';
 import { serverPort } from '../shared/server-address.js';
+import { RandomAPI /*, seededDraw*/ } from '../shared/game-control/random-api.js';
 
-const matches = new Matches();
+//const draw = seededDraw(12345);
+const draw = () => Math.random()
+
+const random = new RandomAPI(draw);
+const matches = new Matches(random);
 const connections = new Connections(matches);
 
 const app = express();

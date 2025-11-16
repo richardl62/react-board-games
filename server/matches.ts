@@ -2,13 +2,16 @@ import { WebSocket } from 'ws';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
 import { Match } from "./match.js";
+import { RandomAPI } from '../shared/game-control/random-api.js';
 
 // Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {
     private matches: Match[];
+    private random: RandomAPI;
     
-    constructor() {
+    constructor(random: RandomAPI) {
         this.matches = [];
+        this.random = random;
     }
 
     /** Create a new match and return it's ID */
@@ -18,7 +21,9 @@ export class Matches {
         // a bit of a kludge, but should ensure a unique id.
         const id = this.matches.length+1; 
 
-        const match = new Match(getGameControl(game), {id, numPlayers, setupData});
+        const match = new Match(getGameControl(game), 
+            {id, numPlayers, setupData, randomAPi: this.random }
+        );
         this.matches.push(match);
 
         return match;
