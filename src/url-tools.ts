@@ -2,12 +2,13 @@
 import { useSearchParams } from "react-router-dom";
 import { MatchID, Player } from "./app-game-support";
 
-export const keys = {
-    credentials: "cred",
-    matchID: "id",
+// Known URL parameters: The values are the actual URL parameter names.
+export const knownParams = {
+    matchID: "mid",
     pid: "pid",
-    np: "np", // Number of players implies offline mode
-} as const;
+    credentials: "cred",
+    numPlayers: "np", // implies offline mode if set
+}
 
 export interface SearchParamData {
     player: Player | null;
@@ -17,62 +18,45 @@ export interface SearchParamData {
 
 export function useSearchParamData() : SearchParamData {
 
-    const [searchParams] = useSearchParams();
+    const [foundParams] = useSearchParams();
 
-    const allKeys : string[]= Object.values(keys);
-    for (const key of searchParams.keys()) {
-        if (!allKeys.includes(key)) {
-            console.warn("Unknown URL parameter:", key);
+    for (const found of foundParams.keys()) {
+        if (!Object.values(knownParams).includes(found)) {
+            console.warn("Unexpected URL parameter:", found);
         }
     }
 
-    const np = searchParams.get(keys.np);
-    if (np) {
-        if(allKeys.length > 1) {
-            console.warn("Unexpected URL parameters present in offline mode - ignoring them");
-        }
-        
-        const numPlayers = parseInt(np, 10);
+    const result: SearchParamData = {
+        player: null,
+        isOffline: null,
+        matchID: null,
+    }
+    
+    const numPlayers_ = foundParams.get(knownParams.numPlayers);
+    if (numPlayers_) {
+        /* offline mode */
+        const numPlayers = parseInt(numPlayers_, 10);
         if(isNaN(numPlayers) || numPlayers < 1) {
-            console.warn("Invalid number of players in offline mode:", np);
-            return {
-                player: null,
-                isOffline: null,
-                matchID: null,
-            };
+            console.warn("Invalid number of players in offline mode:", numPlayers_);
+        } else {
+            result.isOffline = {numPlayers};
+        }
+    } else {
+        const matchID = foundParams.get(knownParams.matchID);
+        if (matchID) {
+            result.matchID = { mid: matchID };
         }
 
-        return {
-            player: null,
-            isOffline: {numPlayers},
-            matchID: null,
-        };
-    }
-
-    const matchID_ = searchParams.get(keys.matchID);
-    const matchID: MatchID | null = matchID_ ? { mid: matchID_ } : null;
-
-    const pid = searchParams.get(keys.pid);
-    const credentials = searchParams.get(keys.credentials);
-
-    let player : Player | null;
-    if (pid && credentials) {
-        player = {
-            id: pid,
-            credentials: credentials,
-        };
-    } else {
-        if (pid || credentials) {
+        const pid = foundParams.get(knownParams.pid);
+        const credentials = foundParams.get(knownParams.credentials);
+        if (pid && credentials) {
+            result.player = { id: pid, credentials };
+        } else if (pid || credentials) {
             console.warn("Only one of player id or credentials is set in URL - ignoring both");
         }
-        player = null;
-    }
 
-    return {
-        player,
-        matchID,
-        isOffline: null,
-    };
+    }
+    return result;
 }
 
 export function useSetSearchParam() {
@@ -81,26 +65,26 @@ export function useSetSearchParam() {
 
     function addPlayer(matchID: MatchID, player: Player): void {
 
-        const urlMatchID = searchParams.get(keys.matchID);
+        const urlMatchID = searchParams.get(knownParams.matchID);
         if(urlMatchID && matchID.mid !== urlMatchID) {
             console.warn(`Unexpected matchID in addPlayer: given ${matchID.mid}`
                 + ` but URL has ${urlMatchID}`
             );
         }
 
-        searchParams.set(keys.matchID, matchID.mid);
-        searchParams.set(keys.pid, player.id);
-        searchParams.set(keys.credentials, player.credentials);
+        searchParams.set(knownParams.matchID, matchID.mid);
+        searchParams.set(knownParams.pid, player.id);
+        searchParams.set(knownParams.credentials, player.credentials);
         setSearchParams(searchParams);
     }
 
     function addMatchID(matchID: MatchID): void {
 
-        if(searchParams.get(keys.matchID)) {
+        if(searchParams.get(knownParams.matchID)) {
             console.warn("Overwriting existing matchID in URL")
         }
 
-        searchParams.set(keys.matchID, matchID.mid);
+        searchParams.set(knownParams.matchID, matchID.mid);
         setSearchParams(searchParams);
     }
 
