@@ -24,14 +24,18 @@ export class RandomAPI {
     }
 }
 
-// Create a seeded draw function using a simple algorithm.
-// (Code written by Copilot.)
-export function seededDraw(seed: number): () => number {
-    let value = seed % 2147483647;
-    if (value <= 0) value += 2147483646;
-
-    return function() {
-        value = (value * 48271) % 2147483647;
-        return (value - 1) / 2147483646;
+export function seededDraw(seed: number) : () => number {
+    // Based on https://github.com/bryc/code/blob/master/jshash/PRNGs.md#mulberry32
+    if (seed < 0 || seed >= 1) { 
+        throw new Error("Seed must be in range [0, 1).");
     }
+
+    const big = 0x100000000;
+    let t = seed * big;
+    return function next() {
+        t += 0x6D2B79F5;
+        let r = Math.imul(t ^ (t >>> 15), t | 1);
+        r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+        return ((r ^ (r >>> 14)) >>> 0) / big; // [0,1)
+    };
 }
