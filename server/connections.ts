@@ -29,11 +29,28 @@ export class Connections {
 
                 const matchID = urlParam("matchID");
                 const playerID = urlParam("playerID");
-                //const credentials = urlParam("credentials");
+                const credentials = urlParam("credentials");
 
-                const match = this.matches.getMatch(parseInt(matchID, 10));
+                const match = this.matches.findMatch(parseInt(matchID, 10));
+                if (!match) {
+                    throw new Error(`Match ${matchID} not found - cannot record connection`);
+                }
 
-                match.connectPlayer(playerID, ws);
+                const player = match.findPlayer(playerID);
+                if (!player) {
+                    throw new Error(`Player ${playerID} not found - cannot record connection`);
+                }
+
+                if (player.isConnected) {
+                    throw new Error(`Player ${playerID} connected - cannot reconnect`);
+                }
+                
+                if (player.credentials !== credentials) {
+                    throw new Error(`Player ${playerID} provided invalid credentials`);
+                }
+
+                player.connect(ws);
+
                 broadcastMatchData(match, { error: null });
             }
             catch (err) {
@@ -86,7 +103,14 @@ export class Connections {
             if (!match) {
                 throw new Error('Attempt to disconnect player who is not in a match');
             }
-            match.disconnectPlayer(ws);
+
+            const player = match.findPlayer(ws);
+            if (!player) {
+                throw new Error("Disconnect report when player not connected");
+            }
+
+            player.disconnect();
+
             broadcastMatchData(match, { error: null });
         } catch (err) {
             // Hmm. Not sure what to do here.

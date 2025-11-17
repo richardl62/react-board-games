@@ -29,15 +29,9 @@ export class Matches {
         return match;
     }
     
-    getMatch(matchID: number) : Match
+    findMatch(matchID: number) : Match | undefined
     {
-        for( const match of this.matches) {
-            if (match.id === matchID) {
-                return match;
-            }
-        }
-
-        throw new Error(`Invalid Match ID: ${matchID}`);
+        return this.matches.find(m => m.id === matchID);
     }
 
     /** Get all the matches of a particular game (e.g. Scrabble) */
@@ -56,7 +50,7 @@ export class Matches {
     // Get the match that a player is in
     getMatchByWebSocket(ws: WebSocket) : Match | null {
         for (const match of this.matches) {
-            if (match.findPlayerByWebSocket(ws)) {
+            if (match.findPlayer(ws)) {
                 return match;
             }
         }

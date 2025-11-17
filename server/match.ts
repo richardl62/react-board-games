@@ -79,28 +79,6 @@ export class Match {
         };
     }
 
-    connectPlayer(id: string, ws: WebSocket) {
-        const player = this.findPlayerByID(id);
-        if (!player) {
-            throw new Error(`Player ${id} not found - cannot record connection`);
-        }
-
-        if (player.isConnected) {
-            throw new Error(`Player ${id} connected - cannot reconnect`);
-        }
-
-        player.connect(ws);
-    }
-
-    disconnectPlayer(ws: WebSocket): void {
-        const player = this.findPlayerByWebSocket(ws);
-        if (!player) {
-            throw new Error("Disconnect report when player not connected");
-        }
-
-        player.disconnect();
-    }
-
     move(request: WsMoveRequest) {
 
         const { move: moveName, arg } = request;
@@ -129,23 +107,11 @@ export class Match {
         this.ctx.endTurn();
     }
 
-    findPlayerByID(id: string): Player | null {
-        for (const player of this.players) {
-            if (player.id.toString() === id) {
-                return player;
-            }
+    findPlayer(id: string | WebSocket): Player | undefined {
+        if (typeof id === "string") {
+            return this.players.find(p => p.id === id);
+        } else {
+            return this.players.find(p => p.getWs() === id);
         }
-
-        return null;
-    }
-
-    findPlayerByWebSocket(ws: WebSocket): Player | null {
-        for (const player of this.players) {
-            if (player.getWs() === ws) {
-                return player;
-            }
-        }
-
-        return null;
     }
 };  

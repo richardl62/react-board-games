@@ -35,7 +35,11 @@ export class ServerLobby implements LobbyInterface {
             matchID: string,
         }
     ): LobbyTypes.Match {
-        const match = this.matches.getMatch(parseInt(matchID));
+        const match = this.matches.findMatch(parseInt(matchID));
+        if (!match) {
+            throw new Error(`Match ${matchID} not found`);
+        }
+
         if ( match.gameName !== gameName ) {
             throw new Error("selected match is not of the expected game");
         }
@@ -50,7 +54,10 @@ export class ServerLobby implements LobbyInterface {
             playerName: string;
         }
     ): LobbyTypes.JoinedMatch {
-        const match = this.matches.getMatch(parseInt(matchID));
+        const match = this.matches.findMatch(parseInt(matchID));
+        if (!match) {
+            throw new Error(`Match ${matchID} not found`);
+        }
 
         const player = match.allocatePlayer(playerName);
 
@@ -58,7 +65,7 @@ export class ServerLobby implements LobbyInterface {
     }
 
     updatePlayer( 
-         { matchID, playerID, newName } : {
+         { matchID, playerID, credentials, newName } : {
             gameName: string,
             matchID: string,
 
@@ -67,11 +74,18 @@ export class ServerLobby implements LobbyInterface {
             newName: string;
         }
     ) : null {
-        const match = this.matches.getMatch(parseInt(matchID));
+        const match = this.matches.findMatch(parseInt(matchID));
+        if (!match) {
+            throw new Error(`Match ${matchID} not found`);
+        }
 
-        const player = match.findPlayerByID(playerID);
+        const player = match.findPlayer(playerID);
         if( !player ) {
             throw new Error("cannot find player to update");
+        }
+        
+        if( player.credentials !== credentials ) {
+            throw new Error("invalid credentials for player update");
         }
 
         player.changeName(newName);
