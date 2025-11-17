@@ -1,6 +1,7 @@
 import { WebSocket  } from 'ws'; // Import the ws library
 import { PublicPlayerMetadata } from '../shared/lobby/types.js';
 import { sAssert } from '../shared/utils/assert.js';
+import { createAlphanumericString } from '../shared/utils/random-string.js';
 
 // Put loosely, a Player represents someone sitting around the table at which
 // a match is being played.
@@ -25,7 +26,8 @@ export class Player {
     
      constructor(id: string) {
         this.id = id;
-        this.credentials = 'c' + this.id; // for now
+
+        this.credentials = createAlphanumericString(8);
         
         this.name = null;
         this.ws = null;
