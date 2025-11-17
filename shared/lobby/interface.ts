@@ -25,7 +25,6 @@ export interface LobbyInterface {
 
     joinMatch: (
         options: {
-            gameName: string;
             matchID: string;
             playerName: string;
         }
@@ -33,7 +32,6 @@ export interface LobbyInterface {
 
     updatePlayer: (
         options: {
-            gameName: string;
             matchID: string;
             playerID: string;
             credentials: string;

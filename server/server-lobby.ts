@@ -49,7 +49,6 @@ export class ServerLobby implements LobbyInterface {
 
     joinMatch(
         { matchID, playerName } : {
-            gameName: string,
             matchID: string,
             playerName: string;
         }
@@ -66,9 +65,7 @@ export class ServerLobby implements LobbyInterface {
 
     updatePlayer( 
          { matchID, playerID, credentials, newName } : {
-            gameName: string,
             matchID: string,
-
             playerID: string;
             credentials: string;
             newName: string;
