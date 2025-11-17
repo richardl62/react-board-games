@@ -1,54 +1,29 @@
-# React + TypeScript + Vite
+# Intro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project provides an online implement of various board games. It was written
+as a hobby/learning project.
 
-Currently, two official plugins are available:
+The project was created using create-react-app, but was later ported to Vite.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The project originally used boardgame.io, but that was replaced with home-grown 
+code as boardgame.io is no longer being maintained. The currect code is still
+influenced by the design of boardgame.io.
 
-## Expanding the ESLint configuration
+An earlier version of this project is deployed at
+https://richards-board-games.herokuapp.com/
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Known problems
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- The old 'endGame' functionality from boardgame.io is not supported. This affects
+AcesUp (and other games?).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- The old check that players do not move out of turn, expect when explicitly allowed,
+is not supported. (Is this worth re-instating?)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- There is no checking to prevent two or more player being given the same name.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- The project is not setup for deployed on Heroku. 
+
+# Testing
+
+More testing is needed, particularly of the effects of network problems. 
