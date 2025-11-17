@@ -27,16 +27,16 @@
     /* Paths */
     "rootDir": "./",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./client/*"],
       "@shared/*": ["./shared/*"],
 
-      "@utils/*": ["./src/utils/*"],
+      "@utils/*": ["./client/utils/*"],
       "@game-control/*": ["./shared/game-control/*"],
       "@lobby/*": ["./shared/lobby/*"],
     }
   },
   "include": [
-    "src/**/*",
+    "client/**/*",
     "shared/**/*",
   ],
 }
