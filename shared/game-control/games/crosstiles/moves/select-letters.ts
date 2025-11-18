@@ -1,4 +1,4 @@
-import { RandomAPI } from "../../../random-api.js";
+import { RandomAPI } from "../../../../utils/random-api.js";
 import { bonusLetters, Letter, letterDistrubtion } from "../config.js";
 import { SetupOptions } from "../server-data.js";
 

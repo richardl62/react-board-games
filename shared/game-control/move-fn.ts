@@ -1,7 +1,7 @@
 import { Ctx } from "./ctx.js";
 import { EventsAPI } from "./events.js";
 import { PlayerID } from "./playerid.js";
-import { RandomAPI } from "./random-api.js";
+import { RandomAPI } from "../utils/random-api.js";
 
 export interface MoveArg0<G> {
     G: G;

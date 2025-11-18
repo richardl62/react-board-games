@@ -1,7 +1,7 @@
 import { sAssert } from "../../../../utils/assert.js";
 import { Letter, standardLetterSet} from "./letters.js";
 import { SquareType } from "./square-type.js";
-import { RandomAPI } from "../../../random-api.js";
+import { RandomAPI } from "../../../../utils/random-api.js";
 import { getScrabbleWords } from "../../../../utils/get-scrabble-words.js";
 
 const D = SquareType.doubleWord;

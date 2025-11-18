@@ -1,5 +1,5 @@
 import { RequiredServerData } from "./required-server-data.js";
-import { RandomAPI } from "./random-api.js";
+import { RandomAPI } from "../utils/random-api.js";
 import { MoveFn } from "./move-fn.js";
 import { Ctx } from "./ctx.js";
 

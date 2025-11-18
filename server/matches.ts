@@ -2,7 +2,7 @@ import { WebSocket } from 'ws';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
 import { Match } from "./match.js";
-import { RandomAPI } from '../shared/game-control/random-api.js';
+import { RandomAPI } from '../shared/utils/random-api.js';
 
 // Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {

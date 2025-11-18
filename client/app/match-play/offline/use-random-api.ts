@@ -1,5 +1,5 @@
 import { useSearchParamData } from "@/url-tools";
-import { RandomAPI, seededDraw } from "@shared/game-control/random-api";
+import { RandomAPI, seededDraw } from "@shared/utils/random-api";
 import { useState, useMemo } from "react";
 
 export function useRandomAPI(): RandomAPI {

@@ -1,6 +1,6 @@
 import { CardNonJoker } from "../../../../utils/cards/types.js";
 import { deckNoJokers } from "../../../../utils/cards/deck.js";
-import { RandomAPI } from "../../../random-api.js";
+import { RandomAPI } from "../../../../utils/random-api.js";
 
 type Filter = (c: CardNonJoker) => boolean;
 export class ExtendingDeck {
