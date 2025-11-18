@@ -1,4 +1,3 @@
-import { wrapMoveFunctions } from "../../wrapped-move-function.js";
 import { ClientMoveFunctions } from "../../../move-fn.js";
 import { doneRecordingGrid } from "./done-recording-grid.js";
 import { readyForNewGame } from "./ready-for-new-game.js";
@@ -8,7 +7,7 @@ import { setScore } from "./set-score.js";
 import { readyToStartGame } from "./starting-game.js";
 import { readyForNextRound } from "./starting-round.js";
 
-export const allFuncs = {
+export const moves = {
     doneRecordingGrid,
     readyForNewGame,
     recordGrid,
@@ -18,6 +17,4 @@ export const allFuncs = {
     readyForNextRound,
 };
 
-export const bgioMoves = wrapMoveFunctions(allFuncs);
-
-export type ClientMoves = ClientMoveFunctions<typeof allFuncs>;
+export type ClientMoves = ClientMoveFunctions<typeof moves>;

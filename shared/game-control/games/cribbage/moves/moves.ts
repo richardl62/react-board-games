@@ -1,4 +1,3 @@
-import { wrapMoveFunctions } from "../../wrapped-move-function.js";
 import { ClientMoveFunctions } from "../../../move-fn.js";
 import { doneMakingBox } from "./done-making-box.js";
 import { drag } from "./drag.js";
@@ -8,7 +7,7 @@ import { requestRestartPegging } from "./request-restart-pegging.js";
 import { requestRevealHands } from "./request-reveal-hands.js";
 import { showCutCard } from "./show-cut-card.js";
 
-export const allFuncs = {
+export const moves = {
     doneMakingBox,
     drag,
     pegClick,
@@ -18,6 +17,4 @@ export const allFuncs = {
     showCutCard,
 };
 
-export const bgioMoves = wrapMoveFunctions(allFuncs);
-
-export type ClientMoves = ClientMoveFunctions<typeof allFuncs>;
+export type ClientMoves = ClientMoveFunctions<typeof moves>;

@@ -1,5 +1,4 @@
 import { Ctx } from "../../../ctx.js";
-import { wrapMoveFunction as standardWrapMoveFunction } from "../../wrapped-move-function.js";
 import { ClientMoveFunctions } from "../../../move-fn.js";
 import { sAssert } from "../../../../utils/assert.js";
 import { checkForWinner } from "./check-for-winner.js";
@@ -30,7 +29,7 @@ function nextPlayer(ctx: Ctx) {
 }
 
 function customWrappedMoveFunction<P>(func: SimpleMoveFunc<P>): WrappedMoveFunc<P> {
-    return standardWrapMoveFunction((arg0, param) => {
+    return (arg0, param) => {
         const { G, ctx, events } = arg0;
         const currentState = G.states[G.states.length - 1];
         sAssert(currentState.currentPlayer === ctx.currentPlayer,
@@ -50,7 +49,7 @@ function customWrappedMoveFunction<P>(func: SimpleMoveFunc<P>): WrappedMoveFunc<
         } else {
             throw new Error("Cannot end turn (internal error)");
         }
-    });
+    };
 }
 
 export const bgioMoves = {

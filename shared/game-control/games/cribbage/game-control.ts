@@ -1,5 +1,5 @@
 import { ActivePlayers, GameControl } from "../../game-control.js";
-import { bgioMoves } from "./moves/moves.js";
+import { moves } from "./moves/moves.js";
 import { startingServerData } from "./starting-server-data.js";
 
 export const appGameNoBoard: GameControl = {
@@ -10,7 +10,7 @@ export const appGameNoBoard: GameControl = {
     minPlayers: 2,
     maxPlayers: 2,
 
-    moves: bgioMoves,
+    moves,
 
     // BGIO does not impose turn order
     turn: {

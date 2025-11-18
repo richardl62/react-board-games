@@ -1,13 +1,10 @@
-import { wrapMoveFunctions } from "../../wrapped-move-function.js";
 import { ClientMoveFunctions } from "../../../move-fn.js";
 import { moveCard } from "./move-card.js";
 import { undo } from "./undo.js";
 
-export const allFuncs = {
+export const moves = {
     moveCard,
     undo,
 };
 
-export const moves = wrapMoveFunctions(allFuncs);
-
-export type ClientMoves = ClientMoveFunctions<typeof allFuncs>;
+export type ClientMoves = ClientMoveFunctions<typeof moves>;

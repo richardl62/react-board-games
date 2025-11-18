@@ -1,5 +1,5 @@
 import { GameControl } from "../../game-control.js";
-import { bgioMoves } from "./moves.js";
+import { moves } from "./moves.js";
 import { startingServerData } from "./server-data.js";
 
 export const gameControl: GameControl = {
@@ -10,5 +10,5 @@ export const gameControl: GameControl = {
     minPlayers: 1,
     maxPlayers: 8,
 
-    moves: bgioMoves,
+    moves,
 };

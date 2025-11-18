@@ -7,6 +7,7 @@ import * as LobbyTypes from '../shared/lobby/types.js';
 import { WsMoveRequest } from "../shared/ws-match-request.js";
 import { ServerMatchData } from "../shared/ws-match-response.js";
 import { Player } from "./player.js";
+import { matchMove } from '../shared/game-control/match-move.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -89,7 +90,8 @@ export class Match {
 
         const endTurn = () => this.endTurn();
 
-        const arg0: MoveArg0<unknown> = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const arg0: MoveArg0<any> = {
             G: this.state,
             ctx: this.ctx,
             playerID: this.currentPlayer.toString(),
@@ -97,7 +99,7 @@ export class Match {
             events: { endTurn },
         }
 
-        const moveResult = move(arg0, arg);
+        const moveResult = matchMove(move, arg0, arg);
         if (typeof moveResult !== "undefined") {
             this.state = moveResult;
         }
