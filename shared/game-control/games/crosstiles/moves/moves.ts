@@ -1,4 +1,5 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { wrapMoveFunctions } from "../../wrapped-move-function.js";
+import { ClientMoveFunctions } from "../../../move-fn.js";
 import { doneRecordingGrid } from "./done-recording-grid.js";
 import { readyForNewGame } from "./ready-for-new-game.js";
 import { recordGrid } from "./record-grid.js";

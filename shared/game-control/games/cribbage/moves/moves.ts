@@ -1,4 +1,5 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { wrapMoveFunctions } from "../../wrapped-move-function.js";
+import { ClientMoveFunctions } from "../../../move-fn.js";
 import { doneMakingBox } from "./done-making-box.js";
 import { drag } from "./drag.js";
 import { pegClick } from "./peg-click.js";

@@ -1,4 +1,5 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../wrapped-move-function.js";
+import { wrapMoveFunctions } from "../wrapped-move-function.js";
+import { ClientMoveFunctions } from "../../move-fn.js";
 import { add } from "./add.js";
 
 export const allFuncs = {

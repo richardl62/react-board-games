@@ -1,7 +1,5 @@
-import { RequiredServerData } from "./required-server-data.js";
-import { MoveArg0 } from "./move-fn.js";
-
-type BgioMoveFunction<State, Param> = (arg0: MoveArg0<State>, param: Param) => void | State;
+import { RequiredServerData } from "../required-server-data.js";
+import { BgioMoveFunction, BgioMoveFunctions } from "../move-fn.js";
 
 export function wrapMoveFunction<State extends RequiredServerData, Param>(func: BgioMoveFunction<State, Param>): BgioMoveFunction<State, Param> {
     return (arg0, param) => {
@@ -28,8 +26,7 @@ export function wrapMoveFunction<State extends RequiredServerData, Param>(func: 
     };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BgioMoveFunctions<S extends RequiredServerData> = { [key: string]: BgioMoveFunction<S, any>; };
+
 
 export function wrapMoveFunctions<S extends RequiredServerData>(
     unwrapped: BgioMoveFunctions<S>
@@ -43,9 +40,3 @@ export function wrapMoveFunctions<S extends RequiredServerData>(
     return obj;
 }
 
-export type ClientMoveFunctions<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    functions extends { [key: string]: BgioMoveFunction<any, any>; }
-> = {
-        [Name in keyof functions]: (arg: Parameters<functions[Name]>[1]) => void;
-    };

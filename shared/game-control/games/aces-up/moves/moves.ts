@@ -1,4 +1,5 @@
-import { ClientMoveFunctions, wrapMoveFunctions } from "../../../wrapped-move-function.js";
+import { wrapMoveFunctions } from "../../wrapped-move-function.js";
+import { ClientMoveFunctions } from "../../../move-fn.js";
 import { moveCard } from "./move-card.js";
 import { undo } from "./undo.js";
 
