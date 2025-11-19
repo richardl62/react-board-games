@@ -58,6 +58,10 @@ export class Match {
             throw new Error("No unallocated player found");
         }
 
+        if ( this.findPlayer({ name }) ) {
+            throw new Error(`player name "${name}" already in use`);
+        }
+
         player.allocate(name);
 
         return player;
@@ -105,11 +109,13 @@ export class Match {
         this.ctx.endTurn();
     }
 
-    findPlayer(id: string | WebSocket): Player | undefined {
-        if (typeof id === "string") {
-            return this.players.find(p => p.id === id);
-        } else {
-            return this.players.find(p => p.getWs() === id);
+    findPlayer(arg: {id: string} | {name: string} | {ws: WebSocket}): Player | undefined {
+        if ('id' in arg) {
+            return this.players.find(p => p.id === arg.id);
+        } else if ('name' in arg) {
+            return this.players.find(p => p.name === arg.name);
+        } else {    
+            return this.players.find(p => p.getWs() === arg.ws);
         }
     }
 };  

@@ -17,8 +17,6 @@ https://richards-board-games.herokuapp.com/
 - The old 'endGame' functionality from boardgame.io is not supported. This affects
 AcesUp (and other games?).
 
-- There is no checking to prevent two or more player being given the same name.
-
 - The project is not setup for deployed on Heroku. 
 
 # Possible enhancements

@@ -29,29 +29,30 @@ export class Player {
 
         this.credentials = createAlphanumericString(8);
         
-        this.name = null;
+        this.name_ = null;
         this.ws = null;
     }
 
     readonly id: string;
     readonly credentials: string;
 
-    private name: string | null;
+    private name_: string | null;
     private ws: WebSocket | null;
 
+    get name() : string | null { return this.name_ }
 
     /** Permanently allocate this player (see class comment) */
     allocate(name: string) {
         sAssert(!this.isAllocated, "Player is already allocated");
-        this.name = name; 
+        this.name_ = name; 
     }
 
     changeName(name: string) {
         sAssert(this.isAllocated, "Attempt to set name of unallocated player");
-        this.name = name;
+        this.name_ = name;
     }
 
-    get isAllocated() { return this.name !== null; }
+    get isAllocated() { return this.name_ !== null; }
 
     connect(ws: WebSocket) {
         sAssert(this.isAllocated, "Attempt to connect unallocated player");
@@ -71,7 +72,7 @@ export class Player {
     }
 
     publicMetadata(): PublicPlayerMetadata {
-        const { name, isConnected } = this;
+        const { name_: name, isConnected } = this;
 
         return  { 
             id: this.id,

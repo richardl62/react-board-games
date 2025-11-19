@@ -50,7 +50,7 @@ export class Matches {
     // Get the match that a player is in
     getMatchByWebSocket(ws: WebSocket) : Match | null {
         for (const match of this.matches) {
-            if (match.findPlayer(ws)) {
+            if (match.findPlayer({ws})) {
                 return match;
             }
         }

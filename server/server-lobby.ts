@@ -76,13 +76,17 @@ export class ServerLobby implements LobbyInterface {
             throw new Error(`Match ${matchID} not found`);
         }
 
-        const player = match.findPlayer(playerID);
+        const player = match.findPlayer({id: playerID});
         if( !player ) {
             throw new Error("cannot find player to update");
         }
         
         if( player.credentials !== credentials ) {
             throw new Error("invalid credentials for player update");
+        }
+
+        if ( match.findPlayer({ name: newName }) ) {
+            throw new Error(`player name "${newName}" already in use`);
         }
 
         player.changeName(newName);

@@ -36,7 +36,7 @@ export class Connections {
                     throw new Error(`Match ${matchID} not found - cannot record connection`);
                 }
 
-                const player = match.findPlayer(playerID);
+                const player = match.findPlayer({id: playerID});
                 if (!player) {
                     throw new Error(`Player ${playerID} not found - cannot record connection`);
                 }
@@ -104,7 +104,7 @@ export class Connections {
                 throw new Error('Attempt to disconnect player who is not in a match');
             }
 
-            const player = match.findPlayer(ws);
+            const player = match.findPlayer({ws});
             if (!player) {
                 throw new Error("Disconnect report when player not connected");
             }

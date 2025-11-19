@@ -6,12 +6,20 @@ import { useSetSearchParam } from "@/url-tools";
 import { lobbyClient } from "./lobby-client";
 
 async function joinMatch(game: AppGame, matchID: MatchID, name: string | null = null): Promise<Player> {
+    // Bug: If name is of the form that could be retuned by defaultPlayerName, 
+    // later attempts to join without specifying a name might lead to a name duplication.
+    // This should be detected server side, but this would lead to an unclear user message.
+
     const match = await lobbyClient.getMatch({ 
         gameName: game.name, 
         matchID: matchID.mid
     });
 
     const players = match.players;
+    if (name && players.find(p => p.name === name)) {
+        throw new Error(`player name "${name}" already in use`);
+    }
+
     let index = 0;
     while (players[index].name) {
         ++index;
