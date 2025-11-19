@@ -82,11 +82,7 @@ export class Match {
 
     move(request: WsMoveRequest) {
 
-        const { move: moveName, arg } = request;
-        const move = this.definition.moves[moveName];
-        if (!move) {
-            throw new Error(`Unknown move: ${moveName}`);
-        }
+        const { move, arg } = request;
 
         const endTurn = () => this.endTurn();
 
@@ -99,7 +95,7 @@ export class Match {
             events: { endTurn },
         }
 
-        const moveResult = matchMove(move, arg0, arg);
+        const moveResult = matchMove(this.definition, move, arg0, arg);
         if (typeof moveResult !== "undefined") {
             this.state = moveResult;
         }

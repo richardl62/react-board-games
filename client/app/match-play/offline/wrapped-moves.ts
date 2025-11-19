@@ -15,7 +15,7 @@ export function wrappedMoves(
         wrapped[moveName] = (arg: unknown) => {
             const newG = JSON.parse(JSON.stringify(moveArg0.G));
             const newArg0 = { ...moveArg0, G: newG} as MoveArg0<RequiredServerData>;
-            matchMove(game.moves[moveName], newArg0, arg);
+            matchMove(game, moveName, newArg0, arg);
 
             setG(newG);
         };
