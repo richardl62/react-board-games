@@ -17,12 +17,13 @@ https://richards-board-games.herokuapp.com/
 - The old 'endGame' functionality from boardgame.io is not supported. This affects
 AcesUp (and other games?).
 
-- The old check that players do not move out of turn, expect when explicitly allowed,
-is not supported. (Is this worth re-instating?)
-
 - There is no checking to prevent two or more player being given the same name.
 
 - The project is not setup for deployed on Heroku. 
+
+# Possible enhancements
+
+- Reduce use of 'any'.
 
 # Testing
 

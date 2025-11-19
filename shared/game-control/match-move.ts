@@ -1,6 +1,6 @@
 import { RequiredServerData } from "./required-server-data.js";
 import { MoveArg0 } from "./move-fn.js";
-import { GameControl } from "./game-control.js";
+import { AllActive, GameControl } from "./game-control.js";
 
 /**
  * Call a Game's move function in a manner that is suitable for a match.
@@ -15,14 +15,19 @@ export function matchMove<State extends RequiredServerData, Param>(
     let errorMessage = null;
     let funcResult = undefined;
 
-    const { G } = arg0;
-    const func = GameControl.moves[moveName];
-    if( !func ) {
-        // Should not happen.
-        throw new Error(`Move "${moveName}" not found in game ${GameControl.name}`);
-    }
-
+    const { G, ctx: {currentPlayer}  } = arg0;
+    const { playerID } = arg0;
+    
     try {
+        const func = GameControl.moves[moveName];
+        if (!func) {
+            throw new Error(`Move "${moveName}" not found in game ${GameControl.name}`);
+        }
+
+        if (currentPlayer !== playerID && GameControl.turnOrder !== AllActive) {
+            throw new Error(`It is not player ${playerID}'s turn.`);
+        }
+
         funcResult = func(arg0, param);
     } catch (error) {
         errorMessage = error instanceof Error ? error.message :

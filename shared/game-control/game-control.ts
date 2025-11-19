@@ -3,9 +3,7 @@ import { RandomAPI } from "../utils/random-api.js";
 import { MoveFn } from "./move-fn.js";
 import { Ctx } from "./ctx.js";
 
-export const ActivePlayers = {
-    ALL: "all",
-};
+export const AllActive = { allActive: true } as const;
 
 export interface SetupArg0 {
     ctx: Ctx;
@@ -14,23 +12,24 @@ export interface SetupArg0 {
 
 // GameControl is used by the server and the app (c.f. AppGame which is used
 // just by the app).
-export interface GameControl { 
-  // Space-free name used to identify the game (c.f. displayName in AppGame).
-  name: string
+export interface GameControl {
+    // Space-free name used to identify the game (c.f. displayName in AppGame).
+    name: string
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  moves: {[moveName: string]: MoveFn<any>};
+    minPlayers: number,
+    maxPlayers: number,
 
-  // KLUDGE?: The setup function is expected to return a type derived from
-  // RequiredState. Specifying the return type as RequiredStates enforces this.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup: (arg0: SetupArg0, setupData: any) => RequiredServerData;
+    // KLUDGE?: The setup function is expected to return a type derived from
+    // RequiredState. Specifying the return type as RequiredStates enforces this.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setup: (arg0: SetupArg0, setupData: any) => RequiredServerData;
 
-  minPlayers: number,
-  maxPlayers: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moves: { [moveName: string]: MoveFn<any> };
 
-  turn?: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        activePlayers?: any;
-  },
+    // By default only the current player can make a move. But if turnControl
+    // is set to AllActive, then any player make a move. (A correctly implemented
+    // game should prevent illegal moves, so the check controlled here is really 
+    // just to catch mistakes.)
+    turnOrder?: typeof AllActive;
 }

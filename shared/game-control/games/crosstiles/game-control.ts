@@ -1,4 +1,4 @@
-import { ActivePlayers, GameControl } from "../../game-control.js";
+import { AllActive, GameControl } from "../../game-control.js";
 import { moves } from "./moves/moves.js";
 import { startingServerData } from "./server-data.js";
 
@@ -12,9 +12,7 @@ export const appGameNoBoard: GameControl = {
     setup: startingServerData,
 
     moves,
-
-    // BGIO does not impose turn order
-    turn: {
-        activePlayers: ActivePlayers.ALL,
-    },
+    
+    // Turn order is not enforced.
+    turnOrder: AllActive,
 };
