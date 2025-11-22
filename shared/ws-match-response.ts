@@ -1,3 +1,4 @@
+import { CtxData, isCtxData } from "./game-control/ctx.js";
 import { PublicPlayerMetadata } from "./lobby/types.js";
 
 // Info about a match that is available from the server.
@@ -5,10 +6,7 @@ export interface ServerMatchData<GameState = unknown> {
     /** The players who have joined the game */
     playerData: PublicPlayerMetadata[];
 
-    playOrder: string[]
-
-    /** The player whose turn it is, as an index into playOrder */
-    playOrderPos: number;
+    ctxData: CtxData
 
     /** The current state of the game, changed using moves. */
     state: GameState;
@@ -21,9 +19,8 @@ export function isServerMatchData(obj: unknown): obj is ServerMatchData {
     const candidate = obj as ServerMatchData;
 
     return Array.isArray(candidate.playerData) &&
-           Array.isArray(candidate.playOrder) &&
-           typeof candidate.playOrderPos === "number" &&
-           "state" in candidate;
+        isCtxData(candidate.ctxData) &&
+        "state" in candidate;
 }
 
 // The info about a match returned from the server over a WebSocket.

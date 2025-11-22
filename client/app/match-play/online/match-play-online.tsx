@@ -44,7 +44,7 @@ export function MatchPlayOnline(props: {
     }
 
     if (!match) {
-        // Should never happem
+        // This line should never be reached given the earlier checks.
         return <div>Match data missing from server response!</div>
     }
 
@@ -55,7 +55,7 @@ export function MatchPlayOnline(props: {
         
         isConnected: true, // See earlier 'to do' comment.
 
-        ctx: new Ctx(match.playOrder, match.playOrderPos),
+        ctx: new Ctx(match.ctxData),
 
         // The need for the conversion shows soemthing isn't quite right.
         matchData: match.playerData.map(convertPlayerData),

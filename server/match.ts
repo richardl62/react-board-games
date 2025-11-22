@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import { ServerCtx } from '../shared/game-control/ctx.js';
+import { makeServerCtx, ServerCtx } from '../shared/game-control/ctx.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
@@ -33,7 +33,7 @@ export class Match {
         this.random = randomAPi;
 
 
-        this.ctx = new ServerCtx(numPlayers);
+        this.ctx = makeServerCtx(numPlayers);
         
         this.players = [];
         for (let id = 0; id < numPlayers; ++id) {
@@ -78,8 +78,7 @@ export class Match {
     matchData(): ServerMatchData {
         return {
             playerData: this.players.map(p => p.publicMetadata()),
-            playOrder: this.ctx.playOrder,
-            playOrderPos: this.ctx.playOrderPos,
+            ctxData: this.ctx.data,
             state: this.state,
         };
     }

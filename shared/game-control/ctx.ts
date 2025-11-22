@@ -1,47 +1,92 @@
+import { isValidIndex } from "../utils/valid-index.js";
+
+export interface CtxData {
+    playOrder: string[];
+    playOrderPos: number;
+    gameover: boolean;
+}
+
+export function isCtxData(obj: unknown): obj is CtxData {
+    if (typeof obj !== "object" || obj === null)
+        return false;
+
+    const candidate = obj as CtxData;
+    return Array.isArray(candidate.playOrder) &&
+           typeof candidate.playOrderPos === "number" &&
+           typeof candidate.gameover === "boolean";
+}
+
 // This class is a cut-down version of the Ctx class in boardgame.io.
 // For legacy reasons, players are identified by strings rather than numbers.
 export class Ctx {
-    readonly playOrder: string[];
-    protected _playOrderPos: number;  // Can be changed by subclasses.
+    protected _data: CtxData;  // Can be changed by subclasses.
 
-    constructor(playOrder: string[], playOrderPos: number) {
-        this.playOrder = playOrder;
-        this._playOrderPos = playOrderPos;
+    constructor(data: CtxData) {
+        this._data = data;
+    }
+
+    get data(): CtxData {
+        return this._data;
     }
 
     get numPlayers(): number {
-        return this.playOrder.length;
+        return this.data.playOrder.length;
     }
 
     get currentPlayer(): string {
-        return this.playOrder[this._playOrderPos];
+        const { playOrderPos, playOrder } = this.data;
+        if (!isValidIndex(playOrder, playOrderPos)) {
+            throw new Error(`Invalid playOrderPos: ${playOrderPos}`);
+        }
+
+        return this.data.playOrder[this.data.playOrderPos];
     }
 
-    nextPlayOrderPos() {
-        return (this._playOrderPos + 1) % this.playOrder.length;
+    get playOrder() {
+        return this.data.playOrder;
     }
 
     get playOrderPos() {
-        return this._playOrderPos;
+        return this.data.playOrderPos;
+    }
+    
+    get gameover() {
+        return this.data.gameover;
+    }
+
+    nextPlayOrderPos() {
+        return (this.playOrderPos + 1) % this.playOrder.length;
     }
 }
 
 export class ServerCtx extends Ctx {
-    constructor(numPlayers: number) {
-        const playOrder = [];
-        for (let i = 0; i < numPlayers; i++) {
-            playOrder.push(i.toString());
-        }
-        super(playOrder, 0);
+    constructor(data: CtxData) {
+        super(data);
     }
 
     endTurn() {
-        this._playOrderPos = this.nextPlayOrderPos();
+        this.data.playOrderPos = this.nextPlayOrderPos();
     }
 
-    makeCopy() {
-        const newCtx = new ServerCtx(this.numPlayers);
-        newCtx._playOrderPos = this._playOrderPos;
-        return newCtx;
+    endGame() {
+        this.data.gameover = true;
     }
+
+    makeCopy() : ServerCtx  {
+        return new ServerCtx(structuredClone(this.data));
+    }
+}
+
+export function makeServerCtx(numPlayers: number): ServerCtx {
+    const playOrder: string[] = [];
+    for (let i = 0; i < numPlayers; i++) {
+        playOrder.push(i.toString());
+    }
+
+    const data: CtxData = {
+        playOrder,
+        playOrderPos: 0,
+        gameover: false,
+    };
+    return new ServerCtx(data);
 }
