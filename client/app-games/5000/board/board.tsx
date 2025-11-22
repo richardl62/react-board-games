@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { GameDiceSet } from "./game-dice-set";
 import { ScoringCombinations } from "./scoring-combinations";
 import { useGameContext } from "../client-side/game-context";
-import { GameOver } from "./game-over";
+import { FinalScores } from "./final-scores";
 import { LastRoundNotice } from "./last-round-notice";
 import { JSX } from "react";
 
@@ -30,21 +30,17 @@ const OuterDiv = styled.div`
 function Board() : JSX.Element {
     const {
         G: {lastRound},
-        // ctx: {gameover}
+        ctx: {matchover}
     } = useGameContext();
 
-    // KLUDGE. Ctx.gameover was removed to help with the move away from boardgame.io
-    const gameover = false; // To do: Fix this.
-
     return <OuterDiv>
-        {lastRound && !gameover && <LastRoundNotice/>}
+        {lastRound && !matchover && <LastRoundNotice/>}
         <GameButtons/>
         <GameDiceSet/>
-        {gameover ? <GameOver /> : <Scores/>}
+        {matchover ? <FinalScores /> : <Scores/>}
         <ScorePads />
         <ScoringCombinations/>
     </OuterDiv>;
 }
 
 export default Board;
-

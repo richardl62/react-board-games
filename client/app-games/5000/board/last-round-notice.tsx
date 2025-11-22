@@ -10,7 +10,6 @@ export function LastRoundNotice() : JSX.Element | null {
     // was to avoid having to implement the endGame event.
     // This was a KLUDGE - see comment in endTurnNotBust.
     return <ListRoundDiv>
-        Target score reached! (This is should be the last round,
-        but this is not enforced.)
+        Target score reached. This is the last round.
     </ListRoundDiv>;
 }

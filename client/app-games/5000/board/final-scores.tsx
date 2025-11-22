@@ -27,7 +27,7 @@ const ScoreTable = styled.div`
     margin-left: 1em;
 `;
 
-export function GameOver() : JSX.Element {
+export function FinalScores() : JSX.Element {
     const {
         G: {playerScores},
         getPlayerName,

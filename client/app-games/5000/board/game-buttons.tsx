@@ -18,7 +18,7 @@ const BustButton = styled.button`
 `;
 
 export function GameButtons() : JSX.Element {
-    const { G, moves, playerID, ctx: {currentPlayer} } = useGameContext();
+    const { G, moves, playerID, ctx: {currentPlayer, matchover} } = useGameContext();
     const [diceText, setDiceText] = React.useState("");
     const [badDiceText, setBadDiceText] = React.useState(false);
 
@@ -46,11 +46,12 @@ export function GameButtons() : JSX.Element {
     const isActivePlayer = playerID === currentPlayer;
     const availableActions = availablePlayerActions(G);
     const showRoll = !availableActions.bust;
+    const allButtonsDisabled = matchover || !isActivePlayer;
     return <OuterDiv>
         <HoldScoringDiceButton/>
         {showRoll && <button 
             onClick={() => roll("unheld")} 
-            disabled={!isActivePlayer || !availableActions.roll}
+            disabled={allButtonsDisabled || !availableActions.roll}
         >
             Roll
         </button>
@@ -58,7 +59,7 @@ export function GameButtons() : JSX.Element {
         {availableActions.rollAll && 
             <button 
                 onClick={() => roll("all")}
-                disabled={!isActivePlayer}
+                disabled={allButtonsDisabled}
             >
                 Roll All
             </button>
@@ -66,7 +67,7 @@ export function GameButtons() : JSX.Element {
         {availableActions.endTurn && 
             <button 
                 onClick={() => moves.endTurnNotBust()}
-                disabled={!isActivePlayer}
+                disabled={allButtonsDisabled}
             >
                 Done
             </button>
@@ -74,7 +75,7 @@ export function GameButtons() : JSX.Element {
         {availableActions.bust && 
             <BustButton 
                 onClick={() => moves.endTurnBust()}
-                disabled={!isActivePlayer}
+                disabled={allButtonsDisabled}
             >
             Bust!
             </BustButton>
@@ -83,7 +84,7 @@ export function GameButtons() : JSX.Element {
             type="text"
             value={diceText}
             onChange={onChangeDiceText}
-            disabled={!isActivePlayer}
+            disabled={allButtonsDisabled}
         />}
         {badDiceText && <div>Invalid dice values</div>}
     

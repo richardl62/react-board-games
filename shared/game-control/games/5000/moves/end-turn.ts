@@ -38,20 +38,20 @@ export function endTurnNotBust (
         G.lastRound = true;
     }
 
-    /*
-    Commented out for now. This is a KLUDGE that was added when removing
-    use of boardgame.io. The motive was to avoid having to implement endGame.
-
+    let endMatch : boolean = false;
     if(G.lastRound) {
         //Get last element of playOrder
         const lastPlayer = arg0.ctx.playOrder.at(-1);
         if(!G.options.alwaysFinishRound || lastPlayer === playerID) {
-            arg0.events.endMatch("win");
+            endMatch = true;
         }
     }
-    */
 
-    turnOver(arg0);
+    if(endMatch) {
+        arg0.events.endMatch();
+    } else {
+        turnOver(arg0);
+    }
 }
 
 export function endTurnBust (

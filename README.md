@@ -14,9 +14,6 @@ https://richards-board-games.herokuapp.com/
 
 # Known problems
 
-- The old 'endGame' functionality from boardgame.io is not supported. This affects
-AcesUp (and other games?).
-
 - The project is not setup for deployed on Heroku. 
 
 # Possible enhancements
