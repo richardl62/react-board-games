@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
 import { Connections } from './connections.js';
 import { Matches } from './matches.js';
-import { serverPort } from '../shared/server-address.js';
+import { defaultPort } from '../shared/server-address.js';
 import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
 
 //const draw = seededDraw(12345);
@@ -17,7 +17,7 @@ const matches = new Matches(random);
 const connections = new Connections(matches);
 
 const app = express();
-const PORT = process.env.PORT || serverPort;
+const PORT = process.env.PORT || defaultPort;
 
 app.use(cors({
   origin: 'http://localhost:5173' // Vite default port
@@ -25,7 +25,11 @@ app.use(cors({
 
 // Start the server
 const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on ${PORT}`);
+
+    if (PORT !== defaultPort) {
+        console.warn(`(Note that when running on localhost, the port is expected to be ${defaultPort}.)`);
+    }
 });
 
 const wss = new WebSocketServer({ server });

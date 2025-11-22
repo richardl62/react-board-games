@@ -1,12 +1,15 @@
-export const serverPort = 8000;
+// KLUDGE: When the server is running on localhost, it must use the default port.
+export const defaultPort = 8000;
 
-// Hmm, should this be a function?  And is this the right place it?
 export function serverAddress(): string {
     
-    const url = new URL(window.location.href);
-    if (url.hostname === "localhost") {
-        url.port = serverPort.toString();
-    }
+    // KLUDGE: In development it is convenient to run the client and server on
+    // different ports.  This code below helps achieve this, but will lead to
+    // (potentially confusing) errors if the server is running on a non-default
+    // port on localhost.
+    const isLocalhost = window.location.hostname === 'localhost';
+    const address = isLocalhost ? 
+        `http://localhost:${defaultPort}` : window.location.origin;
 
-    return url.origin;
+    return address;
 }
