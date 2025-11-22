@@ -12,6 +12,10 @@ export function useOfflineCtx(numPlayers: number) : {
         endTurn: () => {
             ctx.endTurn();
             setCtx(ctx.makeCopy());
+        },
+        endMatch: () => {
+            ctx.endMatch();
+            setCtx(ctx.makeCopy());
         }
     }), [ctx]);
 

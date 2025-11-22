@@ -3,7 +3,7 @@ import { isValidIndex } from "../utils/valid-index.js";
 export interface CtxData {
     playOrder: string[];
     playOrderPos: number;
-    gameover: boolean;
+    matchover: boolean;
 }
 
 export function isCtxData(obj: unknown): obj is CtxData {
@@ -13,7 +13,7 @@ export function isCtxData(obj: unknown): obj is CtxData {
     const candidate = obj as CtxData;
     return Array.isArray(candidate.playOrder) &&
            typeof candidate.playOrderPos === "number" &&
-           typeof candidate.gameover === "boolean";
+           typeof candidate.matchover === "boolean";
 }
 
 // This class is a cut-down version of the Ctx class in boardgame.io.
@@ -50,8 +50,8 @@ export class Ctx {
         return this.data.playOrderPos;
     }
     
-    get gameover() {
-        return this.data.gameover;
+    get matchover() {
+        return this.data.matchover;
     }
 
     nextPlayOrderPos() {
@@ -65,11 +65,15 @@ export class ServerCtx extends Ctx {
     }
 
     endTurn() {
+        if (this.data.matchover) {
+            throw new Error("End turn attempt after match is over.");
+        }
+
         this.data.playOrderPos = this.nextPlayOrderPos();
     }
 
-    endGame() {
-        this.data.gameover = true;
+    endMatch() {
+        this.data.matchover = true;
     }
 
     makeCopy() : ServerCtx  {
@@ -86,7 +90,7 @@ export function makeServerCtx(numPlayers: number): ServerCtx {
     const data: CtxData = {
         playOrder,
         playOrderPos: 0,
-        gameover: false,
+        matchover: false,
     };
     return new ServerCtx(data);
 }

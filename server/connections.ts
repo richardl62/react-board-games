@@ -2,7 +2,7 @@ import WebSocket from "ws";
 import url from 'url';
 import { Matches } from "./matches.js";
 import { WsMatchResponse } from "../shared/ws-match-response.js";
-import { isWsMatchRequest, isWsEndTurn } from "../shared/ws-match-request.js"
+import { isWsMatchRequest, isWsEndTurn, isWsEndMatch } from "../shared/ws-match-request.js"
 import { Match } from "./match.js";
 
 export class Connections {
@@ -80,7 +80,9 @@ export class Connections {
             }
 
             if (isWsEndTurn(matchRequest)) {
-                match.endTurn();
+                match.events.endTurn();
+            } else if (isWsEndMatch(matchRequest)) {
+                match.events.endMatch();
             } else {
                 match.move(matchRequest);
             }

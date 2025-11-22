@@ -1,8 +1,9 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { serverAddress } from "@shared/server-address";
 import { isWsMatchResponse, ServerMatchData } from "@shared/ws-match-response";
-import { WsEndTurn, WsMoveRequest, isWsMoveRequest } from "@shared/ws-match-request";
+import { WsEndMatch, WsEndTurn, WsMoveRequest, isWsMoveRequest } from "@shared/ws-match-request";
 import useWebSocket, {ReadyState} from "react-use-websocket";
+import { EventsAPI } from "@shared/game-control/events";
 
 // A move function as run on a client.
 type MatchMove = (arg0: {
@@ -12,7 +13,7 @@ type MatchMove = (arg0: {
 
 interface Match<GameState = unknown>  extends ServerMatchData<GameState> {
     moves: Record<string, MatchMove>;
-    endTurn: () => void;
+    events: EventsAPI;
 }
 
 /** Status of a match on the server or psuedo-server. */
@@ -62,11 +63,15 @@ export function useOnlineMatch(
     }
 
     const endTurn: WsEndTurn = { endTurn: true };
+    const endMatch: WsEndMatch = { endMatch: true };
     
     const match : Match = {
         ...matchData,
         moves: matchMoves,
-        endTurn: () => sendJsonMessage(endTurn),
+        events: {
+            endTurn: () => sendJsonMessage(endTurn),
+            endMatch: () => sendJsonMessage(endMatch),
+        },
     };
     
     return { readyState, error, match };

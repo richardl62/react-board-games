@@ -62,9 +62,7 @@ export function MatchPlayOnline(props: {
 
         moves: match.moves,
 
-        events: {
-            endTurn: match.endTurn,
-        },
+        events: match.events,
 
         G: match.state,
     }

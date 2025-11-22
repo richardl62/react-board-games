@@ -15,13 +15,17 @@ export function matchMove<State extends RequiredServerData, Param>(
     let errorMessage = null;
     let funcResult = undefined;
 
-    const { G, ctx: {currentPlayer}  } = arg0;
+    const { G, ctx: {currentPlayer, matchover}  } = arg0;
     const { playerID } = arg0;
     
     try {
         const func = GameControl.moves[moveName];
         if (!func) {
             throw new Error(`Move "${moveName}" not found in game ${GameControl.name}`);
+        }
+
+        if ( matchover) {
+            throw new Error("Move attempted after match is over.");
         }
 
         if (currentPlayer !== playerID && GameControl.turnOrder !== AllActive) {

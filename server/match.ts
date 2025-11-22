@@ -8,6 +8,7 @@ import { WsMoveRequest } from "../shared/ws-match-request.js";
 import { ServerMatchData } from "../shared/ws-match-response.js";
 import { Player } from "./player.js";
 import { matchMove } from '../shared/game-control/match-move.js';
+import { EventsAPI } from '../shared/game-control/events.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -87,15 +88,13 @@ export class Match {
 
         const { move, arg } = request;
 
-        const endTurn = () => this.endTurn();
-
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const arg0: MoveArg0<any> = {
             G: this.state,
             ctx: this.ctx,
             playerID: this.currentPlayer.toString(),
             random: this.random,
-            events: { endTurn },
+            events: this.events,
         }
 
         const moveResult = matchMove(this.definition, move, arg0, arg);
@@ -104,8 +103,11 @@ export class Match {
         }
     }
 
-    endTurn() {
-        this.ctx.endTurn();
+    get events (): EventsAPI {
+        return {
+            endTurn: () => { this.ctx.endTurn(); },
+            endMatch: () => { this.ctx.endMatch(); }
+        };
     }
 
     findPlayer(arg: {id: string} | {name: string} | {ws: WebSocket}): Player | undefined {
