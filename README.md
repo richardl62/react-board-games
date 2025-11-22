@@ -14,8 +14,6 @@ https://richards-board-games.herokuapp.com/
 
 # Known problems
 
-- The project is not setup for deployed on Heroku. 
-
 # Possible enhancements
 
 - Reduce use of 'any'.
