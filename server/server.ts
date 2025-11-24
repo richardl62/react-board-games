@@ -10,7 +10,7 @@ import { defaultPort } from '../shared/server-address.js';
 import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
 
 //const draw = seededDraw(12345);
-const draw = () => Math.random()
+const draw = () => Math.random();
 
 const random = new RandomAPI(draw);
 const matches = new Matches(random);
@@ -23,7 +23,6 @@ app.use(cors({
   origin: 'http://localhost:5173' // Vite default port
 }));
 
-// Start the server
 const server = app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);
 
@@ -40,7 +39,6 @@ const __dirname = path.dirname(__filename);
 
 // Serve static files from the dist directory
 const distPath = path.resolve(__dirname, '../../dist');
-app.use(express.static(distPath));
 
 
 // Run all the functions provided by the LobbyClient
@@ -57,13 +55,20 @@ app.get('/lobby', (req, res) => {
   }
 });
 
+app.use(express.static(distPath));
+
+// Fallback - Catch-all for SPA routing'
+app.use((_req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
 wss.on('connection', (ws, req)  => {
 
   connections.connection(ws, req.url);
 
   ws.on('close', () => {
     connections.close(ws);
-  })
+  });
 
   ws.on('error', (error) => {
     connections.error(ws, error);

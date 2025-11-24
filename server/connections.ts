@@ -115,8 +115,8 @@ export class Connections {
 
             broadcastMatchData(match, { error: null });
         } catch (err) {
-            // Hmm. Not sure what to do here.
-            console.error('Error during player disconnect:', err);
+            const errStr = err instanceof Error ? err.message : "unknown error";
+            console.error('Error during player disconnect:', errStr);
         }
     }
 

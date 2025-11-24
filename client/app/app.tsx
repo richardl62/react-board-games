@@ -102,7 +102,7 @@ export function App(): JSX.Element {
     
     useEffect(() => {
         document.title = "Games";
-    });
+    }, []);
 
     return (
         <BrowserRouter>
