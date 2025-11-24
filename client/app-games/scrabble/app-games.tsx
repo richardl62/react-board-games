@@ -2,29 +2,29 @@ import React from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { standardBoard } from "../../app-game-support/standard-board";
 import { WrappedGameProps } from "../../app-game-support/wrapped-game-props";
-import { appGamesNoBoardSimple, appGamesNoBoardStandard} from "@game-control/games/scrabble/game-control";
+import { gameControlSimple, gameControlStandard} from "@game-control/games/scrabble/game-control";
 import { setupOptions } from "./options";
 
 const LazyBoard = React.lazy(() => import("./board/board-wrapper"));
 
 const appGameSimple: AppGame = {
-    ...appGamesNoBoardSimple,
+    ...gameControlSimple,
 
     displayName: "Simple Scrabble",
     category: GameCategory.test,
     
     options: setupOptions,
-    board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, appGamesNoBoardSimple),
+    board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, gameControlSimple),
 };
 
 const appGameStandard: AppGame = {
-    ...appGamesNoBoardStandard,
+    ...gameControlStandard,
     
     displayName: "Scrabble",
     category: GameCategory.standard,
 
     options: setupOptions,
-    board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, appGamesNoBoardStandard),
+    board: (props: WrappedGameProps) => standardBoard(LazyBoard, props, gameControlStandard),
 };
 
 export const appGames = [appGameSimple, appGameStandard];

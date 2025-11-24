@@ -19,8 +19,8 @@ function makeAppGame(config: ScrabbleConfig) : GameControl
     };
 }
 
-export const appGamesNoBoardSimple = makeAppGame(simple);
-export const appGamesNoBoardStandard = makeAppGame(standard);
+export const gameControlSimple = makeAppGame(simple);
+export const gameControlStandard = makeAppGame(standard);
 
-export const appGamesNoBoard = [appGamesNoBoardSimple, appGamesNoBoardStandard];
+export const gameControl = [gameControlSimple, gameControlStandard];
 

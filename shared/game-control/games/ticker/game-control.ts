@@ -2,7 +2,7 @@ import { startingServerData } from "./server-data.js";
 import { moves } from "./moves/moves.js";
 import { GameControl } from "../../game-control.js";
 
-export const appGameNoBoard: GameControl = {
+export const gameControl: GameControl = {
     name: "ticker",
     setup: startingServerData, 
 

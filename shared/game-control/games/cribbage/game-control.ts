@@ -2,7 +2,7 @@ import { GameControl, AllActive } from "../../game-control.js";
 import { moves } from "./moves/moves.js";
 import { startingServerData } from "./starting-server-data.js";
 
-export const appGameNoBoard: GameControl = {
+export const gameControl: GameControl = {
     name: "cribbage",
 
     setup: startingServerData,
