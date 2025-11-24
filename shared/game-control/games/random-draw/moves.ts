@@ -1,8 +1,8 @@
 import { ClientMoveFunctions } from "../../move-fn.js";
-import { changeValues } from "./change-values.js";
+import { draw } from "./draw.js";
 
 export const moves = {
-    changeValues
+    changeValues: draw
 };
 
 export type ClientMoves = ClientMoveFunctions<typeof moves>;
