@@ -84,7 +84,7 @@ export class Match {
         };
     }
 
-    move(request: WsMoveRequest) {
+    move(request: WsMoveRequest, playerID: string) {
 
         const { move, arg } = request;
 
@@ -92,9 +92,10 @@ export class Match {
         const arg0: MoveArg0<any> = {
             G: this.state,
             ctx: this.ctx,
-            playerID: this.currentPlayer.toString(),
             random: this.random,
             events: this.events,
+
+            playerID,
         }
 
         const moveResult = matchMove(this.definition, move, arg0, arg);

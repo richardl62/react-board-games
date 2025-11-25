@@ -64,13 +64,15 @@ export class Connections {
         }
     }
 
-    matchRequest(ws: WebSocket, str: string) {
+    // Handle a player-requested action (move, end turn, etc)
+    playerAction(ws: WebSocket, str: string) {
         let error = null;
         let match;
 
         try {
             match = this.matches.getMatchByWebSocket(ws);
-            if (!match) {
+            const player = match?.findPlayer({ws});
+            if (!match ||!player) {
                 throw new Error('Player not in a match');
             }
 
@@ -84,7 +86,7 @@ export class Connections {
             } else if (isWsEndMatch(matchRequest)) {
                 match.events.endMatch();
             } else {
-                match.move(matchRequest);
+                match.move(matchRequest, player.id);
             }
 
         } catch (err) {

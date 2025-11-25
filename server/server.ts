@@ -75,6 +75,6 @@ wss.on('connection', (ws, req)  => {
   });
 
   ws.on('message', message => { 
-    connections.matchRequest(ws, message.toString());
+    connections.playerAction(ws, message.toString());
   });
 });
