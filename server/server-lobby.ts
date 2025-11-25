@@ -35,7 +35,7 @@ export class ServerLobby implements LobbyInterface {
             matchID: string,
         }
     ): LobbyTypes.Match {
-        const match = this.matches.findMatch(parseInt(matchID));
+        const match = this.matches.findMatch(matchID);
         if (!match) {
             throw new Error(`Match ${matchID} not found`);
         }
@@ -53,7 +53,7 @@ export class ServerLobby implements LobbyInterface {
             playerName: string;
         }
     ): LobbyTypes.JoinedMatch {
-        const match = this.matches.findMatch(parseInt(matchID));
+        const match = this.matches.findMatch(matchID);
         if (!match) {
             throw new Error(`Match ${matchID} not found`);
         }
@@ -71,7 +71,7 @@ export class ServerLobby implements LobbyInterface {
             newName: string;
         }
     ) : null {
-        const match = this.matches.findMatch(parseInt(matchID));
+        const match = this.matches.findMatch(matchID);
         if (!match) {
             throw new Error(`Match ${matchID} not found`);
         }

@@ -13,7 +13,7 @@ import { EventsAPI } from '../shared/game-control/events.js';
 // A match is an instance of a game.
 export class Match {
     readonly definition: GameControl;
-    readonly id: number;
+    readonly matchID: string;
     readonly players: Player[];
     private ctx: ServerCtx;
     private random: RandomAPI;
@@ -22,15 +22,15 @@ export class Match {
 
     constructor(
         gameControl: GameControl,
-        { id, numPlayers, setupData, randomAPi }: {
-            id: number,
+        {  matchID, numPlayers, setupData, randomAPi }: {
+            matchID: string,
             numPlayers: number,
             setupData: unknown,
             randomAPi: RandomAPI,
         }
     ) {
         this.definition = gameControl;
-        this.id = id;
+        this.matchID = matchID;
         this.random = randomAPi;
 
 
@@ -71,7 +71,7 @@ export class Match {
     lobbyMatch(): LobbyTypes.Match {
         return {
             gameName: this.definition.name,
-            matchID: this.id.toString(),
+            matchID: this.matchID,
             players: this.players.map(p => p.publicMetadata()),
         }
     }

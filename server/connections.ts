@@ -31,7 +31,7 @@ export class Connections {
                 const playerID = urlParam("playerID");
                 const credentials = urlParam("credentials");
 
-                const match = this.matches.findMatch(parseInt(matchID, 10));
+                const match = this.matches.findMatch(matchID);
                 if (!match) {
                     throw new Error(`Match ${matchID} not found - cannot record connection`);
                 }

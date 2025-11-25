@@ -19,19 +19,19 @@ export class Matches {
     {
         // Base the id on the number of recorded matches.  This feels like
         // a bit of a kludge, but should ensure a unique id.
-        const id = this.matches.length+1; 
+        const matchID = (this.matches.length+1).toString(); 
 
         const match = new Match(getGameControl(game), 
-            {id, numPlayers, setupData, randomAPi: this.random }
+            {matchID, numPlayers, setupData, randomAPi: this.random }
         );
         this.matches.push(match);
 
         return match;
     }
     
-    findMatch(matchID: number) : Match | undefined
+    findMatch(matchID: string) : Match | undefined
     {
-        return this.matches.find(m => m.id === matchID);
+        return this.matches.find(m => m.matchID === matchID);
     }
 
     /** Get all the matches of a particular game (e.g. Scrabble) */
