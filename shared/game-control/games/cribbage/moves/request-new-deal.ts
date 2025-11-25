@@ -20,5 +20,5 @@ export function requestNewDeal(
         return res;
     }
 
-    return newG;
+    return newG; // BUG: Move function should not return any data.
 }

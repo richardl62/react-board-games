@@ -11,9 +11,8 @@ export function matchMove<State extends RequiredServerData, Param>(
     moveName: string,
     arg0: MoveArg0<State>, 
     param: Param
-) : State | undefined {
+) {
     let errorMessage = null;
-    let funcResult = undefined;
 
     const { G, ctx: {currentPlayer, matchover}  } = arg0;
     const { playerID } = arg0;
@@ -32,22 +31,17 @@ export function matchMove<State extends RequiredServerData, Param>(
             throw new Error(`It is not player ${playerID}'s turn.`);
         }
 
-        funcResult = func(arg0, param);
+        const result = func(arg0, param);
+        if (result !== undefined) {
+            throw new Error("Move functions should not return a value.");
+        }
     } catch (error) {
         errorMessage = error instanceof Error ? error.message :
             "unknown error";
     }
 
-    if (funcResult) {
-        return {
-            ...funcResult,
-            moveError: errorMessage,
-            moveCount: G.moveCount + 1,
-        };
-    } else {
-        G.moveCount++;
-        G.moveError = errorMessage;
-    }
+    G.moveCount++;
+    G.moveError = errorMessage;
 }
 
 
