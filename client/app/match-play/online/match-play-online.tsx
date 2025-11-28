@@ -20,31 +20,31 @@ export function MatchPlayOnline(props: {
     player: Player;
 }): JSX.Element {
     const { game, matchID, player } = props;
-    const matchData = useOnlineMatchData(game, {matchID, player});
+    const onelineMatchData = useOnlineMatchData(game, {matchID, player});
     
-    const { match } = matchData;
+    const { matchData} = onelineMatchData;
 
-    const boardProps: BoardProps | null = match && {
+    const boardProps: BoardProps | null = matchData && {
         playerID: player.id,
         credentials: player.credentials,
         matchID: matchID.mid,
         
         isConnected: true, // See earlier 'to do' comment.
 
-        ctx: new Ctx(match.ctxData),
+        ctx: new Ctx(matchData.ctxData),
 
         // The need for the conversion shows soemthing isn't quite right.
-        matchData: match.playerData.map(convertPlayerData),
+        matchData: matchData.playerData.map(convertPlayerData),
 
-        moves: match.moves,
+        moves: matchData.moves,
+        
+        events: matchData.events,
 
-        events: match.events,
-
-        G: match.state,
+        G: matchData.state,
     }
 
     return <div>
-        <ConnectionStatus matchData={matchData} />
+        <ConnectionStatus onelineMatchData={onelineMatchData} />
         {boardProps && <GameBoard game={game} bgioProps={boardProps} />}
     </div>;
 }

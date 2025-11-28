@@ -14,10 +14,10 @@ function readyStatusText( state: ReadyState) {
     return status || "unknown";
 }
 
-export function ConnectionStatus({ matchData }: {
-    matchData: OnlineMatchData;
+export function ConnectionStatus({ onelineMatchData }: {
+    onelineMatchData: OnlineMatchData;
 }): JSX.Element {
-    const { readyState, error } = matchData;
+    const { readyState, error } = onelineMatchData;
 
     let message : string | null = null;
     if (readyState !== ReadyState.OPEN) {
