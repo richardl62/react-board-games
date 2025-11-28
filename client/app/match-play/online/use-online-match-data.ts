@@ -17,7 +17,7 @@ interface Match<GameState = unknown>  extends ServerMatchData<GameState> {
 }
 
 /** Status of a match on the server or psuedo-server. */
-type OnlineMatchResult = {
+export type OnlineMatchData = {
     readyState: ReadyState; // Use if the connection is not open
 
     match: Match | null ;  // Can be null after initial connection, or after
@@ -31,10 +31,10 @@ type OnlineMatchResult = {
                     // some less-than-ideal code). 
 };
 
-export function useOnlineMatch(
+export function useOnlineMatchData(
     appGame: AppGame,
     {matchID, player}: {matchID: MatchID, player: Player},
-): OnlineMatchResult {
+): OnlineMatchData {
     
     const url = new URL(serverAddress());
     url.protocol = "ws";

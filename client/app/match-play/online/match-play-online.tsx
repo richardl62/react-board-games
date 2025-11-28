@@ -1,23 +1,12 @@
 import { JSX } from "react";
 import { AppGame, MatchID, Player } from "@/app-game-support";
-import { useOnlineMatch } from "./use-match-online";
-import {ReadyState} from "react-use-websocket";
+import { useOnlineMatchData } from "./use-online-match-data";
+
 import { BoardProps, MatchDataElem } from "@shared/game-control/board-props";
 import { PublicPlayerMetadata } from "@shared/lobby/types.js";
 import { Ctx } from "@shared/game-control/ctx";
 import { GameBoard } from "../game-board";
-
-function readyStatus( state: ReadyState) {
-    const status = {
-        [ReadyState.CONNECTING]: "connecting",
-        [ReadyState.OPEN]: "open",
-        [ReadyState.CLOSING]: "closing",
-        [ReadyState.CLOSED]: "closed",
-        [ReadyState.UNINSTANTIATED]: "uninstantiated",
-    }[state];
-
-    return status || "unknown";
-}
+import { ConnectionStatus } from "./connection-status";
 
 
 function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
@@ -31,24 +20,11 @@ export function MatchPlayOnline(props: {
     player: Player;
 }): JSX.Element {
     const { game, matchID, player } = props;
-    const { readyState, match, error } = useOnlineMatch(game, {matchID, player});
+    const matchData = useOnlineMatchData(game, {matchID, player});
+    
+    const { match } = matchData;
 
-    if (readyState !== ReadyState.OPEN) {
-        // To do: Consider recording last good state to minimise impact of a
-        // temporary lost of connection to the server.
-        return <div>Connection status: {readyStatus(readyState)}</div>
-    }
-
-    if (error) {
-        return <div> Server error: {error}</div>
-    }
-
-    if (!match) {
-        // This line should never be reached given the earlier checks.
-        return <div>Match data missing from server response!</div>
-    }
-
-    const boardProps: BoardProps = {
+    const boardProps: BoardProps | null = match && {
         playerID: player.id,
         credentials: player.credentials,
         matchID: matchID.mid,
@@ -67,7 +43,10 @@ export function MatchPlayOnline(props: {
         G: match.state,
     }
 
-    return <GameBoard game={game} bgioProps={boardProps} />
+    return <div>
+        <ConnectionStatus matchData={matchData} />
+        {boardProps && <GameBoard game={game} bgioProps={boardProps} />}
+    </div>;
 }
 
 
