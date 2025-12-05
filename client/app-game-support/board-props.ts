@@ -20,11 +20,6 @@ type Moves = {
 export interface BoardProps<TypeG=any> {
     playerID: PlayerID | null; // Is the null option needed?
 
-    // credentials and matchID seem to be used just to check if the match is
-    // offline.  Can they be merged or prehaps removed?
-    credentials?: string;
-    matchID: string;
-
     // This is misnamed in that it given info about players rather than
     // the match as whole.
     matchData: Array<MatchDataElem>; 
@@ -35,6 +30,7 @@ export interface BoardProps<TypeG=any> {
 
     events: EventsAPI;
 
+    isOffline: boolean;
     // Use (I think) to indicate a temporary lost of connection to the sever.
     isConnected: boolean;
 

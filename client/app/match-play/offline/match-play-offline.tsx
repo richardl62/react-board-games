@@ -30,8 +30,8 @@ function Board({game, show, matchData, moveArg0, setG}: {
         moves: wrappedMoves(game, moveArg0, setG),
         
         matchData,
-        credentials: "offline",
-        matchID: "offline",
+
+        isOffline: true,
         isConnected: true,
     };
 

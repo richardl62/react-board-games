@@ -46,15 +46,6 @@ function makePlayerDataElem(matchData: MatchDataElem[], playerID: string, numPla
 
 }
 
-function isOffline(props: BgioBoardProps) : boolean {
-    const offline1 = !props.credentials;
-    const offline2 = props.matchID === "default";
-    if(offline1 !== offline2) {
-        console.warn("Problem checking if match is offline");
-    }
-    return offline1 && offline2;
-}
-
 export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
     const matchData = props.matchData;
     if(!matchData) {
@@ -66,7 +57,7 @@ export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
     const playerData: PlayerDataDictionary = {};
     for (const id in props.ctx.playOrder) {
         playerData[id] = makePlayerDataElem(matchData, id, props.ctx.numPlayers,
-            isOffline(props)
+            props.isOffline
         );
     }
 

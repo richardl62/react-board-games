@@ -12,10 +12,9 @@ function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
     return {id, isConnected, name: name || undefined}
 }
 
-function Board({game, player, matchID, onlineMatchData}: { 
+function Board({game, player, onlineMatchData}: { 
     game: AppGame;
     player: Player;
-    matchID: MatchID;
     onlineMatchData : OnlineMatchData 
 }): JSX.Element {
 
@@ -27,9 +26,8 @@ function Board({game, player, matchID, onlineMatchData}: {
 
     const boardProps: BoardProps = {
         playerID: player.id,
-        credentials: player.credentials,
-        matchID: matchID.mid,
-        
+
+        isOffline: false,
         isConnected: true, // See earlier 'to do' comment.
 
         ctx: new Ctx(serverMatchData.ctxData),
@@ -58,7 +56,6 @@ export function MatchPlayOnline({ game, matchID, player }: {
         <ConnectionStatus onelineMatchData={onelineMatchData} />
         <Board 
             game={game}
-            matchID={matchID} 
             player={player} 
             onlineMatchData={onelineMatchData}  
         />
