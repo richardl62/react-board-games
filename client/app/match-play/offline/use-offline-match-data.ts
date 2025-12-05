@@ -1,4 +1,4 @@
-import { MatchDataElem } from "@shared/game-control/board-props";
+import { MatchDataElem } from "@/app-game-support/board-props";
 import { Ctx } from "@shared/game-control/ctx";
 import { useMemo } from "react";
 

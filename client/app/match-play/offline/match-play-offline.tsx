@@ -9,7 +9,7 @@ import { useOfflineCtx } from "./use-offline-ctx";
 import { useOfflineMatchData } from "./use-offline-match-data";
 import { useRandomAPI } from "./use-random-api";
 import { wrappedMoves } from "./wrapped-moves";
-import { MatchDataElem } from "@shared/game-control/board-props";
+import { MatchDataElem } from "@/app-game-support/board-props";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};

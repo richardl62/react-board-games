@@ -1,13 +1,11 @@
 import { JSX } from "react";
-import { AppGame, MatchID, Player } from "@/app-game-support";
+import { AppGame, BoardProps, MatchID, Player } from "@/app-game-support";
 import { OnlineMatchData, useOnlineMatchData } from "./use-online-match-data";
-
-import { BoardProps, MatchDataElem } from "@shared/game-control/board-props";
 import { PublicPlayerMetadata } from "@shared/lobby/types.js";
 import { Ctx } from "@shared/game-control/ctx";
 import { GameBoard } from "../game-board";
 import { ConnectionStatus } from "./connection-status";
-
+import { MatchDataElem } from "@/app-game-support/board-props";
 
 function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
     const {id, name, isConnected} = md;
