@@ -31,8 +31,7 @@ function Board({game, show, matchData, moveArg0, setG}: {
         
         matchData,
 
-        isOffline: true,
-        isConnected: true,
+        connectionStatus: "offline",
     };
 
     return <OptionalDisplay display_={show}>

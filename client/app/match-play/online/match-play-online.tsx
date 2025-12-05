@@ -1,24 +1,24 @@
-import { JSX } from "react";
 import { AppGame, BoardProps, MatchID, Player } from "@/app-game-support";
-import { OnlineMatchData, useOnlineMatchData } from "./use-online-match-data";
-import { PublicPlayerMetadata } from "@shared/lobby/types.js";
-import { Ctx } from "@shared/game-control/ctx";
-import { GameBoard } from "../game-board";
-import { ConnectionStatus } from "./connection-status";
 import { MatchDataElem } from "@/app-game-support/board-props";
+import { Ctx } from "@shared/game-control/ctx";
+import { PublicPlayerMetadata } from "@shared/lobby/types.js";
+import { JSX } from "react";
+import { GameBoard } from "../game-board";
+import { useOnlineMatchData } from "./use-online-match-data";
 
 function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
     const {id, name, isConnected} = md;
     return {id, isConnected, name: name || undefined}
 }
 
-function Board({game, player, onlineMatchData}: { 
+export function MatchPlayOnline({ game, matchID, player }: {
     game: AppGame;
+    matchID: MatchID;
     player: Player;
-    onlineMatchData : OnlineMatchData 
 }): JSX.Element {
+    const onlineMatchData = useOnlineMatchData(game, {matchID, player});
 
-    const { moves, events, serverMatchData } = onlineMatchData;
+    const { moves, events, serverMatchData, connectionStatus } = onlineMatchData;
 
     if (serverMatchData === null) {
         return <div>Loading...</div>;
@@ -27,8 +27,7 @@ function Board({game, player, onlineMatchData}: {
     const boardProps: BoardProps = {
         playerID: player.id,
 
-        isOffline: false,
-        isConnected: true, // See earlier 'to do' comment.
+        connectionStatus,
 
         ctx: new Ctx(serverMatchData.ctxData),
 
@@ -43,23 +42,6 @@ function Board({game, player, onlineMatchData}: {
     }
 
     return <GameBoard game={game} bgioProps={boardProps} />
-}
-
-export function MatchPlayOnline({ game, matchID, player }: {
-    game: AppGame;
-    matchID: MatchID;
-    player: Player;
-}): JSX.Element {
-    const onelineMatchData = useOnlineMatchData(game, {matchID, player});
-
-    return <div>
-        <ConnectionStatus onelineMatchData={onelineMatchData} />
-        <Board 
-            game={game}
-            player={player} 
-            onlineMatchData={onelineMatchData}  
-        />
-    </div>;
 }
 
 

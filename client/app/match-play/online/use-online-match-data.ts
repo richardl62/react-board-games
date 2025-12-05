@@ -1,7 +1,6 @@
-import { AppGame, BoardProps, MatchID, Player } from "@/app-game-support";
+import { AppGame, BoardProps, ConnectionStatus, MatchID, Player } from "@/app-game-support";
 import { ServerMatchData } from "@shared/ws-match-response";
 import { WsEndMatch, WsEndTurn } from "@shared/ws-match-request";
-import {ReadyState} from "react-use-websocket";
 import { EventsAPI } from "@shared/game-control/events";
 import { useServerConnection } from "./use-server-connection";
 import { useEffect, useMemo, useState } from "react";
@@ -9,12 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 /** Data about a match received from the server, with added move functions
  * and events. */
 export interface OnlineMatchData {
-    readyState: ReadyState;
-
-    // Set if an exception occured during the last move, or if the last move was found to be 
-    // illegal (e.g. the wrong player tried to move). 
-    // If set, it shows there is a bug somewhere (or at least some less-than-ideal code).
-    error: string | null;  
+    connectionStatus: ConnectionStatus;
 
     // Null while data is initially loading. After that, set to the last
     // non-null value received from the server.
@@ -59,7 +53,13 @@ export function useOnlineMatchData(
     }), [sendMatchRequest]);
 
     const lastServerMatchData = useLastNonNull(serverMatchData);
+
+    const connectionStatus: ConnectionStatus = {
+        readyStatus: readyState,
+        error,
+        staleGameState: serverMatchData !== lastServerMatchData,
+    };
     
-    return { readyState, error, serverMatchData: lastServerMatchData, moves, events };
+    return { connectionStatus, serverMatchData: lastServerMatchData, moves, events };
 }
 

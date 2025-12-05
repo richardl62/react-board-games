@@ -57,7 +57,7 @@ export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
     const playerData: PlayerDataDictionary = {};
     for (const id in props.ctx.playOrder) {
         playerData[id] = makePlayerDataElem(matchData, id, props.ctx.numPlayers,
-            props.isOffline
+            props.connectionStatus === "offline"
         );
     }
 

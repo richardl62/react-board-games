@@ -1,6 +1,13 @@
 import { Ctx } from "@shared/game-control/ctx";
 import { EventsAPI } from "@shared/game-control/events";
 import { PlayerID } from "@shared/game-control/playerid";
+import { ReadyState } from "react-use-websocket";
+
+export type ConnectionStatus = "offline" | {
+    readyStatus: ReadyState,
+    error: string | null,
+    staleGameState: boolean,
+}
 
 export interface MatchDataElem {
     id: string;
@@ -20,6 +27,8 @@ type Moves = {
 export interface BoardProps<TypeG=any> {
     playerID: PlayerID | null; // Is the null option needed?
 
+    connectionStatus: ConnectionStatus;
+
     // This is misnamed in that it given info about players rather than
     // the match as whole.
     matchData: Array<MatchDataElem>; 
@@ -29,10 +38,6 @@ export interface BoardProps<TypeG=any> {
     moves: Moves;
 
     events: EventsAPI;
-
-    isOffline: boolean;
-    // Use (I think) to indicate a temporary lost of connection to the sever.
-    isConnected: boolean;
 
     G: TypeG;
 }
