@@ -34,7 +34,7 @@ export function useOnlineMatchData(
     {matchID, player}: {matchID: MatchID, player: Player},
 ): OnlineMatchData {
 
-    const { readyState, serverMatchData, error, sendMatchRequest } = useServerConnection({matchID, player});
+    const { connectionStatus, serverMatchData, sendMatchRequest } = useServerConnection({matchID, player});
 
     const moves: BoardProps["moves"] = useMemo(() => {
         const moves: BoardProps["moves"] = {};
@@ -54,11 +54,6 @@ export function useOnlineMatchData(
 
     const lastServerMatchData = useLastNonNull(serverMatchData);
 
-    const connectionStatus: ConnectionStatus = {
-        readyStatus: readyState,
-        error,
-        staleGameState: serverMatchData !== lastServerMatchData,
-    };
     
     return { connectionStatus, serverMatchData: lastServerMatchData, moves, events };
 }
