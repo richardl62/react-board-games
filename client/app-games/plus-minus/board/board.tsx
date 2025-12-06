@@ -7,47 +7,48 @@ const OuterDiv = styled.div`
     margin: ${standardOuterMargin};
 `;
 
-const Name = styled.span<{$active: boolean}>`
-    // underline if active
-    text-decoration: ${props => props.$active ? "underline" : "none"};
+const Name = styled.span`
     margin-right: 1em;
 `;
 
+const CurrentPlayer = styled.div`
+    margin-top: 0.7em;
+    margin-bottom: 0.3em;
+`;
+
 function PlayerNames() : JSX.Element {
-    const {ctx: {playOrder}, playerID, getPlayerName} =  useGameContext();
+    const {ctx: {playOrder, currentPlayer}, getPlayerName} =  useGameContext();
+    
+    const name = (id: string) => {
+        return getPlayerName(id) + (id === currentPlayer ? " (you)" : "");
+    }
     return <div>
         {playOrder.map((id) => 
-            <Name key={id} $active={id === playerID}>
-                {getPlayerName(id)}
-            </Name>
+            <Name key={id} > {name(id)} </Name>
         )}
     </div>; 
 }
 
 function Board() : JSX.Element {
     const context = useGameContext();
-    const {G: {count}, moves, events, playerID} = context;
+    const {G: {count}, moves, events, playerID, getPlayerName} = context;
     
     const current = context.ctx.currentPlayer === playerID;
-
+    const currentPlayerName = current ? "You" : getPlayerName(context.ctx.currentPlayer);
     return <OuterDiv>
         <PlayerNames/>
+        
+        <CurrentPlayer>Current player: {currentPlayerName}</CurrentPlayer>
 
-        <button 
-            onClick={()=>moves.add(1)} 
-            disabled={!current}>
+        <button onClick={()=>moves.add(1)} >
             +1
         </button>
 
-        <button 
-            onClick={()=>moves.add(-1)} 
-            disabled={!current}>
+        <button onClick={()=>moves.add(-1)} >
             -1
         </button>
 
-        <button 
-            onClick={() => events.endTurn()} 
-            disabled={!current}>
+        <button onClick={() => events.endTurn()} >
             End Turn
         </button>
         
