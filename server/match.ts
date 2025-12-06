@@ -9,6 +9,7 @@ import { ServerMatchData } from "../shared/ws-match-response.js";
 import { Player } from "./player.js";
 import { matchMove } from '../shared/game-control/match-move.js';
 import { EventsAPI } from '../shared/game-control/events.js';
+import { RequiredServerData } from '../shared/game-control/required-server-data.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -18,7 +19,8 @@ export class Match {
     private ctx: ServerCtx;
     private random: RandomAPI;
 
-    private state: unknown; // To do: pick a better name?
+    // KLUDGE?: state will record more than just RequiredServerData.
+    private state: RequiredServerData;
 
     constructor(
         gameControl: GameControl,

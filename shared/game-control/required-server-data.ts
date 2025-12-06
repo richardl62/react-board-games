@@ -11,6 +11,17 @@ export interface RequiredServerData  {
     startDate: number;
 }
 
+export function isRequiredServerData(obj: unknown): obj is RequiredServerData {
+    if (typeof obj !== "object" || obj === null)
+        return false;
+
+    const candidate = obj as RequiredServerData;
+
+    return (candidate.moveError === null || typeof candidate.moveError === "string") &&
+        typeof candidate.moveCount === "number" &&
+        typeof candidate.startDate === "number";
+}
+
 export function startingRequiredState() : RequiredServerData {
     return {
         moveError: null,
