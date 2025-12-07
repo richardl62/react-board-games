@@ -14,6 +14,8 @@ https://richards-board-games.herokuapp.com/
 
 # Known problems
 
+- The server restarted test does not work.
+
 # Possible enhancements
 
 - Reduce use of 'any'.

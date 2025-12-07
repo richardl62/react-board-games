@@ -3,18 +3,7 @@ import { JSX } from "react";
 import { useStandardBoardContext } from "./standard-board";
 import styled from "styled-components";
 import { ReadyState } from "react-use-websocket";
-
-function readyStatusText( state: ReadyState) {
-    const status = {
-        [ReadyState.CONNECTING]: "connecting",
-        [ReadyState.OPEN]: "open",
-        [ReadyState.CLOSING]: "closing",
-        [ReadyState.CLOSED]: "closed",
-        [ReadyState.UNINSTANTIATED]: "uninstantiated",
-    }[state];
-
-    return status || "unknown";
-}
+import { readyStatusText } from "@utils/ready-status-text";
 
 const WarningDiv = styled.div`
     span:first-child {

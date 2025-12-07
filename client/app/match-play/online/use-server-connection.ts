@@ -3,8 +3,9 @@ import { OnlineConnectionStatus } from "@/app-game-support/board-props";
 import { serverAddress } from "@shared/server-address";
 import { WsMatchRequest } from "@shared/ws-match-request";
 import { ServerMatchData, isWsMatchResponse } from "@shared/ws-match-response";
-import { useState } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import { useEffect } from "react";
+import useWebSocket from "react-use-websocket";
+import { readyStatusText } from "@utils/ready-status-text";
 
 // A fairly thin wrapper around useWebSocket.
 export function useServerConnection(
@@ -29,17 +30,22 @@ export function useServerConnection(
     url.searchParams.append("credentials", player.credentials);
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(url.toString());
-    const isConnected = readyState === ReadyState.OPEN;
-
-    const [expectedStartDate, setExpectedStartDate] = useState(0);
-    const [wasConnected, setWasConnected] = useState(isConnected);
     
-    if (wasConnected !== isConnected) {
-        console.log("Connection to server", isConnected ? "restored" : "lost",
-            (new Date()).toLocaleTimeString());
+    useEffect(() => {
+        console.log("WebSocket readyState:", readyStatusText(readyState), new Date().toLocaleTimeString());
+    }, [readyState]);
 
-        setWasConnected(isConnected);
-    }
+    // TO DO: Come back to this.
+    // const [expectedStartDate, setExpectedStartDate] = useState(0);
+    // let serverRestarted = false;
+    // if (serverMatchData) {
+    //     const { state: { startDate } } = serverMatchData;
+    //     if (expectedStartDate === 0) {
+    //         setExpectedStartDate(startDate);
+    //     } else if (startDate !== expectedStartDate) {
+    //         serverRestarted = true;
+    //     }
+    // }
 
     let error: string | null = null;
     let serverMatchData: ServerMatchData | null = null;
@@ -54,20 +60,10 @@ export function useServerConnection(
         serverMatchData = lastJsonMessage.matchData;
     }
 
-    let serverRestarted = false;
-    if (serverMatchData) {
-        const { state: { startDate } } = serverMatchData;
-        if (expectedStartDate === 0) {
-            setExpectedStartDate(startDate);
-        } else if (startDate !== expectedStartDate) {
-            serverRestarted = true;
-        }
-    }
-
     const connectionStatus: OnlineConnectionStatus = {
         readyState,
         error,
-        serverRestarted,
+        serverRestarted: false, // KLUDGE - Come back to this.
     };
 
     return { connectionStatus, serverMatchData, sendMatchRequest: sendJsonMessage };
