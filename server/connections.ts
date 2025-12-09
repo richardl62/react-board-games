@@ -1,9 +1,9 @@
-import WebSocket from "ws";
 import url from 'url';
-import { Matches } from "./matches.js";
-import { WsMatchResponse } from "../shared/ws-match-response.js";
-import { isWsMatchRequest, isWsEndTurn, isWsEndMatch } from "../shared/ws-match-request.js"
+import WebSocket from "ws";
+import { isWsClientRequest, isWsEndMatch, isWsEndTurn, isWsMoveRequest, WsClientRequest } from "../shared/ws-client-request.js";
+import { WsResponseTrigger, WsServerResponse } from "../shared/ws-server-response.js";
 import { Match } from "./match.js";
+import { Matches } from "./matches.js";
 
 export class Connections {
     matches: Matches;
@@ -12,98 +12,70 @@ export class Connections {
         this.matches = matches;
     }
 
-    connection(ws: WebSocket, requestUrl: string | undefined) {
-
-        if (requestUrl) {
-            try {
-                const parsedUrl = url.parse(requestUrl, true);
-
-                const urlParam = (name: string) => {
-                    const param = parsedUrl.query[name];
-
-                    if (typeof param !== 'string') {
-                        throw new Error(`URL parameter "${name}" missing or invalid`);
-                    }
-                    return param;
-                }
-
-                const matchID = urlParam("matchID");
-                const playerID = urlParam("playerID");
-                const credentials = urlParam("credentials");
-
-                const match = this.matches.findMatch(matchID);
-                if (!match) {
-                    throw new Error(`Match ${matchID} not found - cannot record connection`);
-                }
-
-                const player = match.findPlayer({id: playerID});
-                if (!player) {
-                    throw new Error(`Player ${playerID} not found - cannot record connection`);
-                }
-
-                if (player.isConnected) {
-                    throw new Error(`Player ${playerID} connected - cannot reconnect`);
-                }
-                
-                if (player.credentials !== credentials) {
-                    throw new Error(`Player ${playerID} provided invalid credentials`);
-                }
-
-                player.connect(ws);
-
-                broadcastMatchData(match, { error: null });
+    connected(ws: WebSocket, requestUrl: string | undefined) {
+        
+        let match: Match | undefined = undefined;
+        let error: string | null = null;
+        
+        try {
+            if (!requestUrl) {
+                throw new Error("Connection URL missing");
             }
-            catch (err) {
-                const message = err instanceof Error ? err.message : "unknown error";
+            const parsedUrl = url.parse(requestUrl, true);
 
-                console.log('Error during connection:', message);
+            const urlParam = (name: string) => {
+                const param = parsedUrl.query[name];
 
-                const response: WsMatchResponse = { error: message, matchData: null };
-                ws.send(JSON.stringify(response));
+                if (typeof param !== 'string') {
+                    throw new Error(`URL parameter "${name}" missing or invalid`);
+                }
+                return param;
             }
+
+            const matchID = urlParam("matchID");
+            const playerID = urlParam("playerID");
+            const credentials = urlParam("credentials");
+
+            match = this.matches.findMatch(matchID);
+            if (!match) {
+                throw new Error(`Match ${matchID} not found - cannot record connection`);
+            }
+
+            const player = match.findPlayer({ id: playerID });
+            if (!player) {
+                throw new Error(`Player ${playerID} not found - cannot record connection`);
+            }
+
+            if (player.isConnected) {
+                throw new Error(`Player ${playerID} connected - cannot reconnect`);
+            }
+
+            if (player.credentials !== credentials) {
+                throw new Error(`Player ${playerID} provided invalid credentials`);
+            }
+
+            player.connect(ws);
+        }
+        catch (err) {
+            error = err instanceof Error ? err.message : "unknown error";
+            console.log('Error during connection:', error);
+        }
+
+        const trigger : WsResponseTrigger = { clientConnection: true };
+        if (match) {
+            broadcastMatchData( match, trigger, error );
+        } else {
+            const response: WsServerResponse = { trigger, matchData: null, error };
+            ws.send(JSON.stringify(response));
         }
     }
 
-    // Handle a player-requested action (move, end turn, etc)
-    playerAction(ws: WebSocket, str: string) {
-        let error = null;
-        let match;
-
+    disconnected(ws: WebSocket) {
+        let match: Match | null = null;
+        let error: string | null = null;
+        
         try {
             match = this.matches.getMatchByWebSocket(ws);
-            const player = match?.findPlayer({ws});
-            if (!match ||!player) {
-                throw new Error('Player not in a match');
-            }
-
-            const matchRequest = JSON.parse(str);
-            if (!isWsMatchRequest(matchRequest)) {
-                throw new Error("Unexpected data with match request: " + str);
-            }
-
-            if (isWsEndTurn(matchRequest)) {
-                match.events.endTurn();
-            } else if (isWsEndMatch(matchRequest)) {
-                match.events.endMatch();
-            } else {
-                match.move(matchRequest, player.id);
-            }
-
-        } catch (err) {
-            error = err instanceof Error ? err.message : "unknown error";
-        }
-
-        if (match) {
-            broadcastMatchData(match, { error });
-        } else {
-            // Hmm. Not sure what to do here.
-            console.error('No match found for this WebSocket in move request');
-        }
-    }
-
-    close(ws: WebSocket) {
-        try {
-            const match = this.matches.getMatchByWebSocket(ws);
             if (!match) {
                 throw new Error('Attempt to disconnect player who is not in a match');
             }
@@ -114,11 +86,62 @@ export class Connections {
             }
 
             player.disconnect();
-
-            broadcastMatchData(match, { error: null });
         } catch (err) {
-            const errStr = err instanceof Error ? err.message : "unknown error";
-            console.error('Error during player disconnect:', errStr);
+            error = err instanceof Error ? err.message : "unknown error";
+            console.error('Error during player disconnect:', error);
+        }
+
+        const trigger : WsResponseTrigger = { clientConnection: true };
+        if (match) {
+            broadcastMatchData( match, trigger, error );
+        } else {
+            const response: WsServerResponse = { trigger, matchData: null, error };
+            ws.send(JSON.stringify(response));
+        }
+    }
+
+    // Handle a player-requested action (move, end turn, etc)
+    actionRequest(ws: WebSocket, str: string) {
+
+        let match: Match | null = null;
+        let error: string | null = null;
+        let clientRequest: WsClientRequest | null = null;
+
+        try {
+            match = this.matches.getMatchByWebSocket(ws);
+            const player = match?.findPlayer({ws});
+            if (!match || !player) {
+                throw new Error('Player not in a match');
+            }
+
+            const rawRequest = JSON.parse(str);
+            if ( isWsClientRequest(rawRequest) ) {
+                clientRequest = rawRequest;
+            } else {
+                throw new Error('Invalid client request');
+            }
+
+            if (isWsEndTurn(clientRequest)) {
+                match.events.endTurn();
+            } else if (isWsEndMatch(clientRequest)) {
+                match.events.endMatch();
+            } else if (isWsMoveRequest(clientRequest)) {
+                match.move(clientRequest, player.id);
+            } else {
+                // In practice this should happen only if there is a missing case
+                // in the if/else tests above.
+                throw new Error("Unrecognised client request");
+            }
+        } catch (err) {
+            error = err instanceof Error ? err.message : "unknown error";
+            console.error(`Error: ${error} when processing client request ${str}`);
+        }
+
+        if(match && clientRequest) {
+            broadcastMatchData(match, clientRequest, error);
+        } else if (clientRequest) {
+            const response: WsServerResponse = { trigger: clientRequest, matchData: null, error };
+            ws.send(JSON.stringify(response));
         }
     }
 
@@ -128,9 +151,13 @@ export class Connections {
     }
 }
 
-function broadcastMatchData(match: Match, { error }: { error: string | null }) {
-    const matchData = match.matchData();
-    const response: WsMatchResponse = { matchData, error };
+function broadcastMatchData(
+    match: Match, 
+    trigger: WsResponseTrigger,
+    error: string | null
+) { 
+    const response: WsServerResponse = 
+        { trigger, matchData: match.matchData(), error };
 
     for (const player of match.players) {
         const ws = player.getWs();

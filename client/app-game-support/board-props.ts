@@ -5,8 +5,11 @@ import { ReadyState } from "react-use-websocket";
 
 export interface OnlineConnectionStatus {
     readyState: ReadyState,
+
+    // A non-null error indicates a high-level problem with the connection.
+    // Problems that can caught and handled on the server, e.g. an out-of-turn
+    // move attempt, are reported via WsServerResponse.
     error: string | null,
-    serverRestarted: boolean,
 }
 
 export type ConnectionStatus = "offline" | OnlineConnectionStatus;

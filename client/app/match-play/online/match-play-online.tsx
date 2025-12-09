@@ -23,19 +23,13 @@ export function MatchPlayOnline({ game, matchID, player }: {
 
     sAssert(connectionStatus !== "offline", "MatchPlayOnline called with offline connection status");
 
-    if (connectionStatus.serverRestarted) {
-        return <div>Server has restarted - cannot continue</div>;
-    }
-
     if (serverMatchData === null) {
-        if (connectionStatus.error) {
-            return <div>
-                <div> Server reports fatal error. Cannot continue</div>                
-                <div> (message: {connectionStatus.error})</div>                
-            </div>;
+        const error = connectionStatus.error || onlineMatchData.error;
+        if (error) {
+            return <div> Error: {error} </div>;
+        } else {
+            return <div>Loading...</div>;
         }
-   
-        return <div>Loading...</div>;
     }
 
     const boardProps: BoardProps = {

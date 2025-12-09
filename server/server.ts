@@ -64,17 +64,17 @@ app.use((_req, res) => {
 
 wss.on('connection', (ws, req)  => {
 
-  connections.connection(ws, req.url);
+  connections.connected(ws, req.url);
 
   ws.on('close', () => {
-    connections.close(ws);
+    connections.disconnected(ws);
+  });
+
+  ws.on('message', message => { 
+    connections.actionRequest(ws, message.toString());
   });
 
   ws.on('error', (error) => {
     connections.error(ws, error);
-  });
-
-  ws.on('message', message => { 
-    connections.playerAction(ws, message.toString());
   });
 });
