@@ -1,7 +1,8 @@
 import url from 'url';
 import WebSocket from "ws";
 import { isWsClientRequest, isWsEndMatch, isWsEndTurn, isWsMoveRequest, WsClientRequest } from "../shared/ws-client-request.js";
-import { WsResponseTrigger, WsServerResponse } from "../shared/ws-server-response.js";
+import { WsResponseTrigger } from "../shared/ws-response-trigger.js";
+import { WsServerResponse } from "../shared/ws-server-response.js";
 import { Match } from "./match.js";
 import { Matches } from "./matches.js";
 
@@ -16,6 +17,8 @@ export class Connections {
         
         let match: Match | undefined = undefined;
         let error: string | null = null;
+        
+        const trigger : WsResponseTrigger = { clientConnection: true };
         
         try {
             if (!requestUrl) {
@@ -55,17 +58,14 @@ export class Connections {
             }
 
             player.connect(ws);
+
+            broadcastMatchData( match, trigger );
         }
         catch (err) {
             error = err instanceof Error ? err.message : "unknown error";
             console.log('Error during connection:', error);
-        }
 
-        const trigger : WsResponseTrigger = { clientConnection: true };
-        if (match) {
-            broadcastMatchData( match, trigger, error );
-        } else {
-            const response: WsServerResponse = { trigger, matchData: null, error };
+            const response: WsServerResponse = { trigger, connectionError: error };
             ws.send(JSON.stringify(response));
         }
     }
@@ -73,6 +73,8 @@ export class Connections {
     disconnected(ws: WebSocket) {
         let match: Match | null = null;
         let error: string | null = null;
+        
+        const trigger : WsResponseTrigger = { clientConnection: true };
         
         try {
             match = this.matches.getMatchByWebSocket(ws);
@@ -86,29 +88,21 @@ export class Connections {
             }
 
             player.disconnect();
+
+            broadcastMatchData( match, trigger );
         } catch (err) {
             error = err instanceof Error ? err.message : "unknown error";
             console.error('Error during player disconnect:', error);
-        }
 
-        const trigger : WsResponseTrigger = { clientConnection: true };
-        if (match) {
-            broadcastMatchData( match, trigger, error );
-        } else {
-            const response: WsServerResponse = { trigger, matchData: null, error };
-            ws.send(JSON.stringify(response));
+            // Unable to send error response to disconnected player.
         }
     }
 
     // Handle a player-requested action (move, end turn, etc)
     actionRequest(ws: WebSocket, str: string) {
-
-        let match: Match | null = null;
-        let error: string | null = null;
         let clientRequest: WsClientRequest | null = null;
-
         try {
-            match = this.matches.getMatchByWebSocket(ws);
+            const match = this.matches.getMatchByWebSocket(ws);
             const player = match?.findPlayer({ws});
             if (!match || !player) {
                 throw new Error('Player not in a match');
@@ -132,16 +126,16 @@ export class Connections {
                 // in the if/else tests above.
                 throw new Error("Unrecognised client request");
             }
-        } catch (err) {
-            error = err instanceof Error ? err.message : "unknown error";
-            console.error(`Error: ${error} when processing client request ${str}`);
-        }
 
-        if(match && clientRequest) {
-            broadcastMatchData(match, clientRequest, error);
-        } else if (clientRequest) {
-            const response: WsServerResponse = { trigger: clientRequest, matchData: null, error };
-            ws.send(JSON.stringify(response));
+            broadcastMatchData(match, clientRequest);
+        } catch (err) {
+            const error = err instanceof Error ? err.message : "unknown error";
+            console.warn(`Error: ${error} when processing client request ${str}`); 
+
+            const response: WsServerResponse = { 
+                trigger: clientRequest || { badClientRequest: true }, 
+                connectionError: error };
+            sendResponse(ws, response);
         }
     }
 
@@ -151,18 +145,24 @@ export class Connections {
     }
 }
 
+function sendResponse(ws: WebSocket, response: WsServerResponse) {
+    ws.send(JSON.stringify(response));
+}
+
 function broadcastMatchData(
     match: Match, 
     trigger: WsResponseTrigger,
-    error: string | null
 ) { 
     const response: WsServerResponse = 
-        { trigger, matchData: match.matchData(), error };
+        { trigger, matchData: match.matchData() };
 
     for (const player of match.players) {
-        const ws = player.getWs();
-        if (ws) {
-            ws.send(JSON.stringify(response));
+        if (player.isConnected) {
+          const ws = player.getWs();
+          if(ws)
+            sendResponse(ws, response);
+          else
+            console.error(`Player ${player.id} is marked as connected but has no WebSocket`);
         }
     }
 }

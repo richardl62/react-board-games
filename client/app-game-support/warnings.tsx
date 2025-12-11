@@ -20,15 +20,11 @@ export function Warnings(): JSX.Element {
     const warnings: string[] = [];
 
     if (connectionStatus !== "offline") {
-        const { readyState: readyStatus, error } = connectionStatus
+        const readyState : ReadyState = connectionStatus
 
-        if (readyStatus !== ReadyState.OPEN) {
-            warnings.push(`No connection to server (status: ${readyStatusText(readyStatus)})`);
+        if (readyState !== ReadyState.OPEN) {
+            warnings.push(`No connection to server (status: ${readyStatusText(readyState)})`);
         } else {
-            if (error) {
-                warnings.push(`Connection error: ${error}`);
-            }
-
             for (const pId in playerData) {
                 const { name, status } = playerData[pId];
                 if (status === "notConnected") {

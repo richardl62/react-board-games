@@ -1,13 +1,27 @@
 import { ServerMatchData, isServerMatchData } from "./server-match-data.js";
 import { WsResponseTrigger, isWsResponseTrigger } from "./ws-response-trigger.js";
 
-export interface WsServerResponse {
+export interface WsServerResponseSuccess {
     trigger: WsResponseTrigger;
 
     // At least one of matchData or error should be non-null.
-    matchData: ServerMatchData | null;
-    error: string | null;
+    matchData: ServerMatchData;
+
+    connectionError?: undefined;
 }
+
+export interface WsServerResponseError {
+    trigger: WsResponseTrigger;
+
+    // At least one of matchData or error should be non-null.
+    matchData?: undefined;
+
+    // A problem that prevented a connection from being established, 
+    // such as an unregonised ID or invalid credentials.
+    connectionError: string;
+}
+
+export type WsServerResponse = WsServerResponseSuccess | WsServerResponseError;
 
 export function isWsServerResponse(obj: unknown): obj is WsServerResponse {
     if (typeof obj !== "object" || obj === null)
@@ -15,10 +29,12 @@ export function isWsServerResponse(obj: unknown): obj is WsServerResponse {
 
     const candidate = obj as WsServerResponse;
 
-    const matchDataOK = candidate.matchData === null || isServerMatchData(candidate.matchData);
-    const errorOK = candidate.error === null || typeof candidate.error === "string";
+    if (!isWsResponseTrigger(candidate.trigger))
+        return false;
+
+    const matchDataOK = isServerMatchData(candidate.matchData);
+    const errorOK = typeof candidate.connectionError === "string";
     
-    return isWsResponseTrigger(candidate.trigger) && matchDataOK && errorOK &&
-        Boolean(candidate.matchData || candidate.error);
+    return Boolean(matchDataOK || errorOK);
 }
 

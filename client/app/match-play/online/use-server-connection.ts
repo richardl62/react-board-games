@@ -1,22 +1,23 @@
 import { MatchID, Player } from "@/app-game-support";
-import { OnlineConnectionStatus } from "@/app-game-support/board-props";
 import { serverAddress } from "@shared/server-address";
 import { WsClientRequest } from "@shared/ws-client-request";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import { readyStatusText } from "@utils/ready-status-text";
-import { isWsServerResponse, WsServerResponse } from "@shared/ws-server-response";
+import { isWsServerResponse } from "@shared/ws-server-response";
+import { ReadyState } from "react-use-websocket";
+import { ServerMatchData } from "@shared/server-match-data";
 
 // A fairly thin wrapper around useWebSocket.
 export function useServerConnection(
     { matchID, player }: { matchID: MatchID; player: Player; }
 ): {
-        connectionStatus: OnlineConnectionStatus;
+        readyState: ReadyState;
 
-        /** serverResponse will be missing during initial loading, or following
-         * certain errors, e.g. a failure to connect to the server.
-        */
-        serverResponse: WsServerResponse | null;
+        /** serverResponse will be null during initial loading, or when connectionError is set. */
+        serverMatchData: ServerMatchData | null;
+
+        connectionError: string | null;
 
         // A match request can be a move or an event like end turn.
         sendMatchRequest: (request: WsClientRequest) => void;
@@ -35,22 +36,21 @@ export function useServerConnection(
         console.log("WebSocket readyState:", readyStatusText(readyState), new Date().toLocaleTimeString());
     }, [readyState]);
 
-    let error: string | null = null;
-    let serverResponse: WsServerResponse | null = null;
+
+    let serverMatchData: ServerMatchData | null = null;
+    let connectionError: string | null = null;
 
     if (lastJsonMessage) {
         if(isWsServerResponse(lastJsonMessage)) {
-            serverResponse = lastJsonMessage;
+            serverMatchData = lastJsonMessage.matchData || null;
+            connectionError = lastJsonMessage.connectionError || null;
+
         } else {
-            error = "Invalid WebSocket message format: expected a valid WsMatchResponse object." 
+            // Setting connectionError is a kludge, but it is hard to know what else to do.
+            connectionError = "Invalid WebSocket message format: expected a valid WsMatchResponse object." 
                 + "Received: " + JSON.stringify(lastJsonMessage);
         }
     }
 
-    const connectionStatus: OnlineConnectionStatus = {
-        readyState,
-        error,
-    };
-
-    return { connectionStatus, serverResponse, sendMatchRequest: sendJsonMessage };
+    return { readyState, serverMatchData, connectionError, sendMatchRequest: sendJsonMessage };
 }

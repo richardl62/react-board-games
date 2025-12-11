@@ -1,38 +1,31 @@
-import { AppGame, BoardProps, ConnectionStatus, MatchID, Player } from "@/app-game-support";
-import { ServerMatchData } from "@shared/server-match-data";
+import { AppGame, BoardProps, MatchID, Player } from "@/app-game-support";
+import { useLastNonNull } from "@/utils/use-last-non-null";
 import { EventsAPI } from "@shared/game-control/events";
-import { useServerConnection } from "./use-server-connection";
-import { useEffect, useMemo, useState } from "react";
+import { ServerMatchData } from "@shared/server-match-data";
 import { WsRequestId } from "@shared/ws-client-request";
-
+import { useMemo } from "react";
+import { ReadyState } from "react-use-websocket";
+import { useServerConnection } from "./use-server-connection";
 
 /** Data about a match received from the server, with added move functions
  * and events. */
 export interface OnlineMatchData {
-    connectionStatus: ConnectionStatus;
+    readyState: ReadyState;
 
     // Null while data is initially loading. After that, set to the last
-    // non-null value received from the server.
+    // non-null value received from the server. This is intended to allow
+    // for downstream code to continue working after a temporary loss of
+    // connection.
     serverMatchData: ServerMatchData | null;
 
-    // Indicates an error that was caught and handled, e.g. an out-of-turn
-    // move attempt, or and error thrown during a move.
-    error: string | null;
+    // Set if there a problem preventing a valid connection to the server.
+    // The possible errors include invalid IDs or credentials. If set there
+    // is probably no point in downsteam code using serverMatchData.
+    connectionError: string | null;
 
     moves: BoardProps["moves"];
     events: EventsAPI;
 };
-
-// To do: Conider moving this to a more general location.
-function useLastNonNull<T>(value: T | null): T | null {
-    const [lastNonNull, setLastNonNull] = useState(value);
-    useEffect(() => {
-        if (value !== null) {
-            setLastNonNull(value);
-        }
-    }, [value]);
-    return lastNonNull;
-}
 
 const dummyID: WsRequestId = {playerId: "dummy", number: -1};
 
@@ -41,7 +34,7 @@ export function useOnlineMatchData(
     {matchID, player}: {matchID: MatchID, player: Player},
 ): OnlineMatchData {
 
-    const { connectionStatus, serverResponse, sendMatchRequest } = useServerConnection({matchID, player});
+    const { readyState, serverMatchData, connectionError, sendMatchRequest } = useServerConnection({matchID, player});
     
     const moves: BoardProps["moves"] = useMemo(() => {
         
@@ -61,8 +54,7 @@ export function useOnlineMatchData(
         endMatch: () => sendMatchRequest({id: dummyID, endMatch: true}),
     }), [sendMatchRequest]);
 
-    const lastServerMatchData = useLastNonNull(serverResponse?.matchData || null);
-    const error = serverResponse?.error || null;
-    return { connectionStatus, error, serverMatchData: lastServerMatchData, moves, events };
+    const lastServerMatchData = useLastNonNull(serverMatchData);
+    return { readyState, connectionError, serverMatchData: lastServerMatchData, moves, events };
 }
 

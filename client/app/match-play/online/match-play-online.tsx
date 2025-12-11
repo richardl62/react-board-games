@@ -5,7 +5,7 @@ import { PublicPlayerMetadata } from "@shared/lobby/types.js";
 import { JSX } from "react";
 import { GameBoard } from "../game-board";
 import { useOnlineMatchData } from "./use-online-match-data";
-import { sAssert } from "@shared/utils/assert";
+
 
 function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
     const {id, name, isConnected} = md;
@@ -19,14 +19,12 @@ export function MatchPlayOnline({ game, matchID, player }: {
 }): JSX.Element {
     const onlineMatchData = useOnlineMatchData(game, {matchID, player});
 
-    const { moves, events, serverMatchData, connectionStatus } = onlineMatchData;
+    const { readyState, moves, events, serverMatchData,  connectionError } = onlineMatchData;
 
-    sAssert(connectionStatus !== "offline", "MatchPlayOnline called with offline connection status");
 
     if (serverMatchData === null) {
-        const error = connectionStatus.error || onlineMatchData.error;
-        if (error) {
-            return <div> Error: {error} </div>;
+        if (connectionError) {
+            return <div> Error: {connectionError} </div>;
         } else {
             return <div>Loading...</div>;
         }
@@ -35,7 +33,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
     const boardProps: BoardProps = {
         playerID: player.id,
 
-        connectionStatus,
+        connectionStatus: readyState,
 
         ctx: new Ctx(serverMatchData.ctxData),
 
