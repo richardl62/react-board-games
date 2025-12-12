@@ -101,7 +101,7 @@ function PageNotFound(props: HomePageProps) {
 export function App(): JSX.Element {
     
     useEffect(() => {
-        document.title = "Games";
+        document.title = "Richard's Games";
     }, []);
 
     return (
