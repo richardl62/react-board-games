@@ -36,16 +36,17 @@ export function isWsRequestId(obj: unknown): obj is WsRequestId {
         typeof candidate.number === "number";
 }
 
-// Only a basic check as it is hard to know how to check 'arg'.
 export function isWsMoveRequest(obj: unknown): obj is WsMoveRequest {
     if (typeof obj !== "object" || obj === null)
         return false;
 
     const candidate = obj as WsMoveRequest;
 
+    // There does not seem to be any way to for 'arg'.  Even checking
+    // "'arg' in candidate" goes wrong for functions that don't take arguments. 
     return isWsRequestId(candidate.id) &&
-        typeof candidate.move === "string" && 
-        'arg' in candidate;
+        typeof candidate.move === "string" /*&& 
+        'arg' in candidate*/;
 }
 
 export function isWsEndTurn(obj: unknown): obj is  WsEndTurn {
