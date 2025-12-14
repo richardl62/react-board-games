@@ -12,7 +12,8 @@
     "build": "npm run buildApp && npm run buildServer",
     "lint": "eslint .",
     "preview": "vite preview",
-    "serve": "node dist/server/server.js"
+    "serve": "node dist/server/server.js",
+    "deploy": "git push heroku-vite vite-main:main" 
   },
   "dependencies": {
     "cors": "^2.8.5",
