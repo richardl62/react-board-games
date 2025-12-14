@@ -55,13 +55,13 @@ export class Player {
 
     get isAllocated() { return this.name_ !== null; }
 
-    connect(ws: WebSocket) {
+    recordConnection(ws: WebSocket) {
         sAssert(this.isAllocated, "Attempt to connect unallocated player");
         sAssert(!this.isConnected, "Attempt to connect player who is already connected");
         this.ws = ws;
     }
 
-    disconnect() {
+    recordDisconnection() {
         sAssert(this.isConnected, "Attempt to disconnect player who is not connected");
         this.ws = null;
     }

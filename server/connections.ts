@@ -41,23 +41,29 @@ export class Connections {
 
             match = this.matches.findMatch(matchID);
             if (!match) {
-                throw new Error(`Match ${matchID} not found - cannot record connection`);
+                throw new Error(`Match ${matchID} not found - cannot connect player`);
             }
 
             const player = match.findPlayer({ id: playerID });
             if (!player) {
                 throw new Error(`Player ${playerID} not found - cannot record connection`);
-            }
-
-            if (player.isConnected) {
-                throw new Error(`Player ${playerID} connected - cannot reconnect`);
-            }
-
+            } 
+            
             if (player.credentials !== credentials) {
                 throw new Error(`Player ${playerID} provided invalid credentials`);
             }
 
-            player.connect(ws);
+            // KLUDGE? If the player is already connected, terminate the previous connection.
+            // This is primarily intended for the case where a player starts a match
+            // in one device, then continues it on another devices with closing the first 
+            // connection. (The easy options are either this or dsallowing the new connection,
+            // which seems less user-friendly.)
+            if (player.isConnected) {
+                player.getWs()!.close();
+                player.recordDisconnection();
+            }
+
+            player.recordConnection(ws);
 
             broadcastMatchData( match, trigger );
         }
@@ -87,7 +93,7 @@ export class Connections {
                 throw new Error("Disconnect report when player not connected");
             }
 
-            player.disconnect();
+            player.recordDisconnection();
 
             broadcastMatchData( match, trigger );
         } catch (err) {
