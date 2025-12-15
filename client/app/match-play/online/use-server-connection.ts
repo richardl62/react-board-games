@@ -4,20 +4,17 @@ import { WsClientRequest } from "@shared/ws-client-request";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import { readyStatusText } from "@utils/ready-status-text";
-import { isWsServerResponse } from "@shared/ws-server-response";
+import { isWsServerResponse, WsServerResponse } from "@shared/ws-server-response";
 import { ReadyState } from "react-use-websocket";
-import { ServerMatchData } from "@shared/server-match-data";
 
-// A fairly thin wrapper around useWebSocket.
+// A thin wrapper around useWebSocket.
 export function useServerConnection(
     { matchID, player }: { matchID: MatchID; player: Player; }
 ): {
         readyState: ReadyState;
 
-        /** serverResponse will be null during initial loading, or when connectionError is set. */
-        serverMatchData: ServerMatchData | null;
-
-        connectionError: string | null;
+        // Null while connecting.
+        serverResponse: WsServerResponse | null;
 
         // A match request can be a move or an event like end turn.
         sendMatchRequest: (request: WsClientRequest) => void;
@@ -37,20 +34,22 @@ export function useServerConnection(
     }, [readyState]);
 
 
-    let serverMatchData: ServerMatchData | null = null;
-    let connectionError: string | null = null;
+    let serverResponse: WsServerResponse | null = null;
 
     if (lastJsonMessage) {
         if(isWsServerResponse(lastJsonMessage)) {
-            serverMatchData = lastJsonMessage.matchData || null;
-            connectionError = lastJsonMessage.connectionError || null;
+            serverResponse = lastJsonMessage;
 
         } else {
-            // Setting connectionError is a kludge, but it is hard to know what else to do.
-            connectionError = "Invalid WebSocket message format: expected a valid WsMatchResponse object." 
-                + "Received: " + JSON.stringify(lastJsonMessage);
+            // Not sure what best to do here, but hopefully it will not happen.
+            console.warn("Received invalid WebSocket message:", lastJsonMessage)
+
+            serverResponse = {
+                trigger: { unknownProblem: true },
+                connectionError: "Received invalid server response",
+            }
         }
     }
 
-    return { readyState, serverMatchData, connectionError, sendMatchRequest: sendJsonMessage };
+    return { readyState, serverResponse, sendMatchRequest: sendJsonMessage };
 }
