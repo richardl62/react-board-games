@@ -1,6 +1,6 @@
 import url from 'url';
 import WebSocket from "ws";
-import { isWsClientRequest, isWsEndMatch, isWsEndTurn, isWsMoveRequest, WsClientRequest } from "../shared/ws-client-request.js";
+import { isWsClientRequest, isWsEndMatch, isWsEndTurn, isWsMove, WsClientRequest } from "../shared/ws-client-request.js";
 import { WsResponseTrigger } from "../shared/ws-response-trigger.js";
 import { WsServerResponse } from "../shared/ws-server-response.js";
 import { Match } from "./match.js";
@@ -121,12 +121,12 @@ export class Connections {
                 throw new Error('Invalid client request');
             }
 
-            if (isWsEndTurn(clientRequest)) {
+            if (isWsEndTurn(clientRequest.action)) {
                 match.events.endTurn();
-            } else if (isWsEndMatch(clientRequest)) {
+            } else if (isWsEndMatch(clientRequest.action)) {
                 match.events.endMatch();
-            } else if (isWsMoveRequest(clientRequest)) {
-                match.move(clientRequest, player.id);
+            } else if (isWsMove(clientRequest.action)) {
+                match.move(clientRequest.action, player.id);
             } else {
                 // In practice this should happen only if there is a missing case
                 // in the if/else tests above.

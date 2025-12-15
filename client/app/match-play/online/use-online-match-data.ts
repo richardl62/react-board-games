@@ -2,8 +2,8 @@ import { AppGame, BoardProps, MatchID, Player } from "@/app-game-support";
 import { useLastNonNull } from "@/utils/use-last-non-null";
 import { EventsAPI } from "@shared/game-control/events";
 import { ServerMatchData } from "@shared/server-match-data";
-import { WsRequestId } from "@shared/ws-client-request";
-import { useMemo } from "react";
+import { WsClientRequest, WsRequestId } from "@shared/ws-client-request";
+import { useState } from "react";
 import { ReadyState } from "react-use-websocket";
 import { useServerConnection } from "./use-server-connection";
 
@@ -27,32 +27,38 @@ export interface OnlineMatchData {
     events: EventsAPI;
 };
 
-const dummyID: WsRequestId = {playerId: "dummy", number: -1};
-
 export function useOnlineMatchData(
     appGame: AppGame,
     {matchID, player}: {matchID: MatchID, player: Player},
 ): OnlineMatchData {
 
-    const { readyState, serverMatchData, connectionError, sendMatchRequest } = useServerConnection({matchID, player});
-    
-    const moves: BoardProps["moves"] = useMemo(() => {
-        
-        const moves: BoardProps["moves"] = {};
-        for (const moveName of Object.keys(appGame.moves)) {
-            moves[moveName] = (arg) => sendMatchRequest({
-                id: dummyID,
-                move: moveName,
-                arg,
-            });
-        }
-        return moves;
-    }, [appGame.moves, sendMatchRequest]);
+    const { readyState, serverMatchData, connectionError, 
+        sendMatchRequest: rawSendRequest 
+    } = useServerConnection({matchID, player});
 
-    const events: EventsAPI = useMemo(() => ({
-        endTurn: () => sendMatchRequest({id: dummyID, endTurn: true}),
-        endMatch: () => sendMatchRequest({id: dummyID, endMatch: true}),
-    }), [sendMatchRequest]);
+    const [ lastRequestNumber, setLastRequestNumber ] = useState(0);
+
+    // To do: Consider memoizing the code below.
+    const wrappedSendRequest = (action: WsClientRequest["action"]) => {
+        const requestNumber = lastRequestNumber + 1;
+        setLastRequestNumber(requestNumber);
+
+        const id: WsRequestId = { playerId: player.id, number: requestNumber}
+        rawSendRequest({ id, action });
+    }
+
+    const moves: BoardProps["moves"] = {};
+    for (const moveName of Object.keys(appGame.moves)) {
+        moves[moveName] = (arg) => wrappedSendRequest({
+            move: moveName,
+            arg,
+        });
+    }
+
+    const events: EventsAPI = {
+        endTurn: () => wrappedSendRequest({ endTurn: true }),
+        endMatch: () => wrappedSendRequest({ endMatch: true }),
+    };
 
     const lastServerMatchData = useLastNonNull(serverMatchData);
     return { readyState, connectionError, serverMatchData: lastServerMatchData, moves, events };

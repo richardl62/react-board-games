@@ -4,7 +4,7 @@ import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { WsMoveRequest } from "../shared/ws-client-request.js";
+import { WsMove } from "../shared/ws-client-request.js";
 import { ServerMatchData } from "../shared/server-match-data.js";
 import { Player } from "./player.js";
 import { matchMove } from '../shared/game-control/match-move.js';
@@ -86,7 +86,7 @@ export class Match {
         };
     }
 
-    move(request: WsMoveRequest, playerID: string) {
+    move(request: WsMove, playerID: string) {
 
         const { move, arg } = request;
 

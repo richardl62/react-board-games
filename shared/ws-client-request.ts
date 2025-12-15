@@ -7,25 +7,27 @@ export interface WsRequestId {
     number: number;
 }
 
-export interface WsMoveRequest {
-    id: WsRequestId;
+export interface WsMove {
     move: string;
     arg: unknown;
 }
 
 export interface WsEndTurn {
-    id: WsRequestId;
     endTurn: true;
 }
 
 export interface WsEndMatch {
-    id: WsRequestId;
     endMatch: true;
 }
 
+export type WsRequestedAction = WsEndTurn | WsEndMatch | WsMove;
+
 // Represents a request sent over WebSocket to perform an action on a match,
 // which can either be ending the turn or making a move.
-export type WsClientRequest = WsEndTurn | WsEndMatch | WsMoveRequest;
+export type WsClientRequest = {
+    id: WsRequestId;
+    action: WsRequestedAction;
+}
 
 export function isWsRequestId(obj: unknown): obj is WsRequestId {
     if (typeof obj !== "object" || obj === null)
@@ -36,16 +38,14 @@ export function isWsRequestId(obj: unknown): obj is WsRequestId {
         typeof candidate.number === "number";
 }
 
-export function isWsMoveRequest(obj: unknown): obj is WsMoveRequest {
+export function isWsMove(obj: unknown): obj is WsMove {
     if (typeof obj !== "object" || obj === null)
         return false;
 
-    const candidate = obj as WsMoveRequest;
-
+    const candidate = obj as WsMove;
     // There does not seem to be any way to for 'arg'.  Even checking
     // "'arg' in candidate" goes wrong for functions that don't take arguments. 
-    return isWsRequestId(candidate.id) &&
-        typeof candidate.move === "string" /*&& 
+    return  typeof candidate.move === "string" /*&& 
         'arg' in candidate*/;
 }
 
@@ -54,8 +54,7 @@ export function isWsEndTurn(obj: unknown): obj is  WsEndTurn {
         return false;
 
     const candidate = obj as WsEndTurn;
-    return isWsRequestId(candidate.id) && 
-        candidate.endTurn === true;
+    return candidate.endTurn === true;
 }
 
 export function isWsEndMatch(obj: unknown): obj is WsEndMatch {
@@ -63,11 +62,18 @@ export function isWsEndMatch(obj: unknown): obj is WsEndMatch {
         return false;
 
     const candidate = obj as WsEndMatch;
-    return isWsRequestId(candidate.id) &&
-        candidate.endMatch === true;
+    return candidate.endMatch === true;
+}
+
+export function isWsRequestedAction(obj: unknown): obj is WsRequestedAction {
+    return isWsEndTurn(obj) || isWsEndMatch(obj) || isWsMove(obj);
 }
 
 export function isWsClientRequest(obj: unknown): obj is WsClientRequest {
-    return isWsEndTurn(obj) || isWsEndMatch(obj)  || isWsMoveRequest(obj);
+    if (typeof obj !== "object" || obj === null)
+        return false;
+
+    const candidate = obj as WsClientRequest;
+    return isWsRequestId(candidate.id) && isWsRequestedAction(candidate.action);
 }
 
