@@ -3,7 +3,10 @@ import { EventsAPI } from "@shared/game-control/events";
 import { PlayerID } from "@shared/game-control/playerid";
 import { ReadyState } from "react-use-websocket";
 
-export type ConnectionStatus = "offline" | ReadyState;
+export type ConnectionStatus = "offline" | {
+    readyState: ReadyState;
+    waitingForServer: boolean;
+};
 
 export interface MatchDataElem {
     id: string;

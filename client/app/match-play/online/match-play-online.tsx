@@ -19,8 +19,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
 }): JSX.Element {
     const onlineMatchData = useOnlineMatchData(game, {matchID, player});
 
-    const { readyState, moves, events, serverMatchData,  connectionError } = onlineMatchData;
-
+    const { connectionStatus, moves, events, serverMatchData,  connectionError } = onlineMatchData;
 
     if (serverMatchData === null) {
         if (connectionError) {
@@ -33,7 +32,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
     const boardProps: BoardProps = {
         playerID: player.id,
 
-        connectionStatus: readyState,
+        connectionStatus,
 
         ctx: new Ctx(serverMatchData.ctxData),
 

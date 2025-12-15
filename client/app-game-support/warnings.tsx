@@ -20,7 +20,7 @@ export function Warnings(): JSX.Element {
     const warnings: string[] = [];
 
     if (connectionStatus !== "offline") {
-        const readyState : ReadyState = connectionStatus
+        const {readyState, waitingForServer} = connectionStatus;
 
         if (readyState !== ReadyState.OPEN) {
             warnings.push(`No connection to server (status: ${readyStatusText(readyState)})`);
@@ -31,6 +31,10 @@ export function Warnings(): JSX.Element {
                     warnings.push(`${name} is not connected`);
                 }
             }
+        }
+
+        if (waitingForServer) {
+            warnings.push("Waiting for server response...");
         }
     }
     if(moveError) {
