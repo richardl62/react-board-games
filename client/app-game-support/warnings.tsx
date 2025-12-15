@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import { useStandardBoardContext } from "./standard-board";
 import styled from "styled-components";
@@ -14,13 +14,45 @@ const WarningDiv = styled.div`
     margin-bottom: 0.2em;
 `;
 
+// Return true at the given interval after a call in which flag is true.
+// Later calls in which flag is still true have no effect. Later calls with
+// the flag false (or with a different interval) reset the timer. 
+function useDelayedValue(value: boolean, delay: number) {
+  const [delayedValue, setDelayedValue] = useState(false);
+
+  useEffect(() => {
+    if (!value) {
+      setDelayedValue(false);
+      return;
+    }
+
+    const handler = setTimeout(() => {
+        setDelayedValue(true);
+    }, delay);
+
+    // Run when value or delay changes
+    return () => {
+      clearTimeout(handler);
+    };
+
+  }, [value, delay]);
+
+  return delayedValue;
+}
+
 export function Warnings(): JSX.Element {
     const {G: {moveError}, connectionStatus, playerData } = useStandardBoardContext();  
     
+    const waitingForServer = connectionStatus !== "offline" && connectionStatus.waitingForServer;
+    const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
+
     const warnings: string[] = [];
+    if (reportServerDelay) {
+        warnings.push("Waiting for server...");
+    }
 
     if (connectionStatus !== "offline") {
-        const {readyState, waitingForServer} = connectionStatus;
+        const {readyState } = connectionStatus;
 
         if (readyState !== ReadyState.OPEN) {
             warnings.push(`No connection to server (status: ${readyStatusText(readyState)})`);
@@ -32,14 +64,12 @@ export function Warnings(): JSX.Element {
                 }
             }
         }
-
-        if (waitingForServer) {
-            warnings.push("Waiting for server response...");
-        }
     }
+
     if(moveError) {
         warnings.push("Problem during move " + moveError);
     }
+    
     
     return <>
         {warnings.map((text) => 
