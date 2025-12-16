@@ -1,11 +1,11 @@
 import { MatchID, Player } from "@/app-game-support";
-import { serverAddress } from "@shared/server-address";
 import { WsClientRequest } from "@shared/ws-client-request";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import { readyStatusText } from "@utils/ready-status-text";
 import { isWsServerResponse, WsServerResponse } from "@shared/ws-server-response";
 import { ReadyState } from "react-use-websocket";
+import { serverAddress } from "../../server-address";
 
 // A thin wrapper around useWebSocket.
 export function useServerConnection(

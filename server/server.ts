@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
 import { Connections } from './connections.js';
 import { Matches } from './matches.js';
-import { defaultPort } from '../shared/server-address.js';
+import { defaultPort } from '../shared/default-port.js';
 import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
 
 //const draw = seededDraw(12345);

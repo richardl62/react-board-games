@@ -15,11 +15,6 @@ export function assertThrow(condition: unknown, message?: string,
     doAssert(action, condition, message, args);
 }
 
-export function assertAlert(condition: unknown, message?: string,
-    ...args: unknown[]): asserts condition {
-    doAssert(alert, condition, message, args);
-}
-
 export function assertSilent(condition: unknown, message?: string, ...args: unknown[]): asserts condition {
     doAssert(()=>undefined , condition, message, args);
 }
