@@ -23,3 +23,18 @@ https://richards-board-games.herokuapp.com/
 # Testing
 
 More testing is needed, particularly of the effects of network problems. 
+
+## WebSocket Keepalive
+
+Some hosting platforms and intermediaries (e.g., Heroku routers, load balancers, CDNs) will close idle WebSocket connections after ~55–60 seconds of inactivity. To prevent unintended disconnects during periods of no game activity, the server now sends periodic WebSocket `ping` frames and expects `pong` responses (handled automatically by browsers).
+
+- Behavior: the server pings each connected client on an interval; connections that fail to respond are terminated to avoid leaking dead sockets.
+- Default interval: 25 seconds. Configure via the `KEEPALIVE_MS` environment variable if needed.
+
+Example (Heroku):
+
+```
+heroku config:set KEEPALIVE_MS=25000
+```
+
+Client impact: no code changes required; browsers auto‑reply to `ping` with `pong`. If you want auto‑reconnect for transient network changes, you can enable `shouldReconnect` in the `react-use-websocket` hook on the client side.

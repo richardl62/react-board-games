@@ -63,10 +63,39 @@ app.use((_req, res) => {
 });
 
 wss.on('connection', (ws, req)  => {
+  // Heartbeat to keep idle connections alive behind proxies (e.g., ~60s timeouts)
+  // and to detect dead peers. Browsers auto-respond to pings with pongs.
+  // Interval defaults to 25s or can be overridden via KEEPALIVE_MS.
+  // (Code suggested by GitHub Copilot, and adapted slightly.)
+  const keepAliveMs = Number(process.env.KEEPALIVE_MS || 25000);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const untypeddWs = ws as any;
+  // Track liveness via pong responses
+  untypeddWs.isAlive = true;
+  ws.on('pong', () => {
+    untypeddWs.isAlive = true;
+  });
+
+  const heartbeat = setInterval(() => {
+    // If no pong since last ping, terminate to avoid leaking dead sockets
+    if (untypeddWs.isAlive === false) {
+      clearInterval(heartbeat);
+      try { ws.terminate(); } catch { 
+        console.warn("Failed to terminate dead socket."); 
+    }
+      return;
+    }
+    untypeddWs.isAlive = false;
+    try { ws.ping(); } catch { 
+        console.warn("Failed to send ping."); 
+    }
+  }, keepAliveMs);
 
   connections.connected(ws, req.url);
 
   ws.on('close', () => {
+    clearInterval(heartbeat);
     connections.disconnected(ws);
   });
 
