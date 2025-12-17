@@ -12,6 +12,7 @@ export class Connections {
     constructor(matches: Matches) {
         this.matches = matches;
     }
+
     connected(ws: WebSocket, requestUrl: string | undefined) {
         
         let match: Match | undefined = undefined;

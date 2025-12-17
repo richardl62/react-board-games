@@ -27,12 +27,7 @@ export function useServerConnection(
     url.searchParams.append("playerID", player.id);
     url.searchParams.append("credentials", player.credentials);
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
-        url.toString(),
-        {            
-            heartbeat: true,
-        }
-    );
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(url.toString());
     
     useEffect(() => {
         console.log("WebSocket readyState:", readyStatusText(readyState), new Date().toLocaleTimeString());
