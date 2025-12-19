@@ -44,6 +44,8 @@ export function MatchPlayOnline({ game, matchID, player }: {
         events,
 
         G: serverMatchData.state,
+
+        moveError: serverMatchData.moveError,
     }
 
     return <GameBoard game={game} bgioProps={boardProps} />

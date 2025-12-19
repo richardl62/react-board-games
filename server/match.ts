@@ -22,6 +22,9 @@ export class Match {
     // KLUDGE?: state will record more than just RequiredServerData.
     private state: RequiredServerData;
 
+    // Error message from the last move attempted.
+    private moveError: string | null;
+
     constructor(
         gameControl: GameControl,
         {  matchID, numPlayers, setupData, randomAPi }: {
@@ -35,7 +38,6 @@ export class Match {
         this.matchID = matchID;
         this.random = randomAPi;
 
-
         this.ctx = makeServerCtx(numPlayers);
         
         this.players = [];
@@ -43,11 +45,12 @@ export class Match {
             this.players[id] = new Player(this.ctx.playOrder[id]);
         }
 
-
         this.state = gameControl.setup(
             { ctx: this.ctx, random: randomAPi },
             setupData
         );
+
+        this.moveError = null;
     }
 
     get gameName() { return this.definition.name }
@@ -83,6 +86,7 @@ export class Match {
             playerData: this.players.map(p => p.publicMetadata()),
             ctxData: this.ctx.data,
             state: this.state,
+            moveError: this.moveError,
         };
     }
 
@@ -100,9 +104,12 @@ export class Match {
             playerID,
         }
 
-        const moveResult = matchMove(this.definition, move, arg0, arg);
-        if (typeof moveResult !== "undefined") {
-            this.state = moveResult;
+        try {
+            matchMove(this.definition, move, arg0, arg);
+            this.moveError = null;
+        } catch (error) {
+            this.moveError = error instanceof Error ? error.message :
+                "unknown error";
         }
     }
 

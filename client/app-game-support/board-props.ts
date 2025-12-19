@@ -39,4 +39,6 @@ export interface BoardProps<TypeG=any> {
     events: EventsAPI;
 
     G: TypeG;
+
+    moveError: string | null;
 }

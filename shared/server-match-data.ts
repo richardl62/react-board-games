@@ -1,9 +1,7 @@
 import { CtxData, isCtxData } from "./game-control/ctx.js";
 import { RequiredServerData, isRequiredServerData } from "./game-control/required-server-data.js";
 import { PublicPlayerMetadata } from "./lobby/types.js";
-
 // Info about a match that is available from the server.
-
 export interface ServerMatchData {
     /** The players who have joined the game */
     playerData: PublicPlayerMetadata[];
@@ -14,6 +12,8 @@ export interface ServerMatchData {
      * KLUDGE?: Will include more than just RequiredServerData.
     */
     state: RequiredServerData;
+
+    moveError: string | null;
 }
 
 export function isServerMatchData(obj: unknown): obj is ServerMatchData {
@@ -24,5 +24,6 @@ export function isServerMatchData(obj: unknown): obj is ServerMatchData {
 
     return Array.isArray(candidate.playerData) &&
         isCtxData(candidate.ctxData) &&
-        isRequiredServerData(candidate.state);
+        isRequiredServerData(candidate.state) &&
+        (typeof candidate.moveError === "string" || candidate.moveError === null);
 }

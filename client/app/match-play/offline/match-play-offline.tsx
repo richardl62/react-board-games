@@ -32,6 +32,8 @@ function Board({game, show, matchData, moveArg0, setG}: {
         matchData,
 
         connectionStatus: "offline",
+
+        moveError: null, // FIX THIS!
     };
 
     return <OptionalDisplay display_={show}>

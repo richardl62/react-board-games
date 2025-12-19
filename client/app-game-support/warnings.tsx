@@ -41,7 +41,7 @@ function useDelayedValue(value: boolean, delay: number) {
 }
 
 export function Warnings(): JSX.Element {
-    const {G: {moveError}, connectionStatus, playerData } = useStandardBoardContext();  
+    const {moveError, connectionStatus, playerData } = useStandardBoardContext();  
     
     const waitingForServer = connectionStatus !== "offline" && connectionStatus.waitingForServer;
     const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
