@@ -4,7 +4,6 @@ import { WsResponseTrigger, isWsResponseTrigger } from "./ws-response-trigger.js
 export interface WsServerResponseSuccess {
     trigger: WsResponseTrigger;
 
-    // At least one of matchData or error should be non-null.
     matchData: ServerMatchData;
 
     connectionError?: undefined;
