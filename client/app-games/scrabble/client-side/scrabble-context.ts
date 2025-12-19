@@ -4,7 +4,7 @@ import { ReducerState } from "./reducer-state";
 import { ActionType } from "./scrabble-reducer";
 import { ScrabbleConfig } from "@game-control/games/scrabble/config/scrabble-config";
 import { ClientMoves } from "@game-control/games/scrabble/moves/moves";
-import { isServerData, ServerData } from "@game-control/games/scrabble/server-data";
+import { isServerData } from "@game-control/games/scrabble/server-data";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "@game-control/games/scrabble/moves/game-state";
 import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
@@ -29,8 +29,6 @@ export interface ScrabbleContext extends ReducerState {
     readonly moveHistory: GameState["moveHistory"];
 
     readonly winnerIds: GameState["winnerIds"],
-
-    readonly moveError: ServerData["moveError"];
 }
 
 export const ReactScrabbleContext = React.createContext<ScrabbleContext|null>(null);
@@ -86,7 +84,5 @@ export function makeScrabbleContext(
         legalWords,
 
         winnerIds: finalGameState.winnerIds,
-    
-        moveError: G.moveError,
     };
 }
