@@ -4,7 +4,7 @@ import { SpecifiedValues } from "../../option-specification/types";
 
 export const setupOptions = {
     startingValue: {
-        default: 2,
+        default: 0,
         label: "Starting value",
         min: 0,
         max: 10,
