@@ -22,6 +22,7 @@ function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
     moveError: string | null,
     setMoveResult: (arg: MoveResult) => void,
 }): JSX.Element {
+    throw new Error("This code needs to be updated after refactoring MatchDataElem");
 
     const boardProps: BoardProps = {
         ...moveArg0, // KLUDGE?
@@ -29,7 +30,7 @@ function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
         // KLUDGE? Recomputed each render.
         moves: wrappedMoves(game, moveArg0, setMoveResult),
         
-        matchData,
+        matchData: matchData as unknown as BoardProps["matchData"],
 
         connectionStatus: "offline",
 
@@ -37,6 +38,7 @@ function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
     };
 
     return <OptionalDisplay display_={show}>
+        {/* @ts-expect-error TODO(sligh): temporary until GameBoard offline refactor */}
         <GameBoard game={game} bgioProps={boardProps} />
     </OptionalDisplay>;
 }
