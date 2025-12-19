@@ -4,13 +4,13 @@ import { RequiredServerData } from "@shared/game-control/required-server-data";
 import { matchMove } from "@shared/game-control/match-move";
 
 export interface MoveResult {
-    G: RequiredServerData; // KLUDGE? Will contains for than this.
+    G: RequiredServerData; // KLUDGE? Will contain more than this.
     moveError: string | null;
 }
 
 export function wrappedMoves(
     game: AppGame, 
-    moveArg0: MoveArg0<unknown>,
+    moveArg0: MoveArg0<RequiredServerData>,
     setMoveResult: (arg: MoveResult) => void,
 ) : BoardProps["moves"] {
 
@@ -19,7 +19,7 @@ export function wrappedMoves(
     for (const moveName in game.moves) {
         wrapped[moveName] = (arg: unknown) => {
             const newG = JSON.parse(JSON.stringify(moveArg0.G));
-            const newArg0 = { ...moveArg0, G: newG} as MoveArg0<RequiredServerData>;
+            const newArg0: MoveArg0<RequiredServerData> = { ...moveArg0, G: newG };
             let moveError: string | null = null;
             try {
                 matchMove(game, moveName, newArg0, arg);

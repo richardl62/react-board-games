@@ -1,4 +1,4 @@
-import { AppGame, BoardProps } from "@/app-game-support";
+import { AppGame } from "@/app-game-support";
 import { MoveArg0 } from "@shared/game-control/move-fn";
 import { JSX, useState } from "react";
 import styled from "styled-components";
@@ -9,6 +9,8 @@ import { useOfflineMatchData } from "./use-offline-match-data";
 import { useRandomAPI } from "./use-random-api";
 import { MoveResult, wrappedMoves } from "./wrapped-moves";
 import { MatchDataElem } from "@/app-game-support/board-props";
+import { ServerMatchData } from "@shared/server-match-data";
+import { RequiredServerData } from "@shared/game-control/required-server-data";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
@@ -18,28 +20,32 @@ function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
     game: AppGame,
     show: boolean
     matchData: MatchDataElem[],
-    moveArg0: MoveArg0<unknown>,
+    moveArg0: MoveArg0<RequiredServerData>,
     moveError: string | null,
     setMoveResult: (arg: MoveResult) => void,
 }): JSX.Element {
-    throw new Error("This code needs to be updated after refactoring MatchDataElem");
+    const moves = wrappedMoves(game, moveArg0, setMoveResult);
 
-    const boardProps: BoardProps = {
-        ...moveArg0, // KLUDGE?
-
-        // KLUDGE? Recomputed each render.
-        moves: wrappedMoves(game, moveArg0, setMoveResult),
-        
-        matchData: matchData as unknown as BoardProps["matchData"],
-
-        connectionStatus: "offline",
-
-        moveError
+    const serverMatchData: ServerMatchData = {
+        playerData: matchData.map(({ id, name, isConnected }) => ({
+            id,
+            name: name ?? null,
+            isConnected,
+        })),
+        ctxData: moveArg0.ctx.data,
+        state: moveArg0.G,
+        moveError,
     };
 
     return <OptionalDisplay display_={show}>
-        {/* @ts-expect-error TODO(sligh): temporary until GameBoard offline refactor */}
-        <GameBoard game={game} bgioProps={boardProps} />
+        <GameBoard 
+            game={game}
+            playerID={moveArg0.playerID}
+            connectionStatus={"offline"}
+            serverMatchData={serverMatchData}
+            moves={moves}
+            events={moveArg0.events}
+        />
     </OptionalDisplay>;
 }
 
@@ -64,14 +70,14 @@ export function MatchPlayOffline(props: {
     });
 
     const boards : JSX.Element[] = [];
-    for(const playerID in ctx.playOrder ) {
+    for (const playerID of ctx.playOrder) {
         // Create a board that is optionally displayed. (Early code created either a board
         // or a blank element. However, this caused the Scrabble dictionary to be reloaded 
         // on each move. Presumably, this was because the compoment was unloaded and reloaded
         // each time.)
         const show = !passAndPlay || playerID === ctx.currentPlayer;
 
-        const moveArg0: MoveArg0<unknown> = {
+        const moveArg0: MoveArg0<RequiredServerData> = {
             playerID, ctx, events, G: moveResult.G, random,
         };
 
