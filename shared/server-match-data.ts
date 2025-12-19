@@ -1,6 +1,7 @@
 import { CtxData, isCtxData } from "./game-control/ctx.js";
 import { RequiredServerData, isRequiredServerData } from "./game-control/required-server-data.js";
 import { PublicPlayerMetadata } from "./lobby/types.js";
+
 // Info about a match that is available from the server.
 export interface ServerMatchData {
     /** The players who have joined the game */

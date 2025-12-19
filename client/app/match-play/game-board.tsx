@@ -4,8 +4,6 @@ import { RequiredServerData } from "@game-control/required-server-data";
 import { WrappedGameProps, useWrappedGameProps } from "@/app-game-support/wrapped-game-props";
 import { ServerMatchData } from "@shared/server-match-data";
 import { Ctx } from "@shared/game-control/ctx";
-import { PublicPlayerMetadata } from "@shared/lobby/types";
-import { MatchDataElem } from "@/app-game-support/board-props";
 
 function gameStatus(gameProps: WrappedGameProps) {
     if(!gameProps.allJoined) {
@@ -14,11 +12,6 @@ function gameStatus(gameProps: WrappedGameProps) {
         const player = gameProps.getPlayerName(gameProps.ctx.currentPlayer);
         return `${player} to play`;
     }
-}
-
-function convertPlayerData(md: PublicPlayerMetadata) : MatchDataElem {
-    const {id, name, isConnected} = md;
-    return {id, isConnected, name: name || undefined}
 }
 
 export interface GameBoardProps {
@@ -42,8 +35,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
 
         ctx: new Ctx(serverMatchData.ctxData),
 
-        // The need for the conversion shows something isn't quite right.
-        matchData: serverMatchData.playerData.map(convertPlayerData),
+        matchData: serverMatchData.playerData,
 
         moves,
         
@@ -54,7 +46,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
         moveError: serverMatchData.moveError,
     }
 
-    // The need for this conversion also shows something isn't quite right. 
+    // The need for this conversion shows something isn't quite right. 
     const gameProps = useWrappedGameProps(bgioProps);
 
     useEffect(() => {

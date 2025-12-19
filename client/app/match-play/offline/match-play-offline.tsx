@@ -8,18 +8,18 @@ import { useOfflineCtx } from "./use-offline-ctx";
 import { useOfflineMatchData } from "./use-offline-match-data";
 import { useRandomAPI } from "./use-random-api";
 import { MoveResult, wrappedMoves } from "./wrapped-moves";
-import { MatchDataElem } from "@/app-game-support/board-props";
 import { ServerMatchData } from "@shared/server-match-data";
 import { RequiredServerData } from "@shared/game-control/required-server-data";
+import { PublicPlayerMetadata } from "@shared/lobby/types";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
 `;
 
-function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
+function Board({game, show, playerData, moveArg0, moveError, setMoveResult}: {
     game: AppGame,
     show: boolean
-    matchData: MatchDataElem[],
+    playerData: PublicPlayerMetadata[],
     moveArg0: MoveArg0<RequiredServerData>,
     moveError: string | null,
     setMoveResult: (arg: MoveResult) => void,
@@ -27,11 +27,7 @@ function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
     const moves = wrappedMoves(game, moveArg0, setMoveResult);
 
     const serverMatchData: ServerMatchData = {
-        playerData: matchData.map(({ id, name, isConnected }) => ({
-            id,
-            name: name ?? null,
-            isConnected,
-        })),
+        playerData,
         ctxData: moveArg0.ctx.data,
         state: moveArg0.G,
         moveError,
@@ -61,9 +57,10 @@ export function MatchPlayOffline(props: {
 
     // This is all rather messy. Can it be improved?
     const { ctx,  events } = useOfflineCtx(numPlayers);
-    const matchData = useOfflineMatchData(ctx);
+    const playerData = useOfflineMatchData(ctx);
 
     const random = useRandomAPI();
+
     const [moveResult, setMoveResult] = useState<MoveResult>({
         G: game.setup({ ctx, random }, setupData),
         moveError: null,
@@ -85,7 +82,7 @@ export function MatchPlayOffline(props: {
             key={playerID} 
             show={show}
             game={game} 
-            matchData={matchData}
+            playerData={playerData}
             moveArg0={moveArg0} 
             moveError={moveResult.moveError}    
             setMoveResult={setMoveResult}

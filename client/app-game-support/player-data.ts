@@ -1,5 +1,6 @@
 import { sAssert } from "@utils/assert";
-import { BoardProps as BgioBoardProps, MatchDataElem } from "@/app-game-support/board-props";
+import { PublicPlayerMetadata } from "@shared/lobby/types";
+import { BoardProps as BgioBoardProps } from "@/app-game-support/board-props";
 
 export function defaultPlayerName(playerID: string): string {
     const playerNumber = parseInt(playerID);
@@ -18,7 +19,7 @@ export interface PlayerData {
 
 export type PlayerDataDictionary = {[arg: string] : PlayerData};
 
-function makePlayerDataElem(matchData: MatchDataElem[], playerID: string, numPlayers: number,
+function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string, numPlayers: number,
     offline: boolean): PlayerData {
 
     // For legacy reasons players IDs are strings which record numbers, with there numbers
