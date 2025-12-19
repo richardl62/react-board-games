@@ -6,9 +6,6 @@ export interface RequiredServerData  {
 
     /** Count of moves. Set in wrapMoveFunction. */
     moveCount: number;
-
-    // Date at which startingRequiredState() is called
-    startDate: number;
 }
 
 export function isRequiredServerData(obj: unknown): obj is RequiredServerData {
@@ -18,14 +15,12 @@ export function isRequiredServerData(obj: unknown): obj is RequiredServerData {
     const candidate = obj as RequiredServerData;
 
     return (candidate.moveError === null || typeof candidate.moveError === "string") &&
-        typeof candidate.moveCount === "number" &&
-        typeof candidate.startDate === "number";
+        typeof candidate.moveCount === "number";
 }
 
 export function startingRequiredState() : RequiredServerData {
     return {
         moveError: null,
         moveCount: 0,
-        startDate: Date.now(),
     };
 }
