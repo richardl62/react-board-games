@@ -3,10 +3,15 @@ import { MoveArg0 } from "@shared/game-control/move-fn";
 import { RequiredServerData } from "@shared/game-control/required-server-data";
 import { matchMove } from "@shared/game-control/match-move";
 
+export interface MoveResult {
+    G: RequiredServerData; // KLUDGE? Will contains for than this.
+    moveError: string | null;
+}
+
 export function wrappedMoves(
     game: AppGame, 
     moveArg0: MoveArg0<unknown>,
-    setG: (arg: RequiredServerData) => void,
+    setMoveResult: (arg: MoveResult) => void,
 ) : BoardProps["moves"] {
 
     const wrapped: BoardProps["moves"] = {};
@@ -15,9 +20,18 @@ export function wrappedMoves(
         wrapped[moveName] = (arg: unknown) => {
             const newG = JSON.parse(JSON.stringify(moveArg0.G));
             const newArg0 = { ...moveArg0, G: newG} as MoveArg0<RequiredServerData>;
-            matchMove(game, moveName, newArg0, arg);
+            let moveError: string | null = null;
+            try {
+                matchMove(game, moveName, newArg0, arg);
+            } catch (e) {
+                if (e instanceof Error) {
+                    moveError = e.message;
+                } else {
+                    moveError = "Unknown error";
+                }
+            }
 
-            setG(newG);
+            setMoveResult({ G: newG, moveError });
         };
     }
 

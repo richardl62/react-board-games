@@ -1,6 +1,5 @@
 import { AppGame, BoardProps } from "@/app-game-support";
 import { MoveArg0 } from "@shared/game-control/move-fn";
-import { RequiredServerData } from "@shared/game-control/required-server-data";
 import { JSX, useState } from "react";
 import styled from "styled-components";
 import { OfflineOptions } from "../../offline-options";
@@ -8,32 +7,33 @@ import { GameBoard } from "../game-board";
 import { useOfflineCtx } from "./use-offline-ctx";
 import { useOfflineMatchData } from "./use-offline-match-data";
 import { useRandomAPI } from "./use-random-api";
-import { wrappedMoves } from "./wrapped-moves";
+import { MoveResult, wrappedMoves } from "./wrapped-moves";
 import { MatchDataElem } from "@/app-game-support/board-props";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
 `;
 
-function Board({game, show, matchData, moveArg0, setG}: {
+function Board({game, show, matchData, moveArg0, moveError, setMoveResult}: {
     game: AppGame,
     show: boolean
     matchData: MatchDataElem[],
     moveArg0: MoveArg0<unknown>,
-    setG: (arg: RequiredServerData) => void,
+    moveError: string | null,
+    setMoveResult: (arg: MoveResult) => void,
 }): JSX.Element {
 
     const boardProps: BoardProps = {
         ...moveArg0, // KLUDGE?
 
         // KLUDGE? Recomputed each render.
-        moves: wrappedMoves(game, moveArg0, setG),
+        moves: wrappedMoves(game, moveArg0, setMoveResult),
         
         matchData,
 
         connectionStatus: "offline",
 
-        moveError: null, // FIX THIS!
+        moveError
     };
 
     return <OptionalDisplay display_={show}>
@@ -51,13 +51,15 @@ export function MatchPlayOffline(props: {
         options: {numPlayers, passAndPlay,  setupData}
     } = props;
 
+    // This is all rather messy. Can it be improved?
     const { ctx,  events } = useOfflineCtx(numPlayers);
     const matchData = useOfflineMatchData(ctx);
 
     const random = useRandomAPI();
-    const [G, setG] = useState(
-        game.setup({ ctx, random }, setupData)
-    );
+    const [moveResult, setMoveResult] = useState<MoveResult>({
+        G: game.setup({ ctx, random }, setupData),
+        moveError: null,
+    });
 
     const boards : JSX.Element[] = [];
     for(const playerID in ctx.playOrder ) {
@@ -68,7 +70,7 @@ export function MatchPlayOffline(props: {
         const show = !passAndPlay || playerID === ctx.currentPlayer;
 
         const moveArg0: MoveArg0<unknown> = {
-            playerID, ctx, events, G, random,
+            playerID, ctx, events, G: moveResult.G, random,
         };
 
         boards.push(<Board 
@@ -77,7 +79,8 @@ export function MatchPlayOffline(props: {
             game={game} 
             matchData={matchData}
             moveArg0={moveArg0} 
-            setG={setG}
+            moveError={moveResult.moveError}    
+            setMoveResult={setMoveResult}
         />); 
     }
 
