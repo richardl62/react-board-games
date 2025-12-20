@@ -11,6 +11,16 @@ import { matchMove } from '../shared/game-control/match-move.js';
 import { EventsAPI } from '../shared/game-control/events.js';
 import { RequiredServerData } from '../shared/game-control/required-server-data.js';
 
+interface MutableMatchData {
+    ctxData: CtxData;
+
+    // KLUDGE?: state will record more than just RequiredServerData.
+    state: RequiredServerData;
+
+    // Error message from the last move attempted.
+    moveError: string | null;
+}
+
 // A match is an instance of a game.
 export class Match {
     readonly definition: GameControl;
@@ -20,15 +30,7 @@ export class Match {
     readonly random: RandomAPI;
 
     // The data that can change during the course of a match.
-    private matchData : {
-        ctxData: CtxData;
-
-        // KLUDGE?: state will record more than just RequiredServerData.
-        state: RequiredServerData;
-
-        // Error message from the last move attempted.
-        moveError: string | null;
-    }
+    private mutableData : MutableMatchData
 
     constructor(
         gameControl: GameControl,
@@ -55,14 +57,14 @@ export class Match {
             setupData
         );
 
-        this.matchData = {
+        this.mutableData = {
             ctxData: ctx.data,
             state,
             moveError: null,
         };
     }
 
-    get ctx() { return new ServerCtx(this.matchData.ctxData); }
+    get ctx() { return new ServerCtx(this.mutableData.ctxData); }
 
     get gameName() { return this.definition.name }
 
@@ -92,12 +94,12 @@ export class Match {
         }
     }
 
-    publicMatchData(): ServerMatchData {
+    matchData(): ServerMatchData {
         return {
             playerData: this.players.map(p => p.publicMetadata()),
             ctxData: this.ctx.data,
-            state: this.matchData.state,
-            moveError: this.matchData.moveError,
+            state: this.mutableData.state,
+            moveError: this.mutableData.moveError,
         };
     }
 
@@ -105,32 +107,46 @@ export class Match {
         try {
             const { move, arg } = request;
 
-            const newMatchData = structuredClone(this.matchData);
+            this.executeWithErrorHandling( md => {
+                const ctx = new ServerCtx(md.ctxData);
+                
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const arg0: MoveArg0<any> = {
+                    G: md.state,
+                    ctx,
+                    random: this.random,
+                    events: this.events,
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const arg0: MoveArg0<any> = {
-                G: newMatchData.state,
-                ctx: this.ctx,
-                random: this.random,
-                events: this.events,
+                    playerID,
+                };
+                matchMove(this.definition, move, arg0, arg);
+                md.state = arg0.G;
+                md.ctxData = ctx.data;
+            });
+ 
 
-                playerID,
-            };
-
-            matchMove(this.definition, move, arg0, arg);
-            this.matchData = newMatchData;
-            this.matchData.moveError = null;
-            
         } catch (error) {
-            this.matchData.moveError = error instanceof Error ? error.message :
+            this.mutableData.moveError = error instanceof Error ? error.message :
                 "unknown error during move";
         }
     }
 
     get events (): EventsAPI {
         return {
-            endTurn: () => { this.ctx.endTurn(); },
-            endMatch: () => { this.ctx.endMatch(); }
+            endTurn: () => { 
+                this.executeWithErrorHandling( md => {
+                    const ctx = new ServerCtx(md.ctxData);
+                    ctx.endTurn();
+                    md.ctxData = ctx.data;
+                });
+            },
+            endMatch: () => { 
+                this.executeWithErrorHandling( md => {
+                    const ctx = new ServerCtx(md.ctxData);
+                    ctx.endMatch();
+                    md.ctxData = ctx.data;
+                });
+            },
         };
     }
 
@@ -143,4 +159,19 @@ export class Match {
             return this.players.find(p => p.getWs() === arg.ws);
         }
     }
-};  
+
+    private executeWithErrorHandling(action: (md: MutableMatchData) => void) {
+        try {
+            const md = structuredClone(this.mutableData);
+            action(md);
+            md.moveError = null;
+            this.mutableData = md;
+        } catch (e) {
+            const errorMessage =
+                e instanceof Error
+                    ? e.message
+                    : "Execution failed: " + String(e);
+            this.mutableData.moveError = errorMessage;
+        }
+    }
+}  

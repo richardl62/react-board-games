@@ -160,7 +160,7 @@ function broadcastMatchData(
     trigger: WsResponseTrigger,
 ) { 
     const response: WsServerResponse = 
-        { trigger, matchData: match.publicMatchData() };
+        { trigger, matchData: match.matchData() };
 
     for (const player of match.players) {
         if (player.isConnected) {
