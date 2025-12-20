@@ -18,6 +18,7 @@ export function makeActions(
         try {
             const md = structuredClone(matchData);
             action(md);
+            md.moveError = null;
             setMatchData(md);
         } catch (e) {
             const md = structuredClone(matchData);
