@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import { makeServerCtx, ServerCtx } from '../shared/game-control/ctx.js';
+import { CtxData, makeServerCtx, ServerCtx } from '../shared/game-control/ctx.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { MoveArg0 } from '../shared/game-control/move-fn.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
@@ -15,15 +15,20 @@ import { RequiredServerData } from '../shared/game-control/required-server-data.
 export class Match {
     readonly definition: GameControl;
     readonly matchID: string;
+
     readonly players: Player[];
-    private ctx: ServerCtx;
-    private random: RandomAPI;
+    readonly random: RandomAPI;
 
-    // KLUDGE?: state will record more than just RequiredServerData.
-    private state: RequiredServerData;
+    // The data that can change during the course of a match.
+    private matchData : {
+        ctxData: CtxData;
 
-    // Error message from the last move attempted.
-    private moveError: string | null;
+        // KLUDGE?: state will record more than just RequiredServerData.
+        state: RequiredServerData;
+
+        // Error message from the last move attempted.
+        moveError: string | null;
+    }
 
     constructor(
         gameControl: GameControl,
@@ -37,21 +42,27 @@ export class Match {
         this.definition = gameControl;
         this.matchID = matchID;
         this.random = randomAPi;
+                   
+        const ctx = makeServerCtx(numPlayers);
 
-        this.ctx = makeServerCtx(numPlayers);
-        
         this.players = [];
         for (let id = 0; id < numPlayers; ++id) {
-            this.players[id] = new Player(this.ctx.playOrder[id]);
+            this.players[id] = new Player(ctx.playOrder[id]);
         }
 
-        this.state = gameControl.setup(
-            { ctx: this.ctx, random: randomAPi },
+        const state = gameControl.setup(
+            { ctx, random: randomAPi },
             setupData
         );
 
-        this.moveError = null;
+        this.matchData = {
+            ctxData: ctx.data,
+            state,
+            moveError: null,
+        };
     }
+
+    get ctx() { return new ServerCtx(this.matchData.ctxData); }
 
     get gameName() { return this.definition.name }
 
@@ -81,35 +92,38 @@ export class Match {
         }
     }
 
-    matchData(): ServerMatchData {
+    publicMatchData(): ServerMatchData {
         return {
             playerData: this.players.map(p => p.publicMetadata()),
             ctxData: this.ctx.data,
-            state: this.state,
-            moveError: this.moveError,
+            state: this.matchData.state,
+            moveError: this.matchData.moveError,
         };
     }
 
     move(request: WsMove, playerID: string) {
-
-        const { move, arg } = request;
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const arg0: MoveArg0<any> = {
-            G: this.state,
-            ctx: this.ctx,
-            random: this.random,
-            events: this.events,
-
-            playerID,
-        }
-
         try {
+            const { move, arg } = request;
+
+            const newMatchData = structuredClone(this.matchData);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const arg0: MoveArg0<any> = {
+                G: newMatchData.state,
+                ctx: this.ctx,
+                random: this.random,
+                events: this.events,
+
+                playerID,
+            };
+
             matchMove(this.definition, move, arg0, arg);
-            this.moveError = null;
+            this.matchData = newMatchData;
+            this.matchData.moveError = null;
+            
         } catch (error) {
-            this.moveError = error instanceof Error ? error.message :
-                "unknown error";
+            this.matchData.moveError = error instanceof Error ? error.message :
+                "unknown error during move";
         }
     }
 
