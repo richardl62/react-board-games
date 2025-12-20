@@ -14,35 +14,44 @@ export function makeActions(
     setMatchData: (arg: ServerMatchData) => void
 ): Pick<BoardProps, "moves" | "events"> {
 
+    const executeWithErrorHandling = (action: (md: ServerMatchData) => void) => {
+        try {
+            const md = structuredClone(matchData);
+            action(md);
+            setMatchData(md);
+        } catch (e) {
+            const md = structuredClone(matchData);
+            const errorMessage =
+                e instanceof Error
+                    ? e.message
+                    : "Execution failed: " + String(e);
+            md.moveError = errorMessage;
+            setMatchData(md);
+        }
+    };
+
     const events: BoardProps["events"] = {
         endTurn: () => {
-            const md = structuredClone(matchData);
-            
-            const ctx = new ServerCtx(md.ctxData);
-            ctx.endTurn();
-            md.ctxData = ctx.data;
-            
-            setMatchData(md);
+            executeWithErrorHandling(md => {
+                const ctx = new ServerCtx(md.ctxData);
+                ctx.endTurn();
+                md.ctxData = ctx.data;
+            });
         },
         endMatch: () => {
-            const md = structuredClone(matchData);
-            
-            const ctx = new ServerCtx(md.ctxData);
-            ctx.endMatch();
-            md.ctxData = ctx.data;
-            
-            setMatchData(md);
+            executeWithErrorHandling(md => {
+                const ctx = new ServerCtx(md.ctxData);
+                ctx.endMatch();
+                md.ctxData = ctx.data;
+            });
         },
     };
      
     
     const moves: BoardProps["moves"] = {};
     for (const moveName in game.moves) {
-
         moves[moveName] = (arg: unknown) => {
-            try {
-                const md = structuredClone(matchData);
-
+            executeWithErrorHandling(md => {
                 const moveArg0: MoveArg0<RequiredServerData> = {
                     G: md.state,
                     ctx: new Ctx(md.ctxData),
@@ -51,19 +60,7 @@ export function makeActions(
                     events,
                 };
                 matchMove(game, moveName, moveArg0, arg);
-
-                setMatchData(md);
-            } catch (e) {
-                const md = structuredClone(matchData);
-
-                const errorMessage =
-                    e instanceof Error
-                        ? e.message
-                        : "Move execution failed: " + String(e);
-                md.moveError = errorMessage;
-                
-                setMatchData(md);
-            }
+            });
         };
     }
 
