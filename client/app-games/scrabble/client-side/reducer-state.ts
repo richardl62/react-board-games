@@ -12,8 +12,6 @@ export interface ReducerState extends LocalGameState {
     scrabbleGameProps: ScrabbleGameProps;
     config: ScrabbleConfig;
 
-    externalTimestamp: number;
-
     focusInWordChecker: boolean;
 
     reviewGameHistory: { historyPosition: number } | false;
@@ -50,7 +48,7 @@ export function newReducerState(
     scrabbleGameProps: ScrabbleGameProps,
     simplifiedState: SimplifedReducerState,
 ): ReducerState {
-    const { states, moveCount } = scrabbleGameProps.G;
+    const { states } = scrabbleGameProps.G;
     const historyPosition = simplifiedState.reviewGameHistory ? 
         simplifiedState.reviewGameHistory.historyPosition : states.length-1;
 
@@ -79,7 +77,6 @@ export function newReducerState(
         highScoringWords: null,
         reviewGameHistory,
 
-        externalTimestamp: moveCount,
         scrabbleGameProps: scrabbleGameProps,
     };
 }

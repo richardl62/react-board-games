@@ -59,7 +59,8 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         return <div>Loading dictionary...</div>;
     }
 
-    if (scrabbleGameProps.G.moveCount !== reducerState.externalTimestamp) {
+    if (JSON.stringify(scrabbleGameProps.G) 
+        !== JSON.stringify(reducerState.scrabbleGameProps.G)) {
         dispatch({
             type: "externalStateChange",
             data: scrabbleGameProps,
