@@ -31,8 +31,8 @@ function LetterSelector({recordSelection} : LetterSelectorProps): JSX.Element {
 
 export function SetBlank(): JSX.Element | null {
     const { unsetBlank } = useTurnControlData();
-    const { dispatch, externalTimestamp } = useScrabbleContext();
-    const [doSetBlank, setDoSetBlank] = useState(-1);
+    const { dispatch } = useScrabbleContext();
+    const [ showLetterSelector, setShowLetterSelector] = useState(false);
     
     if (!unsetBlank) {
         return null;
@@ -40,12 +40,10 @@ export function SetBlank(): JSX.Element | null {
 
     const recordSelectedLetter = (l: Letter) => {
         dispatch({ type: "setBlank", data: { id: unsetBlank, letter: l } });
-        setDoSetBlank(-1);
+        setShowLetterSelector(false);
     };
 
-    // To do: Find better test - The idea is to see a previous press of Set Blank
-    // should still be respected.
-    return doSetBlank == externalTimestamp ?
+    return showLetterSelector ?
         <LetterSelector recordSelection={recordSelectedLetter}/> :
-        <button onClick={() => setDoSetBlank(externalTimestamp)}>Set Blank</button>;
+        <button onClick={() => setShowLetterSelector(true)}>Set Blank</button>; 
 }
