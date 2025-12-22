@@ -1,25 +1,15 @@
 import { WebSocket } from 'ws';
-import { CtxData, makeServerCtx, ServerCtx } from '../shared/game-control/ctx.js';
-import { GameControl } from "../shared/game-control/game-control.js";
-import { MoveArg0 } from '../shared/game-control/move-fn.js';
-import { RandomAPI } from '../shared/utils/random-api.js';
-import * as LobbyTypes from '../shared/lobby/types.js';
-import { WsMove } from "../shared/ws-client-request.js";
-import { ServerMatchData } from "../shared/server-match-data.js";
-import { Player } from "./player.js";
-import { matchMove } from '../shared/game-control/match-move.js';
+import { makeServerCtx, ServerCtx } from '../shared/game-control/ctx.js';
 import { EventsAPI } from '../shared/game-control/events.js';
-import { RequiredServerData } from '../shared/game-control/required-server-data.js';
+import { GameControl } from "../shared/game-control/game-control.js";
+import { doMatchAction, matchMove } from '../shared/game-control/match-action.js';
+import * as LobbyTypes from '../shared/lobby/types.js';
+import { ServerMatchData } from "../shared/server-match-data.js";
+import { RandomAPI } from '../shared/utils/random-api.js';
+import { WsMove } from "../shared/ws-client-request.js";
+import { Player } from "./player.js";
 
-interface MutableMatchData {
-    ctxData: CtxData;
-
-    // KLUDGE?: state will record more than just RequiredServerData.
-    state: RequiredServerData;
-
-    // Error message from the last move attempted.
-    moveError: string | null;
-}
+type MutableMatchData = Omit<ServerMatchData, 'playerData'>;
 
 // A match is an instance of a game.
 export class Match {
@@ -96,56 +86,32 @@ export class Match {
 
     matchData(): ServerMatchData {
         return {
+            ...this.mutableData,
             playerData: this.players.map(p => p.publicMetadata()),
-            ctxData: this.ctx.data,
-            state: this.mutableData.state,
-            moveError: this.mutableData.moveError,
         };
     }
 
     move(request: WsMove, playerID: string) {
-        try {
-            const { move, arg } = request;
-
-            this.executeWithErrorHandling( md => {
-                const ctx = new ServerCtx(md.ctxData);
-                
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const arg0: MoveArg0<any> = {
-                    G: md.state,
-                    ctx,
-                    random: this.random,
-                    events: this.events,
-
-                    playerID,
-                };
-                matchMove(this.definition, move, arg0, arg);
-                md.state = arg0.G;
-                md.ctxData = ctx.data;
-            });
- 
-
-        } catch (error) {
-            this.mutableData.moveError = error instanceof Error ? error.message :
-                "unknown error during move";
-        }
+        const { move, arg } = request;
+        this.mutableData = doMatchAction(
+            this.mutableData,
+            md => matchMove(this.definition, move, this.random, playerID, md, arg)
+        );
     }
 
     get events (): EventsAPI {
         return {
             endTurn: () => { 
-                this.executeWithErrorHandling( md => {
-                    const ctx = new ServerCtx(md.ctxData);
-                    ctx.endTurn();
-                    md.ctxData = ctx.data;
-                });
+                this.mutableData = doMatchAction(
+                    this.matchData(),
+                    md => (new ServerCtx(md.ctxData)).endTurn()
+                );
             },
             endMatch: () => { 
-                this.executeWithErrorHandling( md => {
-                    const ctx = new ServerCtx(md.ctxData);
-                    ctx.endMatch();
-                    md.ctxData = ctx.data;
-                });
+                this.mutableData = doMatchAction(
+                    this.matchData(),
+                    md => (new ServerCtx(md.ctxData)).endMatch()
+                );
             },
         };
     }
@@ -157,21 +123,6 @@ export class Match {
             return this.players.find(p => p.name === arg.name);
         } else {    
             return this.players.find(p => p.getWs() === arg.ws);
-        }
-    }
-
-    private executeWithErrorHandling(action: (md: MutableMatchData) => void) {
-        try {
-            const md = structuredClone(this.mutableData);
-            action(md);
-            md.moveError = null;
-            this.mutableData = md;
-        } catch (e) {
-            const errorMessage =
-                e instanceof Error
-                    ? e.message
-                    : "Execution failed: " + String(e);
-            this.mutableData.moveError = errorMessage;
         }
     }
 }  
