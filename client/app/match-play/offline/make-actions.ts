@@ -1,5 +1,5 @@
 import { AppGame, BoardProps } from "@/app-game-support";
-import { ServerCtx } from "@shared/game-control/ctx";
+import { endMatch, endTurn } from "@shared/game-control/ctx";
 import { doMatchAction, matchMove } from "@shared/game-control/match-action";
 import { ServerMatchData } from "@shared/server-match-data";
 import { RandomAPI } from "@shared/utils/random-api";
@@ -17,16 +17,8 @@ export function makeActions(
     };
 
     const events: BoardProps["events"] = {
-        endTurn: () => {
-            doAction(md => {
-                (new ServerCtx(md.ctxData)).endTurn();
-            });
-        },
-        endMatch: () => {
-            doAction(md => {
-                (new ServerCtx(md.ctxData)).endMatch();
-            });
-        },
+        endTurn: () => doAction(md => endTurn(md.ctxData)),
+        endMatch: () => doAction(md => endMatch(md.ctxData)),
     };
      
     const moves: BoardProps["moves"] = {};

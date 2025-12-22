@@ -1,6 +1,6 @@
 import { AppGame } from "@/app-game-support";
 import { OptionValues } from "@/option-specification/types";
-import { Ctx, makeServerCtx } from "@shared/game-control/ctx";
+import { Ctx, makeCtxData } from "@shared/game-control/ctx";
 import { PublicPlayerMetadata } from "@shared/lobby/types";
 import { ServerMatchData } from "@shared/server-match-data";
 import { RandomAPI } from "@shared/utils/random-api";
@@ -25,7 +25,8 @@ export function makeOfflineMatchData(
     random: RandomAPI, 
     options: OptionValues
 ): ServerMatchData {
-    const ctx = makeServerCtx(numPlayers);
+    const ctxData = makeCtxData(numPlayers);
+    const ctx = new Ctx(ctxData);
     return {
         playerData: playerData(ctx),
         ctxData: ctx.data,

@@ -1,13 +1,14 @@
-import { RequiredServerData } from "./required-server-data.js";
-import { MoveArg0 } from "./move-fn.js";
-import { AllActive, GameControl } from "./game-control.js";
 import { ServerMatchData } from "../server-match-data.js";
 import { RandomAPI } from "../utils/random-api.js";
-import { ServerCtx } from "./ctx.js";
+import { Ctx, endMatch, endTurn } from "./ctx.js";
+import { AllActive, GameControl } from "./game-control.js";
+import { MoveArg0 } from "./move-fn.js";
+import { RequiredServerData } from "./required-server-data.js";
 
 /**
  * Call a Game's move function in a manner that is suitable for a match.
- * Specifically, detect errors and increment the move count.
+ * Specifically, detect errors and increment the move count. (Indend for
+ * use within doMatchAction().)
  */
 export function matchMove<Param>(
     GameControl: GameControl,
@@ -18,14 +19,17 @@ export function matchMove<Param>(
     param: Param
 ) {
     const { state, ctxData } = matchData;
-    const ctx = new ServerCtx(ctxData);
     
+    const ctx = new Ctx(ctxData);
     const arg0: MoveArg0<RequiredServerData> = {
         G: state,
         ctx,
         playerID,
         random,
-        events: ctx,
+        events: {
+            endTurn: () => endTurn(ctxData),
+            endMatch: () => endMatch(ctxData),
+        }
     };
 
     const func = GameControl.moves[moveName];

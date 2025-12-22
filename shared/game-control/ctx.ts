@@ -3,7 +3,7 @@ import { isValidIndex } from "../utils/valid-index.js";
 export interface CtxData {
     playOrder: string[];
     playOrderPos: number;
-    matchover: boolean;
+    matchOver: boolean;
 }
 
 export function isCtxData(obj: unknown): obj is CtxData {
@@ -13,7 +13,7 @@ export function isCtxData(obj: unknown): obj is CtxData {
     const candidate = obj as CtxData;
     return Array.isArray(candidate.playOrder) &&
            typeof candidate.playOrderPos === "number" &&
-           typeof candidate.matchover === "boolean";
+           typeof candidate.matchOver === "boolean";
 }
 
 // This class is a cut-down version of the Ctx class in boardgame.io.
@@ -51,7 +51,7 @@ export class Ctx {
     }
     
     get matchover() {
-        return this.data.matchover;
+        return this.data.matchOver;
     }
 
     nextPlayOrderPos() {
@@ -59,38 +59,30 @@ export class Ctx {
     }
 }
 
-export class ServerCtx extends Ctx {
-    constructor(data: CtxData) {
-        super(data);
-    }
-
-    endTurn() {
-        if (this.data.matchover) {
+export function endTurn(cxtData: CtxData) {
+        if (cxtData.matchOver) {
             throw new Error("End turn attempt after match is over.");
         }
 
-        this.data.playOrderPos = this.nextPlayOrderPos();
+        cxtData.playOrderPos = (cxtData.playOrderPos + 1) % cxtData.playOrder.length;
     }
 
-    endMatch() {
-        this.data.matchover = true;
+export function endMatch(cxtData: CtxData) {
+    if (cxtData.matchOver) {
+        throw new Error("Attempt to end match after it is over.");
     }
-
-    makeCopy() : ServerCtx  {
-        return new ServerCtx(structuredClone(this.data));
-    }
+    cxtData.matchOver = true;
 }
 
-export function makeServerCtx(numPlayers: number): ServerCtx {
+export function makeCtxData(numPlayers: number): CtxData {
     const playOrder: string[] = [];
     for (let i = 0; i < numPlayers; i++) {
         playOrder.push(i.toString());
     }
 
-    const data: CtxData = {
+    return {
         playOrder,
         playOrderPos: 0,
-        matchover: false,
+        matchOver: false,
     };
-    return new ServerCtx(data);
 }

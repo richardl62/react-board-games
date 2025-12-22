@@ -1,5 +1,4 @@
 import { WebSocket } from 'ws';
-import { makeServerCtx, ServerCtx } from '../shared/game-control/ctx.js';
 import { EventsAPI } from '../shared/game-control/events.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { doMatchAction, matchMove } from '../shared/game-control/match-action.js';
@@ -8,6 +7,7 @@ import { ServerMatchData } from "../shared/server-match-data.js";
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { WsMove } from "../shared/ws-client-request.js";
 import { Player } from "./player.js";
+import { Ctx, endMatch, endTurn, makeCtxData } from '../shared/game-control/ctx.js';
 
 type MutableMatchData = Omit<ServerMatchData, 'playerData'>;
 
@@ -35,7 +35,8 @@ export class Match {
         this.matchID = matchID;
         this.random = randomAPi;
                    
-        const ctx = makeServerCtx(numPlayers);
+        const ctxData = makeCtxData(numPlayers);
+        const ctx = new Ctx(ctxData);
 
         this.players = [];
         for (let id = 0; id < numPlayers; ++id) {
@@ -48,13 +49,13 @@ export class Match {
         );
 
         this.mutableData = {
-            ctxData: ctx.data,
+            ctxData,
             state,
             moveError: null,
         };
     }
 
-    get ctx() { return new ServerCtx(this.mutableData.ctxData); }
+    get ctx() { return new Ctx(this.mutableData.ctxData); }
 
     get gameName() { return this.definition.name }
 
@@ -104,13 +105,13 @@ export class Match {
             endTurn: () => { 
                 this.mutableData = doMatchAction(
                     this.matchData(),
-                    md => (new ServerCtx(md.ctxData)).endTurn()
+                    md => endTurn(md.ctxData)
                 );
             },
             endMatch: () => { 
                 this.mutableData = doMatchAction(
                     this.matchData(),
-                    md => (new ServerCtx(md.ctxData)).endMatch()
+                    md => endMatch(md.ctxData)
                 );
             },
         };
