@@ -48,10 +48,9 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
         };
     }, [stage, downHandler]);
 
-    if(reducerState.serverData?.moveCount !== gameProps.G.moveCount) {
+    if(JSON.stringify(reducerState.serverData) !== JSON.stringify(gameProps.G)) {
         dispatch({type: "reflectServerData", data: gameProps.G});
     }
-
     
     const asyncWordChecker = useAsync(() => {
         const checkSpelling = gameProps.G.options.checkSpelling;
