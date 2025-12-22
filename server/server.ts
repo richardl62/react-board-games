@@ -27,7 +27,7 @@ app.use(cors({
 }));
 
 const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} (http://localhost:${PORT}) if running locally.`);
+    console.log(`Server is running on port ${PORT} (http://localhost:${PORT} if running locally).`);
 
     if (PORT !== defaultPort) {
         console.warn(`(Note that when running on localhost, the port is expected to be ${defaultPort}.)`);
