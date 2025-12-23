@@ -3,7 +3,6 @@ import { RandomAPI } from "../utils/random-api.js";
 import { Ctx, endMatch, endTurn } from "./ctx.js";
 import { AllActive, GameControl } from "./game-control.js";
 import { MoveArg0 } from "./move-fn.js";
-import { RequiredServerData } from "./required-server-data.js";
 
 /**
  * Call a Game's move function in a manner that is suitable for a match.
@@ -21,7 +20,7 @@ export function matchMove<Param>(
     const { state, ctxData } = matchData;
     
     const ctx = new Ctx(ctxData);
-    const arg0: MoveArg0<RequiredServerData> = {
+    const arg0: MoveArg0<unknown> = {
         G: state,
         ctx,
         playerID,
@@ -49,8 +48,6 @@ export function matchMove<Param>(
     if (result !== undefined) {
         throw new Error("Move functions should not return a value.");
     }
-
-    state.moveCount++;
 }
 
 // Wrap an action on match data with error handling,

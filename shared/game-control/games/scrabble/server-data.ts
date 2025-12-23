@@ -1,4 +1,3 @@
-import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 import { ScrabbleConfig } from "./config/scrabble-config.js";
 import { GameState, isGameState, startingGameState } from "./moves/game-state.js";
 import { SetupArg0 } from "../../game-control.js";
@@ -7,7 +6,7 @@ export interface SetupOptions {
     readonly enableHighScoringWords: boolean;
 }
 
-export interface ServerData extends RequiredServerData {
+export interface ServerData {
     /** states avialable for undo/redo */
     states: GameState[];
     options: SetupOptions;
@@ -17,7 +16,6 @@ export interface ServerData extends RequiredServerData {
 export function isServerData(arg: unknown): boolean {
     const serverData = arg as ServerData;
     return Array.isArray(serverData.states) &&
-        typeof serverData.moveCount === "number" &&
         isGameState(serverData.states[0]);
 }
 
@@ -25,6 +23,5 @@ export function startingServerData(arg0: SetupArg0, options: SetupOptions, confi
     return {
         states: [startingGameState(arg0, config)],
         options,
-        ...startingRequiredState(),
     };
 }

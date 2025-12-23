@@ -1,18 +1,15 @@
-import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 import { SetupArg0 } from "../../game-control.js";
 
 export interface SetupOptions {
     readonly startingValue: number;
 }
 
-export interface ServerData extends RequiredServerData{
+export interface ServerData {
     count: number;
 }
 
 export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
     return {
-        count: options.startingValue,
-        
-        ...startingRequiredState(),
+        count: options.startingValue,        
     };
 }

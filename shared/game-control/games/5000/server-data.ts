@@ -1,5 +1,4 @@
 import { SetupArg0 } from "../../game-control.js";
-import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 
 const numberOfDice = 6;
 
@@ -11,7 +10,7 @@ export interface SetupOptions {
     readonly neverBust: boolean,
 }
 
-export interface ServerData extends RequiredServerData{
+export interface ServerData {
     faces: number[];
     held: boolean[];
 
@@ -80,7 +79,5 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         lastRound: false,
         
         options,
-        
-        ...startingRequiredState(),
     };
 }

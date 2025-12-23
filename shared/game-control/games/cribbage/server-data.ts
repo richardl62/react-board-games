@@ -1,5 +1,3 @@
-
-import { RequiredServerData } from "../../required-server-data.js";
 import { sAssert } from "../../../utils/assert.js";
 import { Card } from "../../../utils/cards/types.js";
 
@@ -53,7 +51,7 @@ export enum GameStage  {
     HandsRevealed,
 }
 
-export interface ServerData extends RequiredServerData {
+export interface ServerData {
     player0: PlayerData;
     player1: PlayerData;
 

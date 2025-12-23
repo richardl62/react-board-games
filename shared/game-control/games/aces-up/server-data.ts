@@ -1,5 +1,4 @@
 import { PlayerID } from "../../playerid.js";
-import { RequiredServerData } from "../../required-server-data.js";
 import { CardNonJoker } from "../../../utils/cards/types.js";
 import { SharedPileData } from "./misc/shared-pile.js";
 import { DiscardPileData } from "./misc/discard-pile.js";
@@ -39,7 +38,7 @@ export interface PerTurnServerData {
     undoItems: UndoItem[];
 }
 
-export interface ServerData extends PerTurnServerData, RequiredServerData {
+export interface ServerData extends PerTurnServerData {
     /** The deck that cards are drawn from */
     deck: CardNonJoker[];
 

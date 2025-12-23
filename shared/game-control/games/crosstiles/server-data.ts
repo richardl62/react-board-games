@@ -1,5 +1,4 @@
 import { SetupArg0 } from "../../game-control.js";
-import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 import { Letter } from "./config.js";
 import { ScoreCategory } from "./score-categories.js";
 import { ScoreCard, startingScoreCard } from "./moves/score-card.js";
@@ -48,7 +47,7 @@ interface PlayerData {
     chosenCategory: ScoreCategory | null;
 }
 
-export interface ServerData extends RequiredServerData {
+export interface ServerData {
     options: SetupOptions;
     stage: GameStage;
     round: number;
@@ -83,7 +82,6 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
         round: 0,
         playerData: playerData,
         options,
-        ...startingRequiredState(),
     };
 
 

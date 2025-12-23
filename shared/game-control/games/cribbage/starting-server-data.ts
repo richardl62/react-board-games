@@ -1,7 +1,6 @@
 import { cardsPerHand } from "./config.js";
 import { SetupArg0 } from "../../game-control.js";
 import { RandomAPI } from "../../../utils/random-api.js";
-import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 import { Card } from "../../../utils/cards/types.js";
 import { deckNoJokers } from "../../../utils/cards/deck.js";
 import { GameStage, PegPositions, PlayerData, ServerData } from "./server-data.js";
@@ -31,7 +30,7 @@ function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
 export function newDealData(
     pegPos: PlayerPegPositions,
     random: RandomAPI, 
-): Omit<ServerData, keyof RequiredServerData> {
+): ServerData {
     const cards = random.Shuffle(deckNoJokers());
 
     return {
@@ -67,6 +66,5 @@ export function startingServerData({ random }: SetupArg0): ServerData {
 
     return {
         ...newDealData(startingPegPos, random),
-        ...startingRequiredState(),
     };
 }

@@ -1,4 +1,3 @@
-import { RequiredServerData } from "./required-server-data.js";
 import { RandomAPI } from "../utils/random-api.js";
 import { MoveFn } from "./move-fn.js";
 import { Ctx } from "./ctx.js";
@@ -19,10 +18,8 @@ export interface GameControl {
     minPlayers: number,
     maxPlayers: number,
 
-    // KLUDGE?: The setup function is expected to return a type derived from
-    // RequiredState. Specifying the return type as RequiredStates enforces this.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setup: (arg0: SetupArg0, setupData: any) => RequiredServerData;
+    setup: (arg0: SetupArg0, setupData: any) => any;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moves: { [moveName: string]: MoveFn<any> };

@@ -1,6 +1,5 @@
 import { SetupArg0 } from "../../../game-control.js";
 import { RandomAPI } from "../../../../utils/random-api.js";
-import { startingRequiredState } from "../../../required-server-data.js";
 import { CardNonJoker, ranks, suits } from "../../../../utils/cards/types.js";
 import { debugOptions } from "../config.js";
 import { handSize } from "../config.js";
@@ -85,8 +84,6 @@ export function startingServerData({ctx, random}: SetupArg0,
         playerData: {},
 
         ...turnStartServerData,
-
-        ...startingRequiredState(),
 
         options,
     };

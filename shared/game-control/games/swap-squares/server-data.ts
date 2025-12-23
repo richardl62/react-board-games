@@ -1,4 +1,3 @@
-import { RequiredServerData, startingRequiredState } from "../../required-server-data.js";
 import { SetupArg0 } from "../../game-control.js";
 import { RandomAPI } from "../../../utils/random-api.js";
 
@@ -14,7 +13,7 @@ export interface SetupOptions {
     readonly startingOrder: typeof startingOrders[number],
 }
 
-export interface ServerData extends RequiredServerData {
+export interface ServerData {
     squares: number[];
     options: SetupOptions;
 }
@@ -49,7 +48,6 @@ export function startingServerData({random}: SetupArg0, options: SetupOptions): 
     const G : ServerData = {
         squares: [],
         options,
-        ...startingRequiredState(),
     };
 
     setSquares(G, random);

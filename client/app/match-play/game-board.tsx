@@ -1,6 +1,5 @@
 import { JSX, useEffect } from "react";
 import { AppGame, BoardProps, ConnectionStatus } from "@/app-game-support";
-import { RequiredServerData } from "@game-control/required-server-data";
 import { WrappedGameProps, useWrappedGameProps } from "@/app-game-support/wrapped-game-props";
 import { ServerMatchData } from "@shared/server-match-data";
 import { Ctx } from "@shared/game-control/ctx";
@@ -28,7 +27,7 @@ export interface GameBoardProps {
 export function GameBoard(props: GameBoardProps) : JSX.Element {
     const { game, playerID, connectionStatus, serverMatchData,  moves, events } = props;
 
-    const bgioProps: BoardProps<RequiredServerData> = {
+    const bgioProps: BoardProps = {
         playerID,
 
         connectionStatus,
