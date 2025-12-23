@@ -10,12 +10,10 @@ export type ConnectionStatus = "offline" | {
 };
 
 type Moves = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [x: string]: (...args: any[]) => void;
+    [x: string]: (...args: unknown[]) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface BoardProps<TypeG=any> {
+export interface BoardProps<TypeG=unknown> {
     playerID: PlayerID | null; // Is the null option needed?
 
     connectionStatus: ConnectionStatus;
