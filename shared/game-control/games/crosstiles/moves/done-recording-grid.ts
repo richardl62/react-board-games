@@ -7,15 +7,16 @@ export function doneRecordingGrid(
     {G, playerID} : MoveArg0<ServerData>,
     _arg: void
 ): void {
-    if (G.stage !== GameStage.makingGrids) {
-        throw new Error("Unexpected call to doneRecordingGrid - " + G.stage);
+    // This function is called during the scoring stage occur if no grid has been recorded.
+    // I'm not sure if this is desirable, but it seems to work.
+    if (G.stage !== GameStage.makingGrids && G.stage !== GameStage.scoring) {
+        throw new Error(`doneRecordingGrid during ${G.stage} stage`);
     }
     
     if(!G.playerData[playerID].gridRackAndScore) {
         recordEmptyGrid(G, playerID);
     }
     G.playerData[playerID].doneRecordingGrid = true;
-
     let allPlayersDoneRecordingGrids = true;
     for (const pid in G.playerData) {
         if (!G.playerData[pid].doneRecordingGrid) {

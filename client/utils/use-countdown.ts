@@ -4,6 +4,7 @@ import { sAssert } from "./assert.js";
 
 const defaultIntervalLength = 1000;
 
+/** Returns the current time (Date.now()), updated at approximately the given interval.*/
 export function useNowTicker(
     /** interval in milliseconds.  Defaults to 1000. */
     optionalIntervalLenght?: number

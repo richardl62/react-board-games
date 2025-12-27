@@ -5,12 +5,13 @@ export function setMakeGridStartTime(
     { G, playerID } : MoveArg0<ServerData>,
     startTime: number): void {
     if (G.stage !== GameStage.makingGrids) {
-        throw new Error("Unexpected call to setMakeGridState");
+        throw new Error(`Unexpected call to setMakeGridStateTime when stage is ${G.stage}`);
     }
 
-
-    if (G.playerData[playerID].makeGridStartTime !== null) {
-        throw new Error("makeGridStartTime already set");
+    const playerData = G.playerData[playerID];
+    if (playerData.makeGridStartTime !== null && playerData.makeGridStartTime !== startTime) {
+        throw new Error(`Unexpected value for makeGridStartTime: ` +
+            `Current ${playerData.makeGridStartTime} new ${startTime}`);
     }
    
     G.playerData[playerID].makeGridStartTime = startTime;
