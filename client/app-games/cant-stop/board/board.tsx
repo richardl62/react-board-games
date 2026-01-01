@@ -9,7 +9,6 @@ function Board() : JSX.Element {
         playerData, 
         playerID,
         moves,
-        events,
     } = useGameContext();
     
     // Very crude board for now.
@@ -24,10 +23,10 @@ function Board() : JSX.Element {
             >
                 Roll
             </button>
-            <button onClick={() => events.endTurn()}
+            <button onClick={() => moves.stopRolling()}
                 disabled={playerID !== currentPlayer}
             >
-                End Turn
+                Don't
             </button>
         </div>
     </div>;
