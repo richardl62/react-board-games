@@ -3,12 +3,12 @@ import { useGameContext } from "../game-context";
 import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 
-function columnHieghts(playerData: ColumnHeight[])  {
+function columnHieghts(playerData: ColumnHeight[]) : string  {
     let str: string = "";
     for (const col of columnValues) {
         const owned = playerData[col].heightOwned;
         const thisTurn = playerData[col].heightThisTurn;
-        str += ` ${owned}`;
+        str += ` ${col}:${owned}`;
         if (thisTurn !== owned) {
             str += `(${thisTurn})`;
         }   
@@ -27,7 +27,7 @@ export function Columns() : JSX.Element {
     const result: JSX.Element[] = [];
     for(const pid of playOrder) {
         result.push(<div>
-            <span>{`Player ${playerData[pid].name}: ${columnHieghts(G.columnHeights[pid])}`}</span>
+            <span>{`Player ${playerData[pid].name} - ${columnHieghts(G.columnHeights[pid])}`}</span>
         </div>);
     }
     return <>{result}</>;

@@ -17,9 +17,10 @@ export function compareArrays<T>(
     return 0;
 }
 
-// Return a sorted copy of values from which duplicates have been removed.
-// The comparision function is used for sorting and detecting duplicates.
-export function uniqueValues<T>(
+/** Return a sorted copy of values from which duplicates have been removed.
+ * The comparision function is used for sorting and detecting duplicates.
+ */
+export function sortUnique<T>(
     values: T[], 
     compare: (a: T, b: T) => number
 ) : T[] {

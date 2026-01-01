@@ -1,21 +1,21 @@
 import { JSX } from "react";
 import { useGameContext } from "../game-context";
-import { useAvailableColumnIncreases } from "./use-available-colum-increases";
+import { getAvailableColumnIncreases } from "./available-colum-increases";
 
 export function TurnControl() : JSX.Element {
     const {
-        G: {diceValues},
-        ctx: {currentPlayer}, 
+        G,
+        ctx, 
         playerID,
         moves,
     } = useGameContext();
     
-    const allowMoves = currentPlayer === playerID;
-    const availableIncreases = useAvailableColumnIncreases();
+    const allowMoves = ctx.currentPlayer === playerID;
+    const availableIncreases = getAvailableColumnIncreases(G, ctx);
 
     // Very crude for now.
     return <div>
-        <div>{`Dice: ${diceValues.join(", ")}`}</div>
+        <div>{`Dice: ${G.diceValues.join(", ")}`}</div>
         <div>
             <button onClick={() => moves.roll()} disabled={!allowMoves}>
                 Roll
