@@ -4,6 +4,8 @@
  * 
  * LIMITIATION: Comparisions are done using === (there is currently no
  * ability to pass in a comparision function)
+ * 
+ * Note: UniqueValues can be uses to both sort an array and remove duplicates.
  */
 export function removeDuplicates<T>(arr: T[]) : T[] {
     if(arr.length < 2) {
