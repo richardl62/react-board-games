@@ -1,5 +1,6 @@
 import { JSX } from "react";
 import { useGameContext } from "../game-context";
+import { Columns } from "./columns";
 
 function Board() : JSX.Element {
     const {
@@ -11,24 +12,24 @@ function Board() : JSX.Element {
         events,
     } = useGameContext();
     
-
-    const name = (id: string) => playerData[id].name;
-    
     // Very crude board for now.
     return <div>
-        {`Current player is ${name(currentPlayer)} (ID ${currentPlayer})`}
-        {`Dice values: ${diceValues.join(", ")} `}
+        <div>{`Current player: ${playerData[currentPlayer].name}`}</div>
+        <Columns/>
 
-        <button onClick={() => moves.roll()}
-            disabled={playerID !== currentPlayer}
-        >
-            Roll
-        </button>
-        <button onClick={() => events.endTurn()}
-            disabled={playerID !== currentPlayer}
-        >
-            End Turn
-        </button>
+        <div>{`Dice values: ${diceValues.join(", ")} `}</div>
+        <div>
+            <button onClick={() => moves.roll()}
+                disabled={playerID !== currentPlayer}
+            >
+                Roll
+            </button>
+            <button onClick={() => events.endTurn()}
+                disabled={playerID !== currentPlayer}
+            >
+                End Turn
+            </button>
+        </div>
     </div>;
 }
 
