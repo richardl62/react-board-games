@@ -11,7 +11,7 @@ export interface ColumnHeight {
 
 export interface ServerData {
     diceValues: number[];
-    columnsHeights: {[playerID: string]: ColumnHeight[]};
+    columnHeights: {[playerID: string]: ColumnHeight[]};
 }
 
 // Starting heights for one player
@@ -35,13 +35,13 @@ export function startingServerData(arg0: SetupArg0): ServerData {
         diceValues[index] = 1;
     }
 
-    const columnsHeights : ServerData["columnsHeights"] = {};
+    const columnsHeights : ServerData["columnHeights"] = {};
     for (const playerID of ctx.playOrder) {
         columnsHeights[playerID] = startingColumnsHeights();
     }
 
     return {
         diceValues,
-        columnsHeights
+        columnHeights: columnsHeights
     }
 }

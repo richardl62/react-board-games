@@ -27,7 +27,7 @@ export function Columns() : JSX.Element {
     const result: JSX.Element[] = [];
     for(const pid of playOrder) {
         result.push(<div>
-            <span>{`Player ${playerData[pid].name}: ${columnHieghts(G.columnsHeights[pid])}`}</span>
+            <span>{`Player ${playerData[pid].name}: ${columnHieghts(G.columnHeights[pid])}`}</span>
         </div>);
     }
     return <>{result}</>;

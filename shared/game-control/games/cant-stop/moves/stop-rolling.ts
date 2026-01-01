@@ -6,7 +6,7 @@ export function stopRolling(
     { G, playerID, events }: MoveArg0<ServerData>,
     _arg: void  
 ) : void {
-    const hieghts = G.columnsHeights[playerID];
+    const hieghts = G.columnHeights[playerID];
     for(const col of columnValues) {
         hieghts[col].heightOwned = hieghts[col].heightThisTurn;
     }

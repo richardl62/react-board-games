@@ -9,7 +9,7 @@ export function addToColumns(
     columns: number[]  
 ) : void {
 
-    const hieghts = G.columnsHeights[playerID];
+    const hieghts = G.columnHeights[playerID];
     for(const col of columns) {
         const maxHieght = maxColumnHeight(col);
         const currentHieght = hieghts[col].heightThisTurn;
