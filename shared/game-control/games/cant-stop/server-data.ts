@@ -19,14 +19,11 @@ function startingColumnsHeights(): ColumnHeight[] {
     const data: ColumnHeight[] = [];
     for (const col of columnValues) {
         data[col] = {
-            heightOwned: col % 5, // Temporary hack for testing
-            heightThisTurn: col % 5,
+            heightOwned: 0,
+            heightThisTurn: 0,
         };
     }
-    data[2].heightOwned = "full";// Temporary hack for testing
-    data[2].heightThisTurn = "full";// Temporary hack for testing
 
-    data[6].heightThisTurn = 7;// Temporary hack for testing
     return data;
 }
 

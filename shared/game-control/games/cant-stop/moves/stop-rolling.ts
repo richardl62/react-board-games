@@ -1,6 +1,6 @@
-import { ServerData } from "./server-data.js";
-import { MoveArg0 } from "../../move-fn.js";
-import { columnValues } from "./config.js";
+import { ServerData } from "../server-data.js";
+import { MoveArg0 } from "../../../move-fn.js";
+import { columnValues } from "../config.js";
 
 export function stopRolling(
     { G, playerID, events }: MoveArg0<ServerData>,

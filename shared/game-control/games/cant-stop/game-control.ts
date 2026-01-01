@@ -1,5 +1,5 @@
 import { GameControl } from "../../game-control.js";
-import { moves } from "./moves.js";
+import { moves } from "./moves/moves.js";
 import { startingServerData } from "./server-data.js";
 
 export const gameControl: GameControl = {
