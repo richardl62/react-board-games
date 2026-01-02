@@ -28,8 +28,8 @@ export function HoldableDice({ face, rotation, held, onClick }: {
 
     return <div onClick={onClick}>
         <Dice
-            rotation={rotation || 0}
-            face={rotation === null ? face : "allSpots"}
+            face={face}
+            rotation={rotation}
             color={held ? diceColor.held : diceColor.unheld} 
         />
         <Held 

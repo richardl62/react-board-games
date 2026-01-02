@@ -52,12 +52,16 @@ const Spot = styled.div<{row: number, col: number}>`
 `;
 
 export function Dice({face, rotation, color}: {
-    face: number | "allSpots", // allSpots is intended for use when the die is spinning.
+    face: number, // Integer between 1 and 6.
+
+    rotation?: number | null, // If a number is given the face value
+        // is ignored and all spots are shown. This is intended to help simulate
+        // a rotation.
+        
     color: string, // For now at least, the spots are always white.
-    rotation: number, // degrees 
 }) {
-    const spotPos = face === "allSpots" ? allSpots : spotPositions[face];
-    sAssert(spotPos);
+    const spotPos = typeof rotation === "number" ? allSpots : spotPositions[face];
+    sAssert(spotPos, "Dice face value is invalid");
 
     const spots = [];
     for (let row = 0; row < 3; row++) {
@@ -69,7 +73,7 @@ export function Dice({face, rotation, color}: {
     }
 
     return <DiceDiv 
-        rotation={rotation}
+        rotation={rotation ?? 0}
         color={color}
     >
         {spots}

@@ -1,7 +1,5 @@
-import { JSX, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGameContext } from "../game-context";
-import { Dice } from "@/utils/dice/dice";
-import { sAssert } from "@shared/utils/assert";
 
 const diceRoll = {
     duration: 1000, // milliseconds
@@ -9,8 +7,7 @@ const diceRoll = {
     rollTotalAngle: 360, // degrees
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
-export function useDiceRollStep() : number| null {
+export function useDiceRotation() : number| null {
     const { G: {rollCount: serverRollCount} } = useGameContext();
     const [lastServerRollCount, setLastServerRollCount] = useState(serverRollCount);
 
@@ -36,18 +33,5 @@ export function useDiceRollStep() : number| null {
         }
     }, [rollStep]);
 
-    return rollStep;
-}
-
-export function RollingDice({value, rollStep, color} : {
-    value: number,
-    rollStep: number | null,
-    color: string
-}) : JSX.Element {
-    sAssert(rollStep === null || (rollStep >= 0 && rollStep <= diceRoll.nRollSteps));   
-
-    const face = rollStep === null ? value : "allSpots";
-    const rotation = rollStep === null ? 0 : diceRoll.rollTotalAngle * (rollStep+1) / diceRoll.nRollSteps;
-
-    return <Dice face={face} rotation={rotation ?? 0} color={color} />
+    return rollStep === null ? null : diceRoll.rollTotalAngle * (rollStep+1) / diceRoll.nRollSteps;
 }
