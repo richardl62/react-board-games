@@ -1,11 +1,11 @@
 import { ClientMoveFunctions } from "../../../move-fn.js";
-import { addToColumns } from "./add-to-colums.js";
+import { recordScoringChoice } from "./record-dice-roll.js";
 import { bust } from "./bust.js";
 import { roll } from "./roll.js";
 import { stopRolling } from "./stop-rolling.js";
 
 export const moves = {
-    addToColumns,
+    recordScoringChoice,
     bust,
     roll,
     stopRolling,

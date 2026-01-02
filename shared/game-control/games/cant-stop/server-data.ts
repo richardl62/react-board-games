@@ -8,9 +8,10 @@ export interface ColumnHeight {
     // The highest square a player will reach if they stop now without going bust.  
     thisTurn: number | "full";
 
-    // The hieght square a player will reach given the current dice choice. Will equal thisTurn if no
-    // has been made since the last roll. (To do: Consider automatically selected if there is only one choice.) 
-    thisDiceChoice: number | "full";
+    // The hieght square a player will reach given the current scoring choice. ('Scoring choice' means the 
+    // option the user picked from those available following a dice roll).
+    // Will equal thisTurn if no scoring choice has been made since the last roll.
+    thisScoringChoice: number | "full";
 };
 
 export interface ServerData {
@@ -30,7 +31,7 @@ function startingColumnsHeights(): ColumnHeight[] {
         data[col] = {
             owned: 0,
             thisTurn: 0,
-            thisDiceChoice: 0,
+            thisScoringChoice: 0,
         };
     }
 

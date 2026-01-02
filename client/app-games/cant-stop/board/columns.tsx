@@ -6,12 +6,14 @@ import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 function columnHieghts(playerData: ColumnHeight[]) : string  {
     let str: string = "";
     for (const col of columnValues) {
-        const owned = playerData[col].owned;
-        const thisTurn = playerData[col].thisTurn;
-        str += ` ${col}:${owned}`;
-        if (thisTurn !== owned) {
-            str += `(${thisTurn})`;
-        }   
+        str += ` ${col}:`;
+
+        const {owned, thisTurn, thisScoringChoice} = playerData[col];
+        if(owned === thisTurn && thisTurn === thisScoringChoice) {
+            str += owned;
+        } else {
+            str += `${owned}-${thisTurn}-${thisScoringChoice}`;
+        }
     }
     return str;
 }
@@ -27,7 +29,7 @@ export function Columns() : JSX.Element {
     const result: JSX.Element[] = [];
     for(const pid of playOrder) {
         result.push(<div>
-            <span>{`Player ${playerData[pid].name} - ${columnHieghts(G.columnHeights[pid])}`}</span>
+            <span>{`${playerData[pid].name} has ${columnHieghts(G.columnHeights[pid])}`}</span>
         </div>);
     }
     return <>{result}</>;

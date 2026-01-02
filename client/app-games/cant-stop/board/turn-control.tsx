@@ -47,7 +47,7 @@ function GameButtons() : JSX.Element {
         {availableIncreases.map((increaseOption, idx) => (
             <button
                 key={idx}
-                onClick={() => moves.addToColumns(increaseOption)}
+                onClick={() => moves.recordScoringChoice(increaseOption)}
                 disabled={!allowMoves}
             >
                 {increaseOption.join(", ")}
