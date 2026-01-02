@@ -13,7 +13,7 @@ export function fullColumns(heights: ServerData["columnHeights"]) : number[] {
         
         for(const playerID in heights) {
             const playerHeights = heights[playerID];
-            if (playerHeights[col].heightThisTurn === "full") {
+            if (playerHeights[col].thisTurn === "full") {
                 full = true;
             }
         }   
@@ -31,7 +31,7 @@ export function fullColumns(heights: ServerData["columnHeights"]) : number[] {
 export function columnsInPlay(heights: ColumnHeight[]) : number[] {
     const inPlay: number[] = [];
     for (const col of columnValues) {
-        if (heights[col].heightOwned !== heights[col].heightThisTurn) {
+        if (heights[col].owned !== heights[col].thisTurn) {
             inPlay.push(col);
         }
     }

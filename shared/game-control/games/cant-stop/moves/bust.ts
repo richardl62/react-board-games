@@ -12,7 +12,7 @@ export function bust(
 
     const hieghts = G.columnHeights[playerID];
     for(const col of columnValues) {
-        hieghts[col].heightThisTurn = hieghts[col].heightOwned;
+        hieghts[col].thisTurn = hieghts[col].owned;
     }
 
     doEndTurn(arg0);

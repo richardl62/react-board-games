@@ -12,15 +12,15 @@ export function addToColumns(
     const hieghts = G.columnHeights[playerID];
     for(const col of columns) {
         const maxHieght = maxColumnHeight(col);
-        const currentHieght = hieghts[col].heightThisTurn;
+        const currentHieght = hieghts[col].thisTurn;
 
         if (currentHieght !== "full") {
             const newHeight = currentHieght + 1;
             
             if (newHeight >= maxHieght) {
-                hieghts[col].heightThisTurn = "full";
+                hieghts[col].thisTurn = "full";
             } else {        
-                hieghts[col].heightThisTurn = newHeight;
+                hieghts[col].thisTurn = newHeight;
             }
         }
     }

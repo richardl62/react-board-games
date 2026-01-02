@@ -3,10 +3,14 @@ import { columnValues, nDice } from "./config.js";
 
 export interface ColumnHeight {
     // The highest square which the player 'owns', i.e. which the player has stopped on in a previous turn.
-    heightOwned: number | "full";
+    owned: number | "full";
     
-    // The highest point reached this turn. Will equal heightOwned if it is not this player's turn.
-    heightThisTurn: number | "full" ;
+    // The highest square a player will reach if they stop now without going bust.  
+    thisTurn: number | "full";
+
+    // The hieght square a player will reach given the current dice choice. Will equal thisTurn if no
+    // has been made since the last roll. (To do: Consider automatically selected if there is only one choice.) 
+    thisDiceChoice: number | "full";
 };
 
 export interface ServerData {
@@ -24,8 +28,9 @@ function startingColumnsHeights(): ColumnHeight[] {
     const data: ColumnHeight[] = [];
     for (const col of columnValues) {
         data[col] = {
-            heightOwned: 0,
-            heightThisTurn: 0,
+            owned: 0,
+            thisTurn: 0,
+            thisDiceChoice: 0,
         };
     }
 

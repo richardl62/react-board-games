@@ -6,8 +6,8 @@ import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 function columnHieghts(playerData: ColumnHeight[]) : string  {
     let str: string = "";
     for (const col of columnValues) {
-        const owned = playerData[col].heightOwned;
-        const thisTurn = playerData[col].heightThisTurn;
+        const owned = playerData[col].owned;
+        const thisTurn = playerData[col].thisTurn;
         str += ` ${col}:${owned}`;
         if (thisTurn !== owned) {
             str += `(${thisTurn})`;

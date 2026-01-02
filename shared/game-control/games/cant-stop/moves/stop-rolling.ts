@@ -10,7 +10,7 @@ export function stopRolling(
     const { G, playerID } = arg0;
     const hieghts = G.columnHeights[playerID];
     for(const col of columnValues) {
-        hieghts[col].heightOwned = hieghts[col].heightThisTurn;
+        hieghts[col].owned = hieghts[col].thisTurn;
     }
 
     doEndTurn(arg0);
