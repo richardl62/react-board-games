@@ -22,10 +22,23 @@ export function TurnControl() : JSX.Element {
 }
 
 function GameButtons() : JSX.Element {
-        const { G, ctx, playerID, moves } = useGameContext();
+    const { G, ctx, playerID, moves } = useGameContext();
     
     const allowMoves = ctx.currentPlayer === playerID;
     const availableIncreases = getAvailableColumnIncreases(G, ctx);
+
+    if (G.rollCount.thisTurn === 0) {
+        return <button onClick={() => moves.roll()} disabled={!allowMoves}>
+            Roll
+        </button>;
+    }
+
+    if (availableIncreases.length === 0) {
+        return <button onClick={() => moves.bust()} disabled={!allowMoves}>
+            Bust
+        </button>
+    }
+
     return <div>
         <button onClick={() => moves.roll()} disabled={!allowMoves}>
             Roll
@@ -43,10 +56,6 @@ function GameButtons() : JSX.Element {
 
         <button onClick={() => moves.stopRolling()} disabled={!allowMoves}>
             Don't
-        </button>
-
-        <button onClick={() => moves.bust()} disabled={!allowMoves}>
-            Bust
         </button>
     </div>
 }

@@ -10,5 +10,6 @@ export function roll(
         G.diceValues[i] = random.Die(6);
     }
 
-    G.rollCount += 1;
+    G.rollCount.thisTurn += 1;
+    G.rollCount.total += 1;
 }
