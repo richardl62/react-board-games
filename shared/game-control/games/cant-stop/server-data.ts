@@ -11,6 +11,7 @@ export interface ColumnHeight {
 
 export interface ServerData {
     diceValues: number[];
+    rollCount: number;
     columnHeights: {[playerID: string]: ColumnHeight[]};
 }
 
@@ -42,6 +43,7 @@ export function startingServerData(arg0: SetupArg0): ServerData {
 
     return {
         diceValues,
+        rollCount: 0,
         columnHeights: columnsHeights
     }
 }

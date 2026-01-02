@@ -9,4 +9,6 @@ export function roll(
     for(let i=0; i<G.diceValues.length; i++) {
         G.diceValues[i] = random.Die(6);
     }
+
+    G.rollCount += 1;
 }
