@@ -13,7 +13,7 @@ import { Trie } from "@utils/word-finder/trie";
 import React from "react";
 import { SetupOptions } from "@game-control/games/scrabble/server-data";
 
-export interface ScrabbleContext extends ReducerState {
+export interface ScrabbleState extends ReducerState {
     readonly wrappedGameProps: WrappedGameProps<ServerData, ClientMoves>; // Omit game-specific server data
     playerID: string;
     currentPlayer: string;
@@ -30,22 +30,22 @@ export interface ScrabbleContext extends ReducerState {
     readonly winnerIds: GameState["winnerIds"],
 }
 
-export const ReactScrabbleContext = React.createContext<ScrabbleContext|null>(null);
+export const ReactScrabbleContext = React.createContext<ScrabbleState|null>(null);
 
-export function useScrabbleContext() : ScrabbleContext {
+export function useScrabbleState() : ScrabbleState {
     const context = React.useContext(ReactScrabbleContext);
     sAssert(context);
 
     return context;
 }
 
-export function makeScrabbleContext(
+export function makeScrabbleState(
     scrabbleGameProps: ScrabbleGameProps,
     config: ScrabbleConfig,
     reducerState: ReducerState,
     dispatch: React.Dispatch<ActionType>,
     legalWords: Trie,
-) : ScrabbleContext {
+) : ScrabbleState {
     const G = scrabbleGameProps.G;
     sAssert(isServerData(G), "Game state appears to be invalid");
 

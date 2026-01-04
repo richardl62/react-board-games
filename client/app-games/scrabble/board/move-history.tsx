@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { MoveHistoryElement, WordsPlayedInfo } from "@game-control/games/scrabble/moves/move-hstory";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { JSX } from "react";
 
 const FirstSpan = styled.span`
@@ -35,7 +35,7 @@ interface WordPlayedProps {
 
 function WordPlayed(props: WordPlayedProps) {
     const {pid, words, illegalWords, score} = props.wordPlayed;
-    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps; 
+    const { getPlayerName: name } = useScrabbleState().wrappedGameProps; 
 
     const illegal = (word: string) => illegalWords.includes(word);
     return <div>
@@ -55,7 +55,7 @@ interface ScoreAdjustmentsProps {
 
 function ScoreAdjustments(props: ScoreAdjustmentsProps) {
     const { adjustments } = props;
-    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps;
+    const { getPlayerName: name } = useScrabbleState().wrappedGameProps;
 
     // preprocessed is use to help with adding commas.
     const preprocessed = [];
@@ -89,7 +89,7 @@ interface WinnersProps {
 
 function GameOver(props: WinnersProps) {
     const { winners } = props;
-    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps;
+    const { getPlayerName: name } = useScrabbleState().wrappedGameProps;
     if(winners.length === 1) {
 
         return <div>
@@ -118,7 +118,7 @@ interface TurnDescriptionProps {
 
 function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
     const { elem } = props;
-    const { getPlayerName: name } = useScrabbleContext().wrappedGameProps;
+    const { getPlayerName: name } = useScrabbleState().wrappedGameProps;
 
     if(elem.wordsPlayed) {
         return <WordPlayed wordPlayed={elem.wordsPlayed} />;

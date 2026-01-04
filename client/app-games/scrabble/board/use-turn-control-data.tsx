@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getWordsAndScore, findActiveLetters, SquareID } from "../client-side";
 import { findUnsetBlack } from "../client-side/board-and-rack";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 function sameWordList(words1: string[], words2: string[]): boolean {
     return words1.join() === words2.join();
@@ -16,7 +16,7 @@ export interface TurnControlData {
 }
 
 export function useTurnControlData(): TurnControlData {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
     interface IllegalWordsData {
         illegal: string[]; // Words to report
         all: string[]; // All words at time illegal words were recorded.

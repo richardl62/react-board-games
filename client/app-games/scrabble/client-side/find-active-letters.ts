@@ -1,8 +1,8 @@
-import { ScrabbleContext } from "./scrabble-context";
+import { ScrabbleState } from "./scrabble-state";
 import { RowCol } from "./get-words-and-score";
 
 
-export function findActiveLetters(context: ScrabbleContext): RowCol[] {
+export function findActiveLetters(context: ScrabbleState): RowCol[] {
     const active: RowCol[] = [];
 
     const board = context.board;

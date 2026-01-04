@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { LetterSet } from "@utils/word-finder/letter-set";
 import { Rack } from "../client-side/board-and-rack";
 import { Trie } from "@utils/word-finder/trie";
@@ -31,7 +31,7 @@ function sameRack(rack1: Rack, rack2: Rack) {
 }
 
 export function AvailableWords(): JSX.Element | null {
-    const {rack, legalWords, reviewGameHistory } = useScrabbleContext();
+    const {rack, legalWords, reviewGameHistory } = useScrabbleState();
 
     const [showAvailableWords, setShowAvailableWords] = React.useState(true);
     const [wordsToShow, setWordsToShow] = 

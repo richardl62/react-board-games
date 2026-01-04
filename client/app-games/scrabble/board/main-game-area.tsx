@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { MainBoard } from "./main-board";
 import { RackAndControls } from "./rack-and-controls";
 import { ScoresEtc } from "./scores-etc";
@@ -31,7 +31,7 @@ const PaddingTop = styled.div`
 `;
 
 function BagInfo(): JSX.Element {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
 
     return <div>
         Tiles in bag: <span>{context.nTilesInBag}</span>
@@ -39,7 +39,7 @@ function BagInfo(): JSX.Element {
 }
 
 export function MainGameArea(): JSX.Element {
-    const { reviewGameHistory } = useScrabbleContext();
+    const { reviewGameHistory } = useScrabbleState();
     return <Game>
         <ScoresEtc />
         <RackAndControls />

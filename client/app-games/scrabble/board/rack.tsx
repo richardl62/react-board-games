@@ -5,7 +5,7 @@ import { SquareType } from "@game-control/games/scrabble/config/square-type";
 import { BoardSquare } from "./board-square";
 import { sAssert } from "@utils/assert";
 import { Tile } from "./tile";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { SquareID, boardIDs } from "../client-side";
 import { makeExtendedLetter } from "@game-control/games/scrabble/config/extended-letter";
 
@@ -16,7 +16,7 @@ interface RackProps {
 
 export function Rack(props: RackProps): JSX.Element {
     const { selected, setSelected } = props;
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
 
     const coreTiles = context.rack;
 

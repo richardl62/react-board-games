@@ -2,7 +2,7 @@ import { sAssert } from "@utils/assert";
 import { BoardData, BoardSquareData } from "@game-control/games/scrabble/moves/game-state";
 import { scoreWords } from "./score-word";
 import { getWord } from "./game-actions";
-import { ScrabbleContext } from "./scrabble-context";
+import { ScrabbleState } from "./scrabble-state";
 import { ScoringConfig } from "@game-control/games/scrabble/config/scrabble-config";
 
 /** Row and Column numbers for use on grid-based board. */
@@ -217,7 +217,7 @@ interface WordsAndScore {
     illegalWords: string[] | null;
   }
   
-type ReducedScrabbleContext = Pick<ScrabbleContext, "board" | "config" | "legalWords">
+type ReducedScrabbleContext = Pick<ScrabbleState, "board" | "config" | "legalWords">
 
 export function getScore(board: BoardData, active: RowCol[], config: ScoringConfig) : number {
     const candidateWords = findCandidateWords(board, active);

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { sAssert } from "@utils/assert";
 import { Rack } from "./rack";
 import { BoardData } from "@game-control/games/scrabble/moves/game-state";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 const StyledRackAndControls = styled.div`
 display:inline-flex;
@@ -38,7 +38,7 @@ function tilesOut(board: BoardData): boolean {
 }
 
 export function RackAndControls(): JSX.Element {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
 
     const hasTilesOut = tilesOut(context.board);
     const nTiles =  context.rack.length;

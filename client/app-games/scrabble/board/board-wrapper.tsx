@@ -4,7 +4,7 @@ import { ScrabbleGameProps } from "../client-side/srcabble-game-props";
 import { initialReducerState } from "../client-side/reducer-state";
 import { scrabbleReducer } from "../client-side/scrabble-reducer";
 import { ScrabbleConfig } from "@game-control/games/scrabble/config/scrabble-config";
-import { makeScrabbleContext, ReactScrabbleContext } from "../client-side/scrabble-context";
+import { makeScrabbleState, ReactScrabbleContext } from "../client-side/scrabble-state";
 import { isScrabbleConfig } from "@game-control/games/scrabble/config/scrabble-config";
 import { sAssert } from "@utils/assert";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
@@ -71,7 +71,7 @@ function BoardWrapper(props: BoardWrapperProps): JSX.Element {
         // }
     } 
 
-    const context = makeScrabbleContext(scrabbleGameProps, config, reducerState, dispatch, trie);
+    const context = makeScrabbleState(scrabbleGameProps, config, reducerState, dispatch, trie);
 
     return <ReactScrabbleContext.Provider value={context}>
         <Board />

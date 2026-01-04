@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { nNonNull } from "@utils/n-non-null";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 const StyledScoresEtc=styled.div`
     display: flex;
@@ -19,7 +19,7 @@ const NumTilesInRack=styled.span`
 
 // To do: Think of a better name
 export function ScoresEtc(): JSX.Element {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
 
     const scoreElems = context.wrappedGameProps.ctx.playOrder.map((pid,index) => {
         const name = context.wrappedGameProps.getPlayerName(pid);

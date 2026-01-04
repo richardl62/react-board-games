@@ -2,7 +2,7 @@ import { JSX } from "react";
 import styled from "styled-components";
 import { MoveHistory } from "./move-history";
 import { MainGameArea } from "./main-game-area";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { AvailableWords } from "./available-words";
 
 const Game = styled.div`
@@ -29,7 +29,7 @@ const RightSide = styled.div`
 `;
 
 export function Board(): JSX.Element {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
 
     return (
         <Game>

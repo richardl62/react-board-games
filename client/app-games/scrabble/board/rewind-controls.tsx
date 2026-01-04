@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { sAssert } from "@utils/assert";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { GoToStart, GoToEnd, StepForwards, StepBackwards } from "./forward-back-arrows";
 
 const Controls = styled.div`
@@ -19,7 +19,7 @@ const Padded = styled.div<{padding: string}>`
 
 
 export function RewindControls() : JSX.Element {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
     const { reviewGameHistory, historyLength } = context;
 
     sAssert(reviewGameHistory);

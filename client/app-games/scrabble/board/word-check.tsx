@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
 import styled from "styled-components";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 const WordInput = styled.input`
   margin-right: 0.2em;
@@ -19,7 +19,7 @@ function Validity({ valid }: { valid: boolean; }) {
 export function WordChecker(): JSX.Element {
     const [word, setEnteredWord] = useState("");
     const [valid, setValid] = useState<boolean | "unknown">("unknown");
-    const { dispatch, legalWords } = useScrabbleContext();
+    const { dispatch, legalWords } = useScrabbleState();
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const rawWord = e.target.value;

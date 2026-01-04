@@ -2,7 +2,7 @@ import { JSX, useState } from "react";
 import styled from "styled-components";
 import { Letter, letters } from "@game-control/games/scrabble/config/letters";
 import { useTurnControlData } from "./use-turn-control-data";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 const StyledLetterChooser = styled.div`
   display: inline-grid;
@@ -31,7 +31,7 @@ function LetterSelector({recordSelection} : LetterSelectorProps): JSX.Element {
 
 export function SetBlank(): JSX.Element | null {
     const { unsetBlank } = useTurnControlData();
-    const { dispatch } = useScrabbleContext();
+    const { dispatch } = useScrabbleState();
     const [ showLetterSelector, setShowLetterSelector] = useState(false);
     
     if (!unsetBlank) {

@@ -5,10 +5,10 @@ import { boardBoarderColor, boardBoarderSize } from "./style";
 import { BoardSquare } from "./board-square";
 import { Tile } from "./tile";
 import { ClickMoveMarker } from "@utils/board/click-move-marker";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 export function MainBoard(): JSX.Element {
-    const { board, clickMoveStart, config, dispatch } = useScrabbleContext();
+    const { board, clickMoveStart, config, dispatch } = useScrabbleState();
     const nRows = board.length;
     const nCols = board[0].length;
 

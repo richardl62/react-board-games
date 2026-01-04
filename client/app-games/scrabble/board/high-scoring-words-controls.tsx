@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { GoToStart, StepBackwards, StepForwards } from "./forward-back-arrows";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { sAssert } from "@utils/assert";
 import styled from "styled-components";
 
@@ -26,7 +26,7 @@ const Padded = styled.div<{padding: string}>`
 `;
 
 function Controls() {
-    const  { highScoringWords, dispatch } = useScrabbleContext();
+    const  { highScoringWords, dispatch } = useScrabbleState();
     sAssert(highScoringWords);
 
     const nWordFounds = highScoringWords.possibleWords.length;
@@ -65,7 +65,7 @@ function Controls() {
 }
 
 export function HighScoringWordsControls() : JSX.Element | null {
-    const  { highScoringWords, options, dispatch, legalWords, reviewGameHistory} = useScrabbleContext();
+    const  { highScoringWords, options, dispatch, legalWords, reviewGameHistory} = useScrabbleState();
     const enabled = highScoringWords !== null;
     const nWordsFound = highScoringWords?.possibleWords.length;
 

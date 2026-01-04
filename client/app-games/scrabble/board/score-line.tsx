@@ -1,10 +1,10 @@
 import { JSX } from "react";
 import { findActiveLetters, getWordsAndScore } from "../client-side";
-import { useScrabbleContext } from "../client-side/scrabble-context";
+import { useScrabbleState } from "../client-side/scrabble-state";
 import { blank } from "@game-control/games/scrabble/config/letters";
 
 export function ScoreLine() : JSX.Element | null {
-    const context = useScrabbleContext();
+    const context = useScrabbleState();
 
     const active = findActiveLetters(context);
     const wordsAndScore = getWordsAndScore(context, active);
