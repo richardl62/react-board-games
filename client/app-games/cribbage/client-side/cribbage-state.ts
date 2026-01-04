@@ -5,7 +5,7 @@ import { ClientMoves } from "@game-control/games/cribbage/moves/moves";
 import { CardSetID, PlayerID, ServerData } from "@game-control/games/cribbage/server-data";
 import { sAssert } from "@utils/assert";
 
-export interface CribbageContext extends ServerData {
+export interface CribbageState extends ServerData {
     moves: ClientMoves;
     numPlayers: number;
 
@@ -15,7 +15,7 @@ export interface CribbageContext extends ServerData {
     poneName: string;
 }
 
-export function useCribbageContext() : CribbageContext {
+export function useCribbageState() : CribbageState {
     const gameProps = useStandardBoardContext() as WrappedGameProps<ServerData, ClientMoves>;
 
     let me: PlayerID;

@@ -3,7 +3,7 @@ import { sAssert } from "@utils/assert";
 import { Card } from "@utils/cards/types"
 import { compareCards } from "@utils/cards/types";
 import { cardInBoxPerPlayer } from "@game-control/games/cribbage/config";
-import { CribbageContext } from "./cribbage-context";
+import { CribbageState } from "./cribbage-state";
 
 function includes(cardSet: Card[], card: Card) {
     for (const c of cardSet) {
@@ -16,7 +16,7 @@ function includes(cardSet: Card[], card: Card) {
 }
 
 export function owner(
-    context: CribbageContext,
+    context: CribbageState,
     card: Card,
 ): PlayerID {
 
@@ -31,7 +31,7 @@ export function owner(
     throw new Error("Card does not have known owner");
 }
 
-function nCardsInBox(context: CribbageContext, playerID: PlayerID) : number {
+function nCardsInBox(context: CribbageState, playerID: PlayerID) : number {
     sAssert(context.stage === GameStage.SettingBox);
     
     let count = 0;
@@ -44,6 +44,6 @@ function nCardsInBox(context: CribbageContext, playerID: PlayerID) : number {
     return count;
 }
 
-export function boxFull(context: CribbageContext, playerID: PlayerID) : boolean {
+export function boxFull(context: CribbageState, playerID: PlayerID) : boolean {
     return nCardsInBox(context, playerID) === cardInBoxPerPlayer;
 }

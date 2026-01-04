@@ -4,7 +4,7 @@ import { CutCard } from "./cut-card";
 import { WrappedScoreBoard } from "./wrapped-score-board";
 import { CardSetID } from "@game-control/games/cribbage/server-data";
 import { MessageAndButton } from "./message-and-button";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { useCribbageState } from "../client-side/cribbage-state";
 import { HandWrapper } from "./hand-wrapper";
 import { standardOuterMargin } from "../../../app-game-support/styles";
 
@@ -26,7 +26,7 @@ const Hands = styled.div`
 `;
 
 function Board() : JSX.Element {
-    const {me, pone} = useCribbageContext();
+    const {me, pone} = useCribbageState();
     return <GameAreaDiv>
         <CutCard/>
 

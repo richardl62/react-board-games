@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { Card } from "@utils/cards/types";
 import { cardSize } from "@utils/cards/styles";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { useCribbageState } from "../client-side/cribbage-state";
 import * as dndControl from "../client-side/dnd-control";
 import { CardSetID, makeCardSetID } from "@game-control/games/cribbage/server-data";
 import { Hand } from "@utils/cards/hand";
@@ -13,7 +13,7 @@ interface HandWrapperProps {
 export function HandWrapper(props: HandWrapperProps) : JSX.Element {
     const { cardSetID } = props;
 
-    const context = useCribbageContext();
+    const context = useCribbageState();
     const { moves} = context;
 
     const cardWidth = cardSize.width;

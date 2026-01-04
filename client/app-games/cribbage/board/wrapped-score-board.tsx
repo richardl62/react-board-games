@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { useCribbageState } from "../client-side/cribbage-state";
 import { PlayerID } from "@game-control/games/cribbage/server-data";
 import { PlayerProps, ScoreBoard } from "./score-board/score-board";
 import { colors } from "./score-board/style";
@@ -10,7 +10,7 @@ const ScoreLine = styled.div<{color: string}>`
 `;
 
 export function WrappedScoreBoard() : JSX.Element {
-    const context = useCribbageContext();
+    const context = useCribbageState();
 
     const playerProps = (who: PlayerID) => {
         const {score, trailingPeg} = context[who];

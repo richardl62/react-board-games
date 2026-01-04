@@ -1,10 +1,10 @@
 import { JSX } from "react";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { useCribbageState } from "../client-side/cribbage-state";
 import { GameRequest, GameStage } from "@game-control/games/cribbage/server-data";
 import { OuterDiv } from "./message-and-button";
 
 function CardsLeft() {
-    const context = useCribbageContext();
+    const context = useCribbageState();
     const { moves, me } = context;
 
     const cardsPegged = context.shared.hand.length > 0;
@@ -18,7 +18,7 @@ function CardsLeft() {
 }
 
 export function Pegging() : JSX.Element | null {
-    const context = useCribbageContext();
+    const context = useCribbageState();
     const { stage, moves, me, pone } = context;
 
     if (stage !== GameStage.Pegging) {

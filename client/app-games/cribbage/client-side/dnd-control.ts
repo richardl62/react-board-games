@@ -1,10 +1,10 @@
 import { CardSetID, GameStage } from "@game-control/games/cribbage/server-data";
 import { sAssert } from "@utils/assert";
-import { boxFull, owner } from "./context-tools";
-import { CribbageContext } from "./cribbage-context";
+import { boxFull, owner } from "./cribbage-state-tools";
+import { CribbageState } from "./cribbage-state";
 
 export function dragAllowed(
-    context: CribbageContext, 
+    context: CribbageState, 
     cardSetID: CardSetID, 
     index: number,
 ) : boolean {
@@ -29,7 +29,7 @@ export function dragAllowed(
 }
 
 export function showBack(
-    context: CribbageContext, 
+    context: CribbageState, 
     cardSetID: CardSetID,
     index: number,
 ) : boolean {
@@ -54,7 +54,7 @@ export function showBack(
 
 
 export function dropTarget(
-    context: CribbageContext,
+    context: CribbageState,
     cardSetID: CardSetID, 
     index?: number,
 ) : boolean {

@@ -1,11 +1,11 @@
 import { JSX } from "react";
-import { boxFull } from "../client-side/context-tools";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { boxFull } from "../client-side/cribbage-state-tools";
+import { useCribbageState } from "../client-side/cribbage-state";
 import { GameRequest, GameStage } from "@game-control/games/cribbage/server-data";
 import { OuterDiv } from "./message-and-button";
 
 export function MakingBox() : JSX.Element | null {
-    const context = useCribbageContext();
+    const context = useCribbageState();
     const { me,  moves, stage } = context;
 
     if (stage !== GameStage.SettingBox) {

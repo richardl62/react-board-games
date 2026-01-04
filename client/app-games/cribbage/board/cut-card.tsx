@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { CardSVG } from "@utils/cards/card";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { useCribbageState } from "../client-side/cribbage-state";
 
 const DeckDiv = styled.div`
     display: inline-flex;
@@ -14,7 +14,7 @@ const DeckDiv = styled.div`
 `;
 
 export function CutCard() : JSX.Element {
-    const { cutCard, moves } = useCribbageContext();
+    const { cutCard, moves } = useCribbageState();
 
 
     const onClick = () => moves.showCutCard();

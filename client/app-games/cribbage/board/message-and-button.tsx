@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useCribbageContext } from "../client-side/cribbage-context";
+import { useCribbageState } from "../client-side/cribbage-state";
 import { GameRequest, GameStage } from "@game-control/games/cribbage/server-data";
 import { MakingBox } from "./making-box";
 import { Pegging } from "./pegging";
@@ -15,7 +15,7 @@ export const OuterDiv = styled.div`
 `;
 
 function Scoring() {
-    const context = useCribbageContext();
+    const context = useCribbageState();
     const { stage, moves, me } = context;
 
     if(stage !== GameStage.HandsRevealed) {
