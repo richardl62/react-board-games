@@ -30,13 +30,11 @@ function GameButtons() : JSX.Element {
         moves 
     } = useMatchState();
     
-    const [ scoreRecorded, setScoreRecorded ] = useState(false);
+    const [ selectedScoringOption, setSelectedScoringOption ] = useState<number | null>(null);
 
     useEffect(() => {
-        if (rollCount.thisTurn === 0) {
-            setScoreRecorded(false);
-        }
-    }, [rollCount.thisTurn]);
+        setSelectedScoringOption(null);
+    }, [rollCount.total]);
 
     const movesDisabled = ctx.currentPlayer !== playerID;
 
@@ -57,8 +55,8 @@ function GameButtons() : JSX.Element {
         </button>
     }
 
-    const rollAndDontDisabled = movesDisabled || !scoreRecorded;
-    
+    const rollAndDontDisabled = movesDisabled || selectedScoringOption === null;
+
     return <div>
         <button 
             onClick={() => moves.roll()} 
@@ -67,7 +65,10 @@ function GameButtons() : JSX.Element {
             Roll
         </button>
 
-        <ScoringOptions setScoreRecorded={setScoreRecorded} />
+        <ScoringOptions
+            selectedScoringOption={selectedScoringOption}
+            setSelectedScoringOption={setSelectedScoringOption} 
+        />
 
         <button 
             onClick={() => moves.stopRolling()}
