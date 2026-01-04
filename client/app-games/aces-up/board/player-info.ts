@@ -1,9 +1,9 @@
 import { PlayerID } from "@game-control/playerid";
-import { GameContext } from "../game-support/match-state";
+import { MatchState } from "../game-support/match-state";
 
 export class PlayerInfo {
 
-    constructor(context: GameContext, owner: PlayerID) {
+    constructor(context: MatchState, owner: PlayerID) {
         this.owner = owner;
         this.viewer = context.playerID;
         this.currentPlayer = context.ctx.currentPlayer;

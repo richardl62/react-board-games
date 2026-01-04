@@ -1,13 +1,13 @@
 import { sAssert } from "@utils/assert";
-import { GameContext } from "./match-state";
+import { MatchState } from "./match-state";
 import { CardID } from "@game-control/games/aces-up/moves/card-id";
 
 export function canMove(
-    gameContext: GameContext,
+    matchState: MatchState,
     id: CardID) : boolean {
 
     // Not this player's turn.
-    if (gameContext.playerID !== gameContext.ctx.currentPlayer) {
+    if (matchState.playerID !== matchState.ctx.currentPlayer) {
         return false;
     }
 
@@ -22,9 +22,9 @@ export function canMove(
     
     // Not this player's card. (This is after the sharedPiles
     // test to ensure that an owner is expected)
-    if(id.owner !== gameContext.playerID) {
+    if(id.owner !== matchState.playerID) {
         return id.area === "discardPileCard" 
-            && gameContext.G.options.canUseOpponentsWastePiles;
+            && matchState.G.options.canUseOpponentsWastePiles;
     }
 
     if (id.area === "hand") {

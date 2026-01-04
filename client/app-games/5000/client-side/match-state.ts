@@ -20,7 +20,7 @@ function diceRotationSteps() {
 
 type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
-interface GameContext extends TypedGameProps {
+interface GameState extends TypedGameProps {
     diceRotation: {
         angle: number,
         // If true, all dice should be rollled. If false, only the
@@ -30,7 +30,7 @@ interface GameContext extends TypedGameProps {
     holdAllowed: boolean;
 }
 
-export function useMatchState() : GameContext {
+export function useMatchState() : GameState {
     const gameProps = useStandardBoardContext() as TypedGameProps;
     const [ oldGameProps, setOldGameProps ] = useState(gameProps);
     const [ oldRollCount, setOldRollCount ] = useState(gameProps.G.rollCount);

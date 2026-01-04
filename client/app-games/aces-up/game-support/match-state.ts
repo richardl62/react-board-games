@@ -9,10 +9,10 @@ interface ExtendedServerData extends ServerData {
     getPlayerData: (owner: PlayerID) => PlayerData;
 }
 
-export interface GameContext extends WrappedGameProps<ServerData, ClientMoves>  {
+export interface MatchState extends WrappedGameProps<ServerData, ClientMoves>  {
     G: ExtendedServerData;
 }
-export function useMatchState() : GameContext {
+export function useMatchState() : MatchState {
     const ctx = useStandardBoardContext() as WrappedGameProps<ServerData, ClientMoves>;
 
     const getPlayerData = (owner: PlayerID) => {
