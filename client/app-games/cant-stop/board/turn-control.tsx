@@ -1,8 +1,8 @@
-import { JSX } from "react";
-import { useMatchState } from "../match-state";
-import { getAvailableColumnIncreases } from "./available-colum-increases";
+import { JSX, useEffect, useState } from "react";
+import { useMatchState } from "../match-state/match-state";
 import { useDiceRotation } from "./rolling-dice";
 import { Dice } from "@/utils/dice/dice";
+import { ScoringOptions } from "./scoring-options";
 
 export function TurnControl() : JSX.Element {
     const { G: {diceValues} } = useMatchState();
@@ -22,39 +22,57 @@ export function TurnControl() : JSX.Element {
 }
 
 function GameButtons() : JSX.Element {
-    const { G, ctx, playerID, moves } = useMatchState();
+    const { 
+        G: {rollCount},
+        scoringOptions, 
+        ctx, 
+        playerID, 
+        moves 
+    } = useMatchState();
     
-    const allowMoves = ctx.currentPlayer === playerID;
-    const availableIncreases = getAvailableColumnIncreases(G, ctx);
+    const [ scoreRecorded, setScoreRecorded ] = useState(false);
 
-    if (G.rollCount.thisTurn === 0) {
-        return <button onClick={() => moves.roll()} disabled={!allowMoves}>
+    useEffect(() => {
+        if (rollCount.thisTurn === 0) {
+            setScoreRecorded(false);
+        }
+    }, [rollCount.thisTurn]);
+
+    const movesDisabled = ctx.currentPlayer !== playerID;
+
+    if (rollCount.thisTurn === 0) {
+        return <button 
+            onClick={() => moves.roll()} 
+            disabled={movesDisabled}
+        >
             Roll
         </button>;
     }
 
-    if (availableIncreases.length === 0) {
-        return <button onClick={() => moves.bust()} disabled={!allowMoves}>
+    if (scoringOptions.length === 0) {
+        return <button 
+            onClick={() => moves.bust()} 
+            disabled={movesDisabled}>
             Bust
         </button>
     }
 
+    const rollAndDontDisabled = movesDisabled || !scoreRecorded;
+    
     return <div>
-        <button onClick={() => moves.roll()} disabled={!allowMoves}>
+        <button 
+            onClick={() => moves.roll()} 
+            disabled={rollAndDontDisabled}
+        >
             Roll
         </button>
 
-        {availableIncreases.map((increaseOption, idx) => (
-            <button
-                key={idx}
-                onClick={() => moves.recordScoringChoice(increaseOption)}
-                disabled={!allowMoves}
-            >
-                {increaseOption.join(", ")}
-            </button>
-        ))}
+        <ScoringOptions setScoreRecorded={setScoreRecorded} />
 
-        <button onClick={() => moves.stopRolling()} disabled={!allowMoves}>
+        <button 
+            onClick={() => moves.stopRolling()}
+            disabled={rollAndDontDisabled}
+        >
             Don't
         </button>
     </div>

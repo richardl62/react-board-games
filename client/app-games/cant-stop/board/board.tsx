@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useMatchState } from "../match-state";
+import { useMatchState } from "../match-state/match-state";
 import { Columns } from "./columns";
 import { TurnControl } from "./turn-control";
 

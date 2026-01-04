@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useMatchState } from "../match-state";
+import { useMatchState } from "../match-state/match-state";
 import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 

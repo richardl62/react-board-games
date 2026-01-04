@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useMatchState } from "../match-state";
+import { useMatchState } from "../match-state/match-state";
 
 const diceRoll = {
     duration: 1000, // milliseconds

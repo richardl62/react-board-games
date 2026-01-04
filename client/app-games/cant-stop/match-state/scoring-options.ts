@@ -1,9 +1,6 @@
 import { compareArrays, sortUnique } from "@/utils/unique-values";
 import { maxColumnsInPlay } from "@shared/game-control/games/cant-stop/config";
 import { sAssert } from "@shared/utils/assert";
-import { columnsInPlay, fullColumns } from "../utils";
-import { ServerData } from "@shared/game-control/games/cant-stop/server-data";
-import { Ctx } from "@shared/game-control/ctx";
 
 // Record all the permutaions of digits 0, 1, 2 3
 const permuations = [
@@ -87,14 +84,18 @@ function adjustedCandidates(
 
 // Returns an array of arrays with each inner array recording the indices of the
 // columns for which the current player can choose to increase the height.
-export function getAvailableColumnIncreases(G: ServerData, ctx: Ctx) : number[][] {
-    const {diceValues, columnHeights} = G;
+export function getScoringOptions({diceValues, fullColumns, columnsInPlay}: {
+    diceValues: number[], 
+    fullColumns: number[], 
+    columnsInPlay: number[]
+}
+) : number[][] {
 
     const candidates = sumsOfPairs(diceValues);
 
     const adjusted = adjustedCandidates(candidates, {
-        full: fullColumns(columnHeights), 
-        inPlay: columnsInPlay(columnHeights[ctx.currentPlayer])
+        full: fullColumns, 
+        inPlay: columnsInPlay
     });
 
     const result = sortUnique(
