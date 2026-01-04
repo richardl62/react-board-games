@@ -1,10 +1,10 @@
 import { JSX, useEffect } from "react";
 import { AppGame, BoardProps, ConnectionStatus } from "@/app-game-support";
-import { WrappedGameProps, useWrappedGameProps } from "@/app-game-support/wrapped-game-props";
+import { WrappedMatchProps, useWrappedMatchProps } from "@/app-game-support/wrapped-match-props";
 import { ServerMatchData } from "@shared/server-match-data";
 import { Ctx } from "@shared/game-control/ctx";
 
-function gameStatus(gameProps: WrappedGameProps) {
+function gameStatus(gameProps: WrappedMatchProps) {
     if(!gameProps.allJoined) {
         return "Game not started";
     } else {
@@ -46,7 +46,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
     }
 
     // The need for this conversion shows something isn't quite right. 
-    const gameProps = useWrappedGameProps(bgioProps);
+    const gameProps = useWrappedMatchProps(bgioProps);
 
     useEffect(() => {
         const status = gameStatus(gameProps);

@@ -1,6 +1,6 @@
 import { OptionSpecifications } from "@/option-specification/types";
 import { JSX } from "react";
-import { WrappedGameProps } from "./wrapped-game-props";
+import { WrappedMatchProps } from "./wrapped-match-props";
 import { GameControl } from "@game-control/game-control";
 
 // The string values are uses as section headers when displaying the list of
@@ -20,7 +20,7 @@ export interface AppGame extends GameControl {
   category: GameCategory;
 
   options?: OptionSpecifications;
-  board: (props: WrappedGameProps) => JSX.Element;
+  board: (props: WrappedMatchProps) => JSX.Element;
 }
 
 export function defaultNumPlayers(game: AppGame): number {

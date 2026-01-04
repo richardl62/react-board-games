@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { WrappedGameProps } from "./wrapped-game-props";
+import { WrappedMatchProps } from "./wrapped-match-props";
 
 const Name = styled.span`
     /* font-weight: bold; */
@@ -20,7 +20,7 @@ const PlayerDataGrid = styled.div`
     column-gap: 0.5em;
 `;
 
-export function WaitingForPlayers(props: WrappedGameProps): JSX.Element {
+export function WaitingForPlayers(props: WrappedMatchProps): JSX.Element {
 
     const gridElems : JSX.Element[] = [];
     let nNotJoined = 0;

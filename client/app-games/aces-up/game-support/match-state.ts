@@ -1,5 +1,5 @@
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { WrappedMatchProps } from "../../../app-game-support/wrapped-match-props";
 import { PlayerData, ServerData } from "@game-control/games/aces-up/server-data";
 import { ClientMoves } from "@game-control/games/aces-up/moves/moves";
 import { PlayerID } from "@game-control/playerid";
@@ -9,11 +9,11 @@ interface ExtendedServerData extends ServerData {
     getPlayerData: (owner: PlayerID) => PlayerData;
 }
 
-export interface MatchState extends WrappedGameProps<ServerData, ClientMoves>  {
+export interface MatchState extends WrappedMatchProps<ServerData, ClientMoves>  {
     G: ExtendedServerData;
 }
 export function useMatchState() : MatchState {
-    const ctx = useStandardBoardContext() as WrappedGameProps<ServerData, ClientMoves>;
+    const ctx = useStandardBoardContext() as WrappedMatchProps<ServerData, ClientMoves>;
 
     const getPlayerData = (owner: PlayerID) => {
         const playerData = ctx.G.playerData[owner];

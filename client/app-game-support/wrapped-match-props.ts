@@ -22,7 +22,7 @@ interface Events extends Omit<BgioEvents, "endTurn"> {
 /**
  * Game properties.  (A wrapper for BGIO BoardProps.)
  */
-export interface WrappedGameProps<G=unknown, Moves=unknown> 
+export interface WrappedMatchProps<G=unknown, Moves=unknown> 
     extends Omit<BoardProps<G>, "moves" | "events"> {
     
     moves: Moves;
@@ -38,7 +38,7 @@ export interface WrappedGameProps<G=unknown, Moves=unknown>
     getPlayerName: (pid: string) => string;
 }
 
-export function useWrappedGameProps<G>(bgioProps: BoardProps<G>): WrappedGameProps<G> {
+export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchProps<G> {
  
     const playerData = makePlayerData(bgioProps);
     const {isOffline} = useSearchParamData();

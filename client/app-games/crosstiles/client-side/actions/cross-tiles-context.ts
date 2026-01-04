@@ -4,13 +4,13 @@ import { ActionType, ReducerState } from "./cross-tiles-reducer";
 import { ClientMoves } from "@game-control/games/crosstiles/moves/moves";
 import { ServerData } from "@game-control/games/crosstiles/server-data";
 import { CrossTilesGameProps } from "./cross-tiles-game-props";
-import { WrappedGameProps } from "../../../../app-game-support/wrapped-game-props";
+import { WrappedMatchProps } from "../../../../app-game-support/wrapped-match-props";
 import React from "react";
 
 
 
 export interface CrossTilesContext extends ServerData, ReducerState{
-    readonly wrappedGameProps: WrappedGameProps<ServerData, ClientMoves>; // Omit game-specific server data
+    readonly wrappedGameProps: WrappedMatchProps<ServerData, ClientMoves>; // Omit game-specific server data
 
     readonly dispatch:  Dispatch<ActionType>;
 

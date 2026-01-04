@@ -1,6 +1,6 @@
-import { WrappedGameProps } from "../../../app-game-support/wrapped-game-props";
+import { WrappedMatchProps } from "../../../app-game-support/wrapped-match-props";
 import { ServerData } from "@game-control/games/scrabble/server-data";
 import { ClientMoves } from "@game-control/games/scrabble/moves/moves";
 
-export type ScrabbleGameProps = WrappedGameProps<ServerData, ClientMoves>;
+export type ScrabbleGameProps = WrappedMatchProps<ServerData, ClientMoves>;
 
