@@ -4,7 +4,7 @@ import { CardSVG } from "@utils/cards/card";
 import { CardNonJoker } from "@utils/cards/types";
 import { cardSize } from "@utils/cards/styles";
 import { cardShortName } from "@utils/cards/types";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
 import { CardDraggable } from "./drag-drop";
@@ -27,7 +27,7 @@ interface Props {
 export function Hand(props: Props) : JSX.Element {
     const { playerInfo } = props;
 
-    const { hand } = useGameContext().G.getPlayerData(playerInfo.owner);
+    const { hand } = useMatchState().G.getPlayerData(playerInfo.owner);
 
     const makeCard = (card: CardNonJoker, index: number) => {
         const key = cardShortName(card) + index;

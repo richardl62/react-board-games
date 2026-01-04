@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { rotateArray } from "@utils/rotate-array";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { rowGap } from "../game-support/styles";
 import { PlayerArea } from "./player-area";
 import { PlayerInfo } from "./player-info";
@@ -14,7 +14,7 @@ const OuterDiv = styled.div`
 `;
 
 export function PlayerAreas() : JSX.Element {
-    const context = useGameContext();
+    const context = useMatchState();
     const {  playerID, ctx: {playOrder} } = context;
     
     const playerIDs = [...playOrder];

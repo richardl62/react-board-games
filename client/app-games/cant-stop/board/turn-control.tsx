@@ -1,11 +1,11 @@
 import { JSX } from "react";
-import { useGameContext } from "../game-context";
+import { useMatchState } from "../match-state";
 import { getAvailableColumnIncreases } from "./available-colum-increases";
 import { useDiceRotation } from "./rolling-dice";
 import { Dice } from "@/utils/dice/dice";
 
 export function TurnControl() : JSX.Element {
-    const { G: {diceValues} } = useGameContext();
+    const { G: {diceValues} } = useMatchState();
     
     const diceRotation = useDiceRotation();
 
@@ -22,7 +22,7 @@ export function TurnControl() : JSX.Element {
 }
 
 function GameButtons() : JSX.Element {
-    const { G, ctx, playerID, moves } = useGameContext();
+    const { G, ctx, playerID, moves } = useMatchState();
     
     const allowMoves = ctx.currentPlayer === playerID;
     const availableIncreases = getAvailableColumnIncreases(G, ctx);

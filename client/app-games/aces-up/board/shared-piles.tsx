@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { SharedPile as SharedPileClass, makeSharedPiles } from "@game-control/games/aces-up/misc/shared-pile";
 import { columnGap } from "../game-support/styles";
 import { SharedPile } from "./shared-pile";
@@ -32,7 +32,7 @@ const Piles = styled.div`
 `;
 
 export function SharedPiles() : JSX.Element {
-    const { G } = useGameContext();
+    const { G } = useMatchState();
     const sharedPiles = makeSharedPiles(G);
     
     // Kludge

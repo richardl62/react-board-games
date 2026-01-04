@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 import React from "react";
 type DiceScore = [
     //dice values
@@ -94,7 +94,7 @@ const ColumnsDiv = styled.div`
     background-color: cornsilk;
 `;
 export function ScoringCombinations() : JSX.Element {
-    const {G: {options}} = useGameContext();
+    const {G: {options}} = useMatchState();
 
     const [show, setShow] = React.useState(false);
     const toggleShow = () => setShow(!show);

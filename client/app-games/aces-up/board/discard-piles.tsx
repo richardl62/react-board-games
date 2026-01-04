@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { CardID } from "@game-control/games/aces-up/moves/card-id";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { columnGap } from "../game-support/styles";
 import { AreaLabelBelow } from "./area-label";
 import { CardStack } from "./card-stack";
@@ -37,7 +37,7 @@ export function Discards(props: {
     playerInfo: PlayerInfo;
 }) : JSX.Element {
     const { playerInfo: { owner } } = props;    
-    const { G } = useGameContext();
+    const { G } = useMatchState();
 
     const discardPiles = makeDiscardPiles(G, owner);
     

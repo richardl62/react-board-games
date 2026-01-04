@@ -1,7 +1,7 @@
 import { JSX, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useTicker } from "@utils/use-countdown";
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 
 const OuterDiv = styled.div`
     margin: 20px;
@@ -48,7 +48,7 @@ function Ticks(props: {
     localCount?: number;
 }) {
     const { localCount } = props;
-    const {G: {count: serverCount} } = useGameContext();
+    const {G: {count: serverCount} } = useMatchState();
     return <div>
         <p>Ticks since start</p>
         {localCount !== undefined && <p>{`Local: ${localCount}`}</p>}
@@ -57,7 +57,7 @@ function Ticks(props: {
 }
 
 function BoardCurrentPlayer() : JSX.Element {
-    const { moves } = useGameContext();
+    const { moves } = useMatchState();
 
     const {ellapsedTime} = useTicker();
     const [lastIncrement, setLastIncrement] = useState(0);
@@ -104,7 +104,7 @@ function BoardCurrentPlayer() : JSX.Element {
 
 
 function Board() : JSX.Element {
-    const {playerID, ctx: {currentPlayer} } = useGameContext();
+    const {playerID, ctx: {currentPlayer} } = useMatchState();
 
     return <OuterDiv>
         {(playerID === currentPlayer) ? <BoardCurrentPlayer /> : <Ticks/>}

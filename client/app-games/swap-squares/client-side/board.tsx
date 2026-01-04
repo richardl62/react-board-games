@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { BoarderedGrid } from "@utils/board/boardered-grid";
 import { DragDrop, PieceHolder } from "@utils/board/piece-holder";
-import { useGameContext } from "./game-context";
+import { useMatchState } from "./match-state";
 
 interface SquareProps {
     value: number;
@@ -44,7 +44,7 @@ function Square(props: SquareProps) : JSX.Element {
 }
 
 export default function Board(): JSX.Element {
-    const ctx = useGameContext();
+    const ctx = useMatchState();
     const { G, moves } = ctx;
     const onReset = () => {
         moves.reset();

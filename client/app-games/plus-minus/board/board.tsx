@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { standardOuterMargin } from "../../../app-game-support/styles";
-import { useGameContext } from "../game-context";
+import { useMatchState } from "../match-state";
 
 const OuterDiv = styled.div`
     margin: ${standardOuterMargin};
@@ -17,7 +17,7 @@ const CurrentPlayer = styled.div`
 `;
 
 function PlayerNames() : JSX.Element {
-    const {ctx: {playOrder, currentPlayer}, getPlayerName} =  useGameContext();
+    const {ctx: {playOrder, currentPlayer}, getPlayerName} =  useMatchState();
     
     const name = (id: string) => {
         return getPlayerName(id) + (id === currentPlayer ? " (you)" : "");
@@ -30,7 +30,7 @@ function PlayerNames() : JSX.Element {
 }
 
 function Board() : JSX.Element {
-    const context = useGameContext();
+    const context = useMatchState();
     const {G: {count}, moves, events, playerID, getPlayerName} = context;
     
     const current = context.ctx.currentPlayer === playerID;

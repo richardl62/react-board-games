@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { ScorePad } from "@utils/score-pad";
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 
 const ScorePadsDiv = styled.div`
     display: flex;
@@ -21,7 +21,7 @@ export function ScorePads() : JSX.Element {
         G : { playerScores, heldDice, scoreCarriedOver}, 
         ctx : { currentPlayer },
         getPlayerName 
-    } = useGameContext();
+    } = useMatchState();
 
     const scorePads = [];
     for (const pid in playerScores) {

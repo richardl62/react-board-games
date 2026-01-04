@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useGameContext } from "../game-context";
+import { useMatchState } from "../match-state";
 import { Columns } from "./columns";
 import { TurnControl } from "./turn-control";
 
@@ -7,7 +7,7 @@ function Board() : JSX.Element {
     const {
         ctx: {currentPlayer}, 
         playerData, 
-    } = useGameContext();
+    } = useMatchState();
     
     // Very crude board for now.
     return <div>

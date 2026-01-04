@@ -5,7 +5,7 @@ import { ServerData } from "@game-control/games/random-draw/server-data";
 
 type TypedGameProps = WrappedGameProps<ServerData, ClientMoves>;
 
-export function useGameContext() : TypedGameProps {
+export function useMatchState() : TypedGameProps {
     return useStandardBoardContext() as TypedGameProps;
 }
 

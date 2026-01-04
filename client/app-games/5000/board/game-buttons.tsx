@@ -1,5 +1,5 @@
 import React, { JSX } from "react";
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 import { availablePlayerActions } from "@game-control/games/5000/utils/available-player-actions";
 import styled from "styled-components";
 import { HoldScoringDiceButton } from "./hold-scoring-dice-button";
@@ -18,7 +18,7 @@ const BustButton = styled.button`
 `;
 
 export function GameButtons() : JSX.Element {
-    const { G, moves, playerID, ctx: {currentPlayer, matchover} } = useGameContext();
+    const { G, moves, playerID, ctx: {currentPlayer, matchover} } = useMatchState();
     const [diceText, setDiceText] = React.useState("");
     const [badDiceText, setBadDiceText] = React.useState(false);
 

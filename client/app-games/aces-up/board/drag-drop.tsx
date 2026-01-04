@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { CardSVG } from "@utils/cards/card";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { canMove } from "../game-support/can-move";
 import { CardID, getCardID } from "@game-control/games/aces-up/moves/card-id";
 import { moveType } from "@game-control/games/aces-up/moves/move-type";
@@ -18,7 +18,7 @@ type CardSVGProps = Parameters<typeof CardSVG>[0];
 type DropRef = ReturnType<typeof useDrop>[1];
 // eslint-disable-next-line react-refresh/only-export-components
 export function useCardDropRef(id: CardID | null) : DropRef | null {
-    const ctx = useGameContext();
+    const ctx = useMatchState();
     const { moveCard } = ctx.moves;
 
     const [, dropRef] = useDrop(() => ({
@@ -42,7 +42,7 @@ type DragRef = ReturnType<typeof useDrag>[1];
 // eslint-disable-next-line react-refresh/only-export-components
 export function useCardDragRef(id: CardID | null) : DragRef | null {
 
-    const ctx = useGameContext();
+    const ctx = useMatchState();
 
     const [, dragRef] = useDrag(
         () => ({

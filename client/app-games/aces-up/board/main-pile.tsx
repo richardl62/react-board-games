@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { CardDraggable } from "./drag-drop";
 import { PlayerInfo } from "./player-info";
 
@@ -17,7 +17,7 @@ interface Props {
 export function MainPile(props: Props) : JSX.Element {
     const { playerInfo } = props;
 
-    const { mainPile } = useGameContext().G.getPlayerData(playerInfo.owner);
+    const { mainPile } = useMatchState().G.getPlayerData(playerInfo.owner);
 
     const message = `${mainPile.length} cards`;
 

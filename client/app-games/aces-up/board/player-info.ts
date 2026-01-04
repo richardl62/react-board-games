@@ -1,5 +1,5 @@
 import { PlayerID } from "@game-control/playerid";
-import { GameContext } from "../game-support/game-context";
+import { GameContext } from "../game-support/match-state";
 
 export class PlayerInfo {
 

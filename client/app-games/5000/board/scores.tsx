@@ -1,4 +1,4 @@
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 import styled from "styled-components";
 import { sAssert } from "@utils/assert";
 import { JSX } from "react";
@@ -26,7 +26,7 @@ export function Scores() : JSX.Element {
     const {
         G: {scoreCarriedOver, heldDice, scoreToBeat, prevRollHeldScore}, 
         getPlayerName
-    } = useGameContext();
+    } = useMatchState();
 
     const scoreToBeatText = () => {
         sAssert(scoreToBeat);

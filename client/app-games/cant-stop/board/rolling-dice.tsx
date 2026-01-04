@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useGameContext } from "../game-context";
+import { useMatchState } from "../match-state";
 
 const diceRoll = {
     duration: 1000, // milliseconds
@@ -8,7 +8,7 @@ const diceRoll = {
 };
 
 export function useDiceRotation() : number| null {
-    const { G: {rollCount: serverRollCount} } = useGameContext();
+    const { G: {rollCount: serverRollCount} } = useMatchState();
     const [lastServerRollCount, setLastServerRollCount] = useState(serverRollCount);
 
     const [rollStep, setRollStep] = useState<number| null>(null);

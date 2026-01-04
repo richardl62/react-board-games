@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 import styled from "styled-components";
 
 const Header = styled.div`
@@ -31,7 +31,7 @@ export function FinalScores() : JSX.Element {
     const {
         G: {playerScores},
         getPlayerName,
-    } = useGameContext();
+    } = useMatchState();
 
     const scores = Object.entries(playerScores).map(([playerID, scores]) => {
         return {

@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useGameContext } from "../game-context";
+import { useMatchState } from "../match-state";
 
 function PlayerValues(props: {pid: string}) : JSX.Element {
     const {
@@ -8,7 +8,7 @@ function PlayerValues(props: {pid: string}) : JSX.Element {
         playerData,
         moves,
 
-     } = useGameContext();
+     } = useMatchState();
     const values = playerValues[props.pid];
     const { name, status } = playerData[props.pid];
 
@@ -28,7 +28,7 @@ function Board() : JSX.Element {
         ctx: {playOrder, currentPlayer}, 
         playerData, 
         playerID
-    } = useGameContext();
+    } = useMatchState();
     
     const playerValues = playOrder.map((pid) => {
         return <PlayerValues key={pid} pid={pid} />

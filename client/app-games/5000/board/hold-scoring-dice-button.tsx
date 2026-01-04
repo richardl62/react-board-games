@@ -1,9 +1,9 @@
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 import { getScores } from "@game-control/games/5000/utils/get-scores";
 import { sAssert } from "@utils/assert";
 
 export function HoldScoringDiceButton() {
-    const { G, holdAllowed, moves } = useGameContext();
+    const { G, holdAllowed, moves } = useMatchState();
     const { faces, held, options } = G;
 
     const { unusedFaces: nonScoringFaces } = getScores({

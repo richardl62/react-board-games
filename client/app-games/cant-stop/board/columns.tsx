@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { useGameContext } from "../game-context";
+import { useMatchState } from "../match-state";
 import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 
@@ -24,7 +24,7 @@ export function Columns() : JSX.Element {
             G,
             ctx: {playOrder}, 
             playerData, 
-        } = useGameContext();
+        } = useMatchState();
 
     const result: JSX.Element[] = [];
     for(const pid of playOrder) {

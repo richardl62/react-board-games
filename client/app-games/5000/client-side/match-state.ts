@@ -30,7 +30,7 @@ interface GameContext extends TypedGameProps {
     holdAllowed: boolean;
 }
 
-export function useGameContext() : GameContext {
+export function useMatchState() : GameContext {
     const gameProps = useStandardBoardContext() as TypedGameProps;
     const [ oldGameProps, setOldGameProps ] = useState(gameProps);
     const [ oldRollCount, setOldRollCount ] = useState(gameProps.G.rollCount);

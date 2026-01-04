@@ -4,7 +4,7 @@ import { ScorePads } from "./score-pads";
 import styled from "styled-components";
 import { GameDiceSet } from "./game-dice-set";
 import { ScoringCombinations } from "./scoring-combinations";
-import { useGameContext } from "../client-side/game-context";
+import { useMatchState } from "../client-side/match-state";
 import { FinalScores } from "./final-scores";
 import { LastRoundNotice } from "./last-round-notice";
 import { JSX } from "react";
@@ -31,7 +31,7 @@ function Board() : JSX.Element {
     const {
         G: {lastRound},
         ctx: {matchover}
-    } = useGameContext();
+    } = useMatchState();
 
     return <OuterDiv>
         {lastRound && !matchover && <LastRoundNotice/>}

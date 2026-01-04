@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { useGameContext } from "../game-support/game-context";
+import { useMatchState } from "../game-support/match-state";
 import { columnGap } from "../game-support/styles";
 import { illegalMoveNotication } from "./illegal-move-notification";
 import { Discards } from "./discard-piles";
@@ -40,7 +40,7 @@ interface Props {
 
 export function PlayerArea(props: Props) : JSX.Element {
     const { playerInfo } = props;
-    const { getPlayerName, moves, G, ctx: {currentPlayer} } = useGameContext();
+    const { getPlayerName, moves, G, ctx: {currentPlayer} } = useMatchState();
     const { undoItems } = G;
 
     let allowUndo = false;
