@@ -1,6 +1,11 @@
 import { SetupArg0 } from "../../game-control.js";
 import { columnValues, nDice } from "./config.js";
 
+export interface SetupOptions {
+    readonly minClearanceAbove: number;
+    readonly minClearanceBelow: number;
+}
+
 export interface ColumnHeight {
     // The highest square which the player 'owns', i.e. which the player has stopped on in a previous turn.
     owned: number | "full";
@@ -15,6 +20,8 @@ export interface ColumnHeight {
 };
 
 export interface ServerData {
+    options: SetupOptions;
+
     diceValues: number[];
     rollCount: {
         total: number;
@@ -38,7 +45,7 @@ function startingColumnsHeights(): ColumnHeight[] {
     return data;
 }
 
-export function startingServerData(arg0: SetupArg0): ServerData {
+export function startingServerData(arg0: SetupArg0, options: SetupOptions): ServerData {
     const {ctx} = arg0;
     
     const diceValues: number[] = [];
@@ -52,6 +59,8 @@ export function startingServerData(arg0: SetupArg0): ServerData {
     }
 
     return {
+        options,
+        
         diceValues,
         rollCount: {
             total: 0,
