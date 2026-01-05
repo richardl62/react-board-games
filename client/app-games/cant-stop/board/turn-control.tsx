@@ -22,13 +22,14 @@ export function TurnControl() : JSX.Element {
 }
 
 function GameButtons() : JSX.Element {
-    const { 
-        G: {rollCount},
+    const state = useMatchState();
+    const{ 
+        G: { rollCount },
         scoringOptions, 
         ctx, 
         playerID, 
-        moves 
-    } = useMatchState();
+        moves, 
+    } = state;
     
     const [ selectedScoringOption, setSelectedScoringOption ] = useState<number | null>(null);
 
@@ -56,6 +57,7 @@ function GameButtons() : JSX.Element {
     }
 
     const rollAndDontDisabled = movesDisabled || selectedScoringOption === null;
+    //const blockers = currentBlockingColumns(state, selectedScoringOption);
 
     return <div>
         <button 
@@ -76,5 +78,24 @@ function GameButtons() : JSX.Element {
         >
             Don't
         </button>
-    </div>
+
+        {/* {blockers !== null && <div>
+            Blocked on columns {blockers.join(", ")}
+        </div>} */}
+    </div>;
 }
+
+// function currentBlockingColumns(state: MatchState, selectedScoringOption: number | null): number[] | null {
+//     const { G: { columnHeights }, isBlocked, playerID, scoringOptions } = state;
+//     if (selectedScoringOption !== null) {
+//         const blockers =  scoringOptions[selectedScoringOption].filter(col => {
+//             const height = columnHeights[playerID][col].thisScoringChoice;
+//             return height !== "full" && isBlocked({ playerID, column: col, height });
+//         });
+
+//         if(blockers.length > 0) {
+//             return blockers;
+//         }
+//     }
+//     return null;
+// }

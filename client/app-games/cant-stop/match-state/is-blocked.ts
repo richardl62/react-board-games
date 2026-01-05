@@ -1,11 +1,12 @@
-import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
 import { ServerData, SetupOptions } from "@shared/game-control/games/cant-stop/server-data";
 
-export function getBlockedSquares(
+// Report if the give player is blocked from stopping with their top pieces
+// in the given columns at the given height.
+export function isBlocked(
+    {playerID, column, height}: {playerID: string, column: number, height: number},
     columnHeights: ServerData["columnHeights"],
     setupOptions: SetupOptions,
-    playerID: string
-): boolean[][] {
+): boolean {
 
     const isHighestOwnedByOther = (col: number, height: number): boolean => {
         for (const pid of Object.keys(columnHeights)) {
@@ -18,7 +19,8 @@ export function getBlockedSquares(
         return false;
     }
 
-    const isBlocked = (column: number, height: number): boolean => {
+    // Players are not considered blocked on columns they haven't started.
+    if (height > 0) {
         for (let offset = 0; offset < setupOptions.minClearanceAbove; offset++) {
             if (isHighestOwnedByOther(column, height + offset)) {
                 return true;
@@ -29,19 +31,7 @@ export function getBlockedSquares(
                 return true;
             }
         }
-        return false;
     }
 
-    const result: boolean[][] = [];
-
-    for (const col of columnValues) {
-        result[col] = [];
-
-        const maxHeight = maxColumnHeight(col);
-        for (let height = 1; height <= maxHeight; height++) {
-            result[col][height] = isBlocked(col, height);
-        }
-    }
-
-    return result;
+    return false;
 }

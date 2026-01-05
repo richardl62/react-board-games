@@ -1,24 +1,24 @@
 import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
-import { columnValues } from "@shared/game-control/games/cant-stop/config";
+import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
 
 export function BlockedSquares() : JSX.Element {
     const {
         G: {options},
-        blockedSquares
+        isBlocked,
     } = useMatchState();
 
     const colTexts = [];
     for (const col of columnValues) {
-        const blocked = blockedSquares[col];
-        if (blocked.includes(true))  {
-            let text = `col ${col}:`;
-            for (const ind in blockedSquares[col]) {
-                if (blockedSquares[col][ind]) {
-                    text += ` ${ind} `;
-                }
+        let blocked = "";
+        for (let height = 0; height < maxColumnHeight(col) ; height++) {
+            if(isBlocked({playerID: "current", column: col, height})) {
+                blocked += `${height} `;
             }
-            colTexts.push(text);
+        }
+
+        if (blocked.length > 0) {
+            colTexts.push(`col ${col}: ${blocked}`);
         }
     }
 

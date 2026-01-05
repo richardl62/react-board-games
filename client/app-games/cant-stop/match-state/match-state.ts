@@ -5,11 +5,11 @@ import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ClientMoves } from "@shared/game-control/games/cant-stop/moves/moves";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 import { getScoringOptions } from "./scoring-options";
-import { getBlockedSquares } from "./get-blocked-squares";
+import { isBlocked } from "./is-blocked";
 
 type StandardMatchState = WrappedMatchProps<ServerData, ClientMoves>;
 
-interface MatchState extends StandardMatchState {
+export interface MatchState extends StandardMatchState {
 
     fullColumns: number[];
 
@@ -22,11 +22,9 @@ interface MatchState extends StandardMatchState {
 
     scoringOptions: number[][];
 
-    /* The squares on which the current player cannot stop due to the clearance requirements
-       specified by the startup options.  
-       Indexed as [column][height] with true means the square is blocked. 
-    */
-    blockedSquares: boolean[][];
+    isBlocked: (
+        {playerID, column, height}: {playerID: string, column: number, height: number}
+    ) => boolean;
 }
 
 export function useMatchState() : MatchState {
@@ -43,15 +41,14 @@ export function useMatchState() : MatchState {
         fullColumns,
         columnsInPlay
     });
-    
-    const blockedSquares = getBlockedSquares(columnHeights, standardState.G.options, playerID);
+
     
     return {
         ...standardState,
         fullColumns,
         columnsInPlay,
         scoringOptions, 
-        blockedSquares
+        isBlocked: (arg) => isBlocked(arg, columnHeights, standardState.G.options)
     };
 }
 
