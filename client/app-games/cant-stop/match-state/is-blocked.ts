@@ -1,9 +1,13 @@
+import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ServerData, SetupOptions } from "@shared/game-control/games/cant-stop/server-data";
 
-// Report if the give player is blocked from stopping with their top pieces
-// in the given columns at the given height.
+export type IsBlockedArg0 = {playerID: string, column: number, height: number};
+
+// Report if the give player if 'mean rule' options prevent a player from stopping with 
+// their top pieces in the given columns at the given height. Full columns do not count
+// as blocked as the fullness rules are not part of the 'mean rules'. 
 export function isBlocked(
-    {playerID, column, height}: {playerID: string, column: number, height: number},
+    {playerID, column, height}: IsBlockedArg0,
     columnHeights: ServerData["columnHeights"],
     setupOptions: SetupOptions,
 ): boolean {
@@ -19,19 +23,43 @@ export function isBlocked(
         return false;
     }
 
-    // Players are not considered blocked on columns they haven't started.
-    if (height > 0) {
-        for (let offset = 0; offset < setupOptions.minClearanceAbove; offset++) {
-            if (isHighestOwnedByOther(column, height + offset)) {
-                return true;
-            }
+    const offsetToCheck: number[] = [];
+    for (let offset = 0; offset < setupOptions.minClearanceAbove; offset++) {
+        offsetToCheck.push(-offset);
+    }
+    for (let offset = 0; offset < setupOptions.minClearanceBelow; offset++) {
+        offsetToCheck.push(offset);
+    }
+
+    for(const offset of offsetToCheck) {
+        const hieghtToCheck = height + offset;
+
+        // Players are not considered blocked on columns they have not started.
+        if (hieghtToCheck > 0 && isHighestOwnedByOther(column, hieghtToCheck)) {
+            return true;
         }
-        for (let offset = 0; offset < setupOptions.minClearanceBelow; offset++) {
-            if (isHighestOwnedByOther(column, height - offset)) {
-                return true;
+    }        
+
+    return false;
+}
+
+export function blockedColumns(
+    columnHeights: ServerData["columnHeights"],
+    playerID: string,
+    isBlocked: (args: IsBlockedArg0) => boolean,
+) : number[] {
+    const result: number[] = [];
+
+    for (const col of columnValues) {
+        const { owned, thisScoringChoice } = columnHeights[playerID][col];
+        
+        // Players can be blocked only on columns that are in play this turn,
+        // and cannot be blocked on full columns.
+        if (thisScoringChoice > owned && thisScoringChoice !== "full") {
+            if (isBlocked({ playerID, column: col, height: thisScoringChoice })) {
+                result.push(col);
             }
         }
     }
-
-    return false;
+    return result;
 }

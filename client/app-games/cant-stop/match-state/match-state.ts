@@ -5,7 +5,8 @@ import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ClientMoves } from "@shared/game-control/games/cant-stop/moves/moves";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 import { getScoringOptions } from "./scoring-options";
-import { isBlocked } from "./is-blocked";
+import { blockedColumns, isBlocked, IsBlockedArg0 } from "./is-blocked";
+import { sanityCheckColumnHeights } from "./sanity-checks";
 
 type StandardMatchState = WrappedMatchProps<ServerData, ClientMoves>;
 
@@ -22,9 +23,17 @@ export interface MatchState extends StandardMatchState {
 
     scoringOptions: number[][];
 
+    /* Squares on which the 'mean rules' options prevent a given player from stopping. 
+    * Full columns do not count as blocked as the fullness rules are not part of the 'mean rules'.
+    */
     isBlocked: (
-        {playerID, column, height}: {playerID: string, column: number, height: number}
+        {playerID, column, height}: IsBlockedArg0
     ) => boolean;
+
+    /** The columns on which the active player in actively blocked, i.e. must either advance 
+    * further or go bust. 
+    */
+    currentlyBlockedColumns: number[];
 }
 
 export function useMatchState() : MatchState {
@@ -32,6 +41,9 @@ export function useMatchState() : MatchState {
     const columnHeights = standardState.G.columnHeights;
     const playerID = standardState.playerID;
     
+    // Is this the best place for this check?
+    sanityCheckColumnHeights(columnHeights);
+
     const fullColumns = getFullColumns(columnHeights);
     
     const columnsInPlay = getColumnsInPlay(columnHeights[playerID]);
@@ -42,14 +54,22 @@ export function useMatchState() : MatchState {
         columnsInPlay
     });
 
+    const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
     
-    return {
+    const state : MatchState = {
         ...standardState,
         fullColumns,
         columnsInPlay,
         scoringOptions, 
-        isBlocked: (arg) => isBlocked(arg, columnHeights, standardState.G.options)
+        isBlocked: isBlockedSimplified,
+        currentlyBlockedColumns: blockedColumns(
+            columnHeights,
+            playerID,
+            isBlockedSimplified,
+        ),
     };
+
+    return state;
 }
 
 function getFullColumns(heights: ServerData["columnHeights"]) : number[] {

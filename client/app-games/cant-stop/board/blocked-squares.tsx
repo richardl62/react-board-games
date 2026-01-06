@@ -5,20 +5,22 @@ import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-s
 export function BlockedSquares() : JSX.Element {
     const {
         G: {options},
+        playerID,
         isBlocked,
+        currentlyBlockedColumns,
     } = useMatchState();
 
     const colTexts = [];
     for (const col of columnValues) {
         let blocked = "";
         for (let height = 0; height < maxColumnHeight(col) ; height++) {
-            if(isBlocked({playerID: "current", column: col, height})) {
+            if(isBlocked({playerID, column: col, height})) {
                 blocked += `${height} `;
             }
         }
 
         if (blocked.length > 0) {
-            colTexts.push(`col ${col}: ${blocked}`);
+            colTexts.push(`-col ${col}: ${blocked}`);
         }
     }
 
@@ -27,5 +29,6 @@ export function BlockedSquares() : JSX.Element {
         <div>{`Min clearance below: ${options.minClearanceBelow}`}</div>
         <div>Blocked Squares: </div>
         {colTexts.map((text, index) => <div key={index}>{text}</div>)}
+        <div>Currently Blocked Columns: {currentlyBlockedColumns.join(", ")}</div>
         </div>
 }
