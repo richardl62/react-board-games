@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { sAssert } from "@shared/utils/assert";
-import { ScoringOptionDiv, ScoringOptionsGrid } from "./styles";
+import { ScoringOptionButton, ScoringOptionsGrid } from "./styles";
 
 const maxScoringOptions = 6;
 
@@ -27,13 +27,13 @@ export function ScoringOptions({selectedScoringOption, setSelectedScoringOption}
         } : undefined;
          
         buttons.push(
-            <ScoringOptionDiv
+            <ScoringOptionButton
                 key={buttonIndex}
                 onClick={onClick}
                 underline={isSelected}
             >
                 {buttonText}
-            </ScoringOptionDiv>
+            </ScoringOptionButton>
         )
     }    
     
