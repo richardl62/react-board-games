@@ -16,7 +16,6 @@ export const allGames : Array<GameControl> = [
     cantStop,
     cribbage,
     crosstiles,
-    g5000,
     plusMinus,
     ...scrabble,
     swapSquares, 

@@ -24,12 +24,12 @@ export const appGames : Array<AppGame> = [
     randomDraw,
 ];
 
-const appGameNames = appGames.map(ag => ag.name).sort();
-const gameControlNames = gameControlGames.map(g => g.name).sort();
+const appGameNames = appGames.map(ag => ag.name).sort().join(",");
+const gameControlNames = gameControlGames.map(g => g.name).sort().join(",");
 
-if(appGameNames.join(",") !== gameControlNames.join(",")) {
-    console.error("appGames and gameControlGames differ");
-    console.error("In appGames but not gameControlGames:", appGameNames.filter(n => !gameControlNames.includes(n)));
-    console.error("In gameControlGames but not appGames:", gameControlNames.filter(n => !appGameNames.includes(n)));
-}
+if(appGameNames !== gameControlNames) {
+    console.error("appGames and gameControlGames differ:");
+    console.log("appGame:", appGameNames);
+    console.log("gameControl:", gameControlNames);
+};
 
