@@ -3,6 +3,7 @@ import { useMatchState } from "../match-state/match-state";
 import { useDiceRotation } from "./dice-rotation";
 import { Dice } from "@/utils/dice/dice";
 import { ScoringOptions } from "./scoring-options";
+import { BustButton, ButtonsDiv, DiceAndButtonsDiv, DiceDiv, NoOptionRollButton } from "./styles";
 
 export function TurnControl() : JSX.Element {
     const { G: {diceValues} } = useMatchState();
@@ -13,12 +14,14 @@ export function TurnControl() : JSX.Element {
         <Dice key={"d" + index} face={diceValues[index]} rotation={diceRotation} color={"darkred"} />
     );
 
-    // Crude for now.
-    return <div>
-        <div> {makeDice(0)} {makeDice(1)} </div>
-        <GameButtons />
-        <div> {makeDice(2)} {makeDice(3)} </div>
-    </div>;
+
+    return <DiceAndButtonsDiv>
+        <DiceDiv> {makeDice(0)} {makeDice(1)} </DiceDiv>
+
+        <ButtonsDiv> <GameButtons /> </ButtonsDiv>
+
+        <DiceDiv> {makeDice(2)} {makeDice(3)} </DiceDiv>
+    </DiceAndButtonsDiv>;
 }
 
 function GameButtons() : JSX.Element {
@@ -40,26 +43,26 @@ function GameButtons() : JSX.Element {
     const movesDisabled = ctx.currentPlayer !== playerID;
 
     if (rollCount.thisTurn === 0) {
-        return <button 
+        return <NoOptionRollButton 
             onClick={() => moves.roll()} 
             disabled={movesDisabled}
         >
             Roll
-        </button>;
+        </NoOptionRollButton>;
     }
 
     if (scoringOptions.length === 0) {
-        return <button 
+        return <BustButton 
             onClick={() => moves.bust()} 
             disabled={movesDisabled}>
             Bust
-        </button>
+        </BustButton>;
     }
 
     const rollAndDontDisabled = movesDisabled || selectedScoringOption === null;
     //const blockers = currentBlockingColumns(state, selectedScoringOption);
 
-    return <div>
+    return <>
         <button 
             onClick={() => moves.roll()} 
             disabled={rollAndDontDisabled}
@@ -78,24 +81,5 @@ function GameButtons() : JSX.Element {
         >
             Don't
         </button>
-
-        {/* {blockers !== null && <div>
-            Blocked on columns {blockers.join(", ")}
-        </div>} */}
-    </div>;
+    </>;
 }
-
-// function currentBlockingColumns(state: MatchState, selectedScoringOption: number | null): number[] | null {
-//     const { G: { columnHeights }, isBlocked, playerID, scoringOptions } = state;
-//     if (selectedScoringOption !== null) {
-//         const blockers =  scoringOptions[selectedScoringOption].filter(col => {
-//             const height = columnHeights[playerID][col].thisScoringChoice;
-//             return height !== "full" && isBlocked({ playerID, column: col, height });
-//         });
-
-//         if(blockers.length > 0) {
-//             return blockers;
-//         }
-//     }
-//     return null;
-// }
