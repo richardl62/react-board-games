@@ -1,6 +1,6 @@
 import { JSX, useEffect, useState } from "react";
 import { useMatchState } from "../match-state/match-state";
-import { useDiceRotation } from "./rolling-dice";
+import { useDiceRotation } from "./dice-rotation";
 import { Dice } from "@/utils/dice/dice";
 import { ScoringOptions } from "./scoring-options";
 

@@ -1,6 +1,7 @@
 import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { sAssert } from "@shared/utils/assert";
+import { ScoringOptionDiv, ScoringOptionsGrid } from "./styles";
 
 const maxScoringOptions = 6;
 
@@ -14,25 +15,27 @@ export function ScoringOptions({selectedScoringOption, setSelectedScoringOption}
     sAssert(scoringOptions.length <= maxScoringOptions, 'Too many scoring options');
 
     const buttons = [];
-    for (let buttonIdx = 0; buttonIdx < maxScoringOptions; buttonIdx++) {
-        const scoringOption = scoringOptions[buttonIdx];
-        const isSelected = selectedScoringOption === buttonIdx;
-        const buttonText = isSelected ? `► ${scoringOption?.join(", ")}` : scoringOption?.join(", ");
-        if (scoringOption) {
-            buttons.push(
-                <button
-                    key={buttonIdx} 
-                    onClick={() => {
-                        moves.recordScoringChoice(scoringOption);
-                        setSelectedScoringOption(buttonIdx);
-                    }}
-                    disabled={!allowMoves}
-                >
-                    {buttonText}
-                </button>
-            )
-        }
+    for (let buttonIndex = 0; buttonIndex < maxScoringOptions; buttonIndex++) {
+        const scoringOption = scoringOptions[buttonIndex];
+
+        const isSelected = selectedScoringOption === buttonIndex;
+        const buttonText = scoringOption ? `${scoringOption?.join(", ")}`: "";
+
+        const onClick = scoringOption && allowMoves ? () => {
+            moves.recordScoringChoice(scoringOption);
+            setSelectedScoringOption(buttonIndex);
+        } : undefined;
+         
+        buttons.push(
+            <ScoringOptionDiv
+                key={buttonIndex}
+                onClick={onClick}
+                underline={isSelected}
+            >
+                {buttonText}
+            </ScoringOptionDiv>
+        )
     }    
     
-    return <div> {buttons}</div>
+    return <ScoringOptionsGrid> {buttons}</ScoringOptionsGrid>
 }
