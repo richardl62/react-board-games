@@ -12,19 +12,19 @@ const spotPositions = [
 ];
 const allSpots = [[1,0,1],[1,1,1],[1,0,1]];
 
-const diceSize = 50; // px
-const diceBorder = diceSize * 0.15; // px
-const spotSize = diceSize * 0.16; // px
+export const diceSize = "50px";
+const diceBorder = `calc(${diceSize} * 0.15)`;
+const spotSize = `calc(${diceSize} * 0.16)`; // px
 
 function spotOffset(index: number) {
     if(index === 0) {
         return diceBorder;
     }
     if(index === 1) {
-        return diceSize / 2 - spotSize / 2;
+        return `calc(${diceSize} / 2 - ${spotSize} / 2)`;
     }
     if(index === 2) {
-        return diceSize - spotSize - diceBorder;
+        return `calc(${diceSize} - ${spotSize} - ${diceBorder})`;
     }
     sAssert(false);
 }
@@ -34,19 +34,18 @@ const DiceDiv = styled.div<{rotation: number, color: string}>`
     background-color: ${props => props.color};
     border-radius: 10px;
 
-    height: ${diceSize}px;
-    width: ${diceSize}px;
+    height: ${diceSize};
+    width: ${diceSize};
 
     transform: rotate(${props => props.rotation}deg);
 `;
 
 const Spot = styled.div<{row: number, col: number}>`
     position: absolute;
-    top: ${props => spotOffset(props.row)}px;
-    left: ${props => spotOffset(props.col)}px;
-
-    height: ${spotSize}px;
-    width: ${spotSize}px;
+    top: ${props => spotOffset(props.row)};
+    left: ${props => spotOffset(props.col)};
+    height: ${spotSize};
+    width: ${spotSize};
     border-radius: 50%;
     background-color: white;
 `;
