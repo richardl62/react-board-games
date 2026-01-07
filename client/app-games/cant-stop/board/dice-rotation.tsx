@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { useMatchState } from "../match-state/match-state";
 
 const diceRoll = {
-    duration: 1000, // milliseconds
-    nRollSteps: 10, // steps
-    rollTotalAngle: 360, // degrees
+    duration: 500, // milliseconds
+    nRollSteps: 5, // steps
+    rollTotalAngle: 180, // degrees
 };
 
 export function useDiceRotation() : number| null {
-    const { G: {rollCount: serverRollCount} } = useMatchState();
-    const [lastServerRollCount, setLastServerRollCount] = useState(serverRollCount);
+    const { G: {rollCount: {total: totalRollCount}} } = useMatchState();
+    const [lastTotalRollCount, setLastTotalRollCount] = useState(totalRollCount);
 
     const [rollStep, setRollStep] = useState<number| null>(null);
 
     // Restart the rolling when a new roll is detected from the server.
     useEffect(() => {
-        if (serverRollCount > lastServerRollCount) {
-            setLastServerRollCount(serverRollCount);
+        if (totalRollCount > lastTotalRollCount) {
+            setLastTotalRollCount(totalRollCount);
             setRollStep(0);
         } 
-    }, [serverRollCount, lastServerRollCount]);
+    }, [totalRollCount, lastTotalRollCount]);
    
     // Increment the roll step at appropriate intervals while a roll is in progress.
     useEffect(() => {
@@ -33,5 +33,5 @@ export function useDiceRotation() : number| null {
         }
     }, [rollStep]);
 
-    return rollStep === null ? null : diceRoll.rollTotalAngle * (rollStep+1) / diceRoll.nRollSteps;
+    return rollStep === null ? null : diceRoll.rollTotalAngle * (rollStep + 1) / diceRoll.nRollSteps;
 }
