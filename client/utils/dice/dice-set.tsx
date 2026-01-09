@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Dice } from "./dice.js";
+import { diceSize } from "./dice.js";
 import { sAssert } from "../assert.js";
 import { HoldableDice } from "./holdable-dice.js";
 
@@ -8,7 +8,7 @@ const OuterDiv = styled.div`
     flex-direction: row;
     // gap between dice
     > * + * {
-        margin-left: ${Dice.diceSize * 0.1}px;
+        margin-left: calc(${diceSize} * 0.1);
     };
 `;
 
