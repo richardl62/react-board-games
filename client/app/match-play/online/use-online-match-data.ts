@@ -11,6 +11,8 @@ import { useAwaitedResponse } from "./use-awaited-response";
 export interface OnlineMatchData {
     connectionStatus: ConnectionStatus;
 
+    reconnecting: boolean;
+
     // Null while data is initially loading. After that, set to the last
     // non-null value received from the server. This is intended to allow
     // for downstream code to continue working after a temporary loss of
@@ -31,7 +33,8 @@ export function useOnlineMatchData(
     {matchID, player}: {matchID: MatchID, player: Player},
 ): OnlineMatchData {
 
-    const { readyState, serverResponse, sendMatchRequest: rawSendRequest 
+    const { 
+        readyState, serverResponse, sendMatchRequest: rawSendRequest, reconnecting
     } = useServerConnection({matchID, player});
 
     const matchData = (serverResponse && serverResponse.matchData) || null;
@@ -63,6 +66,6 @@ export function useOnlineMatchData(
     };
 
     const connectionError = (serverResponse && serverResponse.connectionError) || null;
-    return { connectionStatus, connectionError, serverMatchData: lastServerMatchData, moves, events };
+    return { connectionStatus, connectionError, serverMatchData: lastServerMatchData, moves, events, reconnecting };
 }
 

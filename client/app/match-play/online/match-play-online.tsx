@@ -11,22 +11,25 @@ export function MatchPlayOnline({ game, matchID, player }: {
 }): JSX.Element {
     const onlineMatchData = useOnlineMatchData(game, {matchID, player});
 
-    const { connectionStatus, moves, events, serverMatchData,  connectionError } = onlineMatchData;
+    const { connectionStatus, moves, events, serverMatchData,  connectionError, reconnecting } = onlineMatchData;
 
     if (serverMatchData === null) {
         if (connectionError) {
-            return <div> Error: {connectionError} </div>;
+            return <div> Error: {connectionError} {reconnecting ? "Attempting reconnecting…" : ""}</div>;
         } else {
             return <div>Loading...</div>;
         }
     }
 
-    return <GameBoard 
-        game={game}
-        playerID={player.id}
-        connectionStatus={connectionStatus}
-        serverMatchData={serverMatchData}
-        moves={moves}
-        events={events}
-    />
+    return <div>
+        {reconnecting && <div>Reconnecting…</div>}
+        <GameBoard
+            game={game}
+            playerID={player.id}
+            connectionStatus={connectionStatus}
+            serverMatchData={serverMatchData}
+            moves={moves}
+            events={events}
+        />
+    </div>
 }
