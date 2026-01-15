@@ -32,10 +32,27 @@ export function useServerConnection(
 
     const [reconnecting, setReconnecting] = useState(false);
     const hasEverOpenedRef = useRef(false);
+    // Track terminal rejection so we do not loop reconnections forever on intentional closes
+    const rejectedReasonRef = useRef<string | null>(null);
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(url.toString(), {
         retryOnError: true,
-        shouldReconnect: () => true,
+        shouldReconnect: (event) => {
+            // Stop reconnecting if the server explicitly rejected us or if the close code signals
+            // a policy/authorization problem or a custom 4000+ app code we introduced.
+            if (rejectedReasonRef.current) {
+                console.warn("WebSocket: not reconnecting due to rejection:", rejectedReasonRef.current);
+                return false;
+            }
+
+            const code = event?.code;
+            if (code !== undefined && code >= 4000 && code < 5000) {
+                console.warn(`WebSocket: close code ${code} — treating as deliberate, not reconnecting`);
+                return false;
+            }
+
+            return true;
+        },
         reconnectAttempts: 10,
         reconnectInterval: (attemptNumber) => {
             const inteval =Math.min(1000 * Math.pow(2, attemptNumber), 20000) + Math.floor(Math.random() * 1000)
@@ -50,8 +67,13 @@ export function useServerConnection(
             hasEverOpenedRef.current = true;
             setReconnecting(false);
         },
-        onClose: () => {
+        onClose: (event) => {
             if (hasEverOpenedRef.current) setReconnecting(true);
+
+            // If the server provided a reason, remember it so shouldReconnect can stop looping.
+            if (event?.reason) {
+                rejectedReasonRef.current = event.reason;
+            }
         },
         onError: () => {
             if (hasEverOpenedRef.current) setReconnecting(true);
@@ -71,6 +93,16 @@ export function useServerConnection(
             setReconnecting(true);
         }
     }, [readyState]);
+
+    // Watch for server-sent connection errors so we can treat them as terminal and avoid reconnect loops.
+    useEffect(() => {
+        if (lastJsonMessage && isWsServerResponse(lastJsonMessage)) {
+            if (lastJsonMessage.connectionError) {
+                rejectedReasonRef.current = lastJsonMessage.connectionError;
+                setReconnecting(false);
+            }
+        }
+    }, [lastJsonMessage]);
 
 
     let serverResponse: WsServerResponse | null = null;

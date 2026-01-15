@@ -129,6 +129,7 @@ wss.on('connection', (ws, req)  => {
   });
 
   ws.on('error', (error) => {
-    connections.error(ws, error);
+    // What should be done here
+    console.error('WebSocket error:', error);
   });
 });

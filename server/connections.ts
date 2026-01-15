@@ -6,6 +6,55 @@ import { WsServerResponse } from "../shared/ws-server-response.js";
 import { Match } from "./match.js";
 import { Matches } from "./matches.js";
 
+function sendResponseJSON(ws: WebSocket, response: WsServerResponse) {
+    if (ws.readyState === WebSocket.OPEN) {
+        try {
+            ws.send(JSON.stringify(response));
+        } catch (err) {
+            console.error('Error sending WebSocket response:', err);
+        }
+    } else {
+        console.warn('Attempted to send WebSocket response on non-open socket');
+    }
+}
+
+function broadcastMatchData(
+    match: Match, 
+    trigger: WsResponseTrigger,
+) { 
+    const response: WsServerResponse = 
+        { trigger, matchData: match.matchData() };
+
+    for (const player of match.players) {
+        if (player.isConnected) {
+          const ws = player.getWs();
+          if(ws)
+            sendResponseJSON(ws, response);
+          else
+            console.error(`Player ${player.id} is marked as connected but has no WebSocket`);
+        }
+    }
+}
+
+// Close with a string giving reason. 
+// The actual closure is delayed slightly to allow final messages to be sent. 
+function closeWithReason(ws: WebSocket, reason: string) {
+    const code = 4000; // Application-defined close code
+    const delayMs = 50;
+
+    const safeReason = reason.slice(0, 120); // WebSocket reason must be <= 123 bytes
+    const doClose = () => {
+        try {
+            ws.close(code, safeReason);
+        } catch {
+            console.warn('WebSocket close failed, terminating connection');
+            try { ws.terminate(); } catch { /* noop */ }
+        }
+    };
+    
+    setTimeout(doClose, delayMs);
+}
+
 export class Connections {
     matches: Matches;
 
@@ -59,7 +108,7 @@ export class Connections {
             // connection. (The easy options are either this or dsallowing the new connection,
             // which seems less user-friendly.)
             if (player.isConnected) {
-                player.getWs()!.close();
+                closeWithReason(player.getWs()!, "duplicate-connection");
                 player.recordDisconnection();
             }
 
@@ -72,7 +121,12 @@ export class Connections {
             console.log('Error during connection:', error);
 
             const response: WsServerResponse = { trigger, connectionError: error };
-            ws.send(JSON.stringify(response));
+            try {
+                ws.send(JSON.stringify(response));
+            } catch {
+                console.error('Failed to send connection error message');
+            }
+            closeWithReason(ws, error);
         }
     }
 
@@ -141,34 +195,7 @@ export class Connections {
             const response: WsServerResponse = { 
                 trigger: clientRequest || { badClientRequest: true }, 
                 connectionError: error };
-            sendResponse(ws, response);
-        }
-    }
-
-    error(_ws: WebSocket, error: Error) {
-        // What should be done here?
-        console.error('WebSocket error:', error);
-    }
-}
-
-function sendResponse(ws: WebSocket, response: WsServerResponse) {
-    ws.send(JSON.stringify(response));
-}
-
-function broadcastMatchData(
-    match: Match, 
-    trigger: WsResponseTrigger,
-) { 
-    const response: WsServerResponse = 
-        { trigger, matchData: match.matchData() };
-
-    for (const player of match.players) {
-        if (player.isConnected) {
-          const ws = player.getWs();
-          if(ws)
-            sendResponse(ws, response);
-          else
-            console.error(`Player ${player.id} is marked as connected but has no WebSocket`);
+            sendResponseJSON(ws, response);
         }
     }
 }
