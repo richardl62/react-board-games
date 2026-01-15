@@ -6,6 +6,7 @@ import { readyStatusText } from "@utils/ready-status-text";
 import { isWsServerResponse, WsServerResponse } from "@shared/ws-server-response";
 import { ReadyState } from "react-use-websocket";
 import { serverAddress } from "../../server-address";
+import { wsClientConnection } from "@shared/ws-response-trigger";
 
 // A fairly thin wrapper around useWebSocket.
 export function useServerConnection(
@@ -116,7 +117,7 @@ export function useServerConnection(
             console.warn("Received invalid WebSocket message:", lastJsonMessage)
 
             serverResponse = {
-                trigger: { unknownProblem: true },
+                trigger: wsClientConnection,
                 connectionError: "Received invalid server response",
             }
         }

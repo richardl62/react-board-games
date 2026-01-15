@@ -1,35 +1,35 @@
 import { WsClientRequest, isWsClientRequest } from "./ws-client-request.js";
 
-// Set to all players in a match when a client connects or disconnects.
-export interface WsClientConnection { clientConnection: true };
+// Used when players in a match when a client connects or disconnects.
+export const wsClientConnection = { clientConnection: true } as const;
 
-export interface WsBadClientRequest { badClientRequest: true };
+export const wsBadClientRequest = { badClientRequest: true } as const;
 
-export interface WsUnknownProblem { unknownProblem: true };
+export const wsUnknownProblem = { unknownProblem: true } as const;
 
-export type WsResponseTrigger = WsClientRequest | WsBadClientRequest | WsClientConnection | 
-    WsUnknownProblem;
+export type WsResponseTrigger = WsClientRequest | typeof wsBadClientRequest | typeof wsClientConnection | 
+    typeof wsUnknownProblem;
 
-export function isWsClientConnection(obj: unknown): obj is WsClientConnection {
+export function isWsClientConnection(obj: unknown): obj is typeof wsClientConnection {
     if (typeof obj !== "object" || obj === null)
         return false;
 
-    const candidate = obj as WsClientConnection;
+    const candidate = obj as typeof wsClientConnection;
     return candidate.clientConnection === true;
 }
 
-export function isWsBadClientRequest(obj: unknown): obj is WsBadClientRequest {
+export function isWsBadClientRequest(obj: unknown): obj is typeof wsBadClientRequest {
     if (typeof obj !== "object" || obj === null)
         return false;
 
-    const candidate = obj as WsBadClientRequest;
+    const candidate = obj as typeof wsBadClientRequest;
     return candidate.badClientRequest === true;
 }
 
-export function isWsUnknownProblem(obj: unknown): obj is WsUnknownProblem {
+export function isWsUnknownProblem(obj: unknown): obj is typeof wsUnknownProblem {
     if (typeof obj !== "object" || obj === null)
         return false;       
-    const candidate = obj as WsUnknownProblem;
+    const candidate = obj as typeof wsUnknownProblem;
     return candidate.unknownProblem === true;
 }
 

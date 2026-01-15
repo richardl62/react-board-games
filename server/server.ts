@@ -4,17 +4,17 @@ import cors from 'cors';
 import { WebSocketServer } from 'ws';
 import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
-import { Connections } from './connections.js';
 import { Matches } from './matches.js';
 import { defaultPort } from '../shared/default-port.js';
 import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
+import { processConnection, processDisconnection } from './process-connection.js';
+import { processActionRequest } from './process-action-request.js';
 
 //const draw = seededDraw(12345);
 const draw = () => Math.random();
 
 const random = new RandomAPI(draw);
 const matches = new Matches(random);
-const connections = new Connections(matches);
 
 const app = express();
 const PORT = process.env.PORT || defaultPort;
@@ -114,16 +114,16 @@ wss.on('connection', (ws, req)  => {
   // Start the inactivity countdown on connect
   resetIdleTimer();
 
-  connections.connected(ws, req.url);
+  processConnection(matches, ws, req.url);
 
   ws.on('close', () => {
     clearInterval(heartbeat);
     if (idleTimer) clearTimeout(idleTimer);
-    connections.disconnected(ws);
+    processDisconnection(matches, ws);
   });
 
   ws.on('message', message => { 
-    connections.actionRequest(ws, message.toString());
+    processActionRequest(matches, ws, message.toString());
     // Reset inactivity timer only on real client messages
     resetIdleTimer();
   });

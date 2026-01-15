@@ -3,6 +3,7 @@ import { GameControl } from "../shared/game-control/game-control.js";
 import { allGames } from "../shared/game-control/games/all-games.js";
 import { Match } from "./match.js";
 import { RandomAPI } from '../shared/utils/random-api.js';
+import { Player } from './player.js';
 
 // Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {
@@ -47,11 +48,11 @@ export class Matches {
         return matches;
     }
 
-    // Get the match that a player is in
-    getMatchByWebSocket(ws: WebSocket) : Match | null {
+    findMatchAndPlayer(ws: WebSocket) : {match: Match, player: Player} | null {
         for (const match of this.matches) {
-            if (match.findPlayer({ws})) {
-                return match;
+            const player = match.findPlayer({ws});
+            if (player) {
+                return { match, player };
             }
         }
         

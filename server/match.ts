@@ -8,6 +8,9 @@ import { RandomAPI } from '../shared/utils/random-api.js';
 import { WsMove } from "../shared/ws-client-request.js";
 import { Player } from "./player.js";
 import { Ctx, endMatch, endTurn, makeCtxData } from '../shared/game-control/ctx.js';
+import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
+import { WsServerResponse } from '../shared/ws-server-response.js';
+import { sendServerResponse } from './send-server-response.js';
 
 type MutableMatchData = Omit<ServerMatchData, 'playerData'>;
 
@@ -123,7 +126,20 @@ export class Match {
         } else if ('name' in arg) {
             return this.players.find(p => p.name === arg.name);
         } else {    
-            return this.players.find(p => p.getWs() === arg.ws);
+            return this.players.find(p => p.isConnected && p.getWs() === arg.ws);
+        }
+    }
+
+    broadcastMatchData(
+        trigger: WsResponseTrigger,
+    ) {
+        const response: WsServerResponse =
+            { trigger, matchData: this.matchData() };
+
+        for (const player of this.players) {
+            if (player.isConnected) {
+                sendServerResponse(player.getWs(), response);
+            }
         }
     }
 }  

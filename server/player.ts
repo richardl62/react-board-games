@@ -68,7 +68,10 @@ export class Player {
 
     get isConnected() {return this.ws !== null; } 
     
-    getWs() : WebSocket | null {
+    getWs() : WebSocket {
+        if (!this.ws) {
+            throw new Error(`Player ${this.id} is not connected: cannot get WebSocket`);
+        }
         return this.ws;
     }
 
