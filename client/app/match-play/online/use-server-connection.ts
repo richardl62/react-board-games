@@ -36,8 +36,12 @@ export function useServerConnection(
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(url.toString(), {
         retryOnError: true,
         shouldReconnect: () => true,
-        reconnectAttempts: 50,
-        reconnectInterval: (attemptNumber) => Math.min(1000 * Math.pow(2, attemptNumber), 30000) + Math.floor(Math.random() * 1000),
+        reconnectAttempts: 10,
+        reconnectInterval: (attemptNumber) => {
+            const inteval =Math.min(1000 * Math.pow(2, attemptNumber), 20000) + Math.floor(Math.random() * 1000)
+            console.log(`WebSocket: reconnect attempt ${attemptNumber}, next in ${inteval/1000} seconds`);
+            return inteval; 
+        },
         onReconnectStop: (attempts) => {
             console.warn(`WebSocket: stopped reconnecting after ${attempts} attempts`);
             setReconnecting(false);
