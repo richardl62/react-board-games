@@ -1,6 +1,6 @@
 import { WsClientRequest, isWsClientRequest } from "./ws-client-request.js";
 
-// Used when players in a match when a client connects or disconnects.
+// Used when players in a match connect or disconnect.
 export const wsClientConnection = { clientConnection: true } as const;
 
 export const wsBadClientRequest = { badClientRequest: true } as const;

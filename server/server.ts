@@ -12,6 +12,8 @@ import { processActionRequest } from './process-action-request.js';
 
 // Used to keep track of live entities
 const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds - used to keep connections alive
+                                      // and to detect dead connections.
+                                      
 const IDLE_TIMEOUT = 20 * 60 * 1000; // 20 minutes - timeout for idle connections
 
 //const draw = seededDraw(12345);
