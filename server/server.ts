@@ -10,6 +10,10 @@ import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
 import { processConnection, processDisconnection } from './process-connection.js';
 import { processActionRequest } from './process-action-request.js';
 
+// Used to keep track of live entities
+const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds - used to keep connections alive
+const IDLE_TIMEOUT = 20 * 60 * 1000; // 20 minutes - timeout for idle connections
+
 //const draw = seededDraw(12345);
 const draw = () => Math.random();
 
@@ -18,9 +22,6 @@ const matches = new Matches(random);
 
 const app = express();
 const PORT = process.env.PORT || defaultPort;
-
-const DEFAULT_HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds - used to keep connections alive
-const DEFAULT_IDLE_TIMEOUT = 20 * 60 * 1000; // 20 minutes
 
 app.use(cors({
   origin: 'http://localhost:5173' // Vite default port
@@ -35,6 +36,30 @@ const server = app.listen(PORT, () => {
 });
 
 const wss = new WebSocketServer({ server });
+
+const isAliveMap = new WeakMap<object, boolean>();
+const lastSeenMap = new WeakMap<object, number>();
+
+// Heartbeat runs once every 25s and checks EVERY connected client.
+const interval = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (isAliveMap.get(ws) === false) {
+      return ws.terminate();
+    }
+
+    isAliveMap.set(ws, false);
+    ws.ping();
+
+    // Check if the connection is idle
+    const lastSeen = lastSeenMap.get(ws);
+    if (lastSeen !== undefined && Date.now() - lastSeen > IDLE_TIMEOUT) {
+      ws.close(1000, 'Idle timeout');
+    }
+  });
+}, HEARTBEAT_INTERVAL);
+
+// Clean up global interval when server closes
+wss.on('close', () => clearInterval(interval));
 
 // Resolve __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -64,72 +89,21 @@ app.use((_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
-wss.on('connection', (ws, req)  => {
-  // Heartbeat to keep idle connections alive behind proxies (e.g., ~60s timeouts)
-  // and to detect dead peers. Browsers auto-respond to pings with pongs.
-  // Interval defaults to 25s or can be overridden via KEEPALIVE_MS.
-  // (Code suggested by GitHub Copilot, and adapted slightly.)
-  const keepAliveMs = Number(process.env.KEEPALIVE_MS || DEFAULT_HEARTBEAT_INTERVAL);
+wss.on('connection', (ws, req) => {
+  isAliveMap.set(ws, true);
+  lastSeenMap.set(ws, Date.now());
 
-  // Application-level idle timeout to close connections after long periods of inactivity.
-  const idleCloseMs = Number(process.env.IDLE_TIMEOUT_MS || DEFAULT_IDLE_TIMEOUT);
-
-  // KLUDGE: TypeScript hack to add isAlive property to ws
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const wsAsKeepAlive = ws as any as { isAlive: boolean };
+  ws.on('pong', () => isAliveMap.set(ws, true));
   
-  // Track liveness via pong responses
-  wsAsKeepAlive.isAlive = true;
-  ws.on('pong', () => {
-    wsAsKeepAlive.isAlive = true;
+  ws.on('message', (message) => {
+    lastSeenMap.set(ws, Date.now()); // Update last activity
+    processActionRequest(matches, ws, message.toString());
   });
-
-  const heartbeat = setInterval(() => {
-    // If no pong since last ping, terminate to avoid leaking dead sockets
-    if (wsAsKeepAlive.isAlive === false) {
-      clearInterval(heartbeat);
-      try { ws.terminate(); } catch { /* noop */ }
-      return;
-    }
-    wsAsKeepAlive.isAlive = false;
-    try { ws.ping(); } catch { /* noop */ }
-  }, keepAliveMs);
-
-  // Application-level inactivity timeout: close after long periods
-  // without any client messages (pings/pongs do not reset this).
-  // (Code suggested by GitHub Copilot.)
-  let idleTimer: NodeJS.Timeout;
-  const resetIdleTimer = () => {
-    if (idleCloseMs <= 0) return; // allow disabling via env
-    if (idleTimer) clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      try {
-        ws.close(1000, 'Idle timeout');
-      } catch {
-        try { ws.terminate(); } catch { /* noop */ }
-      }
-    }, idleCloseMs);
-  };
-
-  // Start the inactivity countdown on connect
-  resetIdleTimer();
-
-  processConnection(matches, ws, req.url);
 
   ws.on('close', () => {
-    clearInterval(heartbeat);
-    if (idleTimer) clearTimeout(idleTimer);
     processDisconnection(matches, ws);
+    // WeakMap entries are garbage collected automatically
   });
 
-  ws.on('message', message => { 
-    processActionRequest(matches, ws, message.toString());
-    // Reset inactivity timer only on real client messages
-    resetIdleTimer();
-  });
-
-  ws.on('error', (error) => {
-    // What should be done here
-    console.error('WebSocket error:', error);
-  });
+  processConnection(matches, ws, req.url);
 });
