@@ -11,25 +11,37 @@ export function MatchPlayOnline({ game, matchID, player }: {
 }): JSX.Element {
     const onlineMatchData = useOnlineMatchData(game, {matchID, player});
 
-    const { connectionStatus, moves, events, serverMatchData,  connectionError, reconnecting } = onlineMatchData;
+    const { connectionStatus, moves, events, serverMatchData,  connectionError, reconnecting, rejectionReason } = onlineMatchData;
 
-    if (serverMatchData === null) {
-        if (connectionError) {
-            return <div> Error: {connectionError} {reconnecting ? "Attempting reconnecting…" : ""}</div>;
-        } else {
-            return <div>Loading...</div>;
-        }
-    }
+    // if ( serverMatchData === null) {
+    //     if (connectionError) {
+    //         return <div>
+    //             {rejectionReason && <div>Connection rejected: {rejectionReason}</div>}
+    //             <div>Connection error: {connectionError}</div>
+
+    //             {reconnecting && <div>Attempting reconnecting…</div>}
+
+    //         </div>
+    //     } else {
+    //         return <div>Loading...</div>;
+    //     }
+    // }
 
     return <div>
-        {reconnecting && <div>Reconnecting…</div>}
-        <GameBoard
-            game={game}
-            playerID={player.id}
-            connectionStatus={connectionStatus}
-            serverMatchData={serverMatchData}
-            moves={moves}
-            events={events}
-        />
+        {reconnecting && <div>Attempting reconnecting…</div>}
+        {rejectionReason && <div>Connection rejected: {rejectionReason}</div>}
+        {connectionError && <div>Connection error: {connectionError}</div>}
+
+        { serverMatchData ?
+            <GameBoard
+                game={game}
+                playerID={player.id}
+                connectionStatus={connectionStatus}
+                serverMatchData={serverMatchData}
+                moves={moves}
+                events={events}
+            />
+            :  <div>No match data available.</div>
+        }
     </div>
 }

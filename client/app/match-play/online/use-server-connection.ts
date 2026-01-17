@@ -4,12 +4,21 @@ import { isWsServerResponse, WsServerResponse } from "@shared/ws-server-response
 import { useMemo, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { serverAddress } from "../../server-address";
+import { WsClientRequest } from "@shared/ws-client-request";
 
 const reconnectAttempts = 30;
 const minReconnectinterval = 1000; // 1 second
 const maxReconnectInterval = 20000; // 20 seconds
 
-export function useServerConnection({ matchID, player }: { matchID: MatchID; player: Player }) {
+interface ServerConnection {
+    readyState: number;
+    serverResponse: WsServerResponse | null;
+    sendMatchRequest: (data: WsClientRequest) => void;
+    reconnecting: boolean;
+    rejectionReason: string | null;
+}
+
+export function useServerConnection({ matchID, player }: { matchID: MatchID; player: Player }) : ServerConnection {
     const socketUrl = useMemo(() => {
         const url = new URL(serverAddress());
         url.protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -22,6 +31,7 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
     const [reconnecting, setReconnecting] = useState(false);
     const hasEverOpenedRef = useRef(false);
     const rejectedReasonRef = useRef<string | null>(null);
+    const [rejectionReason, setRejectionReason] = useState<string | null>(null);
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
         retryOnError: true,
@@ -50,7 +60,8 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
 
         onClose: (event) => {
             if (hasEverOpenedRef.current) setReconnecting(true);
-            if (event.reason) rejectedReasonRef.current = event.reason;
+            console.log(`connection closed: ${event.reason}`);
+            if (event.reason)setRejectionReason(event.reason);
         },
 
         onError: () => {
@@ -82,6 +93,7 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
         readyState, 
         serverResponse, 
         sendMatchRequest: sendJsonMessage, 
-        reconnecting 
+        reconnecting,
+        rejectionReason, 
     };
 }

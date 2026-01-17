@@ -24,6 +24,8 @@ export interface OnlineMatchData {
     // is probably no point in downsteam code using serverMatchData.
     connectionError: string | null;
 
+    rejectionReason: string | null;
+
     moves: BoardProps["moves"];
     events: EventsAPI;
 };
@@ -34,7 +36,7 @@ export function useOnlineMatchData(
 ): OnlineMatchData {
 
     const { 
-        readyState, serverResponse, sendMatchRequest: rawSendRequest, reconnecting
+        readyState, serverResponse, sendMatchRequest: rawSendRequest, reconnecting, rejectionReason
     } = useServerConnection({matchID, player});
 
     const matchData = (serverResponse && serverResponse.matchData) || null;
@@ -66,6 +68,6 @@ export function useOnlineMatchData(
     };
 
     const connectionError = (serverResponse && serverResponse.connectionError) || null;
-    return { connectionStatus, connectionError, serverMatchData: lastServerMatchData, moves, events, reconnecting };
+    return { connectionStatus, connectionError, serverMatchData: lastServerMatchData, moves, events, reconnecting, rejectionReason };
 }
 
