@@ -1,13 +1,8 @@
+import { ConnectionStatus } from "@/app/match-play/online/use-server-connection";
 import { Ctx } from "@shared/game-control/ctx";
 import { EventsAPI } from "@shared/game-control/events";
 import { PlayerID } from "@shared/game-control/playerid";
 import { PublicPlayerMetadata } from "@shared/lobby/types";
-import { ReadyState } from "react-use-websocket";
-
-export type ConnectionStatus = "offline" | {
-    readyState: ReadyState;
-    waitingForServer: boolean;
-};
 
 type Moves = {
     [x: string]: (...args: unknown[]) => void;

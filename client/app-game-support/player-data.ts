@@ -47,7 +47,7 @@ function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string
 
 }
 
-export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
+export function makePlayerDataHACKED(props: BgioBoardProps): PlayerDataDictionary {
     const matchData = props.matchData;
     if(!matchData) {
         console.warn("Bgio match data is null");
@@ -58,7 +58,8 @@ export function makePlayerData(props: BgioBoardProps): PlayerDataDictionary {
     const playerData: PlayerDataDictionary = {};
     for (const id in props.ctx.playOrder) {
         playerData[id] = makePlayerDataElem(matchData, id, props.ctx.numPlayers,
-            props.connectionStatus === "offline"
+            true, // TEMPORARY HACK
+            //props.connectionStatus === "offline"
         );
     }
 

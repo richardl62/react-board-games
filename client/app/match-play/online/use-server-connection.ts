@@ -1,21 +1,24 @@
 import { MatchID, Player } from "@/app-game-support";
-import { wsUnknownProblem } from "@shared/ws-response-trigger";
 import { isWsServerResponse, WsServerResponse } from "@shared/ws-server-response";
 import { useMemo, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { serverAddress } from "../../server-address";
 import { WsClientRequest } from "@shared/ws-client-request";
 
+export type ConnectionStatus = "connecting" | "connected" | {
+    closeEvent: CloseEvent,
+    reconnecting: boolean,
+}
+
 const reconnectAttempts = 30;
-const minReconnectinterval = 1000; // 1 second
+const minReconnectInterval = 1000; // 1 second
 const maxReconnectInterval = 20000; // 20 seconds
 
 interface ServerConnection {
-    readyState: number;
+    connectionStatus: ConnectionStatus;
+    
     serverResponse: WsServerResponse | null;
     sendMatchRequest: (data: WsClientRequest) => void;
-    reconnecting: boolean;
-    rejectionReason: string | null;
 }
 
 export function useServerConnection({ matchID, player }: { matchID: MatchID; player: Player }) : ServerConnection {
@@ -28,25 +31,34 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
         return url.toString();
     }, [matchID.mid, player.id, player.credentials]);
 
-    const [reconnecting, setReconnecting] = useState(false);
-    const hasEverOpenedRef = useRef(false);
-    const rejectedReasonRef = useRef<string | null>(null);
-    const [rejectionReason, setRejectionReason] = useState<string | null>(null);
+    const attemptReconnection = useRef(false);
+    const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>( "connecting" );
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
+    const { sendJsonMessage, lastJsonMessage } = useWebSocket(socketUrl, {
         retryOnError: true,
         reconnectAttempts,
-        
-        shouldReconnect: (event) => {
-            // Stop if we found a terminal error (4xxx code or explicit reason)
-            if (rejectedReasonRef.current) return false;
-            const code = event?.code;
-            return !(code !== undefined && code >= 4000 && code < 5000);
+
+        shouldReconnect: () => {
+            return attemptReconnection.current;
+        },
+
+        onReconnectStop: () => {
+            setConnectionStatus((prev) => {
+                if (prev === "connecting" || prev === "connected") {
+                    // I'm not sure if this can even happen, but just in case.
+                    return {
+                        closeEvent: new CloseEvent('close', { reason: "Failed to connect after maximum attempts" }),
+                        reconnecting: false
+                    }
+                }
+ 
+                return { ...prev, reconnecting: false };
+            });
         },
 
         reconnectInterval: (attempt) => {
             const delay = 
-                Math.min(minReconnectinterval * Math.pow(2, attempt), maxReconnectInterval) + 
+                Math.min(minReconnectInterval * Math.pow(2, attempt), maxReconnectInterval) + 
                 Math.floor(Math.random() * 1000) // Jitter to avoid thundering herd problem
             ;
             console.log(`WebSocket: reconnect attempt ${attempt}, next in ${delay / 1000}s`);
@@ -54,46 +66,40 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
         },
 
         onOpen: () => {
-            hasEverOpenedRef.current = true;
-            setReconnecting(false);
+            attemptReconnection.current = false;
+            setConnectionStatus("connected");
         },
 
         onClose: (event) => {
-            if (hasEverOpenedRef.current) setReconnecting(true);
-            console.log(`connection closed: ${event.reason}`);
-            if (event.reason)setRejectionReason(event.reason);
+            attemptReconnection.current = !( event.code >= 4000 && event.code < 5000);
+
+            setConnectionStatus({
+                closeEvent: event,
+                reconnecting: attemptReconnection.current,
+            });
         },
 
-        onError: () => {
-            if (hasEverOpenedRef.current) setReconnecting(true);
-        },
+        // onError could be used here. But onClose will almost always be called after an error,
+        // so it's not clear that there would be anything useful to do.
     });
 
     // Process the server response
     const serverResponse = useMemo((): WsServerResponse | null => {
         if (!lastJsonMessage) return null;
 
-        if (isWsServerResponse(lastJsonMessage)) {
-            // Capture terminal server-side errors
-            if (lastJsonMessage.connectionError) {
-                rejectedReasonRef.current = lastJsonMessage.connectionError;
-                setReconnecting(false);
-            }
-            return lastJsonMessage;
+        if (!isWsServerResponse(lastJsonMessage)) {
+            // Should never happen ...
+            console.warn("Received invalid WebSocket message:", lastJsonMessage);
+            attemptReconnection.current = false;
+            return null;
         }
 
-        console.warn("Received invalid WebSocket message:", lastJsonMessage);
-        return {
-            trigger: wsUnknownProblem,
-            connectionError: "Received invalid server response",
-        };
+        return lastJsonMessage
     }, [lastJsonMessage]);
 
     return { 
-        readyState, 
         serverResponse, 
         sendMatchRequest: sendJsonMessage, 
-        reconnecting,
-        rejectionReason, 
+        connectionStatus,
     };
 }

@@ -41,7 +41,7 @@ export function MatchPlayOffline({game, options}: {
         const board = <GameBoard 
             game={game}
             playerID={playerID}
-            connectionStatus={"offline"}
+            connectionStatus={"connected"}
             serverMatchData={matchData}
             moves={moves}
             events={events}

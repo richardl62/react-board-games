@@ -1,9 +1,9 @@
-import { AppGame, BoardProps, ConnectionStatus, MatchID, Player } from "@/app-game-support";
+import { AppGame, BoardProps,  MatchID, Player } from "@/app-game-support";
 import { useLastNonNull } from "@/utils/use-last-non-null";
 import { EventsAPI } from "@shared/game-control/events";
 import { ServerMatchData } from "@shared/server-match-data";
 import { WsClientRequest } from "@shared/ws-client-request";
-import { useServerConnection } from "./use-server-connection";
+import { ConnectionStatus, useServerConnection } from "./use-server-connection";
 import { useAwaitedResponse } from "./use-awaited-response";
 
 /** Data about a match received from the server, with added move functions
@@ -11,20 +11,14 @@ import { useAwaitedResponse } from "./use-awaited-response";
 export interface OnlineMatchData {
     connectionStatus: ConnectionStatus;
 
-    reconnecting: boolean;
+    // True if waiting of the server to respond to a move or event.
+    waitingForServer: boolean;
 
     // Null while data is initially loading. After that, set to the last
     // non-null value received from the server. This is intended to allow
     // for downstream code to continue working after a temporary loss of
     // connection.
     serverMatchData: ServerMatchData | null;
-
-    // Set if there a problem preventing a valid connection to the server.
-    // The possible errors include invalid IDs or credentials. If set there
-    // is probably no point in downsteam code using serverMatchData.
-    connectionError: string | null;
-
-    rejectionReason: string | null;
 
     moves: BoardProps["moves"];
     events: EventsAPI;
@@ -36,7 +30,7 @@ export function useOnlineMatchData(
 ): OnlineMatchData {
 
     const { 
-        readyState, serverResponse, sendMatchRequest: rawSendRequest, reconnecting, rejectionReason
+        serverResponse, sendMatchRequest: rawSendRequest, connectionStatus
     } = useServerConnection({matchID, player});
 
     const matchData = (serverResponse && serverResponse.matchData) || null;
@@ -62,12 +56,12 @@ export function useOnlineMatchData(
         endMatch: () => wrappedSendRequest({ endMatch: true }),
     };
 
-    const connectionStatus: ConnectionStatus = {
-        readyState,
-        waitingForServer: awaitingResponse,
-    };
-
-    const connectionError = (serverResponse && serverResponse.connectionError) || null;
-    return { connectionStatus, connectionError, serverMatchData: lastServerMatchData, moves, events, reconnecting, rejectionReason };
+    return { 
+        connectionStatus, 
+        waitingForServer: awaitingResponse, 
+        serverMatchData: lastServerMatchData,
+        moves,
+        events,
+    };       
 }
 

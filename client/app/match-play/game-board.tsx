@@ -1,8 +1,9 @@
 import { JSX, useEffect } from "react";
-import { AppGame, BoardProps, ConnectionStatus } from "@/app-game-support";
+import { AppGame, BoardProps } from "@/app-game-support";
 import { WrappedMatchProps, useWrappedMatchProps } from "@/app-game-support/wrapped-match-props";
 import { ServerMatchData } from "@shared/server-match-data";
 import { Ctx } from "@shared/game-control/ctx";
+import { ConnectionStatus } from "./online/use-server-connection";
 
 function gameStatus(gameProps: WrappedMatchProps) {
     if(!gameProps.allJoined) {

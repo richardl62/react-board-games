@@ -3,8 +3,9 @@
 
 import { sAssert } from "@utils/assert";
 import { BoardProps } from "@/app-game-support/board-props";
-import {  makePlayerData, PlayerDataDictionary } from "./player-data";
+import {  makePlayerDataHACKED, PlayerDataDictionary } from "./player-data";
 import { useSearchParamData } from "../url-tools";
+import { useEffect } from "react";
 /**
  * Bgio type definition of 'moves'.
  *
@@ -39,8 +40,10 @@ export interface WrappedMatchProps<G=unknown, Moves=unknown>
 }
 
 export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchProps<G> {
- 
-    const playerData = makePlayerData(bgioProps);
+    useEffect(() => {
+        console.log("Using makePlayerDataHACKED - temporary hack");
+    }, []);
+    const playerData = makePlayerDataHACKED(bgioProps);
     const {isOffline} = useSearchParamData();
 
     let allJoined = true;

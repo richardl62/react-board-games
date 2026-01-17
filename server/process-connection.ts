@@ -83,7 +83,8 @@ export function processDisconnection(matches: Matches, ws: WebSocket) {
     try {
         const found = matches.findMatchAndPlayer(ws);
         if (!found) {
-            throw new Error('Disconnect reported for player who is not in a match');
+            console.log('Disconnect reported from socket with no associated player/match');
+            return;
         }
 
         const { match, player } = found;
