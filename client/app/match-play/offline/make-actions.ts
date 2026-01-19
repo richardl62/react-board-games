@@ -1,6 +1,6 @@
 import { AppGame, BoardProps } from "@/app-game-support";
 import { endMatch, endTurn } from "@shared/game-control/ctx";
-import { doMatchAction, matchMove } from "@shared/game-control/match-action";
+import { matchMove } from "@shared/game-control/match-action";
 import { ServerMatchData } from "@shared/server-match-data";
 import { RandomAPI } from "@shared/utils/random-api";
 
@@ -31,4 +31,8 @@ export function makeActions(
     }
 
     return { moves, events };
+}
+
+function doMatchAction(_matchData: ServerMatchData, _action: (md: ServerMatchData) => void): ServerMatchData {
+    throw new Error("Function not implemented.");
 }

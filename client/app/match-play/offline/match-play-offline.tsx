@@ -43,6 +43,7 @@ export function MatchPlayOffline({game, options}: {
             playerID={playerID}
             connectionStatus={"connected"}
             serverMatchData={matchData}
+            moveError={makeMoveError()}
             moves={moves}
             events={events}
         />
@@ -57,4 +58,8 @@ export function MatchPlayOffline({game, options}: {
 
 }
 
+
+function makeMoveError(): string | null {
+    throw new Error("Function not implemented.");
+}
 

@@ -20,7 +20,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
 }): JSX.Element {
     const onlineMatchData = useOnlineMatchData(game, {matchID, player});
 
-    const { connectionStatus, moves, events, serverMatchData, waitingForServer } = onlineMatchData;
+    const { connectionStatus, moves, events, serverMatchData, moveError,waitingForServer } = onlineMatchData;
 
 
     return <div>
@@ -34,6 +34,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
                 playerID={player.id}
                 connectionStatus={connectionStatus}
                 serverMatchData={serverMatchData}
+                moveError={moveError}
                 moves={moves}
                 events={events}
             />

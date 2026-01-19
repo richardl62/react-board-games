@@ -31,6 +31,5 @@ export function makeOfflineMatchData(
         playerData: playerData(ctx),
         ctxData: ctx.data,
         state: game.setup({ ctx, random }, options),
-        moveError: null,
     };
 }

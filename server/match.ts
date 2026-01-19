@@ -1,18 +1,16 @@
 import { WebSocket } from 'ws';
 import { EventsAPI } from '../shared/game-control/events.js';
 import { GameControl } from "../shared/game-control/game-control.js";
-import { doMatchAction, matchMove } from '../shared/game-control/match-action.js';
+import { matchMove } from '../shared/game-control/match-action.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { ServerMatchData } from "../shared/server-match-data.js";
+import { MutableMatchData, ServerMatchData } from "../shared/server-match-data.js";
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { WsMove } from "../shared/ws-client-request.js";
 import { Player } from "./player.js";
 import { Ctx, endMatch, endTurn, makeCtxData } from '../shared/game-control/ctx.js';
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
-import { sendServerResponse } from './send-server-response.js';
-
-type MutableMatchData = Omit<ServerMatchData, 'playerData'>;
+import { sendServerResponse } from './web-socket-actions.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -54,7 +52,6 @@ export class Match {
         this.mutableData = {
             ctxData,
             state,
-            moveError: null,
         };
     }
 
@@ -97,26 +94,13 @@ export class Match {
 
     move(request: WsMove, playerID: string) {
         const { move, arg } = request;
-        this.mutableData = doMatchAction(
-            this.mutableData,
-            md => matchMove(this.definition, move, this.random, playerID, md, arg)
-        );
+        this.doSafeAction(md => matchMove(this.definition, move, this.random, playerID, md, arg));
     }
 
     get events (): EventsAPI {
         return {
-            endTurn: () => { 
-                this.mutableData = doMatchAction(
-                    this.matchData(),
-                    md => endTurn(md.ctxData)
-                );
-            },
-            endMatch: () => { 
-                this.mutableData = doMatchAction(
-                    this.matchData(),
-                    md => endMatch(md.ctxData)
-                );
-            },
+            endTurn: () => this.doSafeAction(md => endTurn(md.ctxData)),
+            endMatch: () => this.doSafeAction(md => endMatch(md.ctxData)),
         };
     }
 
@@ -130,11 +114,19 @@ export class Match {
         }
     }
 
+    // Perform an action making sure that mutable data is not changed if the action throws.
+    doSafeAction(action: (md: MutableMatchData) => void) {
+        const md = structuredClone(this.mutableData);
+        action(md);
+        this.mutableData = md;
+    }
+
     broadcastMatchData(
         trigger: WsResponseTrigger,
+        errorInAction: string | null
     ) {
         const response: WsServerResponse =
-            { trigger, matchData: this.matchData() };
+            { trigger, matchData: this.matchData(), errorInAction };
 
         for (const player of this.players) {
             if (player.isConnected) {

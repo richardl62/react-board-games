@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import { wsClientConnection } from "../shared/ws-response-trigger.js";
 import { Matches } from "./matches.js";
-import { sendServerResponse } from './send-server-response.js';
+import { closeWithReason } from "./web-socket-actions.js";
 
 // Return the value of the named URL parameter from the given request URL.
 // Throw an error if the parameter is missing or invalid.
@@ -17,24 +17,6 @@ function urlParam(requestUrl: string | undefined, name: string) {
     return param;
 }
 
-// Close a connection with a string giving reason. 
-// (The closure is delayed slightly to allow any final messages to be sent.) 
-function closeWithReason(ws: WebSocket, reason: string) {
-    const code = 4000; // Application-defined close code
-    const delayMs = 50;
-
-    const safeReason = reason.slice(0, 120); // WebSocket reason must be <= 123 bytes
-    const doClose = () => {
-        try {
-            ws.close(code, safeReason);
-        } catch {
-            console.warn('WebSocket close failed, terminating connection');
-            try { ws.terminate(); } catch { /* noop */ }
-        }
-    };
-
-    setTimeout(doClose, delayMs);
-}
 
 export function processConnection(matches: Matches, ws: WebSocket, requestUrl: string | undefined) {
     try {
@@ -68,13 +50,12 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
 
         player.recordConnection(ws);
 
-        match.broadcastMatchData(wsClientConnection);
+        match.broadcastMatchData(wsClientConnection, null);
     }
     catch (err) {
         const error = err instanceof Error ? err.message : "unknown error";
         console.log('Error during connection:', error);
 
-        sendServerResponse(ws, { trigger: wsClientConnection, connectionError: error });
         closeWithReason(ws, error);
     }
 }
@@ -91,7 +72,7 @@ export function processDisconnection(matches: Matches, ws: WebSocket) {
 
         player.recordDisconnection();
 
-        match.broadcastMatchData(wsClientConnection);
+        match.broadcastMatchData(wsClientConnection, null);
     } catch (err) {
         // Hmm. Not sure what best to do as we cannot send error response to disconnected player.
         const error = err instanceof Error ? err.message : "unknown error";
