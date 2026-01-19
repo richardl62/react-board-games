@@ -5,16 +5,18 @@ import { AllActive, GameControl } from "./game-control.js";
 import { MoveArg0 } from "./move-fn.js";
 
 /**
- * Call a Game's move function or throw an error if a problem is found.
- * The input matchData is not modified, and new matchData is returned
- * (this helps avoid leaving invalid match data when errors occur).
+ * Call a Game's move function, or throw if there is a problem.
+ * 
+ * No input is modified except, possibly, random. (I could do better at
+ * policing this.) Instead a (potentially) modified copy of matchData 
+ * is returned.
  */
 export function matchMove<Param>(
-    GameControl: GameControl,
+    GameControl: Readonly<GameControl>,
     moveName: string,
-    random: RandomAPI,
+    random: RandomAPI, // Can be changed
     playerID: string,
-    matchData: MutableMatchData,
+    matchData: Readonly<MutableMatchData>,
     param: Param
 ) : MutableMatchData {
     const { state, ctxData } = structuredClone(matchData);

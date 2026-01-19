@@ -59,6 +59,8 @@ export class Ctx {
     }
 }
 
+// Advance to the next player's turn.
+// Can throw, but in this case no data is changed.
 export function endTurn(cxtData: CtxData) {
         if (cxtData.matchOver) {
             throw new Error("End turn attempt after match is over.");
@@ -67,6 +69,8 @@ export function endTurn(cxtData: CtxData) {
         cxtData.playOrderPos = (cxtData.playOrderPos + 1) % cxtData.playOrder.length;
     }
 
+// Report the end of the match.
+// Can throw, but in this case no data is changed.
 export function endMatch(cxtData: CtxData) {
     if (cxtData.matchOver) {
         throw new Error("Attempt to end match after it is over.");

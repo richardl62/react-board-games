@@ -3,10 +3,9 @@ import { isWsClientRequest, isWsEndTurn, isWsEndMatch, isWsMove } from '../share
 import { Matches } from './matches.js';
 import { closeWithReason } from './web-socket-actions.js';
 
-// Throw if there is a 'serious' error, otherwise process the action.
-// Serious errors are those that prevent an action being attempted, for example
-// being unable to interpret the request. Other errors (for example invalid moves)
-// are caught are reported back to the client.
+// Throw if there is an error that prevent the requested action being attempted, for example
+// if the web socket is not associated with a player. Other errors (for example invalid moves)
+// are caught and reported back to the client via broadcastMatchData.
 export function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string) {
 const found = matches.findMatchAndPlayer(ws);
     if (!found) {
@@ -22,14 +21,13 @@ const found = matches.findMatchAndPlayer(ws);
     let error: string | null = null;
     try {
         if (isWsEndTurn(clientRequest.action)) {
-            match.events.endTurn();
+            match.endTurn();
         } else if (isWsEndMatch(clientRequest.action)) {
-            match.events.endMatch();
+            match.endMatch();
         } else if (isWsMove(clientRequest.action)) {
             match.move(clientRequest.action, player.id);
         } else {
-            // In practice this should happen only if there is a missing case
-            // in the if/else tests above.
+            // Should never happen.
             throw new Error("Unrecognised client request");
         }
     } catch (err) {
@@ -37,7 +35,7 @@ const found = matches.findMatchAndPlayer(ws);
         console.warn(`Error: ${error} when processing client request ${request}`);
     }
 
-     match.broadcastMatchData(clientRequest, error);
+    match.broadcastMatchData(clientRequest, error);
 }
 
 // Handle a player-requested action (move, end turn, etc)

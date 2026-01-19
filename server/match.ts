@@ -1,5 +1,4 @@
 import { WebSocket } from 'ws';
-import { EventsAPI } from '../shared/game-control/events.js';
 import { GameControl } from "../shared/game-control/game-control.js";
 import { matchMove } from '../shared/game-control/match-action.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
@@ -92,16 +91,20 @@ export class Match {
         };
     }
 
+    // Can throw, in which case no data is changed.
     move(request: WsMove, playerID: string) {
         const { move, arg } = request;
-        this.doSafeAction(md => matchMove(this.definition, move, this.random, playerID, md, arg));
+        this.mutableData = matchMove(this.definition, move, this.random, playerID, this.mutableData, arg);
     }
 
-    get events (): EventsAPI {
-        return {
-            endTurn: () => this.doSafeAction(md => endTurn(md.ctxData)),
-            endMatch: () => this.doSafeAction(md => endMatch(md.ctxData)),
-        };
+    // Can throw, in which case no data is changed.
+    endTurn() {
+        endTurn(this.mutableData.ctxData);
+    }
+
+    // Can throw, in which case no data is changed.
+    endMatch() {
+        endMatch(this.mutableData.ctxData);
     }
 
     findPlayer(arg: {id: string} | {name: string} | {ws: WebSocket}): Player | undefined {
@@ -112,13 +115,6 @@ export class Match {
         } else {    
             return this.players.find(p => p.isConnected && p.getWs() === arg.ws);
         }
-    }
-
-    // Perform an action making sure that mutable data is not changed if the action throws.
-    doSafeAction(action: (md: MutableMatchData) => void) {
-        const md = structuredClone(this.mutableData);
-        action(md);
-        this.mutableData = md;
     }
 
     broadcastMatchData(

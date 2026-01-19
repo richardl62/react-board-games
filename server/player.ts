@@ -2,8 +2,6 @@ import { WebSocket  } from 'ws'; // Import the ws library
 import { PublicPlayerMetadata } from '../shared/lobby/types.js';
 import { sAssert } from '../shared/utils/assert.js';
 import { createAlphanumericString } from '../shared/utils/random-string.js';
-import { WsServerResponse } from '../shared/ws-server-response.js';
-import { sendServerResponse } from './web-socket-actions.js';
 
 // Put loosely, a Player represents someone sitting around the table at which
 // a match is being played.
@@ -74,14 +72,6 @@ export class Player {
             throw new Error(`Player ${this.id} is not connected: cannot get WebSocket`);
         }
         return this.ws;
-    }
-
-    sendServerResponse(response: WsServerResponse) {
-        if (this.ws) {
-            sendServerResponse(this.ws, response);
-        } else {
-            console.warn(`Attempt to send server response to disconnected player ${this.id}`);
-        }
     }
 
     publicMetadata(): PublicPlayerMetadata {
