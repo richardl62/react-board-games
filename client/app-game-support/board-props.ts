@@ -25,5 +25,5 @@ export interface BoardProps<TypeG=unknown> {
 
     G: TypeG;
 
-    moveError: string | null;
+    errorInLastAction: string | null;
 }

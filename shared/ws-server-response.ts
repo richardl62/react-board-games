@@ -8,7 +8,7 @@ export interface WsServerResponse {
 
     /** An error reported by the last action (i.e. move or event), or null if there was no
      * reported error. */
-    errorInAction: string | null;
+    errorInLastAction: string | null;
 }
 
 export function isWsServerResponse(obj: unknown): obj is WsServerResponse {

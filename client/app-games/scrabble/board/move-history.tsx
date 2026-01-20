@@ -147,8 +147,8 @@ function TurnDescription(props: TurnDescriptionProps) : JSX.Element {
         return <GameOver winners={elem.gameOver.winners} />;
     }
 
-    if(elem.moveError) {
-        return <MoveError message={elem.moveError.message} />;
+    if(elem.errorInLastAction) {
+        return <MoveError message={elem.errorInLastAction.message} />;
     }
 
     return <div>Problem with turn description</div>;

@@ -20,7 +20,9 @@ export interface OnlineMatchData {
     // connection.
     serverMatchData: ServerMatchData | null;
 
-    moveError: string | null;
+    // An error reported by the last action (i.e. move or event), or null if there was no
+    // reported error.
+    errorInLastAction: string | null;
 
     moves: BoardProps["moves"];
     events: EventsAPI;
@@ -62,7 +64,7 @@ export function useOnlineMatchData(
         connectionStatus, 
         waitingForServer: awaitingResponse, 
         serverMatchData: lastServerMatchData,
-        moveError: serverResponse?.errorInAction || null,
+        errorInLastAction: serverResponse?.errorInLastAction || null,
         moves,
         events,
     };       

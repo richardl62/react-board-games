@@ -119,10 +119,10 @@ export class Match {
 
     broadcastMatchData(
         trigger: WsResponseTrigger,
-        errorInAction: string | null
+        errorInLastAction: string | null
     ) {
         const response: WsServerResponse =
-            { trigger, matchData: this.matchData(), errorInAction };
+            { trigger, matchData: this.matchData(), errorInLastAction };
 
         for (const player of this.players) {
             if (player.isConnected) {

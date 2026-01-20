@@ -21,14 +21,14 @@ export interface GameBoardProps {
     connectionStatus: ConnectionStatus;
     
     serverMatchData: ServerMatchData;
-    moveError: string | null;
+    errorInLastAction: string | null;
 
     moves: BoardProps["moves"];
     events: BoardProps["events"];
 }
 
 export function GameBoard(props: GameBoardProps) : JSX.Element {
-    const { game, playerID, connectionStatus, serverMatchData, moveError, moves, events } = props;
+    const { game, playerID, connectionStatus, serverMatchData, errorInLastAction, moves, events } = props;
 
     const bgioProps: BoardProps = {
         playerID,
@@ -45,7 +45,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
 
         G: serverMatchData.state,
 
-        moveError,
+        errorInLastAction,
     }
 
     // The need for this conversion shows something isn't quite right. 

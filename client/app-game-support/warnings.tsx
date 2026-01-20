@@ -40,7 +40,7 @@ const WarningDiv = styled.div`
 
 export function Warnings(): JSX.Element {
     const warnings: string[] = [];
-    const {moveError /*, connectionStatus, playerData */} = useStandardBoardContext();  
+    const {errorInLastAction /*, connectionStatus, playerData */} = useStandardBoardContext();  
     
     // const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
 
@@ -64,8 +64,8 @@ export function Warnings(): JSX.Element {
     //     }
     // }
 
-    if(moveError) {
-        warnings.push("Problem during move " + moveError);
+    if(errorInLastAction) {
+        warnings.push("Problem during move " + errorInLastAction);
     }
     
     

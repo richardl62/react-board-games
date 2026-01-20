@@ -24,5 +24,5 @@ export interface MoveHistoryElement {
 
     gameOver?: {winners: string[]}; // id of winner(s);
 
-    moveError?: {message: string};
+    errorInLastAction?: {message: string};
 }
