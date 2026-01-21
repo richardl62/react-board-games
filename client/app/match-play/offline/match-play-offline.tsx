@@ -3,10 +3,10 @@ import { JSX, useState } from "react";
 import styled from "styled-components";
 import { OfflineOptions } from "../../offline-options";
 import { GameBoard } from "../game-board";
-import { makeOfflineMatchData } from "./make-offline-match-data";
+import { makeInitialMatchData } from "./make-initial-match-data";
 import { useRandomAPI } from "./use-random-api";
 import { Ctx } from "@shared/game-control/ctx";
-import { makeActions } from "./make-actions";
+import { makePlayerActions } from "./make-player-actions";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
@@ -22,7 +22,7 @@ export function MatchPlayOffline({game, options}: {
     const random = useRandomAPI();
 
     const [ matchData, setMatchData ] = useState(
-        makeOfflineMatchData(game, numPlayers, random, setupData)
+        makeInitialMatchData(game, numPlayers, random, setupData)
     );
 
     const ctx = new Ctx(matchData.ctxData);
@@ -30,7 +30,7 @@ export function MatchPlayOffline({game, options}: {
     const boards : JSX.Element[] = [];
     for (const playerID of ctx.playOrder) {
         
-        const { moves, events } = makeActions(
+        const { moves, events } = makePlayerActions(
             game, playerID, random, matchData, setMatchData
         );
 
@@ -43,7 +43,7 @@ export function MatchPlayOffline({game, options}: {
             playerID={playerID}
             connectionStatus={"connected"}
             serverMatchData={matchData}
-            errorInLastAction={makeMoveError()}
+            errorInLastAction={matchData.errorInLastAction}
             moves={moves}
             events={events}
         />
@@ -55,11 +55,5 @@ export function MatchPlayOffline({game, options}: {
     }
 
     return <div>{boards}</div>; 
-
-}
-
-
-function makeMoveError(): string | null {
-    throw new Error("Function not implemented.");
 }
 
