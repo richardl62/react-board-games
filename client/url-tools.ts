@@ -16,9 +16,9 @@ export interface SearchParamData {
     isOffline: {numPlayers: number} | null;
     matchID: MatchID | null;
 
-    // If set, the seed should be non-negative.
-    // For now at least, seeds are supported only in offline mode. 
-    seed: number | null;
+    // A seed suppied as a search parameter can be any non-negative number,
+    // but the number below, if set, will be in [0,1)
+    seed: number | null; 
 }
 
 export function useSearchParamData() : SearchParamData {
@@ -62,15 +62,14 @@ export function useSearchParamData() : SearchParamData {
         }
     }
 
-    const seed_ = foundParams.get(knownParams.seed);
-    if (seed_) {
-        const seed = parseInt(seed_, 10);
-        if (isNaN(seed) || seed < 0) {
-            console.warn("Invalid seed value in URL:", seed_);
-        } else if (!result.isOffline) {
-            console.warn("Seed specified in URL but not in offline mode - ignoring seed");
+    const userSeed_ = foundParams.get(knownParams.seed);
+    if (userSeed_) {
+        const userSeed = parseInt(userSeed_, 10);
+        if (isNaN(userSeed) || userSeed < 0) {
+            console.warn("Invalid seed value in URL:", userSeed_, " (must be non-negative number)");
         } else {
-            result.seed = seed;
+            // result.seed must be in [0,1). The mapping below is crude but should be good enough.
+            result.seed = 1 / (1.0 + userSeed);
         }
     }
 

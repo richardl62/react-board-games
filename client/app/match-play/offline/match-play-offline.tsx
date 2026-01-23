@@ -1,17 +1,27 @@
 import { AppGame } from "@/app-game-support";
-import { JSX, useState } from "react";
+import { JSX, useMemo, useState } from "react";
 import styled from "styled-components";
 import { OfflineOptions } from "../../offline-options";
 import { GameBoard } from "../game-board";
 import { makeInitialMatchData } from "./make-initial-match-data";
-import { useRandomAPI } from "./use-random-api";
 import { Ctx } from "@shared/game-control/ctx";
 import { makePlayerActions } from "./make-player-actions";
+import { useSearchParamData } from "@/url-tools";
+import { RandomAPI, seededDraw } from "@shared/utils/random-api";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
 `;
 
+function useRandomAPI() {
+    const {seed: seedParam} = useSearchParamData(); // Returns number >= 0 or null
+    return useMemo(() => {
+        // seed must be in [0,1]
+        const seed = (seedParam === null) ? Math.random() : 1.0 / (seedParam+1);
+        return new RandomAPI(seededDraw(seed));
+    }, [seedParam]);
+
+}
 export function MatchPlayOffline({game, options}: {
     game:AppGame,
     options: OfflineOptions,
@@ -20,7 +30,7 @@ export function MatchPlayOffline({game, options}: {
     const {numPlayers, passAndPlay,  setupData} = options;
 
     const random = useRandomAPI();
-
+    
     const [ matchData, setMatchData ] = useState(
         makeInitialMatchData(game, numPlayers, random, setupData)
     );
