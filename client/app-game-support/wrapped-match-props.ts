@@ -4,21 +4,9 @@
 import { sAssert } from "@utils/assert";
 import { BoardProps } from "@/app-game-support/board-props";
 import {  makePlayerDataHACKED, PlayerDataDictionary } from "./player-data";
-import { useSearchParamData } from "../url-tools";
 import { useEffect } from "react";
-/**
- * Bgio type definition of 'moves'.
- *
- * Intended from limited use in, for example, quick prototypes.
- */
+import { EventsAPI } from "@shared/game-control/events";
 
-export type DefaultMovesType = BoardProps["moves"]; 
-
-type BgioEvents = BoardProps["events"];
-
-interface Events extends Omit<BgioEvents, "endTurn"> {
-    endTurn: Required<BgioEvents>["endTurn"];
-}
 
 /**
  * Game properties.  (A wrapper for BGIO BoardProps.)
@@ -27,12 +15,11 @@ export interface WrappedMatchProps<G=unknown, Moves=unknown>
     extends Omit<BoardProps<G>, "moves" | "events"> {
     
     moves: Moves;
-    events: Events;
+    events: EventsAPI;
 
     playerData: PlayerDataDictionary;
 
     allJoined: boolean;
-    allConnected: boolean;
     
     /** Part of BGIO props, but here we assert it is non-null */
     playerID: string; 
@@ -44,37 +31,16 @@ export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchP
         console.log("Using makePlayerDataHACKED - temporary hack");
     }, []);
     const playerData = makePlayerDataHACKED(bgioProps);
-    const {isOffline} = useSearchParamData();
 
-    let allJoined = true;
-    let allConnected = true;
 
-    // KLUDGE?: Assume all players in an offline game are connected
-    if (!isOffline) {
-        for (const playerID in playerData) {
-            const pd = playerData[playerID];
-            if (pd.status !== "connected") {
-                allConnected = false;
-            }
-            if (pd.status === "not joined") {
-                allJoined = false;
-            }
-        }
-    }
+    const allJoined = Object.values(playerData).every(pd => pd.status !== "not joined");
+    
     sAssert(bgioProps.playerID);
     
-    const bigoEvents = bgioProps.events;
-    const endTurn = bigoEvents.endTurn;
-    sAssert(endTurn);
-
-    const events : Events = {...bigoEvents, endTurn: endTurn}; 
-
     return {
         ...bgioProps,
-        events: events,
-        playerData: playerData,
-        allJoined: allJoined,
-        allConnected: allConnected,
+        playerData,
+        allJoined,
         playerID: bgioProps.playerID,
         getPlayerName: (pid: string) => {
             const pd = playerData[pid];
