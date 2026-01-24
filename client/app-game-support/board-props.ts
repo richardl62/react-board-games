@@ -4,12 +4,13 @@ import { EventsAPI } from "@shared/game-control/events";
 import { PlayerID } from "@shared/game-control/playerid";
 import { PublicPlayerMetadata } from "@shared/lobby/types";
 
-type Moves = {
-    [x: string]: (...args: unknown[]) => void;
+export type UntypedMoves = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [x: string]: (...args: any[]) => void;
 }
 
-export interface BoardProps<TypeG=unknown> {
-    playerID: PlayerID | null; // Is the null option needed?
+export interface BoardProps<TypeG=unknown, Moves extends UntypedMoves = UntypedMoves> {
+    playerID: PlayerID;
 
     connectionStatus: ConnectionStatus;
 

@@ -1,28 +1,12 @@
-// NOTE/KLUDGE:  The matchData type supplied by boardgames.io seems not have
-// isConnected as an optional member. The code below is my way of add it.
-
-import { sAssert } from "@utils/assert";
-import { BoardProps } from "@/app-game-support/board-props";
-import {  makePlayerDataHACKED, PlayerDataDictionary } from "./player-data";
+import { BoardProps, UntypedMoves } from "@/app-game-support/board-props";
 import { useEffect } from "react";
-import { EventsAPI } from "@shared/game-control/events";
+import { makePlayerDataHACKED, PlayerDataDictionary } from "./player-data";
 
-
-/**
- * Game properties.  (A wrapper for BGIO BoardProps.)
- */
-export interface WrappedMatchProps<G=unknown, Moves=unknown> 
-    extends Omit<BoardProps<G>, "moves" | "events"> {
-    
-    moves: Moves;
-    events: EventsAPI;
-
+export interface WrappedMatchProps<G=unknown, Moves extends UntypedMoves=UntypedMoves> extends BoardProps<G, Moves> {
     playerData: PlayerDataDictionary;
 
     allJoined: boolean;
     
-    /** Part of BGIO props, but here we assert it is non-null */
-    playerID: string; 
     getPlayerName: (pid: string) => string;
 }
 
@@ -34,8 +18,6 @@ export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchP
 
 
     const allJoined = Object.values(playerData).every(pd => pd.status !== "not joined");
-    
-    sAssert(bgioProps.playerID);
     
     return {
         ...bgioProps,
