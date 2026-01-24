@@ -4,7 +4,7 @@ import { matchMove } from "@shared/game-control/match-action";
 import { RandomAPI } from "@shared/utils/random-api";
 import { OfflineMatchData } from "./make-initial-match-data";
 import { MutableMatchData } from "@shared/server-match-data";
-import { UntypedMoves } from "@/app-game-support/board-props";
+import { UntypedMoves } from "@/app-game-support/wrapped-match-props";
 import { EventsAPI } from "@shared/game-control/events";
 
 export function makePlayerActions(

@@ -1,39 +1,37 @@
-import { BoardProps, UntypedMoves } from "@/app-game-support/board-props";
-import { useEffect } from "react";
-import { makePlayerDataHACKED, PlayerDataDictionary } from "./player-data";
+import { PlayerDataDictionary } from "./player-data";
+import { ConnectionStatus } from "@/app/match-play/online/use-server-connection";
+import { Ctx } from "@shared/game-control/ctx";
+import { EventsAPI } from "@shared/game-control/events";
+import { PlayerID } from "@shared/game-control/playerid";
 
+export type UntypedMoves = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [x: string]: (...args: any[]) => void;
+};
+
+//To do: Consider given this a better name.
 export interface WrappedMatchProps<
-    G=unknown, 
+    TypeG=unknown, 
     Moves extends UntypedMoves=UntypedMoves
-> extends BoardProps<G, Moves> {
+> {
+    G: TypeG;
+
+    ctx: Ctx;
+
+    moves: Moves;
+
+    events: EventsAPI;
+
+    errorInLastAction: string | null;
+
+    connectionStatus: ConnectionStatus;
+
+    playerID: PlayerID;
+
     playerData: PlayerDataDictionary;
 
+    // The items below are convenience properties
     allJoined: boolean;
-    
+
     getPlayerName: (pid: string) => string;
-}
-
-export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchProps<G> {
-    useEffect(() => {
-        console.log("Using makePlayerDataHACKED - temporary hack");
-    }, []);
-    const playerData = makePlayerDataHACKED(bgioProps.ctx, bgioProps.matchData);
-
-
-    const allJoined = Object.values(playerData).every(pd => pd.status !== "not joined");
-    
-    return {
-        ...bgioProps,
-        playerData,
-        allJoined,
-
-        getPlayerName: (pid: string) => {
-            const pd = playerData[pid];
-            if(!pd) {
-                console.error("Invalid player id:", pid);
-                return "<unknown>";
-            }
-            return playerData[pid].name;
-        }
-    };
 }

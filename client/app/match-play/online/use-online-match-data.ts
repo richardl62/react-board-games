@@ -5,7 +5,7 @@ import { ServerMatchData } from "@shared/server-match-data";
 import { WsClientRequest } from "@shared/ws-client-request";
 import { ConnectionStatus, useServerConnection } from "./use-server-connection";
 import { useAwaitedResponse } from "./use-awaited-response";
-import { UntypedMoves } from "@/app-game-support/board-props";
+import { UntypedMoves } from "@/app-game-support/wrapped-match-props";
 
 /** Data about a match received from the server, with added move functions
  * and events. */
