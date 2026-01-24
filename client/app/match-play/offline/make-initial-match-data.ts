@@ -1,4 +1,4 @@
-import { AppGame } from "@/app-game-support";
+import { AppGame, defaultPlayerName } from "@/app-game-support";
 import { OptionValues } from "@/option-specification/types";
 import { Ctx, makeCtxData } from "@shared/game-control/ctx";
 import { PublicPlayerMetadata } from "@shared/lobby/types";
@@ -18,7 +18,7 @@ function playerData(ctx: Ctx): PublicPlayerMetadata[] {
         const id = ctx.playOrder[playerPos];
         matchData.push({
             id,
-            name: "Player " + id,
+            name: defaultPlayerName(id),
             isConnected: true,
         });
     }

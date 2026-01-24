@@ -6,7 +6,7 @@ import { Ctx } from "@shared/game-control/ctx";
 import { ConnectionStatus } from "./online/use-server-connection";
 import { UntypedMoves } from "@/app-game-support/wrapped-match-props";
 import { EventsAPI } from "@shared/game-control/events";
-import { makePlayerDataHACKED } from "@/app-game-support/player-data";
+import { makePlayerData } from "@/app-game-support/player-data";
 
 function gameStatus(gameProps: WrappedMatchProps) {
     if(!gameProps.allJoined) {
@@ -37,15 +37,10 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
         document.title = `${status} - ${game.displayName}`;
     });
 
-    useEffect(() => {
-        console.log("Using makePlayerDataHACKED - temporary hack");
-    }, []);
-
-
     // The code below code prbably be simplied.
     const { game, playerID, connectionStatus, serverMatchData, errorInLastAction, moves, events } = props;
     const ctx = new Ctx(serverMatchData.ctxData);
-    const playerData = makePlayerDataHACKED(ctx, serverMatchData.playerData);
+    const playerData = makePlayerData(ctx, serverMatchData.playerData);
     const gameProps : WrappedMatchProps = {
         ctx, moves, events, playerID, connectionStatus, errorInLastAction,
 

@@ -19,8 +19,7 @@ export interface PlayerData {
 
 export type PlayerDataDictionary = {[arg: string] : PlayerData};
 
-function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string, numPlayers: number,
-    offline: boolean): PlayerData {
+function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string, numPlayers: number): PlayerData {
 
     // For legacy reasons players IDs are strings which record numbers, with there numbers
     // being the players position.  Code should rely on this, but in case some does check 
@@ -35,7 +34,7 @@ function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string
   
     if (!md.name) {
         return {
-            name: offline ? defaultPlayerName(playerID) : nonJoinedPlayerName,
+            name: nonJoinedPlayerName,
             status: "not joined",
         };
     }
@@ -47,16 +46,13 @@ function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string
 
 }
 
-export function makePlayerDataHACKED(
+export function makePlayerData(
     ctx: Ctx,
     matchData: PublicPlayerMetadata[],
 ): PlayerDataDictionary {
     const playerData: PlayerDataDictionary = {};
-    for (const id in ctx.playOrder) {
-        playerData[id] = makePlayerDataElem(matchData, id, ctx.numPlayers,
-            true, // TEMPORARY HACK
-            //props.connectionStatus === "offline"
-        );
+    for (const id of ctx.playOrder) {
+        playerData[id] = makePlayerDataElem(matchData, id, ctx.numPlayers);
     }
 
     return playerData;
