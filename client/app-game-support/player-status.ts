@@ -1,4 +1,3 @@
-import { sAssert } from "@utils/assert";
 import { PublicPlayerMetadata } from "@shared/lobby/types";
 
 export function defaultPlayerName(playerID: string): string {
@@ -11,18 +10,25 @@ export function defaultPlayerName(playerID: string): string {
 
 export const nonJoinedPlayerName = "<available>";
 
-export type PlayerConnectionStatus = "connected" | "not joined" | "notConnected";
+export type PlayerConnectionStatus = "connected" | "not joined" | "not connected";
 
 interface PlayerStatus {
   name: string;
   connectionStatus: PlayerConnectionStatus;
 }
 
-export function makePlayerStatus(matchData: PublicPlayerMetadata[],  playerID: string): PlayerStatus {
-
+export function makePlayerStatus(matchData: PublicPlayerMetadata[], playerID: string): PlayerStatus {
     const md = matchData.find(md => md.id === playerID);
-    sAssert(md, `Cannot find player data for ID ${playerID}`);
-  
+
+    if (!md) {
+        // Should never happen.
+        console.log(`No metadata found for player ID "${playerID}"`);
+        return {
+            name: "Unknown Player",
+            connectionStatus: "not joined", 
+        };
+    }
+
     if (!md.name) {
         return {
             name: nonJoinedPlayerName,
@@ -32,7 +38,7 @@ export function makePlayerStatus(matchData: PublicPlayerMetadata[],  playerID: s
 
     return {
         name: md.name,
-        connectionStatus: md.isConnected ? "connected" : "notConnected"
+        connectionStatus: md.isConnected ? "connected" : "not connected"
     };
 }
 

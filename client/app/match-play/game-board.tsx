@@ -1,4 +1,4 @@
-import { JSX, useEffect } from "react";
+import { JSX, useEffect, useMemo } from "react";
 import { AppGame } from "@/app-game-support";
 import { WrappedMatchProps } from "@/app-game-support/wrapped-match-props";
 import { ServerMatchData } from "@shared/server-match-data";
@@ -31,40 +31,33 @@ export interface GameBoardProps {
 }
 
 export function GameBoard(props: GameBoardProps) : JSX.Element {
-
-    // In theory, the code below could be memoized, but it seem harder than it's worth.
     const { game, serverMatchData, ...otherProps } = props;
-    const ctx = new Ctx(serverMatchData.ctxData);
 
-    const allJoined = ctx.playOrder.every(
-        (pid) => makePlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
-    );
+    // I'm not sure how useful this memoization is ...
+    const gameProps: WrappedMatchProps = useMemo(() => {
+        const ctx = new Ctx(serverMatchData.ctxData);
+        const allJoined = ctx.playOrder.every(
+            (pid) => makePlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
+        );
 
-    const gameProps : WrappedMatchProps = {
-        ...otherProps,
-        
-        ctx,
+        return {
+            ...otherProps,
+            ctx,
+            G: serverMatchData.state,
+            getPlayerConnectionStatus: (playerID: string) => 
+                makePlayerStatus(serverMatchData.playerData, playerID).connectionStatus,
+            getPlayerName: (playerID: string) => 
+                makePlayerStatus(serverMatchData.playerData, playerID).name,
+            allJoined,
+        };
+    }, [serverMatchData, otherProps]);
 
-        G: serverMatchData.state,
-
-        getPlayerConnectionStatus: (playerID: string) => makePlayerStatus(
-            serverMatchData.playerData,
-            playerID
-        ).connectionStatus,
-
-        getPlayerName: (playerID: string) => makePlayerStatus(
-            serverMatchData.playerData,
-            playerID
-        ).name,
-
-        allJoined,
-    };
-
+    const title = `${gameStatus(gameProps)} - ${game.displayName}`;
     useEffect(() => {
-        const status = gameStatus(gameProps);
-        document.title = `${status} - ${game.displayName}`;
-    });
+        document.title = title;
+    }, [title]);
 
-    return game.board(gameProps);
+    const Board = game.board;
+    return <Board {...gameProps} />;
 }
 
