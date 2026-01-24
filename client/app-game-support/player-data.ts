@@ -1,6 +1,6 @@
 import { sAssert } from "@utils/assert";
 import { PublicPlayerMetadata } from "@shared/lobby/types";
-import { BoardProps as BgioBoardProps } from "@/app-game-support/board-props";
+import { Ctx } from "@shared/game-control/ctx";
 
 export function defaultPlayerName(playerID: string): string {
     const playerNumber = parseInt(playerID);
@@ -47,17 +47,13 @@ function makePlayerDataElem(matchData: PublicPlayerMetadata[],  playerID: string
 
 }
 
-export function makePlayerDataHACKED(props: BgioBoardProps): PlayerDataDictionary {
-    const matchData = props.matchData;
-    if(!matchData) {
-        console.warn("Bgio match data is null");
-        return {};
-    }
-    
-
+export function makePlayerDataHACKED(
+    ctx: Ctx,
+    matchData: PublicPlayerMetadata[],
+): PlayerDataDictionary {
     const playerData: PlayerDataDictionary = {};
-    for (const id in props.ctx.playOrder) {
-        playerData[id] = makePlayerDataElem(matchData, id, props.ctx.numPlayers,
+    for (const id in ctx.playOrder) {
+        playerData[id] = makePlayerDataElem(matchData, id, ctx.numPlayers,
             true, // TEMPORARY HACK
             //props.connectionStatus === "offline"
         );

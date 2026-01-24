@@ -2,7 +2,10 @@ import { BoardProps, UntypedMoves } from "@/app-game-support/board-props";
 import { useEffect } from "react";
 import { makePlayerDataHACKED, PlayerDataDictionary } from "./player-data";
 
-export interface WrappedMatchProps<G=unknown, Moves extends UntypedMoves=UntypedMoves> extends BoardProps<G, Moves> {
+export interface WrappedMatchProps<
+    G=unknown, 
+    Moves extends UntypedMoves=UntypedMoves
+> extends BoardProps<G, Moves> {
     playerData: PlayerDataDictionary;
 
     allJoined: boolean;
@@ -14,7 +17,7 @@ export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchP
     useEffect(() => {
         console.log("Using makePlayerDataHACKED - temporary hack");
     }, []);
-    const playerData = makePlayerDataHACKED(bgioProps);
+    const playerData = makePlayerDataHACKED(bgioProps.ctx, bgioProps.matchData);
 
 
     const allJoined = Object.values(playerData).every(pd => pd.status !== "not joined");
@@ -23,7 +26,7 @@ export function useWrappedMatchProps<G>(bgioProps: BoardProps<G>): WrappedMatchP
         ...bgioProps,
         playerData,
         allJoined,
-        playerID: bgioProps.playerID,
+
         getPlayerName: (pid: string) => {
             const pd = playerData[pid];
             if(!pd) {

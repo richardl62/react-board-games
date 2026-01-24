@@ -1,10 +1,11 @@
-import { AppGame, BoardProps,  MatchID, Player } from "@/app-game-support";
+import { AppGame, MatchID, Player } from "@/app-game-support";
 import { useLastNonNull } from "@/utils/use-last-non-null";
 import { EventsAPI } from "@shared/game-control/events";
 import { ServerMatchData } from "@shared/server-match-data";
 import { WsClientRequest } from "@shared/ws-client-request";
 import { ConnectionStatus, useServerConnection } from "./use-server-connection";
 import { useAwaitedResponse } from "./use-awaited-response";
+import { UntypedMoves } from "@/app-game-support/board-props";
 
 /** Data about a match received from the server, with added move functions
  * and events. */
@@ -24,7 +25,7 @@ export interface OnlineMatchData {
     // reported error.
     errorInLastAction: string | null;
 
-    moves: BoardProps["moves"];
+    moves: UntypedMoves;
     events: EventsAPI;
 };
 
@@ -47,7 +48,7 @@ export function useOnlineMatchData(
         return rawSendRequest({ id:addAwaitedResponse(), action });
     }
 
-    const moves: BoardProps["moves"] = {};
+    const moves: UntypedMoves = {};
     for (const moveName of Object.keys(appGame.moves)) {
         moves[moveName] = (arg) => wrappedSendRequest({
             move: moveName,

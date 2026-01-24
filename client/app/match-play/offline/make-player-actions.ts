@@ -1,9 +1,11 @@
-import { AppGame, BoardProps } from "@/app-game-support";
+import { AppGame } from "@/app-game-support";
 import { endMatch, endTurn } from "@shared/game-control/ctx";
 import { matchMove } from "@shared/game-control/match-action";
 import { RandomAPI } from "@shared/utils/random-api";
 import { OfflineMatchData } from "./make-initial-match-data";
 import { MutableMatchData } from "@shared/server-match-data";
+import { UntypedMoves } from "@/app-game-support/board-props";
+import { EventsAPI } from "@shared/game-control/events";
 
 export function makePlayerActions(
     game: AppGame, 
@@ -11,7 +13,7 @@ export function makePlayerActions(
     random: RandomAPI,
     matchData: OfflineMatchData, 
     setMatchData: (arg: OfflineMatchData) => void
-): Pick<BoardProps, "moves" | "events"> {
+): { moves: UntypedMoves; events: EventsAPI } {
 
     const doAction = (action: (md: MutableMatchData) => MutableMatchData) => {
         try {
@@ -30,12 +32,12 @@ export function makePlayerActions(
         }
     };
 
-    const events: BoardProps["events"] = {
+    const events: EventsAPI = {
         endTurn: () => doAction(md => {endTurn(md.ctxData); return md}),
         endMatch: () => doAction(md => {endMatch(md.ctxData); return md}),
     };
      
-    const moves: BoardProps["moves"] = {};
+    const moves: UntypedMoves = {};
     for (const moveName in game.moves) {
         moves[moveName] = (arg: unknown) => {
             doAction(md => matchMove(game, moveName, random, playerID, md, arg));
