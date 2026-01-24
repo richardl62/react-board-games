@@ -23,13 +23,13 @@ export function Columns() : JSX.Element {
         const {
             G,
             ctx: {playOrder}, 
-            playerData, 
+            getPlayerName, 
         } = useMatchState();
 
     const result: JSX.Element[] = [];
     for(const pid of playOrder) {
         result.push(<div key={pid}>
-            <span>{`${playerData[pid].name} has ${columnHieghts(G.columnHeights[pid])}`}</span>
+            <span>{`${getPlayerName(pid)} has ${columnHieghts(G.columnHeights[pid])}`}</span>
         </div>);
     }
     return <>{result}</>;

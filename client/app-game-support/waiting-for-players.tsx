@@ -25,7 +25,8 @@ export function WaitingForPlayers(props: WrappedMatchProps): JSX.Element {
     const gridElems : JSX.Element[] = [];
     let nNotJoined = 0;
     for(const pid of props.ctx.playOrder) {
-        const {status, name} = props.playerData[pid];
+        const name = props.getPlayerName(pid);
+        const status = props.getPlayerConnectionStatus(pid);
         if(status === "not joined") {
             nNotJoined++;
         } else {

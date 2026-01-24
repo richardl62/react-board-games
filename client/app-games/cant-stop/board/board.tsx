@@ -7,12 +7,12 @@ import { BlockedSquares } from "./blocked-squares";
 function Board() : JSX.Element {
     const {
         ctx: {currentPlayer}, 
-        playerData, 
+        getPlayerName, 
     } = useMatchState();
     
     // Very crude board for now.
     return <div>
-        <div>{`Current player: ${playerData[currentPlayer].name}`}</div>
+        <div>{`Current player: ${getPlayerName(currentPlayer)}`}</div>
         <BlockedSquares/>
         <Columns/>
         <TurnControl/>

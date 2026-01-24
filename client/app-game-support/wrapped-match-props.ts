@@ -1,4 +1,4 @@
-import { PlayerDataDictionary } from "./player-data";
+import { PlayerConnectionStatus } from "./player-status";
 import { ConnectionStatus } from "@/app/match-play/online/use-server-connection";
 import { Ctx } from "@shared/game-control/ctx";
 import { EventsAPI } from "@shared/game-control/events";
@@ -14,6 +14,8 @@ export interface WrappedMatchProps<
     TypeG=unknown, 
     Moves extends UntypedMoves=UntypedMoves
 > {
+    playerID: PlayerID;
+    
     G: TypeG;
 
     ctx: Ctx;
@@ -26,12 +28,9 @@ export interface WrappedMatchProps<
 
     connectionStatus: ConnectionStatus;
 
-    playerID: PlayerID;
-
-    playerData: PlayerDataDictionary;
-
-    // The items below are convenience properties
-    allJoined: boolean;
+    getPlayerConnectionStatus: (pid: string) => PlayerConnectionStatus;
 
     getPlayerName: (pid: string) => string;
+
+    allJoined: boolean;
 }

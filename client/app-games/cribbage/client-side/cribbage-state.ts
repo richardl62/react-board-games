@@ -1,4 +1,3 @@
-import { nonJoinedPlayerName } from "@/app-game-support";
 import { useStandardBoardContext } from "@/app-game-support/standard-board";
 import { WrappedMatchProps } from "@/app-game-support/wrapped-match-props";
 import { ClientMoves } from "@game-control/games/cribbage/moves/moves";
@@ -35,9 +34,7 @@ export function useCribbageState() : CribbageState {
         poneID = "0";
     }
 
-    const { playerData } = gameProps;
-    const poneName = playerData[poneID]?.name || nonJoinedPlayerName;
-
+    const poneName = gameProps.getPlayerName(poneID);
 
     return {
         ...gameProps.G,

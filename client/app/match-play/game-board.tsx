@@ -6,10 +6,10 @@ import { Ctx } from "@shared/game-control/ctx";
 import { ConnectionStatus } from "./online/use-server-connection";
 import { UntypedMoves } from "@/app-game-support/wrapped-match-props";
 import { EventsAPI } from "@shared/game-control/events";
-import { makePlayerData } from "@/app-game-support/player-data";
+import { makePlayerStatus } from "@/app-game-support/player-status";
 
 function gameStatus(gameProps: WrappedMatchProps) {
-    if(!gameProps.allJoined) {
+    if (!gameProps.allJoined) {
         return "Game not started";
     } else {
         const player = gameProps.getPlayerName(gameProps.ctx.currentPlayer);
@@ -32,31 +32,38 @@ export interface GameBoardProps {
 
 export function GameBoard(props: GameBoardProps) : JSX.Element {
 
+    // In theory, the code below could be memoized, but it seem harder than it's worth.
+    const { game, serverMatchData, ...otherProps } = props;
+    const ctx = new Ctx(serverMatchData.ctxData);
+
+    const allJoined = ctx.playOrder.every(
+        (pid) => makePlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
+    );
+
+    const gameProps : WrappedMatchProps = {
+        ...otherProps,
+        
+        ctx,
+
+        G: serverMatchData.state,
+
+        getPlayerConnectionStatus: (playerID: string) => makePlayerStatus(
+            serverMatchData.playerData,
+            playerID
+        ).connectionStatus,
+
+        getPlayerName: (playerID: string) => makePlayerStatus(
+            serverMatchData.playerData,
+            playerID
+        ).name,
+
+        allJoined,
+    };
+
     useEffect(() => {
         const status = gameStatus(gameProps);
         document.title = `${status} - ${game.displayName}`;
     });
-
-    // The code below code prbably be simplied.
-    const { game, playerID, connectionStatus, serverMatchData, errorInLastAction, moves, events } = props;
-    const ctx = new Ctx(serverMatchData.ctxData);
-    const playerData = makePlayerData(ctx, serverMatchData.playerData);
-    const gameProps : WrappedMatchProps = {
-        ctx, moves, events, playerID, connectionStatus, errorInLastAction,
-
-        G: serverMatchData.state,
-
-        playerData,
-
-        // Convenience properties
-
-        allJoined: Object.values(playerData).every(pd => pd.status !== "not joined"),
-        
-        getPlayerName: (playerID: string) => {
-            const pd = playerData[playerID];
-            return pd ? pd.name : "Unknown Player";
-        }
-    };
 
     return game.board(gameProps);
 }

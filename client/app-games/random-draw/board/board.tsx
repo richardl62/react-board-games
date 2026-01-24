@@ -5,12 +5,14 @@ function PlayerValues(props: {pid: string}) : JSX.Element {
     const {
         G: {playerValues},
         ctx: {currentPlayer},
-        playerData,
+        getPlayerName,
+        getPlayerConnectionStatus,
         moves,
 
      } = useMatchState();
     const values = playerValues[props.pid];
-    const { name, status } = playerData[props.pid];
+    const name = getPlayerName(props.pid);
+    const status = getPlayerConnectionStatus(props.pid);
 
     return <div>
         <span>{name}: {values.join(", ")}</span>
@@ -26,7 +28,7 @@ function PlayerValues(props: {pid: string}) : JSX.Element {
 function Board() : JSX.Element {
     const {
         ctx: {playOrder, currentPlayer}, 
-        playerData, 
+        getPlayerName,
         playerID
     } = useMatchState();
     
@@ -34,7 +36,7 @@ function Board() : JSX.Element {
         return <PlayerValues key={pid} pid={pid} />
     });
 
-    const name = (id: string) => playerData[id].name;
+    const name = (id: string) => getPlayerName(id);
     
     return <div>
         <div>
