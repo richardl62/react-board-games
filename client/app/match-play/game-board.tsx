@@ -31,9 +31,8 @@ export interface GameBoardProps {
 }
 
 export function GameBoard(props: GameBoardProps) : JSX.Element {
-    const { game, serverMatchData, ...otherProps } = props;
+    const { game, serverMatchData, playerID, connectionStatus, errorInLastAction, moves, events } = props;
 
-    // I'm not sure how useful this memoization is ...
     const gameProps: WrappedMatchProps = useMemo(() => {
         const ctx = new Ctx(serverMatchData.ctxData);
         const allJoined = ctx.playOrder.every(
@@ -41,7 +40,11 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
         );
 
         return {
-            ...otherProps,
+            playerID,
+            connectionStatus,
+            errorInLastAction,
+            moves,
+            events,
             ctx,
             G: serverMatchData.state,
             getPlayerConnectionStatus: (playerID: string) => 
@@ -50,7 +53,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
                 makePlayerStatus(serverMatchData.playerData, playerID).name,
             allJoined,
         };
-    }, [serverMatchData, otherProps]);
+    }, [serverMatchData, playerID, connectionStatus, errorInLastAction, moves, events]);
 
     const title = `${gameStatus(gameProps)} - ${game.displayName}`;
     useEffect(() => {
@@ -60,4 +63,3 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
     const Board = game.board;
     return <Board {...gameProps} />;
 }
-
