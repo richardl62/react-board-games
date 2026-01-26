@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import { useStandardBoardContext } from "./standard-board";
 import styled from "styled-components";
@@ -15,62 +15,61 @@ const WarningDiv = styled.div`
 // Return true at the given interval after a call in which flag is true.
 // Later calls in which flag is still true have no effect. Later calls with
 // the flag false (or with a different interval) reset the timer. 
-// function useDelayedValue(value: boolean, delay: number) {
-//   const [delayedValue, setDelayedValue] = useState(false);
+function useDelayedValue(value: boolean, delay: number) {
+  const [delayedValue, setDelayedValue] = useState(false);
 
-//   useEffect(() => {
-//     if (!value) {
-//       setDelayedValue(false);
-//       return;
-//     }
+  useEffect(() => {
+    if (!value) {
+      setDelayedValue(false);
+      return;
+    }
 
-//     const handler = setTimeout(() => {
-//         setDelayedValue(true);
-//     }, delay);
+    const handler = setTimeout(() => {
+        setDelayedValue(true);
+    }, delay);
 
-//     // Run when value or delay changes
-//     return () => {
-//       clearTimeout(handler);
-//     };
+    // Run when value or delay changes
+    return () => {
+      clearTimeout(handler);
+    };
 
-//   }, [value, delay]);
+  }, [value, delay]);
 
-//   return delayedValue;
-// }
+  return delayedValue;
+}
 
 export function Warnings(): JSX.Element {
     const warnings: string[] = [];
-    const {errorInLastAction /*, connectionStatus, playerData */} = useStandardBoardContext();  
-    
-    // const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
+    const {errorInLastAction, connectionStatus, getPlayerConnectionStatus, getPlayerName, waitingForServer, ctx} = useStandardBoardContext();  
+    const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
 
+    if (reportServerDelay) {
+        warnings.push("Waiting for server...");
+    }
 
-    // if (reportServerDelay) {
-    //     warnings.push("Waiting for server...");
-    // }
+    if ( connectionStatus === "connected" ) {
+        // Do nothing
+    } else if (connectionStatus === "connecting") {
+        warnings.push("Connecting to server...");
+    } else {
+        let message = "No connection to server";
+        if (connectionStatus.reconnecting) {
+            message += " (attempting reconnection)";
+        }
+        warnings.push(message);
+    }
 
-    // if (connectionStatus !== "offline") {
-    //     const {readyState } = connectionStatus;
-
-    //     if (readyState !== ReadyState.OPEN) {
-    //         warnings.push(`No connection to server (status: ${readyStatusText(readyState)})`);
-    //     } else {
-    //         for (const pId in playerData) {
-    //             const { name, status } = playerData[pId];
-    //             if (status === "notConnected") {
-    //                 warnings.push(`${name} is not connected`);
-    //             }
-    //         }
-    //     }
-    // }
+    for (const pid in ctx.playOrder) {
+        if (getPlayerConnectionStatus(pid)  === "not connected") {
+            warnings.push(`${getPlayerName(pid)} is not connected`);
+        }
+    }
 
     if(errorInLastAction) {
         warnings.push("Problem during move " + errorInLastAction);
     }
     
-    
     return <>
-        <div>!!! Reporting of connection issues temporarily disabled !!!</div>
         {warnings.map((text) => 
             <WarningDiv key={text}>
                 <span>WARNING: </span>

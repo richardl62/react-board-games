@@ -24,6 +24,7 @@ export interface GameBoardProps {
     connectionStatus: ConnectionStatus;
     
     serverMatchData: ServerMatchData;
+    waitingForServer: boolean;
     errorInLastAction: string | null;
 
     moves: UntypedMoves;
@@ -31,7 +32,8 @@ export interface GameBoardProps {
 }
 
 export function GameBoard(props: GameBoardProps) : JSX.Element {
-    const { game, serverMatchData, playerID, connectionStatus, errorInLastAction, moves, events } = props;
+    const { game, serverMatchData, playerID, connectionStatus, 
+        waitingForServer, errorInLastAction, moves, events } = props;
 
     const gameProps: WrappedMatchProps = useMemo(() => {
         const ctx = new Ctx(serverMatchData.ctxData);
@@ -42,6 +44,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
         return {
             playerID,
             connectionStatus,
+            waitingForServer,
             errorInLastAction,
             moves,
             events,
@@ -53,7 +56,7 @@ export function GameBoard(props: GameBoardProps) : JSX.Element {
                 makePlayerStatus(serverMatchData.playerData, playerID).name,
             allJoined,
         };
-    }, [serverMatchData, playerID, connectionStatus, errorInLastAction, moves, events]);
+    }, [serverMatchData, playerID, connectionStatus, waitingForServer, errorInLastAction, moves, events]);
 
     const title = `${gameStatus(gameProps)} - ${game.displayName}`;
     useEffect(() => {

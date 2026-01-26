@@ -53,6 +53,7 @@ export function MatchPlayOffline({game, options}: {
             playerID={playerID}
             connectionStatus={"connected"}
             serverMatchData={matchData}
+            waitingForServer={false}
             errorInLastAction={matchData.errorInLastAction}
             moves={moves}
             events={events}

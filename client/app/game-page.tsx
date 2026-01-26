@@ -34,7 +34,7 @@ function InnerGamePage(props: {game : AppGame} ) {
     }
 
     if ( player && !matchID ) {
-        alert("Unexpected URL parameters");
+        return <div>Unexpected URL parameters: Player ID provided without Match ID</div>;
     }
 
     if( matchID ) {

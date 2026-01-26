@@ -28,6 +28,8 @@ export interface WrappedMatchProps<
 
     connectionStatus: ConnectionStatus;
 
+    waitingForServer: boolean;
+
     getPlayerConnectionStatus: (pid: string) => PlayerConnectionStatus;
 
     getPlayerName: (pid: string) => string;
