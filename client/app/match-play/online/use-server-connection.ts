@@ -14,7 +14,7 @@ const reconnectAttempts = 30;
 const minReconnectInterval = 1000; // 1 second
 const maxReconnectInterval = 20000; // 20 seconds
 
-interface ServerConnection {
+export interface ServerConnection {
     connectionStatus: ConnectionStatus;
     
     serverResponse: WsServerResponse | null;

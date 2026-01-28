@@ -1,30 +1,43 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 import { GameBoard } from "../game-board";
-import { useOnlineMatchData } from "./use-online-match-data";
-
+import { useOnlineMatchActions } from "./use-online-match-actions";
+import { useServerConnection } from "./use-server-connection";
+import { WsServerResponse } from "@shared/ws-server-response";
 
 export function MatchPlayOnline({ game, matchID, player }: {
     game: AppGame;
     matchID: MatchID;
     player: Player;
 }): JSX.Element {
-    const onlineMatchData = useOnlineMatchData(game, {matchID, player});
+    const serverConnection = useServerConnection({matchID, player});
+    const {moves, events, waitingForServer} = useOnlineMatchActions(game, player, serverConnection);
+    const { connectionStatus, serverResponse: currentServerResponse } = serverConnection;
 
-    const { connectionStatus, moves, events, serverMatchData, errorInLastAction: errorInLastAction, waitingForServer } = onlineMatchData;
+    // To improve behaviour if there is a temporary loss of connection to the server
+    // record the last non-null server response.
+    const [ lastServerResponse, setLastServerResponse ] = useState<WsServerResponse | null>(null);
+    useEffect(() => {
+        if (currentServerResponse !== null) {
+            setLastServerResponse(currentServerResponse);
+        }
+    }, [currentServerResponse]);
 
+    // Reset the cached response if the match ID changes.
+    useEffect(() => {
+        setLastServerResponse(null);
+    }, [matchID]);
 
-    return serverMatchData ?
+    return lastServerResponse ?
         <GameBoard
             game={game}
             playerID={player.id}
             connectionStatus={connectionStatus}
             waitingForServer={waitingForServer}
-            serverMatchData={serverMatchData}
-            errorInLastAction={errorInLastAction}
+            serverMatchData={lastServerResponse.matchData}
+            errorInLastAction={lastServerResponse.errorInLastAction}
             moves={moves}
             events={events}
         />
-        : <div>No match data available.</div>
-
+        : <div>Loading ....</div>
 }
