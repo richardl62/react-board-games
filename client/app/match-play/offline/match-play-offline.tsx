@@ -2,7 +2,7 @@ import { AppGame } from "@/app-game-support";
 import { JSX, useMemo, useState } from "react";
 import styled from "styled-components";
 import { OfflineOptions } from "../../offline-options";
-import { GameBoard } from "../game-board";
+import { GameBoardWrapper } from "../game-board-wrapper";
 import { makeInitialMatchData } from "./make-initial-match-data";
 import { Ctx } from "@shared/game-control/ctx";
 import { makePlayerActions } from "./make-player-actions";
@@ -48,7 +48,7 @@ export function MatchPlayOffline({game, options}: {
         // or a blank element. However, this caused the Scrabble dictionary to be reloaded 
         // on each move. Presumably, this was because the compoment was unloaded and reloaded
         // each time.)
-        const board = <GameBoard 
+        const board = <GameBoardWrapper 
             game={game}
             playerID={playerID}
             connectionStatus={"connected"}

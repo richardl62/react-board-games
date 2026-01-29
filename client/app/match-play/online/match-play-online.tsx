@@ -1,6 +1,6 @@
 import { AppGame, MatchID, Player } from "@/app-game-support";
 import { JSX, useEffect, useState } from "react";
-import { GameBoard } from "../game-board";
+import { GameBoardWrapper } from "../game-board-wrapper";
 import { useOnlineMatchActions } from "./use-online-match-actions";
 import { useServerConnection } from "./use-server-connection";
 import { WsServerResponse } from "@shared/ws-server-response";
@@ -29,7 +29,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
     }, [matchID]);
 
     return lastServerResponse ?
-        <GameBoard
+        <GameBoardWrapper
             game={game}
             playerID={player.id}
             connectionStatus={connectionStatus}
