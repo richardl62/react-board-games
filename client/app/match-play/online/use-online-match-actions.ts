@@ -1,7 +1,7 @@
 import { AppGame, Player } from "@/app-game-support";
 import { EventsAPI } from "@shared/game-control/events";
 import { WsClientRequest, WsRequestId, isWsClientRequest } from "@shared/ws-client-request";
-import { UntypedMoves } from "@/app-game-support/wrapped-match-props";
+import { UntypedMoves } from "@/app-game-support/board-props";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ServerConnection } from "./use-server-connection";
 

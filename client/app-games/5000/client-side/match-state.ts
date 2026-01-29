@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
-import { WrappedMatchProps } from "../../../app-game-support/wrapped-match-props";
+import { BoardProps } from "../../../app-game-support/board-props";
 import { ClientMoves } from "@game-control/games/5000/moves/moves";
 import { ServerData } from "@game-control/games/5000/server-data";
 import { useTimedSteps } from "@utils/use-timed-steps";
@@ -18,7 +18,7 @@ function diceRotationSteps() {
     return {from, to, stepSize, stepTime};
 }   
 
-type TypedGameProps = WrappedMatchProps<ServerData, ClientMoves>;
+type TypedGameProps = BoardProps<ServerData, ClientMoves>;
 
 interface GameState extends TypedGameProps {
     diceRotation: {

@@ -9,8 +9,8 @@ export type UntypedMoves = {
     [x: string]: (...args: any[]) => void;
 };
 
-//To do: Consider given this a better name.
-export interface WrappedMatchProps<
+// The props used by the board in individual games.
+export interface BoardProps<
     TypeG=unknown, 
     Moves extends UntypedMoves=UntypedMoves
 > {

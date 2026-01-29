@@ -3,7 +3,7 @@ import { AppGame } from "@/app-game-support";
 import { ServerMatchData } from "@shared/server-match-data";
 import { Ctx } from "@shared/game-control/ctx";
 import { ConnectionStatus } from "./online/use-server-connection";
-import { UntypedMoves } from "@/app-game-support/wrapped-match-props";
+import { UntypedMoves } from "@/app-game-support/board-props";
 import { EventsAPI } from "@shared/game-control/events";
 import { makePlayerStatus } from "@/app-game-support/player-status";
 

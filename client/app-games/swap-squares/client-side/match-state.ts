@@ -1,9 +1,9 @@
 import { useStandardBoardContext } from "../../../app-game-support/standard-board";
-import { WrappedMatchProps } from "../../../app-game-support/wrapped-match-props";
+import { BoardProps } from "../../../app-game-support/board-props";
 import { ClientMoves } from "@game-control/games/swap-squares/moves/moves";
 import { ServerData } from "@game-control/games/swap-squares/server-data";
 
-type TypedGameProps = WrappedMatchProps<ServerData, ClientMoves>;
+type TypedGameProps = BoardProps<ServerData, ClientMoves>;
 
 export function useMatchState() : TypedGameProps {
     return useStandardBoardContext() as TypedGameProps;

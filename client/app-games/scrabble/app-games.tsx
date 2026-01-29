@@ -1,7 +1,7 @@
 import React from "react";
 import { AppGame, GameCategory } from "../../app-game-support";
 import { standardBoard } from "../../app-game-support/standard-board";
-import { WrappedMatchProps } from "../../app-game-support/wrapped-match-props";
+import { BoardProps } from "../../app-game-support/board-props";
 import { gameControlSimple, gameControlStandard} from "@game-control/games/scrabble/game-control";
 import { setupOptions } from "./options";
 
@@ -14,7 +14,7 @@ const appGameSimple: AppGame = {
     category: GameCategory.test,
     
     options: setupOptions,
-    board: (props: WrappedMatchProps) => standardBoard(LazyBoard, props, gameControlSimple),
+    board: (props: BoardProps) => standardBoard(LazyBoard, props, gameControlSimple),
 };
 
 const appGameStandard: AppGame = {
@@ -24,7 +24,7 @@ const appGameStandard: AppGame = {
     category: GameCategory.standard,
 
     options: setupOptions,
-    board: (props: WrappedMatchProps) => standardBoard(LazyBoard, props, gameControlStandard),
+    board: (props: BoardProps) => standardBoard(LazyBoard, props, gameControlStandard),
 };
 
 export const appGames = [appGameSimple, appGameStandard];

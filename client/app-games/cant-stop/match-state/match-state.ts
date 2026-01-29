@@ -1,5 +1,5 @@
 import { useStandardBoardContext } from "@/app-game-support/standard-board";
-import { WrappedMatchProps } from "@/app-game-support/wrapped-match-props";
+import { BoardProps } from "@/app-game-support/board-props";
 import { ServerData } from "@game-control/games/cant-stop/server-data";
 import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ClientMoves } from "@shared/game-control/games/cant-stop/moves/moves";
@@ -8,7 +8,7 @@ import { getScoringOptions } from "./scoring-options";
 import { blockedColumns, isBlocked, IsBlockedArg0 } from "./is-blocked";
 import { sanityCheckColumnHeights } from "./sanity-checks";
 
-type StandardMatchState = WrappedMatchProps<ServerData, ClientMoves>;
+type StandardMatchState = BoardProps<ServerData, ClientMoves>;
 
 export interface MatchState extends StandardMatchState {
 

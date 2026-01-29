@@ -7,14 +7,14 @@ import { ClientMoves } from "@game-control/games/scrabble/moves/moves";
 import { isServerData, ServerData } from "@game-control/games/scrabble/server-data";
 import { ScrabbleGameProps } from "./srcabble-game-props";
 import { GameState } from "@game-control/games/scrabble/moves/game-state";
-import { WrappedMatchProps } from "../../../app-game-support/wrapped-match-props";
+import { BoardProps } from "../../../app-game-support/board-props";
 import { Trie } from "@utils/word-finder/trie";
 
 import React from "react";
 import { SetupOptions } from "@game-control/games/scrabble/server-data";
 
 export interface ScrabbleState extends ReducerState {
-    readonly wrappedGameProps: WrappedMatchProps<ServerData, ClientMoves>; // Omit game-specific server data
+    readonly wrappedGameProps: BoardProps<ServerData, ClientMoves>; // Omit game-specific server data
     playerID: string;
     currentPlayer: string;
 

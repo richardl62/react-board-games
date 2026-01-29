@@ -3,14 +3,14 @@ import { DndProvider  } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { sAssert } from "@utils/assert";
 import { Warnings } from "./warnings";
-import { WrappedMatchProps } from "./wrapped-match-props";
+import { BoardProps } from "./board-props";
 import React from "react";
 
-export const ReactBasicsContext = React.createContext<WrappedMatchProps| null>(null);
+export const ReactBasicsContext = React.createContext<BoardProps| null>(null);
 
 export function standardBoard(
     LazyBoard: ReturnType<typeof React.lazy>, 
-    props: WrappedMatchProps,
+    props: BoardProps,
 
     /** Passed to the board. Intended for static configuration settings. 
      * (e.g. to distguish Scrabble from Simple Scrabble)
@@ -29,7 +29,7 @@ export function standardBoard(
     </Suspense>;
 }
 
-export function useStandardBoardContext() : WrappedMatchProps {
+export function useStandardBoardContext() : BoardProps {
     const context = React.useContext(ReactBasicsContext);
     sAssert(context);
 

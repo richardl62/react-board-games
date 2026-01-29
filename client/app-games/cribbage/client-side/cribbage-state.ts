@@ -1,5 +1,5 @@
 import { useStandardBoardContext } from "@/app-game-support/standard-board";
-import { WrappedMatchProps } from "@/app-game-support/wrapped-match-props";
+import { BoardProps } from "@/app-game-support/board-props";
 import { ClientMoves } from "@game-control/games/cribbage/moves/moves";
 import { CardSetID, PlayerID, ServerData } from "@game-control/games/cribbage/server-data";
 import { sAssert } from "@utils/assert";
@@ -15,7 +15,7 @@ export interface CribbageState extends ServerData {
 }
 
 export function useCribbageState() : CribbageState {
-    const gameProps = useStandardBoardContext() as WrappedMatchProps<ServerData, ClientMoves>;
+    const gameProps = useStandardBoardContext() as BoardProps<ServerData, ClientMoves>;
 
     let me: PlayerID;
     let pone: PlayerID;
