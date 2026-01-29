@@ -1,6 +1,7 @@
 import { JSX } from "react";
 import styled from "styled-components";
 import { BoardProps } from "./board-props";
+import { getPlayerStatus } from "./player-status";
 
 const Name = styled.span`
     /* font-weight: bold; */
@@ -25,8 +26,7 @@ export function WaitingForPlayers(props: BoardProps): JSX.Element {
     const gridElems : JSX.Element[] = [];
     let nNotJoined = 0;
     for(const pid of props.ctx.playOrder) {
-        const name = props.getPlayerName(pid);
-        const status = props.getPlayerConnectionStatus(pid);
+        const { name, connectionStatus: status } = getPlayerStatus(props.matchStatus.playerData, pid);
         if(status === "not joined") {
             nNotJoined++;
         } else {

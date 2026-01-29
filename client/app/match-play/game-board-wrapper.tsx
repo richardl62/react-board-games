@@ -5,7 +5,7 @@ import { Ctx } from "@shared/game-control/ctx";
 import { ConnectionStatus } from "./online/use-server-connection";
 import { MatchStatus, UntypedMoves } from "@/app-game-support/board-props";
 import { EventsAPI } from "@shared/game-control/events";
-import { makePlayerStatus } from "@/app-game-support/player-status";
+import { getPlayerStatus } from "@/app-game-support/player-status";
 
 interface Props {
     game: AppGame;
@@ -28,7 +28,7 @@ export function GameBoardWrapper(props: Props) : JSX.Element {
         waitingForServer, errorInLastAction, moves, events } = props;
     
     const getPlayerName = useCallback((playerID: string) => {
-        return makePlayerStatus(serverMatchData.playerData, playerID).name
+        return getPlayerStatus(serverMatchData.playerData, playerID).name
     }, [serverMatchData.playerData] );
 
     const matchStatus : MatchStatus = useMemo(() => {
@@ -45,7 +45,7 @@ export function GameBoardWrapper(props: Props) : JSX.Element {
     },   [serverMatchData.ctxData]);
 
     const allJoined = useMemo(() => ctx.playOrder.every(
-        (pid) => makePlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
+        (pid) => getPlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
     ), [ctx.playOrder, serverMatchData.playerData]);
 
     useEffect(() => {

@@ -2,6 +2,7 @@ import { JSX, useEffect, useState } from "react";
 
 import { useStandardBoardContext } from "./standard-board";
 import styled from "styled-components";
+import { playerStatus } from "./player-status";
 
 const WarningDiv = styled.div`
     span:first-child {
@@ -40,7 +41,9 @@ function useDelayedValue(value: boolean, delay: number) {
 
 export function Warnings(): JSX.Element {
     const warnings: string[] = [];
-    const {errorInLastAction, connectionStatus, getPlayerConnectionStatus, getPlayerName, waitingForServer, ctx} = useStandardBoardContext();  
+    const {
+        matchStatus: { connectionStatus, errorInLastAction, waitingForServer,  playerData}, 
+    } = useStandardBoardContext();  
     const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
 
     if (reportServerDelay) {
@@ -59,9 +62,11 @@ export function Warnings(): JSX.Element {
         warnings.push(message);
     }
 
-    for (const pid in ctx.playOrder) {
-        if (getPlayerConnectionStatus(pid)  === "not connected") {
-            warnings.push(`${getPlayerName(pid)} is not connected`);
+    for (const pd of playerData) {
+        const status = playerStatus(pd);
+
+        if (status.connectionStatus === "not connected") {
+            warnings.push(`${status.name} is not connected`);
         }
     }
 

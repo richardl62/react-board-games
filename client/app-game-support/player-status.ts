@@ -17,7 +17,21 @@ interface PlayerStatus {
   connectionStatus: PlayerConnectionStatus;
 }
 
-export function makePlayerStatus(matchData: PublicPlayerMetadata[], playerID: string): PlayerStatus {
+export function playerStatus(metaData: PublicPlayerMetadata) : PlayerStatus {
+    if (!metaData.name) {
+        return {
+            name: nonJoinedPlayerName,
+            connectionStatus: "not joined",
+        };
+    }
+
+    return {
+        name: metaData.name,
+        connectionStatus: metaData.isConnected ? "connected" : "not connected"
+    };
+}
+
+export function getPlayerStatus(matchData: PublicPlayerMetadata[], playerID: string): PlayerStatus {
     const md = matchData.find(md => md.id === playerID);
 
     if (!md) {
@@ -29,16 +43,6 @@ export function makePlayerStatus(matchData: PublicPlayerMetadata[], playerID: st
         };
     }
 
-    if (!md.name) {
-        return {
-            name: nonJoinedPlayerName,
-            connectionStatus: "not joined",
-        };
-    }
-
-    return {
-        name: md.name,
-        connectionStatus: md.isConnected ? "connected" : "not connected"
-    };
+    return playerStatus(md);
 }
 
