@@ -6,13 +6,11 @@ function PlayerValues(props: {pid: string}) : JSX.Element {
         G: {playerValues},
         ctx: {currentPlayer},
         getPlayerName,
-        getPlayerConnectionStatus,
         moves,
 
      } = useMatchState();
     const values = playerValues[props.pid];
     const name = getPlayerName(props.pid);
-    const status = getPlayerConnectionStatus(props.pid);
 
     return <div>
         <span>{name}: {values.join(", ")}</span>
@@ -21,7 +19,6 @@ function PlayerValues(props: {pid: string}) : JSX.Element {
             >
             Draw
         </button>
-        <span>{status}</span>
     </div>;
 }
 

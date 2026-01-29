@@ -3,7 +3,7 @@ import { AppGame } from "@/app-game-support";
 import { ServerMatchData } from "@shared/server-match-data";
 import { Ctx } from "@shared/game-control/ctx";
 import { ConnectionStatus } from "./online/use-server-connection";
-import { UntypedMoves } from "@/app-game-support/board-props";
+import { MatchStatus, UntypedMoves } from "@/app-game-support/board-props";
 import { EventsAPI } from "@shared/game-control/events";
 import { makePlayerStatus } from "@/app-game-support/player-status";
 
@@ -31,36 +31,43 @@ export function GameBoardWrapper(props: Props) : JSX.Element {
         return makePlayerStatus(serverMatchData.playerData, playerID).name
     }, [serverMatchData.playerData] );
 
-    const getPlayerConnectionStatus = useCallback((playerID: string) => {
-        return makePlayerStatus(serverMatchData.playerData, playerID).connectionStatus
-    }, [serverMatchData.playerData] );
+    const matchStatus : MatchStatus = useMemo(() => {
+        return {
+            connectionStatus,
+            playerData: serverMatchData.playerData,
+            waitingForServer,
+            errorInLastAction,
+        };
+    }, [connectionStatus, errorInLastAction, serverMatchData.playerData, waitingForServer]);
 
     const ctx = useMemo(() => {
         return new Ctx(serverMatchData.ctxData);
     },   [serverMatchData.ctxData]);
 
-    const allJoined = ctx.playOrder.every(
+    const allJoined = useMemo(() => ctx.playOrder.every(
         (pid) => makePlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
-    );
+    ), [ctx.playOrder, serverMatchData.playerData]);
 
-    const status = allJoined ? `${getPlayerName(ctx.currentPlayer)} to play` : 'Game not started';
-    const title = `${status} - ${game.displayName}`
     useEffect(() => {
+        const status = allJoined ? `${getPlayerName(ctx.currentPlayer)} to play` : 'Game not started';
+        const title = `${status} - ${game.displayName}`
+        
         document.title = title;
-    }, [title]);
+    }, [allJoined, ctx.currentPlayer, game.displayName, getPlayerName]);
 
     const Board = game.board;
     return <Board
-        ctx={ctx}
-        allJoined={allJoined}
         G={serverMatchData.state}
-        getPlayerConnectionStatus={getPlayerConnectionStatus}
-        getPlayerName={getPlayerName}
         playerID={playerID}
-        errorInLastAction={errorInLastAction}
-        waitingForServer={waitingForServer}
-        connectionStatus={connectionStatus}
+        ctx={ctx}
+        
         moves={moves}
         events={events}
+
+        getPlayerName={getPlayerName}
+
+        matchStatus={matchStatus}
+        
+        allJoined={allJoined}
      />;
-}
+}  

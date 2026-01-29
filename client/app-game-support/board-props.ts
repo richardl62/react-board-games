@@ -1,8 +1,18 @@
-import { PlayerConnectionStatus } from "./player-status";
 import { ConnectionStatus } from "@/app/match-play/online/use-server-connection";
 import { Ctx } from "@shared/game-control/ctx";
 import { EventsAPI } from "@shared/game-control/events";
 import { PlayerID } from "@shared/game-control/playerid";
+import { PublicPlayerMetadata } from "@shared/lobby/types";
+
+export interface MatchStatus {
+    connectionStatus: ConnectionStatus;
+    
+    playerData: PublicPlayerMetadata[];
+    
+    waitingForServer: boolean;
+    
+    errorInLastAction: string | null;
+}
 
 export type UntypedMoves = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,24 +24,19 @@ export interface BoardProps<
     TypeG=unknown, 
     Moves extends UntypedMoves=UntypedMoves
 > {
-    playerID: PlayerID;
-    
     G: TypeG;
 
     ctx: Ctx;
+
+    playerID: PlayerID;
 
     moves: Moves;
 
     events: EventsAPI;
 
-    errorInLastAction: string | null;
+    matchStatus: MatchStatus;
 
-    connectionStatus: ConnectionStatus;
-
-    waitingForServer: boolean;
-
-    getPlayerConnectionStatus: (pid: string) => PlayerConnectionStatus;
-
+    // Start of convenience properties.
     getPlayerName: (pid: string) => string;
 
     allJoined: boolean;
