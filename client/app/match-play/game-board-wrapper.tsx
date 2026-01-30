@@ -7,6 +7,8 @@ import { MatchStatus, UntypedMoves } from "@/app-game-support/board-props";
 import { EventsAPI } from "@shared/game-control/events";
 import { getPlayerStatus } from "@/app-game-support/player-status";
 
+export type WaitingForServer = false | {actionIgnored: boolean};
+
 interface Props {
     game: AppGame;
 
@@ -14,7 +16,7 @@ interface Props {
     connectionStatus: ConnectionStatus;
     
     serverMatchData: ServerMatchData;
-    waitingForServer: boolean;
+    waitingForServer: WaitingForServer;
     errorInLastAction: string | null;
 
     moves: UntypedMoves;

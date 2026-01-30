@@ -30,11 +30,11 @@ export function WaitingForPlayers(props: BoardProps): JSX.Element {
         if(status === "not joined") {
             nNotJoined++;
         } else {
-            gridElems.push(<Name key={"n-"+name} >{name+":"}</Name>);
+            gridElems.push(<Name key={"n-"+pid} >{name+":"}</Name>);
             if(status === "connected") {
-                gridElems.push(<StandardStatus key={"s-"+name} >Connected</StandardStatus>);
+                gridElems.push(<StandardStatus key={"s-"+pid} >Connected</StandardStatus>);
             } else {
-                gridElems.push(<WarningStatus key={"s-"+name} >Not connected</WarningStatus>);
+                gridElems.push(<WarningStatus key={"s-"+pid} >Not connected</WarningStatus>);
             }
         }
     }

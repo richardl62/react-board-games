@@ -1,3 +1,4 @@
+import { WaitingForServer } from "@/app/match-play/game-board-wrapper";
 import { ConnectionStatus } from "@/app/match-play/online/use-server-connection";
 import { Ctx } from "@shared/game-control/ctx";
 import { EventsAPI } from "@shared/game-control/events";
@@ -9,7 +10,7 @@ export interface MatchStatus {
     
     playerData: PublicPlayerMetadata[];
     
-    waitingForServer: boolean;
+    waitingForServer: WaitingForServer;
     
     errorInLastAction: string | null;
 }

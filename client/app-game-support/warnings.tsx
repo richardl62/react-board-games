@@ -2,7 +2,7 @@ import { JSX, useEffect, useState } from "react";
 
 import { useStandardBoardContext } from "./standard-board";
 import styled from "styled-components";
-import { playerStatus } from "./player-status";
+import { getPlayerStatus } from "./player-status";
 
 const WarningDiv = styled.div`
     span:first-child {
@@ -43,11 +43,19 @@ export function Warnings(): JSX.Element {
     const warnings: string[] = [];
     const {
         matchStatus: { connectionStatus, errorInLastAction, waitingForServer,  playerData}, 
-    } = useStandardBoardContext();  
-    const reportServerDelay = useDelayedValue(waitingForServer, 1000 /* ms */);
+        ctx,
+    } = useStandardBoardContext();
+    
+    // Hmm. I am not sure what delay to use. Hopefully 500ms is enough to avoid jitters.
+    const reportServerDelay = useDelayedValue(Boolean(waitingForServer), 500 /* ms */);
 
     if (reportServerDelay) {
-        warnings.push("Waiting for server...");
+        let message = "Waiting for server...";
+        if (waitingForServer && waitingForServer.actionIgnored) {
+            // Kludge? For user-friendliness, use 'move' rather than 'action' in the message.
+            message += " (some moves have been ignored)";
+        }
+        warnings.push(message);
     }
 
     if ( connectionStatus === "connected" ) {
@@ -62,9 +70,10 @@ export function Warnings(): JSX.Element {
         warnings.push(message);
     }
 
-    for (const pd of playerData) {
-        const status = playerStatus(pd);
+    for (const pid of ctx.playOrder) {
+        const status = getPlayerStatus(playerData, pid);
 
+        // Warn only about players that have joined but are not now connected
         if (status.connectionStatus === "not connected") {
             warnings.push(`${status.name} is not connected`);
         }

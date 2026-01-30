@@ -1,9 +1,10 @@
 import { AppGame, Player } from "@/app-game-support";
 import { EventsAPI } from "@shared/game-control/events";
-import { WsClientRequest, WsRequestId, isWsClientRequest } from "@shared/ws-client-request";
+import { WsRequestId, WsRequestedAction, isWsClientRequest } from "@shared/ws-client-request";
 import { UntypedMoves } from "@/app-game-support/board-props";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ServerConnection } from "./use-server-connection";
+import { WaitingForServer } from "../game-board-wrapper";
 
 function sameRequestID(a: WsRequestId, b: WsRequestId) {
     return a.playerId === b.playerId && a.number === b.number;
@@ -20,9 +21,10 @@ export function useOnlineMatchActions(
 ): {
     moves: UntypedMoves;
     events: EventsAPI;
-    waitingForServer: boolean;
+    waitingForServer: WaitingForServer;
 } {
     const [awaitedResponses, setAwaitedResponses] = useState<WsRequestId[]>([]);
+    const [ actionIgnored, setActionIgnored ] = useState(false);
     const lastRequestNumber = useRef(0);
 
     // Check if the server response is due to a client action rather than, say,  a connection warning.
@@ -37,17 +39,28 @@ export function useOnlineMatchActions(
         }
     }, [responseId]);
 
-    const waitingForServer = awaitedResponses.length > 0;
+    const waitingForServerBoolean = awaitedResponses.length > 0;
 
-    const makeAction = useCallback((action: WsClientRequest["action"]) => {
+    useEffect(() => {
+        if ( !waitingForServerBoolean ) {
+            setActionIgnored(false);
+        }
+    }, [waitingForServerBoolean]);
+
+    const makeAction = useCallback((action: WsRequestedAction) => {
+        if (waitingForServerBoolean) {
+            setActionIgnored(true);
+            return;
+        }
+
         lastRequestNumber.current += 1;
         const id: WsRequestId = { playerId: player.id, number: lastRequestNumber.current };
         setAwaitedResponses(prev => [...prev, id]);
 
         sendMatchRequest({ id, action });
-    }, [player.id, sendMatchRequest]);
+    }, [player.id, sendMatchRequest, waitingForServerBoolean]);
 
-    const { moves, events } = useMemo(() => {
+    const {moves, events } = useMemo(() => {
         const moves: UntypedMoves = {};
         for (const moveName of Object.keys(appGame.moves)) {
             moves[moveName] = (arg) => makeAction({move: moveName, arg});
@@ -64,6 +77,6 @@ export function useOnlineMatchActions(
     return useMemo(() => ({
         moves,
         events,
-        waitingForServer
-    }), [moves, events, waitingForServer]);
+        waitingForServer: waitingForServerBoolean ? { actionIgnored } : false,
+    }), [moves, events, waitingForServerBoolean, actionIgnored]);      
 }

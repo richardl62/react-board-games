@@ -17,16 +17,18 @@ export function MatchPlayOnline({ game, matchID, player }: {
     // To improve behaviour if there is a temporary loss of connection to the server
     // record the last non-null server response.
     const [ lastServerResponse, setLastServerResponse ] = useState<WsServerResponse | null>(null);
+
+    // Reset the cached response if the match ID changes. 
+    useEffect(() => {
+        setLastServerResponse(null);
+    }, [matchID]);
+
+    // Cache the last non-null server response.
     useEffect(() => {
         if (currentServerResponse !== null) {
             setLastServerResponse(currentServerResponse);
         }
     }, [currentServerResponse]);
-
-    // Reset the cached response if the match ID changes.
-    useEffect(() => {
-        setLastServerResponse(null);
-    }, [matchID]);
 
     return lastServerResponse ?
         <GameBoardWrapper
