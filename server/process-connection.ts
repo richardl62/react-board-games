@@ -3,6 +3,17 @@ import { wsClientConnection } from "../shared/ws-response-trigger.js";
 import { Matches } from "./matches.js";
 import { closeWithReason } from "./web-socket-actions.js";
 
+const connectionFlags = new WeakMap<WebSocket, { suppressDisconnectionActions: boolean }>();
+
+function getFlags(ws: WebSocket) {
+    let flags = connectionFlags.get(ws);
+    if (!flags) {
+        flags = { suppressDisconnectionActions: false };
+        connectionFlags.set(ws, flags);
+    }
+    return flags;
+}
+
 // Return the value of the named URL parameter from the given request URL.
 // Throw an error if the parameter is missing or invalid.
 function urlParam(requestUrl: string | undefined, name: string) {
@@ -16,7 +27,6 @@ function urlParam(requestUrl: string | undefined, name: string) {
     }
     return param;
 }
-
 
 export function processConnection(matches: Matches, ws: WebSocket, requestUrl: string | undefined) {
     try {
@@ -44,7 +54,8 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
         // connection. (The easy options are either this or disallowing the new connection,
         // and this option seems more user-friendly.)
         if (player.isConnected) {
-            player.recordDisconnection();
+            const ws = player.getWs();
+            getFlags(ws).suppressDisconnectionActions = true;
             closeWithReason(player.getWs(), "player connected elsewhere");
         }
 
@@ -56,12 +67,18 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
         const error = err instanceof Error ? err.message : "unknown error";
         console.log('Error during connection:', error);
 
-        // Give short reason suitable for humanclients.
-        closeWithReason(ws, "unrecognised match or player");
+        getFlags(ws).suppressDisconnectionActions = true;
+        closeWithReason(ws, 
+            "unrecognised match or player" // Short reason suitable for human clients.
+        );
     }
 }
 
 export function processDisconnection(matches: Matches, ws: WebSocket) {
+    if (getFlags(ws).suppressDisconnectionActions) {
+        return;
+    }
+
     try {
         const found = matches.findMatchAndPlayer(ws);
         if (!found) {

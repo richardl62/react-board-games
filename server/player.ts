@@ -56,7 +56,11 @@ export class Player {
 
     recordConnection(ws: WebSocket) {
         sAssert(this.isAllocated, "Attempt to connect unallocated player");
-        sAssert(!this.isConnected, "Attempt to connect player who is already connected");
+
+        if(this.isConnected) {
+            console.log(`Changing websocket for Player ${this.id}`);
+        }
+        
         this.ws = ws;
     }
 
