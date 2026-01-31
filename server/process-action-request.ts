@@ -1,5 +1,6 @@
 import WebSocket from 'ws';
-import { isWsClientRequest, isWsEndTurn, isWsEndMatch, isWsMove } from '../shared/ws-client-request.js';
+import { isWsEndTurn, isWsEndMatch, isWsMove } from '../shared/ws-requested-action.js';
+import { isWsClientRequest } from '../shared/ws-client-request.js';
 import { Matches } from './matches.js';
 import { closeWithReason } from './web-socket-actions.js';
 

@@ -4,7 +4,7 @@ import { matchMove } from '../shared/game-control/match-action.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
 import { MutableMatchData, ServerMatchData } from "../shared/server-match-data.js";
 import { RandomAPI } from '../shared/utils/random-api.js';
-import { WsMove } from "../shared/ws-client-request.js";
+import { WsMove } from "../shared/ws-requested-action.js";
 import { Player } from "./player.js";
 import { Ctx, endMatch, endTurn, makeCtxData } from '../shared/game-control/ctx.js';
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
