@@ -45,7 +45,7 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
         // and this option seems more user-friendly.)
         if (player.isConnected) {
             player.recordDisconnection();
-            closeWithReason(player.getWs(), "duplicate connection");
+            closeWithReason(player.getWs(), "player connected elsewhere");
         }
 
         player.recordConnection(ws);
@@ -56,7 +56,8 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
         const error = err instanceof Error ? err.message : "unknown error";
         console.log('Error during connection:', error);
 
-        closeWithReason(ws, error);
+        // Give short reason suitable for humanclients.
+        closeWithReason(ws, "unrecognised match or player");
     }
 }
 

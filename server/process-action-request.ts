@@ -45,6 +45,6 @@ export function processActionRequest(matches: Matches, ws: WebSocket, request: s
     } catch (err) {
         const error = err instanceof Error ? err.message : "unknown error";
         console.warn(`Error: ${error} when processing client request ${request}`);
-        closeWithReason(ws, 'WebSocket received invalid data');
+        closeWithReason(ws, 'bad data received');
     }
 }

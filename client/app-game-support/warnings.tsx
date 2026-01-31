@@ -13,6 +13,13 @@ const WarningDiv = styled.div`
     margin-bottom: 0.2em;
 `;
 
+function Warning({text} : {text: string}): JSX.Element {
+    return <WarningDiv>
+        <span>WARNING: </span>
+        <span>{text}</span>
+    </WarningDiv>;
+}
+
 // Return true at the given interval after a call in which flag is true.
 // Later calls in which flag is still true have no effect. Later calls with
 // the flag false (or with a different interval) reset the timer. 
@@ -39,56 +46,78 @@ function useDelayedValue(value: boolean, delay: number) {
   return delayedValue;
 }
 
-export function Warnings(): JSX.Element {
-    const warnings: string[] = [];
+
+function useWarnings() : {
+    connectionIssue: string | null,
+    disconnectedPlayers: string[],
+    errorInLastAction: string | null,
+    lastActionIgnored: boolean,
+} {
     const {
-        matchStatus: { connectionStatus, errorInLastAction, waitingForServer,  playerData}, 
+        matchStatus: { 
+            connectionStatus, 
+            errorInLastAction, 
+            actionRequestStatus: { lastActionIgnored, waitingForServer },
+            playerData
+        }, 
         ctx,
+
     } = useStandardBoardContext();
+
+    // To avoid jitters have a short delay before reporting server delays;
+    const reportServerDelay = useDelayedValue(waitingForServer, 500);
+
+    let connectionIssue : string | null = null;
+    if ( connectionStatus !== "connected" ) {
+        if ( connectionStatus === "connecting" ) {
+            connectionIssue = "Connecting to server...";
+        } else {
+            const reason = connectionStatus.closeEvent.reason || `closure code ${connectionStatus.closeEvent.code}`;
+            connectionIssue = `No connection to server (${reason})`;
+            if (connectionStatus.reconnecting) {
+                connectionIssue += ": attempting reconnection ...";
+            }
+        }
+    } else if (reportServerDelay) {
+        connectionIssue = "Waiting for server...";
+    }
     
-    // Hmm. I am not sure what delay to use. Hopefully 500ms is enough to avoid jitters.
-    const reportServerDelay = useDelayedValue(Boolean(waitingForServer), 500 /* ms */);
-
-    if (reportServerDelay) {
-        let message = "Waiting for server...";
-        if (waitingForServer && waitingForServer.actionIgnored) {
-            // Kludge? For user-friendliness, use 'move' rather than 'action' in the message.
-            message += " (some moves have been ignored)";
-        }
-        warnings.push(message);
-    }
-
-    if ( connectionStatus === "connected" ) {
-        // Do nothing
-    } else if (connectionStatus === "connecting") {
-        warnings.push("Connecting to server...");
-    } else {
-        let message = "No connection to server";
-        if (connectionStatus.reconnecting) {
-            message += " (attempting reconnection)";
-        }
-        warnings.push(message);
-    }
-
+    const disconnectedPlayers: string[] = [];
     for (const pid of ctx.playOrder) {
         const status = getPlayerStatus(playerData, pid);
 
         // Warn only about players that have joined but are not now connected
         if (status.connectionStatus === "not connected") {
-            warnings.push(`${status.name} is not connected`);
+            disconnectedPlayers.push(status.name);
         }
     }
 
-    if(errorInLastAction) {
-        warnings.push("Problem during move " + errorInLastAction);
-    }
+    return {
+        connectionIssue,
+        disconnectedPlayers,
+        errorInLastAction,
+        lastActionIgnored,
+    };
+}
+
+// Display warning about connections to the server or unexpected errors.
+// (Individual games should handle warnings about game-specific issues 
+// such as illegal moves.)
+export function Warnings(): JSX.Element {
+    const {
+        connectionIssue,
+        disconnectedPlayers,
+        errorInLastAction,
+        lastActionIgnored,
+    } = useWarnings();
+
+    const disconnectedMessage = disconnectedPlayers.length === 0 ? null :
+        `${disconnectedPlayers.join(", ")} ${disconnectedPlayers.length === 1 ? "is" : "are"} not connected.`;
     
-    return <>
-        {warnings.map((text) => 
-            <WarningDiv key={text}>
-                <span>WARNING: </span>
-                <span>{text}</span>
-            </WarningDiv>
-        )}
-    </>;
+    return <div>
+        { connectionIssue && <Warning text={connectionIssue} /> }
+        { disconnectedMessage && <Warning text={disconnectedMessage} /> }
+        { lastActionIgnored && <Warning text="Last move was ignored by the server." /> }
+        { errorInLastAction && <Warning text={`Error in last action: ${errorInLastAction}`} /> }
+    </div>;
 }

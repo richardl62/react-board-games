@@ -15,7 +15,10 @@ export function sendServerResponse(ws: WebSocket, response: WsServerResponse) {
 
 // Close a connection with a string giving reason. 
 // (The closure is delayed slightly to allow any final messages to be sent.) 
-export function closeWithReason(ws: WebSocket, reason: string) {
+export function closeWithReason(
+    ws: WebSocket, 
+    reason: string // Short reason suitable for a human client.
+) {
     const code = 4000; // Application-defined close code
     const delayMs = 50;
 

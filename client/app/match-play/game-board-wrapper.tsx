@@ -7,7 +7,15 @@ import { MatchStatus, UntypedMoves } from "@/app-game-support/board-props";
 import { EventsAPI } from "@shared/game-control/events";
 import { getPlayerStatus } from "@/app-game-support/player-status";
 
-export type WaitingForServer = false | {actionIgnored: boolean};
+export type ActionRequestStatus = {
+    // True if the we are currently waiting for the server to respond to an action request.
+    waitingForServer: boolean;
+
+    // True if the last user-requested action was ignored.  This could occur either if
+    // we are waiting for a response from the server (in which case waitingForServer will
+    // be set), or if there is no connection to the server.
+    lastActionIgnored: boolean;
+};
 
 interface Props {
     game: AppGame;
@@ -16,7 +24,7 @@ interface Props {
     connectionStatus: ConnectionStatus;
     
     serverMatchData: ServerMatchData;
-    waitingForServer: WaitingForServer;
+    actionRequestStatus: ActionRequestStatus;
     errorInLastAction: string | null;
 
     moves: UntypedMoves;
@@ -27,7 +35,7 @@ interface Props {
 // It is the highest level at which the no distinction between online and offline matches is made. 
 export function GameBoardWrapper(props: Props) : JSX.Element {
     const { game, serverMatchData, playerID, connectionStatus, 
-        waitingForServer, errorInLastAction, moves, events } = props;
+        actionRequestStatus, errorInLastAction, moves, events } = props;
     
     const getPlayerName = useCallback((playerID: string) => {
         return getPlayerStatus(serverMatchData.playerData, playerID).name
@@ -37,10 +45,10 @@ export function GameBoardWrapper(props: Props) : JSX.Element {
         return {
             connectionStatus,
             playerData: serverMatchData.playerData,
-            waitingForServer,
+            actionRequestStatus,
             errorInLastAction,
         };
-    }, [connectionStatus, errorInLastAction, serverMatchData.playerData, waitingForServer]);
+    }, [connectionStatus, errorInLastAction, serverMatchData.playerData, actionRequestStatus]);
 
     const ctx = useMemo(() => {
         return new Ctx(serverMatchData.ctxData);

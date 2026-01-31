@@ -11,7 +11,7 @@ export function MatchPlayOnline({ game, matchID, player }: {
     player: Player;
 }): JSX.Element {
     const serverConnection = useServerConnection({matchID, player});
-    const {moves, events, waitingForServer} = useOnlineMatchActions(game, player, serverConnection);
+    const {moves, events, actionRequestStatus} = useOnlineMatchActions(game, player, serverConnection);
     const { connectionStatus, serverResponse: currentServerResponse } = serverConnection;
 
     // To improve behaviour if there is a temporary loss of connection to the server
@@ -30,16 +30,30 @@ export function MatchPlayOnline({ game, matchID, player }: {
         }
     }, [currentServerResponse]);
 
-    return lastServerResponse ?
-        <GameBoardWrapper
+    if ( lastServerResponse ) {
+        return <GameBoardWrapper
             game={game}
             playerID={player.id}
             connectionStatus={connectionStatus}
-            waitingForServer={waitingForServer}
+            actionRequestStatus={actionRequestStatus}
             serverMatchData={lastServerResponse.matchData}
             errorInLastAction={lastServerResponse.errorInLastAction}
             moves={moves}
             events={events}
         />
-        : <div>Loading ....</div>
+    }
+
+    // If the status is 'connected' then we must be waiting for the first server response.
+    // To keep things simple, report this to the user in the same way as will connected.
+    if (connectionStatus === "connecting" || connectionStatus === "connected") {
+        return <div>Connecting ...</div>;
+    }
+
+    const { reason, code } = connectionStatus.closeEvent;
+    if ( reason ) {
+        return <div>ERROR: Cannot join match ({reason})</div>;
+    }
+
+    return <div>ERROR: Cannot connect to server (code {code})</div>;
+
 }
