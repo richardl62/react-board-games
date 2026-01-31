@@ -22,6 +22,8 @@ export class Match {
     // The data that can change during the course of a match.
     private mutableData : MutableMatchData
 
+    private responseDelay: number = 0;
+
     constructor(
         gameControl: GameControl,
         {  matchID, numPlayers, setupData, randomAPi }: {
@@ -117,6 +119,10 @@ export class Match {
         }
     }
 
+    setResponseDelay(responseDelay: number) {
+        this.responseDelay = responseDelay;
+    }
+
     broadcastMatchData(
         trigger: WsResponseTrigger,
         errorInLastAction: string | null
@@ -124,10 +130,17 @@ export class Match {
         const response: WsServerResponse =
             { trigger, matchData: this.matchData(), errorInLastAction };
 
-        for (const player of this.players) {
-            if (player.isConnected) {
-                sendServerResponse(player.getWs(), response);
+        const doIt = () => {
+            for (const player of this.players) {
+                if (player.isConnected) {
+                    sendServerResponse(player.getWs(), response);
+                }
             }
         }
+        if (this.responseDelay > 0) {
+            setTimeout(doIt, this.responseDelay);
+        } else {
+            doIt();
+        }   
     }
 }  

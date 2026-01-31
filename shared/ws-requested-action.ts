@@ -11,14 +11,6 @@ export interface WsEndMatch {
     endMatch: true;
 }
 
-export interface WsCloseConnection {
-    closeConnection: true;
-}
-
-export interface WsResponseDelay {
-    responseDelay: number; // milliseconds
-}
-
 export type WsRequestedAction = WsEndTurn | WsEndMatch | WsMove;
 
 export function isWsMove(obj: unknown): obj is WsMove {
@@ -48,21 +40,7 @@ export function isWsEndMatch(obj: unknown): obj is WsEndMatch {
     return candidate.endMatch === true;
 }
 
-export function isWsCloseConnection(obj: unknown): obj is WsCloseConnection {
-    if (typeof obj !== "object" || obj === null)
-        return false;
-    const candidate = obj as WsCloseConnection;
-    return candidate.closeConnection === true;
-}
-
-export function isWsResponseDelay(obj: unknown): obj is WsResponseDelay {
-    if (typeof obj !== "object" || obj === null)
-        return false;
-    const candidate = obj as WsResponseDelay;
-    return typeof candidate.responseDelay === "number";
-}
-
 export function isWsRequestedAction(obj: unknown): obj is WsRequestedAction {
-    return isWsEndTurn(obj) || isWsEndMatch(obj) || isWsMove(obj) || isWsCloseConnection(obj) || isWsResponseDelay(obj);
+    return isWsEndTurn(obj) || isWsEndMatch(obj) || isWsMove(obj);
 }
 

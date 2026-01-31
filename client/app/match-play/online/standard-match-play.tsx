@@ -2,16 +2,16 @@ import { AppGame, MatchID, Player } from "@/app-game-support";
 import { JSX, useEffect, useState } from "react";
 import { GameBoardWrapper } from "../game-board-wrapper";
 import { useOnlineMatchActions } from "./use-online-match-actions";
-import { useServerConnection } from "./use-server-connection";
+import { ServerConnection } from "./use-server-connection";
 import { WsServerResponse } from "@shared/ws-server-response";
 
-export interface MatchPlayProps {
+export interface StandardMatchPlayProps {
     game: AppGame;
     matchID: MatchID;
     player: Player;
+    serverConnection: ServerConnection;
 }
-export function StandardMatchPlay({ game, matchID, player }: MatchPlayProps): JSX.Element {
-    const serverConnection = useServerConnection({matchID, player});
+export function StandardMatchPlay({ game, matchID, player, serverConnection }: StandardMatchPlayProps): JSX.Element {
     const {moves, events, actionRequestStatus} = useOnlineMatchActions(game, player, serverConnection);
     const { connectionStatus, serverResponse: currentServerResponse } = serverConnection;
 

@@ -1,5 +1,6 @@
 import { ChangeEvent, JSX, useState } from "react";
 import styled from "styled-components";
+import { ServerConnection } from "./use-server-connection";
 
 // Good enough styling for test options.
 const OuterDiv = styled.div`
@@ -13,11 +14,12 @@ const CloseConnection = styled.button`
 
 const NumberInput = styled.input`;
     width: 6rem;
+    margin-right: 0.3rem;
 `;
 
 
 // Test options of online play. 
-export function TestOptions(): JSX.Element {
+export function TestOptions({ serverConnection }: { serverConnection: ServerConnection }): JSX.Element {
     const [value, setValue] = useState<number>(0)
 
     const handleDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +34,7 @@ export function TestOptions(): JSX.Element {
     };
 
     const handleCloseConnection = () => {
-        console.log("close connection clicked");
+        serverConnection.sendMatchRequest({ closeConnection: true });
     };
 
     return (
@@ -49,6 +51,9 @@ export function TestOptions(): JSX.Element {
                 value={value}
                 onChange={handleDelayChange}
             />
+            <button onClick={() => serverConnection.sendMatchRequest({ responseDelay: value })}>
+                Set Delay
+            </button>
 
         </OuterDiv>
     );

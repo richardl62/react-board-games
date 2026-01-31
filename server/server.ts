@@ -16,8 +16,6 @@ const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds - used to keep connections a
                                       
 const IDLE_TIMEOUT = 20 * 60 * 1000; // 20 minutes - timeout for idle connections
 
-let actionDelay = 0;
-
 //const draw = seededDraw(12345);
 const draw = () => Math.random();
 
@@ -86,16 +84,6 @@ app.get('/lobby', (req, res) => {
   }
 });
 
-app.get('/delay', (req, res) => {
-  const ms = parseInt(req.query.ms as string);
-  if (isNaN(ms)) {
-      res.status(400).send("Invalid delay");
-      return;
-  }
-  actionDelay = ms;
-  res.send(`Action delay set to ${ms}ms`);
-});
-
 app.use(express.static(distPath));
 
 // Fallback - Catch-all for SPA routing'
@@ -111,11 +99,7 @@ wss.on('connection', (ws, req) => {
   
   ws.on('message', (message) => {
     lastSeenMap.set(ws, Date.now()); // Update last activity
-    if (actionDelay > 0) {
-      setTimeout(() => processActionRequest(matches, ws, message.toString()), actionDelay);
-    } else {
-      processActionRequest(matches, ws, message.toString());
-    }
+    processActionRequest(matches, ws, message.toString());
   });
 
   ws.on('close', () => {

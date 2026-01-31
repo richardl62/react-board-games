@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { serverAddress } from "../../server-address";
 import { WsClientRequest } from "@shared/ws-client-request";
+import { WsTestAction } from "@shared/ws-test-actions";
 
 export type ConnectionStatus = "connecting" | "connected" | {
     closeEvent: CloseEvent,
@@ -18,7 +19,7 @@ export interface ServerConnection {
     connectionStatus: ConnectionStatus;
     
     serverResponse: WsServerResponse | null;
-    sendMatchRequest: (data: WsClientRequest) => void;
+    sendMatchRequest: (data: WsClientRequest | WsTestAction) => void;
 }
 
 export function useServerConnection({ matchID, player }: { matchID: MatchID; player: Player }) : ServerConnection {

@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import { isWsEndTurn, isWsEndMatch, isWsMove } from '../shared/ws-requested-action.js';
 import { isWsClientRequest } from '../shared/ws-client-request.js';
+import { isWsCloseConnection, isWsResponseDelay } from '../shared/ws-test-actions.js';
 import { Matches } from './matches.js';
 import { closeWithReason } from './web-socket-actions.js';
 
@@ -15,6 +16,21 @@ const found = matches.findMatchAndPlayer(ws);
     const { match, player } = found;
 
     const clientRequest = JSON.parse(request);
+
+    // Process test actions
+    if (isWsCloseConnection(clientRequest)) {
+        // Test action: Close without giving a reasons (this should trigger
+        // the client to attempt to reconnect).
+        ws.close();
+        return;
+    }
+
+    if (isWsResponseDelay(clientRequest)) {
+        match.setResponseDelay(clientRequest.responseDelay);
+        return;
+    }
+
+    // Now process normal client requests.
     if (!isWsClientRequest(clientRequest)) {
         throw new Error('WebSocket received invalid data');
     } 
