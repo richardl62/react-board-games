@@ -5,7 +5,6 @@ import { useOnlineMatchActions } from "./use-online-match-actions";
 import { ServerConnection} from "./use-server-connection";
 import { DebugModeActions } from "./debug-mode-actions";
 import { useSearchParamData } from "@/url-tools";
-import { useDebugMode } from "../debug-mode-context";
 
 interface ServerConnectionWithResponse extends ServerConnection {
     serverResponse: NonNullable<ServerConnection["serverResponse"]>;
@@ -21,7 +20,6 @@ export function StandardMatchPlay({ game, player, serverConnection }: StandardMa
     const {moves, events, actionRequestStatus} = useOnlineMatchActions(game, player, serverConnection);
     const { connectionStatus, serverResponse} = serverConnection;
     const { debugMode } = useSearchParamData();
-    const { debugMode } = useDebugMode();
 
     return <div>
         {debugMode && <DebugModeActions serverConnection={serverConnection} />}

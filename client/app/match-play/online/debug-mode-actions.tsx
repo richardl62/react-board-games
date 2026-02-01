@@ -20,7 +20,7 @@ const NumberInput = styled.input`
 
 // Extra options for use in debug mode.
 export function DebugModeActions({ serverConnection }: { serverConnection: ServerConnection }): JSX.Element {
-    const [ requiredDelay, setRequiredDelay ] = useState<number>(0)
+    const [ requiredDelay, setRequiredDelay ] = useState<number>(0);
     const [ delayApplied, setDelayApplied ] = useState(false);    
 
     const handleDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
