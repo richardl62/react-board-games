@@ -1,7 +1,6 @@
 import { ChangeEvent, JSX, useState } from "react";
 import styled from "styled-components";
 import { ServerConnection } from "./use-server-connection";
-import { useDebugMode } from "../debug-mode-context";
 
 // Good enough styling for test options.
 const OuterDiv = styled.div`
@@ -19,21 +18,23 @@ const NumberInput = styled.input`
 `;
 
 
-// Test options of online play. 
-export function TestOptions({ serverConnection }: { serverConnection: ServerConnection }): JSX.Element {
-    const { debugMode, setDebugMode } = useDebugMode();
-    const [value, setValue] = useState<number>(0)
+// Extra options for use in debug mode.
+export function DebugModeActions({ serverConnection }: { serverConnection: ServerConnection }): JSX.Element {
+    const [ requiredDelay, setRequiredDelay ] = useState<number>(0)
+    const [ delayApplied, setDelayApplied ] = useState(false);    
 
     const handleDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if ( !e.target.value ) {
-            setValue(0);
-            return;
-        }
-        const val = parseInt(e.target.value, 10);
-        if (!isNaN(val) && val >= 0) {
-            setValue(val);
+        const newDelay = e.target.value ? parseInt(e.target.value, 10) : 0;
+        if (!isNaN(newDelay) && newDelay >= 0 && newDelay !== requiredDelay ) {
+            setRequiredDelay(newDelay);
+            setDelayApplied(false);
         }
     };
+
+    const handleApplyDelay = () => {
+        serverConnection.sendMatchRequest({ responseDelay: requiredDelay });
+        setDelayApplied(true);
+    }
 
     const handleCloseConnection = () => {
         serverConnection.sendMatchRequest({ closeConnection: true });
@@ -41,16 +42,6 @@ export function TestOptions({ serverConnection }: { serverConnection: ServerConn
 
     return (
         <OuterDiv>
-            <label>
-                <input 
-                    type="checkbox" 
-                    checked={debugMode} 
-                    onChange={(e) => setDebugMode(e.target.checked)} 
-                    style={{ marginRight: "0.5rem" }}
-                />
-                Debug Mode
-            </label>
-            <div style={{ width: "1rem" }} />
             <CloseConnection onClick={handleCloseConnection}>
                 Close Connection
             </CloseConnection>
@@ -60,11 +51,14 @@ export function TestOptions({ serverConnection }: { serverConnection: ServerConn
                 id="delay"
                 type="number"
                 min="0"
-                value={value}
+                value={requiredDelay}
                 onChange={handleDelayChange}
             />
-            <button onClick={() => serverConnection.sendMatchRequest({ responseDelay: value })}>
-                Set Delay
+            <button 
+                onClick={handleApplyDelay}
+                disabled={delayApplied}
+            >
+                Apply
             </button>
 
         </OuterDiv>

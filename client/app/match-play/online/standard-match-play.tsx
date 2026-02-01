@@ -3,7 +3,9 @@ import { JSX } from "react";
 import { GameBoardWrapper } from "../game-board-wrapper";
 import { useOnlineMatchActions } from "./use-online-match-actions";
 import { ServerConnection} from "./use-server-connection";
-import { TestOptions } from "./test-options";
+import { DebugModeActions } from "./debug-mode-actions";
+import { useSearchParamData } from "@/url-tools";
+import { useDebugMode } from "../debug-mode-context";
 
 interface ServerConnectionWithResponse extends ServerConnection {
     serverResponse: NonNullable<ServerConnection["serverResponse"]>;
@@ -18,9 +20,11 @@ interface StandardMatchPlayProps {
 export function StandardMatchPlay({ game, player, serverConnection }: StandardMatchPlayProps): JSX.Element {
     const {moves, events, actionRequestStatus} = useOnlineMatchActions(game, player, serverConnection);
     const { connectionStatus, serverResponse} = serverConnection;
+    const { debugMode } = useSearchParamData();
+    const { debugMode } = useDebugMode();
 
     return <div>
-        <TestOptions serverConnection={serverConnection} />
+        {debugMode && <DebugModeActions serverConnection={serverConnection} />}
         <GameBoardWrapper
             game={game}
             playerID={player.id}

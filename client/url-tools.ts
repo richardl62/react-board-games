@@ -9,6 +9,7 @@ export const knownParams = {
     credentials: "cred",
     numPlayers: "np", // implies offline mode if set
     seed: "seed", // (Pseudo) random seed
+    debug: "db", // enable debug mode
 }
 
 export interface SearchParamData {
@@ -19,6 +20,8 @@ export interface SearchParamData {
     // A seed suppied as a search parameter can be any non-negative number,
     // but the number below, if set, will be in [0,1)
     seed: number | null; 
+
+    debugMode: boolean;
 }
 
 export function useSearchParamData() : SearchParamData {
@@ -35,7 +38,8 @@ export function useSearchParamData() : SearchParamData {
         player: null,
         isOffline: null,
         matchID: null,
-        seed: null
+        seed: null,
+        debugMode: false,
     }
     
     const numPlayers_ = foundParams.get(knownParams.numPlayers);
@@ -71,6 +75,11 @@ export function useSearchParamData() : SearchParamData {
             // result.seed must be in [0,1). The mapping below is crude but should be good enough.
             result.seed = 1 / (1.0 + userSeed);
         }
+    }
+
+    const debugMode_ = foundParams.get(knownParams.debug);
+    if (debugMode_ !== null) {
+        result.debugMode = true;
     }
 
     return result;
