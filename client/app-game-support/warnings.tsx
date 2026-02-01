@@ -13,13 +13,6 @@ const WarningDiv = styled.div`
     margin-bottom: 0.2em;
 `;
 
-function Warning({text} : {text: string}): JSX.Element {
-    return <WarningDiv>
-        <span>WARNING: </span>
-        <span>{text}</span>
-    </WarningDiv>;
-}
-
 // Return true at the given interval after a call in which flag is true.
 // Later calls in which flag is still true have no effect. Later calls with
 // the flag false (or with a different interval) reset the timer. 
@@ -100,6 +93,16 @@ function useWarnings() : {
     };
 }
 
+function Warning({text} : {text: string | null}): JSX.Element {
+    if (!text) {
+        return <></>;
+    }
+    return <WarningDiv>
+        <span>WARNING: </span>
+        <span>{text}</span>
+    </WarningDiv>;
+}
+
 // Display warning about connections to the server or unexpected errors.
 // (Individual games should handle warnings about game-specific issues 
 // such as illegal moves.)
@@ -115,9 +118,9 @@ export function Warnings(): JSX.Element {
         `${disconnectedPlayers.join(", ")} ${disconnectedPlayers.length === 1 ? "is" : "are"} not connected.`;
     
     return <div>
-        { connectionIssue && <Warning text={connectionIssue} /> }
-        { disconnectedMessage && <Warning text={disconnectedMessage} /> }
-        { lastActionIgnored && <Warning text="Last move was ignored by the server." /> }
-        { errorInLastAction && <Warning text={`Error in last action: ${errorInLastAction}`} /> }
+        <Warning text={connectionIssue} />
+        <Warning text={disconnectedMessage} />
+        <Warning text={lastActionIgnored ? "Last move was ignored by the server." : null} />
+        <Warning text={errorInLastAction ? `Error in last action: ${errorInLastAction}` : null} />
     </div>;
 }
