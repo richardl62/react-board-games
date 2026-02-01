@@ -12,7 +12,7 @@ const CloseConnection = styled.button`
     margin-right: 0.5rem;
 `;
 
-const NumberInput = styled.input`;
+const NumberInput = styled.input`
     width: 6rem;
     margin-right: 0.3rem;
 `;
