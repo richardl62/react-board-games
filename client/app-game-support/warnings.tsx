@@ -39,6 +39,40 @@ function useDelayedValue(value: boolean, delay: number) {
   return delayedValue;
 }
 
+// In general return the given text. But to avoid jitters return any non-null
+// text for the given duration even if the input changes.
+function useStableText(text: string | null, minDuration: number): string | null {
+    const [stableText, setStableText] = useState<string | null>(text);
+    const [lastChangeTime, setLastChangeTime] = useState<number>(Date.now());
+
+    useEffect(() => {
+        if (text === stableText) {
+            return;
+        }
+
+        const now = Date.now();
+        const timeSinceChange = now - lastChangeTime;
+
+        if (stableText !== null && timeSinceChange < minDuration) {
+            // Need to wait before changing to null
+            const remainingTime = minDuration - timeSinceChange;
+            const handler = setTimeout(() => {
+                setStableText(text);
+                setLastChangeTime(Date.now());
+            }, remainingTime);
+
+            return () => {
+                clearTimeout(handler);
+            };
+        } else {
+            // Can change immediately
+            setStableText(text);
+            setLastChangeTime(now);
+        }
+    }, [text, stableText, lastChangeTime, minDuration]);
+
+    return stableText;
+}
 
 function useWarnings() : {
     connectionIssue: string | null,
@@ -93,7 +127,7 @@ function useWarnings() : {
     };
 }
 
-function Warning({text} : {text: string | null}): JSX.Element {
+function OptionalWarning({text} : {text: string | null}): JSX.Element {
     if (!text) {
         return <></>;
     }
@@ -117,10 +151,18 @@ export function Warnings(): JSX.Element {
     const disconnectedMessage = disconnectedPlayers.length === 0 ? null :
         `${disconnectedPlayers.join(", ")} ${disconnectedPlayers.length === 1 ? "is" : "are"} not connected.`;
     
+    const lastActionIgnoredText = lastActionIgnored ? "Last move was ignored by the server." : null;
+    const errorInLastActionText = errorInLastAction ? `Error in last action: ${errorInLastAction}` : null;
+
+    const stableConnectionIssue = useStableText(connectionIssue, 3000);
+    const stableDisconnectedMessage = useStableText(disconnectedMessage, 3000);
+    const stableLastActionIgnored = useStableText(lastActionIgnoredText, 3000);
+    const stableErrorInLastAction = useStableText(errorInLastActionText, 3000);
+
     return <div>
-        <Warning text={connectionIssue} />
-        <Warning text={disconnectedMessage} />
-        <Warning text={lastActionIgnored ? "Last move was ignored by the server." : null} />
-        <Warning text={errorInLastAction ? `Error in last action: ${errorInLastAction}` : null} />
+        <OptionalWarning text={stableConnectionIssue} />
+        <OptionalWarning text={stableDisconnectedMessage} />
+        <OptionalWarning text={stableLastActionIgnored} />
+        <OptionalWarning text={stableErrorInLastAction} />
     </div>;
 }
