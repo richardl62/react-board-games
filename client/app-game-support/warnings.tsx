@@ -1,5 +1,4 @@
 import { JSX, useEffect, useState } from "react";
-
 import { useStandardBoardContext } from "./standard-board";
 import styled from "styled-components";
 import { getPlayerStatus } from "./player-status";
@@ -90,28 +89,17 @@ function connectionIssueDescription(
 function useConnectionIssue(
     matchStatus: MatchStatus,
     acceptableWait: number // milliseconds 
-) : {
-    connectionWarning: string | null,
-    lastActionWarning: string | null,
-} {
-    const {connectionStatus, actionRequestStatus: {waitingForServer, lastActionIgnored}} = matchStatus;
+) : string | null {
+    const {connectionStatus, actionRequestStatus: {waitingForServer }} = matchStatus;
 
     const stableWaitingForServer = useStableValue( waitingForServer, acceptableWait);
     const stableConnectionStatus = useStableValue( connectionStatus, acceptableWait);
 
-    let connectionWarning: string | null = null;
-    let lastActionWarning: string | null = null;
-
-    if (stableWaitingForServer  || stableConnectionStatus || lastActionIgnored) {
-        // In general, don't report a transient wait for the server.  But if a move has been ignored
-        // do report it as it helps explain why.
-        const reportWaitingForServer = stableWaitingForServer === true || ( waitingForServer && lastActionIgnored);
-
-        connectionWarning = connectionIssueDescription(connectionStatus, reportWaitingForServer);
-        lastActionWarning = lastActionIgnored ? "Last action was ignored" : null;
+    if (stableWaitingForServer  || stableConnectionStatus ) {
+        return connectionIssueDescription(connectionStatus, stableWaitingForServer  === true);    
     }
 
-    return { connectionWarning, lastActionWarning };
+    return null;
 }
 
 // If any players are disconnected return a string that names them. Or return null 
@@ -159,20 +147,24 @@ function Warning({text, minDisplayTime} :
 // (Individual games should handle warnings about game-specific issues 
 // such as illegal moves.)
 export function Warnings(): JSX.Element {
-    const networkIssueWait = 4000; // milliseconds - wait before reporting a possibly transient network issue.
+    const networkIssueWait = 2000; // milliseconds - wait before reporting a possibly transient network issue.
     const minWarningDisplayTime = 2000; // milliseconds - once a warning is displayed, display it for at least this long.
 
     const { matchStatus, ctx } = useStandardBoardContext();
+    const { errorInLastAction, actionRequestStatus: {lastActionIgnored} } = matchStatus;
 
-    const {connectionWarning, lastActionWarning} = useConnectionIssue(matchStatus, networkIssueWait);
+    const connectionWarning = useConnectionIssue(matchStatus, networkIssueWait);
     const playersWarning = usePlayersWarning(matchStatus.playerData, ctx, networkIssueWait);
-
-    const { errorInLastAction } = matchStatus;
     const errorInActionWarning = errorInLastAction ? `Error in last action: ${errorInLastAction}` : null;
+
+    useEffect(() => {
+        if (lastActionIgnored) {
+            console.warn("Last action was ignored.");
+        }
+    }, [lastActionIgnored]);
 
     return <div>
         <Warning text={connectionWarning} minDisplayTime={minWarningDisplayTime} />
-        <Warning text={lastActionWarning} minDisplayTime={minWarningDisplayTime} />
         <Warning text={playersWarning} minDisplayTime={minWarningDisplayTime} />
         <Warning text={errorInActionWarning} minDisplayTime={minWarningDisplayTime} />
     </div>;
