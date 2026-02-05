@@ -107,12 +107,12 @@ export function RackAndControls(): JSX.Element {
             <Rack selected={selectedForSwap} setSelected={setSelectedForSwap}/>
 
             {isMyTurn &&
-                <button
+                <ButtonNoWrap
                     disabled={!allowSwapping}
                     onClick={doEnableSwap}
                 >
-                    Swap
-                </button>}
+                    {allowSwapping ? "Swap" : "Can't swap"}
+                </ButtonNoWrap>}
 
         </StyledRackAndControls>
         );
