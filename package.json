@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "serve": "node dist/server/server.js",
-    "deploy": "git push heroku master" 
+    "deploy": "git push heroku main" 
   },
   "engines": {
     "node": "22.x",
