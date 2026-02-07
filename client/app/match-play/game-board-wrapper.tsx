@@ -58,12 +58,13 @@ export function GameBoardWrapper(props: Props) : JSX.Element {
         (pid) => getPlayerStatus(serverMatchData.playerData, pid).connectionStatus !== "not joined"
     ), [ctx.playOrder, serverMatchData.playerData]);
 
+    // KLUDGE: Set the document title on every render. The avoids some issues with it not updating
+    // properly in offline matches. 
     useEffect(() => {
         const status = allJoined ? `${getPlayerName(ctx.currentPlayer)} to play` : 'Game not started';
         const title = `${status} - ${game.displayName}`
-        
         document.title = title;
-    }, [allJoined, ctx.currentPlayer, game.displayName, getPlayerName]);
+    });
 
     const Board = game.board;
     return <Board
