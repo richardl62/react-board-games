@@ -20,7 +20,7 @@ export interface MoveHistoryElement {
         nSwapped: number;
     };
     
-    scoresAdjusted?: {[id: string]: number};
+    scoresAdjusted?: Record<string, number>;
 
     gameOver?: {winners: string[]}; // id of winner(s);
 

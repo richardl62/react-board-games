@@ -52,7 +52,7 @@ export interface ServerData {
     stage: GameStage;
     round: number;
 
-    playerData: {[playerID: string]: PlayerData };
+    playerData: Record<string, PlayerData>;
 }
 
 export function startingPlayerData() : PlayerData {
@@ -71,7 +71,7 @@ export function startingPlayerData() : PlayerData {
 
 export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData 
 {
-    const playerData : {[playerID: string]: PlayerData } = {};
+    const playerData : Record<string, PlayerData> = {};
     
     for(const pid in ctx.playOrder) {
         playerData[pid] = startingPlayerData();

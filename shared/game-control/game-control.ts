@@ -22,7 +22,7 @@ export interface GameControl {
     setup: (arg0: SetupArg0, setupData: any) => any;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    moves: { [moveName: string]: MoveFn<any> };
+    moves: Record<string, MoveFn<any>>;
 
     // By default only the current player can make a move. But if turnControl
     // is set to AllActive, then any player make a move. (A correctly implemented

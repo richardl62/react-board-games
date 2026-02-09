@@ -30,7 +30,7 @@ export interface ServerData {
 
     prevRollHeldScore: number;
 
-    playerScores: {[playerID: string]: number[]};
+    playerScores: Record<string, number[]>;
 
     lastRound: boolean;
 

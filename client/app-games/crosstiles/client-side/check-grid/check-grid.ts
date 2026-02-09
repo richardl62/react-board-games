@@ -7,7 +7,7 @@ import { countBonusLetters } from "./count-bonus-letters";
 import { findIllegalWords } from "./find-illegal-words";
 import { getWords } from "./get-words";
 
-export type FixedScoreOptions = { [category in FixedScoreCategory]? : number }
+export type FixedScoreOptions = Partial<Record<FixedScoreCategory, number>>
 
 function countLetters(grid: (Letter | null)[][]) {
     return grid.flat().filter(elem => elem).length;

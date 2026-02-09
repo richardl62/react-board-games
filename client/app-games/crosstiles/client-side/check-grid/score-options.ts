@@ -1,4 +1,3 @@
-
 import { sAssert } from "@utils/assert";
 import { bonusScore } from "@game-control/games/crosstiles/config";
 import { ScoreCategory } from "@game-control/games/crosstiles/score-categories";
@@ -11,7 +10,7 @@ interface ScoringData extends ReturnType<typeof checkGrid> {
 }
 
 export class ScoreOptions {
-    private playerScoreOptions: {[pid: string]: ScoringData} = {};
+    private playerScoreOptions: Record<string, ScoringData> = {};
 
     constructor(
         playerData: ServerData["playerData"],

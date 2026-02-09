@@ -2,7 +2,7 @@ import { SetupArg0 } from "../../game-control.js";
 import { valuesPerPlayer, maxValue } from "./config.js";
 
 export interface ServerData {
-    playerValues: {[playerID: string]: number[]};
+    playerValues: Record<string, number[]>;
 }
 
 export function startingServerData(arg0: SetupArg0): ServerData {

@@ -28,7 +28,7 @@ export interface ServerData {
         thisTurn: number;
     };
 
-    columnHeights: {[playerID: string]: ColumnHeight[]};
+    columnHeights: Record<string, ColumnHeight[]>;
 }
 
 // Starting heights for one player

@@ -50,7 +50,7 @@ function WordPlayed(props: WordPlayedProps) {
 }
 
 interface ScoreAdjustmentsProps {
-    adjustments: {[id: string]: number};
+    adjustments: Record<string, number>;
 }
 
 function ScoreAdjustments(props: ScoreAdjustmentsProps) {

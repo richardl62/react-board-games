@@ -18,7 +18,7 @@ export interface PlayerData {
     cardPlayedToSharedPiles: boolean;
 }
 
-type PlayerDataDictionary =  {[playerID: string]: PlayerData }
+type PlayerDataDictionary =  Record<string, PlayerData>
 type MoveToSharedPile = 
     "not done" | 
     "done" |

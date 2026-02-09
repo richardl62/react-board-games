@@ -15,10 +15,8 @@ export interface MatchStatus {
     errorInLastAction: string | null;
 }
 
-export type UntypedMoves = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [x: string]: (...args: any[]) => void;
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type UntypedMoves = Record<string, (...args: any[]) => void>;
 
 // The props used by the board in individual games.
 export interface BoardProps<

@@ -19,7 +19,7 @@ export type MoveFn<G> = (
 
 export type ClientMoveFunctions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    functions extends { [key: string]: MoveFn<any>; }
+    functions extends Record<string, MoveFn<any>>
 > = {
         [Name in keyof functions]: (arg: Parameters<functions[Name]>[1]) => void;
     };

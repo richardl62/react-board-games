@@ -1,6 +1,6 @@
-export type OptionSpecifications = {[arg:string]: BooleanSpecification | NumericSpecification | FixedStringSpecification };
+export type OptionSpecifications = Record<string, BooleanSpecification | NumericSpecification | FixedStringSpecification>;
 export type OptionValue = boolean | number | string;
-export type OptionValues = {[arg:string]: OptionValue};
+export type OptionValues = Record<string, OptionValue>;
 
 interface BaseSpecification {
     label: string;

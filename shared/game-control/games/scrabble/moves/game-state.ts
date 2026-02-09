@@ -23,7 +23,7 @@ export interface GamePlayerData {
     score: number;
 }
 
-type PlayerDataDictionary = {[id: string] : GamePlayerData};
+type PlayerDataDictionary = Record<string, GamePlayerData>;
 
 /** The state of the game at a particular point in history */
 export interface GameState {

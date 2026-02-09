@@ -18,17 +18,13 @@ export interface CreatedMatch {
 
 export interface MatchData {
     gameName: string;
-    players: {
-        [id: number]: PlayerMetadata;
-    };
-
+    players: Record<number, PlayerMetadata>;
 }
 
 export interface Match extends Omit<MatchData, 'players'> {
     matchID: string;
     players: PublicPlayerMetadata[];
 }
-;
 
 export interface MatchList {
     matches: Match[];

@@ -31,7 +31,7 @@ function findWinners(playerData: ServerData["states"][0]["playerData"]): string[
 
 function gameEndActions(state: GameState, playerOutPid: string | null): void {
 
-    const scoreAdjustement: { [id: string]: number; } = {};
+    const scoreAdjustement: Record<string, number> = {};
     let totalRackScores = 0;
 
     const playerData = state.playerData;

@@ -27,7 +27,7 @@ export function makeLetter(str: string) : Letter | null {
 }
 
 // For now at least, all scrabble configurations use the same letter scores.
-const letterScores: { [L in Letter]: number } = {
+const letterScores: Record<Letter, number> = {
     A: 1, E: 1, I: 1, L: 1, N: 1, O: 1, R: 1, S: 1, T: 1, U: 1,
     D: 2, G: 2,
     B: 3, C: 3, M: 3, P: 3,

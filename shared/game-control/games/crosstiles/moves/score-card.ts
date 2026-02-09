@@ -1,7 +1,7 @@
 import { sAssert } from "../../../../utils/assert.js";
 import { scoreCategories, ScoreCategory } from "../score-categories.js";
 
-export type ScoreCard = {[category in ScoreCategory]? : number};
+export type ScoreCard = Partial<Record<ScoreCategory, number>>;
 
 export function startingScoreCard(): ScoreCard {
     return {

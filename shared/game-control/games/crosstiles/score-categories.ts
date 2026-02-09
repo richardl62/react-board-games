@@ -10,7 +10,7 @@ export const fixedScoreCategories : FixedScoreCategory [] = [
 
 export const scoreCategories : ScoreCategory [] = [...fixedScoreCategories,  "chance", "bonus"];
 
-export const displayName: {[category in ScoreCategoryOrTotal] : string} = {
+export const displayName: Record<ScoreCategoryOrTotal, string> = {
     length4: "4 letter word",
     length5: "5 letter word",
     length6: "6 letter word",
@@ -21,7 +21,7 @@ export const displayName: {[category in ScoreCategoryOrTotal] : string} = {
     total: "TOTAL",
 };
 
-export const categoryDescription: {[category in ScoreCategoryOrTotal] : string} = {
+export const categoryDescription: Record<ScoreCategoryOrTotal, string> = {
     length4: "A single word of exactly 4 letters",
     length5: "A single word of exactly 5 letters",
     length6: "A single word of exactly 6 letters",
@@ -33,7 +33,7 @@ export const categoryDescription: {[category in ScoreCategoryOrTotal] : string} 
     total: "The total score so far",
 };
 
-export const fixedScores: {[category in FixedScoreCategory] : number} = {
+export const fixedScores: Record<FixedScoreCategory, number> = {
     length4: 20,
     length5: 30,
     length6: 50,
