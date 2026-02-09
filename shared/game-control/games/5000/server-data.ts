@@ -41,8 +41,8 @@ export interface ServerData {
 }
 
 export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData {
-    const faces = Array(numberOfDice).fill(1);
-    const held = Array(numberOfDice).fill(false);
+    const faces = Array<number>(numberOfDice).fill(1);
+    const held = Array<boolean>(numberOfDice).fill(false);
     
     const playerScores : ServerData["playerScores"] = {};
 

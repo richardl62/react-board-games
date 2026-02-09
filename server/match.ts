@@ -45,7 +45,7 @@ export class Match {
             this.players[id] = new Player(ctx.playOrder[id]);
         }
 
-        const state = gameControl.setup(
+        const state: unknown = gameControl.setup(
             { ctx, random: randomAPi },
             setupData
         );

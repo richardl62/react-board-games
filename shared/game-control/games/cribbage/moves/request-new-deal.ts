@@ -7,7 +7,7 @@ export function requestNewDeal(
     {G: inputG, ctx, random} : MoveArg0<ServerData>,  
     playerID: PlayerID): ServerData {
     // If returning a new G, the existing G must not be changed.
-    const newG = JSON.parse(JSON.stringify(inputG));
+    const newG = JSON.parse(JSON.stringify(inputG)) as ServerData;
 
     if (processGameRequest(newG, GameRequest.NewDeal, ctx, playerID)) {
         const ndd = newDealData(newG, random);

@@ -15,7 +15,7 @@ const found = matches.findMatchAndPlayer(ws);
     }
     const { match, player } = found;
 
-    const clientRequest = JSON.parse(request);
+    const clientRequest : unknown = JSON.parse(request);
 
     // Process test actions
     if (isWsCloseConnection(clientRequest)) {

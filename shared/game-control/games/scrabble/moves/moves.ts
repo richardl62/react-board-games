@@ -37,7 +37,7 @@ function customWrappedMoveFunction<P>(func: SimpleMoveFunc<P>): WrappedMoveFunc<
         );
 
         // KLUDGE/defensive - ensure copied state is fully independant.
-        const newState: GameState = JSON.parse(JSON.stringify(currentState));
+        const newState = JSON.parse(JSON.stringify(currentState)) as GameState;
         newState.currentPlayer = nextPlayer(ctx);
         func({...arg0, G: newState}, param);
 

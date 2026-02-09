@@ -12,7 +12,7 @@ export function HoldScoringDiceButton() {
         allSameScore: options.scoreToWin
     });
 
-    const toHold: boolean[] = Array(held.length).fill(true);
+    const toHold: boolean[] = Array<boolean>(held.length).fill(true);
 
     const unHold = (face: number) => {
         for (let i = held.length - 1; i >= 0; i--) {

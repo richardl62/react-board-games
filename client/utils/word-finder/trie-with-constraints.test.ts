@@ -27,7 +27,7 @@ describe("Trie word length", () => {
     test.each(testData)("%d %d", (minLength, maxLenght, expected) => {
         const found = trie.findWords(new WordConstraint(
             new LetterSet("", 100), // more than enought wild cards 
-            Array(maxLenght).fill(null), 
+            Array<null>(maxLenght).fill(null), 
             minLength
         ));
 
@@ -55,7 +55,7 @@ describe("Trie letter set", () => {
     test.each(testData)("%s", (letters, expected) => {
         const found = trie.findWords(new WordConstraint(
             makeLetterSet(letters),
-            Array(100).fill(null), // More than enough 
+            Array<null>(100).fill(null), // More than enough 
             0
         ));
 

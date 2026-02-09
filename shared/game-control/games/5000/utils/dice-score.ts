@@ -17,6 +17,6 @@ export const zeroScore: DiceScore = {
 };
 
 export function totalScore(score: DiceScore): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return Object.values(score).reduce((a, b) => a + b);
 }
-
