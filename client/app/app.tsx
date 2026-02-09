@@ -34,7 +34,7 @@ function gamePath(game: AppGame): string {
 }
 
 interface LinkListProps {
-    games: Array<AppGame>;
+    games: AppGame[];
     category: GameCategory;
   }
   
@@ -66,7 +66,7 @@ function CategoryLinks(props: LinkListProps) {
 }
 
 interface HomePageProps {
-    games: Array<AppGame>;
+    games: AppGame[];
 }
   
 function GameLinks({ games }: HomePageProps) {

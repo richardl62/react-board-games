@@ -11,7 +11,7 @@ import { appGame as swapSquares } from "./swap-squares/app-game";
 import { appGame as ticker } from "./ticker/app-game";
 import { appGame as randomDraw } from "./random-draw/app-game";
 
-export const appGames : Array<AppGame> = [
+export const appGames : AppGame[] = [
     g5000,
     acesUp,
     cantStop,

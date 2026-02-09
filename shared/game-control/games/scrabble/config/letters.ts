@@ -53,7 +53,7 @@ export const standardLetterSet = (()=>{
         [blank]: 2,
     };
 
-    const bag: Array<Letter> = [];
+    const bag: Letter[] = [];
     let letter: Letter;
     for (letter in dist) {
         const count = dist[letter];

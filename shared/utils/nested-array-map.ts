@@ -1,10 +1,10 @@
 /** map the elements of an array of arrays */
 export function nestedArrayMap<T, MappedT>(
-    array: Array<Array<T>>,
+    array: T[][],
     func: (elem: T, indices: [number, number]) => MappedT
-): Array<Array<MappedT>> {
+): MappedT[][] {
 
-    const result: Array<Array<MappedT>> = [];
+    const result: MappedT[][] = [];
 
     for (let ind1 = 0; ind1 < array.length; ++ind1) {
         result[ind1] = [];

@@ -5,7 +5,7 @@ import { SetupOptions } from "../server-data.js";
 const vowels = ["A","E","I","O","U"];
 
 const letterSet = (() => {
-    const letterSet: Array<Letter> = [];
+    const letterSet: Letter[] = [];
 
     let letter: Letter;
     for (letter in letterDistrubtion) {

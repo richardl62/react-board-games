@@ -10,7 +10,7 @@ import { gameControl as swapSquares } from "./swap-squares/game-control.js";
 import { gameControl as ticker } from "./ticker/game-control.js";
 import { gameControl as randomdraw } from "./random-draw/game-control.js";
 
-export const allGames : Array<GameControl> = [
+export const allGames : GameControl[] = [
     g5000,
     acesUp,
     cantStop,
