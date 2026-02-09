@@ -17,14 +17,14 @@ export function runLobbyFunction(matches: Matches, query: ParsedQs) : unknown {
     throw new Error("Parameter missing or invalid in call to lobby");
   }
 
-  // TO DO: Refactor to properly fix the lint errors.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // TO DO: Refactor to properly fix the lint errors. (Note: The lint
+  // errors change when strict linting is enabled.)
+  /* eslint-disable */
   const lobby : any = new ServerLobby(matches);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if(typeof (lobby)[func] === "function") {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     return (lobby)[func](arg);
   }
+  /* eslint-enable */
 
   throw new Error('Lobby function not implemented.');
 }
