@@ -11,7 +11,7 @@ export interface WsRequestId {
 
 // Represents a request sent over WebSocket to perform an action on a match,
 // which can either be ending the turn or making a move.
-export type WsClientRequest = {
+export interface WsClientRequest {
     id: WsRequestId;
     action: WsRequestedAction;
 }

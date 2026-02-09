@@ -14,7 +14,7 @@ export const EmptyCard = styled.div`
     border-radius: 5%;
 `;
 
-type CardProps = {
+interface CardProps {
     card?: Card | null;
     showBack?: boolean | CardBack ;
 } 

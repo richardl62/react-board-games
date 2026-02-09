@@ -7,7 +7,7 @@ import { MatchStatus, UntypedMoves } from "@/app-game-support/board-props";
 import { EventsAPI } from "@shared/game-control/events";
 import { getPlayerStatus } from "@/app-game-support/player-status";
 
-export type ActionRequestStatus = {
+export interface ActionRequestStatus {
     // True if the we are currently waiting for the server to respond to an action request.
     waitingForServer: boolean;
 
@@ -15,7 +15,7 @@ export type ActionRequestStatus = {
     // we are waiting for a response from the server (in which case waitingForServer will
     // be set), or if there is no connection to the server.
     lastActionIgnored: boolean;
-};
+}
 
 interface Props {
     game: AppGame;

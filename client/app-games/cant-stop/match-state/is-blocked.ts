@@ -1,7 +1,7 @@
 import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ServerData, SetupOptions } from "@shared/game-control/games/cant-stop/server-data";
 
-export type IsBlockedArg0 = {playerID: string, column: number, height: number};
+export interface IsBlockedArg0 {playerID: string, column: number, height: number}
 
 // Report if the give player if 'mean rule' options prevent a player from stopping with 
 // their top pieces in the given columns at the given height. Full columns do not count

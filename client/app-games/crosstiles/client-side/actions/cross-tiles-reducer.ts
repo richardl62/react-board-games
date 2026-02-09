@@ -7,7 +7,7 @@ import { reflectServerData } from "./reflect-server-data";
 import { tileClicked } from "./tile-clicked";
 import { ClickMoveStart, SquareID } from "./types";
 
-export type ReducerState = {
+export interface ReducerState {
     rack: (Letter | null) [] | null,
     grid: (Letter | null) [][];
     
@@ -21,7 +21,7 @@ export type ReducerState = {
     /** Incremented after a (potential) user-made change made to the grid. 
      * (In practice, incremented on every reducer action, except reflecting server data.) */
     gridChangeTimestamp: number;
-};
+}
 
 export function initialReducerState(playerID: string): ReducerState {
     return {

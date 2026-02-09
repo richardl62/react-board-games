@@ -3,7 +3,7 @@ import { LetterSet } from "../letter-set.js";
 import { Trie } from "../trie.js";
 import { WordConstraint } from "../word-contraint.js";
 
-type WordAndStart = {start: number; word: string};
+interface WordAndStart {start: number; word: string}
 
 function isGiven(r: null | undefined | LetterRequirement) : boolean {
     return Boolean(r?.given);
