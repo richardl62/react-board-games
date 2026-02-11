@@ -22,7 +22,7 @@ export class Match {
     // The data that can change during the course of a match.
     private mutableData : MutableMatchData
 
-    private responseDelay: number = 0;
+    private responseDelay = 0;
 
     constructor(
         gameControl: GameControl,

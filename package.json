@@ -11,6 +11,7 @@
     "tsc": "tsc -b",
     "build": "npm run buildApp && npm run buildServer",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "serve": "node dist/server/server.js",
     "deploy": "git push heroku main" 

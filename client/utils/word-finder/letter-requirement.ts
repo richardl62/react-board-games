@@ -35,6 +35,6 @@ export function isPermitted(letter: string, constraint: LetterRequirement) : boo
     if (constraint.given !== undefined) {
         return letter === constraint.given;
     } else {
-        return constraint.allowed.indexOf(letter) >= 0;
+        return constraint.allowed.includes(letter);
     }
 }

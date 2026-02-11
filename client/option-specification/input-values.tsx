@@ -53,7 +53,7 @@ export function InputValues<Spec extends OptionSpecifications>(props: {
             sAssert(typeof arg === typeof value);
             
             const newValues = {...localValues};
-            newValues[key as keyof Spec] = arg as typeof value;
+            newValues[key] = arg as typeof value;
             setLocalValues(newValues);
         };
 

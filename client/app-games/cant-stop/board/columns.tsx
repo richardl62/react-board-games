@@ -4,7 +4,7 @@ import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 
 function columnHieghts(playerData: ColumnHeight[]) : string  {
-    let str: string = "";
+    let str = "";
     for (const col of columnValues) {
         str += ` ${col}:`;
 

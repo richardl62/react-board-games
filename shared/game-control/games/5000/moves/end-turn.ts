@@ -38,7 +38,7 @@ export function endTurnNotBust (
         G.lastRound = true;
     }
 
-    let endMatch : boolean = false;
+    let endMatch  = false;
     if(G.lastRound) {
         //Get last element of playOrder
         const lastPlayer = arg0.ctx.playOrder.at(-1);

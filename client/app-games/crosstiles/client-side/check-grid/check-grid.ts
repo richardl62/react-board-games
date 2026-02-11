@@ -90,7 +90,7 @@ export function checkGrid(
     if (gridCategory) {
         if(scoreCard[gridCategory] === undefined) {
             scoreCategory = gridCategory;
-        } else if(scoreCard[gridCategory] !== 0 && scoreCard["chance"] === undefined ) {
+        } else if(scoreCard[gridCategory] !== 0 && scoreCard.chance === undefined ) {
             scoreCategory = "chance";
         }
     } 

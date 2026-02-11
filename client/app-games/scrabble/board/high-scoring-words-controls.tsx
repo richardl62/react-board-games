@@ -60,7 +60,7 @@ function Controls() {
             </Padded>
         </button>
 
-        {`(${position!+1} of ${nWordFounds})`}
+        {`(${position+1} of ${nWordFounds})`}
     </ControlDiv>;
 }
 
