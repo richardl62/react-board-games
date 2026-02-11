@@ -30,7 +30,7 @@ export function GameLobby(props: {
 
     return <GameLobbyDiv>
         <LoadingOrError status={asyncMatchList} activity="getting list of matches" />
-        {matches && matches.map(match =>
+        {matches?.map(match =>
             <MatchLobbyWithApiInfo key={match.matchID} game={game} match={match} />
         )}
 

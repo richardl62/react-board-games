@@ -37,7 +37,7 @@ export class WordConstraint implements TrieWordConstraint {
             return null;
         }
 
-        const newAvailableLetters = (constraint && constraint.given) ? 
+        const newAvailableLetters = (constraint?.given) ? 
             this.availableLetters.makeCopy() :
             this.availableLetters.advance(letter);
 

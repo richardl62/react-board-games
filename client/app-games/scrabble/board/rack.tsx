@@ -63,7 +63,7 @@ export function Rack(props: RackProps): JSX.Element {
             onDragEnd={selected ? undefined : onDragEnd}
             onClick={onClick}
 
-            highlight={Boolean(selected && selected[index])}
+            highlight={Boolean(selected?.[index])}
             showHover={false}
         />;
     });

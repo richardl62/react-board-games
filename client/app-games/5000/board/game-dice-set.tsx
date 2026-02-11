@@ -17,10 +17,10 @@ export function GameDiceSet(): JSX.Element {
             moves.setHeld(newHeld);
         };
     }
-    const rotateAll = diceRotation && diceRotation.allDice;
+    const rotateAll = diceRotation?.allDice;
     return <DiceSet
         faces={faces}
-        rotation={diceRotation && diceRotation.angle}
+        rotation={diceRotation?.angle}
         held={rotateAll? Array(6).fill(false) : held}
         onDiceClick={onDiceClick}
     />;

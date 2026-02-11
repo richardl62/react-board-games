@@ -47,7 +47,7 @@ export function TileGrid(props: TileGridProps) : JSX.Element {
             const id = container && squareID(row, col, container);
             
             let clickMoveDirection;
-            if(clickMoveStart && clickMoveStart.row === row && clickMoveStart.col === col) {
+            if(clickMoveStart?.row === row && clickMoveStart.col === col) {
                 clickMoveDirection = clickMoveStart.direction;
             }
 

@@ -13,6 +13,8 @@ export interface BoardSquareData extends ExtendedLetter {
 }
 
 export function getLetter(sd : BoardSquareData | null) : Letter | null {
+    // Don't use option chaining as the return value must be null rather than undefined.
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     return sd && sd.letter;
 }
 

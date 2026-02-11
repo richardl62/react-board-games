@@ -137,7 +137,7 @@ export class BoardAndRack {
         }
 
         const bsq = this.board[tp.board.row][tp.board.col];
-        return Boolean(bsq && bsq.active);
+        return Boolean(bsq?.active);
     }
 
     getRack(): Rack {
@@ -149,6 +149,9 @@ export class BoardAndRack {
     }
 
     getBoardLetters() : (Letter|null)[][] {
+        // Don't use option chaining as the return value must be null rather than
+        // undefined.
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
         return this.board.map(row => row.map(sq => sq && sq.letter));
     }
 
@@ -275,7 +278,7 @@ export class BoardAndRack {
         sAssert(!onRack(id));
 
         const sq = this.board[id.row][id.col];
-        sAssert(sq && sq.isBlank, "Cannot set blank", "Square=", sq);
+        sAssert(sq?.isBlank, "Cannot set blank", "Square=", sq);
         sq.letter = letter;
     }
 

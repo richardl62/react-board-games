@@ -27,7 +27,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Ele
 
     const { gridRackAndScore: recordedGridRackAndScore, scoreCard, 
         doneRecordingGrid } = playerData[playerID];
-    const recordedGrid = recordedGridRackAndScore && recordedGridRackAndScore.grid;
+    const recordedGrid = recordedGridRackAndScore?.grid;
     
     sAssert(rack);
 

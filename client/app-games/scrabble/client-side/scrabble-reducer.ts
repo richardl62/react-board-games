@@ -97,7 +97,7 @@ export function scrabbleReducer(state : ReducerState, action: ActionType) : Redu
         }
     }
     else if(action.type === "setHighScoringWordsPosition") {
-        sAssert(highScoringWords && highScoringWords.possibleWords[action.data.position]);
+        sAssert(highScoringWords?.possibleWords[action.data.position]);
         highScoringWords.position = action.data.position;
         preserveHighScoringWords = true;
     } else {
@@ -151,7 +151,7 @@ function newClickMoveState(row: number, col: number, oldCMS: WordPosition | null
 
     // If the same square is clicked multiple times, the arrow cycles
     // in the order right, down, none.
-    if (oldCMS && oldCMS.row === row && oldCMS.col === col ) {
+    if (oldCMS?.row === row && oldCMS.col === col ) {
         direction = (oldCMS.direction === "row") ? "column" : null;
     } else {
         // A new square has been picked so choice the default direction.
