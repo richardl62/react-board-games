@@ -17,5 +17,6 @@ export const zeroScore: DiceScore = {
 };
 
 export function totalScore(score: DiceScore): number {
-    return Object.values(score).reduce((a, b) => a + b);
+    // The use of 'as' avoids lint warnings about unasafe use of any.
+    return (Object.values(score) as number[]).reduce((a, b) => a + b, 0);
 }
