@@ -73,7 +73,7 @@ export function startingServerData({ctx}: SetupArg0, options: SetupOptions): Ser
 {
     const playerData : Record<string, PlayerData> = {};
     
-    for(const pid in ctx.playOrder) {
+    for(const pid of ctx.playOrder) {
         playerData[pid] = startingPlayerData();
     }
 

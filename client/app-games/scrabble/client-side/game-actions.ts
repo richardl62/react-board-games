@@ -74,9 +74,9 @@ export function addToRack(rack: Rack, tile: ExtendedLetter): void {
 /* move blank spaces to the end */
 export function compactRack(rack: Rack): void {
     let setPos = 0;
-    for(let readPos = 0; readPos < rack.length; ++readPos) {
-        if(rack[readPos]) {
-            rack[setPos] = rack[readPos];
+    for(const tile of rack) {
+        if(tile) {
+            rack[setPos] = tile;
             ++setPos;  
         }
     }

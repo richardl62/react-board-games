@@ -59,6 +59,8 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
     const notConnected : JSX.Element[] = [];
     let gameFull = true;
 
+    // To do (low priority): Modernise this loop.
+    // eslint-disable-next-line @typescript-eslint/no-for-in-array
     for(const index in players) {
         const { name, isConnected } = players[index];
 

@@ -10,7 +10,7 @@ export function startingServerData(arg0: SetupArg0): ServerData {
     
     const playerValues : ServerData["playerValues"] = {}; 
 
-    for(const pid in ctx.playOrder) {
+    for(const pid of ctx.playOrder) {
         playerValues[pid] = [];
         for(let i=0; i<valuesPerPlayer; i++) {
             playerValues[pid].push(random.Die(maxValue));

@@ -103,7 +103,7 @@ export function startingServerData({ctx, random}: SetupArg0,
 
     sd.sharedPileData.push(makeSharedPileData([]));
 
-    for (const pid in ctx.playOrder) {
+    for (const pid of ctx.playOrder) {
         sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
     }
 

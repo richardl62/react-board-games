@@ -18,13 +18,13 @@ function addWordsfromRow(row: (Letter | null)[], words: string[]) {
 
 export function getWords(grid: (Letter|null)[][]) : string[] {
     const words: string[] = [];
-    for(const row in grid) {
-        addWordsfromRow(grid[row], words);
+    for(const row of grid) {
+        addWordsfromRow(row, words);
     }
 
     const trans = transpose(grid);
-    for(const row in trans) {
-        addWordsfromRow(trans[row], words);
+    for(const row of trans) {
+        addWordsfromRow(row, words);
     }
 
     return words;

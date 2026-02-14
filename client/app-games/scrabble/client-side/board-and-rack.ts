@@ -258,8 +258,8 @@ export class BoardAndRack {
 
 
     recallRack(): void {
-        for (let row = 0; row < this.board.length; ++row) {
-            for (let col = 0; col < this.board[row].length; ++col) {
+        for (const [row, boardRow] of this.board.entries()) {
+            for (const [col] of boardRow.entries()) {
                 const tile = this.board[row][col];
                 if (tile?.active) {
                     addToRack(this.rack, tile);
@@ -283,14 +283,7 @@ export class BoardAndRack {
     }
 
     get nTilesInRack() : number {
-        let nTiles = 0;
-        for(const elem of this.rack) {
-            if(elem) {
-                ++nTiles;
-            }
-        }
-
-        return nTiles;
+        return this.rack.filter(tile => tile !== null).length;
     }
 
     get rackIsFull() : boolean {

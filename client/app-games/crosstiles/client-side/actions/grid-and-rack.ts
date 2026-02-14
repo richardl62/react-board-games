@@ -167,8 +167,7 @@ export class GridAndRack {
     }
 
     recallToRack(): void {
-        for(let r = 0; r < this.grid.length; ++r) {
-            const row = this.grid[r];
+        for(const row of this.grid) {
             for(let c = 0; c < row.length; ++c) {
                 if(row[c]) {
                     this.addToRack(row[c]!);
