@@ -66,7 +66,7 @@ export function useTurnControlData(): TurnControlData {
                     score: wordsAndScore.score,
                     playedWordinfo: {
                         ...wordsAndScore,
-                        illegalWords: wordsAndScore.illegalWords || [],
+                        illegalWords: wordsAndScore.illegalWords ?? [],
                     },
 
                 });

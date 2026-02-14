@@ -22,8 +22,8 @@ const Container = styled.div<{
 
     height: ${props=>props.height};
     width: ${props=>props.width};
-    color: ${props=>props.color || "none"};
-    background-color: ${props=>props.backgroundColor || "none"};
+    color: ${props=>props.color ?? "none"};
+    background-color: ${props=>props.backgroundColor ?? "none"};
 
     position: relative;
     z-index: 0;
@@ -57,7 +57,7 @@ const Border = styled.div<{
 }>`
     height: ${props=>props.height};
     width: ${props=>props.width};
-    color: ${props=>props.color || "none"};
+    color: ${props=>props.color ?? "none"};
 
     position: absolute;
     top:0;

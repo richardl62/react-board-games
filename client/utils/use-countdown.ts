@@ -10,8 +10,7 @@ export function useNowTicker(
     optionalIntervalLenght?: number
 ) : number {
     
-    const intervalLenght = optionalIntervalLenght === undefined ? 
-        defaultIntervalLength : optionalIntervalLenght;
+    const intervalLenght = optionalIntervalLenght ?? defaultIntervalLength;
     sAssert(intervalLenght >= 0, "Bad interval length");
     
     const [now, setNow] = useState(Date.now());

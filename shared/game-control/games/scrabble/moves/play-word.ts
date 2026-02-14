@@ -19,9 +19,7 @@ export function playWord(
     const newRack = [...inputRack];
     
     for(let ri = 0; ri < newRack.length; ++ri) {
-        if(!newRack[ri]) {
-            newRack[ri] = newBag.shift() || null;
-        }
+        newRack[ri] ??= newBag.shift() ?? null;
     }
 
     state.playerData[ctx.currentPlayer].rack = newRack;

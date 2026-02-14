@@ -33,7 +33,7 @@ members. It looked as if reactDnD data was being merged into the ID object.)
 export function useDrag<ID = UnknownObject>(arg?: UseDragArg<ID> | null):
      [{ isDragging: boolean; }, ReactDnd.ConnectDragSource, ReactDnd.ConnectDragPreview] 
 {
-    const {id, start, end} = arg || {};
+    const {id, start, end} = arg ?? {};
 
     // I tried to enforce this in typescript, but got stuck.
     sAssert(id === undefined || typeof id === "object");
@@ -83,7 +83,7 @@ interface UseDropArg<ID = UnknownObject> {
 export function useDrop<ID = UnknownObject>(arg?: UseDropArg<ID> | null): 
     [{ isOver: boolean; canDrop: boolean; item: unknown; }, ReactDnd.ConnectDropTarget] 
 {
-    const {id, onDrop} = arg || {};
+    const {id, onDrop} = arg ?? {};
     
     // I tried to enforce this in typescript, but got stuck.
     sAssert(id === undefined || typeof id === "object");

@@ -62,7 +62,7 @@ export function PlayerArea(props: Props) : JSX.Element {
 
     return <OuterDiv>
         <HeaderLine errorMessage={Boolean(notification)} >
-            <span>{notification || standardMessage()}</span>
+            <span>{notification ?? standardMessage()}</span>
             <UndoButton 
                 visible={allowUndo}
                 onClick={() => moves.undo()}

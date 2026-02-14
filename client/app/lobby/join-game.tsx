@@ -30,7 +30,7 @@ async function joinMatch(game: AppGame, matchID: MatchID, name: string | null = 
 
     const joinMatchResult = await lobbyClient.joinMatch({
         matchID: matchID.mid,
-        playerName: name || "unnamed"
+        playerName: name ?? "unnamed"
     });
 
     const credentials = joinMatchResult.playerCredentials;

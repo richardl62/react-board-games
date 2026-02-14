@@ -60,7 +60,7 @@ function singleScore(text: string, score: number | null | undefined) {
     return <SingleScoreDiv 
         showingText={score === null}
     >
-        {score === null ? text : score}
+        {score ?? text}
     </SingleScoreDiv>;
 }
 

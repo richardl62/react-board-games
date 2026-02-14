@@ -5,7 +5,7 @@ import { sAssert } from "@shared/utils/assert";
 
 export function fullOptionSpecification(game: AppGame) {
     const { minPlayers, maxPlayers } = game;
-    const gameOptions = game.options || {};
+    const gameOptions = game.options ?? {};
     
     return {
         numPlayers: {

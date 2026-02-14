@@ -36,10 +36,10 @@ interface Props {
  */
 export function BoarderedGrid(props: Props) : JSX.Element {
     const children = props.children;
-    const nCols = props.nCols || nElements(children);
-    const backgroundColor = props.backgroundColor || "none";
-    const gridGap = props.gridGap || "none";
-    const borderWidth = props.borderWidth || gridGap;
+    const nCols = props.nCols ?? nElements(children);
+    const backgroundColor = props.backgroundColor ?? "none";
+    const gridGap = props.gridGap ?? "none";
+    const borderWidth = props.borderWidth ?? gridGap;
 
 
     return <Grid nCols={nCols} backgroundColor={backgroundColor} gridGap={gridGap} borderWidth={borderWidth}>

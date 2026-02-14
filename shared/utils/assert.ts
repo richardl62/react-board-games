@@ -2,7 +2,7 @@ function doAssert(
     action: (message: string) => void,
     condition: unknown, message: string | undefined, args: unknown[]) {
     if (!condition) {
-        const newMessage = "Assertion failed: " + (message || "<no message>");
+        const newMessage = "Assertion failed: " + (message ?? "<no message>");
         console.log(newMessage, ...args);
         action(newMessage);
     }

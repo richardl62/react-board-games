@@ -85,7 +85,7 @@ export class SharedPile {
 
     /** Return the top card, or undefined if there are no cards. */
     get top() : CardNonJoker | undefined {
-        return this._thisTurnStandard.at(-1) || this._old.at(-1);
+        return this._thisTurnStandard.at(-1) ?? this._old.at(-1);
     }
 
     get isEmpty() : boolean {
@@ -110,7 +110,7 @@ export class SharedPile {
     stealTopCard(thiefCard: CardNonJoker) : CardNonJoker {
         sAssert(thiefCard.rank === this._options.thiefRank);
 
-        const stolen = this._thisTurnStandard.pop() ||
+        const stolen = this._thisTurnStandard.pop() ??
             this._old.pop()!;
         sAssert(stolen, "SharedPile.stealTopCard: no card to steal");
 

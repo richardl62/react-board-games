@@ -12,7 +12,7 @@ export function SharedPile(props: {
 
     const { old, thisTurnStandard, thisTurnSpecials } = pile.tops();
     // Get the top cards, if any, of the two sub-piles
-    const displayCards = [old || null];
+    const displayCards = [old ?? null];
     if ( thisTurnSpecials ) {
         displayCards.push(thisTurnSpecials);
     } else if ( thisTurnStandard ) {

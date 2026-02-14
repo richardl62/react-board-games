@@ -23,7 +23,7 @@ const random = new RandomAPI(draw);
 const matches = new Matches(random);
 
 const app = express();
-const PORT = process.env.PORT || defaultPort;
+const PORT = process.env.PORT ?? defaultPort;
 
 app.use(cors({
   origin: 'http://localhost:5173' // Vite default port

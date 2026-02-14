@@ -159,7 +159,7 @@ function findCandidateWords(
     active: RowCol[],
 ): RowCol[][] | null {
 
-    return findCandidateWordsDirected(board, active, "row") ||
+    return findCandidateWordsDirected(board, active, "row") ??
         findCandidateWordsDirected(board, active, "col");
 }
 

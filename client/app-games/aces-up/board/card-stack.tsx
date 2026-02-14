@@ -63,7 +63,7 @@ export function CardStack(props: {
 }): JSX.Element {
     const { cards, dragID, dropID } = props;
 
-    const dropRef = useCardDropRef(dropID || null);
+    const dropRef = useCardDropRef(dropID ?? null);
 
     return <CardStackDiv ref={dndRefKludge(dropRef)} height={cardStackHeight(cards.length)}>
         {cards.length === 0 ? 

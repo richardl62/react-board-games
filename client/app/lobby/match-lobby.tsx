@@ -63,6 +63,10 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps) : JSX.E
         const { name, isConnected } = players[index];
 
         const key = name+index; // Kludge?
+
+        // To do (low priority): Check the name can legitimately be an empty string.
+        // If not the || could be replaced by ??.
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const elem = <span key={key}>{name || nonJoinedPlayerName}</span>;
         allNames.push(elem);
 

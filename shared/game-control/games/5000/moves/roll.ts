@@ -35,7 +35,7 @@ export function roll(
         }
     }
 
-    G.faces = newFaces || faces;
+    G.faces = newFaces ?? faces;
     G.held = held;
 
     // Calculate the score from the dice
