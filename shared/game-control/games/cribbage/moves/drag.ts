@@ -14,16 +14,16 @@ function dragPermitted(state: ServerData, {to, from}: FromTo) : boolean {
     const fromID = makeCardSetID(from.cardSetID);
     const toID = makeCardSetID(to.cardSetID);
     
-    if (fromID === toID && fromID !== "shared") {
+    if (fromID === toID && fromID !== CardSetID.Shared) {
         return true;
     }
 
     if (state.stage === GameStage.SettingBox) {
-        return toID === "shared" || fromID === "shared";
+        return toID === CardSetID.Shared || fromID === CardSetID.Shared;
     }
 
     if (state.stage === GameStage.Pegging) {
-        return toID === "shared";
+        return toID === CardSetID.Shared;
     } 
 
     sAssert(false, "Cannot determined result of dragPermitted");
@@ -69,7 +69,7 @@ export function drag(
             reorderFollowingDrag(state[fromID].hand, from.index, to.index);
         }
     } else if (state.stage === GameStage.Pegging) {
-        sAssert(toID === "shared", "unexpected action during pegging");
+        sAssert(toID === CardSetID.Shared, "unexpected action during pegging");
         const card = state[fromID].hand.splice(from.index, 1)[0];
         state[toID].hand.push(card);
     } else {

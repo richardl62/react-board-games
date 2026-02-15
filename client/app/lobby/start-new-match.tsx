@@ -40,7 +40,7 @@ export function StartNewMatch(props: {
                 setupData: options,
             });
         } else {
-            asyncCreateMatch.execute({
+            void asyncCreateMatch.execute({
                 numPlayers: options.numPlayers,
                 setupData: options,
             });

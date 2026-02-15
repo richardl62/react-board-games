@@ -10,12 +10,14 @@ export enum CardSetID {
 
 export type PlayerID = CardSetID.Player0 | CardSetID.Player1;
 
-export function makeCardSetID(value: string) : CardSetID {
-    sAssert(value === CardSetID.Player0 ||
-        value === CardSetID.Player1 ||
-        value === CardSetID.Shared, "string does not represent a card set");
+export function makeCardSetID(csid: string) : CardSetID {
+    const csidEnum = csid as CardSetID;
+    
+    sAssert(csidEnum === CardSetID.Player0 ||
+        csidEnum === CardSetID.Player1 ||
+        csidEnum === CardSetID.Shared, "string does not represent a card set");
         
-    return value as CardSetID;
+    return csidEnum;
 }
 
 interface CardSetData {
@@ -68,5 +70,3 @@ export interface ServerData {
         visible: boolean;
     };
 }
-
-

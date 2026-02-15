@@ -32,7 +32,7 @@ export class LetterSet implements TrieWordConstraint {
     }
 
     // No constraint on word length
-    get minLengthReached() {return true;}
+    readonly minLengthReached = true;
 
     // Return a copy of the letter set.
     makeCopy() : LetterSet {

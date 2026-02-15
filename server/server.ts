@@ -99,6 +99,7 @@ wss.on('connection', (ws, req) => {
   
   ws.on('message', (message) => {
     lastSeenMap.set(ws, Date.now()); // Update last activity
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     processActionRequest(matches, ws, message.toString());
   });
 

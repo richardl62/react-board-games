@@ -99,7 +99,7 @@ export const simple: ScrabbleConfig = {
     maxPlayers: 4,
     rackSize: 4,
 
-    getLegalWords: async () => simpleScrabbleWords,
+    getLegalWords: () => Promise.resolve(simpleScrabbleWords),
     makeFullBag: () : Letter[] => [...simpleScrabbleLettersForBag].reverse(),
 
     boardLayout: [
@@ -133,6 +133,3 @@ export function isScrabbleConfig(arg: unknown) : boolean {
 
     return valid;
 }
-
-
-

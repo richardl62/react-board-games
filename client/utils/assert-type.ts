@@ -4,6 +4,7 @@ export type Equal<T, U> =
   (<G>() => G extends T ? 1 : 2) extends
   (<G>() => G extends U ? 1 : 2) ? true : false;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function assertType<_T extends true>() {}
 
 /* Example usage:

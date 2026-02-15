@@ -95,7 +95,7 @@ export function JoinGame(props: JoinGameProps): JSX.Element {
 
         <button
             type="button"
-            onClick={joinGameCallback.execute}
+            onClick={() => { void joinGameCallback.execute(); }}
             disabled={joinGameCallback.loading || gameFull}
         >
             Join
