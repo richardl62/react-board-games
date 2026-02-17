@@ -6,16 +6,22 @@ export interface SetupOptions {
     readonly minClearanceBelow: number;
 }
 
+// Various measures of a player's progress.
+// - These values will be equal when it not the player's turn.
+// - During the players turn owned <= thisTurn <= thisScoringChoice 
+//   with 'full' being considered bigger than normal numbers.
 export interface ColumnHeight {
-    // The highest square which the player 'owns', i.e. which the player has stopped on in a previous turn.
+    /** The highest square which the player 'owns', i.e. which the player has stopped on
+    in a previous turn. */
     owned: number | "full";
     
-    // The highest square a player will reach if they stop now without going bust.  
+    /** The highest square the player has reached, taking into account previous rolls
+    during this turn. */
     thisTurn: number | "full";
 
-    // The hieght square a player will reach given the current scoring choice. ('Scoring choice' means the 
-    // option the user picked from those available following a dice roll).
-    // Will equal thisTurn if no scoring choice has been made since the last roll.
+    /** The highest square the player has reached given the current scoring choice. 
+    'Scoring choice' means the option the user picked from those available following a
+    dice roll. */
     thisScoringChoice: number | "full";
 };
 
@@ -23,6 +29,8 @@ export interface ServerData {
     options: SetupOptions;
 
     diceValues: number[];
+
+    /** Use to trigger animations. */
     rollCount: {
         total: number;
         thisTurn: number;
@@ -47,25 +55,22 @@ function startingColumnsHeights(): ColumnHeight[] {
 
 export function startingServerData(arg0: SetupArg0, options: SetupOptions): ServerData {
     const {ctx} = arg0;
-    
-    const diceValues: number[] = [];
-    for (let index = 0; index < nDice; index++) {
-        diceValues[index] = 1;
-    }
 
-    const columnsHeights : ServerData["columnHeights"] = {};
+    const columnHeights :  Record<string, ColumnHeight[]> = {};
     for (const playerID of ctx.playOrder) {
-        columnsHeights[playerID] = startingColumnsHeights();
+        columnHeights[playerID] = startingColumnsHeights();
     }
 
     return {
         options,
         
-        diceValues,
+        diceValues: Array<number>(nDice).fill(1),
+
         rollCount: {
             total: 0,
             thisTurn: 0,
         },
-        columnHeights: columnsHeights
+
+        columnHeights,
     }
 }

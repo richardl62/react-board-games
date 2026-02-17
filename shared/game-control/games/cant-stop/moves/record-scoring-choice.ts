@@ -1,7 +1,6 @@
 import { ServerData } from "../server-data.js";
 import { MoveArg0 } from "../../../move-fn.js";
 import { maxColumnHeight } from "../config.js";
-import { clearScoringChoice } from "./utils.js";
 
 // Add one to the current height of the given columns for the current player.
 // If the height reaches the max height, set it to "full".
@@ -13,14 +12,16 @@ export function recordScoringChoice(
     const heights = G.columnHeights[playerID];
 
     // Clear any previous scoring choice.
-    clearScoringChoice(G);
+    heights.forEach(h => { h.thisScoringChoice = h.thisTurn; });
 
     // Record the new scoring choice.
     for(const col of columns) {
-        const currentHieght = heights[col].thisScoringChoice;
+        const currentHeight = heights[col].thisScoringChoice;
 
-        if (currentHieght !== "full") {
-            const newHeight = currentHieght + 1;
+        // In general, it shouldn't be possible to select a full column. But if a player selects
+        // a double (e.g. two 6s) a columns might be filled by the first of these numbers.
+        if (currentHeight !== "full") {
+            const newHeight = currentHeight + 1;
             
             if (newHeight >= maxColumnHeight(col)) {
                 heights[col].thisScoringChoice = "full";
