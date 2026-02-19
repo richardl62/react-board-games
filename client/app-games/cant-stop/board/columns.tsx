@@ -1,36 +1,53 @@
+import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
 import { JSX } from "react";
-import { useMatchState } from "../match-state/match-state";
-import { columnValues } from "@shared/game-control/games/cant-stop/config";
-import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
+import styled from "styled-components";
 
-function columnHieghts(playerData: ColumnHeight[]) : string  {
-    let str = "";
-    for (const col of columnValues) {
-        str += ` ${col}:`;
+const border = "2px solid black";
 
-        const {owned, thisTurn, thisScoringChoice} = playerData[col];
-        if(owned === thisTurn && thisTurn === thisScoringChoice) {
-            str += owned;
-        } else {
-            str += `${owned}-${thisTurn}-${thisScoringChoice}`;
-        }
+const ColumnsDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const colBorderLeft = (val: number) => val <= 7 ? border : "none";
+const colBorderRight = (val: number) => val >= 7 ? border : "none";
+
+// KLUDGE? To help keep squares aligned, the bottom border comes from the
+// square rather than the column.
+const ColumnDiv = styled.div< {colValue: number }>`
+    border-top: ${border};
+    ${(props) => `border-left: ${colBorderLeft(props.colValue)};`}
+    ${(props) => `border-right: ${colBorderRight(props.colValue)};`}
+`;
+
+const Square = styled.div< {height: number }>`      
+    width: 40px;
+    height: 40px;
+    background-color: cornsilk;
+
+    border-bottom: ${border};
+`;
+
+function Column({ colValue }: { colValue: number }) : JSX.Element {
+    const squares = [];
+    for(let height = maxColumnHeight(colValue)-1; height >= 0; height--) {
+        squares.push(
+            <Square key={height} height={height}> {height} </Square>
+        );
     }
-    return str;
+
+    return <ColumnDiv colValue={colValue}> {squares} </ColumnDiv>;
 }
 
-// Very crude presention of column heights.
 export function Columns() : JSX.Element {
-        const {
-            G,
-            ctx: {playOrder}, 
-            getPlayerName, 
-        } = useMatchState();
-
-    const result: JSX.Element[] = [];
-    for(const pid of playOrder) {
-        result.push(<div key={pid}>
-            <span>{`${getPlayerName(pid)} has ${columnHieghts(G.columnHeights[pid])}`}</span>
-        </div>);
-    }
-    return <>{result}</>;
+   return <ColumnsDiv>
+     {columnValues.map((colValue) =>
+        <div key={colValue}>
+            <div>{colValue}</div> 
+            <Column colValue={colValue} />
+            <div>{colValue}</div>
+        </div>
+    )}
+   </ColumnsDiv>; 
 }

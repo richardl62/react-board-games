@@ -1,19 +1,13 @@
 import { JSX } from "react";
-import { useMatchState } from "../match-state/match-state";
-import { Columns } from "./columns";
 import { TurnControl } from "./turn-control";
-import { BlockedSquares } from "./blocked-squares";
+import { Columns } from "./columns";
+import { BoardText } from "./board-text/board-text";
 
 function Board() : JSX.Element {
-    const {
-        ctx: {currentPlayer}, 
-        getPlayerName, 
-    } = useMatchState();
     
     // Very crude board for now.
     return <div>
-        <div>{`Current player: ${getPlayerName(currentPlayer)}`}</div>
-        <BlockedSquares/>
+        <BoardText/>
         <Columns/>
         <TurnControl/>
     </div>

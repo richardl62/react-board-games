@@ -1,8 +1,8 @@
 import { JSX } from "react";
-import { useMatchState } from "../match-state/match-state";
+import { useMatchState } from "../../match-state/match-state";
 import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
 
-export function BlockedSquares() : JSX.Element {
+export function BlockedSquaresText() : JSX.Element {
     const {
         G: {options},
         playerID,
