@@ -2,7 +2,7 @@ import { JSX } from "react";
 import styled from "styled-components";
 import { squareBorder as border, playerColor, temporaryOwnerColor } from "./styles";
 
-
+const subSquareWidth = "12px";
 
 const SquareDiv = styled.div`
     display: flex;
@@ -22,10 +22,12 @@ const SquareDiv = styled.div`
 
 const SubSquare = styled.div`
     height: 40px;
-    width: 12px;
+    width: ${subSquareWidth};
     display: flex;
     align-items: center;
     justify-content: center;
+
+    position: relative;
 `;
 
 
@@ -40,17 +42,48 @@ const ThisTurn = styled.div<{ color: string }>`
     width: 80%;
 
     background-color: ${({ color }) => color};
-    border-radius: 999px; //Arbitry large value to make ends semi-circular.
+    border-radius: 999px; //Arbitrary large value to make ends semi-circular.
+    position: relative;
 `;
 
+const CrossDiv = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: ${subSquareWidth};
+`;
 
+function Cross() {
+    return <CrossDiv>🚫</CrossDiv>;
+}
+
+
+// Dummy implementation to test SquareDiv etc.
 export function Square(_props: {colValue: number, height: number}  ) : JSX.Element {
     return <SquareDiv>
-        <SubSquare> <ThisTurn color={playerColor(0)} /> </SubSquare>
-        <SubSquare> </SubSquare >
-        <SubSquare> <Owned color={playerColor(2)} /> </SubSquare>
+        <SubSquare> 
+            <ThisTurn color={playerColor(2)} /> 
+            <Cross />
+        </SubSquare>
+
+        <SubSquare> 
+            <Cross />
+        </SubSquare >
+
+        <SubSquare> 
+            <Owned color={playerColor(1)} /> 
+        </SubSquare>
+        
         <SubSquare>
-             <ThisTurn color={temporaryOwnerColor} /> 
+             <ThisTurn color={temporaryOwnerColor}>
+                <Cross />
+             </ThisTurn> 
         </SubSquare>
     </SquareDiv>;
 }
