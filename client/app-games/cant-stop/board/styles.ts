@@ -1,4 +1,5 @@
 import { diceSize } from '@/utils/dice/dice';
+import { sAssert } from '@shared/utils/assert';
 import styled from 'styled-components';
 
 const buttonFont = "Roboto";
@@ -82,4 +83,14 @@ export const ScoringOptionsGrid = styled.div`
     }
     border: 2px solid black;
 `;
+
+export const squareBorder = "2px solid darkred";
+
+const playerColors = ["red", "green", "blue", "yellow"];
+export const temporaryOwnerColor = "grey";
+
+export function playerColor(player: number) {
+    sAssert(player >= 0 && player < playerColors.length, `Invalid player number: ${player}`);
+    return playerColors[player];
+}
 

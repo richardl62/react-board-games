@@ -1,9 +1,8 @@
 import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
 import { JSX } from "react";
 import styled from "styled-components";
-import { ProgressMarkers } from "./progress-markers";
-
-const border = "2px solid darkred";
+import { Square } from "./square";
+import { squareBorder as border, playerColor } from "./styles";
 
 const ColumnsDiv = styled.div`
     display: flex;
@@ -25,21 +24,13 @@ const ColumnDiv = styled.div< {$colValue: number }>`
     position: relative;
 `;
 
-const Square = styled.div`      
-    width: 40px;
-    height: 40px;
-    background-color: cornsilk;
-
-    border-bottom: ${border};
-`;
-
-const CompletedColumn = styled.div`
+const CompletedColumn = styled.div<{ owner: number }>`
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: blue;
+    background-color: ${({ owner }) => playerColor(owner)};
     border-bottom: ${border};
 `;
 
@@ -50,18 +41,14 @@ const ColumnLabel = styled.div`
 function Column({ colValue }: { colValue: number }) : JSX.Element {
     const squares = [];
     for(let height = maxColumnHeight(colValue)-1; height >= 0; height--) {
-        squares.push(
-            <Square key={height}>
-                <ProgressMarkers colValue={colValue} height={height} />
-            </Square>
-        );
+        squares.push(<Square key={height} colValue={colValue} height={height} />);
     }
 
     const full = colValue === 6; // For temporary testing.
 
     return <ColumnDiv $colValue={colValue}> 
         {squares} 
-        {full && <CompletedColumn />}
+        {full && <CompletedColumn owner={3} />}
     </ColumnDiv>;
 }
 
