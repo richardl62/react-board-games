@@ -89,7 +89,8 @@ export const squareBorder = "2px solid darkred";
 const playerColors = ["red", "green", "blue", "yellow"];
 export const temporaryOwnerColor = "grey";
 
-export function playerColor(player: number) {
+export function playerColor(playerID: string) {
+    const player = parseInt(playerID, 10);
     sAssert(player >= 0 && player < playerColors.length, `Invalid player number: ${player}`);
     return playerColors[player];
 }

@@ -24,13 +24,13 @@ const ColumnDiv = styled.div< {$colValue: number }>`
     position: relative;
 `;
 
-const CompletedColumn = styled.div<{ owner: number }>`
+const CompletedColumn = styled.div<{ color: string }>`
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: ${({ owner }) => playerColor(owner)};
+    background-color: ${({ color }) => color};
     border-bottom: ${border};
 `;
 
@@ -44,11 +44,11 @@ function Column({ colValue }: { colValue: number }) : JSX.Element {
         squares.push(<Square key={height} colValue={colValue} height={height} />);
     }
 
-    const full = colValue === 6; // For temporary testing.
+    const full = false; //colValue === 6; // For temporary testing.
 
     return <ColumnDiv $colValue={colValue}> 
         {squares} 
-        {full && <CompletedColumn owner={3} />}
+        {full && <CompletedColumn color={playerColor("3")} />}
     </ColumnDiv>;
 }
 
