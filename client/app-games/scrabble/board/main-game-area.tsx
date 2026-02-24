@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import styled from "styled-components";
 import { useScrabbleState } from "../client-side/scrabble-state";
 import { MainBoard } from "./main-board";
@@ -38,8 +38,15 @@ function BagInfo(): JSX.Element {
     </div>;
 }
 
+const DefinitionText = styled.div`
+  margin-top: 0.2em;
+  font-style: italic;
+  max-width: 26em;
+`;
+
 export function MainGameArea(): JSX.Element {
     const { reviewGameHistory } = useScrabbleState();
+    const [definition, setDefinition] = useState<string | null>(null);
     return <Game>
         <ScoresEtc />
         <RackAndControls />
@@ -47,9 +54,12 @@ export function MainGameArea(): JSX.Element {
             <MainBoard />
         </MainBoardDiv>
         <SpaceBetween>
-            <WordChecker />
+            <WordChecker setDefinition={setDefinition} />
             <BagInfo />
         </SpaceBetween>
+
+        {definition && <DefinitionText>{definition}</DefinitionText>}
+
 
         {reviewGameHistory ? <RewindControls /> : <TurnControl />}
         <PaddingTop >

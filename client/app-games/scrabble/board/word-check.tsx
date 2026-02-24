@@ -1,6 +1,7 @@
 import { JSX, useState } from "react";
 import styled from "styled-components";
 import { useScrabbleState } from "../client-side/scrabble-state";
+import { fetchDefinition } from "@/utils/fetch-definition";
 
 const WordInput = styled.input`
   margin-right: 0.2em;
@@ -16,7 +17,7 @@ function Validity({ valid }: { valid: boolean; }) {
     </ValidityMessage>;
 }
 
-export function WordChecker(): JSX.Element {
+export function WordChecker({setDefinition}: {setDefinition: (definition: string | null) => void}): JSX.Element {
     const [word, setEnteredWord] = useState("");
     const [valid, setValid] = useState<boolean | "unknown">("unknown");
     const { dispatch, legalWords } = useScrabbleState();
@@ -26,12 +27,21 @@ export function WordChecker(): JSX.Element {
         const word = rawWord.replace(/[^A-Za-z]/gi, "");
         setEnteredWord(word);
         setValid("unknown");
+        setDefinition(null);
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        // legalWords records upper case words
-        setValid(legalWords.hasWord(word.toUpperCase()));
         e.preventDefault();
+        // legalWords records upper case words
+        const isValid = legalWords.hasWord(word.toUpperCase());
+        setValid(isValid);
+
+        if (isValid) {
+            setDefinition("Loading definition...");
+            fetchDefinition(word)
+                .then(def => setDefinition(def ?? "No definition found."))
+                .catch(() => setDefinition("Could not fetch definition."));
+        }
     };
 
     const focusIn = (arg: boolean) => {
