@@ -1,5 +1,5 @@
 import { SetupOptions } from "@game-control/games/5000/server-data";
-import { SpecifiedValues } from "../../option-specification/types";
+import { OptionSpecifications, SpecifiedValues } from "../../option-specification/types";
 import { assertType, Equal } from "@utils/assert-type";
 
 export const setupOptions = {
@@ -25,8 +25,7 @@ export const setupOptions = {
         label: "Never bust",
         debugOnly: true,
     },
-} as const;
-
+} as const satisfies OptionSpecifications;
 
 assertType<Equal<
     SetupOptions, 

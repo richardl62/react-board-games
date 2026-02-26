@@ -1,4 +1,4 @@
-import { SpecifiedValues } from "../../option-specification/types";
+import { OptionSpecifications, SpecifiedValues } from "../../option-specification/types";
 import { assertType, Equal } from "@utils/assert-type";
 import { SetupOptions } from "@game-control/games/cant-stop/server-data";
 
@@ -19,7 +19,8 @@ export const setupOptions = {
         label: "Fill column at start",
         debugOnly: true,
     },
-} as const
+} as const satisfies OptionSpecifications;
+
 
 assertType<Equal<
     SetupOptions, 

@@ -1,4 +1,3 @@
-export type OptionSpecifications = Record<string, BooleanSpecification | NumericSpecification | FixedStringSpecification>;
 export type OptionValue = boolean | number | string;
 export type OptionValues = Record<string, OptionValue>;
 
@@ -31,8 +30,7 @@ export interface FixedStringSpecification extends BaseSpecification  {
     options: readonly string[];
 }
 
-
-
+export type OptionSpecifications = Record<string, BooleanSpecification | NumericSpecification | FixedStringSpecification>;
 
 /*
 SpecifiedValues is intended to give a resticted type for FixedStringSpecification and a general for Numbers and booleans.

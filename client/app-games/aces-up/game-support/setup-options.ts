@@ -1,5 +1,5 @@
 import { assertType, Equal } from "@utils/assert-type";
-import { SpecifiedValues } from "@/option-specification/types";
+import { OptionSpecifications, SpecifiedValues } from "@/option-specification/types";
 import { SetupOptions } from "@game-control/games/aces-up/options";
 
 export const setupOptions = {
@@ -25,7 +25,7 @@ export const setupOptions = {
         label: "Jacks and queens special",
         default: false,
     }
-} as const;
+} as const satisfies OptionSpecifications;
 
 assertType<Equal<
     SetupOptions, 

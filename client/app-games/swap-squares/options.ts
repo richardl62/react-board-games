@@ -1,5 +1,5 @@
 import { assertType, Equal } from "@utils/assert-type";
-import { SpecifiedValues } from "../../option-specification/types";
+import { OptionSpecifications, SpecifiedValues } from "../../option-specification/types";
 import { SetupOptions, startingOrders } from "@game-control/games/swap-squares/server-data";
 
 export const setupOptions = {
@@ -18,7 +18,7 @@ export const setupOptions = {
         default: "forward",
         options: startingOrders,
     }
-} as const;
+} as const satisfies OptionSpecifications;
 
 assertType<Equal<
     SetupOptions, 

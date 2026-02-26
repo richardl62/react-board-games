@@ -1,4 +1,4 @@
-import { SpecifiedValues } from "../../option-specification/types";
+import { OptionSpecifications, SpecifiedValues } from "../../option-specification/types";
 import { assertType, Equal } from "@utils/assert-type";
 import { SetupOptions } from "@game-control/games/crosstiles/server-data";
 
@@ -47,7 +47,7 @@ export const setupOptions = {
         default: true,
         label: "Check spelling",
     }
-} as const
+} as const satisfies OptionSpecifications;
 
 assertType<Equal<
     SetupOptions, 
