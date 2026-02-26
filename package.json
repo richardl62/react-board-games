@@ -14,7 +14,9 @@
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "serve": "node dist/server/server.js",
-    "deploy": "git push heroku main" 
+    "deploy": "git push heroku main",
+    "heroku:off": "heroku ps:scale web=0 --app richards-board-games",
+    "heroku:on": "heroku ps:scale web=1 --app richards-board-games"
   },
   "engines": {
     "node": "22.x",
