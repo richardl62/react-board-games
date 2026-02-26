@@ -29,7 +29,7 @@ export interface MatchState extends StandardMatchState {
         {playerID, column, height}: IsBlockedArg0
     ) => boolean;
 
-    isFull: (col: number) => PlayerID | undefined;
+    isFull: (col: number, category:keyof ColumnHeight) => PlayerID | undefined;
 
     /** The columns on which the active player in actively blocked, i.e. must either advance 
     * further or go bust. 
@@ -45,12 +45,10 @@ export function useMatchState() : MatchState {
     // Is this the best place for this check?
     sanityCheckColumnHeights(columnHeights);
 
-    
     const columnsInPlay = getColumnsInPlay(columnHeights[playerID]);
 
     const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
-    const isFullSimplified = (col: number) => isFull(col, columnHeights);
-
+    const isFullSimplified = (col: number, category: keyof ColumnHeight) => isFull(col, category, columnHeights);
     
     const scoringOptions = getScoringOptions({
         diceValues: standardState.G.diceValues,
@@ -74,9 +72,13 @@ export function useMatchState() : MatchState {
     return state;
 }
 
-function isFull(col: number, heights: ServerData["columnHeights"]) : PlayerID | undefined {
+function isFull(
+    col: number,
+    category: keyof ColumnHeight,
+    heights: ServerData["columnHeights"]
+) : PlayerID | undefined {
     for (const [playerID, playerHeights] of Object.entries(heights)) {
-        if (playerHeights[col].thisTurn === "full") {
+        if (playerHeights[col][category] === "full") {
             return playerID;
         }
     }

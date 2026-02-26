@@ -46,7 +46,7 @@ function Column({ colValue }: { colValue: number }) : JSX.Element {
         squares.push(<Square key={height} colValue={colValue} height={height} />);
     }
 
-    const full = isFull(colValue);
+    const full = isFull(colValue, "owned");
 
     return <ColumnDiv $colValue={colValue}> 
         {squares} 
