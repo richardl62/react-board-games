@@ -3,6 +3,7 @@ import { JSX } from "react";
 import styled from "styled-components";
 import { Square } from "./square";
 import { squareBorder as border, playerColor } from "./styles";
+import { useMatchState } from "../match-state/match-state";
 
 const ColumnsDiv = styled.div`
     display: flex;
@@ -39,16 +40,17 @@ const ColumnLabel = styled.div`
 `
 
 function Column({ colValue }: { colValue: number }) : JSX.Element {
+    const { isFull } = useMatchState();
     const squares = [];
     for(let height = maxColumnHeight(colValue)-1; height >= 0; height--) {
         squares.push(<Square key={height} colValue={colValue} height={height} />);
     }
 
-    const full = false; //colValue === 6; // For temporary testing.
+    const full = isFull(colValue);
 
     return <ColumnDiv $colValue={colValue}> 
         {squares} 
-        {full && <CompletedColumn color={playerColor("3")} />}
+        {full && <CompletedColumn color={playerColor(full)} />}
     </ColumnDiv>;
 }
 

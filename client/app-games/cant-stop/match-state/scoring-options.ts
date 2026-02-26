@@ -1,5 +1,6 @@
 import { compareArrays, sortUnique } from "@/utils/unique-values";
 import { maxColumnsInPlay } from "@shared/game-control/games/cant-stop/config";
+import { PlayerID } from "@shared/game-control/playerid";
 import { sAssert } from "@shared/utils/assert";
 
 // Record all the permutaions of digits 0, 1, 2 3
@@ -49,7 +50,7 @@ function sumsOfPairs(values: number[]) : number[][] {
 // The result will not contain empty candidates but may contain duplicates.
 function adjustedCandidates(
     candidates: number[][],
-    { inPlay, full }: { inPlay: number[], full: number[] }
+    { inPlay, isFull }: { inPlay: number[], isFull: (col: number) => PlayerID | undefined}
 ): number[][] {
 
     const valid = (candidate: number[]) => {
@@ -64,7 +65,7 @@ function adjustedCandidates(
     for (const candidate of candidates) {
         sAssert(candidate.length <= 2, "Expected 2 columns or fewer");
         
-        const nonFull = candidate.filter( col => !full.includes(col));
+        const nonFull = candidate.filter( col => !isFull(col));
         if (nonFull.length === 0) {
             continue;
         }
@@ -84,9 +85,9 @@ function adjustedCandidates(
 
 // Returns an array of arrays with each inner array recording the indices of the
 // columns for which the current player can choose to increase the height.
-export function getScoringOptions({diceValues, fullColumns, columnsInPlay}: {
+export function getScoringOptions({diceValues, isFull, columnsInPlay}: {
     diceValues: number[], 
-    fullColumns: number[], 
+    isFull: (col: number) => PlayerID | undefined, 
     columnsInPlay: number[]
 }
 ) : number[][] {
@@ -94,7 +95,7 @@ export function getScoringOptions({diceValues, fullColumns, columnsInPlay}: {
     const candidates = sumsOfPairs(diceValues);
 
     const adjusted = adjustedCandidates(candidates, {
-        full: fullColumns, 
+        isFull, 
         inPlay: columnsInPlay
     });
 

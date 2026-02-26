@@ -7,12 +7,11 @@ import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 import { getScoringOptions } from "./scoring-options";
 import { blockedColumns, isBlocked, IsBlockedArg0 } from "./is-blocked";
 import { sanityCheckColumnHeights } from "./sanity-checks";
+import { PlayerID } from "@shared/game-control/playerid";
 
 type StandardMatchState = BoardProps<ServerData, ClientMoves>;
 
 export interface MatchState extends StandardMatchState {
-
-    fullColumns: number[];
 
     /** The indices of the columns that are in play.
       * 'In play' means that they have been selected after a previous roll during this
@@ -30,6 +29,8 @@ export interface MatchState extends StandardMatchState {
         {playerID, column, height}: IsBlockedArg0
     ) => boolean;
 
+    isFull: (col: number) => PlayerID | undefined;
+
     /** The columns on which the active player in actively blocked, i.e. must either advance 
     * further or go bust. 
     */
@@ -44,24 +45,25 @@ export function useMatchState() : MatchState {
     // Is this the best place for this check?
     sanityCheckColumnHeights(columnHeights);
 
-    const fullColumns = getFullColumns(columnHeights);
     
     const columnsInPlay = getColumnsInPlay(columnHeights[playerID]);
+
+    const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
+    const isFullSimplified = (col: number) => isFull(col, columnHeights);
+
     
     const scoringOptions = getScoringOptions({
         diceValues: standardState.G.diceValues,
-        fullColumns,
+        isFull: isFullSimplified,
         columnsInPlay
     });
-
-    const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
     
     const state : MatchState = {
         ...standardState,
-        fullColumns,
         columnsInPlay,
         scoringOptions, 
         isBlocked: isBlockedSimplified,
+        isFull: isFullSimplified,
         currentlyBlockedColumns: blockedColumns(
             columnHeights,
             playerID,
@@ -72,23 +74,14 @@ export function useMatchState() : MatchState {
     return state;
 }
 
-function getFullColumns(heights: ServerData["columnHeights"]) : number[] {
-    const result: number[] = [];
-    for(const col of columnValues) {
-        let full = false;
-        
-        for(const playerID in heights) {
-            const playerHeights = heights[playerID];
-            if (playerHeights[col].thisTurn === "full") {
-                full = true;
-            }
-        }   
-        if (full) {
-            result.push(col);
+function isFull(col: number, heights: ServerData["columnHeights"]) : PlayerID | undefined {
+    for (const [playerID, playerHeights] of Object.entries(heights)) {
+        if (playerHeights[col].thisTurn === "full") {
+            return playerID;
         }
     }
 
-    return result;
+    return undefined;
 }
 
 function getColumnsInPlay(heights: ColumnHeight[]) : number[] {
