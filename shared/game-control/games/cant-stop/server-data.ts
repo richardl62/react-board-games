@@ -1,9 +1,10 @@
 import { SetupArg0 } from "../../game-control.js";
-import { columnValues, nDice } from "./config.js";
+import { columnValues, maxColumnHeight, nDice } from "./config.js";
 
 export interface SetupOptions {
     readonly minClearanceAbove: number;
     readonly minClearanceBelow: number;
+    readonly partiallyFillAtStart: boolean;
 }
 
 // Various measures of a player's progress.
@@ -40,13 +41,20 @@ export interface ServerData {
 }
 
 // Starting heights for one player
-function startingColumnsHeights(): ColumnHeight[] {
+function startingColumnsHeights(playerID: string, partiallyFillAtStart: boolean): ColumnHeight[] {
     const data: ColumnHeight[] = [];
     for (const col of columnValues) {
+        let height : number | "full" = 0;
+        if ( partiallyFillAtStart ) {
+            // Partially or fully fill columns. This option is intended to help with testing.
+            height = ( playerID === "0" && col === 7) ? "full" : maxColumnHeight(col) - 2;
+        }
+
+
         data[col] = {
-            owned: 0,
-            thisTurn: 0,
-            thisScoringChoice: 0,
+            owned: height,
+            thisTurn: height,
+            thisScoringChoice: height,
         };
     }
 
@@ -58,7 +66,7 @@ export function startingServerData(arg0: SetupArg0, options: SetupOptions): Serv
 
     const columnHeights :  Record<string, ColumnHeight[]> = {};
     for (const playerID of ctx.playOrder) {
-        columnHeights[playerID] = startingColumnsHeights();
+        columnHeights[playerID] = startingColumnsHeights(playerID, options.partiallyFillAtStart);
     }
 
     return {

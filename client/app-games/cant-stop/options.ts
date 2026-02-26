@@ -4,7 +4,7 @@ import { SetupOptions } from "@game-control/games/cant-stop/server-data";
 
 export const setupOptions = {
     minClearanceAbove: {
-        default: 1, // For now, to help with testing
+        default: 0,
         label: "Min clearance above",
         min: 0,
     }, 
@@ -12,6 +12,12 @@ export const setupOptions = {
         default: 0,
         label: "Min clearance below",
         min: 0,
+    },
+    // For test purposes it can help to partially fill columns from the start.
+    partiallyFillAtStart: {
+        default: false,
+        label: "Fill column at start",
+        debugOnly: true,
     },
 } as const
 
