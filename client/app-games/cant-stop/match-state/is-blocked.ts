@@ -1,5 +1,6 @@
 import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ServerData, SetupOptions } from "@shared/game-control/games/cant-stop/server-data";
+import { sAssert } from "@shared/utils/assert";
 
 export interface IsBlockedArg0 {playerID: string, column: number, height: number}
 
@@ -9,36 +10,25 @@ export interface IsBlockedArg0 {playerID: string, column: number, height: number
 export function isBlocked(
     {playerID, column, height}: IsBlockedArg0,
     columnHeights: ServerData["columnHeights"],
-    setupOptions: SetupOptions,
+    {minClearanceAbove, minClearanceBelow}: SetupOptions,
 ): boolean {
 
-    const isHighestOwnedByOther = (col: number, height: number): boolean => {
-        for (const pid of Object.keys(columnHeights)) {
-            if (pid !== playerID) {
-                if (height === columnHeights[pid][col].owned) {
+    for (const pid of Object.keys(columnHeights)) {
+        if (pid !== playerID) {
+            const ownedByOther = columnHeights[pid][column].owned;
+            if (ownedByOther !== 0 && ownedByOther !== "full") {
+                const otherHeight = ownedByOther - 1;
+                
+                if (otherHeight >= height && otherHeight - height < minClearanceAbove) {
+                    return true;
+                }
+
+                if (otherHeight <= height && height - otherHeight < minClearanceBelow) {
                     return true;
                 }
             }
         }
-        return false;
     }
-
-    const offsetToCheck: number[] = [];
-    for (let offset = 0; offset < setupOptions.minClearanceAbove; offset++) {
-        offsetToCheck.push(-offset);
-    }
-    for (let offset = 0; offset < setupOptions.minClearanceBelow; offset++) {
-        offsetToCheck.push(offset);
-    }
-
-    for(const offset of offsetToCheck) {
-        const hieghtToCheck = height + offset;
-
-        // Players are not considered blocked on columns they have not started.
-        if (hieghtToCheck > 0 && isHighestOwnedByOther(column, hieghtToCheck)) {
-            return true;
-        }
-    }        
 
     return false;
 }
@@ -56,7 +46,9 @@ export function blockedColumns(
         // Players can be blocked only on columns that are in play this turn,
         // and cannot be blocked on full columns.
         if (thisScoringChoice > owned && thisScoringChoice !== "full") {
-            if (isBlocked({ playerID, column: col, height: thisScoringChoice })) {
+            sAssert(thisScoringChoice > 0, "Unexpected value for thisScoringChoice");
+
+            if (isBlocked({ playerID, column: col, height: thisScoringChoice - 1 })) {
                 result.push(col);
             }
         }
