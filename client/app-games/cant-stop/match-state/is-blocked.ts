@@ -3,7 +3,7 @@ import { ServerData, SetupOptions } from "@shared/game-control/games/cant-stop/s
 
 export interface IsBlockedArg0 {playerID: string, column: number, height: number}
 
-// Report if the give player if 'mean rule' options prevent a player from stopping with 
+// Check if 'mean rule' options prevent a player from stopping with 
 // their top pieces in the given columns at the given height. Full columns do not count
 // as blocked as the fullness rules are not part of the 'mean rules'. 
 export function isBlocked(

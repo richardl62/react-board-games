@@ -56,6 +56,10 @@ export const RollDontButton = styled.button`
     width: calc(0.2 * ${buttonDivWidth});
 `
 
+export const ScoringOptionContainer  = styled.div`
+    width: calc(0.6 * ${buttonDivWidth});
+`
+
 export const ScoringOptionButton = styled.div<{ underline?: boolean }>`
     display: flex;
     ${props => props.underline && 'text-decoration: underline;'}

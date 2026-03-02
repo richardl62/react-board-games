@@ -3,7 +3,7 @@ import { useMatchState } from "../match-state/match-state";
 import { useDiceRotation } from "./dice-rotation";
 import { Dice } from "@/utils/dice/dice";
 import { ScoringOptions } from "./scoring-options";
-import { BustButton, ButtonsDiv, DiceAndButtonsDiv, TwoDiceDiv, NoOptionRollButton, RollDontButton } from "./styles";
+import { BustButton, ButtonsDiv, DiceAndButtonsDiv, TwoDiceDiv, NoOptionRollButton, RollDontButton, ScoringOptionContainer } from "./styles";
 
 export function TurnControl() : JSX.Element {
     const { G: {diceValues} } = useMatchState();
@@ -25,14 +25,14 @@ export function TurnControl() : JSX.Element {
 }
 
 function GameButtons() : JSX.Element {
-    const state = useMatchState();
     const{ 
         G: { rollCount },
         scoringOptions, 
         ctx, 
         playerID, 
-        moves, 
-    } = state;
+        moves,
+        currentlyBlockedColumns, 
+    } = useMatchState();
     
     const [ selectedScoringOption, setSelectedScoringOption ] = useState<number | null>(null);
 
@@ -58,25 +58,28 @@ function GameButtons() : JSX.Element {
         </BustButton>;
     }
 
-    const rollAndDontDisabled = movesDisabled || selectedScoringOption === null;
-    //const blockers = currentBlockingColumns(state, selectedScoringOption);
-
+    const rollDisabled = movesDisabled || selectedScoringOption === null;
+    const dontDisabled = movesDisabled || selectedScoringOption === null || currentlyBlockedColumns.length > 0;
+    const blockMessage = currentlyBlockedColumns.length > 0 ? `Blocked on col ${currentlyBlockedColumns.join(", ")}` : "";
     return <>
         <RollDontButton 
             onClick={() => moves.roll()} 
-            disabled={rollAndDontDisabled}
+            disabled={rollDisabled}
         >
             Roll
         </RollDontButton>
 
-        <ScoringOptions
-            selectedScoringOption={selectedScoringOption}
-            setSelectedScoringOption={setSelectedScoringOption} 
-        />
+        <ScoringOptionContainer>
+            <ScoringOptions
+                selectedScoringOption={selectedScoringOption}
+                setSelectedScoringOption={setSelectedScoringOption} 
+            />
+            <div>{blockMessage}</div>
+        </ScoringOptionContainer>
 
         <RollDontButton 
             onClick={() => moves.stopRolling()}
-            disabled={rollAndDontDisabled}
+            disabled={dontDisabled}
         >
             Don't
         </RollDontButton>
