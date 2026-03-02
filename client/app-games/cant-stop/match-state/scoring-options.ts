@@ -4,45 +4,16 @@ import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
 import { PlayerID } from "@shared/game-control/playerid";
 import { sAssert } from "@shared/utils/assert";
 
-// Record all the permutaions of digits 0, 1, 2 3
-const permuations = [
-    [0, 1, 2, 3],
-    [0, 1, 3, 2],
-    [0, 2, 1, 3],
-    [0, 2, 3, 1],
-    [0, 3, 1, 2],
-    [0, 3, 2, 1],
-    [1, 0, 2, 3],
-    [1, 0, 3, 2],
-    [1, 2, 0, 3],
-    [1, 2, 3, 0],
-    [1, 3, 0, 2],
-    [1, 3, 2, 0],
-    [2, 0, 1, 3],
-    [2, 0, 3, 1],
-    [2, 1, 0, 3],
-    [2, 1, 3, 0],
-    [2, 3, 0, 1],
-    [2, 3, 1, 0],
-    [3, 0, 1, 2],
-    [3, 0, 2, 1],
-    [3, 1, 0, 2],
-    [3, 1, 2, 0],
-    [3, 2, 0, 1],
-    [3, 2, 1, 0],
-]
-
 function sumsOfPairs(values: number[]) : number[][] {
-    const results: number[][] = []
-    for (const permuation of permuations) {
+    // There are only 3 unique ways to partition the 4 dice into pairs.
+    const pairs = [
+        [values[0] + values[1], values[2] + values[3]],
+        [values[0] + values[2], values[1] + values[3]],
+        [values[0] + values[3], values[1] + values[2]],
+    ];
 
-        const pair = [
-            values[permuation[0]] + values[permuation[1]], 
-            values[permuation[2]] + values[permuation[3]]
-        ];
-        results.push(pair.sort());
-    }
-    return results
+    // Ensure canonical order (e.g. [2, 10] instead of [10, 2])
+    return pairs.map(pair => pair.sort((a, b) => a - b));
 }
 
 // Adjust the candidate options to ensure that
