@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { sAssert } from "@shared/utils/assert";
-import { ScoringOptionButton, ScoringOptionsGrid } from "./styles";
+import { playerColor, ScoringOptionButton, ScoringOptionsGrid } from "./styles";
 
 const maxScoringOptions = 6;
 
@@ -13,6 +13,8 @@ export function ScoringOptions({selectedScoringOption, setSelectedScoringOption}
     const allowMoves = ctx.currentPlayer === playerID;
 
     sAssert(scoringOptions.length <= maxScoringOptions, 'Too many scoring options');
+
+    const playerColor_ = playerColor(ctx.currentPlayer);
 
     const buttons = [];
     for (let buttonIndex = 0; buttonIndex < maxScoringOptions; buttonIndex++) {
@@ -30,6 +32,7 @@ export function ScoringOptions({selectedScoringOption, setSelectedScoringOption}
             <ScoringOptionButton
                 key={buttonIndex}
                 onClick={onClick}
+                playerColor={playerColor_}
                 underline={isSelected}
             >
                 {buttonText}

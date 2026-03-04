@@ -32,7 +32,7 @@ export const ButtonsDiv = styled.div`
     width: ${buttonDivWidth};
 `;
 
-export const NoOptionRollButton = styled.div`
+export const NoOptionRollOrBustButton = styled.div<{playerColor: string}>`
     display: flex;
     width: 100%;
     height: 100%;
@@ -43,14 +43,11 @@ export const NoOptionRollButton = styled.div`
     justify-content: center;
     align-items: center;
 
-    color: darkblue;
-    background-color: lightgrey;
+    color: lightgrey;
+    background-color: ${props => props.playerColor};
     border: 1px solid black;
 `;
 
-export const BustButton = styled(NoOptionRollButton)`
-    color: darkblue;
-`;
 
 export const RollDontButton = styled.button`
     width: calc(0.2 * ${buttonDivWidth});
@@ -60,18 +57,18 @@ export const ScoringOptionContainer  = styled.div`
     width: calc(0.6 * ${buttonDivWidth});
 `
 
-export const ScoringOptionButton = styled.div<{ underline?: boolean }>`
+export const ScoringOptionButton = styled.div<{ playerColor: string, underline?: boolean }>`
     display: flex;
     ${props => props.underline && 'text-decoration: underline;'}
+
+    color: lightgrey;
+    background-color: ${props => props.playerColor};
 
     justify-content: center;
     align-items: center;
     
     font-size: calc(0.20 * ${buttonDivHieght});
     font-family: ${buttonFont};
-
-    background-color: blue;
-    color: white;
 `;
 
 export const ScoringOptionsGrid = styled.div`
