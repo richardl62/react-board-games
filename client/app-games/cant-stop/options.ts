@@ -4,12 +4,12 @@ import { SetupOptions } from "@game-control/games/cant-stop/server-data";
 
 export const setupOptions = {
     minClearanceAbove: {
-        default: 0,
+        default: 0,// Temporary -  to help with testing.
         label: "Min clearance above",
-        min: 0,
+        min: 0, 
     }, 
     minClearanceBelow: {
-        default: 0,
+        default: 1,// Temporary -  to help with testing.
         label: "Min clearance below",
         min: 0,
     },
