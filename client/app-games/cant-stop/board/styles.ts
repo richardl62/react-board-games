@@ -1,6 +1,6 @@
 import { diceSize } from '@/utils/dice/dice';
-import { sAssert } from '@shared/utils/assert';
 import styled from 'styled-components';
+import { colors } from './colors';
 
 const buttonFont = "Roboto";
 const buttonDivHieght = "100px";
@@ -43,11 +43,10 @@ export const NoOptionRollOrBustButton = styled.div`
     justify-content: center;
     align-items: center;
 
-    color: lightgrey;
+    color: ${colors.playerButtonText};
     background-color: var(--playerColor);
     border: 1px solid black;
 `;
-
 
 export const RollDontButton = styled.button`
     width: calc(0.2 * ${buttonDivWidth});
@@ -61,7 +60,7 @@ export const ScoringOptionButton = styled.div<{underline?: boolean }>`
     display: flex;
     ${props => props.underline && 'text-decoration: underline;'}
 
-    color: lightgrey;
+    color: ${colors.playerButtonText};
     background-color: var(--playerColor);
 
     justify-content: center;
@@ -85,14 +84,4 @@ export const ScoringOptionsGrid = styled.div`
     border: 2px solid black;
 `;
 
-export const squareBorder = "2px solid darkred";
-
-const playerColors = ["red", "green", "blue", "yellow"];
-export const temporaryOwnerColor = "grey";
-
-export function playerColor(playerID: string) {
-    const player = parseInt(playerID, 10);
-    sAssert(player >= 0 && player < playerColors.length, `Invalid player number: ${player}`);
-    return playerColors[player];
-}
-
+export const squareBorder = `2px solid ${colors.board.border}`;

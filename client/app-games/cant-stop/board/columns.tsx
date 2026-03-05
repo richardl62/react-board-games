@@ -2,7 +2,8 @@ import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-s
 import { JSX } from "react";
 import styled from "styled-components";
 import { Square } from "./square";
-import { squareBorder as border, playerColor } from "./styles";
+import { squareBorder as border } from "./styles";
+import { playerColor } from './colors';
 import { useMatchState } from "../match-state/match-state";
 
 const ColumnsDiv = styled.div`

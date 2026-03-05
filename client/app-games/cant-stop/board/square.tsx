@@ -3,20 +3,18 @@ import styled from "styled-components";
 import { squareBorder as border } from "./styles";
 import { useMatchState } from "../match-state/match-state";
 import { SubSquare } from "./sub-square";
+import { colors } from "./colors";
 
 const SquareDiv = styled.div`
     display: flex;
     flex-direction: row;
 
-
-    background-color: cornsilk;
+    background-color: ${colors.board.background};
 
     border-bottom: ${border};
 
     & > :not(:last-child) {
-        border-right: ${border}; // Only the color is used.
-        border-right-style: dashed;
-        border-right-width: 1px;
+        border-right: ${colors.board.border} dashed 1px;
     }
 `;
 

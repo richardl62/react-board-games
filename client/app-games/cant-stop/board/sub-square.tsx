@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { playerColor, temporaryOwnerColor } from "./styles";
+import { playerColor, colors } from './colors';
 import { useMatchState } from "../match-state/match-state";
 
 const subSquareWidth = "12px";
@@ -63,7 +63,7 @@ export function SubSquare({playerID, colValue, height }: {playerID: string, colV
     } else if (isCovered(heights.thisTurn, height)) {
         indicator = <Peg color={playerColor(playerID)} />;
     } else if (isCovered(heights.thisScoringChoice, height)) {
-        indicator = <Peg color={temporaryOwnerColor} />;
+        indicator = <Peg color={colors.temporaryOwner} />;
     }
 
     return <SubSquareDiv>
