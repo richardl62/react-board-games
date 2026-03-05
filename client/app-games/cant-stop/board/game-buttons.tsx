@@ -1,17 +1,14 @@
 import { JSX, useState, useEffect } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { ScoringOptions } from "./scoring-options";
-import { NoOptionRollOrBustButton, ButtonsDiv, RollDontButton, ScoringOptionContainer, playerColor } from "./styles";
+import { NoOptionRollOrBustButton, ButtonsDiv, RollDontButton, ScoringOptionContainer } from "./styles";
 
 function InnerGameButtons(): JSX.Element {
     const {
         G: { rollCount }, scoringOptions, ctx, playerID, moves, currentlyBlockedColumns,
-        ctx: { currentPlayer }
     } = useMatchState();
 
     const [selectedScoringOption, setSelectedScoringOption] = useState<number | null>(null);
-
-    const playerColor_ = playerColor(currentPlayer);
 
     useEffect(() => {
         setSelectedScoringOption(null);
@@ -20,7 +17,7 @@ function InnerGameButtons(): JSX.Element {
     const movesDisabled = ctx.currentPlayer !== playerID;
 
     if (rollCount.thisTurn === 0) {
-        return <NoOptionRollOrBustButton playerColor={playerColor_}
+        return <NoOptionRollOrBustButton
             onClick={movesDisabled ? undefined : () => moves.roll()}
         >
             Roll
@@ -28,7 +25,7 @@ function InnerGameButtons(): JSX.Element {
     }
 
     if (scoringOptions.length === 0) {
-        return <NoOptionRollOrBustButton playerColor={playerColor_}
+        return <NoOptionRollOrBustButton
             onClick={movesDisabled ? undefined : () => moves.bust()}
         >
             Bust

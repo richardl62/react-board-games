@@ -35,9 +35,10 @@ const CompletedColumn = styled.div<{ color: string }>`
     border-bottom: ${border};
 `;
 
-const ColumnLabel = styled.div`
+const ColumnLabel = styled.div<{inPlay: boolean}>`
     text-align: center;
-`
+    color: ${(props) => props.inPlay ? "var(--playerColor)" : "inherit"};
+`;
 
 function Column({ colValue }: { colValue: number }) : JSX.Element {
     const { isFull } = useMatchState();
@@ -54,14 +55,21 @@ function Column({ colValue }: { colValue: number }) : JSX.Element {
     </ColumnDiv>;
 }
 
-export function Columns() : JSX.Element {
-   return <ColumnsDiv>
-     {columnValues.map((colValue) =>
-        <div key={colValue}>
-            <ColumnLabel>{colValue}</ColumnLabel> 
-            <Column colValue={colValue} />
-            <ColumnLabel>{colValue}</ColumnLabel>
-        </div>
-    )}
-   </ColumnsDiv>; 
+export function Columns(): JSX.Element {
+    const { playerID, G: {columnHeights} } = useMatchState();
+
+    const inPlay = (colValue: number) => {
+        const heights = columnHeights[playerID][colValue];
+        return heights.owned !== heights.thisScoringChoice;
+    }
+
+    return <ColumnsDiv>
+        {columnValues.map((colValue) =>
+            <div key={colValue}>
+                <ColumnLabel inPlay={inPlay(colValue)}>{colValue}</ColumnLabel>
+                <Column colValue={colValue} />
+                <ColumnLabel inPlay={inPlay(colValue)}>{colValue}</ColumnLabel>
+            </div>
+        )}
+    </ColumnsDiv>;
 }

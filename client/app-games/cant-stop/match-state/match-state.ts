@@ -13,13 +13,6 @@ type StandardMatchState = BoardProps<ServerData, ClientMoves>;
 
 export interface MatchState extends StandardMatchState {
 
-    /** The indices of the columns that are in play.
-      * 'In play' means that they have been selected after a previous roll during this
-      * turn. Or, equivalently, they are the columns that count towards the limit
-      * on the number of columns that can be in play during the turn. 
-      */
-    columnsInPlay: number[];
-
     scoringOptions: number[][];
 
     /* Squares on which the 'mean rules' options prevent a given player from stopping. 
@@ -45,20 +38,17 @@ export function useMatchState() : MatchState {
     // Is this the best place for this check?
     sanityCheckColumnHeights(columnHeights);
 
-    const columnsInPlay = getColumnsInPlay(columnHeights[playerID]);
-
     const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
     const isFullSimplified = (col: number, category: keyof ColumnHeight) => isFull(col, category, columnHeights);
     
     const scoringOptions = getScoringOptions({
         diceValues: standardState.G.diceValues,
         isFull: isFullSimplified,
-        columnsInPlay
+        columnsInPlay: getColumnsInPlay(columnHeights[playerID]),
     });
     
     const state : MatchState = {
         ...standardState,
-        columnsInPlay,
         scoringOptions, 
         isBlocked: isBlockedSimplified,
         isFull: isFullSimplified,
