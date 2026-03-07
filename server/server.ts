@@ -26,7 +26,7 @@ const app = express();
 const PORT = process.env.PORT ?? defaultPort;
 
 app.use(cors({
-  origin: 'http://localhost:5173' // Vite default port
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'] // Vite default port
 }));
 
 const server = app.listen(PORT, () => {
