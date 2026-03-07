@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "buildServer": "tsc -b ./tsconfig.server.json",
     "buildAndRunServer": "tsc -b ./tsconfig.server.json && npm run serve",
     "buildApp": "tsc -b && vite build",
