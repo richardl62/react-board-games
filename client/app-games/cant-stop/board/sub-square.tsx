@@ -1,18 +1,18 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { playerColor, colors } from './colors';
+import { playerColor, colors } from './styles';
 import { useMatchState } from "../match-state/match-state";
-
-const subSquareWidth = "12px";
+import * as styles from "./styles"
 
 const SubSquareDiv = styled.div`
-    height: 40px;
-    width: ${subSquareWidth};
+    height: ${styles.subSquare.height};
+    width: ${styles.subSquare.width};
     display: flex;
     align-items: center;
     justify-content: center;
 
     position: relative;
+    overflow: hidden;
 `;
 
 const Solid = styled.div<{ color: string }>`
@@ -40,7 +40,8 @@ const BlockedDiv = styled.div`
     align-items: center;
     justify-content: center;
     font-family: 'Noto Sans', sans-serif;
-    font-size: ${subSquareWidth};
+    font-size: ${styles.subSquare.width};
+    line-height: 1;
 `;
 
 function Blocked() {

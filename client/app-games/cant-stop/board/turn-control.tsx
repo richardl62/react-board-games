@@ -2,9 +2,9 @@ import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { useDiceRotation } from "./dice-rotation";
 import { Dice } from "@/utils/dice/dice";
-import { DiceAndButtonsDiv, TwoDiceDiv } from "./styles";
+import { DiceAndButtonsDiv, TwoDiceDiv } from "./styles2";
 import { GameButtons } from "./game-buttons";
-import { colors } from "./colors";
+import { colors } from "./styles";
 
 export function TurnControl() : JSX.Element {
     const { G: {diceValues} } = useMatchState();

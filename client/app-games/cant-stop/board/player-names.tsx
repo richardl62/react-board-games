@@ -1,7 +1,7 @@
 import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
 import styled from "styled-components";
-import { playerColor } from './colors';
+import { playerColor } from './styles';
 
 const Names = styled.div`
     display: flex;

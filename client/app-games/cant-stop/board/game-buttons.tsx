@@ -1,7 +1,7 @@
 import { JSX, useState, useEffect } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { ScoringOptions } from "./scoring-options";
-import { NoOptionRollOrBustButton, ButtonsDiv, RollDontButton, ScoringOptionContainer } from "./styles";
+import { NoOptionRollOrBustButton, ButtonsDiv, RollDontButton, ScoringOptionContainer } from "./styles2";
 
 function InnerGameButtons(): JSX.Element {
     const {

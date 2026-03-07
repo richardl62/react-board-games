@@ -4,7 +4,7 @@ import { Columns } from "./columns";
 import { PlayerNames } from "./player-names";
 import styled from "styled-components";
 import { useMatchState } from "../match-state/match-state";
-import { playerColor } from './colors';
+import { playerColor } from './styles';
 
 const BoardContainer = styled.div<{playerColor: string}>`
     display: inline-flex;

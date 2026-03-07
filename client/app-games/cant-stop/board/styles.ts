@@ -1,87 +1,37 @@
-import { diceSize } from '@/utils/dice/dice';
-import styled from 'styled-components';
-import { colors } from './colors';
+import { assertThrow as sAssert } from '@shared/utils/assert';
 
-const buttonFont = "Roboto";
-const buttonDivHieght = "100px";
-const buttonDivWidth = "400px";
+// Colors suggest by Gemini based on my originals of blue, red, green and orange;
+// The idea is to get better contrast with the white text.
+const playerColors = [
+    "blue",    // Player 0
+    "#CC0000", // Player 1 (dark red)
+    "#006400", // Player 2 (dark green)
+    "#D2691E", // Player 3 (chocolate/dark orange)
+];
 
-export const DiceAndButtonsDiv  = styled.div`
-    display: flex;
-    flex-direction: row;
-
-    align-items: center;
-`;
-
-export const TwoDiceDiv  = styled.div`
-    display: flex;
-    flex-direction: column;
+export const colors = {
+    board: {
+        background: "cornsilk",
+        border: "darkred", // Includes internal boarders
+    },
     
-    justify-content: space-between;
+    temporaryOwner: "grey",
 
-    height: calc(2.4*${diceSize});
+    // Text color for buttons whoses foreground is a player colour.
+    playerButtonText: "white",
 
-    margin: 0 10px;
-`;
+    dice: "darkred",
+};
 
-export const ButtonsDiv = styled.div`
-    display: flex;
-    flex-direction: row;
+export function playerColor(playerID: string) {
+    const player = parseInt(playerID, 10);
+    sAssert(player >= 0 && player < playerColors.length, `Invalid player number: ${player}`);
+    return playerColors[player];
+}
 
-    height: ${buttonDivHieght};
-    width: ${buttonDivWidth};
-`;
+export const subSquare = {
+    width: "18px",
+    height: "40px",
+    border: "none", //`${colors.board.border} solid 1px`,
+};
 
-export const NoOptionRollOrBustButton = styled.div`
-    display: flex;
-    width: 100%;
-    height: 100%;
-
-    font-size: calc(0.6 * ${buttonDivHieght});
-    font-family: ${buttonFont};
-
-    justify-content: center;
-    align-items: center;
-
-    color: ${colors.playerButtonText};
-    background-color: var(--playerColor);
-    border: 1px solid black;
-`;
-
-export const RollDontButton = styled.button`
-    width: calc(0.2 * ${buttonDivWidth});
-`
-
-export const ScoringOptionContainer  = styled.div`
-    width: calc(0.6 * ${buttonDivWidth});
-`
-
-export const ScoringOptionButton = styled.div<{underline?: boolean }>`
-    display: flex;
-    ${props => props.underline && 'text-decoration: underline;'}
-
-    color: ${colors.playerButtonText};
-    background-color: var(--playerColor);
-
-    justify-content: center;
-    align-items: center;
-    
-    font-size: calc(0.20 * ${buttonDivHieght});
-    font-family: ${buttonFont};
-`;
-
-export const ScoringOptionsGrid = styled.div`
-    display: grid;
-    width: 100%;
-    height: 100%;
-
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-
-    & > * {
-        border: 1px solid black;
-    }
-    border: 2px solid black;
-`;
-
-export const squareBorder = `2px solid ${colors.board.border}`;

@@ -1,10 +1,8 @@
-import { columnValues, maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
+import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { JSX } from "react";
 import styled from "styled-components";
-import { Square } from "./square";
-import { squareBorder as border } from "./styles";
-import { playerColor } from './colors';
 import { useMatchState } from "../match-state/match-state";
+import { Column } from "./column";
 
 const ColumnsDiv = styled.div`
     display: flex;
@@ -14,48 +12,13 @@ const ColumnsDiv = styled.div`
     margin-left: 1rem;
 `;
 
-const colBorderLeft = (val: number) => val <= 7 ? border : "none";
-const colBorderRight = (val: number) => val >= 7 ? border : "none";
-
-// KLUDGE? To help keep squares aligned, the bottom border comes from the
-// square or CompletedColumn rather than ColumnDiv.
-const ColumnDiv = styled.div< {$colValue: number }>`
-    border-top: ${border};
-    ${(props) => `border-left: ${colBorderLeft(props.$colValue)};`}
-    ${(props) => `border-right: ${colBorderRight(props.$colValue)};`}
-    position: relative;
-`;
-
-const CompletedColumn = styled.div<{ color: string }>`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: ${({ color }) => color};
-    border-bottom: ${border};
-`;
-
 const ColumnLabel = styled.div<{inPlay: boolean}>`
     text-align: center;
     color: ${(props) => props.inPlay ? "var(--playerColor)" : "inherit"};
 `;
 
-function Column({ colValue }: { colValue: number }) : JSX.Element {
-    const { isFull } = useMatchState();
-    const squares = [];
-    for(let height = maxColumnHeight(colValue)-1; height >= 0; height--) {
-        squares.push(<Square key={height} colValue={colValue} height={height} />);
-    }
-
-    const full = isFull(colValue, "owned");
-
-    return <ColumnDiv $colValue={colValue}> 
-        {squares} 
-        {full && <CompletedColumn color={playerColor(full)} />}
-    </ColumnDiv>;
-}
-
+// Columns are centered vertically. 
+// KLUDGE?: Rely on the centering to ensure that square boundaries align as required.
 export function Columns(): JSX.Element {
     const { playerID, G: {columnHeights} } = useMatchState();
 
