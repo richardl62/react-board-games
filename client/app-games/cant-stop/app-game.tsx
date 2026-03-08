@@ -9,8 +9,8 @@ const LazyBoard = React.lazy(() => import("./board/board"));
 export const appGame: AppGame = {
     ...gameControl,
 
-    displayName: "Cant Stop",
-    category: GameCategory.development,
+    displayName: "Can't Stop",
+    category: GameCategory.standard,
     
     options: setupOptions,
     board: (props) => standardBoard(LazyBoard, props),

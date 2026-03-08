@@ -16,7 +16,7 @@ export const setupOptions = {
     // For test purposes it can help to partially fill columns from the start.
     partiallyFillAtStart: {
         default: false,
-        label: "Fill column at start",
+        label: "Partially fill column at start",
         debugOnly: true,
     },
 } as const satisfies OptionSpecifications;

@@ -48,7 +48,14 @@ function startingColumnsHeights(playerID: string, partiallyFillAtStart: boolean)
         if ( partiallyFillAtStart ) {
             // Partially or fully fill columns. This is intended to help with testing.
             const makeFull = ( playerID === "0" && col === 5 ) || ( playerID === "1" && col === 9 );
-            height = makeFull ? "full" : maxColumnHeight(col) - 2;
+
+            if( makeFull ) {
+                height = "full";
+            } else if(col === 7) {
+                height = 0;
+            } else {
+                height = maxColumnHeight(col) - 2;
+            }
         }
 
 
