@@ -12,6 +12,10 @@ export function isBlocked(
     columnHeights: ServerData["columnHeights"],
     {minClearanceAbove, minClearanceBelow}: SetupOptions,
 ): boolean {
+    const ownedByPlayer = columnHeights[playerID][column].owned;
+    if(ownedByPlayer === "full" || ownedByPlayer > height) {
+        return false;
+    }
 
     for (const pid of Object.keys(columnHeights)) {
         if (pid !== playerID) {
@@ -19,11 +23,15 @@ export function isBlocked(
             if (ownedByOther !== 0 && ownedByOther !== "full") {
                 const otherHeight = ownedByOther - 1;
                 
-                if (otherHeight >= height && otherHeight - height < minClearanceAbove) {
+                const clearanceAbove = height - otherHeight;
+                if (clearanceAbove >= 0 && clearanceAbove < minClearanceAbove)
+                {
                     return true;
                 }
 
-                if (otherHeight <= height && height - otherHeight < minClearanceBelow) {
+                const clearanceBelow = otherHeight - height;
+                if (clearanceBelow >= 0 && clearanceBelow < minClearanceBelow)
+                {
                     return true;
                 }
             }
