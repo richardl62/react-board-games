@@ -27,7 +27,6 @@ const Peg = styled.div<{ color: string }>`
 
     background-color: ${({ color }) => color};
     border-radius: 999px; //Arbitrary large value to make ends semi-circular.
-    position: relative;
 `;
 
 const BlockedDiv = styled.div`
@@ -42,10 +41,12 @@ const BlockedDiv = styled.div`
     font-family: 'Noto Sans', sans-serif;
     font-size: ${styles.subSquare.width};
     line-height: 1;
+    color: back;
+    z-index: 1;
 `;
 
 function Blocked() {
-    return <BlockedDiv>🚫</BlockedDiv>;
+    return <BlockedDiv>🚫&#xFE0E;</BlockedDiv>;
 }
 
 function isCovered(heightCovered: number | "full", currentHeight: number) {
