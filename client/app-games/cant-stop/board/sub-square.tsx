@@ -35,18 +35,16 @@ const BlockedDiv = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Noto Sans', sans-serif;
-    font-size: ${styles.subSquare.width};
-    line-height: 1;
-    color: back;
     z-index: 1;
 `;
 
 function Blocked() {
-    return <BlockedDiv>🚫&#xFE0E;</BlockedDiv>;
+    return <BlockedDiv>
+        <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <rect width="100" height="100" fill="white" />
+            <circle cx="50" cy="50" r="40" fill="black" />
+        </svg>
+    </BlockedDiv>;
 }
 
 function isCovered(heightCovered: number | "full", currentHeight: number) {
