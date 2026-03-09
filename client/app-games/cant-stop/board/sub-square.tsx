@@ -1,5 +1,6 @@
 import { JSX } from "react";
 import styled from "styled-components";
+import { playerColor } from './styles';
 import { useMatchState } from "../match-state/match-state";
 import * as styles from "./styles"
 
@@ -14,10 +15,10 @@ const SubSquareDiv = styled.div`
     overflow: hidden;
 `;
 
-const Solid = styled.div`
+const Solid = styled.div<{ color: string }>`
     height: 100%;
     width: 100%;
-    background-color: var(--playerColor);
+    background-color: ${({ color }) => color};
 `;
 
 const Peg = styled.div<{ solid: boolean }>`
@@ -61,7 +62,7 @@ export function SubSquare({playerID, colValue, height }: {playerID: string, colV
 
     let indicator = null;
     if (isCovered(heights.owned, height)) {
-        indicator = <Solid />;
+        indicator = <Solid color={playerColor(playerID)} />;
     } else if (isCovered(heights.thisTurn, height)) {
         indicator = <Peg solid={true}/>;
     } else if (isCovered(heights.thisScoringChoice, height)) {
