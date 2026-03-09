@@ -1,6 +1,5 @@
 import { JSX } from "react";
 import styled from "styled-components";
-import { playerColor, colors } from './styles';
 import { useMatchState } from "../match-state/match-state";
 import * as styles from "./styles"
 
@@ -15,18 +14,21 @@ const SubSquareDiv = styled.div`
     overflow: hidden;
 `;
 
-const Solid = styled.div<{ color: string }>`
+const Solid = styled.div`
     height: 100%;
     width: 100%;
-    background-color: ${({ color }) => color};
+    background-color: var(--playerColor);
 `;
 
-const Peg = styled.div<{ color: string }>`
+const Peg = styled.div<{ solid: boolean }>`
     height: 80%;
     width: 80%;
+    border-radius: 999px;
+    border: 3px solid var(--playerColor);
 
-    background-color: ${({ color }) => color};
-    border-radius: 999px; //Arbitrary large value to make ends semi-circular.
+    background-color: ${({solid}) => solid ? "var(--playerColor)" : "transparent"};
+
+    box-sizing: border-box;
 `;
 
 const BlockedDiv = styled.div`
@@ -59,11 +61,11 @@ export function SubSquare({playerID, colValue, height }: {playerID: string, colV
 
     let indicator = null;
     if (isCovered(heights.owned, height)) {
-        indicator = <Solid color={playerColor(playerID)} />;
+        indicator = <Solid />;
     } else if (isCovered(heights.thisTurn, height)) {
-        indicator = <Peg color={playerColor(playerID)} />;
+        indicator = <Peg solid={true}/>;
     } else if (isCovered(heights.thisScoringChoice, height)) {
-        indicator = <Peg color={colors.temporaryOwner} />;
+        indicator = <Peg solid={false}/>;
     }
 
     return <SubSquareDiv>
