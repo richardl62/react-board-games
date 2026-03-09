@@ -41,8 +41,8 @@ const BlockedDiv = styled.div`
 function Blocked() {
     return <BlockedDiv>
         <svg viewBox="0 0 100 100" width="100%" height="100%">
-            <rect width="100" height="100" fill="white" />
-            <circle cx="50" cy="50" r="40" fill="black" />
+            <circle cx="50" cy="50" r="40" fill="white" stroke="black" strokeWidth="8" />
+            <line x1="25" y1="25" x2="75" y2="75" stroke="black" strokeWidth="8" />
         </svg>
     </BlockedDiv>;
 }
