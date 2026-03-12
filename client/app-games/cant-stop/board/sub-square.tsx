@@ -21,13 +21,13 @@ const Solid = styled.div<{ color: string }>`
     background-color: ${({ color }) => color};
 `;
 
-const Peg = styled.div<{ solid: boolean }>`
+const Peg = styled.div<{ solid: boolean, color: string }>`
     height: 80%;
     width: 80%;
     border-radius: 999px;
-    border: 3px solid var(--playerColor);
+    border: 3px solid ${({ color }) => color};
 
-    background-color: ${({solid}) => solid ? "var(--playerColor)" : "transparent"};
+    background-color: ${({solid, color}) => solid ? color : "transparent"};
 
     box-sizing: border-box;
 `;
@@ -59,14 +59,14 @@ export function SubSquare({playerID, colValue, height }: {playerID: string, colV
 
     const heights = columnHeights[playerID][colValue];
     const showAsBlocked = isBlocked({ playerID, column: colValue, height }) && ctx.currentPlayer === playerID;
-
+    const color = playerColor(playerID);
     let indicator = null;
     if (isCovered(heights.owned, height)) {
-        indicator = <Solid color={playerColor(playerID)} />;
+        indicator = <Solid color={color} />;
     } else if (isCovered(heights.thisTurn, height)) {
-        indicator = <Peg solid={true}/>;
+        indicator = <Peg color={color} solid={true}/>;
     } else if (isCovered(heights.thisScoringChoice, height)) {
-        indicator = <Peg solid={false}/>;
+        indicator = <Peg color={color} solid={false}/>;
     }
 
     return <SubSquareDiv>

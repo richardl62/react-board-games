@@ -46,16 +46,16 @@ function startingColumnsHeights(playerID: string, partiallyFillAtStart: boolean)
     for (const col of columnValues) {
         let height : number | "full" = 0;
         if ( partiallyFillAtStart ) {
-            // Partially or fully fill columns. This is intended to help with testing.
-            const makeFull = ( playerID === "0" && col === 5 ) || ( playerID === "1" && col === 9 );
-
-            if( makeFull ) {
-                height = "full";
-            } else if(col === 7) {
-                height = 0;
-            } else {
-                height = maxColumnHeight(col) - 2;
+            if ( col == 5 ) {
+                height = playerID === "1" ?  6: "full";
             }
+            else if(col === 7) {
+                height = 2;
+            } else {
+                const special = (col === 4 && playerID === "1") ||
+                    (col === 8 && playerID === "0");
+                height = maxColumnHeight(col) - (special ? 1 : 2);
+            } 
         }
 
 
