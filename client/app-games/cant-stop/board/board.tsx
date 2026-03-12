@@ -15,12 +15,26 @@ const BoardContainer = styled.div<{playerColor: string}>`
     --playerColor:${props => props.playerColor };
 `;
 
+const Messages = styled.div`
+    align-self: flex-start;
+    margin-left: 1em;
+`;
+
+function Options() {
+    const { G: { options :{ minClearanceAbove, minClearanceBelow }} } = useMatchState();
+    return <Messages>
+        {minClearanceAbove !== 0 && <div>Minimum clearance above: {minClearanceAbove}</div>}
+        {minClearanceBelow !== 0 && <div>Minimum clearance below: {minClearanceBelow}</div>}
+    </Messages>
+}
+
 function Board() : JSX.Element {
     const {playerID} = useMatchState();
     return <BoardContainer playerColor={playerColor(playerID)}>
         <PlayerNames/>
         <Columns/>
         <TurnControl/>
+        <Options/>
     </BoardContainer>
 }
 
