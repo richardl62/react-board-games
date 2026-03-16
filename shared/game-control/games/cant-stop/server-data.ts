@@ -26,6 +26,14 @@ export interface ColumnHeight {
     thisScoringChoice: number | "full";
 };
 
+export interface ScoringOptions {
+    options: number[][];
+
+    /** An index into 'options' of a string. (It is a string when, and only when,'options' is empty.)
+    */
+    chosen: number | "rollRequired" | "bust";
+}
+
 export interface ServerData {
     options: SetupOptions;
 
@@ -36,6 +44,8 @@ export interface ServerData {
         total: number;
         thisTurn: number;
     };
+
+    scoringOptions: ScoringOptions;
 
     columnHeights: Record<string, ColumnHeight[]>;
 }
@@ -85,6 +95,11 @@ export function startingServerData(arg0: SetupArg0, options: SetupOptions): Serv
         rollCount: {
             total: 0,
             thisTurn: 0,
+        },
+
+        scoringOptions: {
+            options: [],
+            chosen: "rollRequired",
         },
 
         columnHeights,

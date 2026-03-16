@@ -1,8 +1,10 @@
 import { compareArrays, sortUnique } from "@/utils/unique-values";
 import { maxColumnsInPlay } from "@shared/game-control/games/cant-stop/config";
-import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
+import { ServerData } from "@shared/game-control/games/cant-stop/server-data";
 import { PlayerID } from "@shared/game-control/playerid";
 import { sAssert } from "@shared/utils/assert";
+import { getColumnsInPlay } from "./colums-in-play";
+import { isFull } from "./is-full";
 
 function sumsOfPairs(values: number[]) : number[][] {
     // There are only 3 unique ways to partition the 4 dice into pairs.
@@ -22,10 +24,11 @@ function sumsOfPairs(values: number[]) : number[][] {
 // The result will not contain empty candidates but may contain duplicates.
 function adjustedCandidates(
     candidates: number[][],
-    { inPlay, isFull }: { 
-        inPlay: number[], 
-        isFull: (col: number, category: keyof ColumnHeight) => PlayerID | undefined}
+    columnHeights: ServerData["columnHeights"],
+    playerID: PlayerID, 
 ): number[][] {
+
+    const inPlay = getColumnsInPlay(columnHeights[playerID]);
 
     const valid = (candidate: number[]) => {
         const newInPlay = new Set(inPlay);      
@@ -39,7 +42,7 @@ function adjustedCandidates(
     for (const candidate of candidates) {
         sAssert(candidate.length <= 2, "Expected 2 columns or fewer");
         
-        const nonFull = candidate.filter( col => !isFull(col, "thisTurn"));
+        const nonFull = candidate.filter( col => !isFull(col, "thisTurn", columnHeights));
         if (nonFull.length === 0) {
             continue;
         }
@@ -59,19 +62,15 @@ function adjustedCandidates(
 
 // Returns an array of arrays with each inner array recording the indices of the
 // columns for which the current player can choose to increase the height.
-export function getScoringOptions({diceValues, isFull, columnsInPlay}: {
-    diceValues: number[], 
-    isFull: (col: number, category: keyof ColumnHeight) => PlayerID | undefined, 
-    columnsInPlay: number[]
-}
+export function getScoringOptions(
+    diceValues: number[],
+    columnHeights: ServerData["columnHeights"],
+    playerID: PlayerID, 
 ) : number[][] {
-
+    
     const candidates = sumsOfPairs(diceValues);
 
-    const adjusted = adjustedCandidates(candidates, {
-        isFull, 
-        inPlay: columnsInPlay
-    });
+    const adjusted = adjustedCandidates(candidates, columnHeights, playerID);
 
     const result = sortUnique(
         adjusted, 

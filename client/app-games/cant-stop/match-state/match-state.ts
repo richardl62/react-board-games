@@ -1,13 +1,13 @@
 import { useStandardBoardContext } from "@/app-game-support/standard-board";
 import { BoardProps } from "@/app-game-support/board-props";
 import { ServerData } from "@game-control/games/cant-stop/server-data";
-import { columnValues } from "@shared/game-control/games/cant-stop/config";
 import { ClientMoves } from "@shared/game-control/games/cant-stop/moves/moves";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
-import { getScoringOptions } from "./scoring-options";
+import { getScoringOptions } from "../../../../shared/game-control/games/cant-stop/tools/scoring-options";
 import { blockedColumns, isBlocked, IsBlockedArg0 } from "./is-blocked";
 import { sanityCheckColumnHeights } from "./sanity-checks";
 import { PlayerID } from "@shared/game-control/playerid";
+import { isFull } from "@shared/game-control/games/cant-stop/tools/is-full";
 
 type StandardMatchState = BoardProps<ServerData, ClientMoves>;
 
@@ -41,11 +41,11 @@ export function useMatchState() : MatchState {
     const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
     const isFullSimplified = (col: number, category: keyof ColumnHeight) => isFull(col, category, columnHeights);
     
-    const scoringOptions = getScoringOptions({
-        diceValues: standardState.G.diceValues,
-        isFull: isFullSimplified,
-        columnsInPlay: getColumnsInPlay(columnHeights[playerID]),
-    });
+    const scoringOptions = getScoringOptions(
+        standardState.G.diceValues,
+        columnHeights,
+        playerID,
+    );
     
     const state : MatchState = {
         ...standardState,
@@ -62,27 +62,3 @@ export function useMatchState() : MatchState {
     return state;
 }
 
-function isFull(
-    col: number,
-    category: keyof ColumnHeight,
-    heights: ServerData["columnHeights"]
-) : PlayerID | undefined {
-    for (const [playerID, playerHeights] of Object.entries(heights)) {
-        if (playerHeights[col][category] === "full") {
-            return playerID;
-        }
-    }
-
-    return undefined;
-}
-
-function getColumnsInPlay(heights: ColumnHeight[]) : number[] {
-    const inPlay: number[] = [];
-    for (const col of columnValues) {
-        if (heights[col].owned !== heights[col].thisTurn) {
-            inPlay.push(col);
-        }
-    }
-
-    return inPlay;
-}
