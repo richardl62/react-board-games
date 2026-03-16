@@ -14,7 +14,7 @@ const ColumnsDiv = styled.div`
 
 const ColumnLabel = styled.div<{inPlay: boolean}>`
     text-align: center;
-    color: ${(props) => props.inPlay ? "var(--playerColor)" : "inherit"};
+    color: ${(props) => props.inPlay ? "var(--currentPlayerColor)" : "inherit"};
 `;
 
 // Columns are centered vertically. 

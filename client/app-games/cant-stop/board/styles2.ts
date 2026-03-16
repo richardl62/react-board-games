@@ -45,7 +45,7 @@ export const NoOptionRollOrBustButton = styled.div`
     align-items: center;
 
     color: ${colors.playerButtonText};
-    background-color: var(--playerColor);
+    background-color: var(--currentPlayerColor);
     border: 1px solid black;
 `;
 
@@ -62,7 +62,7 @@ export const ScoringOptionButton = styled.div<{underline?: boolean }>`
     ${props => props.underline && 'text-decoration: underline;'}
 
     color: ${colors.playerButtonText};
-    background-color: var(--playerColor);
+    background-color: var(--currentPlayerColor);
 
     justify-content: center;
     align-items: center;

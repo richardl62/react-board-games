@@ -6,13 +6,13 @@ import styled from "styled-components";
 import { useMatchState } from "../match-state/match-state";
 import { playerColor } from './styles';
 
-const BoardContainer = styled.div<{playerColor: string}>`
+const BoardContainer = styled.div<{currentPlayerColor: string}>`
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     gap: 1em;
 
-    --playerColor:${props => props.playerColor };
+    --currentPlayerColor:${props => props.currentPlayerColor };
 `;
 
 const Messages = styled.div`
@@ -29,8 +29,9 @@ function Options() {
 }
 
 function Board() : JSX.Element {
-    const {playerID} = useMatchState();
-    return <BoardContainer playerColor={playerColor(playerID)}>
+    const {ctx} = useMatchState();
+
+    return <BoardContainer currentPlayerColor={playerColor(ctx.currentPlayer)}>
         <PlayerNames/>
         <Columns/>
         <TurnControl/>
