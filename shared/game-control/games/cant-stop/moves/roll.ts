@@ -18,6 +18,6 @@ export function roll(
     G.rollCount.thisTurn += 1;
     G.rollCount.total += 1;
 
-    G.scoringOptions.options = getScoringOptions(G.diceValues, G.columnHeights, playerID);
-    G.scoringOptions.chosen = G.scoringOptions.options.length > 0 ? "choiceRequired" : "bust";
+    G.scoringOptions = getScoringOptions(G.diceValues, G.columnHeights, playerID);
+    G.scoringChoice = G.scoringOptions.length > 0 ? "choiceRequired" : "bust";
 }

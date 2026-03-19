@@ -26,28 +26,22 @@ export interface ColumnHeight {
     thisScoringChoice: number | "full";
 };
 
-export interface ScoringOptions {
-    options: number[][];
-
-    /** An index into 'options' of a string. (It is a string when, and only when,'options' is empty.)
-    */
-    chosen: number | "rollRequired" | "choiceRequired" | "bust";
-}
-
 export interface ServerData {
     options: SetupOptions;
 
+    columnHeights: Record<string, ColumnHeight[]>;
+
     diceValues: number[];
+    scoringOptions: number[][]; // Computed from diceValues and columnHeights.
+    
+    /** An index into 'scoringOptions' or a string. */
+    scoringChoice: number | "rollRequired" | "choiceRequired" | "bust";
 
     /** Use to trigger animations. */
     rollCount: {
         total: number;
         thisTurn: number;
     };
-
-    scoringOptions: ScoringOptions;
-
-    columnHeights: Record<string, ColumnHeight[]>;
 }
 
 // Starting heights for one player
@@ -89,19 +83,16 @@ export function startingServerData(arg0: SetupArg0, options: SetupOptions): Serv
 
     return {
         options,
+
+        columnHeights,
         
         diceValues: Array<number>(nDice).fill(1),
-
+        scoringOptions: [],
+        scoringChoice: "rollRequired",
+    
         rollCount: {
             total: 0,
             thisTurn: 0,
         },
-
-        scoringOptions: {
-            options: [],
-            chosen: "rollRequired",
-        },
-
-        columnHeights,
     }
 }

@@ -26,7 +26,7 @@ function InnerGameButtons(): JSX.Element {
 
     if (scoringOptions.length === 0) {
         return <NoOptionRollOrBustButton
-            onClick={movesDisabled ? undefined : () => moves.bust()}
+            onClick={movesDisabled ? undefined : () => moves.acknowledgeBust()}
         >
             Bust
         </NoOptionRollOrBustButton>;
