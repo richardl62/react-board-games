@@ -20,10 +20,10 @@ const ColumnLabel = styled.div<{inPlay: boolean}>`
 // Columns are centered vertically. 
 // KLUDGE?: Rely on the centering to ensure that square boundaries align as required.
 export function Columns(): JSX.Element {
-    const { playerID, G: {columnHeights} } = useMatchState();
+    const { ctx, G: {columnHeights} } = useMatchState();
 
     const inPlay = (colValue: number) => {
-        const heights = columnHeights[playerID][colValue];
+        const heights = columnHeights[ctx.currentPlayer][colValue];
         return heights.owned !== heights.thisScoringChoice;
     }
 
