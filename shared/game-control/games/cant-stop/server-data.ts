@@ -31,7 +31,7 @@ export interface ScoringOptions {
 
     /** An index into 'options' of a string. (It is a string when, and only when,'options' is empty.)
     */
-    chosen: number | "rollRequired" | "bust";
+    chosen: number | "rollRequired" | "choiceRequired" | "bust";
 }
 
 export interface ServerData {

@@ -1,5 +1,6 @@
 import { ServerData } from "../server-data.js";
 import { MoveArg0 } from "../../../move-fn.js";
+import { getScoringOptions } from "../tools/scoring-options.js";
 
 export function roll(
     arg0: MoveArg0<ServerData>,
@@ -16,4 +17,7 @@ export function roll(
 
     G.rollCount.thisTurn += 1;
     G.rollCount.total += 1;
+
+    G.scoringOptions.options = getScoringOptions(G.diceValues, G.columnHeights, playerID);
+    G.scoringOptions.chosen = G.scoringOptions.options.length > 0 ? "choiceRequired" : "bust";
 }

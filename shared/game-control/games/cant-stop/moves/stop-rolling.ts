@@ -11,5 +11,8 @@ export function stopRolling(
 
     heights.forEach(h => { h.owned = h.thisTurn = h.thisScoringChoice; });
 
+    G.scoringOptions.options = [];
+    G.scoringOptions.chosen = "rollRequired";
+
     doEndTurn(arg0);
 }

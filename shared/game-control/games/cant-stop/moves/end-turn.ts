@@ -15,6 +15,14 @@ export function doEndTurn(
         });
     } 
 
+    const { options, chosen } = G.scoringOptions;
+    sAssert(options.length === 0 && (chosen === "bust" || chosen === "rollRequired"),
+        "Invalid scoring options at end of turn."
+    );
+
+    G.scoringOptions.options = [];
+    G.scoringOptions.chosen = "rollRequired";
+
     events.endTurn();
     G.rollCount.thisTurn = 0;
 }

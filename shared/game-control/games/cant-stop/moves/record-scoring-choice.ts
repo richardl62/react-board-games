@@ -30,4 +30,15 @@ export function recordScoringChoice(
             }
         }
     }
+
+    // To do: Consider paasing the index rather than the chosen columns into this function.
+    const scoringChoiceIndex = G.scoringOptions.options.findIndex(
+        option => JSON.stringify(option) === JSON.stringify(columns) // Effeciency is not a concern.
+    );
+
+    if (scoringChoiceIndex === -1) {
+        throw new Error("Invalid scoring choice.");
+    }
+
+    G.scoringOptions.chosen = scoringChoiceIndex;
 }

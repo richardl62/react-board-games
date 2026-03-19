@@ -15,5 +15,7 @@ export function bust(
         h.thisScoringChoice = h.thisTurn = h.owned;
     });
 
+    G.scoringOptions.chosen = "rollRequired";
+
     doEndTurn(arg0);
 }
