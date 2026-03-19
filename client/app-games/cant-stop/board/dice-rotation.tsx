@@ -8,18 +8,18 @@ const diceRoll = {
 };
 
 export function useDiceRotation() : number| null {
-    const { G: {rollCount: {total: totalRollCount}} } = useMatchState();
-    const [lastTotalRollCount, setLastTotalRollCount] = useState(totalRollCount);
+    const { G: {rollCount } } = useMatchState();
+    const [lastRollCount, setLastRollCount] = useState(rollCount);
 
     const [rollStep, setRollStep] = useState<number| null>(null);
 
     // Restart the rolling when a new roll is detected from the server.
     useEffect(() => {
-        if (totalRollCount > lastTotalRollCount) {
-            setLastTotalRollCount(totalRollCount);
+        if (rollCount > lastRollCount) {
+            setLastRollCount(rollCount);
             setRollStep(0);
         } 
-    }, [totalRollCount, lastTotalRollCount]);
+    }, [rollCount, lastRollCount]);
    
     // Increment the roll step at appropriate intervals while a roll is in progress.
     useEffect(() => {

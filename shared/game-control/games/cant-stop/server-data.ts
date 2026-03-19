@@ -38,10 +38,7 @@ export interface ServerData {
     scoringChoice: number | "rollRequired" | "choiceRequired" | "bust";
 
     /** Use to trigger animations. */
-    rollCount: {
-        total: number;
-        thisTurn: number;
-    };
+    rollCount: number;
 }
 
 // Starting heights for one player
@@ -90,9 +87,6 @@ export function startingServerData(arg0: SetupArg0, options: SetupOptions): Serv
         scoringOptions: [],
         scoringChoice: "rollRequired",
     
-        rollCount: {
-            total: 0,
-            thisTurn: 0,
-        },
+        rollCount: 0,
     }
 }

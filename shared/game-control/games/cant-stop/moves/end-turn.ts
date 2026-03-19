@@ -19,5 +19,4 @@ export function doEndTurn(
     G.scoringChoice = "rollRequired";
 
     events.endTurn();
-    G.rollCount.thisTurn = 0;
 }
