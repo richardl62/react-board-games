@@ -1,10 +1,10 @@
-import { compareArrays, sortUnique } from "@/utils/unique-values";
-import { maxColumnsInPlay } from "@shared/game-control/games/cant-stop/config";
-import { ServerData } from "@shared/game-control/games/cant-stop/server-data";
-import { PlayerID } from "@shared/game-control/playerid";
-import { sAssert } from "@shared/utils/assert";
-import { getColumnsInPlay } from "./colums-in-play";
-import { isFull } from "./is-full";
+import { compareArrays, sortUnique } from "../../../../utils/unique-values.js";
+import { maxColumnsInPlay } from "../../../../game-control/games/cant-stop/config.js";
+import { ServerData } from "../../../../game-control/games/cant-stop/server-data.js";
+import { PlayerID } from "../../../../game-control/playerid.js";
+import { sAssert } from "../../../../utils/assert.js";
+import { getColumnsInPlay } from "./colums-in-play.js";
+import { isFull } from "./is-full.js";
 
 function sumsOfPairs(values: number[]) : number[][] {
     // There are only 3 unique ways to partition the 4 dice into pairs.

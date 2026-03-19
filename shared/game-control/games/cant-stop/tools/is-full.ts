@@ -1,5 +1,5 @@
-import { PlayerID } from "../../../../../shared/game-control/playerid";
-import { ColumnHeight, ServerData } from "../server-data";
+import { PlayerID } from "../../../../../shared/game-control/playerid.js";
+import { ColumnHeight, ServerData } from "../server-data.js";
 
 export function isFull(
     col: number,

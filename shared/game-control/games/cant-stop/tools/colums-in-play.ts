@@ -1,5 +1,5 @@
-import { columnValues } from "../config";
-import { ColumnHeight } from "../server-data";
+import { columnValues } from "../config.js";
+import { ColumnHeight } from "../server-data.js";
 
 /**
  * List the columns that are in play this turn. 
