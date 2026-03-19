@@ -3,7 +3,6 @@ import { BoardProps } from "@/app-game-support/board-props";
 import { ServerData } from "@game-control/games/cant-stop/server-data";
 import { ClientMoves } from "@shared/game-control/games/cant-stop/moves/moves";
 import { ColumnHeight } from "@shared/game-control/games/cant-stop/server-data";
-import { getScoringOptions } from "../../../../shared/game-control/games/cant-stop/tools/scoring-options";
 import { blockedColumns, isBlocked, IsBlockedArg0 } from "./is-blocked";
 import { sanityCheckColumnHeights } from "./sanity-checks";
 import { PlayerID } from "@shared/game-control/playerid";
@@ -12,8 +11,6 @@ import { isFull } from "@shared/game-control/games/cant-stop/tools/is-full";
 type StandardMatchState = BoardProps<ServerData, ClientMoves>;
 
 export interface MatchState extends StandardMatchState {
-
-    scoringOptions: number[][];
 
     /* Squares on which the 'mean rules' options prevent a given player from stopping. 
     * Full columns do not count as blocked as the fullness rules are not part of the 'mean rules'.
@@ -41,15 +38,8 @@ export function useMatchState() : MatchState {
     const isBlockedSimplified = (arg: IsBlockedArg0) => isBlocked(arg, columnHeights, standardState.G.options)
     const isFullSimplified = (col: number, category: keyof ColumnHeight) => isFull(col, category, columnHeights);
     
-    const scoringOptions = getScoringOptions(
-        standardState.G.diceValues,
-        columnHeights,
-        playerID,
-    );
-    
     const state : MatchState = {
         ...standardState,
-        scoringOptions, 
         isBlocked: isBlockedSimplified,
         isFull: isFullSimplified,
         currentlyBlockedColumns: blockedColumns(

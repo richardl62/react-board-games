@@ -1,30 +1,25 @@
-import { JSX, useState, useEffect } from "react";
+import { JSX } from "react";
 import { useMatchState } from "../match-state/match-state";
 import { ScoringOptions } from "./scoring-options";
 import { NoOptionRollOrBustButton, ButtonsDiv, RollDontButton, ScoringOptionContainer } from "./styles2";
 
 function InnerGameButtons(): JSX.Element {
     const {
-        G: { rollCount }, scoringOptions, ctx, playerID, moves, currentlyBlockedColumns,
+        G: { scoringChoice },  ctx, playerID, moves, currentlyBlockedColumns,
     } = useMatchState();
 
-    const [selectedScoringOption, setSelectedScoringOption] = useState<number | null>(null);
-
-    useEffect(() => {
-        setSelectedScoringOption(null);
-    }, [rollCount.total]);
 
     const movesDisabled = ctx.currentPlayer !== playerID;
 
-    if (rollCount.thisTurn === 0) {
+    if (scoringChoice === "rollRequired") {
         return <NoOptionRollOrBustButton
             onClick={movesDisabled ? undefined : () => moves.roll()}
         >
             Roll
-        </NoOptionRollOrBustButton>;
+        </NoOptionRollOrBustButton>
     }
 
-    if (scoringOptions.length === 0) {
+    if (scoringChoice === "bust") {
         return <NoOptionRollOrBustButton
             onClick={movesDisabled ? undefined : () => moves.acknowledgeBust()}
         >
@@ -32,8 +27,10 @@ function InnerGameButtons(): JSX.Element {
         </NoOptionRollOrBustButton>;
     }
 
-    const rollDisabled = movesDisabled || selectedScoringOption === null;
-    const dontDisabled = movesDisabled || selectedScoringOption === null || currentlyBlockedColumns.length > 0;
+    const scoreSelected = typeof scoringChoice === "number";
+    const rollDisabled = movesDisabled || !scoreSelected;
+    const dontDisabled = movesDisabled || !scoreSelected || currentlyBlockedColumns.length > 0;
+
     const blockMessage = currentlyBlockedColumns.length > 0 ? `Blocked on col ${currentlyBlockedColumns.join(", ")}` : "";
     return <>
         <RollDontButton
@@ -44,9 +41,7 @@ function InnerGameButtons(): JSX.Element {
         </RollDontButton>
 
         <ScoringOptionContainer>
-            <ScoringOptions
-                selectedScoringOption={selectedScoringOption}
-                setSelectedScoringOption={setSelectedScoringOption} />
+            <ScoringOptions />
             <div>{blockMessage}</div>
         </ScoringOptionContainer>
 
