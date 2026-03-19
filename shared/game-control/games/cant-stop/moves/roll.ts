@@ -15,8 +15,7 @@ export function roll(
         G.diceValues[i] = random.Die(6);
     }
 
-    G.rollCount.thisTurn += 1;
-    G.rollCount.total += 1;
+    G.rollCount += 1;
 
     G.scoringOptions = getScoringOptions(G.diceValues, G.columnHeights, playerID);
     G.scoringChoice = G.scoringOptions.length > 0 ? "choiceRequired" : "bust";
