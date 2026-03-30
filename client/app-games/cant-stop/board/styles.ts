@@ -1,15 +1,14 @@
 import { assertThrow as sAssert } from '@shared/utils/assert';
 
-// Colors suggest by Gemini based on my originals of blue, red, green and orange;
-// The idea is to get better contrast with the white text.
-const playerColors = [
-    "blue",    // Player 0
-    "#CC0000", // Player 1 (dark red)
-    "#006400", // Player 2 (dark green)
-    "#D2691E", // Player 3 (chocolate/dark orange)
-];
 
 export const colors = {
+    players: [
+        "blue",    // Player 0
+        "#CC0000", // Player 1 (dark red)
+        "#006400", // Player 2 (dark green)
+        "#D2691E", // Player 3 (chocolate/dark orange)
+    ],
+    
     board: {
         background: "cornsilk",
         border: "darkred", // Includes internal boarders
@@ -25,13 +24,15 @@ export const colors = {
 
 export function playerColor(playerID: string) {
     const player = parseInt(playerID, 10);
-    sAssert(player >= 0 && player < playerColors.length, `Invalid player number: ${player}`);
-    return playerColors[player];
+    sAssert(player >= 0 && player < colors.players.length, `Invalid player number: ${player}`);
+    return colors.players[player];
 }
 
 export const subSquare = {
     width: "18px",
     height: "40px",
-    border: "none", //`${colors.board.border} solid 1px`,
 };
+
+// Used for borders of columns and squares.
+export const squareBorder = `3px solid ${colors.board.border}`;
 

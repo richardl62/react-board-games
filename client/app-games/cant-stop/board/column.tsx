@@ -2,20 +2,26 @@ import { maxColumnHeight } from "@shared/game-control/games/cant-stop/config";
 import { JSX } from "react";
 import styled from "styled-components";
 import { useMatchState } from "../match-state/match-state";
-import { colors, playerColor, subSquare } from './styles';
-import { squareBorder as border } from "./styles2";
+import { colors, playerColor  } from './styles';
+import { squareBorder } from "./styles";
 import { SubSquare } from "./sub-square";
 
-const colBorderLeft = (val: number) => val <= 7 ? border : "none";
-const colBorderRight = (val: number) => val >= 7 ? border : "none";
+const colBorderLeft = (val: number) => val <= 7 ? squareBorder : "none";
+const colBorderRight = (val: number) => val >= 7 ? squareBorder : "none";
 
 // KLUDGE? To help keep squares aligned, the bottom border comes from the
 // SquareDiv or CompletedColumn rather than ColumnDiv.
 const ColumnDiv = styled.div< {$colValue: number }>`
-    border-top: ${border};
+    position: relative;
+
+    border-top: ${squareBorder};
     border-left: ${(props) => colBorderLeft(props.$colValue)};
     border-right: ${(props) => colBorderRight(props.$colValue)};
-    position: relative;
+    border-bottom: ${squareBorder};
+
+    & > :not(:last-child) {
+        border-bottom: ${squareBorder};
+    }
 `;
 
 const SquareDiv = styled.div`
@@ -23,12 +29,6 @@ const SquareDiv = styled.div`
     flex-direction: row;
 
     background-color: ${colors.board.background};
-
-    border-bottom: ${border};
-
-    & > :not(:last-child) {
-        border-right: ${subSquare.border};
-    }
 `;
 
 const CompletedColumn = styled.div<{ owner: string }>`
@@ -38,7 +38,7 @@ const CompletedColumn = styled.div<{ owner: string }>`
     width: 100%;
     height: 100%;
     background-color: ${({ owner }) => playerColor(owner)};
-    border-bottom: ${border};
+    border-bottom: ${squareBorder};
 `;
 
 // A column is either:

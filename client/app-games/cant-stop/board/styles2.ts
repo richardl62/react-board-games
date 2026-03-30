@@ -85,4 +85,3 @@ export const ScoringOptionsGrid = styled.div`
     border: 2px solid black;
 `;
 
-export const squareBorder = `2px solid ${colors.board.border}`;
