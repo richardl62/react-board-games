@@ -3,15 +3,15 @@ import { assertThrow as sAssert } from '@shared/utils/assert';
 
 export const colors = {
     players: [
-        "blue",    // Player 0
-        "#CC0000", // Player 1 (dark red)
-        "#006400", // Player 2 (dark green)
-        "#D2691E", // Player 3 (chocolate/dark orange)
+        "#FF0000", // Vibrant Red
+        "#228B22", // Forest Green
+        "blue",
+        "#E67E22", // Vibrant Orange
     ],
     
     board: {
         background: "cornsilk",
-        border: "darkred", // Includes internal boarders
+        border: "#4A0000", // Deep Maroon
     },
     
     temporaryOwner: "grey",
@@ -35,4 +35,3 @@ export const subSquare = {
 
 // Used for borders of columns and squares.
 export const squareBorder = `3px solid ${colors.board.border}`;
-
