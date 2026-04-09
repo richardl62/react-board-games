@@ -2,6 +2,7 @@ import { JSX, useState } from "react";
 import styled from "styled-components";
 import { SetBlank } from "./set-blank";
 import { useTurnControlData } from "./use-turn-control-data";
+import { useScrabbleState } from "../client-side/scrabble-state";
 
 export const StyledScoreLine = styled.div`
   display: flex; 
@@ -45,11 +46,18 @@ function PassDialog() {
 }
 
 export function TurnControl(): JSX.Element {
+    const { options: { allowIllegalWords } } = useScrabbleState();
     const { illegalWords, onDone } = useTurnControlData();
-    const doButtonText = illegalWords ?
-        "Done (permitting illegal words)" :
-        "Done"
-    ;
+    
+    let doButtonText = "Done";
+    let disableDoneButton = false;
+    if(illegalWords ) {
+        if(allowIllegalWords) {
+            doButtonText = "Done (permitting illegal words)";
+        } else {
+            disableDoneButton = true;
+        }
+    }
 
     return (
         <div>
@@ -63,7 +71,10 @@ export function TurnControl(): JSX.Element {
             <SetBlank/>
             <StyledScoreLine>
                 <PassDialog/>
-                {onDone && <button onClick={onDone}> {doButtonText} </button>}
+                {onDone && <button onClick={onDone} disabled={disableDoneButton}> 
+                        {doButtonText} 
+                    </button>
+                }
             </StyledScoreLine>
         </div>
     );

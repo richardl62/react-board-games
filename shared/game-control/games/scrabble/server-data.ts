@@ -3,6 +3,7 @@ import { GameState, isGameState, startingGameState } from "./moves/game-state.js
 import { SetupArg0 } from "../../game-control.js";
 
 export interface SetupOptions {
+    readonly allowIllegalWords: boolean;
     readonly enableHighScoringWords: boolean;
 }
 
