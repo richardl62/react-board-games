@@ -17,7 +17,7 @@ function sameRequestID(a: WsRequestId, b: WsRequestId) {
 export function useOnlineMatchActions(
     appGame: AppGame,
     player: Player,
-    { serverResponse, sendMatchRequest, connectionStatus}: ServerConnection
+    { serverResponse, sendMatchRequest }: ServerConnection
 ): {
     moves: UntypedMoves;
     events: EventsAPI;
@@ -63,9 +63,9 @@ export function useOnlineMatchActions(
     waitingForServerRef.current = waitingForServer;
 
     const makeAction = useCallback((action: WsRequestedAction) => {
-        // Don't attempt an action if disconnected or if waiting for a response to
-        // a prior action.
-        const ignoreAction = connectionStatus !== 'connected' || waitingForServerRef.current;
+        // Don't attempt an action if waiting for a response to a prior action.
+        // If disconnected, the action is allowed and will be queued by the connection hook.
+        const ignoreAction = waitingForServerRef.current;
         setLastActionIgnored(ignoreAction);
         
         if (ignoreAction) {
@@ -78,7 +78,7 @@ export function useOnlineMatchActions(
         waitingForServerRef.current = true;
         
         sendMatchRequest({ id, action });
-    }, [player.id, sendMatchRequest, connectionStatus]);
+    }, [player.id, sendMatchRequest]);
 
     const {moves, events } = useMemo(() => {
         const moves: UntypedMoves = {};
