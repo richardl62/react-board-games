@@ -10,12 +10,14 @@ import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
 import { processConnection, processDisconnection } from './process-connection.js';
 import { processActionRequest } from './process-action-request.js';
 
-// Used to keep track of live entities
-const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds - used to keep connections alive
-                                      // and to detect dead connections.
+// Used to keep connections alive and to detect dead connections.  A connection
+// that does not responed to pings for this interval will be closed.
+const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds 
                                       
-const IDLE_TIMEOUT = 20 * 60 * 1000; // 20 minutes - timeout for idle connections
-
+// Used to check if a connect is idle in the sense of there not been any user requests,
+// such as moves.  If the timeout is exceeded the connection will be closed.
+const IDLE_TIMEOUT = 60 * 60 * 1000; // 60 minutes 
+                                     
 //const draw = seededDraw(12345);
 const draw = () => Math.random();
 
@@ -40,7 +42,8 @@ const server = app.listen(PORT, () => {
 const wss = new WebSocketServer({ server });
 
 const isAliveMap = new WeakMap<object, boolean>();
-const lastSeenMap = new WeakMap<object, number>();
+
+const lastUserRequest = new WeakMap<object, number>();
 
 // Heartbeat runs once every 25s and checks EVERY connected client.
 const interval = setInterval(() => {
@@ -53,7 +56,7 @@ const interval = setInterval(() => {
     ws.ping();
 
     // Check if the connection is idle
-    const lastSeen = lastSeenMap.get(ws);
+    const lastSeen = lastUserRequest.get(ws);
     if (lastSeen !== undefined && Date.now() - lastSeen > IDLE_TIMEOUT) {
       ws.close(1000, 'Idle timeout');
     }
@@ -93,12 +96,12 @@ app.use((_req, res) => {
 
 wss.on('connection', (ws, req) => {
   isAliveMap.set(ws, true);
-  lastSeenMap.set(ws, Date.now());
+  lastUserRequest.set(ws, Date.now());
 
   ws.on('pong', () => isAliveMap.set(ws, true));
   
   ws.on('message', (message) => {
-    lastSeenMap.set(ws, Date.now()); // Update last activity
+    lastUserRequest.set(ws, Date.now()); // Update last activity
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
     processActionRequest(matches, ws, message.toString());
   });
