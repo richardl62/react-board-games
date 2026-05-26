@@ -90,6 +90,7 @@ export class Match {
         return {
             ...this.mutableData,
             playerData: this.players.map(p => p.publicMetadata()),
+            prngState: this.random.getState(),
         };
     }
 

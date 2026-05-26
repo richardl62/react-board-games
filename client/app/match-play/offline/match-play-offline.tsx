@@ -7,7 +7,7 @@ import { makeInitialMatchData } from "./make-initial-match-data";
 import { Ctx } from "@shared/game-control/ctx";
 import { makePlayerActions } from "./make-player-actions";
 import { useSearchParamData } from "@/url-tools";
-import { RandomAPI, seededDraw } from "@shared/utils/random-api";
+import { RandomAPI } from "@shared/utils/random-api";
 
 const OptionalDisplay = styled.div<{display_: boolean}>`
     display: ${props => props.display_? "block" : "none"};
@@ -18,7 +18,7 @@ function useRandomAPI() {
     return useMemo(() => {
         // seed must be in [0,1]
         const seed = (seedParam === null) ? Math.random() : 1.0 / (seedParam+1);
-        return new RandomAPI(seededDraw(seed));
+        return RandomAPI.fromSeed(seed);
     }, [seedParam]);
 
 }

@@ -21,6 +21,7 @@ export function makePlayerActions(
             setMatchData({
                 ...mutatedData,
                 playerData: matchData.playerData,
+                prngState: random.getState(),
                 errorInLastAction: null,
             });
         } catch (e) {

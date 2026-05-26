@@ -3,7 +3,7 @@ import { PublicPlayerMetadata } from "./lobby/types.js";
 
 // The infomation about a match that can be changed by a move or event.
 export interface MutableMatchData {
-    /** The context data (player order, etc.) for the match, changed by events 
+    /** The context data (player order, etc.) for the match, changed by events
      * also by moves that trigger events.
     */
     ctxData: CtxData;
@@ -16,6 +16,11 @@ export interface MutableMatchData {
 export interface ServerMatchData extends MutableMatchData {
     /** The players who have joined the game */
     playerData: PublicPlayerMetadata[];
+
+    /** PRNG state after the last move. Allows the client to reconstruct the
+     * same random sequence for optimistic updates. (PRNG -> Psuedo Random Number Generated)
+     **/
+    prngState: number;
 }
 
 export function isServerMatchData(obj: unknown): obj is ServerMatchData {

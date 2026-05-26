@@ -8,11 +8,9 @@ import { Player } from './player.js';
 // Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {
     private matches: Match[];
-    private random: RandomAPI;
-    
-    constructor(random: RandomAPI) {
+
+    constructor() {
         this.matches = [];
-        this.random = random;
     }
 
     /** Create a new match and return it's ID */
@@ -20,10 +18,10 @@ export class Matches {
     {
         // Base the id on the number of recorded matches.  This feels like
         // a bit of a kludge, but should ensure a unique id.
-        const matchID = (this.matches.length+1).toString(); 
+        const matchID = (this.matches.length+1).toString();
 
         const match = new Match(getGameControl(game),
-            {matchID, numPlayers, setupData, randomAPI: this.random }
+            {matchID, numPlayers, setupData, randomAPI: RandomAPI.fromSeed(Math.random()) }
         );
         this.matches.push(match);
 
