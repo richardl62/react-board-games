@@ -6,6 +6,7 @@ import { UntypedMoves } from "@/app-game-support/board-props";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ServerConnection } from "./use-server-connection";
 import { ActionRequestStatus } from "../game-board-wrapper";
+import { isWsClientConnection } from "@shared/ws-response-trigger";
 
 function sameRequestID(a: WsRequestId, b: WsRequestId) {
     return a.playerId === b.playerId && a.number === b.number;
@@ -39,6 +40,19 @@ export function useOnlineMatchActions(
             });
         }
     }, [responseId]);
+
+    // On reconnection the server sends a wsClientConnection trigger with the authoritative
+    // current state. Any in-flight request IDs will never receive a dedicated response
+    // (the server already broadcast while we were disconnected), so clear them here.
+    //
+    // TO DO: Reconsider this. The idea it to avoid waiting for a response that was lost due
+    // to network problems. But as it results in waitingForServer being false, it could 
+    // lead to the user attempting another move, or the same move again.
+    useEffect(() => {
+        if (serverResponse && isWsClientConnection(serverResponse.trigger)) {
+            setAwaitedResponses([]);
+        }
+    }, [serverResponse]);
 
     // Storing the waiting status in a ref as well a 'direct' variable. The ref allows
     // for the (probably rare) case where a user triggers an action twice before the state 
