@@ -7,28 +7,40 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ServerConnection } from "./use-server-connection";
 import { ActionRequestStatus } from "../game-board-wrapper";
 import { isWsClientConnection } from "@shared/ws-response-trigger";
+import { ServerMatchData } from "@shared/server-match-data";
+import { applyActionLocally } from "../apply-action-locally";
 
 function sameRequestID(a: WsRequestId, b: WsRequestId) {
     return a.playerId === b.playerId && a.number === b.number;
 }
 
 // Return actions - moves and events - suitable for an online game.
-// Also return status information about the action requested.
+// Also return status information about the action requested, and an
+// optimistic match state (applied locally before the server responds).
 export function useOnlineMatchActions(
     appGame: AppGame,
     player: Player,
-    { serverResponse, sendMatchRequest }: ServerConnection
+    { serverResponse, sendMatchRequest }: ServerConnection,
+    matchData: ServerMatchData,
 ): {
     moves: UntypedMoves;
     events: EventsAPI;
     actionRequestStatus: ActionRequestStatus;
+    optimisticMatchData: ServerMatchData | null;
 } {
     const [awaitedResponses, setAwaitedResponses] = useState<WsRequestId[]>([]);
-    const [ lastActionIgnored, setLastActionIgnored ] = useState(false);
-    
+    const [lastActionIgnored, setLastActionIgnored] = useState(false);
+    const [optimisticMatchData, setOptimisticMatchData] = useState<ServerMatchData | null>(null);
+
     const lastRequestNumber = useRef(0);
 
-    // Check if the server response is due to a client action rather than, say,  a connection warning.
+    // Read matchData synchronously in makeAction without it being a useCallback dependency
+    // (matchData changes on every server response; listing it as a dep would recreate moves/events
+    // on every response and cause unnecessary re-renders). Mirrors the waitingForServerRef pattern.
+    const matchDataRef = useRef(matchData);
+    matchDataRef.current = matchData;
+
+    // Check if the server response is due to a client action rather than, say, a connection warning.
     const trigger = serverResponse?.trigger;
     const responseId = isWsClientRequest(trigger) ? trigger.id : null;
 
@@ -38,24 +50,23 @@ export function useOnlineMatchActions(
                 const stillAwaited = prev.filter(id => !sameRequestID(id, responseId));
                 return stillAwaited.length !== prev.length ? stillAwaited : prev;
             });
+            setOptimisticMatchData(null);
         }
     }, [responseId]);
 
     // On reconnection the server sends a wsClientConnection trigger with the authoritative
-    // current state. Any in-flight request IDs will never receive a dedicated response
-    // (the server already broadcast while we were disconnected), so clear them here.
-    //
-    // TO DO: Reconsider this. The idea it to avoid waiting for a response that was lost due
-    // to network problems. But as it results in waitingForServer being false, it could 
-    // lead to the user attempting another move, or the same move again.
+    // current state. Clear optimistic state and any in-flight request IDs here.
+    // TO DO (Phase 2): Make this conditional — if messages were flushed from the queue on
+    // reconnect, leave awaitedResponses and optimisticMatchData intact; the response is coming.
     useEffect(() => {
         if (serverResponse && isWsClientConnection(serverResponse.trigger)) {
             setAwaitedResponses([]);
+            setOptimisticMatchData(null);
         }
     }, [serverResponse]);
 
-    // Storing the waiting status in a ref as well a 'direct' variable. The ref allows
-    // for the (probably rare) case where a user triggers an action twice before the state 
+    // Storing the waiting status in a ref as well as a 'direct' variable. The ref allows
+    // for the (probably rare) case where a user triggers an action twice before the state
     // updates. The variable is for use in dependencies in later hooks (linters do not like
     // the use of waitingForServerRef.current as a dependency).
     const waitingForServer = awaitedResponses.length > 0;
@@ -67,8 +78,14 @@ export function useOnlineMatchActions(
         // If disconnected, the action is allowed and will be queued by the connection hook.
         const ignoreAction = waitingForServerRef.current;
         setLastActionIgnored(ignoreAction);
-        
-        if (ignoreAction) {
+        if (ignoreAction) return;
+
+        // Apply the move locally for immediate display, using the same PRNG state the server
+        // will use. If local validation fails (shouldn't happen with a correct UI), abort.
+        try {
+            setOptimisticMatchData(applyActionLocally(appGame, action, player.id, matchDataRef.current));
+        } catch (_e) {
+            setLastActionIgnored(true);
             return;
         }
 
@@ -76,14 +93,14 @@ export function useOnlineMatchActions(
         const id: WsRequestId = { playerId: player.id, number: lastRequestNumber.current };
         setAwaitedResponses(prev => [...prev, id]);
         waitingForServerRef.current = true;
-        
-        sendMatchRequest({ id, action });
-    }, [player.id, sendMatchRequest]);
 
-    const {moves, events } = useMemo(() => {
+        sendMatchRequest({ id, action });
+    }, [appGame, player.id, sendMatchRequest]);
+
+    const { moves, events } = useMemo(() => {
         const moves: UntypedMoves = {};
         for (const moveName of Object.keys(appGame.moves)) {
-            moves[moveName] = (arg) => makeAction({move: moveName, arg});
+            moves[moveName] = (arg) => makeAction({ move: moveName, arg });
         }
 
         const events: EventsAPI = {
@@ -97,6 +114,7 @@ export function useOnlineMatchActions(
     return useMemo(() => ({
         moves,
         events,
-        actionRequestStatus: {waitingForServer, lastActionIgnored },
-    }), [moves, events, waitingForServer, lastActionIgnored]);      
+        actionRequestStatus: { waitingForServer, lastActionIgnored },
+        optimisticMatchData,
+    }), [moves, events, waitingForServer, lastActionIgnored, optimisticMatchData]);
 }

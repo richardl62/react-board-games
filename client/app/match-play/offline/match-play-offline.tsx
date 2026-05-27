@@ -40,9 +40,7 @@ export function MatchPlayOffline({game, options}: {
     const boards : JSX.Element[] = [];
     for (const playerID of ctx.playOrder) {
         
-        const { moves, events } = makePlayerActions(
-            game, playerID, random, matchData, setMatchData
-        );
+        const { moves, events } = makePlayerActions(game, playerID, matchData, setMatchData);
 
         // Create a board that is optionally displayed. (Early code created either a board
         // or a blank element. However, this caused the Scrabble dictionary to be reloaded 

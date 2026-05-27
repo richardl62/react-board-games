@@ -17,9 +17,13 @@ interface StandardMatchPlayProps {
 }
 
 export function StandardMatchPlay({ game, player, serverConnection }: StandardMatchPlayProps): JSX.Element {
-    const {moves, events, actionRequestStatus} = useOnlineMatchActions(game, player, serverConnection);
-    const { connectionStatus, serverResponse} = serverConnection;
+    const { connectionStatus, serverResponse } = serverConnection;
+    const { moves, events, actionRequestStatus, optimisticMatchData } =
+        useOnlineMatchActions(game, player, serverConnection, serverResponse.matchData);
     const { debugMode } = useSearchParamData();
+
+    const displayedMatchData = optimisticMatchData ?? serverResponse.matchData;
+    const displayedError = optimisticMatchData !== null ? null : serverResponse.errorInLastAction;
 
     return <div>
         {debugMode && <DebugModeActions serverConnection={serverConnection} />}
@@ -28,8 +32,8 @@ export function StandardMatchPlay({ game, player, serverConnection }: StandardMa
             playerID={player.id}
             connectionStatus={connectionStatus}
             actionRequestStatus={actionRequestStatus}
-            serverMatchData={serverResponse.matchData}
-            errorInLastAction={serverResponse.errorInLastAction}
+            serverMatchData={displayedMatchData}
+            errorInLastAction={displayedError}
             moves={moves}
             events={events}
         />
