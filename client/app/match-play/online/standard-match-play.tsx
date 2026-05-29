@@ -23,6 +23,10 @@ export function StandardMatchPlay({ game, player, serverConnection }: StandardMa
     const { debugMode } = useSearchParamData();
 
     const displayedMatchData = optimisticMatchData ?? serverResponse.matchData;
+    // While the optimistic state is showing, serverResponse.errorInLastAction is stale — it
+    // reflects a previous action, not the current one. Suppress it to avoid showing a misleading
+    // error during the wait. If the server rejects this move, optimisticMatchData will be cleared
+    // at the same time as errorInLastAction is updated, so the error will appear on the next render.
     const displayedError = optimisticMatchData !== null ? null : serverResponse.errorInLastAction;
 
     return <div>

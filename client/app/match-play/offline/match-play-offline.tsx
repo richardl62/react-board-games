@@ -22,6 +22,7 @@ function useRandomAPI() {
     }, [seedParam]);
 
 }
+
 export function MatchPlayOffline({game, options}: {
     game:AppGame,
     options: OfflineOptions,
@@ -29,9 +30,9 @@ export function MatchPlayOffline({game, options}: {
 
     const {numPlayers, passAndPlay,  setupData} = options;
 
+    // To do: Consider merging useRandomAPI and makeInitialMatchData into a single hook.
     const random = useRandomAPI();
-    
-    const [ matchData, setMatchData ] = useState(
+   const [ matchData, setMatchData ] = useState(
         makeInitialMatchData(game, numPlayers, random, setupData)
     );
 
