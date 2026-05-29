@@ -20,7 +20,7 @@ function sameRequestID(a: WsRequestId, b: WsRequestId) {
 export function useOnlineMatchActions(
     appGame: AppGame,
     player: Player,
-    { serverResponse, sendMatchRequest }: ServerConnection,
+    { serverResponse, sendMatchRequest, flushedQueueOnReconnect }: ServerConnection,
     matchData: ServerMatchData,
 ): {
     moves: UntypedMoves;
@@ -55,15 +55,18 @@ export function useOnlineMatchActions(
     }, [responseId]);
 
     // On reconnection the server sends a wsClientConnection trigger with the authoritative
-    // current state. Clear optimistic state and any in-flight request IDs here.
-    // TO DO (Phase 2): Make this conditional — if messages were flushed from the queue on
-    // reconnect, leave awaitedResponses and optimisticMatchData intact; the response is coming.
+    // current state. If the queue was empty at reconnect, any in-flight response is lost —
+    // clear everything so the player can act again. If messages were flushed from the queue,
+    // the server is about to process them and will respond normally, so leave the in-flight
+    // state intact.
     useEffect(() => {
         if (serverResponse && isWsClientConnection(serverResponse.trigger)) {
-            setAwaitedResponses([]);
-            setOptimisticMatchData(null);
+            if (!flushedQueueOnReconnect.current) {
+                setAwaitedResponses([]);
+                setOptimisticMatchData(null);
+            }
         }
-    }, [serverResponse]);
+    }, [serverResponse, flushedQueueOnReconnect]);
 
     // Storing the waiting status in a ref as well as a 'direct' variable. The ref allows
     // for the (probably rare) case where a user triggers an action twice before the state

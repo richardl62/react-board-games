@@ -17,9 +17,14 @@ const maxReconnectInterval = 20000; // 20 seconds
 
 export interface ServerConnection {
     connectionStatus: ConnectionStatus;
-    
+
     serverResponse: WsServerResponse | null;
     sendMatchRequest: (data: WsClientRequest | WsTestAction) => void;
+
+    // True immediately after a reconnect during which queued messages were flushed to the server.
+    // Allows useOnlineMatchActions to distinguish "response lost during disconnect" (clear
+    // in-flight state) from "move was queued and just sent" (leave in-flight state intact).
+    flushedQueueOnReconnect: { readonly current: boolean };
 }
 
 export function useServerConnection({ matchID, player }: { matchID: MatchID; player: Player }) : ServerConnection {
@@ -33,6 +38,9 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
     }, [matchID.mid, player.id, player.credentials]);
 
     const attemptReconnection = useRef(false);
+    const isConnectedRef = useRef(false);
+    const queuedMessageCount = useRef(0);
+    const flushedQueueOnReconnect = useRef(false);
     const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>( "connecting" );
 
     const { sendJsonMessage, lastJsonMessage } = useWebSocket(socketUrl, {
@@ -67,11 +75,15 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
         },
 
         onOpen: () => {
+            flushedQueueOnReconnect.current = queuedMessageCount.current > 0;
+            queuedMessageCount.current = 0;
+            isConnectedRef.current = true;
             attemptReconnection.current = false;
             setConnectionStatus("connected");
         },
 
         onClose: (event) => {
+            isConnectedRef.current = false;
             attemptReconnection.current = !( event.code >= 4000 && event.code < 5000);
 
             setConnectionStatus({
@@ -98,9 +110,17 @@ export function useServerConnection({ matchID, player }: { matchID: MatchID; pla
         return lastJsonMessage
     }, [lastJsonMessage]);
 
-    return { 
-        serverResponse, 
-        sendMatchRequest: sendJsonMessage, 
+    const sendMatchRequest = (data: WsClientRequest | WsTestAction) => {
+        if (!isConnectedRef.current) {
+            queuedMessageCount.current += 1;
+        }
+        sendJsonMessage(data);
+    };
+
+    return {
+        serverResponse,
+        sendMatchRequest,
         connectionStatus,
+        flushedQueueOnReconnect,
     };
 }
