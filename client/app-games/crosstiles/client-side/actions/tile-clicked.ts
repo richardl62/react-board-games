@@ -43,7 +43,7 @@ export function tileClicked(state: ReducerState, id: SquareID): ReducerState {
 function newClickMoveStart(cms: ClickMoveStart | null, id: SquareID): ClickMoveStart | null {
     sAssert(id.container === "grid");
 
-    const currentDirection = (cms && cms.row === id.row && cms.col === id.col) ? cms.direction : null;
+    const currentDirection = (cms?.row === id.row && cms.col === id.col) ? cms.direction : null;
 
     const newDirection = nextCickMoveDirection(currentDirection);
 
