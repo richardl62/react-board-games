@@ -12,7 +12,7 @@ import { MoveArg0 } from "./move-fn.js";
  * is returned.
  */
 export function matchMove<Param>(
-    GameControl: Readonly<GameControl>,
+    gameControl: Readonly<GameControl>,
     moveName: string,
     random: RandomAPI, // Can be changed
     playerID: string,
@@ -20,7 +20,7 @@ export function matchMove<Param>(
     param: Param
 ) : MutableMatchData {
     const { state, ctxData } = structuredClone(matchData);
-    
+
     const ctx = new Ctx(ctxData);
     const arg0: MoveArg0<unknown> = {
         G: state,
@@ -33,16 +33,16 @@ export function matchMove<Param>(
         }
     };
 
-    const func = GameControl.moves[moveName];
+    const func = gameControl.moves[moveName];
     if (!func) {
-        throw new Error(`Move "${moveName}" not found in game ${GameControl.name}`);
+        throw new Error(`Move "${moveName}" not found in game ${gameControl.name}`);
     }
 
     if (ctx.matchover) {
         throw new Error("Move attempted after match is over.");
     }
 
-    if (ctx.currentPlayer !== playerID && GameControl.turnOrder !== AllActive) {
+    if (ctx.currentPlayer !== playerID && gameControl.turnOrder !== AllActive) {
         throw new Error(`It is not player ${playerID}'s turn.`);
     }
 

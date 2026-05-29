@@ -1,7 +1,7 @@
 // Actions for test/debug purposes.  These are sent over the websocket in the
-// same way as actions, i.e. moves and events, but don't they don't trigger a 
+// same way as actions, i.e. moves and events, but they don't trigger a
 // direct response. (They can trigger an indirect response, e.g. reports of a
-// closed connect).
+// closed connection).
 export interface WsCloseConnection {
     closeConnection: true;
 }

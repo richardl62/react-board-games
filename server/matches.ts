@@ -22,8 +22,8 @@ export class Matches {
         // a bit of a kludge, but should ensure a unique id.
         const matchID = (this.matches.length+1).toString(); 
 
-        const match = new Match(getGameControl(game), 
-            {matchID, numPlayers, setupData, randomAPi: this.random }
+        const match = new Match(getGameControl(game),
+            {matchID, numPlayers, setupData, randomAPI: this.random }
         );
         this.matches.push(match);
 
@@ -38,14 +38,7 @@ export class Matches {
     /** Get all the matches of a particular game (e.g. Scrabble) */
     getMatches(gameName: string) : Match[]
     {
-        const matches: Match[] = [];
-        for( const match of this.matches) {
-            if ( match.gameName === gameName ) {
-                matches.push(match);
-            }
-        }
-
-        return matches;
+        return this.matches.filter(m => m.gameName === gameName);
     }
 
     findMatchAndPlayer(ws: WebSocket) : {match: Match, player: Player} | null {

@@ -6,19 +6,18 @@ import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
 import { Matches } from './matches.js';
 import { defaultPort } from '../shared/default-port.js';
-import { RandomAPI /*, seededDraw*/ } from '../shared/utils/random-api.js';
+import { RandomAPI } from '../shared/utils/random-api.js';
 import { processConnection, processDisconnection } from './process-connection.js';
 import { processActionRequest } from './process-action-request.js';
 
 // Used to keep connections alive and to detect dead connections.  A connection
-// that does not responed to pings for this interval will be closed.
-const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds 
-                                      
-// Used to check if a connect is idle in the sense of there not been any user requests,
+// that does not respond to pings for this interval will be closed.
+const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds
+
+// Used to check if a connection is idle in the sense of there not being any user requests,
 // such as moves.  If the timeout is exceeded the connection will be closed.
 const IDLE_TIMEOUT = 60 * 60 * 1000; // 60 minutes 
                                      
-//const draw = seededDraw(12345);
 const draw = () => Math.random();
 
 const random = new RandomAPI(draw);
@@ -89,7 +88,7 @@ app.get('/lobby', (req, res) => {
 
 app.use(express.static(distPath));
 
-// Fallback - Catch-all for SPA routing'
+// Fallback - Catch-all for SPA routing
 app.use((_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });

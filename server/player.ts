@@ -1,4 +1,4 @@
-import { WebSocket  } from 'ws'; // Import the ws library
+import { WebSocket } from 'ws';
 import { PublicPlayerMetadata } from '../shared/lobby/types.js';
 import { sAssert } from '../shared/utils/assert.js';
 import { createAlphanumericString } from '../shared/utils/random-string.js';
@@ -24,7 +24,7 @@ import { createAlphanumericString } from '../shared/utils/random-string.js';
 //
 export class Player {
     
-     constructor(id: string) {
+    constructor(id: string) {
         this.id = id;
 
         this.credentials = createAlphanumericString(8);

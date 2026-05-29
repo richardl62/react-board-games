@@ -9,7 +9,7 @@ import { closeWithReason } from './web-socket-actions.js';
 // if the web socket is not associated with a player. Other errors (for example invalid moves)
 // are caught and reported back to the client via broadcastMatchData.
 export function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string) {
-const found = matches.findMatchAndPlayer(ws);
+    const found = matches.findMatchAndPlayer(ws);
     if (!found) {
         throw new Error('WebSocket not associated with a player');
     }

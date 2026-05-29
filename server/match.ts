@@ -26,16 +26,16 @@ export class Match {
 
     constructor(
         gameControl: GameControl,
-        {  matchID, numPlayers, setupData, randomAPi }: {
+        {  matchID, numPlayers, setupData, randomAPI }: {
             matchID: string,
             numPlayers: number,
             setupData: unknown,
-            randomAPi: RandomAPI,
+            randomAPI: RandomAPI,
         }
     ) {
         this.definition = gameControl;
         this.matchID = matchID;
-        this.random = randomAPi;
+        this.random = randomAPI;
                    
         const ctxData = makeCtxData(numPlayers);
         const ctx = new Ctx(ctxData);
@@ -46,7 +46,7 @@ export class Match {
         }
 
         const state: unknown = gameControl.setup(
-            { ctx, random: randomAPi },
+            { ctx, random: randomAPI },
             setupData
         );
 
