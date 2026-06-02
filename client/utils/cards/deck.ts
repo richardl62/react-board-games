@@ -1,1 +1,1 @@
-export * from "../../../shared/utils/cards/deck.js";
+export * from '../../../shared/utils/cards/deck.js';

@@ -1,40 +1,39 @@
-import { sAssert } from "../assert.js";
+import { sAssert } from '../assert.js';
 
-/** A letter that is supplied independantly of the set of available letters passed 
+/** A letter that is supplied independantly of the set of available letters passed
  * to a WordConstraint (e.g. a letter from a crossing word in Scrabble.)
  */
 interface GivenLetter {
-    /** Must be a single letter */
-    given: string;
+  /** Must be a single letter */
+  given: string;
 
-    allowed?: undefined;
+  allowed?: undefined;
 }
 
-export function givenLetter(given: string) : GivenLetter {
-    sAssert(given.length === 1);
-    return {given};
+export function givenLetter(given: string): GivenLetter {
+  sAssert(given.length === 1);
+  return { given };
 }
 
-/** A constraint on a letter (e.g. to ensure that a crossing word in Scrabble is 
+/** A constraint on a letter (e.g. to ensure that a crossing word in Scrabble is
  * valid). */
 interface AllowedLetters {
-    given?: undefined;
+  given?: undefined;
 
-    /** The string acts as a set of letters. */
-    allowed: string;
+  /** The string acts as a set of letters. */
+  allowed: string;
 }
 
-export function allowedLetters(allowed: string) : AllowedLetters {
-    return {allowed};
+export function allowedLetters(allowed: string): AllowedLetters {
+  return { allowed };
 }
 
-export type LetterRequirement = GivenLetter | AllowedLetters; 
+export type LetterRequirement = GivenLetter | AllowedLetters;
 
-export function isPermitted(letter: string, constraint: LetterRequirement) : boolean {
-
-    if (constraint.given !== undefined) {
-        return letter === constraint.given;
-    } else {
-        return constraint.allowed.includes(letter);
-    }
+export function isPermitted(letter: string, constraint: LetterRequirement): boolean {
+  if (constraint.given !== undefined) {
+    return letter === constraint.given;
+  } else {
+    return constraint.allowed.includes(letter);
+  }
 }

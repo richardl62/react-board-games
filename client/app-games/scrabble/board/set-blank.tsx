@@ -1,8 +1,8 @@
-import { JSX, useState } from "react";
-import styled from "styled-components";
-import { Letter, letters } from "@game-control/games/scrabble/config/letters";
-import { useTurnControlData } from "./use-turn-control-data";
-import { useScrabbleState } from "../client-side/scrabble-state";
+import { JSX, useState } from 'react';
+import styled from 'styled-components';
+import { Letter, letters } from '@game-control/games/scrabble/config/letters';
+import { useTurnControlData } from './use-turn-control-data';
+import { useScrabbleState } from '../client-side/scrabble-state';
 
 const StyledLetterChooser = styled.div`
   display: inline-grid;
@@ -19,31 +19,37 @@ const StyledLetterChooser = styled.div`
 `;
 
 interface LetterSelectorProps {
-  recordSelection: (l: Letter) => void
+  recordSelection: (l: Letter) => void;
 }
-function LetterSelector({recordSelection} : LetterSelectorProps): JSX.Element {
-    return (<StyledLetterChooser>
-        {letters.map(l => <div key={l} onClick={()=>recordSelection(l)}>
-            {l}
-        </div>)}
-    </StyledLetterChooser>);
+function LetterSelector({ recordSelection }: LetterSelectorProps): JSX.Element {
+  return (
+    <StyledLetterChooser>
+      {letters.map((l) => (
+        <div key={l} onClick={() => recordSelection(l)}>
+          {l}
+        </div>
+      ))}
+    </StyledLetterChooser>
+  );
 }
 
 export function SetBlank(): JSX.Element | null {
-    const { unsetBlank } = useTurnControlData();
-    const { dispatch } = useScrabbleState();
-    const [ showLetterSelector, setShowLetterSelector] = useState(false);
-    
-    if (!unsetBlank) {
-        return null;
-    }
+  const { unsetBlank } = useTurnControlData();
+  const { dispatch } = useScrabbleState();
+  const [showLetterSelector, setShowLetterSelector] = useState(false);
 
-    const recordSelectedLetter = (l: Letter) => {
-        dispatch({ type: "setBlank", data: { id: unsetBlank, letter: l } });
-        setShowLetterSelector(false);
-    };
+  if (!unsetBlank) {
+    return null;
+  }
 
-    return showLetterSelector ?
-        <LetterSelector recordSelection={recordSelectedLetter}/> :
-        <button onClick={() => setShowLetterSelector(true)}>Set Blank</button>; 
+  const recordSelectedLetter = (l: Letter) => {
+    dispatch({ type: 'setBlank', data: { id: unsetBlank, letter: l } });
+    setShowLetterSelector(false);
+  };
+
+  return showLetterSelector ? (
+    <LetterSelector recordSelection={recordSelectedLetter} />
+  ) : (
+    <button onClick={() => setShowLetterSelector(true)}>Set Blank</button>
+  );
 }

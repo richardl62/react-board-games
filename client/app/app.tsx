@@ -1,26 +1,26 @@
-import { AppGame, GameCategory } from "@/app-game-support";
-import { standardOuterMargin } from "@/app-game-support/styles";
-import { appGames } from "@/app-games/app-games";
-import { JSX, useEffect } from "react";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import styled from "styled-components";
-import "./app.css";
-import { GamePage } from "./game-page";
+import { AppGame, GameCategory } from '@/app-game-support';
+import { standardOuterMargin } from '@/app-game-support/styles';
+import { appGames } from '@/app-games/app-games';
+import { JSX, useEffect } from 'react';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import styled from 'styled-components';
+import './app.css';
+import { GamePage } from './game-page';
 
 const HomePageStyles = styled.div`
-    font-size: 18px;
-    h1 {
-        font-size: 1.2em;
-        font-weight: bold;
-    }
-    
-    h2 {
-        margin-top: 0.5em;
-        font-size: 18px;
-        font-weight: 600;
-    }
+  font-size: 18px;
+  h1 {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
 
-    margin: ${standardOuterMargin};
+  h2 {
+    margin-top: 0.5em;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  margin: ${standardOuterMargin};
 `;
 
 const ErrorMessage = styled.div`
@@ -30,93 +30,99 @@ const ErrorMessage = styled.div`
 `;
 
 function gamePath(game: AppGame): string {
-    return "/" + game.name;
+  return '/' + game.name;
 }
 
 interface LinkListProps {
-    games: AppGame[];
-    category: GameCategory;
-  }
-  
+  games: AppGame[];
+  category: GameCategory;
+}
+
 function CategoryLinks(props: LinkListProps) {
-    const { games, category } =  props;
-    const selectedGames =  games.filter(appGame => appGame.category === category);
+  const { games, category } = props;
+  const selectedGames = games.filter((appGame) => appGame.category === category);
 
-    const link = (game: AppGame) => {
-        const to = {
-            pathname: gamePath(game),
-            search: window.location.search,
-        };
-
-        return <li key={game.name}>
-            <Link to={to}>{game.displayName}</Link>
-        </li>;
+  const link = (game: AppGame) => {
+    const to = {
+      pathname: gamePath(game),
+      search: window.location.search,
     };
 
-    if(selectedGames.length === 0) {
-        return null;
-    }
+    return (
+      <li key={game.name}>
+        <Link to={to}>{game.displayName}</Link>
+      </li>
+    );
+  };
 
-    return <>
-        <h2>{category}</h2>
-        <ul>
-            {selectedGames.map(link)}
-        </ul>
-    </>;
+  if (selectedGames.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <h2>{category}</h2>
+      <ul>{selectedGames.map(link)}</ul>
+    </>
+  );
 }
 
 interface HomePageProps {
-    games: AppGame[];
+  games: AppGame[];
 }
-  
+
 function GameLinks({ games }: HomePageProps) {
-    return (
-        <div>
-            {Object.values(GameCategory).map((category : GameCategory) =>
-                <CategoryLinks key={category} games={games} category={category} />
-            )}
-        </div>
-    );
+  return (
+    <div>
+      {Object.values(GameCategory).map((category: GameCategory) => (
+        <CategoryLinks key={category} games={games} category={category} />
+      ))}
+    </div>
+  );
 }
 
 function HomePage(props: HomePageProps) {
-    return <HomePageStyles>
-        <h1>Available Games</h1>
-        <GameLinks {...props} />
-    </HomePageStyles>;
+  return (
+    <HomePageStyles>
+      <h1>Available Games</h1>
+      <GameLinks {...props} />
+    </HomePageStyles>
+  );
 }
 
 function PageNotFound(props: HomePageProps) {
-    return <HomePageStyles>
-        <ErrorMessage>404: Page Not Found</ErrorMessage>
-        <div>You could try one of these links:</div>
-        <GameLinks {...props} />
-    </HomePageStyles>;
-         
+  return (
+    <HomePageStyles>
+      <ErrorMessage>404: Page Not Found</ErrorMessage>
+      <div>You could try one of these links:</div>
+      <GameLinks {...props} />
+    </HomePageStyles>
+  );
 }
 
 /**
  * Games App.
  */
 export function App(): JSX.Element {
-    
-    useEffect(() => {
-        document.title = "Richard's Games";
-    }, []);
+  useEffect(() => {
+    document.title = "Richard's Games";
+  }, []);
 
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route key="/" path="/" element={<HomePage games={appGames} />} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route key="/" path="/" element={<HomePage games={appGames} />} />
 
-                {appGames.map(appGame => <Route
-                    key={appGame.name}
-                    path={gamePath(appGame)}
-                    element={<GamePage game={appGame}/>}
-                />)}
+        {appGames.map((appGame) => (
+          <Route
+            key={appGame.name}
+            path={gamePath(appGame)}
+            element={<GamePage game={appGame} />}
+          />
+        ))}
 
-                <Route key="pageNotFound" path="/*" element={<PageNotFound games={appGames} />} />
-            </Routes>
-        </BrowserRouter>
-    );
+        <Route key="pageNotFound" path="/*" element={<PageNotFound games={appGames} />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }

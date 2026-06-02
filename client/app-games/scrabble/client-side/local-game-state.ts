@@ -1,23 +1,22 @@
-import { sAssert } from "@utils/assert";
-import { Rack } from "./board-and-rack";
-import { BoardData, GameState } from "@game-control/games/scrabble/moves/game-state";
+import { sAssert } from '@utils/assert';
+import { Rack } from './board-and-rack';
+import { BoardData, GameState } from '@game-control/games/scrabble/moves/game-state';
 
 export interface LocalGameState {
-    board: BoardData;
-    rack: Rack;
-    playerData: GameState["playerData"];
-    nTilesInBag: number;
+  board: BoardData;
+  rack: Rack;
+  playerData: GameState['playerData'];
+  nTilesInBag: number;
 }
 
-export function getLocalGameState(state: GameState, playerID: string): LocalGameState
-{
-    sAssert(state.playerData[playerID], "Player ID appears to be invalid");
+export function getLocalGameState(state: GameState, playerID: string): LocalGameState {
+  sAssert(state.playerData[playerID], 'Player ID appears to be invalid');
 
-    const rack = state.playerData[playerID].rack;
-    return {
-        board: state.board,
-        rack: rack,
-        nTilesInBag: state.bag.length,
-        playerData: state.playerData,
-    };
+  const rack = state.playerData[playerID].rack;
+  return {
+    board: state.board,
+    rack: rack,
+    nTilesInBag: state.bag.length,
+    playerData: state.playerData,
+  };
 }

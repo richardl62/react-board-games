@@ -1,8 +1,8 @@
-import { ClientMoveFunctions } from "../../move-fn.js";
-import { add } from "./add.js";
+import { ClientMoveFunctions } from '../../move-fn.js';
+import { add } from './add.js';
 
 export const moves = {
-    add
+  add,
 };
 
 export type ClientMoves = ClientMoveFunctions<typeof moves>;

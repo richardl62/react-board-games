@@ -1,83 +1,82 @@
-import { ScrabbleGameProps } from "./srcabble-game-props";
-import { ScrabbleConfig } from "@game-control/games/scrabble/config/scrabble-config";
-import { GameState } from "@game-control/games/scrabble/moves/game-state";
-import { getLocalGameState, LocalGameState } from "./local-game-state";
-import { WordPosition } from "@utils/word-finder/get-legal-words/word-position";
-import { LegalWordAndScore } from "../high-scoring-words/get-high-scoring-words";
+import { ScrabbleGameProps } from './srcabble-game-props';
+import { ScrabbleConfig } from '@game-control/games/scrabble/config/scrabble-config';
+import { GameState } from '@game-control/games/scrabble/moves/game-state';
+import { getLocalGameState, LocalGameState } from './local-game-state';
+import { WordPosition } from '@utils/word-finder/get-legal-words/word-position';
+import { LegalWordAndScore } from '../high-scoring-words/get-high-scoring-words';
 
 export interface ReducerState extends LocalGameState {
-    gameStates: GameState[];
+  gameStates: GameState[];
 
-    // KLUDGE? The members below are used only for sanity checks.
-    scrabbleGameProps: ScrabbleGameProps;
-    config: ScrabbleConfig;
+  // KLUDGE? The members below are used only for sanity checks.
+  scrabbleGameProps: ScrabbleGameProps;
+  config: ScrabbleConfig;
 
-    focusInWordChecker: boolean;
+  focusInWordChecker: boolean;
 
-    reviewGameHistory: { historyPosition: number } | false;
-    
-    highScoringWords: { 
-        possibleWords: LegalWordAndScore[],
-        position: number; 
-    } | null;
+  reviewGameHistory: { historyPosition: number } | false;
 
-    clickMoveStart: WordPosition | null;
+  highScoringWords: {
+    possibleWords: LegalWordAndScore[];
+    position: number;
+  } | null;
+
+  clickMoveStart: WordPosition | null;
 }
 
 interface SimplifedReducerState {
-    clickMoveStart: ReducerState["clickMoveStart"];
-    config: ReducerState["config"];
-    reviewGameHistory: ReducerState["reviewGameHistory"];
+  clickMoveStart: ReducerState['clickMoveStart'];
+  config: ReducerState['config'];
+  reviewGameHistory: ReducerState['reviewGameHistory'];
 }
 
 export function initialReducerState(
-    scrabbleGameProps: ScrabbleGameProps,
-    config: ScrabbleConfig,
+  scrabbleGameProps: ScrabbleGameProps,
+  config: ScrabbleConfig,
 ): ReducerState {
+  const simplifiedState: SimplifedReducerState = {
+    clickMoveStart: null,
+    reviewGameHistory: false,
+    config: config,
+  };
 
-    const simplifiedState : SimplifedReducerState = {
-        clickMoveStart: null,
-        reviewGameHistory: false,
-        config: config,
-    };
-
-    return newReducerState(scrabbleGameProps, simplifiedState);
+  return newReducerState(scrabbleGameProps, simplifiedState);
 }
 
 export function newReducerState(
-    scrabbleGameProps: ScrabbleGameProps,
-    simplifiedState: SimplifedReducerState,
+  scrabbleGameProps: ScrabbleGameProps,
+  simplifiedState: SimplifedReducerState,
 ): ReducerState {
-    const { states } = scrabbleGameProps.G;
-    const historyPosition = simplifiedState.reviewGameHistory ? 
-        simplifiedState.reviewGameHistory.historyPosition : states.length-1;
+  const { states } = scrabbleGameProps.G;
+  const historyPosition = simplifiedState.reviewGameHistory
+    ? simplifiedState.reviewGameHistory.historyPosition
+    : states.length - 1;
 
-    let playerID;
-    if(simplifiedState.reviewGameHistory) {
-        // View the game from the perspective of the current player
-        playerID = states[simplifiedState.reviewGameHistory.historyPosition].currentPlayer;
-    } else {
-        playerID = scrabbleGameProps.playerID;
-    }
+  let playerID;
+  if (simplifiedState.reviewGameHistory) {
+    // View the game from the perspective of the current player
+    playerID = states[simplifiedState.reviewGameHistory.historyPosition].currentPlayer;
+  } else {
+    playerID = scrabbleGameProps.playerID;
+  }
 
-    let { reviewGameHistory } = simplifiedState;
-    // Enable game history if the game is over.
-    const gameOver = !!states.at(-1)?.winnerIds;
-    if (gameOver && !reviewGameHistory) {
-        reviewGameHistory = { historyPosition: states.length - 1 };
-    }
+  let { reviewGameHistory } = simplifiedState;
+  // Enable game history if the game is over.
+  const gameOver = !!states.at(-1)?.winnerIds;
+  if (gameOver && !reviewGameHistory) {
+    reviewGameHistory = { historyPosition: states.length - 1 };
+  }
 
-    return {
-        ...simplifiedState,
-        ...getLocalGameState(states[historyPosition], playerID),
-        focusInWordChecker: false,
-        
-        gameStates: states,
+  return {
+    ...simplifiedState,
+    ...getLocalGameState(states[historyPosition], playerID),
+    focusInWordChecker: false,
 
-        highScoringWords: null,
-        reviewGameHistory,
+    gameStates: states,
 
-        scrabbleGameProps: scrabbleGameProps,
-    };
+    highScoringWords: null,
+    reviewGameHistory,
+
+    scrabbleGameProps: scrabbleGameProps,
+  };
 }
-

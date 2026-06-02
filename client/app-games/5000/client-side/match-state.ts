@@ -1,70 +1,71 @@
-import { useState } from "react";
-import { useStandardBoardContext } from "../../../app-game-support/standard-board";
-import { BoardProps } from "../../../app-game-support/board-props";
-import { ClientMoves } from "@game-control/games/5000/moves/moves";
-import { ServerData } from "@game-control/games/5000/server-data";
-import { useTimedSteps } from "@utils/use-timed-steps";
+import { useState } from 'react';
+import { useStandardBoardContext } from '../../../app-game-support/standard-board';
+import { BoardProps } from '../../../app-game-support/board-props';
+import { ClientMoves } from '@game-control/games/5000/moves/moves';
+import { ServerData } from '@game-control/games/5000/server-data';
+import { useTimedSteps } from '@utils/use-timed-steps';
 
 const spinTime = 1000; // milliseconds
 const nRotations = 1;
 const stepSize = 30;
 
 function diceRotationSteps() {
-    const from = 0;
-    const to = nRotations * 360;
-    const nSteps = (to - from) / stepSize;
-    const stepTime = spinTime / nSteps;
+  const from = 0;
+  const to = nRotations * 360;
+  const nSteps = (to - from) / stepSize;
+  const stepTime = spinTime / nSteps;
 
-    return {from, to, stepSize, stepTime};
-}   
+  return { from, to, stepSize, stepTime };
+}
 
 type TypedGameProps = BoardProps<ServerData, ClientMoves>;
 
 interface GameState extends TypedGameProps {
-    diceRotation: {
-        angle: number,
-        // If true, all dice should be rollled. If false, only the
-        // dice that were not held should be rolled.
-        allDice: boolean,
-    } | null;
-    holdAllowed: boolean;
+  diceRotation: {
+    angle: number;
+    // If true, all dice should be rollled. If false, only the
+    // dice that were not held should be rolled.
+    allDice: boolean;
+  } | null;
+  holdAllowed: boolean;
 }
 
-export function useMatchState() : GameState {
-    const gameProps = useStandardBoardContext() as TypedGameProps;
-    const [ oldGameProps, setOldGameProps ] = useState(gameProps);
-    const [ oldRollCount, setOldRollCount ] = useState(gameProps.G.rollCount);
-    const [rotationAngle, startRotation] = useTimedSteps(diceRotationSteps());
+export function useMatchState(): GameState {
+  const gameProps = useStandardBoardContext() as TypedGameProps;
+  const [oldGameProps, setOldGameProps] = useState(gameProps);
+  const [oldRollCount, setOldRollCount] = useState(gameProps.G.rollCount);
+  const [rotationAngle, startRotation] = useTimedSteps(diceRotationSteps());
 
-    const { playerID } = gameProps;
-    const { currentPlayer } = gameProps.ctx;
-    const { turnOverRollCount, rollCount } = gameProps.G;
+  const { playerID } = gameProps;
+  const { currentPlayer } = gameProps.ctx;
+  const { turnOverRollCount, rollCount } = gameProps.G;
 
-    // Start the dice roll if the roll count has changed
-    let rolling = rotationAngle !== null;
-    if(oldRollCount !== gameProps.G.rollCount) {
-        setOldRollCount(gameProps.G.rollCount);
-        startRotation();
-        rolling = true;
-    }
+  // Start the dice roll if the roll count has changed
+  let rolling = rotationAngle !== null;
+  if (oldRollCount !== gameProps.G.rollCount) {
+    setOldRollCount(gameProps.G.rollCount);
+    startRotation();
+    rolling = true;
+  }
 
-    // Record the old game props when not rolling. This ensures that
-    // oldGameProps records the props that were in effect when the roll
-    // started.
-    if (!rolling && oldGameProps !== gameProps) {
-        setOldGameProps(gameProps);
-    }
+  // Record the old game props when not rolling. This ensures that
+  // oldGameProps records the props that were in effect when the roll
+  // started.
+  if (!rolling && oldGameProps !== gameProps) {
+    setOldGameProps(gameProps);
+  }
 
-    const returnedGameProps = rolling ? oldGameProps : gameProps;
+  const returnedGameProps = rolling ? oldGameProps : gameProps;
 
-    const diceRotation = rolling ? {
+  const diceRotation = rolling
+    ? {
         angle: rotationAngle!,
         // If all dice were held, then assume this is a roll all.
         allDice: !oldGameProps.G.held.includes(false),
-    } : null; 
+      }
+    : null;
 
-    const turnOver = turnOverRollCount === rollCount;
-    const holdAllowed = !turnOver && playerID === currentPlayer && diceRotation === null;
-    return {...returnedGameProps, diceRotation, holdAllowed};
+  const turnOver = turnOverRollCount === rollCount;
+  const holdAllowed = !turnOver && playerID === currentPlayer && diceRotation === null;
+  return { ...returnedGameProps, diceRotation, holdAllowed };
 }
-

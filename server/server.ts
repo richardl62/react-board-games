@@ -15,23 +15,27 @@ const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds
 
 // Used to check if a connection is idle in the sense of there not being any user requests,
 // such as moves.  If the timeout is exceeded the connection will be closed.
-const IDLE_TIMEOUT = 60 * 60 * 1000; // 60 minutes 
-                                     
+const IDLE_TIMEOUT = 60 * 60 * 1000; // 60 minutes
+
 const matches = new Matches();
 
 const app = express();
 const PORT = process.env.PORT ?? defaultPort;
 
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'] // Vite default port
-}));
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Vite default port
+  }),
+);
 
 const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} (http://localhost:${PORT}/ if running locally).`);
+  console.log(`Server is running on port ${PORT} (http://localhost:${PORT}/ if running locally).`);
 
-    if (PORT !== defaultPort) {
-        console.warn(`(Note that when running on localhost, the port is expected to be ${defaultPort}.)`);
-    }
+  if (PORT !== defaultPort) {
+    console.warn(
+      `(Note that when running on localhost, the port is expected to be ${defaultPort}.)`,
+    );
+  }
 });
 
 const wss = new WebSocketServer({ server });
@@ -42,7 +46,7 @@ const lastUserRequest = new WeakMap<object, number>();
 
 // Heartbeat runs once every 25s and checks EVERY connected client.
 const interval = setInterval(() => {
-    wss.clients.forEach((ws) => {
+  wss.clients.forEach((ws) => {
     if (isAliveMap.get(ws) === false) {
       return ws.terminate();
     }
@@ -76,8 +80,8 @@ app.get('/lobby', (req, res) => {
     const result = runLobbyFunction(matches, req.query);
     res.send(JSON.stringify(result));
   } catch (err) {
-    const message = err instanceof Error ? err.message : "unknown error";
-    console.error("Error in /lobby:", message);
+    const message = err instanceof Error ? err.message : 'unknown error';
+    console.error('Error in /lobby:', message);
     res.status(400).send(`Lobby error: ${message}`);
   }
 });
@@ -94,7 +98,7 @@ wss.on('connection', (ws, req) => {
   lastUserRequest.set(ws, Date.now());
 
   ws.on('pong', () => isAliveMap.set(ws, true));
-  
+
   ws.on('message', (message) => {
     lastUserRequest.set(ws, Date.now()); // Update last activity
     // eslint-disable-next-line @typescript-eslint/no-base-to-string

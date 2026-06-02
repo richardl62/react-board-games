@@ -1,57 +1,45 @@
-import { sAssert } from "../../../../utils/assert.js";
-import { Letter } from "../config.js";
-import { makeEmptyGrid } from "./make-empty-grid.js";
-import { ServerData, GameStage } from "../server-data.js";
-import { ScoreWithCategory } from "./set-score.js";
-import { MoveArg0 } from "../../../move-fn.js";
-import { PlayerID } from "../../../playerid.js";
+import { sAssert } from '../../../../utils/assert.js';
+import { Letter } from '../config.js';
+import { makeEmptyGrid } from './make-empty-grid.js';
+import { ServerData, GameStage } from '../server-data.js';
+import { ScoreWithCategory } from './set-score.js';
+import { MoveArg0 } from '../../../move-fn.js';
+import { PlayerID } from '../../../playerid.js';
 
 interface GridAndScore {
-    grid: (Letter | null)[][],
-    rack:  (Letter | null)[],
-    score: ScoreWithCategory | null, 
+  grid: (Letter | null)[][];
+  rack: (Letter | null)[];
+  score: ScoreWithCategory | null;
 }
 
-export function doRecordGrid(
-    G :ServerData,
-    playerID: PlayerID,
-    gridAndScore: GridAndScore,
-): void {
-    if (G.stage !== GameStage.makingGrids) {
-        throw new Error("Unexpected call to recordGrid - " + G.stage);
-    }
+export function doRecordGrid(G: ServerData, playerID: PlayerID, gridAndScore: GridAndScore): void {
+  if (G.stage !== GameStage.makingGrids) {
+    throw new Error('Unexpected call to recordGrid - ' + G.stage);
+  }
 
-    const {grid, rack, score} = gridAndScore;
+  const { grid, rack, score } = gridAndScore;
 
-    G.playerData[playerID].gridRackAndScore = {
-        grid: grid.map(row => [...row]),
-        rack: [...rack],
-        score
-    };
+  G.playerData[playerID].gridRackAndScore = {
+    grid: grid.map((row) => [...row]),
+    rack: [...rack],
+    score,
+  };
 }
 
 export function recordGrid(
-    { G, playerID } : MoveArg0<ServerData>,
-    gridAndScore: GridAndScore,
+  { G, playerID }: MoveArg0<ServerData>,
+  gridAndScore: GridAndScore,
 ): void {
-    doRecordGrid(G, playerID, gridAndScore);
+  doRecordGrid(G, playerID, gridAndScore);
 }
 
-export function recordEmptyGrid(
-    G: ServerData,
-    playerID: PlayerID,
-): void {
-    const { selectedLetters } = G.playerData[playerID];
-    sAssert(selectedLetters);
+export function recordEmptyGrid(G: ServerData, playerID: PlayerID): void {
+  const { selectedLetters } = G.playerData[playerID];
+  sAssert(selectedLetters);
 
-    doRecordGrid(
-        G,
-        playerID,
-        {
-            grid: makeEmptyGrid(),
-            rack: selectedLetters,
-            score: null,
-        }
-    );
-
+  doRecordGrid(G, playerID, {
+    grid: makeEmptyGrid(),
+    rack: selectedLetters,
+    score: null,
+  });
 }

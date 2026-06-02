@@ -1,15 +1,15 @@
-import { JSX, ReactNode } from "react";
-import styled from "styled-components";
+import { JSX, ReactNode } from 'react';
+import styled from 'styled-components';
 
-const borderRadius = "5px";
-const legendFontSize = "0.9em";
+const borderRadius = '5px';
+const legendFontSize = '0.9em';
 
 const Box = styled.div`
   display: inline-block;
   position: relative;
 
   border: 1px solid grey;
-  border-radius:  ${borderRadius};
+  border-radius: ${borderRadius};
 
   padding: ${borderRadius};
   padding-top: calc(${borderRadius} + ${legendFontSize} * 0.2);
@@ -33,11 +33,11 @@ interface BoxWithLegendProps {
   children: ReactNode;
 }
 export function BoxWithLegend(props: BoxWithLegendProps): JSX.Element {
-    const { legend, children } = props;
-    return (
-        <Box>
-            <Legend>{legend}</Legend>
-            {children}
-        </Box>
-    );
+  const { legend, children } = props;
+  return (
+    <Box>
+      <Legend>{legend}</Legend>
+      {children}
+    </Box>
+  );
 }

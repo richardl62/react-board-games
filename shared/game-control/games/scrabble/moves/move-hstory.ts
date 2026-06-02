@@ -2,27 +2,27 @@
 // pass and swapTiles in set.
 
 export interface WordsPlayedInfo {
-    pid: string;
+  pid: string;
 
-    words: string[];
-    score: number;
-    
-    illegalWords: string[];
+  words: string[];
+  score: number;
+
+  illegalWords: string[];
 }
 
 export interface MoveHistoryElement {
-    wordsPlayed?: WordsPlayedInfo;
+  wordsPlayed?: WordsPlayedInfo;
 
-    pass?: {pid: string};
+  pass?: { pid: string };
 
-    tilesSwapped?: {
-        pid: string;
-        nSwapped: number;
-    };
-    
-    scoresAdjusted?: Record<string, number>;
+  tilesSwapped?: {
+    pid: string;
+    nSwapped: number;
+  };
 
-    gameOver?: {winners: string[]}; // id of winner(s);
+  scoresAdjusted?: Record<string, number>;
 
-    errorInLastAction?: {message: string};
+  gameOver?: { winners: string[] }; // id of winner(s);
+
+  errorInLastAction?: { message: string };
 }

@@ -1,46 +1,53 @@
-import { AppGame } from "@/app-game-support";
-import { endMatch, endTurn } from "@shared/game-control/ctx";
-import { matchMove } from "@shared/game-control/match-action";
-import { OfflineMatchData } from "./make-initial-match-data";
-import { MutableMatchData } from "@shared/server-match-data";
-import { UntypedMoves } from "@/app-game-support/board-props";
-import { EventsAPI } from "@shared/game-control/events";
+import { AppGame } from '@/app-game-support';
+import { endMatch, endTurn } from '@shared/game-control/ctx';
+import { matchMove } from '@shared/game-control/match-action';
+import { OfflineMatchData } from './make-initial-match-data';
+import { MutableMatchData } from '@shared/server-match-data';
+import { UntypedMoves } from '@/app-game-support/board-props';
+import { EventsAPI } from '@shared/game-control/events';
 
 export function makePlayerActions(
-    game: AppGame, 
-    playerID: string,
-    matchData: OfflineMatchData, 
-    setMatchData: (arg: OfflineMatchData) => void
+  game: AppGame,
+  playerID: string,
+  matchData: OfflineMatchData,
+  setMatchData: (arg: OfflineMatchData) => void,
 ): { moves: UntypedMoves; events: EventsAPI } {
-
-    const doAction = (action: (md: MutableMatchData) => MutableMatchData) => {
-        try {
-            const mutatedData = action(matchData)
-            setMatchData({
-                ...mutatedData,
-                playerData: matchData.playerData,
-                errorInLastAction: null,
-            });
-        } catch (e) {
-            const errorInLastAction = (e instanceof Error) ? e.message : `Unrecognised error: ${String(e)}`;
-            setMatchData({
-                ...matchData,
-                errorInLastAction,
-            });
-        }
-    };
-
-    const events: EventsAPI = {
-        endTurn: () => doAction(md => {endTurn(md.ctxData); return md}),
-        endMatch: () => doAction(md => {endMatch(md.ctxData); return md}),
-    };
-     
-    const moves: UntypedMoves = {};
-    for (const moveName in game.moves) {
-        moves[moveName] = (arg: unknown) => {
-            doAction(md => matchMove(game, moveName, playerID, md, arg));
-        };
+  const doAction = (action: (md: MutableMatchData) => MutableMatchData) => {
+    try {
+      const mutatedData = action(matchData);
+      setMatchData({
+        ...mutatedData,
+        playerData: matchData.playerData,
+        errorInLastAction: null,
+      });
+    } catch (e) {
+      const errorInLastAction = e instanceof Error ? e.message : `Unrecognised error: ${String(e)}`;
+      setMatchData({
+        ...matchData,
+        errorInLastAction,
+      });
     }
+  };
 
-    return { moves, events };
+  const events: EventsAPI = {
+    endTurn: () =>
+      doAction((md) => {
+        endTurn(md.ctxData);
+        return md;
+      }),
+    endMatch: () =>
+      doAction((md) => {
+        endMatch(md.ctxData);
+        return md;
+      }),
+  };
+
+  const moves: UntypedMoves = {};
+  for (const moveName in game.moves) {
+    moves[moveName] = (arg: unknown) => {
+      doAction((md) => matchMove(game, moveName, playerID, md, arg));
+    };
+  }
+
+  return { moves, events };
 }

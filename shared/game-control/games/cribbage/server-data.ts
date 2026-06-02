@@ -1,72 +1,74 @@
-import { sAssert } from "../../../utils/assert.js";
-import { Card } from "../../../utils/cards/types.js";
+import { sAssert } from '../../../utils/assert.js';
+import { Card } from '../../../utils/cards/types.js';
 
 // The whole CardSetID stuff is rather kludged.
 export enum CardSetID {
-    Player0 = "player0",
-    Player1 = "player1",
-    Shared = "shared",
+  Player0 = 'player0',
+  Player1 = 'player1',
+  Shared = 'shared',
 }
 
 export type PlayerID = CardSetID.Player0 | CardSetID.Player1;
 
-export function makeCardSetID(csid: string) : CardSetID {
-    const csidEnum = csid as CardSetID;
-    
-    sAssert(csidEnum === CardSetID.Player0 ||
-        csidEnum === CardSetID.Player1 ||
-        csidEnum === CardSetID.Shared, "string does not represent a card set");
-        
-    return csidEnum;
+export function makeCardSetID(csid: string): CardSetID {
+  const csidEnum = csid as CardSetID;
+
+  sAssert(
+    csidEnum === CardSetID.Player0 ||
+      csidEnum === CardSetID.Player1 ||
+      csidEnum === CardSetID.Shared,
+    'string does not represent a card set',
+  );
+
+  return csidEnum;
 }
 
 interface CardSetData {
-    /** 'visible' cards.  Does not include cards in play */ 
-    hand: Card[];
+  /** 'visible' cards.  Does not include cards in play */
+  hand: Card[];
 }
 
 /** Requests for a particular action (e.g. a new deal) to be performed */
 export enum GameRequest {
-    RestartPegging,
-    RevealHand,
-    NewDeal,
-    FinishSettingBox,
+  RestartPegging,
+  RevealHand,
+  NewDeal,
+  FinishSettingBox,
 }
 
 interface PerDealPlayerData extends CardSetData {
-    /** Includes cards in play (i.e. those that have been played during pegging) */
-    fullHand: Card[];
-    request: GameRequest | null;
+  /** Includes cards in play (i.e. those that have been played during pegging) */
+  fullHand: Card[];
+  request: GameRequest | null;
 }
 
 export interface PegPositions {
-    trailingPeg: number; // initialised to -1.
-    score: number;
+  trailingPeg: number; // initialised to -1.
+  score: number;
 }
 
-export interface PlayerData extends PerDealPlayerData, PegPositions {
-}
+export interface PlayerData extends PerDealPlayerData, PegPositions {}
 
-export enum GameStage  {
-    SettingBox,
-    Pegging,
-    HandsRevealed,
+export enum GameStage {
+  SettingBox,
+  Pegging,
+  HandsRevealed,
 }
 
 export interface ServerData {
-    player0: PlayerData;
-    player1: PlayerData;
+  player0: PlayerData;
+  player1: PlayerData;
 
-    shared: CardSetData;
+  shared: CardSetData;
 
-    stage: GameStage;
+  stage: GameStage;
 
-    box: Card [];
+  box: Card[];
 
-    // Kludge? The cut card is selected from the start but is shown only when
-    // a player 'cuts' the deck.
-    cutCard: {
-        card: Card;
-        visible: boolean;
-    };
+  // Kludge? The cut card is selected from the start but is shown only when
+  // a player 'cuts' the deck.
+  cutCard: {
+    card: Card;
+    visible: boolean;
+  };
 }

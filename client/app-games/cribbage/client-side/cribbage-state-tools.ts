@@ -1,49 +1,45 @@
-import { CardSetID, GameStage, PlayerID } from "@game-control/games/cribbage/server-data";
-import { sAssert } from "@utils/assert";
-import { Card } from "@utils/cards/types"
-import { compareCards } from "@utils/cards/types";
-import { cardInBoxPerPlayer } from "@game-control/games/cribbage/config";
-import { CribbageState } from "./cribbage-state";
+import { CardSetID, GameStage, PlayerID } from '@game-control/games/cribbage/server-data';
+import { sAssert } from '@utils/assert';
+import { Card } from '@utils/cards/types';
+import { compareCards } from '@utils/cards/types';
+import { cardInBoxPerPlayer } from '@game-control/games/cribbage/config';
+import { CribbageState } from './cribbage-state';
 
 function includes(cardSet: Card[], card: Card) {
-    for (const c of cardSet) {
-        if (compareCards(c, card) === 0) {
-            return true;
-        }
+  for (const c of cardSet) {
+    if (compareCards(c, card) === 0) {
+      return true;
     }
+  }
 
-    return false;
+  return false;
 }
 
-export function owner(
-    context: CribbageState,
-    card: Card,
-): PlayerID {
+export function owner(context: CribbageState, card: Card): PlayerID {
+  if (includes(context.player0.fullHand, card)) {
+    return CardSetID.Player0;
+  }
 
-    if (includes(context.player0.fullHand, card)) {
-        return CardSetID.Player0;
-    }
+  if (includes(context.player1.fullHand, card)) {
+    return CardSetID.Player1;
+  }
 
-    if (includes(context.player1.fullHand, card)) {
-        return CardSetID.Player1;
-    }
-
-    throw new Error("Card does not have known owner");
+  throw new Error('Card does not have known owner');
 }
 
-function nCardsInBox(context: CribbageState, playerID: PlayerID) : number {
-    sAssert(context.stage === GameStage.SettingBox);
-    
-    let count = 0;
-    for(const card of context.shared.hand) {
-        if(owner(context, card) === playerID) {
-            ++count;
-        }
-    }
+function nCardsInBox(context: CribbageState, playerID: PlayerID): number {
+  sAssert(context.stage === GameStage.SettingBox);
 
-    return count;
+  let count = 0;
+  for (const card of context.shared.hand) {
+    if (owner(context, card) === playerID) {
+      ++count;
+    }
+  }
+
+  return count;
 }
 
-export function boxFull(context: CribbageState, playerID: PlayerID) : boolean {
-    return nCardsInBox(context, playerID) === cardInBoxPerPlayer;
+export function boxFull(context: CribbageState, playerID: PlayerID): boolean {
+  return nCardsInBox(context, playerID) === cardInBoxPerPlayer;
 }

@@ -1,6 +1,6 @@
-import { LetterRequirement, allowedLetters, givenLetter } from "../letter-requirement.js";
-import { Trie } from "../trie.js";
-import { findMissingLetters } from "./find-missing-letter.js";
+import { LetterRequirement, allowedLetters, givenLetter } from '../letter-requirement.js';
+import { Trie } from '../trie.js';
+import { findMissingLetters } from './find-missing-letter.js';
 
 /**
  * Return letter requirements for words that cross the given set of letters
@@ -9,35 +9,37 @@ import { findMissingLetters } from "./find-missing-letter.js";
  * 2) Any new words that are form are in the trie.
  */
 export function getCrossingWordRequirements(
-    /** Each string should record a single letter */
-    letters: (string|null)[], 
-    trie: Trie
-):
-    (LetterRequirement | null)[] 
-{
-    return letters.map((_val, index) => requirement(letters, index, trie));
+  /** Each string should record a single letter */
+  letters: (string | null)[],
+  trie: Trie,
+): (LetterRequirement | null)[] {
+  return letters.map((_val, index) => requirement(letters, index, trie));
 }
 
-function requirement(letters: (string|null)[], index: number, trie: Trie) : LetterRequirement | null {
-    const letter = letters[index];
-    if (letter) {
-        return givenLetter(letter);
-    }
+function requirement(
+  letters: (string | null)[],
+  index: number,
+  trie: Trie,
+): LetterRequirement | null {
+  const letter = letters[index];
+  if (letter) {
+    return givenLetter(letter);
+  }
 
-    let before = "";
-    for(let i = index-1; letters[i]; --i) {
-        before = letters[i] + before;
-    }
+  let before = '';
+  for (let i = index - 1; letters[i]; --i) {
+    before = letters[i] + before;
+  }
 
-    let after = "";
-    for(let i = index+1; letters[i]; ++i) {
-        after = after + letters[i];
-    }
+  let after = '';
+  for (let i = index + 1; letters[i]; ++i) {
+    after = after + letters[i];
+  }
 
-    if(before.length > 0 || after.length > 0) {
-        const letters = findMissingLetters({before, after}, trie);
-        return allowedLetters(letters.join(""));
-    }
+  if (before.length > 0 || after.length > 0) {
+    const letters = findMissingLetters({ before, after }, trie);
+    return allowedLetters(letters.join(''));
+  }
 
-    return null;
+  return null;
 }

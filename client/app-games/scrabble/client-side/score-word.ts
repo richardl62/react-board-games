@@ -1,40 +1,43 @@
-import { sAssert } from "@utils/assert";
-import { tileScore } from "@game-control/games/scrabble/config/extended-letter";
-import { BoardData } from "@game-control/games/scrabble/moves/game-state";
-import { ScoringConfig } from "@game-control/games/scrabble/config/scrabble-config";
-import { multipliers } from "@game-control/games/scrabble/config/square-type";
+import { sAssert } from '@utils/assert';
+import { tileScore } from '@game-control/games/scrabble/config/extended-letter';
+import { BoardData } from '@game-control/games/scrabble/moves/game-state';
+import { ScoringConfig } from '@game-control/games/scrabble/config/scrabble-config';
+import { multipliers } from '@game-control/games/scrabble/config/square-type';
 
 interface RowCol {
-    row: number;
-    col: number;
+  row: number;
+  col: number;
 }
 
 function scoreWord(board: BoardData, word: RowCol[], config: ScoringConfig): number {
-    let score = 0;
-    let wordMult = 1;
+  let score = 0;
+  let wordMult = 1;
 
-    word.forEach(rc => {
-        const sq = board[rc.row][rc.col];
-        sAssert(sq);
+  word.forEach((rc) => {
+    const sq = board[rc.row][rc.col];
+    sAssert(sq);
 
-        if(sq.active) {
-            const mults = multipliers(
-                config.boardLayout[rc.row][rc.col]
-            );
-            score += tileScore(sq) * mults.letter;
-            wordMult *= mults.word;
-        } else {
-            score += tileScore(sq);
-        }
-    });
+    if (sq.active) {
+      const mults = multipliers(config.boardLayout[rc.row][rc.col]);
+      score += tileScore(sq) * mults.letter;
+      wordMult *= mults.word;
+    } else {
+      score += tileScore(sq);
+    }
+  });
 
-    return score * wordMult;
+  return score * wordMult;
 }
 
-export function scoreWords(board: BoardData, words: RowCol[][], scabbleConfig: ScoringConfig) : number {
-    let score = 0;
-    words.forEach(word => {score += scoreWord(board, word, scabbleConfig);});
+export function scoreWords(
+  board: BoardData,
+  words: RowCol[][],
+  scabbleConfig: ScoringConfig,
+): number {
+  let score = 0;
+  words.forEach((word) => {
+    score += scoreWord(board, word, scabbleConfig);
+  });
 
-    return score;
+  return score;
 }
-

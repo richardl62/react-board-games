@@ -1,33 +1,33 @@
-import { JSX } from "react";
-import styled from "styled-components";
-import { useCribbageState } from "../client-side/cribbage-state";
-import { PlayerID } from "@game-control/games/cribbage/server-data";
-import { PlayerProps, ScoreBoard } from "./score-board/score-board";
-import { colors } from "./score-board/style";
+import { JSX } from 'react';
+import styled from 'styled-components';
+import { useCribbageState } from '../client-side/cribbage-state';
+import { PlayerID } from '@game-control/games/cribbage/server-data';
+import { PlayerProps, ScoreBoard } from './score-board/score-board';
+import { colors } from './score-board/style';
 
-const ScoreLine = styled.div<{color: string}>`
-    color: ${props => props.color}
+const ScoreLine = styled.div<{ color: string }>`
+  color: ${(props) => props.color};
 `;
 
-export function WrappedScoreBoard() : JSX.Element {
-    const context = useCribbageState();
+export function WrappedScoreBoard(): JSX.Element {
+  const context = useCribbageState();
 
-    const playerProps = (who: PlayerID) => {
-        const {score, trailingPeg} = context[who];
-        const props: PlayerProps = {
-            hasPeg: val => val === score || val === trailingPeg,
-            onClick: val => context.moves.pegClick({who, score: val}),
-        };
-        return props;
-    }; 
+  const playerProps = (who: PlayerID) => {
+    const { score, trailingPeg } = context[who];
+    const props: PlayerProps = {
+      hasPeg: (val) => val === score || val === trailingPeg,
+      onClick: (val) => context.moves.pegClick({ who, score: val }),
+    };
+    return props;
+  };
 
-    return <div>
-        <ScoreBoard player1={playerProps(context.me)} player2={playerProps(context.pone)} />
-        <ScoreLine color={colors.player1}>
-            {`You: ${context[context.me].score}`}
-        </ScoreLine>
-        <ScoreLine color={colors.player2}>
-            {`${context.poneName}: ${context[context.pone].score}`}
-        </ScoreLine>
-    </div>; 
+  return (
+    <div>
+      <ScoreBoard player1={playerProps(context.me)} player2={playerProps(context.pone)} />
+      <ScoreLine color={colors.player1}>{`You: ${context[context.me].score}`}</ScoreLine>
+      <ScoreLine color={colors.player2}>
+        {`${context.poneName}: ${context[context.pone].score}`}
+      </ScoreLine>
+    </div>
+  );
 }

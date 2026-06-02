@@ -1,20 +1,19 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { ErrorBoundary } from "react-error-boundary";
-import styled from "styled-components";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { ErrorBoundary } from 'react-error-boundary';
+import styled from 'styled-components';
 import { App } from './app/app.tsx';
 import isPropValid from '@emotion/is-prop-valid';
 import { StyleSheetManager } from 'styled-components';
 
-const ErrorFallbackStyled=styled.div`
+const ErrorFallbackStyled = styled.div`
   font-size: large;
   * {
     margin-bottom: 0.5em;
   }
 `;
 
-const ErrorMessage=styled.div`
-
+const ErrorMessage = styled.div`
   span:first-child {
     font-weight: bold;
     color: red;
@@ -22,39 +21,36 @@ const ErrorMessage=styled.div`
   }
 `;
 
-const ErrorStack=styled.div`
+const ErrorStack = styled.div`
   font-size: small;
   margin-left: 1em;
 `;
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ErrorFallback({ error }: { error: Error }) {
-    return (
-        <ErrorFallbackStyled>
-            <ErrorMessage>
-                <span>Internal error:</span>
-                <span>{error.message}</span>
-            </ErrorMessage>
+  return (
+    <ErrorFallbackStyled>
+      <ErrorMessage>
+        <span>Internal error:</span>
+        <span>{error.message}</span>
+      </ErrorMessage>
 
-            {error.stack &&
+      {error.stack && (
         <div>
-            <div>Gory details:</div>
-            <ErrorStack>{error.stack}</ErrorStack> 
+          <div>Gory details:</div>
+          <ErrorStack>{error.stack}</ErrorStack>
         </div>
-            }
-     
-        </ErrorFallbackStyled>
-    );
+      )}
+    </ErrorFallbackStyled>
+  );
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <StyleSheetManager shouldForwardProp={isPropValid}>
         <App />
       </StyleSheetManager>
     </ErrorBoundary>
   </StrictMode>,
-)
+);

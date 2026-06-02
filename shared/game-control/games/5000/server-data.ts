@@ -1,83 +1,81 @@
-import { SetupArg0 } from "../../game-control.js";
+import { SetupArg0 } from '../../game-control.js';
 
 const numberOfDice = 6;
 
 export interface SetupOptions {
-    readonly scoreToWin: number,
-    readonly mustBeatPreviousScores: boolean,
-    readonly alwaysFinishRound: boolean,
-    readonly manualDiceRolls: boolean,
-    readonly neverBust: boolean,
+  readonly scoreToWin: number;
+  readonly mustBeatPreviousScores: boolean;
+  readonly alwaysFinishRound: boolean;
+  readonly manualDiceRolls: boolean;
+  readonly neverBust: boolean;
 }
 
 export interface ServerData {
-    faces: number[];
-    held: boolean[];
+  faces: number[];
+  held: boolean[];
 
-    /** Null if the 'must beat previous scores' option is off */
-    scoreToBeat: {value: number, setBy: string} | null;
+  /** Null if the 'must beat previous scores' option is off */
+  scoreToBeat: { value: number; setBy: string } | null;
 
-    scoreCarriedOver: number;
+  scoreCarriedOver: number;
 
-    /** The score from the dice, excludes scores carried over from earlier in the turn */
-    heldDice: {
-        score: number;
-        categories: string[];
-        numScoringFaces: number;
-    };
-    
-    maxDiceScore: number;
+  /** The score from the dice, excludes scores carried over from earlier in the turn */
+  heldDice: {
+    score: number;
+    categories: string[];
+    numScoringFaces: number;
+  };
 
-    prevRollHeldScore: number;
+  maxDiceScore: number;
 
-    playerScores: Record<string, number[]>;
+  prevRollHeldScore: number;
 
-    lastRound: boolean;
+  playerScores: Record<string, number[]>;
 
-    options: SetupOptions;
+  lastRound: boolean;
 
-    rollCount: number;
-    turnOverRollCount: number;
+  options: SetupOptions;
+
+  rollCount: number;
+  turnOverRollCount: number;
 }
 
-export function startingServerData({ctx}: SetupArg0, options: SetupOptions): ServerData {
-    const faces = Array<number>(numberOfDice).fill(1);
-    const held = Array<boolean>(numberOfDice).fill(false);
-    
-    const playerScores : ServerData["playerScores"] = {};
+export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): ServerData {
+  const faces = Array<number>(numberOfDice).fill(1);
+  const held = Array<boolean>(numberOfDice).fill(false);
 
-    for (const pid of ctx.playOrder) {
-        playerScores[pid] = [];
-    }
+  const playerScores: ServerData['playerScores'] = {};
 
-    const scoreToBeat = options.mustBeatPreviousScores ? 
-        {value: 0, setBy: ""/*kludge*/} : null;
-    
-    return {
-        faces,
-        held,
-        scoreToBeat,
-        scoreCarriedOver: 0,
+  for (const pid of ctx.playOrder) {
+    playerScores[pid] = [];
+  }
 
-        heldDice: {
-            score: 0,
-            categories: [],
-            numScoringFaces: 0,
-        },
-        
-        maxDiceScore: 0,
+  const scoreToBeat = options.mustBeatPreviousScores ? { value: 0, setBy: '' /*kludge*/ } : null;
 
-        prevRollHeldScore: 0,
+  return {
+    faces,
+    held,
+    scoreToBeat,
+    scoreCarriedOver: 0,
 
+    heldDice: {
+      score: 0,
+      categories: [],
+      numScoringFaces: 0,
+    },
 
-        playerScores,
-        
-        rollCount: 0,
-        // Kludge?: Treat the start of the game as the end of a turn.
-        turnOverRollCount: 0,
+    maxDiceScore: 0,
 
-        lastRound: false,
-        
-        options,
-    };
+    prevRollHeldScore: 0,
+
+    playerScores,
+
+    rollCount: 0,
+    // Kludge?: Treat the start of the game as the end of a turn.
+    turnOverRollCount: 0,
+
+    lastRound: false,
+
+    options,
+  };
 }

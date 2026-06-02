@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "serve": "node dist/server/server.js",
     "deploy": "git push heroku main",
+    "format": "prettier --write \"{client,server,shared}/**/*.{ts,tsx}\"",
     "heroku:off": "heroku ps:scale web=0 --app richards-board-games",
     "heroku:on": "heroku ps:scale web=1 --app richards-board-games",
     "heroku:restart": "heroku restart --app richards-board-games"

@@ -1,4 +1,4 @@
 export const diceColor = {
-    held: "darkblue",
-    unheld: "darkred",
+  held: 'darkblue',
+  unheld: 'darkred',
 };

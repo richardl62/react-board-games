@@ -1,10 +1,10 @@
-import { ClientMoveFunctions } from "../../../move-fn.js";
-import { swap } from "./swap.js";
-import { reset } from "./reset.js";
+import { ClientMoveFunctions } from '../../../move-fn.js';
+import { swap } from './swap.js';
+import { reset } from './reset.js';
 
 export const moves = {
-    swap,
-    reset,
+  swap,
+  reset,
 };
 
 export type ClientMoves = ClientMoveFunctions<typeof moves>;

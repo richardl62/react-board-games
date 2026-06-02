@@ -1,18 +1,17 @@
-import { AllActive, GameControl } from "../../game-control.js";
-import { moves } from "./moves/moves.js";
-import { startingServerData } from "./server-data.js";
+import { AllActive, GameControl } from '../../game-control.js';
+import { moves } from './moves/moves.js';
+import { startingServerData } from './server-data.js';
 
 export const gameControl: GameControl = {
-    name: "crosstiles",
+  name: 'crosstiles',
 
-    minPlayers: 1,
-    maxPlayers: 99,
+  minPlayers: 1,
+  maxPlayers: 99,
 
+  setup: startingServerData,
 
-    setup: startingServerData,
+  moves,
 
-    moves,
-    
-    // Turn order is not enforced.
-    turnOrder: AllActive,
+  // Turn order is not enforced.
+  turnOrder: AllActive,
 };

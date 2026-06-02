@@ -1,99 +1,99 @@
-import WebSocket from "ws";
-import { wsClientConnection } from "../shared/ws-response-trigger.js";
-import { Matches } from "./matches.js";
-import { closeWithReason } from "./web-socket-actions.js";
+import WebSocket from 'ws';
+import { wsClientConnection } from '../shared/ws-response-trigger.js';
+import { Matches } from './matches.js';
+import { closeWithReason } from './web-socket-actions.js';
 
 const connectionFlags = new WeakMap<WebSocket, { suppressDisconnectionActions: boolean }>();
 
 function getFlags(ws: WebSocket) {
-    let flags = connectionFlags.get(ws);
-    if (!flags) {
-        flags = { suppressDisconnectionActions: false };
-        connectionFlags.set(ws, flags);
-    }
-    return flags;
+  let flags = connectionFlags.get(ws);
+  if (!flags) {
+    flags = { suppressDisconnectionActions: false };
+    connectionFlags.set(ws, flags);
+  }
+  return flags;
 }
 
 // Return the value of the named URL parameter from the given request URL.
 // Throw an error if the parameter is missing or invalid.
 function urlParam(requestUrl: string | undefined, name: string) {
-    if (!requestUrl) throw new Error("Unexpected null request URL");
-    
-    const parsed = new URL(requestUrl, "http://localhost" /* dummy base URL */);
-    const param = parsed.searchParams.get(name);
+  if (!requestUrl) throw new Error('Unexpected null request URL');
 
-    if (!param) {
-        throw new Error(`URL parameter "${name}" missing or invalid`);
-    }
-    return param;
+  const parsed = new URL(requestUrl, 'http://localhost' /* dummy base URL */);
+  const param = parsed.searchParams.get(name);
+
+  if (!param) {
+    throw new Error(`URL parameter "${name}" missing or invalid`);
+  }
+  return param;
 }
 
 export function processConnection(matches: Matches, ws: WebSocket, requestUrl: string | undefined) {
-    try {
-        const matchID = urlParam(requestUrl, "matchID");
-        const playerID = urlParam(requestUrl, "playerID");
-        const credentials = urlParam(requestUrl, "credentials");
+  try {
+    const matchID = urlParam(requestUrl, 'matchID');
+    const playerID = urlParam(requestUrl, 'playerID');
+    const credentials = urlParam(requestUrl, 'credentials');
 
-        const match = matches.findMatch(matchID);
-        if (!match) {
-            throw new Error(`Match ${matchID} not found - cannot connect player`);
-        }
-
-        const player = match.findPlayer({ id: playerID });
-        if (!player) {
-            throw new Error(`Player ${playerID} not found - cannot record connection`);
-        }
-
-        if (player.credentials !== credentials) {
-            throw new Error(`Player ${playerID} provided invalid credentials`);
-        }
-
-        // KLUDGE? If the player is already connected, terminate the previous connection.
-        // This is primarily intended for the case where a player starts a match
-        // on one device, then continues it on another device without closing the first
-        // connection. (The easy options are either this or disallowing the new connection,
-        // and this option seems more user-friendly.)
-        if (player.isConnected) {
-            const ws = player.getWs();
-            getFlags(ws).suppressDisconnectionActions = true;
-            closeWithReason(player.getWs(), "player connected elsewhere");
-        }
-
-        player.recordConnection(ws);
-
-        match.broadcastMatchData(wsClientConnection, null);
+    const match = matches.findMatch(matchID);
+    if (!match) {
+      throw new Error(`Match ${matchID} not found - cannot connect player`);
     }
-    catch (err) {
-        const error = err instanceof Error ? err.message : "unknown error";
-        console.log('Error during connection:', error);
 
-        getFlags(ws).suppressDisconnectionActions = true;
-        closeWithReason(ws, 
-            "unrecognised match or player" // Short reason suitable for human clients.
-        );
+    const player = match.findPlayer({ id: playerID });
+    if (!player) {
+      throw new Error(`Player ${playerID} not found - cannot record connection`);
     }
+
+    if (player.credentials !== credentials) {
+      throw new Error(`Player ${playerID} provided invalid credentials`);
+    }
+
+    // KLUDGE? If the player is already connected, terminate the previous connection.
+    // This is primarily intended for the case where a player starts a match
+    // on one device, then continues it on another device without closing the first
+    // connection. (The easy options are either this or disallowing the new connection,
+    // and this option seems more user-friendly.)
+    if (player.isConnected) {
+      const ws = player.getWs();
+      getFlags(ws).suppressDisconnectionActions = true;
+      closeWithReason(player.getWs(), 'player connected elsewhere');
+    }
+
+    player.recordConnection(ws);
+
+    match.broadcastMatchData(wsClientConnection, null);
+  } catch (err) {
+    const error = err instanceof Error ? err.message : 'unknown error';
+    console.log('Error during connection:', error);
+
+    getFlags(ws).suppressDisconnectionActions = true;
+    closeWithReason(
+      ws,
+      'unrecognised match or player', // Short reason suitable for human clients.
+    );
+  }
 }
 
 export function processDisconnection(matches: Matches, ws: WebSocket) {
-    if (getFlags(ws).suppressDisconnectionActions) {
-        return;
+  if (getFlags(ws).suppressDisconnectionActions) {
+    return;
+  }
+
+  try {
+    const found = matches.findMatchAndPlayer(ws);
+    if (!found) {
+      console.log('Disconnect reported from socket with no associated player/match');
+      return;
     }
 
-    try {
-        const found = matches.findMatchAndPlayer(ws);
-        if (!found) {
-            console.log('Disconnect reported from socket with no associated player/match');
-            return;
-        }
+    const { match, player } = found;
 
-        const { match, player } = found;
+    player.recordDisconnection();
 
-        player.recordDisconnection();
-
-        match.broadcastMatchData(wsClientConnection, null);
-    } catch (err) {
-        // Hmm. Not sure what best to do as we cannot send error response to disconnected player.
-        const error = err instanceof Error ? err.message : "unknown error";
-        console.error('Error during player disconnect:', error);
-    }
+    match.broadcastMatchData(wsClientConnection, null);
+  } catch (err) {
+    // Hmm. Not sure what best to do as we cannot send error response to disconnected player.
+    const error = err instanceof Error ? err.message : 'unknown error';
+    console.error('Error during player disconnect:', error);
+  }
 }

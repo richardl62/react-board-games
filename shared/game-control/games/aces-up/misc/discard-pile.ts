@@ -1,80 +1,77 @@
-import { sAssert } from "../../../../utils/assert.js";
-import { CardNonJoker } from "../../../../utils/cards/types.js";
-import { GameOptions } from "../options.js";
+import { sAssert } from '../../../../utils/assert.js';
+import { CardNonJoker } from '../../../../utils/cards/types.js';
+import { GameOptions } from '../options.js';
 
 export interface DiscardPileData {
-    cards: CardNonJoker[];
-    recentSpecials: CardNonJoker[];
+  cards: CardNonJoker[];
+  recentSpecials: CardNonJoker[];
 }
 
-export function makeDiscardPileData(cards: CardNonJoker [] = []) : DiscardPileData {
-    return {
-        cards,
-        recentSpecials: []
-    };
-} 
+export function makeDiscardPileData(cards: CardNonJoker[] = []): DiscardPileData {
+  return {
+    cards,
+    recentSpecials: [],
+  };
+}
 
 export class DiscardPile {
-    private _cards: CardNonJoker[];
-    private _options: GameOptions;
-    private _recentSpecials: CardNonJoker[] = [];
-    
-    constructor(data: DiscardPileData, options: GameOptions) {
-        this._cards = data.cards;
-        this._options = options;
-        this._recentSpecials = data.recentSpecials;
-    }
+  private _cards: CardNonJoker[];
+  private _options: GameOptions;
+  private _recentSpecials: CardNonJoker[] = [];
 
-    get length() : number {
-        return this._cards.length;
-    }
+  constructor(data: DiscardPileData, options: GameOptions) {
+    this._cards = data.cards;
+    this._options = options;
+    this._recentSpecials = data.recentSpecials;
+  }
 
-    get cards() : {standard: CardNonJoker[], recentSpecials: CardNonJoker[]} {
-        return {
-            standard: this._cards,
-            recentSpecials: this._recentSpecials
-        };
-    }
+  get length(): number {
+    return this._cards.length;
+  }
 
-    get isEmpty() : boolean {
-        return this._cards.length === 0;
-    }
+  get cards(): { standard: CardNonJoker[]; recentSpecials: CardNonJoker[] } {
+    return {
+      standard: this._cards,
+      recentSpecials: this._recentSpecials,
+    };
+  }
 
-    get topCard() : CardNonJoker | undefined {
-        return this._cards.at(-1);
-    }
-            
-    clear(killerCard: CardNonJoker) {
-        sAssert(killerCard.rank === this._options.killerRank);
+  get isEmpty(): boolean {
+    return this._cards.length === 0;
+  }
 
-        this._cards.splice(0);
-        this._recentSpecials.push(killerCard);
-    }
+  get topCard(): CardNonJoker | undefined {
+    return this._cards.at(-1);
+  }
 
-    stealTopCard(thiefCard: CardNonJoker) : CardNonJoker {
-        sAssert(thiefCard.rank === this._options.thiefRank);
+  clear(killerCard: CardNonJoker) {
+    sAssert(killerCard.rank === this._options.killerRank);
 
-        const stolen = this._cards.pop();
-        sAssert(stolen, "SharedPile.stealTopCard: no card to steal");
-        this._recentSpecials.push(thiefCard);
+    this._cards.splice(0);
+    this._recentSpecials.push(killerCard);
+  }
 
-        return stolen;
-    }
+  stealTopCard(thiefCard: CardNonJoker): CardNonJoker {
+    sAssert(thiefCard.rank === this._options.thiefRank);
 
-    add(...cards: CardNonJoker[]) {
-        this._cards.push(...cards);
-    }
+    const stolen = this._cards.pop();
+    sAssert(stolen, 'SharedPile.stealTopCard: no card to steal');
+    this._recentSpecials.push(thiefCard);
 
-    removeFromTop(count: number) : CardNonJoker[] {
-        const removed = this._cards.splice(
-            this._cards.length - count,
-            count);
-        sAssert(removed.length === count,
-            "DiscardPile.removeFromTop: not enough cards");
-        return removed;
-    }
+    return stolen;
+  }
 
-    resetForStartOfRound() {
-        this._recentSpecials.splice(0);
-    }
+  add(...cards: CardNonJoker[]) {
+    this._cards.push(...cards);
+  }
+
+  removeFromTop(count: number): CardNonJoker[] {
+    const removed = this._cards.splice(this._cards.length - count, count);
+    sAssert(removed.length === count, 'DiscardPile.removeFromTop: not enough cards');
+    return removed;
+  }
+
+  resetForStartOfRound() {
+    this._recentSpecials.splice(0);
+  }
 }

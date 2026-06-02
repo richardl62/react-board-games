@@ -1,28 +1,31 @@
-import { ScrabbleConfig } from "./config/scrabble-config.js";
-import { GameState, isGameState, startingGameState } from "./moves/game-state.js";
-import { SetupArg0 } from "../../game-control.js";
+import { ScrabbleConfig } from './config/scrabble-config.js';
+import { GameState, isGameState, startingGameState } from './moves/game-state.js';
+import { SetupArg0 } from '../../game-control.js';
 
 export interface SetupOptions {
-    readonly allowIllegalWords: boolean;
-    readonly enableHighScoringWords: boolean;
+  readonly allowIllegalWords: boolean;
+  readonly enableHighScoringWords: boolean;
 }
 
 export interface ServerData {
-    /** states avialable for undo/redo */
-    states: GameState[];
-    options: SetupOptions;
+  /** states avialable for undo/redo */
+  states: GameState[];
+  options: SetupOptions;
 }
 /** Quick check that an object is (probably) a GameData. */
 
 export function isServerData(arg: unknown): boolean {
-    const serverData = arg as ServerData;
-    return Array.isArray(serverData.states) &&
-        isGameState(serverData.states[0]);
+  const serverData = arg as ServerData;
+  return Array.isArray(serverData.states) && isGameState(serverData.states[0]);
 }
 
-export function startingServerData(arg0: SetupArg0, options: SetupOptions, config: ScrabbleConfig): ServerData {
-    return {
-        states: [startingGameState(arg0, config)],
-        options,
-    };
+export function startingServerData(
+  arg0: SetupArg0,
+  options: SetupOptions,
+  config: ScrabbleConfig,
+): ServerData {
+  return {
+    states: [startingGameState(arg0, config)],
+    options,
+  };
 }

@@ -1,62 +1,39 @@
-import { BoardAndRack } from "../client-side/board-and-rack";
-import { Letter } from "@game-control/games/scrabble/config/letters";
-import { BoardSquareData } from "@game-control/games/scrabble/moves/game-state";
-import { applyPossibleWord } from "./apply-possible-word";
+import { BoardAndRack } from '../client-side/board-and-rack';
+import { Letter } from '@game-control/games/scrabble/config/letters';
+import { BoardSquareData } from '@game-control/games/scrabble/moves/game-state';
+import { applyPossibleWord } from './apply-possible-word';
 
-type Board = (Letter| null)[][];
-type Rack = (Letter| null)[];
+type Board = (Letter | null)[][];
+type Rack = (Letter | null)[];
 
-function makeBoardAndRack(
-    board: Board, 
-    rack: Rack, 
-) {
-    const boardSquare = (l: Letter|null) : (BoardSquareData | null) =>
-        l && {letter:l, active: true, isBlank: false};
+function makeBoardAndRack(board: Board, rack: Rack) {
+  const boardSquare = (l: Letter | null): BoardSquareData | null =>
+    l && { letter: l, active: true, isBlank: false };
 
-    return new BoardAndRack(
-        board.map(row => row.map(boardSquare)), 
-        rack
-    );
+  return new BoardAndRack(
+    board.map((row) => row.map(boardSquare)),
+    rack,
+  );
 }
 
-test("Apply possible Word 1",() => {
-    // At one time this test crashed due to a problem with setting blanks.
+test('Apply possible Word 1', () => {
+  // At one time this test crashed due to a problem with setting blanks.
 
-    const br = makeBoardAndRack(
-        [
-            [null, null]
-        ],
-        ["B", "?", ],
-    );
+  const br = makeBoardAndRack([[null, null]], ['B', '?']);
 
-    applyPossibleWord(br,
-        {row:0, col: 0, direction: "row", word: "BX"},
-    );
+  applyPossibleWord(br, { row: 0, col: 0, direction: 'row', word: 'BX' });
 
-    expect(br.getBoardLetters()).toEqual([
-        ["B","X"]
-    ]);
+  expect(br.getBoardLetters()).toEqual([['B', 'X']]);
 
-    expect(br.getRack()).toEqual([null, null]);
+  expect(br.getRack()).toEqual([null, null]);
 });
 
-test("Apply possible Word 2",() => {
+test('Apply possible Word 2', () => {
+  const br = makeBoardAndRack([[null, 'X', null, null]], [null, '?', 'B', 'C', 'C', 'A']);
 
-    const br = makeBoardAndRack(
-        [
-            [null, "X", null, null]
-        ],
-        [null, "?", "B", "C", "C", "A"]
-    );
+  applyPossibleWord(br, { row: 0, col: 1, direction: 'row', word: 'AXC' });
 
-    applyPossibleWord(br,
-        {row:0, col: 1, direction: "row", word: "AXC"},
-    );
+  expect(br.getBoardLetters()).toEqual([[null, 'A', 'X', 'C']]);
 
-    expect(br.getBoardLetters()).toEqual([
-        [null, "A", "X", "C"]
-    ]);
-
-    expect(br.getRack()).toEqual([null, "?", "B", null, "C", null]);
+  expect(br.getRack()).toEqual([null, '?', 'B', null, 'C', null]);
 });
-

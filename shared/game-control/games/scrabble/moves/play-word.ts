@@ -1,42 +1,37 @@
-import { Letter } from "../config/letters.js";
-import { BoardData, GameState } from "./game-state.js";
-import { WordsPlayedInfo } from "./move-hstory.js";
-import { MoveArg0 } from "../../../move-fn.js";
+import { Letter } from '../config/letters.js';
+import { BoardData, GameState } from './game-state.js';
+import { WordsPlayedInfo } from './move-hstory.js';
+import { MoveArg0 } from '../../../move-fn.js';
 
 export interface PlayWordParam {
-    board: BoardData;
-    rack: (Letter | null)[];
-    playedWordinfo: Omit<WordsPlayedInfo,"pid">
-    score: number;
-} 
-
-export function playWord(
-    {G: state, ctx} : MoveArg0<GameState>, 
-    { board, rack: inputRack, playedWordinfo, score }: PlayWordParam
-) : void
-{
-    const newBag = [...state.bag];
-    const newRack = [...inputRack];
-    
-    for(let ri = 0; ri < newRack.length; ++ri) {
-        newRack[ri] ??= newBag.shift() ?? null;
-    }
-
-    state.playerData[ctx.currentPlayer].rack = newRack;
-    state.playerData[ctx.currentPlayer].score += score;
-    state.bag = newBag;
-
-    // KLUDGE: 'active' does not really belong server side
-    state.board = board.map(row => row.map(
-        sq => sq && { ...sq, active: false }
-    ));
-
-    const info = {
-        ...playedWordinfo,
-        pid: ctx.currentPlayer,
-    };
-
-    state.moveHistory.push({wordsPlayed: info});  
+  board: BoardData;
+  rack: (Letter | null)[];
+  playedWordinfo: Omit<WordsPlayedInfo, 'pid'>;
+  score: number;
 }
 
+export function playWord(
+  { G: state, ctx }: MoveArg0<GameState>,
+  { board, rack: inputRack, playedWordinfo, score }: PlayWordParam,
+): void {
+  const newBag = [...state.bag];
+  const newRack = [...inputRack];
 
+  for (let ri = 0; ri < newRack.length; ++ri) {
+    newRack[ri] ??= newBag.shift() ?? null;
+  }
+
+  state.playerData[ctx.currentPlayer].rack = newRack;
+  state.playerData[ctx.currentPlayer].score += score;
+  state.bag = newBag;
+
+  // KLUDGE: 'active' does not really belong server side
+  state.board = board.map((row) => row.map((sq) => sq && { ...sq, active: false }));
+
+  const info = {
+    ...playedWordinfo,
+    pid: ctx.currentPlayer,
+  };
+
+  state.moveHistory.push({ wordsPlayed: info });
+}

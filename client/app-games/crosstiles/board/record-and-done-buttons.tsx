@@ -1,132 +1,145 @@
-import { JSX, useState } from "react";
-import { sAssert } from "@utils/assert";
-import { sameNestedArray } from "@utils/same-nested-array";
-import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { checkGrid } from "../client-side/check-grid/check-grid";
-import { bonusScore } from "@game-control/games/crosstiles/config";
+import { JSX, useState } from 'react';
+import { sAssert } from '@utils/assert';
+import { sameNestedArray } from '@utils/same-nested-array';
+import { useCrossTilesContext } from '../client-side/actions/cross-tiles-context';
+import { checkGrid } from '../client-side/check-grid/check-grid';
+import { bonusScore } from '@game-control/games/crosstiles/config';
 
-export type RecordRequest = "blockedWithIllegalWords" | "cancelled" | "done";
+export type RecordRequest = 'blockedWithIllegalWords' | 'cancelled' | 'done';
 
 interface RecordAndDoneButtonsProps {
-    /** Called when a record is requested, when a record request is cancelled, or
-     * when a record actually occurs. 
-     * 
-     * Request can be implicitly cancelled by changed the grid. This function
-     * is still be call in those case.
-     */
-    recordRequest: (status: RecordRequest) => void
+  /** Called when a record is requested, when a record request is cancelled, or
+   * when a record actually occurs.
+   *
+   * Request can be implicitly cancelled by changed the grid. This function
+   * is still be call in those case.
+   */
+  recordRequest: (status: RecordRequest) => void;
 }
 
-export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps) : JSX.Element {
-    const { recordRequest } = props;
+export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps): JSX.Element {
+  const { recordRequest } = props;
 
-    const context = useCrossTilesContext();
+  const context = useCrossTilesContext();
 
-    const { grid, rack, playerData, isLegalWord, gridChangeTimestamp, options,
-        dispatch, wrappedGameProps: { moves, playerID },  } = context;
+  const {
+    grid,
+    rack,
+    playerData,
+    isLegalWord,
+    gridChangeTimestamp,
+    options,
+    dispatch,
+    wrappedGameProps: { moves, playerID },
+  } = context;
 
-    const { gridRackAndScore: recordedGridRackAndScore, scoreCard, 
-        doneRecordingGrid } = playerData[playerID];
-    const recordedGrid = recordedGridRackAndScore?.grid;
-    
-    sAssert(rack);
+  const {
+    gridRackAndScore: recordedGridRackAndScore,
+    scoreCard,
+    doneRecordingGrid,
+  } = playerData[playerID];
+  const recordedGrid = recordedGridRackAndScore?.grid;
 
-    const [blockedRecordTimestamp, setBlockedRecordTimestamp] = useState<number | null>(null);
-    const [blockedDoneTimestamp, setBlockedDoneTimestamp] = useState<number | null>(null);
+  sAssert(rack);
 
-    const currentGridRecorded = recordedGrid && sameNestedArray(recordedGrid, grid);
+  const [blockedRecordTimestamp, setBlockedRecordTimestamp] = useState<number | null>(null);
+  const [blockedDoneTimestamp, setBlockedDoneTimestamp] = useState<number | null>(null);
 
-    // Request confirmation if the grid does not score, unless that option
-    // is disabled.
-    const onRecordGrid = (status: "unconfirmed" | "confirmed") => {
-        const { scoreCategory, score, nBonuses, illegalWords }
-            = checkGrid(grid, scoreCard, isLegalWord);
+  const currentGridRecorded = recordedGrid && sameNestedArray(recordedGrid, grid);
 
-        if (scoreCategory || status === "confirmed" || !options.checkGridBeforeRecoding) {
-            const scoreParam = scoreCategory && {
-                score,
-                category: scoreCategory,
-                bonus: nBonuses * bonusScore,
-            };
-            moves.recordGrid({ grid, rack, score: scoreParam });
+  // Request confirmation if the grid does not score, unless that option
+  // is disabled.
+  const onRecordGrid = (status: 'unconfirmed' | 'confirmed') => {
+    const { scoreCategory, score, nBonuses, illegalWords } = checkGrid(
+      grid,
+      scoreCard,
+      isLegalWord,
+    );
 
-            setBlockedRecordTimestamp(null);
-            recordRequest("done");
-        } else {
-            if (illegalWords) {
-                recordRequest("blockedWithIllegalWords");
-            }
+    if (scoreCategory || status === 'confirmed' || !options.checkGridBeforeRecoding) {
+      const scoreParam = scoreCategory && {
+        score,
+        category: scoreCategory,
+        bonus: nBonuses * bonusScore,
+      };
+      moves.recordGrid({ grid, rack, score: scoreParam });
 
-            setBlockedRecordTimestamp(gridChangeTimestamp);
-        }
-    };
+      setBlockedRecordTimestamp(null);
+      recordRequest('done');
+    } else {
+      if (illegalWords) {
+        recordRequest('blockedWithIllegalWords');
+      }
 
-    const onCancelRecord = () => {
-        setBlockedRecordTimestamp(null);
-        recordRequest("cancelled");
-    };
+      setBlockedRecordTimestamp(gridChangeTimestamp);
+    }
+  };
 
-    // Request confirmation if no grid is recorded.
-    const onDone = (status: "unconfirmed" | "confirmed") => {
-        if (!currentGridRecorded && status === "unconfirmed") {
-            setBlockedDoneTimestamp(gridChangeTimestamp);
-        } else {
-            setBlockedDoneTimestamp(null);
-            dispatch({type: "clearClickMoveStart"});
+  const onCancelRecord = () => {
+    setBlockedRecordTimestamp(null);
+    recordRequest('cancelled');
+  };
 
-            moves.doneRecordingGrid();
-        }
-    };
+  // Request confirmation if no grid is recorded.
+  const onDone = (status: 'unconfirmed' | 'confirmed') => {
+    if (!currentGridRecorded && status === 'unconfirmed') {
+      setBlockedDoneTimestamp(gridChangeTimestamp);
+    } else {
+      setBlockedDoneTimestamp(null);
+      dispatch({ type: 'clearClickMoveStart' });
 
-    const onCancelDone = () => {
-        setBlockedDoneTimestamp(null);
-    };
+      moves.doneRecordingGrid();
+    }
+  };
 
-    if (blockedDoneTimestamp === gridChangeTimestamp) {
-        const message = recordedGrid ? "Current grid not recorded " :
-            "No grid recorded ";
-        return <div>
-            <span>{message}</span>
-            <button onClick={() => onDone("confirmed")}> Confirm done </button>
-            <button onClick={onCancelDone}> Cancel </button>
-        </div>;
+  const onCancelDone = () => {
+    setBlockedDoneTimestamp(null);
+  };
+
+  if (blockedDoneTimestamp === gridChangeTimestamp) {
+    const message = recordedGrid ? 'Current grid not recorded ' : 'No grid recorded ';
+    return (
+      <div>
+        <span>{message}</span>
+        <button onClick={() => onDone('confirmed')}> Confirm done </button>
+        <button onClick={onCancelDone}> Cancel </button>
+      </div>
+    );
+  }
+
+  if (blockedRecordTimestamp === gridChangeTimestamp) {
+    return (
+      <div>
+        <span>Grid does not score </span>
+        <button onClick={() => onRecordGrid('confirmed')}> Confirm record </button>
+        <button onClick={onCancelRecord}> Cancel </button>
+      </div>
+    );
+  }
+
+  const gridChangedMessage = () => {
+    if (!recordedGrid) {
+      return 'No grid recorded';
     }
 
-    if (blockedRecordTimestamp === gridChangeTimestamp) {
-        return <div>
-            <span>Grid does not score </span>
-            <button onClick={() => onRecordGrid("confirmed")}> Confirm record </button>
-            <button onClick={onCancelRecord}> Cancel </button>
-        </div>;
+    if (currentGridRecorded) {
+      return 'Grid recorded';
     }
 
-    const gridChangedMessage = () => {
-        if (!recordedGrid) {
-            return "No grid recorded";
-        }
+    return 'Grid changed';
+  };
 
-        if (currentGridRecorded) {
-            return "Grid recorded";
-        }
+  return (
+    <div>
+      <button onClick={() => onRecordGrid('unconfirmed')} disabled={doneRecordingGrid}>
+        Record Grid
+      </button>
 
-        return "Grid changed";
-    };
+      <button onClick={() => onDone('unconfirmed')} disabled={doneRecordingGrid}>
+        Done
+      </button>
 
-    return <div>
-        <button 
-            onClick={() => onRecordGrid("unconfirmed")} 
-            disabled={doneRecordingGrid}
-        >
-            Record Grid
-        </button>
-
-        <button 
-            onClick={() => onDone("unconfirmed")}
-            disabled={doneRecordingGrid}
-        >
-            Done
-        </button>
-
-        <span>{gridChangedMessage()}</span>
-    </div>;
+      <span>{gridChangedMessage()}</span>
+    </div>
+  );
 }

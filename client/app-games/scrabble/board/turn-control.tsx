@@ -1,15 +1,15 @@
-import { JSX, useState } from "react";
-import styled from "styled-components";
-import { SetBlank } from "./set-blank";
-import { useTurnControlData } from "./use-turn-control-data";
-import { useScrabbleState } from "../client-side/scrabble-state";
+import { JSX, useState } from 'react';
+import styled from 'styled-components';
+import { SetBlank } from './set-blank';
+import { useTurnControlData } from './use-turn-control-data';
+import { useScrabbleState } from '../client-side/scrabble-state';
 
 export const StyledScoreLine = styled.div`
-  display: flex; 
+  display: flex;
   font-size: large;
   * {
     margin-right: 0.5em;
-  };
+  }
 `;
 
 const StyledIllegalWords = styled.div`
@@ -21,61 +21,74 @@ const StyledIllegalWords = styled.div`
   color: darkred;
 `;
 
-
 // Prehaps this should be generalised into a 'button with confirmation' untility
 function PassDialog() {
-    const [ awaitingConfirmation, setAwaitingConfirmation ] = useState(false);
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
 
-    const { onPass } = useTurnControlData();
-    if(!onPass) {
-        return null;
-    }
+  const { onPass } = useTurnControlData();
+  if (!onPass) {
+    return null;
+  }
 
-    if(awaitingConfirmation) {
-        return <>
-            <button onClick={()=>{setAwaitingConfirmation(false); onPass();}}>
-                Confirm Pass</button>
-            <button onClick={()=>setAwaitingConfirmation(false)}>Cancel</button>
-        </>;
-    }
-    return <>
-
-        <span>Your turn </span>
-        <button onClick={()=>setAwaitingConfirmation(true)}>Pass</button>
-    </>;
+  if (awaitingConfirmation) {
+    return (
+      <>
+        <button
+          onClick={() => {
+            setAwaitingConfirmation(false);
+            onPass();
+          }}
+        >
+          Confirm Pass
+        </button>
+        <button onClick={() => setAwaitingConfirmation(false)}>Cancel</button>
+      </>
+    );
+  }
+  return (
+    <>
+      <span>Your turn </span>
+      <button onClick={() => setAwaitingConfirmation(true)}>Pass</button>
+    </>
+  );
 }
 
 export function TurnControl(): JSX.Element {
-    const { options: { allowIllegalWords } } = useScrabbleState();
-    const { illegalWords, onDone } = useTurnControlData();
-    
-    let doButtonText = "Done";
-    let disableDoneButton = false;
-    if(illegalWords ) {
-        if(allowIllegalWords) {
-            doButtonText = "Done (permitting illegal words)";
-        } else {
-            disableDoneButton = true;
-        }
-    }
+  const {
+    options: { allowIllegalWords },
+  } = useScrabbleState();
+  const { illegalWords, onDone } = useTurnControlData();
 
-    return (
-        <div>
-            {illegalWords &&
+  let doButtonText = 'Done';
+  let disableDoneButton = false;
+  if (illegalWords) {
+    if (allowIllegalWords) {
+      doButtonText = 'Done (permitting illegal words)';
+    } else {
+      disableDoneButton = true;
+    }
+  }
+
+  return (
+    <div>
+      {illegalWords && (
         <StyledIllegalWords>
           Illegal Words:
-            {illegalWords.map(w => <span key={w}>{w.toLowerCase()}</span>)}
+          {illegalWords.map((w) => (
+            <span key={w}>{w.toLowerCase()}</span>
+          ))}
         </StyledIllegalWords>
-            }
+      )}
 
-            <SetBlank/>
-            <StyledScoreLine>
-                <PassDialog/>
-                {onDone && <button onClick={onDone} disabled={disableDoneButton}> 
-                        {doButtonText} 
-                    </button>
-                }
-            </StyledScoreLine>
-        </div>
-    );
+      <SetBlank />
+      <StyledScoreLine>
+        <PassDialog />
+        {onDone && (
+          <button onClick={onDone} disabled={disableDoneButton}>
+            {doButtonText}
+          </button>
+        )}
+      </StyledScoreLine>
+    </div>
+  );
 }

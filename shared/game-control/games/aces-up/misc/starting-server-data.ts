@@ -1,111 +1,116 @@
-import { SetupArg0 } from "../../../game-control.js";
-import { RandomAPI } from "../../../../utils/random-api.js";
-import { CardNonJoker, ranks, suits } from "../../../../utils/cards/types.js";
-import { debugOptions } from "../config.js";
-import { handSize } from "../config.js";
-import { makeDiscardPileData } from "./discard-pile.js";
-import { ExtendingDeck } from "./extendable-deck.js";
-import { PerTurnServerData, PlayerData, ServerData } from "../server-data.js";
-import { makeSharedPileData } from "./shared-pile.js";
-import { GameOptions, makeGameOptions, OptionWrapper, SetupOptions } from "../options.js";
+import { SetupArg0 } from '../../../game-control.js';
+import { RandomAPI } from '../../../../utils/random-api.js';
+import { CardNonJoker, ranks, suits } from '../../../../utils/cards/types.js';
+import { debugOptions } from '../config.js';
+import { handSize } from '../config.js';
+import { makeDiscardPileData } from './discard-pile.js';
+import { ExtendingDeck } from './extendable-deck.js';
+import { PerTurnServerData, PlayerData, ServerData } from '../server-data.js';
+import { makeSharedPileData } from './shared-pile.js';
+import { GameOptions, makeGameOptions, OptionWrapper, SetupOptions } from '../options.js';
 
-function startingPlayerData(mainPileDeck: ExtendingDeck, handDeck: ExtendingDeck,
-    options: GameOptions) : PlayerData {
+function startingPlayerData(
+  mainPileDeck: ExtendingDeck,
+  handDeck: ExtendingDeck,
+  options: GameOptions,
+): PlayerData {
+  const optionsWrapper = new OptionWrapper(options);
+  const notSpecial = (c: CardNonJoker) => !optionsWrapper.isSpecial(c);
 
-    const optionsWrapper = new OptionWrapper(options);
-    const notSpecial = (c: CardNonJoker) => !optionsWrapper.isSpecial(c);
+  const discards: CardNonJoker[][] = [[], [], []];
 
-    const discards : CardNonJoker[][] = [[], [], []];
-
-    if (debugOptions.prepopulateOrdered) {
-        for(const rank of ranks.slice(0,6)) {
-            discards[0].push({rank, suit: "C"});
-        }
-        for(let i = 0; i < 10; i++) {
-            discards[1].push({
-                rank: "K", 
-                suit: suits[i%suits.length],
-            });
-        }
-    } else if (debugOptions.prepopulateRandom) {
-        discards[0] = mainPileDeck.drawN(6);
-        discards[1] = mainPileDeck.drawN(1);
-        discards[2] = [{rank: "K", suit: "C"}, {rank: "K", suit: "D"},
-            {rank: "K", suit: "H"}, {rank: "K", suit: "S"} ];
+  if (debugOptions.prepopulateOrdered) {
+    for (const rank of ranks.slice(0, 6)) {
+      discards[0].push({ rank, suit: 'C' });
     }
+    for (let i = 0; i < 10; i++) {
+      discards[1].push({
+        rank: 'K',
+        suit: suits[i % suits.length],
+      });
+    }
+  } else if (debugOptions.prepopulateRandom) {
+    discards[0] = mainPileDeck.drawN(6);
+    discards[1] = mainPileDeck.drawN(1);
+    discards[2] = [
+      { rank: 'K', suit: 'C' },
+      { rank: 'K', suit: 'D' },
+      { rank: 'K', suit: 'H' },
+      { rank: 'K', suit: 'S' },
+    ];
+  }
 
-    return {
-        mainPile: mainPileDeck.drawN(options.mainPileSize, notSpecial),
+  return {
+    mainPile: mainPileDeck.drawN(options.mainPileSize, notSpecial),
 
-        hand: handDeck.drawN(handSize),
+    hand: handDeck.drawN(handSize),
 
-        discardPileData: [
-            makeDiscardPileData(discards[0]),
-            makeDiscardPileData(discards[1]),
-            makeDiscardPileData(discards[2]),
-        ],
-        cardPlayedToSharedPiles: false,
-    };
+    discardPileData: [
+      makeDiscardPileData(discards[0]),
+      makeDiscardPileData(discards[1]),
+      makeDiscardPileData(discards[2]),
+    ],
+    cardPlayedToSharedPiles: false,
+  };
 }
 
 export const turnStartServerData: PerTurnServerData = {
-    moveToSharedPile: "not done",
-    undoItems:[],
+  moveToSharedPile: 'not done',
+  undoItems: [],
 };
 
 function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) {
-    const options = new OptionWrapper(gameOptions);
-    
-    const nonSpecialRanks = ranks.filter(rank => 
-        !options.isSpecial({rank, suit: "C"/*arbitary*/})
-        && rank !== gameOptions.topRank
-    );
+  const options = new OptionWrapper(gameOptions);
 
-    const topRankIndex = random.Die(nonSpecialRanks.length) -1;
-    const suit = suits[random.Die(suits.length) -1];
-    //KLUDGE: Assumes the special ranks have higher index than non-special.
-    const cards : CardNonJoker[] = [];
-    for(let index = 0; index <= topRankIndex; ++index) {
-        const rank = ranks[index];
-        cards.push({rank,suit});
-    }
+  const nonSpecialRanks = ranks.filter(
+    (rank) => !options.isSpecial({ rank, suit: 'C' /*arbitary*/ }) && rank !== gameOptions.topRank,
+  );
 
-    return makeSharedPileData(cards);
+  const topRankIndex = random.Die(nonSpecialRanks.length) - 1;
+  const suit = suits[random.Die(suits.length) - 1];
+  //KLUDGE: Assumes the special ranks have higher index than non-special.
+  const cards: CardNonJoker[] = [];
+  for (let index = 0; index <= topRankIndex; ++index) {
+    const rank = ranks[index];
+    cards.push({ rank, suit });
+  }
+
+  return makeSharedPileData(cards);
 }
 
-export function startingServerData({ctx, random}: SetupArg0,
-    setupOptions: SetupOptions
+export function startingServerData(
+  { ctx, random }: SetupArg0,
+  setupOptions: SetupOptions,
 ): ServerData {
-    const options = makeGameOptions(setupOptions);
-    const sd: ServerData = {
-        deck: [],
-        sharedPileData: [],
+  const options = makeGameOptions(setupOptions);
+  const sd: ServerData = {
+    deck: [],
+    sharedPileData: [],
 
-        playerData: {},
+    playerData: {},
 
-        ...turnStartServerData,
+    ...turnStartServerData,
 
-        options,
-    };
+    options,
+  };
 
-    const mainPileDeck = new ExtendingDeck(random, []);
-    const handDeck = new ExtendingDeck(random, sd.deck);
+  const mainPileDeck = new ExtendingDeck(random, []);
+  const handDeck = new ExtendingDeck(random, sd.deck);
 
-    for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
-        sd.sharedPileData.push(makeRandomSharedPile(options, random));
-    }
+  for (let i = 0; i < options.nSharedPilesAtStart; ++i) {
+    sd.sharedPileData.push(makeRandomSharedPile(options, random));
+  }
 
-    if (debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {
-        const kc = { rank: "K", suit: "C" } as const;
-        sd.sharedPileData.push(makeSharedPileData([kc,kc,kc,kc,kc,kc,kc,kc,]));
+  if (debugOptions.prepopulateRandom || debugOptions.prepopulateOrdered) {
+    const kc = { rank: 'K', suit: 'C' } as const;
+    sd.sharedPileData.push(makeSharedPileData([kc, kc, kc, kc, kc, kc, kc, kc]));
+  }
 
-    }
+  sd.sharedPileData.push(makeSharedPileData([]));
 
-    sd.sharedPileData.push(makeSharedPileData([]));
+  for (const pid of ctx.playOrder) {
+    sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
+  }
 
-    for (const pid of ctx.playOrder) {
-        sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
-    }
-
-    return sd;
+  return sd;
 }

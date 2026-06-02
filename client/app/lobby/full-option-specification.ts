@@ -1,42 +1,42 @@
-import { AppGame } from "@/app-game-support";
-import { defaultNumPlayers } from "@/app-game-support/app-game";
-import { OptionValues } from "@/option-specification/types";
-import { sAssert } from "@shared/utils/assert";
+import { AppGame } from '@/app-game-support';
+import { defaultNumPlayers } from '@/app-game-support/app-game';
+import { OptionValues } from '@/option-specification/types';
+import { sAssert } from '@shared/utils/assert';
 
 export function fullOptionSpecification(game: AppGame) {
-    const { minPlayers, maxPlayers } = game;
-    const gameOptions = game.options ?? {};
-    
-    return {
-        numPlayers: {
-            label: "Number of players",
-            default: defaultNumPlayers(game),
-            min: minPlayers,
-            max: maxPlayers,
-        },
+  const { minPlayers, maxPlayers } = game;
+  const gameOptions = game.options ?? {};
 
-        ...gameOptions,
+  return {
+    numPlayers: {
+      label: 'Number of players',
+      default: defaultNumPlayers(game),
+      min: minPlayers,
+      max: maxPlayers,
+    },
 
-        offline: {
-            label: "Play and pass (offline)",
-            default: false,
-            debugOnly: false,
-        },
+    ...gameOptions,
 
-        showDebugOptions: {
-            label: "Show debug options",
-            default: false,
-        },
+    offline: {
+      label: 'Play and pass (offline)',
+      default: false,
+      debugOnly: false,
+    },
 
-        passAndPlay: {
-            label: "Play and pass (offline only)",
-            default: true,
-            debugOnly: true,
-            showIf: (values: OptionValues) => {
-                const res = values.offline;
-                sAssert(typeof res === "boolean");
-                return res;
-            },
-        }
-    } as const;
+    showDebugOptions: {
+      label: 'Show debug options',
+      default: false,
+    },
+
+    passAndPlay: {
+      label: 'Play and pass (offline only)',
+      default: true,
+      debugOnly: true,
+      showIf: (values: OptionValues) => {
+        const res = values.offline;
+        sAssert(typeof res === 'boolean');
+        return res;
+      },
+    },
+  } as const;
 }

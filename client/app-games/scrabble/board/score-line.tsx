@@ -1,29 +1,29 @@
-import { JSX } from "react";
-import { findActiveLetters, getWordsAndScore } from "../client-side";
-import { useScrabbleState } from "../client-side/scrabble-state";
-import { blank } from "@game-control/games/scrabble/config/letters";
+import { JSX } from 'react';
+import { findActiveLetters, getWordsAndScore } from '../client-side';
+import { useScrabbleState } from '../client-side/scrabble-state';
+import { blank } from '@game-control/games/scrabble/config/letters';
 
-export function ScoreLine() : JSX.Element | null {
-    const context = useScrabbleState();
+export function ScoreLine(): JSX.Element | null {
+  const context = useScrabbleState();
 
-    const active = findActiveLetters(context);
-    const wordsAndScore = getWordsAndScore(context, active);
-    
-    let illegalWords: string[] = [];
-    if(wordsAndScore?.illegalWords) {
-        illegalWords =  wordsAndScore.illegalWords.filter(word => !word.includes(blank));
-    }
+  const active = findActiveLetters(context);
+  const wordsAndScore = getWordsAndScore(context, active);
 
-    if (active.length === 0) {
-        return null;
-    }
-    
-    let scoreText = "Word score: ";
-    scoreText += wordsAndScore ? wordsAndScore.score : "-";
-    if(illegalWords.length > 0) {
-        const pluralise = illegalWords.length > 1 ? "s" : ""; 
-        scoreText += ` (includes illegal word${pluralise}: ${illegalWords.join(", ")})`;
-    }
+  let illegalWords: string[] = [];
+  if (wordsAndScore?.illegalWords) {
+    illegalWords = wordsAndScore.illegalWords.filter((word) => !word.includes(blank));
+  }
 
-    return <div>{scoreText}</div>;
+  if (active.length === 0) {
+    return null;
+  }
+
+  let scoreText = 'Word score: ';
+  scoreText += wordsAndScore ? wordsAndScore.score : '-';
+  if (illegalWords.length > 0) {
+    const pluralise = illegalWords.length > 1 ? 's' : '';
+    scoreText += ` (includes illegal word${pluralise}: ${illegalWords.join(', ')})`;
+  }
+
+  return <div>{scoreText}</div>;
 }

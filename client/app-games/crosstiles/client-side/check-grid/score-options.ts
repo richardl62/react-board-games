@@ -1,57 +1,53 @@
-import { sAssert } from "@utils/assert";
-import { bonusScore } from "@game-control/games/crosstiles/config";
-import { ScoreCategory } from "@game-control/games/crosstiles/score-categories";
-import { ScoreCard } from "@game-control/games/crosstiles/moves/score-card";
-import { ServerData } from "@game-control/games/crosstiles/server-data";
-import { checkGrid } from "./check-grid";
+import { sAssert } from '@utils/assert';
+import { bonusScore } from '@game-control/games/crosstiles/config';
+import { ScoreCategory } from '@game-control/games/crosstiles/score-categories';
+import { ScoreCard } from '@game-control/games/crosstiles/moves/score-card';
+import { ServerData } from '@game-control/games/crosstiles/server-data';
+import { checkGrid } from './check-grid';
 
 interface ScoringData extends ReturnType<typeof checkGrid> {
-    scoreCard: ScoreCard;
+  scoreCard: ScoreCard;
 }
 
 export class ScoreOptions {
-    private playerScoreOptions: Record<string, ScoringData> = {};
+  private playerScoreOptions: Record<string, ScoringData> = {};
 
-    constructor(
-        playerData: ServerData["playerData"],
-        isLegalWord: (word: string) => boolean,
-    ) {
-        for(const pid in playerData) {
-            const { scoreCard, gridRackAndScore } = playerData[pid];
-            sAssert(gridRackAndScore);
+  constructor(playerData: ServerData['playerData'], isLegalWord: (word: string) => boolean) {
+    for (const pid in playerData) {
+      const { scoreCard, gridRackAndScore } = playerData[pid];
+      sAssert(gridRackAndScore);
 
+      this.playerScoreOptions[pid] = {
+        ...checkGrid(gridRackAndScore.grid, scoreCard, isLegalWord),
+        scoreCard,
+      };
+    }
+  }
 
-            this.playerScoreOptions[pid] = {
-                ... checkGrid(gridRackAndScore.grid, scoreCard, isLegalWord),
-                scoreCard
-            };
-        }
+  private scoringData(pid: string) {
+    const data = this.playerScoreOptions[pid];
+    sAssert(data, 'Unrecognised player id');
+    return data;
+  }
+
+  scoreOption(pid: string, category: ScoreCategory): number | null {
+    const sd = this.scoringData(pid);
+
+    if (!sd.scoreCategory) {
+      // The grid does not score, so any unused categories can be zeroed.
+      return sd.scoreCard[category] === undefined ? 0 : null;
     }
 
-    private scoringData(pid: string) {
-        const data = this.playerScoreOptions[pid];
-        sAssert(data, "Unrecognised player id");
-        return data;
+    if (sd.scoreCategory === category) {
+      return sd.score;
     }
 
-    scoreOption(pid: string, category: ScoreCategory) : number | null {
-        const sd = this.scoringData(pid);
-        
-        if(!sd.scoreCategory) {
-            // The grid does not score, so any unused categories can be zeroed.
-            return sd.scoreCard[category] === undefined ? 0 : null;
-        }
+    return null;
+  }
 
-        if(sd.scoreCategory === category) {
-            return sd.score;
-        }
+  bonus(pid: string): number {
+    const sd = this.scoringData(pid);
 
-        return null;
-    }
-
-    bonus(pid: string) : number {
-        const sd = this.scoringData(pid);
-
-        return sd ? sd.nBonuses * bonusScore : 0;
-    }
+    return sd ? sd.nBonuses * bonusScore : 0;
+  }
 }

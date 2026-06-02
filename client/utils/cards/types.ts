@@ -1,1 +1,1 @@
-export * from "../../../shared/utils/cards/types.js";
+export * from '../../../shared/utils/cards/types.js';

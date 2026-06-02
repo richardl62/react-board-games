@@ -1,43 +1,48 @@
-import { columnValues } from "@shared/game-control/games/cant-stop/config";
-import { JSX } from "react";
-import styled from "styled-components";
-import { useMatchState } from "../match-state/match-state";
-import { Column } from "./column";
+import { columnValues } from '@shared/game-control/games/cant-stop/config';
+import { JSX } from 'react';
+import styled from 'styled-components';
+import { useMatchState } from '../match-state/match-state';
+import { Column } from './column';
 
 const ColumnsDiv = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-    margin-left: 1rem;
+  margin-left: 1rem;
 `;
 
-const ColumnLabel = styled.div<{inPlay: boolean}>`
-    text-align: center;
-    color: ${(props) => props.inPlay ? "var(--currentPlayerColor)" : "inherit"};
+const ColumnLabel = styled.div<{ inPlay: boolean }>`
+  text-align: center;
+  color: ${(props) => (props.inPlay ? 'var(--currentPlayerColor)' : 'inherit')};
 
-    font-family: "Roboto", sans-serif;
-    font-size: 1.2rem;
-    font-weight: ${(props) => props.inPlay ? 1000 : "normal"};
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: ${(props) => (props.inPlay ? 1000 : 'normal')};
 `;
 
-// Columns are centered vertically. 
+// Columns are centered vertically.
 // KLUDGE?: Rely on the centering to ensure that square boundaries align as required.
 export function Columns(): JSX.Element {
-    const { ctx, G: {columnHeights} } = useMatchState();
+  const {
+    ctx,
+    G: { columnHeights },
+  } = useMatchState();
 
-    const inPlay = (colValue: number) => {
-        const heights = columnHeights[ctx.currentPlayer][colValue];
-        return heights.owned !== heights.thisScoringChoice;
-    }
+  const inPlay = (colValue: number) => {
+    const heights = columnHeights[ctx.currentPlayer][colValue];
+    return heights.owned !== heights.thisScoringChoice;
+  };
 
-    return <ColumnsDiv>
-        {columnValues.map((colValue) =>
-            <div key={colValue}>
-                <ColumnLabel inPlay={inPlay(colValue)}>{colValue}</ColumnLabel>
-                <Column colValue={colValue} />
-                <ColumnLabel inPlay={inPlay(colValue)}>{colValue}</ColumnLabel>
-            </div>
-        )}
-    </ColumnsDiv>;
+  return (
+    <ColumnsDiv>
+      {columnValues.map((colValue) => (
+        <div key={colValue}>
+          <ColumnLabel inPlay={inPlay(colValue)}>{colValue}</ColumnLabel>
+          <Column colValue={colValue} />
+          <ColumnLabel inPlay={inPlay(colValue)}>{colValue}</ColumnLabel>
+        </div>
+      ))}
+    </ColumnsDiv>
+  );
 }

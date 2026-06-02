@@ -1,135 +1,138 @@
-import { JSX, useEffect, useState } from "react";
-import styled from "styled-components";
-import { sAssert } from "@utils/assert";
-import {  useNowTicker } from "@utils/use-countdown";
-import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { GameStage } from "@game-control/games/crosstiles/server-data";
-import { GridStatus } from "./grid-status";
-import { RackAndBoard } from "./rack-and-board";
-import { makeEmptyGrid } from "@game-control/games/crosstiles/moves/make-empty-grid";
-import { PlayerStatus } from "./player-status";
-import { RecordAndDoneButtons, RecordRequest } from "./record-and-done-buttons";
-import { MakeGridCountDown } from "./make-grid-countdown";
+import { JSX, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { sAssert } from '@utils/assert';
+import { useNowTicker } from '@utils/use-countdown';
+import { useCrossTilesContext } from '../client-side/actions/cross-tiles-context';
+import { GameStage } from '@game-control/games/crosstiles/server-data';
+import { GridStatus } from './grid-status';
+import { RackAndBoard } from './rack-and-board';
+import { makeEmptyGrid } from '@game-control/games/crosstiles/moves/make-empty-grid';
+import { PlayerStatus } from './player-status';
+import { RecordAndDoneButtons, RecordRequest } from './record-and-done-buttons';
+import { MakeGridCountDown } from './make-grid-countdown';
 
 const OuterDiv = styled.div`
-    display: inline-flex;
-    flex-direction: column;
-    align-items: start; 
+  display: inline-flex;
+  flex-direction: column;
+  align-items: start;
 `;
 
 const TimeLeft = styled.span`
-    font-size: large;
+  font-size: large;
 `;
 
 const ButtonAndTimeDiv = styled.div`
-    margin-top: 6px;
+  margin-top: 6px;
 
-    button {
-        margin-right: 4px;   
-    }
+  button {
+    margin-right: 4px;
+  }
 `;
 
 function minutesAndSeconds(secondsFactional: number) {
-    const seconds = Math.max(Math.floor(secondsFactional + 0.5), 0);
-    const minutes =  Math.floor(seconds/60);
-    const remainder = seconds % 60;
-    const padding = remainder < 10 ? "0" : "";
+  const seconds = Math.max(Math.floor(secondsFactional + 0.5), 0);
+  const minutes = Math.floor(seconds / 60);
+  const remainder = seconds % 60;
+  const padding = remainder < 10 ? '0' : '';
 
-    return `${minutes}:${padding}${remainder}`;
+  return `${minutes}:${padding}${remainder}`;
 }
 
 interface MakeGridInnerProps {
-    secondsLeft: number;
+  secondsLeft: number;
 }
 
-function MakeGridInner(props: MakeGridInnerProps) : JSX.Element {
-    const { secondsLeft } = props;
-    
-    const context = useCrossTilesContext();
-    const { playerData, stage, grid } = context;
-    const { moves,  playerID } = context.wrappedGameProps;
-    const [showIllegalWords, setShowIllegalWords] = useState(false);
+function MakeGridInner(props: MakeGridInnerProps): JSX.Element {
+  const { secondsLeft } = props;
 
-    sAssert(stage === GameStage.makingGrids);
+  const context = useCrossTilesContext();
+  const { playerData, stage, grid } = context;
+  const { moves, playerID } = context.wrappedGameProps;
+  const [showIllegalWords, setShowIllegalWords] = useState(false);
 
-    const {
-        gridRackAndScore: recordedGridRackAndScore,
-        doneRecordingGrid: amDoneRecording,
-        selectedLetters, 
-    } = playerData[playerID];
+  sAssert(stage === GameStage.makingGrids);
 
-    useEffect(() => {
-        if (secondsLeft < 0 && !amDoneRecording) {
-            if (!recordedGridRackAndScore) {
-                sAssert(selectedLetters);
-                moves.recordGrid({ grid: makeEmptyGrid(), rack: selectedLetters, score: null });
-            }
-            moves.doneRecordingGrid();
-        }
-    });
+  const {
+    gridRackAndScore: recordedGridRackAndScore,
+    doneRecordingGrid: amDoneRecording,
+    selectedLetters,
+  } = playerData[playerID];
 
-    const doneMessage = (pid: string) => {
-        if ( pid === playerID ) {
-            return null;
-        }
+  useEffect(() => {
+    if (secondsLeft < 0 && !amDoneRecording) {
+      if (!recordedGridRackAndScore) {
+        sAssert(selectedLetters);
+        moves.recordGrid({ grid: makeEmptyGrid(), rack: selectedLetters, score: null });
+      }
+      moves.doneRecordingGrid();
+    }
+  });
 
-        return playerData[pid].doneRecordingGrid ? "Done" : "Not done";
-    };
+  const doneMessage = (pid: string) => {
+    if (pid === playerID) {
+      return null;
+    }
 
-    const recordRequest = (status: RecordRequest) => {
-        setShowIllegalWords(status === "blockedWithIllegalWords");
-    };
+    return playerData[pid].doneRecordingGrid ? 'Done' : 'Not done';
+  };
 
-    return <OuterDiv>
-        <RackAndBoard />
-        <GridStatus scoreCard={playerData[playerID].scoreCard} grid={grid} 
-            checkSpelling={showIllegalWords} />
+  const recordRequest = (status: RecordRequest) => {
+    setShowIllegalWords(status === 'blockedWithIllegalWords');
+  };
 
-        {amDoneRecording && <div>Done: Waiting for other player(s)</div>}   
-        <ButtonAndTimeDiv>
-            {amDoneRecording || 
-                <RecordAndDoneButtons recordRequest={recordRequest}/>
-            }
-            <PlayerStatus message={doneMessage} />
-            <TimeLeft>{"Time left " + minutesAndSeconds(secondsLeft)}</TimeLeft>
-        </ButtonAndTimeDiv>
-    </OuterDiv>;
+  return (
+    <OuterDiv>
+      <RackAndBoard />
+      <GridStatus
+        scoreCard={playerData[playerID].scoreCard}
+        grid={grid}
+        checkSpelling={showIllegalWords}
+      />
+
+      {amDoneRecording && <div>Done: Waiting for other player(s)</div>}
+      <ButtonAndTimeDiv>
+        {amDoneRecording || <RecordAndDoneButtons recordRequest={recordRequest} />}
+        <PlayerStatus message={doneMessage} />
+        <TimeLeft>{'Time left ' + minutesAndSeconds(secondsLeft)}</TimeLeft>
+      </ButtonAndTimeDiv>
+    </OuterDiv>
+  );
 }
 
-export function MakeGrid() : JSX.Element | null {
-    const context = useCrossTilesContext();
-    const { playerData, stage, options } = context;
-    const { moves,  playerID } = context.wrappedGameProps;
+export function MakeGrid(): JSX.Element | null {
+  const context = useCrossTilesContext();
+  const { playerData, stage, options } = context;
+  const { moves, playerID } = context.wrappedGameProps;
 
-    const now = useNowTicker();
+  const now = useNowTicker();
 
-    const { makeGridStartTime } = playerData[playerID];
+  const { makeGridStartTime } = playerData[playerID];
 
-    useEffect(()=>{
-        if(stage === GameStage.makingGrids) {
-            if(makeGridStartTime === null) {
-                moves.setMakeGridStartTime(now);
-            } 
-        }
-    });
-
-    if(stage !== GameStage.makingGrids) {
-        return null;
+  useEffect(() => {
+    if (stage === GameStage.makingGrids) {
+      if (makeGridStartTime === null) {
+        moves.setMakeGridStartTime(now);
+      }
     }
+  });
 
-    if(makeGridStartTime === null) {
-        return null;
-    }
-   
-    const secondsSinceStart = (now - makeGridStartTime) / 1000;
-    const remainingCountdown = options.makeGridCountdown - secondsSinceStart;
+  if (stage !== GameStage.makingGrids) {
+    return null;
+  }
 
-    if(remainingCountdown > 0) {
-        return <MakeGridCountDown secondsLeft={remainingCountdown} />;
-    }
+  if (makeGridStartTime === null) {
+    return null;
+  }
 
-    const totalTime = options.timeToMakeGrid + options.makeGridCountdown;
-    const secondsLeft = totalTime - secondsSinceStart;
+  const secondsSinceStart = (now - makeGridStartTime) / 1000;
+  const remainingCountdown = options.makeGridCountdown - secondsSinceStart;
 
-    return <MakeGridInner secondsLeft={secondsLeft} />;
+  if (remainingCountdown > 0) {
+    return <MakeGridCountDown secondsLeft={remainingCountdown} />;
+  }
+
+  const totalTime = options.timeToMakeGrid + options.makeGridCountdown;
+  const secondsLeft = totalTime - secondsSinceStart;
+
+  return <MakeGridInner secondsLeft={secondsLeft} />;
 }

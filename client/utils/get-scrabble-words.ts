@@ -1,1 +1,1 @@
-export * from "../../shared/utils/get-scrabble-words";
+export * from '../../shared/utils/get-scrabble-words';

@@ -3,85 +3,84 @@ import { diceSize } from '@/utils/dice/dice';
 import styled from 'styled-components';
 import { colors } from './styles';
 
-const buttonFont = "Roboto";
-const buttonDivHieght = "100px";
-const buttonDivWidth = "400px";
+const buttonFont = 'Roboto';
+const buttonDivHieght = '100px';
+const buttonDivWidth = '400px';
 
-export const DiceAndButtonsDiv  = styled.div`
-    display: flex;
-    flex-direction: row;
+export const DiceAndButtonsDiv = styled.div`
+  display: flex;
+  flex-direction: row;
 
-    align-items: center;
+  align-items: center;
 `;
 
-export const TwoDiceDiv  = styled.div`
-    display: flex;
-    flex-direction: column;
-    
-    justify-content: space-between;
+export const TwoDiceDiv = styled.div`
+  display: flex;
+  flex-direction: column;
 
-    height: calc(2.4*${diceSize});
+  justify-content: space-between;
 
-    margin: 0 10px;
+  height: calc(2.4 * ${diceSize});
+
+  margin: 0 10px;
 `;
 
 export const ButtonsDiv = styled.div`
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-    height: ${buttonDivHieght};
-    width: ${buttonDivWidth};
+  height: ${buttonDivHieght};
+  width: ${buttonDivWidth};
 `;
 
 export const NoOptionRollOrBustButton = styled.div`
-    display: flex;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  width: 100%;
+  height: 100%;
 
-    font-size: calc(0.6 * ${buttonDivHieght});
-    font-family: ${buttonFont};
+  font-size: calc(0.6 * ${buttonDivHieght});
+  font-family: ${buttonFont};
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    color: ${colors.playerButtonText};
-    background-color: var(--currentPlayerColor);
-    border: 1px solid black;
+  color: ${colors.playerButtonText};
+  background-color: var(--currentPlayerColor);
+  border: 1px solid black;
 `;
 
 export const RollDontButton = styled.button`
-    width: calc(0.2 * ${buttonDivWidth});
-`
+  width: calc(0.2 * ${buttonDivWidth});
+`;
 
-export const ScoringOptionContainer  = styled.div`
-    width: calc(0.6 * ${buttonDivWidth});
-`
+export const ScoringOptionContainer = styled.div`
+  width: calc(0.6 * ${buttonDivWidth});
+`;
 
-export const ScoringOptionButton = styled.div<{underline?: boolean }>`
-    display: flex;
-    ${props => props.underline && 'text-decoration: underline;'}
+export const ScoringOptionButton = styled.div<{ underline?: boolean }>`
+  display: flex;
+  ${(props) => props.underline && 'text-decoration: underline;'}
 
-    color: ${colors.playerButtonText};
-    background-color: var(--currentPlayerColor);
+  color: ${colors.playerButtonText};
+  background-color: var(--currentPlayerColor);
 
-    justify-content: center;
-    align-items: center;
-    
-    font-size: calc(0.20 * ${buttonDivHieght});
-    font-family: ${buttonFont};
+  justify-content: center;
+  align-items: center;
+
+  font-size: calc(0.2 * ${buttonDivHieght});
+  font-family: ${buttonFont};
 `;
 
 export const ScoringOptionsGrid = styled.div`
-    display: grid;
-    width: 100%;
-    height: 100%;
+  display: grid;
+  width: 100%;
+  height: 100%;
 
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
 
-    & > * {
-        border: 1px solid black;
-    }
-    border: 2px solid black;
+  & > * {
+    border: 1px solid black;
+  }
+  border: 2px solid black;
 `;
-

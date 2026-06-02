@@ -1,10 +1,10 @@
-import { ClientMoveFunctions } from "../../../move-fn.js";
-import { moveCard } from "./move-card.js";
-import { undo } from "./undo.js";
+import { ClientMoveFunctions } from '../../../move-fn.js';
+import { moveCard } from './move-card.js';
+import { undo } from './undo.js';
 
 export const moves = {
-    moveCard,
-    undo,
+  moveCard,
+  undo,
 };
 
 export type ClientMoves = ClientMoveFunctions<typeof moves>;

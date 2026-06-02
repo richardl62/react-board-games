@@ -1,58 +1,54 @@
-import { JSX } from "react";
-import { Card } from "@utils/cards/types";
-import { cardSize } from "@utils/cards/styles";
-import { useCribbageState } from "../client-side/cribbage-state";
-import * as dndControl from "../client-side/dnd-control";
-import { CardSetID, makeCardSetID } from "@game-control/games/cribbage/server-data";
-import { Hand } from "@utils/cards/hand";
+import { JSX } from 'react';
+import { Card } from '@utils/cards/types';
+import { cardSize } from '@utils/cards/styles';
+import { useCribbageState } from '../client-side/cribbage-state';
+import * as dndControl from '../client-side/dnd-control';
+import { CardSetID, makeCardSetID } from '@game-control/games/cribbage/server-data';
+import { Hand } from '@utils/cards/hand';
 
 interface HandWrapperProps {
-    cardSetID: CardSetID;
+  cardSetID: CardSetID;
 }
 
-export function HandWrapper(props: HandWrapperProps) : JSX.Element {
-    const { cardSetID } = props;
+export function HandWrapper(props: HandWrapperProps): JSX.Element {
+  const { cardSetID } = props;
 
-    const context = useCribbageState();
-    const { moves} = context;
+  const context = useCribbageState();
+  const { moves } = context;
 
-    const cardWidth = cardSize.width;
-    const cardHeight = cardSize.height;
-    const maxSeperation = cardSize.width / 12;
-    
-    const cards : (Card|null) [] = context[cardSetID].hand;
+  const cardWidth = cardSize.width;
+  const cardHeight = cardSize.height;
+  const maxSeperation = cardSize.width / 12;
 
-    const showBack = (index: number) => dndControl.showBack(context, cardSetID, index);
-    const draggable = (index: number) => dndControl.dragAllowed(context, cardSetID, index);
-    const dropTarget = (index?: number) =>  dndControl.dropTarget(context, cardSetID, index);
+  const cards: (Card | null)[] = context[cardSetID].hand;
 
-    const onDrop = (
-        arg: {
-            from: { handID: string, index: number },
-            to: { handID: string, index?: number }
-        }
-    ) => {
-        const {from, to} = arg;
-        moves.drag({
-            from: { cardSetID: makeCardSetID(from.handID), index: from.index },
-            to: { cardSetID: makeCardSetID(to.handID), index: to.index },
-        });
-    };
+  const showBack = (index: number) => dndControl.showBack(context, cardSetID, index);
+  const draggable = (index: number) => dndControl.dragAllowed(context, cardSetID, index);
+  const dropTarget = (index?: number) => dndControl.dropTarget(context, cardSetID, index);
 
-    //dropTarget: (index?: number) => boolean;
-    return <Hand 
-        cards={cards}
-        showBack={showBack}
+  const onDrop = (arg: {
+    from: { handID: string; index: number };
+    to: { handID: string; index?: number };
+  }) => {
+    const { from, to } = arg;
+    moves.drag({
+      from: { cardSetID: makeCardSetID(from.handID), index: from.index },
+      to: { cardSetID: makeCardSetID(to.handID), index: to.index },
+    });
+  };
 
-        cardWidth={cardWidth}
-        cardHeight={cardHeight}
-        maxSeperation={maxSeperation}
-
-        handID={cardSetID}
-        draggable={draggable}
-        dropTarget={dropTarget}
-
-        onDrop={onDrop}
-    />;
+  //dropTarget: (index?: number) => boolean;
+  return (
+    <Hand
+      cards={cards}
+      showBack={showBack}
+      cardWidth={cardWidth}
+      cardHeight={cardHeight}
+      maxSeperation={maxSeperation}
+      handID={cardSetID}
+      draggable={draggable}
+      dropTarget={dropTarget}
+      onDrop={onDrop}
+    />
+  );
 }
-

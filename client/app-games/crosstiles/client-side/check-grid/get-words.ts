@@ -1,33 +1,34 @@
-import { Letter } from "@game-control/games/crosstiles/config";
-import { transpose } from "@utils/transpose";
+import { Letter } from '@game-control/games/crosstiles/config';
+import { transpose } from '@utils/transpose';
 
 function addWordsfromRow(row: (Letter | null)[], words: string[]) {
-    let str = "";
-    for(let r = 0; r < row.length+1; r++) { // Reads one off end of row
-        const letter = row[r];
-        if(letter) {
-            str += letter;
-        } else {
-            if(str.length >= 2) {
-                words.push(str);
-            }
-            str = "";
-        }
+  let str = '';
+  for (let r = 0; r < row.length + 1; r++) {
+    // Reads one off end of row
+    const letter = row[r];
+    if (letter) {
+      str += letter;
+    } else {
+      if (str.length >= 2) {
+        words.push(str);
+      }
+      str = '';
     }
+  }
 }
 
-export function getWords(grid: (Letter|null)[][]) : string[] {
-    const words: string[] = [];
-    for(const row of grid) {
-        addWordsfromRow(row, words);
-    }
+export function getWords(grid: (Letter | null)[][]): string[] {
+  const words: string[] = [];
+  for (const row of grid) {
+    addWordsfromRow(row, words);
+  }
 
-    const trans = transpose(grid);
-    for(const row of trans) {
-        addWordsfromRow(row, words);
-    }
+  const trans = transpose(grid);
+  for (const row of trans) {
+    addWordsfromRow(row, words);
+  }
 
-    return words;
+  return words;
 }
 
 // const grid1 = [

@@ -1,61 +1,61 @@
-import { JSX } from "react";
-import styled from "styled-components";
-import { useCrossTilesContext } from "../client-side/actions/cross-tiles-context";
-import { totalScore } from "@game-control/games/crosstiles/moves/score-card";
-import { GameStage } from "@game-control/games/crosstiles/server-data";
-
+import { JSX } from 'react';
+import styled from 'styled-components';
+import { useCrossTilesContext } from '../client-side/actions/cross-tiles-context';
+import { totalScore } from '@game-control/games/crosstiles/moves/score-card';
+import { GameStage } from '@game-control/games/crosstiles/server-data';
 
 const GameOverDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: start;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 `;
 
 const Heading = styled.div`
-    font-weight: bold;
+  font-weight: bold;
 `;
 
 const ScoreTable = styled.div`
-    display: inline-grid;
-    column-gap: 0.5em;
-    grid-template-columns: auto auto auto;
-    margin-bottom: 8px;
+  display: inline-grid;
+  column-gap: 0.5em;
+  grid-template-columns: auto auto auto;
+  margin-bottom: 8px;
 `;
 
-export function EndOfGame() : JSX.Element | null {
-    const context = useCrossTilesContext();
-    const { stage, playerData,  wrappedGameProps } = context;
-    const { getPlayerName, moves, playerID } = wrappedGameProps;
+export function EndOfGame(): JSX.Element | null {
+  const context = useCrossTilesContext();
+  const { stage, playerData, wrappedGameProps } = context;
+  const { getPlayerName, moves, playerID } = wrappedGameProps;
 
-    if(stage !== GameStage.over) {
-        return null;
-    }
+  if (stage !== GameStage.over) {
+    return null;
+  }
 
-    const scores = [];
-    for(const pid in playerData) {
-        const name = getPlayerName(pid);
-        const score = totalScore(playerData[pid].scoreCard);
-        const message = playerData[pid].readyForNewGame ? " (Ready for new game)" : "";
-        scores.push({name,score,message});
-    }
-    
-    // Highest score first
-    scores.sort((p1, p2) => p2.score - p1.score);
+  const scores = [];
+  for (const pid in playerData) {
+    const name = getPlayerName(pid);
+    const score = totalScore(playerData[pid].scoreCard);
+    const message = playerData[pid].readyForNewGame ? ' (Ready for new game)' : '';
+    scores.push({ name, score, message });
+  }
 
-    const amReady =  playerData[playerID].readyForNewGame;
+  // Highest score first
+  scores.sort((p1, p2) => p2.score - p1.score);
 
-    return <GameOverDiv>
-        <Heading>Final scores</Heading>
+  const amReady = playerData[playerID].readyForNewGame;
 
-        <ScoreTable>
-            {scores.map(ps => [
-                <div key={ps.name}>{ps.name}</div>,
-                <div key={ps.name+"score"}>{ps.score}</div>,
-                <div key={ps.name+"message"}>{ps.message}</div> 
-            ]
-            )}
-        </ScoreTable>
+  return (
+    <GameOverDiv>
+      <Heading>Final scores</Heading>
 
-        {!amReady && <button onClick={()=>moves.readyForNewGame()}>Start new game</button>}
-    </GameOverDiv>;
+      <ScoreTable>
+        {scores.map((ps) => [
+          <div key={ps.name}>{ps.name}</div>,
+          <div key={ps.name + 'score'}>{ps.score}</div>,
+          <div key={ps.name + 'message'}>{ps.message}</div>,
+        ])}
+      </ScoreTable>
+
+      {!amReady && <button onClick={() => moves.readyForNewGame()}>Start new game</button>}
+    </GameOverDiv>
+  );
 }

@@ -1,14 +1,14 @@
-import { GameControl } from "../../game-control.js";
-import { moves } from "./moves/moves.js";
-import { startingServerData } from "./server-data.js";
+import { GameControl } from '../../game-control.js';
+import { moves } from './moves/moves.js';
+import { startingServerData } from './server-data.js';
 
 export const gameControl: GameControl = {
-    name: "cantstop",
+  name: 'cantstop',
 
-    setup: startingServerData,
-    
-    minPlayers: 1,
-    maxPlayers: 4,
+  setup: startingServerData,
 
-    moves,
+  minPlayers: 1,
+  maxPlayers: 4,
+
+  moves,
 };

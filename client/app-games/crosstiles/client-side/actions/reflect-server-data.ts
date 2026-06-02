@@ -1,26 +1,25 @@
-import { ServerData } from "@game-control/games/crosstiles/server-data";
-import { ReducerState } from "./cross-tiles-reducer";
-import { makeEmptyGrid } from "@game-control/games/crosstiles/moves/make-empty-grid";
+import { ServerData } from '@game-control/games/crosstiles/server-data';
+import { ReducerState } from './cross-tiles-reducer';
+import { makeEmptyGrid } from '@game-control/games/crosstiles/moves/make-empty-grid';
 
 export function reflectServerData(state: ReducerState, newServerData: ServerData): ReducerState {
+  const oldRound = state.serverData?.round;
+  const newRound = newServerData.round;
 
-    const oldRound = state.serverData?.round;
-    const newRound = newServerData.round;
-    
-    const { playerID, gridChangeTimestamp } = state;
-    const {selectedLetters} = newServerData.playerData[playerID]; 
+  const { playerID, gridChangeTimestamp } = state;
+  const { selectedLetters } = newServerData.playerData[playerID];
 
-    if (oldRound != newRound) {
-        return {
-            rack: selectedLetters && [...selectedLetters],
-            grid: makeEmptyGrid(),
-            clickMoveStart: null,
-            serverData: newServerData,
+  if (oldRound != newRound) {
+    return {
+      rack: selectedLetters && [...selectedLetters],
+      grid: makeEmptyGrid(),
+      clickMoveStart: null,
+      serverData: newServerData,
 
-            playerID,
-            gridChangeTimestamp,
-        };
-    }
+      playerID,
+      gridChangeTimestamp,
+    };
+  }
 
-    return { ...state, serverData: newServerData };
+  return { ...state, serverData: newServerData };
 }

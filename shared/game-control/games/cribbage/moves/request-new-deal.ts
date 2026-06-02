@@ -1,24 +1,25 @@
-import { processGameRequest } from "./process-game-request.js";   
-import { GameRequest, PlayerID, ServerData } from "../server-data.js";
-import { newDealData } from "../starting-server-data.js";
-import { MoveArg0 } from "../../../move-fn.js";
+import { processGameRequest } from './process-game-request.js';
+import { GameRequest, PlayerID, ServerData } from '../server-data.js';
+import { newDealData } from '../starting-server-data.js';
+import { MoveArg0 } from '../../../move-fn.js';
 
 export function requestNewDeal(
-    {G: inputG, ctx, random} : MoveArg0<ServerData>,  
-    playerID: PlayerID): ServerData {
-    // If returning a new G, the existing G must not be changed.
-    const newG = JSON.parse(JSON.stringify(inputG)) as ServerData;
+  { G: inputG, ctx, random }: MoveArg0<ServerData>,
+  playerID: PlayerID,
+): ServerData {
+  // If returning a new G, the existing G must not be changed.
+  const newG = JSON.parse(JSON.stringify(inputG)) as ServerData;
 
-    if (processGameRequest(newG, GameRequest.NewDeal, ctx, playerID)) {
-        const ndd = newDealData(newG, random);
+  if (processGameRequest(newG, GameRequest.NewDeal, ctx, playerID)) {
+    const ndd = newDealData(newG, random);
 
-        const res = {
-            ...newG,
-            ...ndd,
-        };
+    const res = {
+      ...newG,
+      ...ndd,
+    };
 
-        return res;
-    }
+    return res;
+  }
 
-    return newG; // BUG: Move function should not return any data.
+  return newG; // BUG: Move function should not return any data.
 }

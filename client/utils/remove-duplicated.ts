@@ -1,25 +1,25 @@
 /** Remove dupicated from a sorted array.
  * More precisely, return a copy of the array in which sequences of
  * repeated elements are replaced by a single element.
- * 
+ *
  * LIMITIATION: Comparisions are done using === (there is currently no
  * ability to pass in a comparision function)
- * 
+ *
  * Note: UniqueValues can be uses to both sort an array and remove duplicates.
  */
-export function removeDuplicates<T>(arr: T[]) : T[] {
-    if(arr.length < 2) {
-        return arr;
-    }
+export function removeDuplicates<T>(arr: T[]): T[] {
+  if (arr.length < 2) {
+    return arr;
+  }
 
-    const ra = [arr[0]];
-    for(let i = 1; i < arr.length; ++i) {
-        if(arr[i] !== ra[ra.length - 1]) {
-            ra.push(arr[i]);
-        }
+  const ra = [arr[0]];
+  for (let i = 1; i < arr.length; ++i) {
+    if (arr[i] !== ra[ra.length - 1]) {
+      ra.push(arr[i]);
     }
+  }
 
-    return ra;
+  return ra;
 }
 
 // function test(...args: number[]) {

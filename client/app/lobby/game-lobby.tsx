@@ -1,40 +1,38 @@
-import { AppGame } from "@/app-game-support";
-import { standardOuterMargin } from "@/app-game-support/styles";
-import { LoadingOrError } from "@utils/async-status";
-import { JSX } from "react";
-import { useAsync } from "react-async-hook";
-import styled from "styled-components";
-import { OfflineOptions } from "../offline-options";
-import { lobbyClient } from "./lobby-client";
-import { MatchLobbyWithApiInfo } from "./match-lobby";
-import { StartNewMatch } from "./start-new-match";
+import { AppGame } from '@/app-game-support';
+import { standardOuterMargin } from '@/app-game-support/styles';
+import { LoadingOrError } from '@utils/async-status';
+import { JSX } from 'react';
+import { useAsync } from 'react-async-hook';
+import styled from 'styled-components';
+import { OfflineOptions } from '../offline-options';
+import { lobbyClient } from './lobby-client';
+import { MatchLobbyWithApiInfo } from './match-lobby';
+import { StartNewMatch } from './start-new-match';
 
 const GameLobbyDiv = styled.div`
-    display: inline-flex;
-    flex-direction: column;
+  display: inline-flex;
+  flex-direction: column;
 
-    margin: ${standardOuterMargin};
+  margin: ${standardOuterMargin};
 `;
 
-
 export function GameLobby(props: {
-    game: AppGame;
-    setOfflineOptions: (opts: OfflineOptions) => void;
+  game: AppGame;
+  setOfflineOptions: (opts: OfflineOptions) => void;
 }): JSX.Element {
-    const { game, setOfflineOptions } = props;
-    const asyncMatchList = useAsync(() => lobbyClient.listMatches(
-        { gameName: game.name }), []
-    );
+  const { game, setOfflineOptions } = props;
+  const asyncMatchList = useAsync(() => lobbyClient.listMatches({ gameName: game.name }), []);
 
-    const matches = asyncMatchList.result?.matches;
+  const matches = asyncMatchList.result?.matches;
 
-    return <GameLobbyDiv>
-        <LoadingOrError status={asyncMatchList} activity="getting list of matches" />
-        {matches?.map(match =>
-            <MatchLobbyWithApiInfo key={match.matchID} game={game} match={match} />
-        )}
+  return (
+    <GameLobbyDiv>
+      <LoadingOrError status={asyncMatchList} activity="getting list of matches" />
+      {matches?.map((match) => (
+        <MatchLobbyWithApiInfo key={match.matchID} game={game} match={match} />
+      ))}
 
-        <StartNewMatch game={game} setOfflineOptions={setOfflineOptions} />
-    </GameLobbyDiv>;
-     
+      <StartNewMatch game={game} setOfflineOptions={setOfflineOptions} />
+    </GameLobbyDiv>
+  );
 }

@@ -1,53 +1,59 @@
-import { JSX } from "react";
-import styled from "styled-components";
-import { categoryDescription, displayName, FixedScoreCategory, 
-    fixedScores, ScoreCategoryOrTotal } from "@game-control/games/crosstiles/score-categories";
-import { scoreCardBackgroundColor } from "./style";
+import { JSX } from 'react';
+import styled from 'styled-components';
+import {
+  categoryDescription,
+  displayName,
+  FixedScoreCategory,
+  fixedScores,
+  ScoreCategoryOrTotal,
+} from '@game-control/games/crosstiles/score-categories';
+import { scoreCardBackgroundColor } from './style';
 
 const CategoryLabelDiv = styled.div`
-    position: relative;
+  position: relative;
 
-    :hover {
-        div {
-            display: inline-block;
-        } ;
-     } 
+  :hover {
+    div {
+      display: inline-block;
+    }
+  }
 `;
 
 const Label = styled.div`
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 
-     background-color: ${scoreCardBackgroundColor};
-     padding: 1px;
+  background-color: ${scoreCardBackgroundColor};
+  padding: 1px;
 `;
 
 const Description = styled.div`
-    position: absolute;
-    z-index: 2;
+  position: absolute;
+  z-index: 2;
 
-    display: none;
-    top: 2px;
-    left: 2px;
-    width: 19em;
+  display: none;
+  top: 2px;
+  left: 2px;
+  width: 19em;
 
-    border: 1px solid black;
-    background: white;
+  border: 1px solid black;
+  background: white;
 `;
 
 interface CategoryLabelProps {
-    category: ScoreCategoryOrTotal;
+  category: ScoreCategoryOrTotal;
 }
 export function CategoryLabel({ category }: CategoryLabelProps): JSX.Element {
+  let labelText = displayName[category];
 
-    let labelText = displayName[category];
-    
-    const fixedScore = fixedScores[category as FixedScoreCategory];
-    if(fixedScore) {
-        labelText += ` (${fixedScore})`;
-    }
-    return <CategoryLabelDiv>
-        <Label>{labelText}</Label>
-        <Description>{categoryDescription[category]}</Description>
-    </CategoryLabelDiv>;
+  const fixedScore = fixedScores[category as FixedScoreCategory];
+  if (fixedScore) {
+    labelText += ` (${fixedScore})`;
+  }
+  return (
+    <CategoryLabelDiv>
+      <Label>{labelText}</Label>
+      <Description>{categoryDescription[category]}</Description>
+    </CategoryLabelDiv>
+  );
 }

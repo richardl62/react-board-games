@@ -15,5 +15,5 @@
 //TO DO: Ensure that T1 and T2 overlap.
 
 export function sameJSON<T>(obj1: T, obj2: T): boolean {
-    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
 }

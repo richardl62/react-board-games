@@ -4,5 +4,5 @@ export interface Player {
 }
 
 export interface MatchID {
-  mid: string
-} 
+  mid: string;
+}

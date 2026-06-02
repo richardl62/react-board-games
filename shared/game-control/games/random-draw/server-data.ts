@@ -1,23 +1,23 @@
-import { SetupArg0 } from "../../game-control.js";
-import { valuesPerPlayer, maxValue } from "./config.js";
+import { SetupArg0 } from '../../game-control.js';
+import { valuesPerPlayer, maxValue } from './config.js';
 
 export interface ServerData {
-    playerValues: Record<string, number[]>;
+  playerValues: Record<string, number[]>;
 }
 
 export function startingServerData(arg0: SetupArg0): ServerData {
-    const {ctx, random} = arg0;
-    
-    const playerValues : ServerData["playerValues"] = {}; 
+  const { ctx, random } = arg0;
 
-    for(const pid of ctx.playOrder) {
-        playerValues[pid] = [];
-        for(let i=0; i<valuesPerPlayer; i++) {
-            playerValues[pid].push(random.Die(maxValue));
-        }
+  const playerValues: ServerData['playerValues'] = {};
+
+  for (const pid of ctx.playOrder) {
+    playerValues[pid] = [];
+    for (let i = 0; i < valuesPerPlayer; i++) {
+      playerValues[pid].push(random.Die(maxValue));
     }
-    
-    return {
-        playerValues,
-    }
+  }
+
+  return {
+    playerValues,
+  };
 }

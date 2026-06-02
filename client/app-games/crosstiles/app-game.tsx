@@ -1,18 +1,17 @@
-import React from "react";
-import { AppGame, GameCategory } from "../../app-game-support";
-import { standardBoard } from "../../app-game-support/standard-board";
-import { gameControl } from "@game-control/games/crosstiles/game-control";
-import { setupOptions } from "./options";
+import React from 'react';
+import { AppGame, GameCategory } from '../../app-game-support';
+import { standardBoard } from '../../app-game-support/standard-board';
+import { gameControl } from '@game-control/games/crosstiles/game-control';
+import { setupOptions } from './options';
 
-const LazyBoard = React.lazy(() => import("./board/board"));
-
+const LazyBoard = React.lazy(() => import('./board/board'));
 
 export const appGame: AppGame = {
-    ...gameControl,
+  ...gameControl,
 
-    displayName: "CrossTiles",
-    category: GameCategory.standard,
+  displayName: 'CrossTiles',
+  category: GameCategory.standard,
 
-    options: setupOptions,
-    board: (props) => standardBoard(LazyBoard, props),
+  options: setupOptions,
+  board: (props) => standardBoard(LazyBoard, props),
 };

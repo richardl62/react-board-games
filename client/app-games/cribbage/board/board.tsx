@@ -1,47 +1,47 @@
-import { JSX } from "react";
-import styled from "styled-components";
-import { CutCard } from "./cut-card";
-import { WrappedScoreBoard } from "./wrapped-score-board";
-import { CardSetID } from "@game-control/games/cribbage/server-data";
-import { MessageAndButton } from "./message-and-button";
-import { useCribbageState } from "../client-side/cribbage-state";
-import { HandWrapper } from "./hand-wrapper";
-import { standardOuterMargin } from "../../../app-game-support/styles";
-
+import { JSX } from 'react';
+import styled from 'styled-components';
+import { CutCard } from './cut-card';
+import { WrappedScoreBoard } from './wrapped-score-board';
+import { CardSetID } from '@game-control/games/cribbage/server-data';
+import { MessageAndButton } from './message-and-button';
+import { useCribbageState } from '../client-side/cribbage-state';
+import { HandWrapper } from './hand-wrapper';
+import { standardOuterMargin } from '../../../app-game-support/styles';
 
 const GameAreaDiv = styled.div`
-    display: inline flex;
-    div {
-        margin-right: 5px;
-    }
+  display: inline flex;
+  div {
+    margin-right: 5px;
+  }
 
-    margin: ${standardOuterMargin};
+  margin: ${standardOuterMargin};
 `;
 
 const Hands = styled.div`
-    margin-left: 20px;
-    > * {
-        margin-bottom: 40px;
-    };
+  margin-left: 20px;
+  > * {
+    margin-bottom: 40px;
+  }
 `;
 
-function Board() : JSX.Element {
-    const {me, pone} = useCribbageState();
-    return <GameAreaDiv>
-        <CutCard/>
+function Board(): JSX.Element {
+  const { me, pone } = useCribbageState();
+  return (
+    <GameAreaDiv>
+      <CutCard />
 
-        <Hands>
-            <HandWrapper cardSetID={pone} />
-            <HandWrapper cardSetID={CardSetID.Shared} />
-            <div>
-                <HandWrapper cardSetID={me} />
-                <MessageAndButton />
-            </div>
-        </Hands>
-          
-        <WrappedScoreBoard/>
+      <Hands>
+        <HandWrapper cardSetID={pone} />
+        <HandWrapper cardSetID={CardSetID.Shared} />
+        <div>
+          <HandWrapper cardSetID={me} />
+          <MessageAndButton />
+        </div>
+      </Hands>
 
-    </GameAreaDiv>;
+      <WrappedScoreBoard />
+    </GameAreaDiv>
+  );
 }
 
 export default Board;

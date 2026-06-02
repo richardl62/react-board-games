@@ -1,42 +1,45 @@
-import styled from "styled-components";
-import { diceSize } from "./dice.js";
-import { sAssert } from "../assert.js";
-import { HoldableDice } from "./holdable-dice.js";
+import styled from 'styled-components';
+import { diceSize } from './dice.js';
+import { sAssert } from '../assert.js';
+import { HoldableDice } from './holdable-dice.js';
 
 const OuterDiv = styled.div`
-    display: flex;
-    flex-direction: row;
-    // gap between dice
-    > * + * {
-        margin-left: calc(${diceSize} * 0.1);
-    };
+  display: flex;
+  flex-direction: row;
+  // gap between dice
+  > * + * {
+    margin-left: calc(${diceSize} * 0.1);
+  }
 `;
 
-export function DiceSet({faces, rotation, held, onDiceClick}: { 
-    faces: number[];
-    held: boolean[];
+export function DiceSet({
+  faces,
+  rotation,
+  held,
+  onDiceClick,
+}: {
+  faces: number[];
+  held: boolean[];
 
-    // If non-null, any non-held dice are shown as rotated by this angle
-    // (in degrees), and all 7 possible dice spots are shown.
-    rotation?: number | null;
+  // If non-null, any non-held dice are shown as rotated by this angle
+  // (in degrees), and all 7 possible dice spots are shown.
+  rotation?: number | null;
 
-    onDiceClick?: (i: number) => void;
- }) {
-    sAssert(held.length === faces.length);
+  onDiceClick?: (i: number) => void;
+}) {
+  sAssert(held.length === faces.length);
 
-    return (
-        <OuterDiv>
-            {faces.map((face, i) => (
-                <HoldableDice 
-                    rotation={rotation} 
-                    face={face}
-                    held={ held[i]}
-                    onClick={onDiceClick && (() => onDiceClick(i))} 
-                    key={i} 
-                />
-            ))}
-        </OuterDiv>
-    );
+  return (
+    <OuterDiv>
+      {faces.map((face, i) => (
+        <HoldableDice
+          rotation={rotation}
+          face={face}
+          held={held[i]}
+          onClick={onDiceClick && (() => onDiceClick(i))}
+          key={i}
+        />
+      ))}
+    </OuterDiv>
+  );
 }
-
-

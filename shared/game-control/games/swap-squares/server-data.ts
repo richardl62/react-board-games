@@ -1,62 +1,48 @@
-import { SetupArg0 } from "../../game-control.js";
-import { RandomAPI } from "../../../utils/random-api.js";
+import { SetupArg0 } from '../../game-control.js';
+import { RandomAPI } from '../../../utils/random-api.js';
 
-export const startingOrders = [
-    "forward",
-    "backwards",
-    "random",
-] as const;
+export const startingOrders = ['forward', 'backwards', 'random'] as const;
 
 export interface SetupOptions {
-    readonly numRows: number,
-    readonly numColumns: number,
-    readonly startingOrder: typeof startingOrders[number],
+  readonly numRows: number;
+  readonly numColumns: number;
+  readonly startingOrder: (typeof startingOrders)[number];
 }
 
 export interface ServerData {
-    squares: number[];
-    options: SetupOptions;
+  squares: number[];
+  options: SetupOptions;
 }
 
-export function setSquares(
-    G: ServerData, 
-    random: RandomAPI
-) : void {
-    
-    const makeSquares = () => {
-        const nSquares = G.options.numRows * G.options.numColumns;
+export function setSquares(G: ServerData, random: RandomAPI): void {
+  const makeSquares = () => {
+    const nSquares = G.options.numRows * G.options.numColumns;
 
-        const squares: number[] = [];
-        for (let i = 0; i < nSquares; i++) {
-            squares.push(i);
-        }
+    const squares: number[] = [];
+    for (let i = 0; i < nSquares; i++) {
+      squares.push(i);
+    }
 
-        switch (G.options.startingOrder) {
-        case "forward":
-            return squares;
-        case "backwards":
-            return squares.reverse();
-        case "random":
-            return random.Shuffle(squares);
-        }
-    };
+    switch (G.options.startingOrder) {
+      case 'forward':
+        return squares;
+      case 'backwards':
+        return squares.reverse();
+      case 'random':
+        return random.Shuffle(squares);
+    }
+  };
 
-    G.squares = makeSquares();
+  G.squares = makeSquares();
 }
 
-export function startingServerData({random}: SetupArg0, options: SetupOptions): ServerData {
-    const G : ServerData = {
-        squares: [],
-        options,
-    };
+export function startingServerData({ random }: SetupArg0, options: SetupOptions): ServerData {
+  const G: ServerData = {
+    squares: [],
+    options,
+  };
 
-    setSquares(G, random);
+  setSquares(G, random);
 
-    return G;
+  return G;
 }
-
-
-
-
-
-

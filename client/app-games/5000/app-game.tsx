@@ -1,17 +1,17 @@
-import { AppGame, GameCategory } from "../../app-game-support";
-import { standardBoard } from "../../app-game-support/standard-board";
-import React from "react";
-import { gameControl } from "@game-control/games/5000/game-control";
-import { setupOptions } from "./options";
+import { AppGame, GameCategory } from '../../app-game-support';
+import { standardBoard } from '../../app-game-support/standard-board';
+import React from 'react';
+import { gameControl } from '@game-control/games/5000/game-control';
+import { setupOptions } from './options';
 
-const LazyBoard = React.lazy(() => import("./board/board"));
+const LazyBoard = React.lazy(() => import('./board/board'));
 
 export const appGame: AppGame = {
-    ...gameControl,
-    
-    displayName: "5000",
-    category: GameCategory.standard,
+  ...gameControl,
 
-    options: setupOptions,
-    board: (props) => standardBoard(LazyBoard, props),
+  displayName: '5000',
+  category: GameCategory.standard,
+
+  options: setupOptions,
+  board: (props) => standardBoard(LazyBoard, props),
 };

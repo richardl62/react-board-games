@@ -1,41 +1,39 @@
-import { Dice } from "./dice.js";
-import { diceColor } from "./style.js";
-import styled from "styled-components";
+import { Dice } from './dice.js';
+import { diceColor } from './style.js';
+import styled from 'styled-components';
 
 // Text is centered justified.
 const Held = styled.div<{ visible: boolean }>`
-    visibility: ${props => props.visible ? "visible" : "hidden"};
-    font-weight: bold;
-    font-family: helvetica;
-    color: ${diceColor.held};
-    text-align: center;
+  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+  font-weight: bold;
+  font-family: helvetica;
+  color: ${diceColor.held};
+  text-align: center;
 `;
 
 // A dice with a toggle-able hold.
 // Intended just for use in DiceSet.
-export function HoldableDice({ face, rotation, held, onClick }: {
-    face: number;
-    held: boolean;
+export function HoldableDice({
+  face,
+  rotation,
+  held,
+  onClick,
+}: {
+  face: number;
+  held: boolean;
 
-    // Rotation is ignored if the dice is held. 
-    rotation?: number | null;
-    onClick?: () => void;
+  // Rotation is ignored if the dice is held.
+  rotation?: number | null;
+  onClick?: () => void;
 }) {
+  if (held) {
+    rotation = null; // KLUDGE?
+  }
 
-    if (held) {
-        rotation = null; // KLUDGE?
-    }
-
-    return <div onClick={onClick}>
-        <Dice
-            face={face}
-            rotation={rotation}
-            color={held ? diceColor.held : diceColor.unheld} 
-        />
-        <Held 
-            visible={held}
-        >
-            Held
-        </Held>
-    </div>;
+  return (
+    <div onClick={onClick}>
+      <Dice face={face} rotation={rotation} color={held ? diceColor.held : diceColor.unheld} />
+      <Held visible={held}>Held</Held>
+    </div>
+  );
 }

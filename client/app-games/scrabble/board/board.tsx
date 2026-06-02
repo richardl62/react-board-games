@@ -1,44 +1,43 @@
-import { JSX } from "react";
-import styled from "styled-components";
-import { MoveHistory } from "./move-history";
-import { MainGameArea } from "./main-game-area";
-import { useScrabbleState } from "../client-side/scrabble-state";
-import { AvailableWords } from "./available-words";
+import { JSX } from 'react';
+import styled from 'styled-components';
+import { MoveHistory } from './move-history';
+import { MainGameArea } from './main-game-area';
+import { useScrabbleState } from '../client-side/scrabble-state';
+import { AvailableWords } from './available-words';
 
 const Game = styled.div`
-    display: flex;
+  display: flex;
 
-    // A margin between items
-    > * + * {
-        margin-left: 10px;
-    }
+  // A margin between items
+  > * + * {
+    margin-left: 10px;
+  }
 
-    margin: 6px;
-    margin-left:30px;
+  margin: 6px;
+  margin-left: 30px;
 `;
 
 const RightSide = styled.div`
-    display: flex;
+  display: flex;
 
-    margin-top: 70px;  // KLUDGE
+  margin-top: 70px; // KLUDGE
 
-    // A margin between items
-    > * + * {
-        margin-left: 10px;
-    }
+  // A margin between items
+  > * + * {
+    margin-left: 10px;
+  }
 `;
 
 export function Board(): JSX.Element {
-    const context = useScrabbleState();
+  const context = useScrabbleState();
 
-    return (
-        <Game>
-            <MainGameArea />
-            <RightSide>
-                <MoveHistory moveHistory={context.moveHistory} />
-                <AvailableWords />
-            </RightSide>
-        </Game>
-    );
+  return (
+    <Game>
+      <MainGameArea />
+      <RightSide>
+        <MoveHistory moveHistory={context.moveHistory} />
+        <AvailableWords />
+      </RightSide>
+    </Game>
+  );
 }
-

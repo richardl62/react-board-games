@@ -1,70 +1,66 @@
-import { cardsPerHand } from "./config.js";
-import { SetupArg0 } from "../../game-control.js";
-import { RandomAPI } from "../../../utils/random-api.js";
-import { Card } from "../../../utils/cards/types.js";
-import { deckNoJokers } from "../../../utils/cards/deck.js";
-import { GameStage, PegPositions, PlayerData, ServerData } from "./server-data.js";
+import { cardsPerHand } from './config.js';
+import { SetupArg0 } from '../../game-control.js';
+import { RandomAPI } from '../../../utils/random-api.js';
+import { Card } from '../../../utils/cards/types.js';
+import { deckNoJokers } from '../../../utils/cards/deck.js';
+import { GameStage, PegPositions, PlayerData, ServerData } from './server-data.js';
 
 interface PlayerPegPositions {
-    player0: PegPositions;
-    player1: PegPositions;
+  player0: PegPositions;
+  player1: PegPositions;
 }
 
 function playerData(cards: Card[], pegPos: PegPositions): PlayerData {
+  const hand = cards.splice(0, cardsPerHand);
 
-    const hand = cards.splice(0, cardsPerHand);
+  return {
+    hand,
+    fullHand: [...hand],
+    request: null,
 
-    return {
-        hand,
-        fullHand: [...hand],
-        request: null,
-
-        // Explicitly assign the required members of pegPos rather than using 
-        // ...pegPos. This prevents any non-required members also being copied. 
-        // (Previous use of ...pegPos lead to hand and fullHand being overwritten.)
-        trailingPeg: pegPos.trailingPeg,
-        score: pegPos.score,
-    };
+    // Explicitly assign the required members of pegPos rather than using
+    // ...pegPos. This prevents any non-required members also being copied.
+    // (Previous use of ...pegPos lead to hand and fullHand being overwritten.)
+    trailingPeg: pegPos.trailingPeg,
+    score: pegPos.score,
+  };
 }
 
-export function newDealData(
-    pegPos: PlayerPegPositions,
-    random: RandomAPI, 
-): ServerData {
-    const cards = random.Shuffle(deckNoJokers());
+export function newDealData(pegPos: PlayerPegPositions, random: RandomAPI): ServerData {
+  const cards = random.Shuffle(deckNoJokers());
 
-    return {
-        player0: playerData(cards, pegPos.player0),
-        player1: playerData(cards, pegPos.player1),
+  return {
+    player0: playerData(cards, pegPos.player0),
+    player1: playerData(cards, pegPos.player1),
 
-        shared: {
-            hand: [],
-        },
+    shared: {
+      hand: [],
+    },
 
-        box: [],
+    box: [],
 
-        stage: GameStage.SettingBox,
+    stage: GameStage.SettingBox,
 
-        cutCard: {
-            card: cards.pop()!,
-            visible: false,
-        },
-    };
+    cutCard: {
+      card: cards.pop()!,
+      visible: false,
+    },
+  };
 }
 
 export function startingServerData({ random }: SetupArg0): ServerData {
-    const startingPegPos : PlayerPegPositions = {
-        player0: {
-            score: 0,
-            trailingPeg: -1,
-        },
-        player1: {
-            score: 0,
-            trailingPeg: -1,
-        },
-    };
+  const startingPegPos: PlayerPegPositions = {
+    player0: {
+      score: 0,
+      trailingPeg: -1,
+    },
+    player1: {
+      score: 0,
+      trailingPeg: -1,
+    },
+  };
 
-    return {
-        ...newDealData(startingPegPos, random),
-    };
+  return {
+    ...newDealData(startingPegPos, random),
+  };
 }
