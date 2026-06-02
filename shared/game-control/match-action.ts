@@ -48,6 +48,6 @@ export function matchMove<Param>(
 
     func(arg0, param);
 
-    return {state, ctxData}
+    return {state, ctxData, prngState: random.getState()}
 }
 

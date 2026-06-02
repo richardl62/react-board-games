@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import { runLobbyFunction } from './run-lobby-function.js';
 import { Matches } from './matches.js';
 import { defaultPort } from '../shared/default-port.js';
-import { RandomAPI } from '../shared/utils/random-api.js';
 import { processConnection, processDisconnection } from './process-connection.js';
 import { processActionRequest } from './process-action-request.js';
 
@@ -18,10 +17,7 @@ const HEARTBEAT_INTERVAL = 25 * 1000; // 25 seconds
 // such as moves.  If the timeout is exceeded the connection will be closed.
 const IDLE_TIMEOUT = 60 * 60 * 1000; // 60 minutes 
                                      
-const draw = () => Math.random();
-
-const random = new RandomAPI(draw);
-const matches = new Matches(random);
+const matches = new Matches();
 
 const app = express();
 const PORT = process.env.PORT ?? defaultPort;
@@ -46,7 +42,7 @@ const lastUserRequest = new WeakMap<object, number>();
 
 // Heartbeat runs once every 25s and checks EVERY connected client.
 const interval = setInterval(() => {
-  wss.clients.forEach((ws) => {
+    wss.clients.forEach((ws) => {
     if (isAliveMap.get(ws) === false) {
       return ws.terminate();
     }

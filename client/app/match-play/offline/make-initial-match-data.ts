@@ -38,6 +38,7 @@ export function makeInitialMatchData(
         playerData: playerData(ctx),
         ctxData: ctx.data,
         state: game.setup({ ctx, random }, options),
+        prngState: random.getState(),
         errorInLastAction: null,
     };
 }

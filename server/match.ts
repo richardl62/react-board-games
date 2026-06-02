@@ -53,6 +53,7 @@ export class Match {
         this.mutableData = {
             ctxData,
             state,
+            prngState: randomAPI.getState(),
         };
     }
 
