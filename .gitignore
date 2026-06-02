@@ -26,3 +26,7 @@ dist-ssr
 
 # typescript
 *.tsbuildinfo
+
+# Claude code
+.claude/
+.claude
