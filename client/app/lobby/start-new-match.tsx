@@ -21,12 +21,12 @@ export function StartNewMatch(props: {
 
     const asyncCreateMatch = useAsyncCallback(
         (arg: {numPlayers: number, setupData: unknown}) => {
-            const randomSeed = (seedParam === null) ? Math.random() : 1.0 / (seedParam + 1);
+            const randomSeed = seedParam ?? Math.random();
             return lobbyClient.createMatch({
                 gameName: game.name,
                 numPlayers: arg.numPlayers,
-                setupData: arg.setupData,
                 randomSeed,
+                setupData: arg.setupData,
             }).then(m => addMatchID({mid: m.matchID}));
         }
     );

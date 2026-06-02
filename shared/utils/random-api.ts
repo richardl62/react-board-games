@@ -27,7 +27,7 @@ export class RandomAPI {
 
     private next(): number {
         // Based on https://github.com/bryc/code/blob/master/jshash/PRNGs.md#mulberry32
-        this.t += 0x6D2B79F5;
+        this.t = (this.t + 0x6D2B79F5) | 0;   // keep t in 32-bit signed range
         let r = Math.imul(this.t ^ (this.t >>> 15), this.t | 1);
         r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
         return ((r ^ (r >>> 14)) >>> 0) / 0x100000000; // [0,1)

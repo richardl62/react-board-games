@@ -97,7 +97,7 @@ export class Match {
     // Can throw, in which case no data is changed.
     move(request: WsMove, playerID: string) {
         const { move, arg } = request;
-        this.mutableData = matchMove(this.definition, move, this.random, playerID, this.mutableData, arg);
+        this.mutableData = matchMove(this.definition, move, playerID, this.mutableData, arg);
     }
 
     // Can throw, in which case no data is changed.
