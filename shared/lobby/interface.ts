@@ -20,6 +20,7 @@ export interface LobbyInterface {
             gameName: string;
             numPlayers: number;
             setupData: unknown;
+            randomSeed: number;
         }
     ) => CreatedMatch;
 

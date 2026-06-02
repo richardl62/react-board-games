@@ -14,14 +14,14 @@ export class Matches {
     }
 
     /** Create a new match and return it's ID */
-    addMatch(game: string, numPlayers: number, setupData: unknown) : Match
+    addMatch(game: string, numPlayers: number, setupData: unknown, randomSeed: number) : Match
     {
         // Base the id on the number of recorded matches.  This feels like
         // a bit of a kludge, but should ensure a unique id.
         const matchID = (this.matches.length+1).toString();
 
         const match = new Match(getGameControl(game),
-            {matchID, numPlayers, setupData, randomAPI: RandomAPI.fromSeed(Math.random()) }
+            {matchID, numPlayers, setupData, randomAPI: RandomAPI.fromSeed(randomSeed) }
         );
         this.matches.push(match);
 
