@@ -9,13 +9,14 @@ export class ServerLobby implements LobbyInterface {
     matches: Matches;
 
     createMatch(
-        {gameName, numPlayers, setupData}: {
+        {gameName, numPlayers, setupData, randomSeed}: {
             gameName: string;
             numPlayers: number;
             setupData: unknown;
+            randomSeed: number;
         }
-    ): LobbyTypes.CreatedMatch {   
-        const match = this.matches.addMatch(gameName, numPlayers, setupData);
+    ): LobbyTypes.CreatedMatch {
+        const match = this.matches.addMatch(gameName, numPlayers, setupData, randomSeed);
         return match.lobbyMatch();
     }
 

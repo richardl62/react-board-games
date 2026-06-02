@@ -1,7 +1,7 @@
 import { AppGame } from "@/app-game-support";
 import { InputValues } from "@/option-specification/input-values";
 import { SpecifiedValues } from "@/option-specification/types";
-import { useSetSearchParam } from "@/url-tools";
+import { useSearchParamData, useSetSearchParam } from "@/url-tools";
 import { loadingOrError, LoadingOrError } from "@utils/async-status";
 import { BoxWithLegend } from "@utils/box-with-legend";
 import { JSX } from "react";
@@ -16,15 +16,19 @@ export function StartNewMatch(props: {
   }): JSX.Element {
     const { game, setOfflineOptions } = props;
     const { addMatchID } = useSetSearchParam();
+    const { seed: seedParam } = useSearchParamData();
     const optionsSpec = fullOptionSpecification(game);
-    
+
     const asyncCreateMatch = useAsyncCallback(
-        (arg: {numPlayers: number, setupData: unknown}) =>
-            lobbyClient.createMatch({ 
-                gameName: game.name, 
+        (arg: {numPlayers: number, setupData: unknown}) => {
+            const randomSeed = seedParam ?? Math.random();
+            return lobbyClient.createMatch({
+                gameName: game.name,
                 numPlayers: arg.numPlayers,
-                setupData: arg.setupData 
-            }).then(m => addMatchID({mid: m.matchID}))
+                randomSeed,
+                setupData: arg.setupData,
+            }).then(m => addMatchID({mid: m.matchID}));
+        }
     );
 
     if(loadingOrError(asyncCreateMatch)) {

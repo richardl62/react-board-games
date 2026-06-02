@@ -26,18 +26,21 @@ function playerData(ctx: Ctx): PublicPlayerMetadata[] {
 }
 
 // make a ServerMatchData suitable for the start of an offline match.
+// seed must be in [0, 1).
 export function makeInitialMatchData(
-    game: AppGame, 
-    numPlayers: number, 
-    random: RandomAPI, 
+    game: AppGame,
+    numPlayers: number,
+    seed: number,
     options: OptionValues
 ): OfflineMatchData {
     const ctxData = makeCtxData(numPlayers);
     const ctx = new Ctx(ctxData);
+    const random = RandomAPI.fromSeed(seed);
     return {
         playerData: playerData(ctx),
         ctxData: ctx.data,
         state: game.setup({ ctx, random }, options),
+        prngState: random.getState(),
         errorInLastAction: null,
     };
 }

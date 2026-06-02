@@ -14,13 +14,13 @@ import { MoveArg0 } from "./move-fn.js";
 export function matchMove<Param>(
     gameControl: Readonly<GameControl>,
     moveName: string,
-    random: RandomAPI, // Can be changed
     playerID: string,
     matchData: Readonly<MutableMatchData>,
     param: Param
 ) : MutableMatchData {
     const { state, ctxData } = structuredClone(matchData);
-
+    const random = RandomAPI.fromState(matchData.prngState); 
+    
     const ctx = new Ctx(ctxData);
     const arg0: MoveArg0<unknown> = {
         G: state,
@@ -48,6 +48,6 @@ export function matchMove<Param>(
 
     func(arg0, param);
 
-    return {state, ctxData}
+    return {state, ctxData, prngState: random.getState()}
 }
 
