@@ -78,7 +78,7 @@ export function Scoring(): JSX.Element | null {
     playerData,
     nPlayers,
     nthPlayerID,
-    wrappedGameProps: { moves, playerID },
+    wrappedGameProps: { moves, viewingPlayer: playerID },
   } = context;
 
   if (stage !== GameStage.scoring) {

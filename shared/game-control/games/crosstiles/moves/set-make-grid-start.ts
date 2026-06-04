@@ -2,7 +2,7 @@ import { GameStage, ServerData } from '../server-data.js';
 import { MoveArg0 } from '../../../move-fn.js';
 
 export function setMakeGridStartTime(
-  { G, playerID }: MoveArg0<ServerData>,
+  { G, viewingPlayer: playerID }: MoveArg0<ServerData>,
   startTime: number,
 ): void {
   if (G.stage !== GameStage.makingGrids) {

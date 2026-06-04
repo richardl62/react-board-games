@@ -30,7 +30,7 @@ export function moveableToSharedPile(
 type MoveType = 'move' | 'steal' | 'clear' | null;
 
 export function moveType(
-  { G, playerID }: { G: ServerData; ctx: Ctx; playerID: PlayerID },
+  { G, viewingPlayer: playerID }: { G: ServerData; ctx: Ctx; viewingPlayer: PlayerID },
   { to, from }: { to: CardID; from: CardID },
 ): MoveType {
   const options = new OptionWrapper(G.options);

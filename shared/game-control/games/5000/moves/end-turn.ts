@@ -17,7 +17,7 @@ function turnOver({ G, events }: MoveArg0<ServerData>): void {
 }
 
 export function endTurnNotBust(arg0: MoveArg0<ServerData>, _arg1: void): void {
-  const { G, playerID } = arg0;
+  const { G, viewingPlayer: playerID } = arg0;
 
   const score = G.scoreCarriedOver + G.heldDice.score;
   if (G.scoreToBeat) {
@@ -50,7 +50,7 @@ export function endTurnNotBust(arg0: MoveArg0<ServerData>, _arg1: void): void {
 }
 
 export function endTurnBust(arg0: MoveArg0<ServerData>, _arg1: void): void {
-  const { G, playerID } = arg0;
+  const { G, viewingPlayer: playerID } = arg0;
 
   if (G.scoreToBeat?.setBy === playerID) {
     G.scoreToBeat.value = 0;

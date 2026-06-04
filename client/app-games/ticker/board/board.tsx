@@ -104,7 +104,7 @@ function BoardCurrentPlayer(): JSX.Element {
 
 function Board(): JSX.Element {
   const {
-    playerID,
+    viewingPlayer: playerID,
     ctx: { currentPlayer },
   } = useMatchState();
 

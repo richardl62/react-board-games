@@ -36,7 +36,7 @@ export function useMatchState(): GameState {
   const [oldRollCount, setOldRollCount] = useState(gameProps.G.rollCount);
   const [rotationAngle, startRotation] = useTimedSteps(diceRotationSteps());
 
-  const { playerID } = gameProps;
+  const { viewingPlayer: playerID } = gameProps;
   const { currentPlayer } = gameProps.ctx;
   const { turnOverRollCount, rollCount } = gameProps.G;
 

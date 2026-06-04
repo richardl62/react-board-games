@@ -24,7 +24,11 @@ export interface BoardProps<TypeG = unknown, Moves extends UntypedMoves = Untype
 
   ctx: Ctx;
 
-  playerID: PlayerID;
+  /** The player for whom we are rendering the board. This is used to determine what
+  secret information to show, and for other display purposes. It is also used
+  together with ctx.currentPlayer to determine whether game actions (moves and events)
+  are enabled. */
+  viewingPlayer: PlayerID;
 
   moves: Moves;
 

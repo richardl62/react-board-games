@@ -27,7 +27,7 @@ async function getWordChecker(): Promise<(word: string) => boolean> {
 
 function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
   const { gameProps, children } = props;
-  const { playerID } = gameProps;
+  const { viewingPlayer: playerID } = gameProps;
 
   const [reducerState, dispatch] = useReducer(crossTilesReducer, initialReducerState(playerID));
 

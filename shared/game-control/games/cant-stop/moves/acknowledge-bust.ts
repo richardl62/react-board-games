@@ -4,7 +4,7 @@ import { doEndTurn } from './end-turn.js';
 import { sAssert } from '../../../../utils/assert.js';
 // Call by a player to acknowledge that they are bust.
 export function acknowledgeBust(arg0: MoveArg0<ServerData>, _arg: void): void {
-  const { G, playerID } = arg0;
+  const { G, viewingPlayer: playerID } = arg0;
   const heights = G.columnHeights[playerID];
 
   sAssert(G.scoringChoice === 'bust', 'acknowledgeBust called when not bust.');

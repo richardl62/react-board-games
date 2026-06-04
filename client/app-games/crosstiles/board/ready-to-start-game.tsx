@@ -20,7 +20,7 @@ const OuterDiv = styled.div`
 export function ReadyToStartGame(): JSX.Element | null {
   const context = useCrossTilesContext();
   const { stage, playerData, options, wrappedGameProps } = context;
-  const { moves, playerID, allJoined } = wrappedGameProps;
+  const { moves, viewingPlayer: playerID, allJoined } = wrappedGameProps;
 
   if (stage !== GameStage.starting) {
     return null;

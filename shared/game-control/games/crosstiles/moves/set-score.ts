@@ -22,7 +22,10 @@ export function doSetScore(G: ServerData, playerID: string, arg: ScoreWithCatego
   G.playerData[playerID].chosenCategory = category;
 }
 
-export function setScore({ G, playerID }: MoveArg0<ServerData>, arg: ScoreWithCategory): void {
+export function setScore(
+  { G, viewingPlayer: playerID }: MoveArg0<ServerData>,
+  arg: ScoreWithCategory,
+): void {
   if (G.stage !== GameStage.scoring) {
     throw new Error('Unexpected call to recordGrid');
   }

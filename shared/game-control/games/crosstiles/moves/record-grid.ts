@@ -27,7 +27,7 @@ export function doRecordGrid(G: ServerData, playerID: PlayerID, gridAndScore: Gr
 }
 
 export function recordGrid(
-  { G, playerID }: MoveArg0<ServerData>,
+  { G, viewingPlayer: playerID }: MoveArg0<ServerData>,
   gridAndScore: GridAndScore,
 ): void {
   doRecordGrid(G, playerID, gridAndScore);

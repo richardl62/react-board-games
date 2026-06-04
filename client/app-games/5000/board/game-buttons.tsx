@@ -21,7 +21,7 @@ export function GameButtons(): JSX.Element {
   const {
     G,
     moves,
-    playerID,
+    viewingPlayer: playerID,
     ctx: { currentPlayer, matchover },
   } = useMatchState();
   const [diceText, setDiceText] = React.useState('');

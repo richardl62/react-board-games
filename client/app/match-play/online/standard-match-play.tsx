@@ -34,7 +34,7 @@ export function StandardMatchPlay({
       {debugMode && <DebugModeActions serverConnection={serverConnection} />}
       <GameBoardWrapper
         game={game}
-        playerID={player.id}
+        viewingPlayer={player.id}
         connectionStatus={connectionStatus}
         actionRequestStatus={actionRequestStatus}
         serverMatchData={serverResponse.matchData}

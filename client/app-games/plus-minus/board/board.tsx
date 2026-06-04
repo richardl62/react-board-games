@@ -40,7 +40,7 @@ function Board(): JSX.Element {
     G: { count },
     moves,
     events,
-    playerID,
+    viewingPlayer: playerID,
     getPlayerName,
   } = context;
 

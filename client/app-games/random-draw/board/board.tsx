@@ -12,7 +12,7 @@ function PlayerValues(props: { pid: string }): JSX.Element {
   const {
     G: { playerValues },
     ctx: { currentPlayer },
-    playerID,
+    viewingPlayer: playerID,
     getPlayerName,
     moves,
     events,
@@ -47,7 +47,7 @@ function Board(): JSX.Element {
   const {
     ctx: { playOrder, currentPlayer },
     getPlayerName,
-    playerID,
+    viewingPlayer: playerID,
   } = useMatchState();
 
   const playerValues = playOrder.map((pid) => {

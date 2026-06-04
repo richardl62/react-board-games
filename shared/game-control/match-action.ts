@@ -25,7 +25,7 @@ export function matchMove<Param>(
   const arg0: MoveArg0<unknown> = {
     G: state,
     ctx,
-    playerID,
+    viewingPlayer: playerID,
     random,
     events: {
       endTurn: () => endTurn(ctxData),

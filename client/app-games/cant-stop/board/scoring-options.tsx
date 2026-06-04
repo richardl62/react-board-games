@@ -9,7 +9,7 @@ export function ScoringOptions(): JSX.Element {
   const {
     G: { scoringOptions, scoringChoice },
     ctx,
-    playerID,
+    viewingPlayer: playerID,
     moves,
   } = useMatchState();
   const allowMoves = ctx.currentPlayer === playerID;

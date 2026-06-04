@@ -21,9 +21,9 @@ export function useCribbageState(): CribbageState {
   let pone: PlayerID;
   let poneID: '0' | '1';
 
-  sAssert(gameProps.playerID === '0' || gameProps.playerID === '1');
+  sAssert(gameProps.viewingPlayer === '0' || gameProps.viewingPlayer === '1');
 
-  if (gameProps.playerID === '0') {
+  if (gameProps.viewingPlayer === '0') {
     me = CardSetID.Player0;
     pone = CardSetID.Player1;
     poneID = '1';

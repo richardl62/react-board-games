@@ -30,7 +30,7 @@ export function RecordAndDoneButtons(props: RecordAndDoneButtonsProps): JSX.Elem
     gridChangeTimestamp,
     options,
     dispatch,
-    wrappedGameProps: { moves, playerID },
+    wrappedGameProps: { moves, viewingPlayer: playerID },
   } = context;
 
   const {

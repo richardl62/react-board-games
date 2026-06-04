@@ -3,7 +3,10 @@ import { ServerData, GameStage } from '../server-data.js';
 import { doSetScore } from './set-score.js';
 import { MoveArg0 } from '../../../move-fn.js';
 
-export function doneRecordingGrid({ G, playerID }: MoveArg0<ServerData>, _arg: void): void {
+export function doneRecordingGrid(
+  { G, viewingPlayer: playerID }: MoveArg0<ServerData>,
+  _arg: void,
+): void {
   // This function is called during the scoring stage occur if no grid has been recorded.
   // I'm not sure if this is desirable, but it seems to work.
   if (G.stage !== GameStage.makingGrids && G.stage !== GameStage.scoring) {

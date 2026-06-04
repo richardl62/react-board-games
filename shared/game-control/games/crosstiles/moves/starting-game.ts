@@ -2,7 +2,10 @@ import { GameStage, ServerData } from '../server-data.js';
 import { startRound } from './start-round.js';
 import { MoveArg0 } from '../../../move-fn.js';
 
-export function readyToStartGame({ G, playerID, random }: MoveArg0<ServerData>, _arg: void): void {
+export function readyToStartGame(
+  { G, viewingPlayer: playerID, random }: MoveArg0<ServerData>,
+  _arg: void,
+): void {
   if (G.stage !== GameStage.starting) {
     throw new Error('Unexpected call to readyToStartGame');
   }

@@ -3,7 +3,7 @@ import { startRound } from './start-round.js';
 import { MoveArg0 } from '../../../move-fn.js';
 
 export function readyForNewGame(arg0: MoveArg0<ServerData>, _option: void): void {
-  const { G, playerID, random } = arg0;
+  const { G, viewingPlayer: playerID, random } = arg0;
 
   G.playerData[playerID].readyForNewGame = true;
 

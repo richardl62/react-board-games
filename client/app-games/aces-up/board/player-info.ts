@@ -4,7 +4,7 @@ import { MatchState } from '../game-support/match-state';
 export class PlayerInfo {
   constructor(context: MatchState, owner: PlayerID) {
     this.owner = owner;
-    this.viewer = context.playerID;
+    this.viewer = context.viewingPlayer;
     this.currentPlayer = context.ctx.currentPlayer;
   }
 

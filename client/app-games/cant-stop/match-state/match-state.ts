@@ -27,7 +27,7 @@ export interface MatchState extends StandardMatchState {
 export function useMatchState(): MatchState {
   const standardState = useStandardBoardContext() as StandardMatchState;
   const columnHeights = standardState.G.columnHeights;
-  const playerID = standardState.playerID;
+  const playerID = standardState.viewingPlayer;
 
   // Is this the best place for this check?
   sanityCheckColumnHeights(columnHeights);

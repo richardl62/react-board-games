@@ -26,7 +26,7 @@ export function RackAndBoard(): JSX.Element | null {
     clickMoveStart,
     dispatch,
     playerData,
-    wrappedGameProps: { playerID },
+    wrappedGameProps: { viewingPlayer: playerID },
   } = context;
 
   const { doneRecordingGrid } = playerData[playerID];

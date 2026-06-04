@@ -59,12 +59,12 @@ export function makeScrabbleState(
     playerID = currentPlayer;
     moveHistory = gameState.moveHistory;
   } else {
-    playerID = scrabbleGameProps.playerID;
+    playerID = scrabbleGameProps.viewingPlayer;
     currentPlayer = scrabbleGameProps.ctx.currentPlayer;
     moveHistory = finalGameState.moveHistory;
   }
 
-  sAssert(scrabbleGameProps.playerID);
+  sAssert(scrabbleGameProps.viewingPlayer);
 
   return {
     ...reducerState,

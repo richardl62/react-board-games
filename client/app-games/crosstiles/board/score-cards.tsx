@@ -39,7 +39,7 @@ function totalPlayerScore(pid: string, context: CrossTilesContext) {
 export function ScoreCards(): JSX.Element | null {
   const context = useCrossTilesContext();
   const { stage, playerData, nPlayers, nthPlayerID, wrappedGameProps, isLegalWord } = context;
-  const { getPlayerName, playerID, moves } = wrappedGameProps;
+  const { getPlayerName, viewingPlayer: playerID, moves } = wrappedGameProps;
 
   if (stage === GameStage.starting) {
     return null;

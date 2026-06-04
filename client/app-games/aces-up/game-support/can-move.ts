@@ -4,7 +4,7 @@ import { CardID } from '@game-control/games/aces-up/moves/card-id';
 
 export function canMove(matchState: MatchState, id: CardID): boolean {
   // Not this player's turn.
-  if (matchState.playerID !== matchState.ctx.currentPlayer) {
+  if (matchState.viewingPlayer !== matchState.ctx.currentPlayer) {
     return false;
   }
 
@@ -19,7 +19,7 @@ export function canMove(matchState: MatchState, id: CardID): boolean {
 
   // Not this player's card. (This is after the sharedPiles
   // test to ensure that an owner is expected)
-  if (id.owner !== matchState.playerID) {
+  if (id.owner !== matchState.viewingPlayer) {
     return id.area === 'discardPileCard' && matchState.G.options.canUseOpponentsWastePiles;
   }
 

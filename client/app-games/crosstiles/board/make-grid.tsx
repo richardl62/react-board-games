@@ -47,7 +47,7 @@ function MakeGridInner(props: MakeGridInnerProps): JSX.Element {
 
   const context = useCrossTilesContext();
   const { playerData, stage, grid } = context;
-  const { moves, playerID } = context.wrappedGameProps;
+  const { moves, viewingPlayer: playerID } = context.wrappedGameProps;
   const [showIllegalWords, setShowIllegalWords] = useState(false);
 
   sAssert(stage === GameStage.makingGrids);
@@ -102,7 +102,7 @@ function MakeGridInner(props: MakeGridInnerProps): JSX.Element {
 export function MakeGrid(): JSX.Element | null {
   const context = useCrossTilesContext();
   const { playerData, stage, options } = context;
-  const { moves, playerID } = context.wrappedGameProps;
+  const { moves, viewingPlayer: playerID } = context.wrappedGameProps;
 
   const now = useNowTicker();
 

@@ -12,7 +12,7 @@ function InnerGameButtons(): JSX.Element {
   const {
     G: { scoringChoice },
     ctx,
-    playerID,
+    viewingPlayer: playerID,
     moves,
     currentlyBlockedColumns,
   } = useMatchState();

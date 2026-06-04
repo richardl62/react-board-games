@@ -5,7 +5,7 @@ import { maxColumnHeight } from '../config.js';
 // Add one to the current height of the given columns for the current player.
 // If the height reaches the max height, set it to "full".
 export function recordScoringChoice(arg0: MoveArg0<ServerData>, columns: number[]): void {
-  const { G, playerID } = arg0;
+  const { G, viewingPlayer: playerID } = arg0;
   const heights = G.columnHeights[playerID];
 
   // Clear any previous scoring choice.

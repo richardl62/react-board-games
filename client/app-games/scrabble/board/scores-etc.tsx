@@ -27,7 +27,7 @@ export function ScoresEtc(): JSX.Element {
     const nInRack = nNonNull(context.playerData[pid].rack);
 
     let nInRackText = '';
-    if (pid !== context.wrappedGameProps.playerID && context.nTilesInBag === 0) {
+    if (pid !== context.wrappedGameProps.viewingPlayer && context.nTilesInBag === 0) {
       nInRackText = ` (${nInRack} tiles left) `;
     }
 

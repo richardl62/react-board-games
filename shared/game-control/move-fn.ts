@@ -6,7 +6,7 @@ import { RandomAPI } from '../utils/random-api.js';
 export interface MoveArg0<G> {
   G: G;
   ctx: Ctx;
-  playerID: PlayerID;
+  viewingPlayer: PlayerID;
   random: RandomAPI;
   events: EventsAPI;
 }

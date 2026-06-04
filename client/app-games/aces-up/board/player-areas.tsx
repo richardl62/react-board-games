@@ -16,7 +16,7 @@ const OuterDiv = styled.div`
 export function PlayerAreas(): JSX.Element {
   const context = useMatchState();
   const {
-    playerID,
+    viewingPlayer: playerID,
     ctx: { playOrder },
   } = context;
 

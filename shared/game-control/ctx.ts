@@ -34,6 +34,7 @@ export class Ctx {
     return this.data.playOrder.length;
   }
 
+  // The player whose turn it is. Typically this is the only player allowed to make moves.
   get currentPlayer(): string {
     const { playOrderPos, playOrder } = this.data;
     if (!isValidIndex(playOrder, playOrderPos)) {

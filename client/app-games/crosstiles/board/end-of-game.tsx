@@ -24,7 +24,7 @@ const ScoreTable = styled.div`
 export function EndOfGame(): JSX.Element | null {
   const context = useCrossTilesContext();
   const { stage, playerData, wrappedGameProps } = context;
-  const { getPlayerName, moves, playerID } = wrappedGameProps;
+  const { getPlayerName, moves, viewingPlayer: playerID } = wrappedGameProps;
 
   if (stage !== GameStage.over) {
     return null;

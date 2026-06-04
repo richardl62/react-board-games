@@ -3,7 +3,7 @@ import { MoveArg0 } from '../../../move-fn.js';
 import { getScoringOptions } from '../tools/scoring-options.js';
 
 export function roll(arg0: MoveArg0<ServerData>, _arg: void): void {
-  const { G, playerID, random } = arg0;
+  const { G, viewingPlayer: playerID, random } = arg0;
   const heights = G.columnHeights[playerID];
 
   heights.forEach((h) => {

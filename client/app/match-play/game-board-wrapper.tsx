@@ -6,6 +6,7 @@ import { ConnectionStatus } from './online/use-server-connection';
 import { MatchStatus, UntypedMoves } from '@/app-game-support/board-props';
 import { EventsAPI } from '@shared/game-control/events';
 import { getPlayerStatus } from '@/app-game-support/player-status';
+import { PlayerID } from '@shared/game-control/playerid';
 
 export interface ActionRequestStatus {
   // True if the we are currently waiting for the server to respond to an action request.
@@ -20,9 +21,13 @@ export interface ActionRequestStatus {
 interface Props {
   game: AppGame;
 
-  playerID: string;
-  connectionStatus: ConnectionStatus;
+  /** The player for whom we are rendering the board. This is used to determine what
+  secret information to show, and for other display purposes. It is also used
+  together with ctx.currentPlayer to determine whether game actions (moves and events)
+  are enabled. */
+  viewingPlayer: PlayerID;
 
+  connectionStatus: ConnectionStatus;
   serverMatchData: ServerMatchData;
   actionRequestStatus: ActionRequestStatus;
   errorInLastAction: string | null;
@@ -37,7 +42,7 @@ export function GameBoardWrapper(props: Props): JSX.Element {
   const {
     game,
     serverMatchData,
-    playerID,
+    viewingPlayer,
     connectionStatus,
     actionRequestStatus,
     errorInLastAction,
@@ -85,7 +90,7 @@ export function GameBoardWrapper(props: Props): JSX.Element {
   return (
     <Board
       G={serverMatchData.state}
-      playerID={playerID}
+      viewingPlayer={viewingPlayer}
       ctx={ctx}
       moves={moves}
       events={events}
