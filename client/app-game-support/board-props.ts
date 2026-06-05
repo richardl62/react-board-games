@@ -12,6 +12,10 @@ export interface MatchStatus {
 
   actionRequestStatus: ActionRequestStatus;
 
+  /** A description of an error in the last move or event or null if there was no error.
+   * Possible errors included moving out of turn, or uncaught exceptions. In general, an
+   * error indicates a bug in game code.
+   */
   errorInLastAction: string | null;
 }
 
