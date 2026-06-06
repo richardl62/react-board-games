@@ -1,0 +1,5 @@
+{
+  "entry": ["index.html", "server/server.ts"],
+  "project": ["client/**/*.{ts,tsx}", "server/**/*.ts", "shared/**/*.ts"],
+  "ignore": ["client/vite-env.d.ts", "client/svg.d.ts"]
+}
