@@ -1,6 +1,6 @@
 import { AppGame, defaultPlayerName } from '@/app-game-support';
 import { OptionValues } from '@/option-specification/types';
-import { Ctx, makeCtxData } from '@shared/game-control/ctx';
+import { makeMutableMatchData } from '@shared/game-control/make-mutable-match-data';
 import { PublicPlayerMetadata } from '@shared/lobby/types';
 import { ServerMatchData } from '@shared/server-match-data';
 import { RandomAPI } from '@shared/utils/random-api';
@@ -11,17 +11,12 @@ export interface OfflineMatchData extends ServerMatchData {
   errorInLastAction: string | null;
 }
 
-function playerData(ctx: Ctx): PublicPlayerMetadata[] {
-  const matchData: PublicPlayerMetadata[] = [];
-  for (let playerPos = 0; playerPos < ctx.numPlayers; playerPos++) {
-    const id = ctx.playOrder[playerPos];
-    matchData.push({
-      id,
-      name: defaultPlayerName(id),
-      isConnected: true,
-    });
-  }
-  return matchData;
+function playerData(playOrder: string[]): PublicPlayerMetadata[] {
+  return playOrder.map(id => ({
+    id,
+    name: defaultPlayerName(id),
+    isConnected: true,
+  }));
 }
 
 // make a ServerMatchData suitable for the start of an offline match.
@@ -32,14 +27,11 @@ export function makeInitialMatchData(
   seed: number,
   options: OptionValues,
 ): OfflineMatchData {
-  const ctxData = makeCtxData(numPlayers);
-  const ctx = new Ctx(ctxData);
   const random = RandomAPI.fromSeed(seed);
+  const mutableData = makeMutableMatchData(game, numPlayers, options, random);
   return {
-    playerData: playerData(ctx),
-    ctxData: ctx.data,
-    state: game.setup({ ctx, random }, options),
-    prngState: random.getState(),
+    ...mutableData,
+    playerData: playerData(mutableData.ctxData.playOrder),
     errorInLastAction: null,
   };
 }

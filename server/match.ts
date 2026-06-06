@@ -6,7 +6,8 @@ import { MutableMatchData, ServerMatchData } from '../shared/server-match-data.j
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { WsMove } from '../shared/ws-requested-action.js';
 import { Player } from './player.js';
-import { Ctx, endMatch, endTurn, makeCtxData } from '../shared/game-control/ctx.js';
+import { endMatch, endTurn } from '../shared/game-control/ctx.js';
+import { makeMutableMatchData } from '../shared/game-control/make-mutable-match-data.js';
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
@@ -42,35 +43,17 @@ export class Match {
     this.matchID = matchID;
     this.random = randomAPI;
 
-    const ctxData = makeCtxData(numPlayers);
-    const ctx = new Ctx(ctxData);
+    this.mutableData = makeMutableMatchData(gameControl, numPlayers, setupData, randomAPI);
 
     this.players = [];
     for (let id = 0; id < numPlayers; ++id) {
-      this.players[id] = new Player(ctx.playOrder[id]);
+      this.players[id] = new Player(this.mutableData.ctxData.playOrder[id]);
     }
-
-    const state: unknown = gameControl.setup({ ctx, random: randomAPI }, setupData);
-
-    this.mutableData = {
-      ctxData,
-      state,
-      prngState: randomAPI.getState(),
-    };
-  }
-
-  get ctx() {
-    return new Ctx(this.mutableData.ctxData);
   }
 
   get gameName() {
     return this.definition.name;
   }
-
-  get currentPlayer() {
-    return parseInt(this.ctx.currentPlayer);
-  }
-  // set currentPlayer(cp: number) { this.ctx.currentPlayer = cp.toString() };
 
   allocatePlayer(name: string): Player {
     const player = this.players.find((p) => !p.isAllocated);
