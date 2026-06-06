@@ -1,9 +1,7 @@
-import { sAssert } from '../assert.js';
-
 export const suits = ['C', 'D', 'H', 'S'] as const;
 export const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'] as const;
 
-export type Suit = (typeof suits)[number];
+type Suit = (typeof suits)[number];
 export type Rank = (typeof ranks)[number];
 
 export interface CardNonJoker {
@@ -56,26 +54,6 @@ export function compareCards(c1: Card, c2: Card): number {
   return c1.joker ? 1 : -1;
 }
 
-export function suitName(suit: Suit): string {
-  if (suit === 'C') {
-    return 'clubs';
-  }
-
-  if (suit === 'D') {
-    return 'diamonds';
-  }
-
-  if (suit === 'H') {
-    return 'hearts';
-  }
-
-  if (suit === 'S') {
-    return 'spades';
-  }
-
-  sAssert(false);
-}
-
 export function rankName(rank: Rank): string {
   if (rank === 'A') {
     return 'ace';
@@ -94,14 +72,6 @@ export function rankName(rank: Rank): string {
   }
 
   return rank;
-}
-
-export function cardName(card: Card): string {
-  if (card.joker) {
-    return 'Joker' + card.joker;
-  }
-
-  return card.rank + suitName(card.suit);
 }
 
 export function cardShortName(card: Card): string {

@@ -1,4 +1,4 @@
-export interface PlayerMetadata {
+interface PlayerMetadata {
   id: string;
   name: string | null;
   credentials: string;
@@ -16,7 +16,7 @@ export interface CreatedMatch {
   matchID: string;
 }
 
-export interface MatchData {
+interface MatchData {
   gameName: string;
   players: Record<number, PlayerMetadata>;
 }

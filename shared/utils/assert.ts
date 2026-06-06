@@ -22,14 +22,6 @@ export function assertThrow(
   doAssert(action, condition, message, args);
 }
 
-export function assertSilent(
-  condition: unknown,
-  message?: string,
-  ...args: unknown[]
-): asserts condition {
-  doAssert(() => undefined, condition, message, args);
-}
-
 // 'sAssert' -> 'standard assert'.
 // This name is used rather than 'assert' to destinguish it from other assert
 // functions, e.g. console.assert, and so make it easier to get MS code to

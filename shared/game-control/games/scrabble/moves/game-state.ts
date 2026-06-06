@@ -11,15 +11,9 @@ export interface BoardSquareData extends ExtendedLetter {
   active: boolean;
 }
 
-export function getLetter(sd: BoardSquareData | null): Letter | null {
-  // Don't use option chaining as the return value must be null rather than undefined.
-  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-  return sd && sd.letter;
-}
-
 export type BoardData = (BoardSquareData | null)[][];
 
-export interface GamePlayerData {
+interface GamePlayerData {
   rack: (Letter | null)[];
   score: number;
 }

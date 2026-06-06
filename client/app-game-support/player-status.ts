@@ -10,14 +10,14 @@ export function defaultPlayerName(playerID: string): string {
 
 export const nonJoinedPlayerName = '<available>';
 
-export type PlayerConnectionStatus = 'connected' | 'not joined' | 'not connected';
+type PlayerConnectionStatus = 'connected' | 'not joined' | 'not connected';
 
 interface PlayerStatus {
   name: string;
   connectionStatus: PlayerConnectionStatus;
 }
 
-export function playerStatus(metaData: PublicPlayerMetadata): PlayerStatus {
+function playerStatus(metaData: PublicPlayerMetadata): PlayerStatus {
   if (!metaData.name) {
     return {
       name: nonJoinedPlayerName,

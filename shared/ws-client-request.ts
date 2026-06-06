@@ -16,7 +16,7 @@ export interface WsClientRequest {
   action: WsRequestedAction;
 }
 
-export function isWsRequestId(obj: unknown): obj is WsRequestId {
+function isWsRequestId(obj: unknown): obj is WsRequestId {
   if (typeof obj !== 'object' || obj === null) return false;
 
   const candidate = obj as WsRequestId;

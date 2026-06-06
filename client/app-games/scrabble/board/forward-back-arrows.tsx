@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
 
-export const arrowHeight = '15px';
+const arrowHeight = '15px';
 const arrowColor = 'darkred';
 
 // To do: Consider making this into a utility class that can also be used by

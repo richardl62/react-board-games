@@ -3,33 +3,32 @@ import { WsClientRequest, isWsClientRequest } from './ws-client-request.js';
 // Used when players in a match connect or disconnect.
 export const wsClientConnection = { clientConnection: true } as const;
 
-export const wsBadClientRequest = { badClientRequest: true } as const;
-
-export const wsUnknownProblem = { unknownProblem: true } as const;
+interface WsBadClientRequest { readonly badClientRequest: true }
+interface WsUnknownProblem { readonly unknownProblem: true }
 
 export type WsResponseTrigger =
   | WsClientRequest
-  | typeof wsBadClientRequest
+  | WsBadClientRequest
   | typeof wsClientConnection
-  | typeof wsUnknownProblem;
+  | WsUnknownProblem;
 
-export function isWsClientConnection(obj: unknown): obj is typeof wsClientConnection {
+function isWsClientConnection(obj: unknown): obj is typeof wsClientConnection {
   if (typeof obj !== 'object' || obj === null) return false;
 
   const candidate = obj as typeof wsClientConnection;
   return candidate.clientConnection === true;
 }
 
-export function isWsBadClientRequest(obj: unknown): obj is typeof wsBadClientRequest {
+function isWsBadClientRequest(obj: unknown): obj is WsBadClientRequest {
   if (typeof obj !== 'object' || obj === null) return false;
 
-  const candidate = obj as typeof wsBadClientRequest;
+  const candidate = obj as WsBadClientRequest;
   return candidate.badClientRequest === true;
 }
 
-export function isWsUnknownProblem(obj: unknown): obj is typeof wsUnknownProblem {
+function isWsUnknownProblem(obj: unknown): obj is WsUnknownProblem {
   if (typeof obj !== 'object' || obj === null) return false;
-  const candidate = obj as typeof wsUnknownProblem;
+  const candidate = obj as WsUnknownProblem;
   return candidate.unknownProblem === true;
 }
 

@@ -4,7 +4,7 @@ import { getCardBackComponent, getCardComponent } from './card-components.js';
 import { cardSize, defaultCardBack } from './styles.js';
 import { Card, CardBack } from './types.js';
 
-export const EmptyCard = styled.div`
+const EmptyCard = styled.div`
   width: ${cardSize.width}px;
   height: ${cardSize.height}px;
 

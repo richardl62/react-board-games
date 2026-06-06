@@ -6,7 +6,7 @@ import { Warnings } from './warnings';
 import { BoardProps } from './board-props';
 import React from 'react';
 
-export const ReactBasicsContext = React.createContext<BoardProps | null>(null);
+const ReactBasicsContext = React.createContext<BoardProps | null>(null);
 
 export function standardBoard(
   LazyBoard: ReturnType<typeof React.lazy>,

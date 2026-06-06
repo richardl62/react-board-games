@@ -1,4 +1,4 @@
-import { Card, CardNonJoker, ranks, suits } from './types.js';
+import { CardNonJoker, ranks, suits } from './types.js';
 
 // Return a deck with or without jokers.
 // Inefficient if called multiple times (could cache a deck)
@@ -12,14 +12,6 @@ export function deckNoJokers(): CardNonJoker[] {
       cards.push({ rank: rank, suit: suit });
     }
   }
-
-  return cards;
-}
-
-export function deck(): Card[] {
-  const cards: Card[] = deckNoJokers();
-  cards.push({ joker: 1 });
-  cards.push({ joker: 2 });
 
   return cards;
 }

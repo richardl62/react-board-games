@@ -4,7 +4,7 @@ export type FixedScoreCategory = 'length4' | 'length5' | 'length6' | 'words2' | 
 export type ScoreCategory = FixedScoreCategory | 'chance' | 'bonus';
 export type ScoreCategoryOrTotal = ScoreCategory | 'total';
 
-export const fixedScoreCategories: FixedScoreCategory[] = [
+const fixedScoreCategories: FixedScoreCategory[] = [
   'length4',
   'length5',
   'length6',

@@ -4,7 +4,7 @@ import { SetBlank } from './set-blank';
 import { useTurnControlData } from './use-turn-control-data';
 import { useScrabbleState } from '../client-side/scrabble-state';
 
-export const StyledScoreLine = styled.div`
+const StyledScoreLine = styled.div`
   display: flex;
   font-size: large;
   * {

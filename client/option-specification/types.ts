@@ -1,4 +1,4 @@
-export type OptionValue = boolean | number | string;
+type OptionValue = boolean | number | string;
 export type OptionValues = Record<string, OptionValue>;
 
 interface BaseSpecification {

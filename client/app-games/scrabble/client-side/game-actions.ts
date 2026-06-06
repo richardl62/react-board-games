@@ -4,7 +4,6 @@ import { Rack } from './board-and-rack';
 import { ExtendedLetter } from '@game-control/games/scrabble/config/extended-letter';
 import { RowCol } from './get-words-and-score';
 import { BoardData } from '@game-control/games/scrabble/moves/game-state';
-import { ServerData } from '@game-control/games/scrabble/server-data';
 
 export interface SquareID {
   row: number;
@@ -77,10 +76,4 @@ export function compactRack(rack: Rack): void {
   for (; setPos < rack.length; ++setPos) {
     rack[setPos] = null;
   }
-}
-
-export function canSwapTiles(G: ServerData): boolean {
-  const state = G.states[G.states.length - 1];
-  const rackSize = Object.values(state.playerData)[0].rack.length;
-  return state.bag.length >= rackSize;
 }

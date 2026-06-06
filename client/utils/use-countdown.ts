@@ -63,34 +63,3 @@ export function useTicker(
     },
   };
 }
-
-interface useCountdownResult {
-  ellapsedTime: number; // seconds, can be fractional.
-  timeLeft: number; // seconds, can be fractional.
-  stop: () => void;
-  reset: () => void;
-}
-
-export function useCountdown({
-  time,
-  tickInterval,
-  onEnd: onDone,
-}: {
-  time: number; // seconds
-  tickInterval?: number; // milliseconds
-  onEnd?: () => void;
-}): useCountdownResult {
-  sAssert(time >= 0, 'Bad time');
-  sAssert(tickInterval === undefined || tickInterval >= 0, 'Bad tick interval');
-
-  const { ellapsedTime, stop, reset } = useTicker(tickInterval);
-  const timeLeft = time - ellapsedTime;
-  if (timeLeft <= 0) {
-    stop();
-    if (onDone) {
-      onDone();
-    }
-  }
-
-  return { ellapsedTime, timeLeft, stop, reset };
-}

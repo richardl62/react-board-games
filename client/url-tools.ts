@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { MatchID, Player } from './app-game-support';
 
 // Known URL parameters: The values are the actual URL parameter names.
-export const knownParams = {
+const knownParams = {
   matchID: 'mid',
   pid: 'pid',
   credentials: 'cred',

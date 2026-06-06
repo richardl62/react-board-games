@@ -10,7 +10,7 @@ import { CrossTilesGameProps } from '../client-side/actions/cross-tiles-game-pro
 import { crossTilesReducer, initialReducerState } from '../client-side/actions/cross-tiles-reducer';
 import { GameStage } from '@game-control/games/crosstiles/server-data';
 
-export interface ContextProviderPlusProps {
+interface ContextProviderPlusProps {
   gameProps: CrossTilesGameProps;
   children: React.ReactNode;
 }

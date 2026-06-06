@@ -12,7 +12,7 @@ interface GridAndScore {
   score: ScoreWithCategory | null;
 }
 
-export function doRecordGrid(G: ServerData, playerID: PlayerID, gridAndScore: GridAndScore): void {
+function doRecordGrid(G: ServerData, playerID: PlayerID, gridAndScore: GridAndScore): void {
   if (G.stage !== GameStage.makingGrids) {
     throw new Error('Unexpected call to recordGrid - ' + G.stage);
   }
