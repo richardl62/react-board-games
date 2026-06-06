@@ -1,29 +1,25 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-      "target": "ES2022",
-      "lib": ["ES2022"],
-      "types": ["node"],
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext",
-      "esModuleInterop": true,
-      "skipLibCheck": true,
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
 
-      /* Linting */
-      "strict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noFallthroughCasesInSwitch": true,
-      "noUncheckedSideEffectImports": true,
-      "forceConsistentCasingInFileNames": true,
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "forceConsistentCasingInFileNames": true,
 
-      "outDir": "./dist",
-      "rootDir": "./"
-    },
-    "include": [
-      "server/**/*.ts",
-      "game-control/**/*.ts",
-    ],
-  }
-  
+    "outDir": "./dist",
+    "rootDir": "./"
+  },
+  "include": ["server/**/*.ts"]
+}
