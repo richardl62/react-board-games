@@ -1,5 +1,5 @@
 import { JSX, useCallback, useEffect, useMemo } from 'react';
-import { AppGame } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
 import { ServerMatchData } from '@shared/server-match-data';
 import { Ctx } from '@shared/game-control/ctx';
 import { ConnectionStatus } from './online/use-server-connection';

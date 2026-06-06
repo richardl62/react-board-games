@@ -1,4 +1,6 @@
-import { AppGame, MatchID, nonJoinedPlayerName } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
+import { MatchID } from '@/app-game-support/types';
+import { nonJoinedPlayerName } from '@/app-game-support/player-status';
 import { Match } from '@lobby/types';
 import { AsyncStatus } from '@utils/async-status';
 import { BoxWithLegend } from '@utils/box-with-legend';

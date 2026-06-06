@@ -1,4 +1,4 @@
-import { MatchID } from '@/app-game-support';
+import { MatchID } from '@/app-game-support/types';
 import { WsServerResponse } from '@shared/ws-server-response';
 import { useEffect, useState } from 'react';
 

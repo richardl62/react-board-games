@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppGame, GameCategory } from '../../app-game-support';
+import { AppGame, GameCategory } from '../../app-game-support/app-game';
 import { standardBoard } from '../../app-game-support/standard-board';
 import { BoardProps } from '../../app-game-support/board-props';
 import { gameControlSimple, gameControlStandard } from '@game-control/games/scrabble/game-control';

@@ -1,4 +1,4 @@
-import { AppGame, GameCategory } from '@/app-game-support';
+import { AppGame, GameCategory } from '@/app-game-support/app-game';
 import { standardOuterMargin } from '@/app-game-support/styles';
 import { appGames } from '@/app-games/app-games';
 import { JSX, useEffect } from 'react';

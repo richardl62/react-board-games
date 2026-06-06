@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { MatchID, Player } from './app-game-support';
+import { MatchID, Player } from './app-game-support/types';
 
 // Known URL parameters: The values are the actual URL parameter names.
 const knownParams = {

@@ -1,4 +1,4 @@
-import { AppGame } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
 import { defaultNumPlayers } from '@/app-game-support/app-game';
 import { OptionValues } from '@/option-specification/types';
 import { sAssert } from '@shared/utils/assert';

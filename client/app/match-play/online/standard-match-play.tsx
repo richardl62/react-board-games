@@ -1,4 +1,5 @@
-import { AppGame, Player } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
+import { Player } from '@/app-game-support/types';
 import { JSX } from 'react';
 import { GameBoardWrapper } from '../game-board-wrapper';
 import { useOnlineMatchActions } from './use-online-match-actions';

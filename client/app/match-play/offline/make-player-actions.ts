@@ -1,4 +1,4 @@
-import { AppGame } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
 import { endMatch, endTurn } from '@shared/game-control/ctx';
 import { matchMove } from '@shared/game-control/match-action';
 import { OfflineMatchData } from './make-initial-match-data';

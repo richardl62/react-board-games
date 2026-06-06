@@ -1,11 +1,11 @@
 import { BoarderedGrid } from '@utils/board/boardered-grid';
-import { JSX } from 'react';
-import { boardIDs, SquareID } from '../client-side';
-import { boardBoarderColor, boardBoarderSize } from './style';
-import { BoardSquare } from './board-square';
-import { Tile } from './tile';
 import { ClickMoveMarker } from '@utils/board/click-move-marker';
+import { JSX } from 'react';
+import { boardIDs, SquareID } from '../client-side/game-actions';
 import { useScrabbleState } from '../client-side/scrabble-state';
+import { BoardSquare } from './board-square';
+import { boardBoarderColor, boardBoarderSize } from './style';
+import { Tile } from './tile';
 
 export function MainBoard(): JSX.Element {
   const { board, clickMoveStart, config, dispatch } = useScrabbleState();

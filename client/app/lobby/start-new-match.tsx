@@ -1,4 +1,4 @@
-import { AppGame } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
 import { InputValues } from '@/option-specification/input-values';
 import { SpecifiedValues } from '@/option-specification/types';
 import { useSearchParamData, useSetSearchParam } from '@/url-tools';

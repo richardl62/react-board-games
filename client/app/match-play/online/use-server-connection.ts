@@ -1,4 +1,4 @@
-import { MatchID, Player } from '@/app-game-support';
+import { MatchID, Player } from '@/app-game-support/types';
 import { isWsServerResponse, WsServerResponse } from '@shared/ws-server-response';
 import { useMemo, useRef, useState } from 'react';
 import useWebSocket from 'react-use-websocket';

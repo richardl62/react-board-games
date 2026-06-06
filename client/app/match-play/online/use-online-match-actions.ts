@@ -1,4 +1,5 @@
-import { AppGame, Player } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
+import { Player } from '@/app-game-support/types';
 import { EventsAPI } from '@shared/game-control/events';
 import { WsRequestId, isWsClientRequest } from '@shared/ws-client-request';
 import { WsRequestedAction } from '@shared/ws-requested-action';

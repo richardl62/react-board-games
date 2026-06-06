@@ -2,8 +2,8 @@ import { JSX } from 'react';
 import { StandardMatchPlay } from './standard-match-play';
 import { ConnectionStatus, useServerConnection } from './use-server-connection';
 import { useLastServerResponse } from './use-last-server-response';
-import { AppGame, Player, MatchID } from '@/app-game-support';
-
+import { AppGame } from '@/app-game-support/app-game';
+import { Player, MatchID } from '@/app-game-support/types';
 export function MatchPlayOnline({
   game,
   player,

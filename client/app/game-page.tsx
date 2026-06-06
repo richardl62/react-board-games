@@ -1,4 +1,4 @@
-import { AppGame } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
 import { useSearchParamData } from '@/url-tools';
 import { JSX, useState } from 'react';
 import styled from 'styled-components';

@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
-import { WaitingForPlayers } from '../../../app-game-support';
+import { WaitingForPlayers } from '../../../app-game-support/waiting-for-players';
 import { ShowValues } from '../../../option-specification/show-values';
 import { useCrossTilesContext } from '../client-side/actions/cross-tiles-context';
 import { setupOptions } from '../options';

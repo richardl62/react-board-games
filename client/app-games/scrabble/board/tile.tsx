@@ -1,6 +1,7 @@
+import type { ExtendedLetter as CoreTile } from '@game-control/games/scrabble/config/extended-letter';
+import { tileScore } from '@game-control/games/scrabble/config/extended-letter';
 import { JSX } from 'react';
 import styled from 'styled-components';
-import { CoreTile, tileScore } from '../client-side';
 import { squareSize, tileBackgroundColor, tileTextColor } from './style';
 
 const StyledLetter = styled.div`

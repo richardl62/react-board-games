@@ -1,5 +1,5 @@
 import { JSX, useEffect, useReducer, useState } from 'react';
-import { Board } from '.';
+import { Board } from './board';
 import { ScrabbleGameProps } from '../client-side/srcabble-game-props';
 import { initialReducerState } from '../client-side/reducer-state';
 import { scrabbleReducer } from '../client-side/scrabble-reducer';

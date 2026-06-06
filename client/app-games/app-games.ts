@@ -1,5 +1,5 @@
 import { allGames as gameControlGames } from '@game-control/games/all-games';
-import { AppGame } from '../app-game-support';
+import { AppGame } from '../app-game-support/app-game';
 import { appGame as g5000 } from './5000/app-game';
 import { appGame as acesUp } from './aces-up/app-game';
 import { appGame as cantStop } from './cant-stop/app-game';

@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { DragDrop, PieceHolder, PieceHolderStyle } from '@utils/board/piece-holder';
 import { squareSize, squareBackground, hoverBorderColor, hightlightBorderColor } from './style';
-import { SquareID } from '../client-side';
+import { SquareID } from '../client-side/game-actions';
 import { SquareType } from '@game-control/games/scrabble/config/square-type';
 
 interface BoardSquareProps {

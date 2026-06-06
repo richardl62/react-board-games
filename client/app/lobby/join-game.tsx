@@ -1,8 +1,10 @@
+import { AppGame } from '@/app-game-support/app-game';
+import { defaultPlayerName } from '@/app-game-support/player-status';
+import { MatchID, Player } from '@/app-game-support/types';
+import { useSetSearchParam } from '@/url-tools';
+import { AsyncStatus, loadingOrError } from '@utils/async-status';
 import { JSX, useState } from 'react';
 import { useAsyncCallback } from 'react-async-hook';
-import { AppGame, defaultPlayerName, MatchID, Player } from '@/app-game-support';
-import { AsyncStatus, loadingOrError } from '@utils/async-status';
-import { useSetSearchParam } from '@/url-tools';
 import { lobbyClient } from './lobby-client';
 
 async function joinMatch(

@@ -1,4 +1,5 @@
-import { AppGame, defaultPlayerName } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
+import { defaultPlayerName } from '@/app-game-support/player-status';
 import { OptionValues } from '@/option-specification/types';
 import { makeMutableMatchData } from '@shared/game-control/make-mutable-match-data';
 import { PublicPlayerMetadata } from '@shared/lobby/types';
@@ -12,7 +13,7 @@ export interface OfflineMatchData extends ServerMatchData {
 }
 
 function playerData(playOrder: string[]): PublicPlayerMetadata[] {
-  return playOrder.map(id => ({
+  return playOrder.map((id) => ({
     id,
     name: defaultPlayerName(id),
     isConnected: true,

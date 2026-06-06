@@ -1,4 +1,4 @@
-import { AppGame } from '@/app-game-support';
+import { AppGame } from '@/app-game-support/app-game';
 import { standardOuterMargin } from '@/app-game-support/styles';
 import { LoadingOrError } from '@utils/async-status';
 import { JSX } from 'react';

@@ -1,4 +1,4 @@
-import { AppGame, GameCategory } from '../../app-game-support';
+import { AppGame, GameCategory } from '../../app-game-support/app-game';
 import { standardBoard } from '../../app-game-support/standard-board';
 import React from 'react';
 import { gameControl } from '@game-control/games/5000/game-control';

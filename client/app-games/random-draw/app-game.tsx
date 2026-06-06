@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppGame, GameCategory } from '../../app-game-support';
+import { AppGame, GameCategory } from '../../app-game-support/app-game';
 import { standardBoard } from '../../app-game-support/standard-board';
 import { gameControl } from '@game-control/games/random-draw/game-control';
 

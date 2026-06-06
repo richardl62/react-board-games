@@ -1,13 +1,13 @@
-import { JSX } from 'react';
-import { boardBoarderColor, boardBoarderSize } from './style';
-import { BoarderedGrid } from '@utils/board/boardered-grid';
-import { SquareType } from '@game-control/games/scrabble/config/square-type';
-import { BoardSquare } from './board-square';
-import { sAssert } from '@utils/assert';
-import { Tile } from './tile';
-import { useScrabbleState } from '../client-side/scrabble-state';
-import { SquareID, boardIDs } from '../client-side';
 import { makeExtendedLetter } from '@game-control/games/scrabble/config/extended-letter';
+import { SquareType } from '@game-control/games/scrabble/config/square-type';
+import { sAssert } from '@utils/assert';
+import { BoarderedGrid } from '@utils/board/boardered-grid';
+import { JSX } from 'react';
+import { SquareID, boardIDs } from '../client-side/game-actions';
+import { useScrabbleState } from '../client-side/scrabble-state';
+import { BoardSquare } from './board-square';
+import { boardBoarderColor, boardBoarderSize } from './style';
+import { Tile } from './tile';
 
 interface RackProps {
   selected: boolean[] | null;
