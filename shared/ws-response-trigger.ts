@@ -12,7 +12,7 @@ export type WsResponseTrigger =
   | typeof wsClientConnection
   | WsUnknownProblem;
 
-function isWsClientConnection(obj: unknown): obj is typeof wsClientConnection {
+export function isWsClientConnection(obj: unknown): obj is typeof wsClientConnection {
   if (typeof obj !== 'object' || obj === null) return false;
 
   const candidate = obj as typeof wsClientConnection;

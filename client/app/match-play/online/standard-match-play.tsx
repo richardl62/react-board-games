@@ -22,12 +22,13 @@ export function StandardMatchPlay({
   player,
   serverConnection,
 }: StandardMatchPlayProps): JSX.Element {
-  const { moves, events, actionRequestStatus } = useOnlineMatchActions(
+  const { connectionStatus, serverResponse } = serverConnection;
+  const { moves, events, actionRequestStatus, optimisticMatchState } = useOnlineMatchActions(
     game,
     player,
     serverConnection,
+    serverResponse.matchState,
   );
-  const { connectionStatus, serverResponse } = serverConnection;
   const { debugMode } = useSearchParamData();
 
   return (
@@ -38,7 +39,7 @@ export function StandardMatchPlay({
         viewingPlayer={player.id}
         connectionStatus={connectionStatus}
         actionRequestStatus={actionRequestStatus}
-        matchState={serverResponse.matchState}
+        matchState={optimisticMatchState ?? serverResponse.matchState}
         moves={moves}
         events={events}
       />
