@@ -31,8 +31,11 @@ function playerStatus(metaData: PublicPlayerMetadata): PlayerStatus {
   };
 }
 
-export function getPlayerStatus(matchData: PublicPlayerMetadata[], playerID: string): PlayerStatus {
-  const md = matchData.find((md) => md.id === playerID);
+export function getPlayerStatus(
+  matchState: PublicPlayerMetadata[],
+  playerID: string,
+): PlayerStatus {
+  const md = matchState.find((md) => md.id === playerID);
 
   if (!md) {
     // Should never happen.

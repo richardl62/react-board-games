@@ -3,7 +3,7 @@ import { JSX, useState } from 'react';
 import styled from 'styled-components';
 import { OfflineOptions } from '../../offline-options';
 import { GameBoardWrapper } from '../game-board-wrapper';
-import { makeInitialMatchData } from './make-initial-match-data';
+import { makeInitialMatchState } from './make-initial-match-data';
 import { Ctx } from '@shared/game-control/ctx';
 import { makePlayerActions } from './make-player-actions';
 import { useSearchParamData } from '@/url-tools';
@@ -22,15 +22,15 @@ export function MatchPlayOffline({
   const { numPlayers, passAndPlay, setupData } = options;
   const { seed: seedParam } = useSearchParamData();
 
-  const [matchData, setMatchData] = useState(() =>
-    makeInitialMatchData(game, numPlayers, seedParam ?? Math.random(), setupData),
+  const [matchState, setMatchState] = useState(() =>
+    makeInitialMatchState(game, numPlayers, seedParam ?? Math.random(), setupData),
   );
 
-  const ctx = new Ctx(matchData.ctxData);
+  const ctx = new Ctx(matchState.ctxData);
 
   const boards: JSX.Element[] = [];
   for (const viewingPlayer of ctx.playOrder) {
-    const { moves, events } = makePlayerActions(game, viewingPlayer, matchData, setMatchData);
+    const { moves, events } = makePlayerActions(game, viewingPlayer, matchState, setMatchState);
 
     // Create a board that is optionally displayed. (Early code created either a board
     // or a blank element. However, this caused the Scrabble dictionary to be reloaded
@@ -41,9 +41,9 @@ export function MatchPlayOffline({
         game={game}
         viewingPlayer={viewingPlayer}
         connectionStatus={'connected'}
-        matchData={matchData}
+        matchState={matchState}
         actionRequestStatus={{ waitingForServer: false, lastActionIgnored: false }}
-        errorInLastAction={matchData.errorInLastAction}
+        errorInLastAction={matchState.errorInLastAction}
         moves={moves}
         events={events}
       />

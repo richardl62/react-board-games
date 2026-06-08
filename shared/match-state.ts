@@ -2,7 +2,7 @@ import { CtxData, isCtxData } from './game-control/ctx.js';
 import { PublicPlayerMetadata } from './lobby/types.js';
 
 /** The infomation about a match that can be changed by a move or event. */
-export interface ActiveMatchData {
+export interface ActiveMatchState {
   /** The context data (player order, etc.) for the match, changed by events
    * also by moves that trigger events.
    */
@@ -18,15 +18,15 @@ export interface ActiveMatchData {
 }
 
 /** The configurable/changable data for a match */
-export interface MatchData extends ActiveMatchData {
+export interface MatchState extends ActiveMatchState {
   /** The players who have joined the game */
   playerData: PublicPlayerMetadata[];
 }
 
-export function isMatchData(obj: unknown): obj is MatchData {
+export function isMatchState(obj: unknown): obj is MatchState {
   if (typeof obj !== 'object' || obj === null) return false;
 
-  const candidate = obj as MatchData;
+  const candidate = obj as MatchState;
 
   return Array.isArray(candidate.playerData) && isCtxData(candidate.ctxData);
 }

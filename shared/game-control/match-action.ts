@@ -1,4 +1,4 @@
-import { ActiveMatchData } from '../match-data.js';
+import { ActiveMatchState } from '../match-state.js';
 import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
 import { AllActive, GameControl } from './game-control.js';
@@ -8,18 +8,18 @@ import { MoveArg0 } from './move-fn.js';
  * Call a Game's move function, or throw if there is a problem.
  *
  * No input is modified except, possibly, random. (I could do better at
- * policing this.) Instead a (potentially) modified copy of matchData
+ * policing this.) Instead a (potentially) modified copy of matchState
  * is returned.
  */
 export function matchMove<Param>(
   gameControl: Readonly<GameControl>,
   moveName: string,
   playerID: string,
-  matchData: Readonly<ActiveMatchData>,
+  matchState: Readonly<ActiveMatchState>,
   param: Param,
-): ActiveMatchData {
-  const { state, ctxData } = structuredClone(matchData);
-  const random = RandomAPI.fromState(matchData.prngState);
+): ActiveMatchState {
+  const { state, ctxData } = structuredClone(matchState);
+  const random = RandomAPI.fromState(matchState.prngState);
 
   const ctx = new Ctx(ctxData);
   const arg0: MoveArg0<unknown> = {

@@ -7,7 +7,7 @@ import { closeWithReason } from './web-socket-actions.js';
 
 // Throw if there is an error that prevent the requested action being attempted, for example
 // if the web socket is not associated with a player. Other errors (for example invalid moves)
-// are caught and reported back to the client via broadcastMatchData.
+// are caught and reported back to the client via broadcastMatchState.
 function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string) {
   const found = matches.findMatchAndPlayer(ws);
   if (!found) {
@@ -52,7 +52,7 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
     console.warn(`Error: ${error} when processing client request ${request}`);
   }
 
-  match.broadcastMatchData(clientRequest, error);
+  match.broadcastMatchState(clientRequest, error);
 }
 
 // Handle a player-requested action (move, end turn, etc)

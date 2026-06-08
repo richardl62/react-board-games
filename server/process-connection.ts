@@ -61,7 +61,7 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
 
     player.recordConnection(ws);
 
-    match.broadcastMatchData(wsClientConnection, null);
+    match.broadcastMatchState(wsClientConnection, null);
   } catch (err) {
     const error = err instanceof Error ? err.message : 'unknown error';
     console.log('Error during connection:', error);
@@ -90,7 +90,7 @@ export function processDisconnection(matches: Matches, ws: WebSocket) {
 
     player.recordDisconnection();
 
-    match.broadcastMatchData(wsClientConnection, null);
+    match.broadcastMatchState(wsClientConnection, null);
   } catch (err) {
     // Hmm. Not sure what best to do as we cannot send error response to disconnected player.
     const error = err instanceof Error ? err.message : 'unknown error';

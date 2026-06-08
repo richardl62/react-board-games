@@ -1,29 +1,29 @@
 import { AppGame } from '@/app-game-support/app-game';
 import { endMatch, endTurn } from '@shared/game-control/ctx';
 import { matchMove } from '@shared/game-control/match-action';
-import { OfflineMatchData } from './make-initial-match-data';
-import { ActiveMatchData } from '@shared/match-data';
+import { OfflineMatchState } from './make-initial-match-data';
+import { ActiveMatchState } from '@shared/match-state';
 import { UntypedMoves } from '@/app-game-support/board-props';
 import { EventsAPI } from '@shared/game-control/events';
 
 export function makePlayerActions(
   game: AppGame,
   playerID: string,
-  matchData: OfflineMatchData,
-  setMatchData: (arg: OfflineMatchData) => void,
+  matchState: OfflineMatchState,
+  setMatchState: (arg: OfflineMatchState) => void,
 ): { moves: UntypedMoves; events: EventsAPI } {
-  const doAction = (action: (md: ActiveMatchData) => ActiveMatchData) => {
+  const doAction = (action: (md: ActiveMatchState) => ActiveMatchState) => {
     try {
-      const mutatedData = action(matchData);
-      setMatchData({
+      const mutatedData = action(matchState);
+      setMatchState({
         ...mutatedData,
-        playerData: matchData.playerData,
+        playerData: matchState.playerData,
         errorInLastAction: null,
       });
     } catch (e) {
       const errorInLastAction = e instanceof Error ? e.message : `Unrecognised error: ${String(e)}`;
-      setMatchData({
-        ...matchData,
+      setMatchState({
+        ...matchState,
         errorInLastAction,
       });
     }

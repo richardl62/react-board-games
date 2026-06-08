@@ -1,6 +1,6 @@
 import { JSX, useCallback, useEffect, useMemo } from 'react';
 import { AppGame } from '@/app-game-support/app-game';
-import { MatchData } from '@shared/match-data';
+import { MatchState } from '@shared/match-state';
 import { Ctx } from '@shared/game-control/ctx';
 import { ConnectionStatus } from './online/use-server-connection';
 import { MatchStatus, UntypedMoves } from '@/app-game-support/board-props';
@@ -30,7 +30,7 @@ interface Props {
   are enabled. */
   viewingPlayer: PlayerID;
 
-  matchData: MatchData;
+  matchState: MatchState;
   errorInLastAction: string | null;
 
   connectionStatus: ConnectionStatus;
@@ -45,7 +45,7 @@ interface Props {
 export function GameBoardWrapper(props: Props): JSX.Element {
   const {
     game,
-    matchData,
+    matchState,
     viewingPlayer,
     connectionStatus,
     actionRequestStatus,
@@ -56,30 +56,30 @@ export function GameBoardWrapper(props: Props): JSX.Element {
 
   const getPlayerName = useCallback(
     (playerID: string) => {
-      return getPlayerStatus(matchData.playerData, playerID).name;
+      return getPlayerStatus(matchState.playerData, playerID).name;
     },
-    [matchData.playerData],
+    [matchState.playerData],
   );
 
   const matchStatus: MatchStatus = useMemo(() => {
     return {
       connectionStatus,
-      playerData: matchData.playerData,
+      playerData: matchState.playerData,
       actionRequestStatus,
       errorInLastAction,
     };
-  }, [connectionStatus, errorInLastAction, matchData.playerData, actionRequestStatus]);
+  }, [connectionStatus, errorInLastAction, matchState.playerData, actionRequestStatus]);
 
   const ctx = useMemo(() => {
-    return new Ctx(matchData.ctxData);
-  }, [matchData.ctxData]);
+    return new Ctx(matchState.ctxData);
+  }, [matchState.ctxData]);
 
   const allJoined = useMemo(
     () =>
       ctx.playOrder.every(
-        (pid) => getPlayerStatus(matchData.playerData, pid).connectionStatus !== 'not joined',
+        (pid) => getPlayerStatus(matchState.playerData, pid).connectionStatus !== 'not joined',
       ),
-    [ctx.playOrder, matchData.playerData],
+    [ctx.playOrder, matchState.playerData],
   );
 
   // KLUDGE: Set the document title on every render. The avoids some issues with it not updating
@@ -93,7 +93,7 @@ export function GameBoardWrapper(props: Props): JSX.Element {
   const Board = game.board;
   return (
     <Board
-      G={matchData.state}
+      G={matchState.state}
       viewingPlayer={viewingPlayer}
       ctx={ctx}
       moves={moves}

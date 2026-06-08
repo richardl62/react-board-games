@@ -2,12 +2,12 @@ import { WebSocket } from 'ws';
 import { GameControl } from '../shared/game-control/game-control.js';
 import { matchMove } from '../shared/game-control/match-action.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { ActiveMatchData, MatchData } from '../shared/match-data.js';
+import { ActiveMatchState, MatchState } from '../shared/match-state.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { WsMove } from '../shared/ws-requested-action.js';
 import { Player } from './player.js';
 import { endMatch, endTurn } from '../shared/game-control/ctx.js';
-import { makeActiveMatchData } from '../shared/game-control/make-active-match-data.js';
+import { makeActiveMatchState } from '../shared/game-control/make-active-match-data.js';
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
@@ -21,7 +21,7 @@ export class Match {
   readonly random: RandomAPI;
 
   // The data that can change during the course of a match.
-  private activeData: ActiveMatchData;
+  private activeData: ActiveMatchState;
 
   private responseDelay = 0;
 
@@ -43,7 +43,7 @@ export class Match {
     this.matchID = matchID;
     this.random = randomAPI;
 
-    this.activeData = makeActiveMatchData(gameControl, numPlayers, setupData, randomAPI);
+    this.activeData = makeActiveMatchState(gameControl, numPlayers, setupData, randomAPI);
 
     this.players = [];
     for (let id = 0; id < numPlayers; ++id) {
@@ -78,7 +78,7 @@ export class Match {
     };
   }
 
-  matchData(): MatchData {
+  matchState(): MatchState {
     return {
       ...this.activeData,
       playerData: this.players.map((p) => p.publicMetadata()),
@@ -115,8 +115,12 @@ export class Match {
     this.responseDelay = responseDelay;
   }
 
-  broadcastMatchData(trigger: WsResponseTrigger, errorInLastAction: string | null) {
-    const response: WsServerResponse = { trigger, matchData: this.matchData(), errorInLastAction };
+  broadcastMatchState(trigger: WsResponseTrigger, errorInLastAction: string | null) {
+    const response: WsServerResponse = {
+      trigger,
+      matchState: this.matchState(),
+      errorInLastAction,
+    };
 
     const doIt = () => {
       for (const player of this.players) {
