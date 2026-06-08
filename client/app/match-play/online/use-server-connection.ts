@@ -6,6 +6,9 @@ import { serverAddress } from '../../server-address';
 import { WsClientRequest } from '@shared/ws-client-request';
 import { WsTestAction } from '@shared/ws-test-actions';
 
+/** Status of connection with server. For closed connections includes
+ * indication of whether reconnection is being attempted.
+ */
 export type ConnectionStatus =
   | 'connecting'
   | 'connected'

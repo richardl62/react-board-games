@@ -2,7 +2,7 @@ import { AppGame } from '@/app-game-support/app-game';
 import { endMatch, endTurn } from '@shared/game-control/ctx';
 import { matchMove } from '@shared/game-control/match-action';
 import { OfflineMatchData } from './make-initial-match-data';
-import { MutableMatchData } from '@shared/server-match-data';
+import { ActiveMatchData } from '@shared/match-data';
 import { UntypedMoves } from '@/app-game-support/board-props';
 import { EventsAPI } from '@shared/game-control/events';
 
@@ -12,7 +12,7 @@ export function makePlayerActions(
   matchData: OfflineMatchData,
   setMatchData: (arg: OfflineMatchData) => void,
 ): { moves: UntypedMoves; events: EventsAPI } {
-  const doAction = (action: (md: MutableMatchData) => MutableMatchData) => {
+  const doAction = (action: (md: ActiveMatchData) => ActiveMatchData) => {
     try {
       const mutatedData = action(matchData);
       setMatchData({

@@ -38,7 +38,7 @@ export function StandardMatchPlay({
         viewingPlayer={player.id}
         connectionStatus={connectionStatus}
         actionRequestStatus={actionRequestStatus}
-        serverMatchData={serverResponse.matchData}
+        matchData={serverResponse.matchData}
         errorInLastAction={serverResponse.errorInLastAction}
         moves={moves}
         events={events}

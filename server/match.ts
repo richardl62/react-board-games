@@ -2,12 +2,12 @@ import { WebSocket } from 'ws';
 import { GameControl } from '../shared/game-control/game-control.js';
 import { matchMove } from '../shared/game-control/match-action.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { MutableMatchData, ServerMatchData } from '../shared/server-match-data.js';
+import { ActiveMatchData, MatchData } from '../shared/match-data.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { WsMove } from '../shared/ws-requested-action.js';
 import { Player } from './player.js';
 import { endMatch, endTurn } from '../shared/game-control/ctx.js';
-import { makeMutableMatchData } from '../shared/game-control/make-mutable-match-data.js';
+import { makeActiveMatchData } from '../shared/game-control/make-active-match-data.js';
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
@@ -21,7 +21,7 @@ export class Match {
   readonly random: RandomAPI;
 
   // The data that can change during the course of a match.
-  private mutableData: MutableMatchData;
+  private activeData: ActiveMatchData;
 
   private responseDelay = 0;
 
@@ -43,11 +43,11 @@ export class Match {
     this.matchID = matchID;
     this.random = randomAPI;
 
-    this.mutableData = makeMutableMatchData(gameControl, numPlayers, setupData, randomAPI);
+    this.activeData = makeActiveMatchData(gameControl, numPlayers, setupData, randomAPI);
 
     this.players = [];
     for (let id = 0; id < numPlayers; ++id) {
-      this.players[id] = new Player(this.mutableData.ctxData.playOrder[id]);
+      this.players[id] = new Player(this.activeData.ctxData.playOrder[id]);
     }
   }
 
@@ -78,9 +78,9 @@ export class Match {
     };
   }
 
-  matchData(): ServerMatchData {
+  matchData(): MatchData {
     return {
-      ...this.mutableData,
+      ...this.activeData,
       playerData: this.players.map((p) => p.publicMetadata()),
     };
   }
@@ -88,17 +88,17 @@ export class Match {
   // Can throw, in which case no data is changed.
   move(request: WsMove, playerID: string) {
     const { move, arg } = request;
-    this.mutableData = matchMove(this.definition, move, playerID, this.mutableData, arg);
+    this.activeData = matchMove(this.definition, move, playerID, this.activeData, arg);
   }
 
   // Can throw, in which case no data is changed.
   endTurn() {
-    endTurn(this.mutableData.ctxData);
+    endTurn(this.activeData.ctxData);
   }
 
   // Can throw, in which case no data is changed.
   endMatch() {
-    endMatch(this.mutableData.ctxData);
+    endMatch(this.activeData.ctxData);
   }
 
   findPlayer(arg: { id: string } | { name: string } | { ws: WebSocket }): Player | undefined {

@@ -1,4 +1,4 @@
-import { MutableMatchData } from '../server-match-data.js';
+import { ActiveMatchData } from '../match-data.js';
 import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
 import { AllActive, GameControl } from './game-control.js';
@@ -15,9 +15,9 @@ export function matchMove<Param>(
   gameControl: Readonly<GameControl>,
   moveName: string,
   playerID: string,
-  matchData: Readonly<MutableMatchData>,
+  matchData: Readonly<ActiveMatchData>,
   param: Param,
-): MutableMatchData {
+): ActiveMatchData {
   const { state, ctxData } = structuredClone(matchData);
   const random = RandomAPI.fromState(matchData.prngState);
 

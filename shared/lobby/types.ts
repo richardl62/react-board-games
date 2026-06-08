@@ -1,11 +1,8 @@
-interface PlayerMetadata {
+export interface PublicPlayerMetadata {
   id: string;
   name: string | null;
-  credentials: string;
   isConnected: boolean;
 }
-
-export type PublicPlayerMetadata = Omit<PlayerMetadata, 'credentials'>;
 
 export interface JoinedMatch {
   playerID: string;
@@ -16,12 +13,8 @@ export interface CreatedMatch {
   matchID: string;
 }
 
-interface MatchData {
+export interface Match {
   gameName: string;
-  players: Record<number, PlayerMetadata>;
-}
-
-export interface Match extends Omit<MatchData, 'players'> {
   matchID: string;
   players: PublicPlayerMetadata[];
 }

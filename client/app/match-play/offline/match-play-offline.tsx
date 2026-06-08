@@ -41,7 +41,7 @@ export function MatchPlayOffline({
         game={game}
         viewingPlayer={viewingPlayer}
         connectionStatus={'connected'}
-        serverMatchData={matchData}
+        matchData={matchData}
         actionRequestStatus={{ waitingForServer: false, lastActionIgnored: false }}
         errorInLastAction={matchData.errorInLastAction}
         moves={moves}
