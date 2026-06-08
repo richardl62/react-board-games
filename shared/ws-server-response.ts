@@ -5,10 +5,6 @@ export interface WsServerResponse {
   trigger: WsResponseTrigger;
 
   matchState: MatchState;
-
-  /** An error reported by the last action (i.e. move or event), or null if there was no
-   * reported error. */
-  errorInLastAction: string | null;
 }
 
 export function isWsServerResponse(obj: unknown): obj is WsServerResponse {

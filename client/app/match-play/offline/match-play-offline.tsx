@@ -43,7 +43,6 @@ export function MatchPlayOffline({
         connectionStatus={'connected'}
         matchState={matchState}
         actionRequestStatus={{ waitingForServer: false, lastActionIgnored: false }}
-        errorInLastAction={matchState.errorInLastAction}
         moves={moves}
         events={events}
       />

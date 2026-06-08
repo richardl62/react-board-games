@@ -31,7 +31,6 @@ interface Props {
   viewingPlayer: PlayerID;
 
   matchState: MatchState;
-  errorInLastAction: string | null;
 
   connectionStatus: ConnectionStatus;
   actionRequestStatus: ActionRequestStatus;
@@ -49,7 +48,6 @@ export function GameBoardWrapper(props: Props): JSX.Element {
     viewingPlayer,
     connectionStatus,
     actionRequestStatus,
-    errorInLastAction,
     moves,
     events,
   } = props;
@@ -66,9 +64,9 @@ export function GameBoardWrapper(props: Props): JSX.Element {
       connectionStatus,
       playerData: matchState.playerData,
       actionRequestStatus,
-      errorInLastAction,
+      errorInLastAction: matchState.errorInLastAction,
     };
-  }, [connectionStatus, errorInLastAction, matchState.playerData, actionRequestStatus]);
+  }, [connectionStatus, matchState.playerData, matchState.errorInLastAction, actionRequestStatus]);
 
   const ctx = useMemo(() => {
     return new Ctx(matchState.ctxData);

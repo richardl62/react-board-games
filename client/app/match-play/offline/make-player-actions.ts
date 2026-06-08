@@ -1,16 +1,15 @@
 import { AppGame } from '@/app-game-support/app-game';
 import { endMatch, endTurn } from '@shared/game-control/ctx';
 import { matchMove } from '@shared/game-control/match-action';
-import { OfflineMatchState } from './make-initial-match-data';
-import { ActiveMatchState } from '@shared/match-state';
+import { ActiveMatchState, MatchState } from '@shared/match-state';
 import { UntypedMoves } from '@/app-game-support/board-props';
 import { EventsAPI } from '@shared/game-control/events';
 
 export function makePlayerActions(
   game: AppGame,
   playerID: string,
-  matchState: OfflineMatchState,
-  setMatchState: (arg: OfflineMatchState) => void,
+  matchState: MatchState,
+  setMatchState: (arg: MatchState) => void,
 ): { moves: UntypedMoves; events: EventsAPI } {
   const doAction = (action: (md: ActiveMatchState) => ActiveMatchState) => {
     try {

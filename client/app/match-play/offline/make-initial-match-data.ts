@@ -6,12 +6,6 @@ import { PublicPlayerMetadata } from '@shared/lobby/types';
 import { MatchState } from '@shared/match-state';
 import { RandomAPI } from '@shared/utils/random-api';
 
-export interface OfflineMatchState extends MatchState {
-  /** An error reported by the last action (i.e. move or event), or null if there was no
-   * reported error. */
-  errorInLastAction: string | null;
-}
-
 function playerData(playOrder: string[]): PublicPlayerMetadata[] {
   return playOrder.map((id) => ({
     id,
@@ -27,7 +21,7 @@ export function makeInitialMatchState(
   numPlayers: number,
   seed: number,
   options: OptionValues,
-): OfflineMatchState {
+): MatchState {
   const random = RandomAPI.fromSeed(seed);
   const matchState = makeActiveMatchState(game, numPlayers, options, random);
   return {

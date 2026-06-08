@@ -20,7 +20,7 @@ export class Match {
   readonly players: Player[];
   readonly random: RandomAPI;
 
-  // The data that can change during the course of a match.
+  // Data that can be changed by a move or event.
   private activeData: ActiveMatchState;
 
   private responseDelay = 0;
@@ -78,10 +78,11 @@ export class Match {
     };
   }
 
-  matchState(): MatchState {
+  matchState(errorInLastAction: string | null): MatchState {
     return {
       ...this.activeData,
       playerData: this.players.map((p) => p.publicMetadata()),
+      errorInLastAction,
     };
   }
 
@@ -118,8 +119,7 @@ export class Match {
   broadcastMatchState(trigger: WsResponseTrigger, errorInLastAction: string | null) {
     const response: WsServerResponse = {
       trigger,
-      matchState: this.matchState(),
-      errorInLastAction,
+      matchState: this.matchState(errorInLastAction),
     };
 
     const doIt = () => {
