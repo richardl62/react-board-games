@@ -4,7 +4,9 @@ import { ConnectionStatus, useServerConnection } from './use-server-connection';
 import { useLastServerResponse } from './use-last-server-response';
 import { AppGame } from '@/app-game-support/app-game';
 import { Player, MatchID } from '@/app-game-support/types';
-export function MatchPlayOnline({
+
+// This together with OfflineMatch are the entry points used to start a match.
+export function OnlineMatch({
   game,
   player,
   matchID,

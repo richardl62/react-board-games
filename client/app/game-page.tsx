@@ -2,8 +2,8 @@ import { AppGame } from '@/app-game-support/app-game';
 import { useSearchParamData } from '@/url-tools';
 import { JSX, useState } from 'react';
 import styled from 'styled-components';
-import { MatchPlayOffline } from './match-play/offline/match-play-offline';
-import { MatchPlayOnline } from './match-play/online/match-play-online';
+import { OfflineMatch } from './match-play/offline/offline-match';
+import { OnlineMatch } from './match-play/online/online-match';
 import { OfflineOptions } from './offline-options';
 import { GameLobby } from './lobby/game-lobby';
 import { MatchLobby } from './lobby/match-lobby';
@@ -27,11 +27,11 @@ function InnerGamePage(props: { game: AppGame }) {
   const [offlineOptions, setOfflineOptions] = useState(startingOfflineOptions);
 
   if (offlineOptions) {
-    return <MatchPlayOffline game={game} options={offlineOptions} />;
+    return <OfflineMatch game={game} options={offlineOptions} />;
   }
 
   if (player && matchID) {
-    return <MatchPlayOnline game={game} matchID={matchID} player={player} />;
+    return <OnlineMatch game={game} matchID={matchID} player={player} />;
   }
 
   if (player && !matchID) {

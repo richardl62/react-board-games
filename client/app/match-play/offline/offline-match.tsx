@@ -12,7 +12,8 @@ const OptionalDisplay = styled.div<{ display_: boolean }>`
   display: ${(props) => (props.display_ ? 'block' : 'none')};
 `;
 
-export function MatchPlayOffline({
+// This together with onlineMatch are the entry points used to start a match.
+export function OfflineMatch({
   game,
   options,
 }: {
