@@ -1,7 +1,6 @@
 import { JSX } from 'react';
 import { StandardMatchPlay } from './standard-match-play';
 import { ConnectionStatus, useServerConnection } from './use-server-connection';
-import { useLastServerResponse } from './use-last-server-response';
 import { AppGame } from '@/app-game-support/app-game';
 import { Player, MatchID } from '@/app-game-support/types';
 
@@ -16,21 +15,17 @@ export function OnlineMatch({
   matchID: MatchID;
 }): JSX.Element {
   const serverConnection = useServerConnection({ matchID, player });
-  const { serverResponse: currentServerResponse } = serverConnection;
+  const { serverResponse, connectionStatus } = serverConnection;
 
-  // To improve behaviour if there is a temporary loss of connection to the server
-  // record the last non-null server response.
-  const lastServerResponse = useLastServerResponse(matchID, currentServerResponse);
-
-  if (!lastServerResponse) {
-    return <ShowConnectionStatus connectionStatus={serverConnection.connectionStatus} />;
+  if (!serverResponse) {
+    return <ShowConnectionStatus connectionStatus={connectionStatus} />;
   }
 
   return (
     <StandardMatchPlay
       game={game}
       player={player}
-      serverConnection={{ ...serverConnection, serverResponse: lastServerResponse }}
+      serverConnection={{ ...serverConnection, serverResponse }}
     />
   );
 }
