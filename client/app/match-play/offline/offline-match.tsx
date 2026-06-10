@@ -43,7 +43,11 @@ export function OfflineMatch({
         viewingPlayer={viewingPlayer}
         connectionStatus={'connected'}
         matchState={matchState}
-        actionRequestStatus={{ waitingForServer: false, lastActionIgnored: false }}
+        actionRequestStatus={{
+          waitingForServer: false,
+          lastActionIgnored: false,
+          lastActionUnconfirmed: false,
+        }}
         moves={moves}
         events={events}
       />

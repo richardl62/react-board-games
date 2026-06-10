@@ -19,6 +19,13 @@ export interface ActionRequestStatus {
   be set), or if there is no connection to the server.
   */
   lastActionIgnored: boolean;
+
+  /** True if the last action was applied optimistically and sent to the server, but the
+   * connection was lost before a response arrived and is unlikely to ever arrive. The
+   * board now shows the latest state received from the server, which may or may not
+   * reflect that action.
+   */
+  lastActionUnconfirmed: boolean;
 }
 
 interface Props {

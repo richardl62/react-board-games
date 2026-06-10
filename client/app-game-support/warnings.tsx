@@ -161,13 +161,16 @@ export function Warnings(): JSX.Element {
   const { matchStatus, ctx } = useStandardBoardContext();
   const {
     errorInLastAction,
-    actionRequestStatus: { lastActionIgnored },
+    actionRequestStatus: { lastActionIgnored, lastActionUnconfirmed },
   } = matchStatus;
 
   const connectionWarning = useConnectionIssue(matchStatus, networkIssueWait);
   const playersWarning = usePlayersWarning(matchStatus.playerData, ctx, networkIssueWait);
   const errorInActionWarning = errorInLastAction
     ? `Error in last action: ${errorInLastAction}`
+    : null;
+  const unconfirmedActionWarning = lastActionUnconfirmed
+    ? 'Last action unconfirmed (possible network problem)'
     : null;
 
   useEffect(() => {
@@ -181,6 +184,7 @@ export function Warnings(): JSX.Element {
       <Warning text={connectionWarning} minDisplayTime={minWarningDisplayTime} />
       <Warning text={playersWarning} minDisplayTime={minWarningDisplayTime} />
       <Warning text={errorInActionWarning} minDisplayTime={minWarningDisplayTime} />
+      <Warning text={unconfirmedActionWarning} minDisplayTime={minWarningDisplayTime} />
     </div>
   );
 }
