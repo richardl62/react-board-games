@@ -45,8 +45,8 @@ export function OfflineMatch({
         matchState={matchState}
         actionRequestStatus={{
           waitingForServer: false,
-          lastActionIgnored: false,
           lastActionUnconfirmed: false,
+          predictionDiverged: false,
         }}
         moves={moves}
         events={events}

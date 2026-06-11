@@ -161,7 +161,7 @@ export function Warnings(): JSX.Element {
   const { matchStatus, ctx } = useStandardBoardContext();
   const {
     errorInLastAction,
-    actionRequestStatus: { lastActionIgnored, lastActionUnconfirmed },
+    actionRequestStatus: { lastActionUnconfirmed, predictionDiverged },
   } = matchStatus;
 
   const connectionWarning = useConnectionIssue(matchStatus, networkIssueWait);
@@ -172,12 +172,9 @@ export function Warnings(): JSX.Element {
   const unconfirmedActionWarning = lastActionUnconfirmed
     ? 'Last action unconfirmed (possible network problem)'
     : null;
-
-  useEffect(() => {
-    if (lastActionIgnored) {
-      console.warn('Last action was ignored.');
-    }
-  }, [lastActionIgnored]);
+  const predictionDivergedWarning = predictionDiverged
+    ? 'Unexpected server response (internal error)'
+    : null;
 
   return (
     <div>
@@ -185,6 +182,7 @@ export function Warnings(): JSX.Element {
       <Warning text={playersWarning} minDisplayTime={minWarningDisplayTime} />
       <Warning text={errorInActionWarning} minDisplayTime={minWarningDisplayTime} />
       <Warning text={unconfirmedActionWarning} minDisplayTime={minWarningDisplayTime} />
+      <Warning text={predictionDivergedWarning} minDisplayTime={minWarningDisplayTime} />
     </div>
   );
 }

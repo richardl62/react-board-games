@@ -10,15 +10,10 @@ import { PlayerID } from '@shared/game-control/playerid';
 
 /** Status of last requested action */
 export interface ActionRequestStatus {
-  /** True if we are currently waiting for the server to respond to an action request.
+  /** True if we are currently waiting for the server to respond to one or more action
+   * requests.
    */
   waitingForServer: boolean;
-
-  /* True if the last user-requested action was ignored.  This could occur either if
-  we are waiting for a response from the server (in which case waitingForServer will
-  be set), or if there is no connection to the server.
-  */
-  lastActionIgnored: boolean;
 
   /** True if the last action was applied optimistically and sent to the server, but the
    * connection was lost before a response arrived and is unlikely to ever arrive. The
@@ -26,6 +21,13 @@ export interface ActionRequestStatus {
    * reflect that action.
    */
   lastActionUnconfirmed: boolean;
+
+  /** True if a server response didn't match the locally-predicted state for the same
+   * action. This indicates a bug (local prediction is meant to mirror the server
+   * exactly). The board now shows the server's state, discarding any other pending
+   * predictions.
+   */
+  predictionDiverged: boolean;
 }
 
 interface Props {
