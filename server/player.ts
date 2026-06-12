@@ -37,6 +37,7 @@ export class Player {
 
   private name_: string | null;
   private ws: WebSocket | null;
+  private reconnectionBlockedUntil: number | null = null;
 
   get name(): string | null {
     return this.name_;
@@ -81,6 +82,15 @@ export class Player {
       throw new Error(`Player ${this.id} is not connected: cannot get WebSocket`);
     }
     return this.ws;
+  }
+
+  /** Reject any (re)connection attempts from this player until the given time. */
+  blockReconnectionUntil(timestamp: number) {
+    this.reconnectionBlockedUntil = timestamp;
+  }
+
+  get isReconnectionBlocked() {
+    return this.reconnectionBlockedUntil !== null && Date.now() < this.reconnectionBlockedUntil;
   }
 
   publicMetadata(): PublicPlayerMetadata {

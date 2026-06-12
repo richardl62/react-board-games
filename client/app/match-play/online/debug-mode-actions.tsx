@@ -26,6 +26,8 @@ export function DebugModeActions({
   const [requiredDelay, setRequiredDelay] = useState<number>(0);
   const [delayApplied, setDelayApplied] = useState(false);
 
+  const [blockReconnectionMs, setBlockReconnectionMs] = useState<number>(0);
+
   const handleDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newDelay = e.target.value ? parseInt(e.target.value, 10) : 0;
     if (!isNaN(newDelay) && newDelay >= 0 && newDelay !== requiredDelay) {
@@ -39,12 +41,27 @@ export function DebugModeActions({
     setDelayApplied(true);
   };
 
+  const handleBlockReconnectionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value ? parseInt(e.target.value, 10) : 0;
+    if (!isNaN(newValue) && newValue >= 0) {
+      setBlockReconnectionMs(newValue);
+    }
+  };
+
   const handleCloseConnection = () => {
-    serverConnection.sendMatchRequest({ closeConnection: true });
+    serverConnection.sendMatchRequest({ closeConnection: true, blockReconnectionMs });
   };
 
   return (
     <OuterDiv>
+      <label htmlFor="blockReconnection">Block reconnection (ms):</label>
+      <NumberInput
+        id="blockReconnection"
+        type="number"
+        min="0"
+        value={blockReconnectionMs}
+        onChange={handleBlockReconnectionChange}
+      />
       <CloseConnection onClick={handleCloseConnection}>Close Connection</CloseConnection>
 
       <label htmlFor="delay">Server delay (ms):</label>

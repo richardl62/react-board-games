@@ -48,6 +48,13 @@ export function processConnection(matches: Matches, ws: WebSocket, requestUrl: s
       throw new Error(`Player ${playerID} provided invalid credentials`);
     }
 
+    // Test action: reject (re)connection attempts while blocked. No reason is given,
+    // so the client will keep retrying with its normal reconnection backoff.
+    if (player.isReconnectionBlocked) {
+      ws.close();
+      return;
+    }
+
     // KLUDGE? If the player is already connected, terminate the previous connection.
     // This is primarily intended for the case where a player starts a match
     // on one device, then continues it on another device without closing the first
