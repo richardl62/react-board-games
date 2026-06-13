@@ -20,10 +20,11 @@ interface PendingAction {
   id: WsRequestId;
   action: WsRequestedAction;
 
-  // Was the request for this action queued while disconnected (and so guaranteed
-  // delivery by react-use-websocket on reconnect), or sent live (where the response
-  // could be lost if the connection drops before it arrives)?
-  queuedWhileDisconnected: boolean;
+  // True once sendMatchRequest has been called for this action over a connection the
+  // server is known to have accepted (see makeAction and the wsClientConnection
+  // handling in handleServerResponse). False means the request hasn't been sent yet
+  // and must be sent as soon as the connection is confirmed live.
+  sent: boolean;
 
   // The match state predicted to result from this action, computed when it was
   // dispatched by applying it (via applyActionLocally) to the previous pending
@@ -76,6 +77,13 @@ export function useOnlineMatchActions(
   const connectionStatusRef = useRef(connectionStatus);
   connectionStatusRef.current = connectionStatus;
 
+  // Whether the current connection (per connectionStatusRef) has had its
+  // wsClientConnection broadcast received - i.e. whether sendMatchRequest right now
+  // would go straight to a server-accepted socket rather than react-use-websocket's
+  // queue. Starts true: this hook only mounts once serverResponse is non-null, which
+  // requires the connection's wsClientConnection to have already arrived.
+  const connectionConfirmedRef = useRef(true);
+
   // Called by useServerConnection, in order and exactly once, for every server
   // response - see responseHandlerRef in use-server-connection.ts.
   const handleServerResponse = useCallback(
@@ -85,24 +93,39 @@ export function useOnlineMatchActions(
 
       if (isWsClientConnection(trigger)) {
         // The server's wsClientConnection broadcast (sent on every connect/disconnect)
-        // carries authoritative state but isn't tied to any particular request. The
-        // right response depends on how the oldest pending action (if any) was sent:
+        // proves this connection is live and accepted - the server just sent a
+        // message over it. It also carries authoritative state but isn't tied to any
+        // particular request. The right response depends on how the oldest pending
+        // action (if any) was sent:
         //
-        // Scenario A (queuedWhileDisconnected = false): sent live before the
-        // connection dropped. The response may never arrive, and everything chained
-        // on top of it is unverifiable. Drop the whole queue and fall back to the
-        // server's state.
+        // Scenario A (sent = true): sent over a connection that has since dropped.
+        // The response may never arrive, and everything chained on top of it is
+        // unverifiable. Drop the whole queue and fall back to the server's state.
         //
-        // Scenario B (queuedWhileDisconnected = true): queued while offline and just
-        // flushed by react-use-websocket. The server sends wsClientConnection before
-        // processing the freshly-arrived request, so the response is still coming.
-        // Leave the queue intact - it'll be handled below as responses arrive.
-        if (pending.length > 0 && !pending[0].queuedWhileDisconnected) {
+        // Scenario B (sent = false): created while disconnected/unconfirmed and never
+        // transmitted. This wsClientConnection confirms the connection is now live and
+        // accepted, so send every not-yet-sent pending action now, in order, directly
+        // on this socket.
+        connectionConfirmedRef.current = true;
+
+        if (pending.length > 0 && pending[0].sent) {
           pendingActionsRef.current = [];
           setPendingActions([]);
           setOptimisticMatchState(null);
           setLastActionUnconfirmed(true);
+          return;
         }
+
+        if (pending.length > 0) {
+          const next = pending.map((p) => {
+            if (p.sent) return p;
+            sendMatchRequest({ id: p.id, action: p.action });
+            return { ...p, sent: true };
+          });
+          pendingActionsRef.current = next;
+          setPendingActions(next);
+        }
+
         return;
       }
 
@@ -158,7 +181,7 @@ export function useOnlineMatchActions(
 
       setLastActionUnconfirmed(false);
     },
-    [player.id],
+    [player.id, sendMatchRequest],
   );
 
   responseHandlerRef.current = handleServerResponse;
@@ -187,21 +210,21 @@ export function useOnlineMatchActions(
         return;
       }
 
+      if (connectionStatusRef.current !== 'connected') {
+        connectionConfirmedRef.current = false;
+      }
+
       lastRequestNumber.current += 1;
       const id: WsRequestId = { playerId: player.id, number: lastRequestNumber.current };
-      const next = [
-        ...pending,
-        {
-          id,
-          action,
-          queuedWhileDisconnected: connectionStatusRef.current !== 'connected',
-          predictedState,
-        },
-      ];
+
+      const sent = connectionConfirmedRef.current;
+      if (sent) {
+        sendMatchRequest({ id, action });
+      }
+
+      const next = [...pending, { id, action, sent, predictedState }];
       pendingActionsRef.current = next;
       setPendingActions(next);
-
-      sendMatchRequest({ id, action });
     },
     [appGame, player.id, sendMatchRequest],
   );
