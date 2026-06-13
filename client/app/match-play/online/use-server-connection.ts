@@ -1,6 +1,6 @@
 import { MatchID, Player } from '@/app-game-support/types';
 import { isWsServerResponse, WsServerResponse } from '@shared/ws-server-response';
-import { useMemo, useRef, useState } from 'react';
+import { RefObject, useMemo, useRef, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { serverAddress } from '../../server-address';
 import { WsClientRequest } from '@shared/ws-client-request';
@@ -26,6 +26,10 @@ export interface ServerConnection {
 
   serverResponse: WsServerResponse | null;
   sendMatchRequest: (data: WsClientRequest | WsTestAction) => void;
+
+  // Registered by useOnlineMatchActions with a callback to be invoked, in order and
+  // exactly once, for every server response - see onMessage below.
+  responseHandlerRef: RefObject<(response: WsServerResponse) => void>;
 }
 
 export function useServerConnection({
@@ -46,8 +50,10 @@ export function useServerConnection({
 
   const attemptReconnection = useRef(false);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connecting');
+  const [serverResponse, setServerResponse] = useState<WsServerResponse | null>(null);
+  const responseHandlerRef = useRef<(response: WsServerResponse) => void>(() => undefined);
 
-  const { sendJsonMessage, lastJsonMessage } = useWebSocket(socketUrl, {
+  const { sendJsonMessage } = useWebSocket(socketUrl, {
     retryOnError: true,
     reconnectAttempts,
 
@@ -95,25 +101,36 @@ export function useServerConnection({
 
     // onError could be used here. But onClose will almost always be called after an error,
     // so it's not clear that there would be anything useful to do.
+
+    // Called synchronously, once per message, in arrival order - the single point
+    // where incoming messages are parsed and dispatched to (a) serverResponse, for
+    // display, and (b) responseHandlerRef, for processing the pending-actions queue.
+    onMessage: (event) => {
+      let data: unknown;
+      try {
+        data = JSON.parse(event.data as string);
+      } catch {
+        console.warn('Received unparseable WebSocket message:', event.data);
+        attemptReconnection.current = false;
+        return;
+      }
+
+      if (!isWsServerResponse(data)) {
+        // Should never happen ...
+        console.warn('Received invalid WebSocket message:', data);
+        attemptReconnection.current = false;
+        return;
+      }
+
+      setServerResponse(data);
+      responseHandlerRef.current(data);
+    },
   });
-
-  // Process the server response
-  const serverResponse = useMemo((): WsServerResponse | null => {
-    if (!lastJsonMessage) return null;
-
-    if (!isWsServerResponse(lastJsonMessage)) {
-      // Should never happen ...
-      console.warn('Received invalid WebSocket message:', lastJsonMessage);
-      attemptReconnection.current = false;
-      return null;
-    }
-
-    return lastJsonMessage;
-  }, [lastJsonMessage]);
 
   return {
     serverResponse,
     sendMatchRequest: sendJsonMessage,
     connectionStatus,
+    responseHandlerRef,
   };
 }
