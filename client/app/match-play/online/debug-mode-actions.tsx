@@ -2,14 +2,22 @@ import { ChangeEvent, JSX, useState } from 'react';
 import styled from 'styled-components';
 import { ServerConnection } from './use-server-connection';
 
-// Good enough styling for test options.
 const OuterDiv = styled.div`
   display: flex;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
 `;
 
-const CloseConnection = styled.button`
-  margin-right: 0.5rem;
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Label = styled.label`
+  min-width: 12rem;
+  text-align: right;
+  margin-right: 0.1rem;
 `;
 
 const NumberInput = styled.input`
@@ -54,27 +62,31 @@ export function DebugModeActions({
 
   return (
     <OuterDiv>
-      <label htmlFor="blockReconnection">Block reconnection (ms):</label>
-      <NumberInput
-        id="blockReconnection"
-        type="number"
-        min="0"
-        value={blockReconnectionMs}
-        onChange={handleBlockReconnectionChange}
-      />
-      <CloseConnection onClick={handleCloseConnection}>Close Connection</CloseConnection>
+      <Row>
+        <Label htmlFor="blockReconnection">Block reconnections (ms):</Label>
+        <NumberInput
+          id="blockReconnection"
+          type="number"
+          min="0"
+          value={blockReconnectionMs}
+          onChange={handleBlockReconnectionChange}
+        />
+        <button onClick={handleCloseConnection}>Close Connection</button>
+      </Row>
 
-      <label htmlFor="delay">Server delay (ms):</label>
-      <NumberInput
-        id="delay"
-        type="number"
-        min="0"
-        value={requiredDelay}
-        onChange={handleDelayChange}
-      />
-      <button onClick={handleApplyDelay} disabled={delayApplied}>
-        Apply
-      </button>
+      <Row>
+        <Label htmlFor="delay">Server delay (ms):</Label>
+        <NumberInput
+          id="delay"
+          type="number"
+          min="0"
+          value={requiredDelay}
+          onChange={handleDelayChange}
+        />
+        <button onClick={handleApplyDelay} disabled={delayApplied}>
+          Apply
+        </button>
+      </Row>
     </OuterDiv>
   );
 }
