@@ -2,7 +2,7 @@ import { AppGame } from '@/app-game-support/app-game';
 import { Player } from '@/app-game-support/types';
 import { JSX } from 'react';
 import { GameBoardWrapper } from '../game-board-wrapper';
-import { useOnlineMatchActions } from './use-online-match-actions';
+import { useOnlineMatchInfo } from './use-online-match-info';
 import { ServerConnection } from './use-server-connection';
 import { DebugModeActions } from './debug-mode-actions';
 import { useSearchParamData } from '@/url-tools';
@@ -23,7 +23,7 @@ export function StandardMatchPlay({
   serverConnection,
 }: StandardMatchPlayProps): JSX.Element {
   const { connectionStatus, serverResponse } = serverConnection;
-  const { moves, events, actionRequestStatus, optimisticMatchState } = useOnlineMatchActions(
+  const { moves, events, actionRequestStatus, matchState } = useOnlineMatchInfo(
     game,
     player,
     serverConnection,
@@ -39,7 +39,7 @@ export function StandardMatchPlay({
         viewingPlayer={player.id}
         connectionStatus={connectionStatus}
         actionRequestStatus={actionRequestStatus}
-        matchState={optimisticMatchState ?? serverResponse.matchState}
+        matchState={matchState}
         moves={moves}
         events={events}
       />

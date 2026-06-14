@@ -51,15 +51,8 @@ interface Props {
 // Renders the game board for a particular game.
 // It is the highest level at which the no distinction between online and offline matches is made.
 export function GameBoardWrapper(props: Props): JSX.Element {
-  const {
-    game,
-    matchState,
-    viewingPlayer,
-    connectionStatus,
-    actionRequestStatus,
-    moves,
-    events,
-  } = props;
+  const { game, matchState, viewingPlayer, connectionStatus, actionRequestStatus, moves, events } =
+    props;
 
   const getPlayerName = useCallback(
     (playerID: string) => {

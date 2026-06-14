@@ -2,7 +2,12 @@ import { AppGame } from '@/app-game-support/app-game';
 import { endMatch, endTurn } from '@shared/game-control/ctx';
 import { matchMove } from '@shared/game-control/match-action';
 import { MatchState } from '@shared/match-state';
-import { isWsEndMatch, isWsEndTurn, isWsMove, WsRequestedAction } from '@shared/ws-requested-action';
+import {
+  isWsEndMatch,
+  isWsEndTurn,
+  isWsMove,
+  WsRequestedAction,
+} from '@shared/ws-requested-action';
 
 /**
  * Apply a requested action (move, end turn or end match) to a match state, returning

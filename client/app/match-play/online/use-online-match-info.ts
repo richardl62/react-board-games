@@ -46,10 +46,11 @@ function predictionMatches(predicted: MatchState, actual: MatchState): boolean {
   return JSON.stringify(predictableFields(predicted)) === JSON.stringify(predictableFields(actual));
 }
 
-// Return actions - moves and events - suitable for an online game.
-// Also return status information about the action requested, and the optimistic
-// (locally-predicted) match state, if any actions are currently in flight.
-export function useOnlineMatchActions(
+// Return information suitable for an online game.  This is
+// - match state (which may be an optimistic prediction)
+// - actions (moves and events)
+// - the status of action requests (e.g. whether we are waiting for the server)
+export function useOnlineMatchInfo(
   appGame: AppGame,
   player: Player,
   { sendMatchRequest, connectionStatus, responseHandlerRef }: ServerConnection,
@@ -58,7 +59,7 @@ export function useOnlineMatchActions(
   moves: UntypedMoves;
   events: EventsAPI;
   actionRequestStatus: ActionRequestStatus;
-  optimisticMatchState: MatchState | null;
+  matchState: MatchState;
 } {
   const [pendingActions, setPendingActions] = useState<PendingAction[]>([]);
   const [optimisticMatchState, setOptimisticMatchState] = useState<MatchState | null>(null);
@@ -272,7 +273,7 @@ export function useOnlineMatchActions(
       moves,
       events,
       actionRequestStatus: { waitingForServer, lastActionUnconfirmed, predictionDiverged },
-      optimisticMatchState,
+      matchState: optimisticMatchState ?? matchState,
     }),
     [
       moves,
@@ -281,6 +282,7 @@ export function useOnlineMatchActions(
       lastActionUnconfirmed,
       predictionDiverged,
       optimisticMatchState,
+      matchState,
     ],
   );
 }

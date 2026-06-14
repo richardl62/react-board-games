@@ -12,8 +12,12 @@ export function wsClientConnection(playerId: string): WsClientConnection {
   return { clientConnection: true, playerId };
 }
 
-interface WsBadClientRequest { readonly badClientRequest: true }
-interface WsUnknownProblem { readonly unknownProblem: true }
+interface WsBadClientRequest {
+  readonly badClientRequest: true;
+}
+interface WsUnknownProblem {
+  readonly unknownProblem: true;
+}
 
 export type WsResponseTrigger =
   | WsClientRequest
