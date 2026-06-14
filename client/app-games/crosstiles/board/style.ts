@@ -13,8 +13,11 @@ export const tileTextColor = 'white';
 
 export const squareBackgroundColor = '#fff8dc'; // cornsilk
 
+/** @alias */
 export const scoreCardBoarderColor = tileBackgroundColor;
+/** @alias */
 export const scoreCardBackgroundColor = squareBackgroundColor;
+
 export const scoreCardHeaderTextColor = 'white';
 
 export const optionalScoreBackgroundColor = {
