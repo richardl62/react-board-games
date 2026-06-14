@@ -1,7 +1,7 @@
 import { AppGame } from '@/app-game-support/app-game';
 import { Player } from '@/app-game-support/types';
 import { EventsAPI } from '@shared/game-control/events';
-import { WsRequestId, isWsClientRequest } from '@shared/ws-client-request';
+import { WsClientRequest, WsRequestId, isWsClientRequest } from '@shared/ws-client-request';
 import { WsRequestedAction } from '@shared/ws-requested-action';
 import { UntypedMoves } from '@/app-game-support/board-props';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -20,10 +20,11 @@ interface PendingAction {
   id: WsRequestId;
   action: WsRequestedAction;
 
-  // True once sendMatchRequest has been called for this action over a connection the
-  // server is known to have accepted (see makeAction and the wsClientConnection
-  // handling in handleServerResponse). False means the request hasn't been sent yet
-  // and must be sent as soon as the connection is confirmed live.
+  // True once sendMatchRequest has been called for this action. This will be done
+  // only over a connection the server is known to have accepted (see makeAction
+  // and the wsClientConnection handling in handleServerResponse). False means the
+  // request hasn't been sent yet and must be sent as soon as the connection is
+  // confirmed live.
   sent: boolean;
 
   // The match state predicted to result from this action, computed when it was
@@ -84,48 +85,111 @@ export function useOnlineMatchActions(
   // requires the connection's wsClientConnection to have already arrived.
   const connectionConfirmedRef = useRef(true);
 
+  // Update pendingActions and its ref together, so synchronous reads via
+  // pendingActionsRef stay in sync with the state used for rendering.
+  const setPending = useCallback((next: PendingAction[]) => {
+    pendingActionsRef.current = next;
+    setPendingActions(next);
+  }, []);
+
+  // Clear the pending queue and any optimistic prediction - used whenever a response
+  // can no longer be trusted (lost connection, out-of-order response, or a diverged
+  // prediction) and the board should fall back to the server's state.
+  const dropPendingQueue = useCallback(() => {
+    setPending([]);
+    setOptimisticMatchState(null);
+  }, [setPending]);
+
+  // Handle the server's wsClientConnection broadcast, sent on every connect/disconnect
+  // (this player's own, or another player's). It proves THIS connection is live and
+  // accepted - the server just sent a message over it - and carries authoritative
+  // state, but isn't tied to any particular request. The right response depends on how
+  // the oldest pending action (if any) was sent:
+  //
+  // Scenario A (sent = true): sent over a connection that has since dropped. The
+  // response may never arrive, and everything chained on top of it is unverifiable.
+  // Drop the whole queue and fall back to the server's state.
+  //
+  // Scenario B (sent = false): created while disconnected/unconfirmed and never
+  // transmitted. This broadcast confirms the connection is now live and accepted, so
+  // send every not-yet-sent pending action now, in order, directly on this socket.
+  const handleConnectionBroadcast = useCallback(() => {
+    connectionConfirmedRef.current = true;
+
+    const pending = pendingActionsRef.current;
+
+    if (pending.length > 0 && pending[0].sent) {
+      dropPendingQueue();
+      setLastActionUnconfirmed(true);
+      return;
+    }
+
+    if (pending.length > 0) {
+      const next = pending.map((p) => {
+        if (p.sent) return p;
+        sendMatchRequest({ id: p.id, action: p.action });
+        return { ...p, sent: true };
+      });
+      setPending(next);
+    }
+  }, [dropPendingQueue, sendMatchRequest, setPending]);
+
+  // Handle a response to one of this player's own action requests (move/endTurn/
+  // endMatch). Responses are delivered in order and exactly once, so the response
+  // always corresponds to the head of the queue. (Defensive check below in case that
+  // guarantee is ever violated.)
+  const handleActionResponse = useCallback(
+    (trigger: WsClientRequest, response: WsServerResponse) => {
+      const pending = pendingActionsRef.current;
+
+      if (pending.length === 0) {
+        // Response for an action whose entry was already dropped after an earlier
+        // divergence - the displayed state already tracks the server's matchState
+        // directly.
+        return;
+      }
+
+      const prediction = pending[0];
+      if (!sameRequestID(prediction.id, trigger.id)) {
+        console.error('Response received out of order - expected response for a different action', {
+          expectedId: prediction.id,
+          responseId: trigger.id,
+        });
+        dropPendingQueue();
+        setPredictionDiverged(true);
+        setLastActionUnconfirmed(false);
+        return;
+      }
+
+      if (predictionMatches(prediction.predictedState, response.matchState)) {
+        const rest = pending.slice(1);
+        setPending(rest);
+        if (rest.length === 0) {
+          setOptimisticMatchState(null);
+        }
+      } else {
+        console.error('Optimistic prediction diverged from server response', {
+          predicted: prediction.predictedState,
+          actual: response.matchState,
+        });
+        dropPendingQueue();
+        setPredictionDiverged(true);
+      }
+
+      setLastActionUnconfirmed(false);
+    },
+    [dropPendingQueue, setPending],
+  );
+
   // Called by useServerConnection, in order and exactly once, for every server
-  // response - see responseHandlerRef in use-server-connection.ts.
+  // response - see responseHandlerRef in use-server-connection.ts. Dispatches to the
+  // two handlers above based on what triggered the response.
   const handleServerResponse = useCallback(
     (response: WsServerResponse) => {
       const { trigger } = response;
-      const pending = pendingActionsRef.current;
 
       if (isWsClientConnection(trigger)) {
-        // The server's wsClientConnection broadcast (sent on every connect/disconnect)
-        // proves this connection is live and accepted - the server just sent a
-        // message over it. It also carries authoritative state but isn't tied to any
-        // particular request. The right response depends on how the oldest pending
-        // action (if any) was sent:
-        //
-        // Scenario A (sent = true): sent over a connection that has since dropped.
-        // The response may never arrive, and everything chained on top of it is
-        // unverifiable. Drop the whole queue and fall back to the server's state.
-        //
-        // Scenario B (sent = false): created while disconnected/unconfirmed and never
-        // transmitted. This wsClientConnection confirms the connection is now live and
-        // accepted, so send every not-yet-sent pending action now, in order, directly
-        // on this socket.
-        connectionConfirmedRef.current = true;
-
-        if (pending.length > 0 && pending[0].sent) {
-          pendingActionsRef.current = [];
-          setPendingActions([]);
-          setOptimisticMatchState(null);
-          setLastActionUnconfirmed(true);
-          return;
-        }
-
-        if (pending.length > 0) {
-          const next = pending.map((p) => {
-            if (p.sent) return p;
-            sendMatchRequest({ id: p.id, action: p.action });
-            return { ...p, sent: true };
-          });
-          pendingActionsRef.current = next;
-          setPendingActions(next);
-        }
-
+        handleConnectionBroadcast();
         return;
       }
 
@@ -137,51 +201,9 @@ export function useOnlineMatchActions(
         return; // another player's broadcast.
       }
 
-      if (pending.length === 0) {
-        // Response for an action whose entry was already dropped after an earlier
-        // divergence - the displayed state already tracks the server's matchState
-        // directly.
-        return;
-      }
-
-      // Responses are delivered in order and exactly once, so the response always
-      // corresponds to the head of the queue. (Defensive check below in case that
-      // guarantee is ever violated.)
-      const prediction = pending[0];
-      if (!sameRequestID(prediction.id, trigger.id)) {
-        console.error(
-          'Response received out of order - expected response for a different action',
-          { expectedId: prediction.id, responseId: trigger.id },
-        );
-        pendingActionsRef.current = [];
-        setPendingActions([]);
-        setOptimisticMatchState(null);
-        setPredictionDiverged(true);
-        setLastActionUnconfirmed(false);
-        return;
-      }
-
-      if (predictionMatches(prediction.predictedState, response.matchState)) {
-        const rest = pending.slice(1);
-        pendingActionsRef.current = rest;
-        setPendingActions(rest);
-        if (rest.length === 0) {
-          setOptimisticMatchState(null);
-        }
-      } else {
-        console.error('Optimistic prediction diverged from server response', {
-          predicted: prediction.predictedState,
-          actual: response.matchState,
-        });
-        pendingActionsRef.current = [];
-        setPendingActions([]);
-        setOptimisticMatchState(null);
-        setPredictionDiverged(true);
-      }
-
-      setLastActionUnconfirmed(false);
+      handleActionResponse(trigger, response);
     },
-    [player.id, sendMatchRequest],
+    [handleActionResponse, handleConnectionBroadcast, player.id],
   );
 
   responseHandlerRef.current = handleServerResponse;
@@ -222,11 +244,9 @@ export function useOnlineMatchActions(
         sendMatchRequest({ id, action });
       }
 
-      const next = [...pending, { id, action, sent, predictedState }];
-      pendingActionsRef.current = next;
-      setPendingActions(next);
+      setPending([...pending, { id, action, sent, predictedState }]);
     },
-    [appGame, player.id, sendMatchRequest],
+    [appGame, player.id, sendMatchRequest, setPending],
   );
 
   const { moves, events } = useMemo(() => {
