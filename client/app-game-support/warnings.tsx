@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { getPlayerStatus } from './player-status';
 import { PublicPlayerMetadata } from '@shared/lobby/types';
 import { Ctx } from '@shared/game-control/ctx';
-import { MatchStatus } from './board-props';
-import { ConnectionStatus } from '@/app/match-play/online/use-server-connection';
+import { ConnectionStatus, describeClose } from '@/app/match-play/online/use-server-connection';
 
 const WarningDiv = styled.div`
   span:first-child {
@@ -16,23 +15,16 @@ const WarningDiv = styled.div`
   margin-bottom: 0.2em;
 `;
 
-// Return the value if it has been unchanged for the given interval, otherwise return null.
-function useStableValue<ValueT>(value: ValueT, waitTime: number): ValueT | null {
-  const [settledValue, setSettledValue] = useState<ValueT>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSettledValue(value);
-    }, waitTime);
-    return () => clearTimeout(handler);
-  }, [value, waitTime]);
-
-  return value === settledValue ? settledValue : null;
-}
-
-// In general return the given text. But to avoid jitters return any non-null
-// text for the given duration even if the input changes. (Code by GitHub Copilot.)
-function useJitterFreeText(text: string | null, minDuration: number): string | null {
+// Smooth a piece of warning text over time to avoid flicker:
+// - when nothing is shown, a new warning is surfaced only once `text` has stayed
+//   unchanged for `appearAfter` ms (0 = immediately), so brief transient issues
+//   never appear;
+// - once something is shown, any change (including clearing to null) is held off
+//   until it has been displayed for at least `minVisible` ms.
+function useSmoothedText(
+  text: string | null,
+  { appearAfter, minVisible }: { appearAfter: number; minVisible: number },
+): string | null {
   const [stableText, setStableText] = useState<string | null>(text);
   const [lastChangeTime, setLastChangeTime] = useState<number>(Date.now());
 
@@ -41,26 +33,31 @@ function useJitterFreeText(text: string | null, minDuration: number): string | n
       return;
     }
 
-    const now = Date.now();
-    const timeSinceChange = now - lastChangeTime;
-
-    if (stableText !== null && timeSinceChange < minDuration) {
-      // Need to wait before changing to null
-      const remainingTime = minDuration - timeSinceChange;
-      const handler = setTimeout(() => {
-        setStableText(text);
-        setLastChangeTime(Date.now());
-      }, remainingTime);
-
-      return () => {
-        clearTimeout(handler);
-      };
-    } else {
-      // Can change immediately
+    const commit = () => {
       setStableText(text);
-      setLastChangeTime(now);
+      setLastChangeTime(Date.now());
+    };
+
+    // Nothing is shown yet: wait for `text` to persist `appearAfter` before
+    // surfacing it (the effect re-runs, resetting this timer, if it changes again).
+    if (stableText === null) {
+      if (appearAfter === 0) {
+        commit();
+        return;
+      }
+      const handler = setTimeout(commit, appearAfter);
+      return () => clearTimeout(handler);
     }
-  }, [text, stableText, lastChangeTime, minDuration]);
+
+    // Something is already shown: keep it until it has been visible `minVisible`.
+    const remaining = minVisible - (Date.now() - lastChangeTime);
+    if (remaining > 0) {
+      const handler = setTimeout(commit, remaining);
+      return () => clearTimeout(handler);
+    }
+
+    commit();
+  }, [text, stableText, lastChangeTime, appearAfter, minVisible]);
 
   return stableText;
 }
@@ -74,72 +71,49 @@ function connectionIssueDescription(
   } else if (connectionStatus === 'connecting') {
     return 'Connecting to server...';
   } else {
-    const reason =
-      connectionStatus.closeEvent.reason || `closure code ${connectionStatus.closeEvent.code}`;
+    const reason = describeClose(connectionStatus.closeEvent);
     let connectionIssue = `No connection to server (${reason})`;
     if (connectionStatus.reconnecting) {
       connectionIssue += ': attempting reconnection ...';
+    } else if (waitingForServer) {
+      // Reconnection has been abandoned while actions are still pending. Those
+      // actions are shown optimistically but were never confirmed by the server,
+      // so warn the player rather than leaving them looking applied.
+      connectionIssue += '. Recent moves may not have been saved.';
     }
     return connectionIssue;
   }
 }
 
-// If there is a persistent problem with connection or a move has been ignored,
-// return a string describing the issue otherwise return return null.
-function useConnectionIssue(
-  matchStatus: MatchStatus,
-  acceptableWait: number, // milliseconds
-): string | null {
-  const {
-    connectionStatus,
-    actionRequestStatus: { waitingForServer },
-  } = matchStatus;
+// If any players are disconnected return a string that names them. Or return null
+// if all players are connected.
+function playersWarning(playerData: PublicPlayerMetadata[], ctx: Ctx): string | null {
+  const disconnectedPlayers: string[] = [];
+  for (const pid of ctx.playOrder) {
+    const status = getPlayerStatus(playerData, pid);
 
-  const stableWaitingForServer = useStableValue(waitingForServer, acceptableWait);
-  const stableConnectionStatus = useStableValue(connectionStatus, acceptableWait);
-
-  if (stableWaitingForServer || stableConnectionStatus) {
-    return connectionIssueDescription(connectionStatus, stableWaitingForServer === true);
+    // Warn only about players that have joined but are not now connected
+    if (status.connectionStatus === 'not connected') {
+      disconnectedPlayers.push(status.name);
+    }
   }
 
-  return null;
-}
-
-// If any players are disconnected return a string that names them. Or return null
-// all players are connected.
-function usePlayersWarning(
-  playerData: PublicPlayerMetadata[],
-  ctx: Ctx,
-  acceptableWait: number, // milliseconds
-): string | null {
-  const warning = () => {
-    const disconnectedPlayers: string[] = [];
-    for (const pid of ctx.playOrder) {
-      const status = getPlayerStatus(playerData, pid);
-
-      // Warn only about players that have joined but are not now connected
-      if (status.connectionStatus === 'not connected') {
-        disconnectedPlayers.push(status.name);
-      }
-    }
-
-    if (disconnectedPlayers.length === 0) {
-      return null;
-    }
-    return `${disconnectedPlayers.join(', ')} ${disconnectedPlayers.length === 1 ? 'is' : 'are'} not connected.`;
-  };
-
-  return useStableValue(warning(), acceptableWait);
+  if (disconnectedPlayers.length === 0) {
+    return null;
+  }
+  return `${disconnectedPlayers.join(', ')} ${disconnectedPlayers.length === 1 ? 'is' : 'are'} not connected.`;
 }
 
 function Warning({
   text,
-  minDisplayTime,
+  appearAfter,
+  minVisible,
 }: {
   text: string | null;
-  minDisplayTime: number;
+  appearAfter: number;
+  minVisible: number;
 }): JSX.Element {
-  const stableText = useJitterFreeText(text, minDisplayTime);
+  const stableText = useSmoothedText(text, { appearAfter, minVisible });
   if (!stableText) {
     return <></>;
   }
@@ -155,17 +129,22 @@ function Warning({
 // (Individual games should handle warnings about game-specific issues
 // such as illegal moves.)
 export function Warnings(): JSX.Element {
-  const networkIssueWait = 2000; // milliseconds - wait before reporting a possibly transient network issue.
-  const minWarningDisplayTime = 2000; // milliseconds - once a warning is displayed, display it for at least this long.
+  // Connection/player warnings cover possibly-transient network issues, so wait
+  // before showing them; once shown (and for the immediate warnings below), keep
+  // any warning visible for at least minVisible to avoid flicker.
+  const networkIssueWait = 2000;
+  const minVisible = 2000;
 
   const { matchStatus, ctx } = useStandardBoardContext();
   const {
+    connectionStatus,
+    playerData,
     errorInLastAction,
-    actionRequestStatus: { lastActionUnconfirmed, predictionDiverged },
+    actionRequestStatus: { waitingForServer, lastActionUnconfirmed, predictionDiverged },
   } = matchStatus;
 
-  const connectionWarning = useConnectionIssue(matchStatus, networkIssueWait);
-  const playersWarning = usePlayersWarning(matchStatus.playerData, ctx, networkIssueWait);
+  const connectionWarning = connectionIssueDescription(connectionStatus, waitingForServer);
+  const disconnectedPlayersWarning = playersWarning(playerData, ctx);
   const errorInActionWarning = errorInLastAction
     ? `Error in last action: ${errorInLastAction}`
     : null;
@@ -178,11 +157,15 @@ export function Warnings(): JSX.Element {
 
   return (
     <div>
-      <Warning text={connectionWarning} minDisplayTime={minWarningDisplayTime} />
-      <Warning text={playersWarning} minDisplayTime={minWarningDisplayTime} />
-      <Warning text={errorInActionWarning} minDisplayTime={minWarningDisplayTime} />
-      <Warning text={unconfirmedActionWarning} minDisplayTime={minWarningDisplayTime} />
-      <Warning text={predictionDivergedWarning} minDisplayTime={minWarningDisplayTime} />
+      <Warning text={connectionWarning} appearAfter={networkIssueWait} minVisible={minVisible} />
+      <Warning
+        text={disconnectedPlayersWarning}
+        appearAfter={networkIssueWait}
+        minVisible={minVisible}
+      />
+      <Warning text={errorInActionWarning} appearAfter={0} minVisible={minVisible} />
+      <Warning text={unconfirmedActionWarning} appearAfter={0} minVisible={minVisible} />
+      <Warning text={predictionDivergedWarning} appearAfter={0} minVisible={minVisible} />
     </div>
   );
 }

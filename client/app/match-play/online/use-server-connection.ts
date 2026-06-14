@@ -17,6 +17,12 @@ export type ConnectionStatus =
       reconnecting: boolean;
     };
 
+/** Human-readable description of why a connection closed: the server-supplied reason
+ * if there is one, otherwise the numeric close code. */
+export function describeClose(closeEvent: CloseEvent): string {
+  return closeEvent.reason || `closure code ${closeEvent.code}`;
+}
+
 const reconnectAttempts = 30;
 const minReconnectInterval = 1000; // 1 second
 const maxReconnectInterval = 20000; // 20 seconds

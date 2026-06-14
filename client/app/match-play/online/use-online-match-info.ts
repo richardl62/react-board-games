@@ -76,15 +76,21 @@ export function useOnlineMatchInfo(
   pendingActionsRef.current = pendingActions;
   const matchStateRef = useRef(matchState);
   matchStateRef.current = matchState;
-  const connectionStatusRef = useRef(connectionStatus);
-  connectionStatusRef.current = connectionStatus;
 
-  // Whether the current connection (per connectionStatusRef) has had its
-  // wsClientConnection broadcast received - i.e. whether sendMatchRequest right now
-  // would go straight to a server-accepted socket rather than react-use-websocket's
-  // queue. Starts true: this hook only mounts once serverResponse is non-null, which
-  // requires the connection's wsClientConnection to have already arrived.
+  // Whether the current connection has had its wsClientConnection broadcast
+  // received - i.e. whether sendMatchRequest right now would go straight to a
+  // server-accepted socket rather than react-use-websocket's queue. Starts true:
+  // this hook only mounts once serverResponse is non-null, which requires the
+  // connection's wsClientConnection to have already arrived.
   const connectionConfirmedRef = useRef(true);
+
+  // A closed connection invalidates confirmation: the next socket is not
+  // server-accepted until its wsClientConnection broadcast arrives (set back to true
+  // in handleConnectionConfirmed), even though onOpen will report status 'connected'
+  // first. Done in the render body to keep this hook effect-free.
+  if (connectionStatus !== 'connected' && connectionStatus !== 'connecting') {
+    connectionConfirmedRef.current = false;
+  }
 
   // Update pendingActions and its ref together, so synchronous reads via
   // pendingActionsRef stay in sync with the state used for rendering.
@@ -233,10 +239,6 @@ export function useOnlineMatchInfo(
 
       if (predictedState.errorInLastAction !== null) {
         return;
-      }
-
-      if (connectionStatusRef.current !== 'connected') {
-        connectionConfirmedRef.current = false;
       }
 
       lastRequestNumber.current += 1;
