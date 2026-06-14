@@ -100,8 +100,8 @@ export function useOnlineMatchActions(
     setOptimisticMatchState(null);
   }, [setPending]);
 
-  // Handle the server's wsClientConnection broadcast, sent on every connect/disconnect
-  // (this player's own, or another player's). It proves THIS connection is live and
+  // Handle a wsClientConnection broadcast confirmed (by the dispatcher below) to be
+  // about this player's own connection. It proves this connection is live and
   // accepted - the server just sent a message over it - and carries authoritative
   // state, but isn't tied to any particular request. The right response depends on how
   // the oldest pending action (if any) was sent:
@@ -113,7 +113,7 @@ export function useOnlineMatchActions(
   // Scenario B (sent = false): created while disconnected/unconfirmed and never
   // transmitted. This broadcast confirms the connection is now live and accepted, so
   // send every not-yet-sent pending action now, in order, directly on this socket.
-  const handleConnectionBroadcast = useCallback(() => {
+  const handleConnectionConfirmed = useCallback(() => {
     connectionConfirmedRef.current = true;
 
     const pending = pendingActionsRef.current;
@@ -189,7 +189,9 @@ export function useOnlineMatchActions(
       const { trigger } = response;
 
       if (isWsClientConnection(trigger)) {
-        handleConnectionBroadcast();
+        if (trigger.playerId === player.id) {
+          handleConnectionConfirmed();
+        }
         return;
       }
 
@@ -203,7 +205,7 @@ export function useOnlineMatchActions(
 
       handleActionResponse(trigger, response);
     },
-    [handleActionResponse, handleConnectionBroadcast, player.id],
+    [handleActionResponse, handleConnectionConfirmed, player.id],
   );
 
   responseHandlerRef.current = handleServerResponse;
