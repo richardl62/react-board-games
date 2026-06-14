@@ -79,7 +79,7 @@ function connectionIssueDescription(
       // Reconnection has been abandoned while actions are still pending. Those
       // actions are shown optimistically but were never confirmed by the server,
       // so warn the player rather than leaving them looking applied.
-      connectionIssue += '. Recent moves may not have been saved.';
+      connectionIssue += '. Recent moves may not have been fully processed.';
     }
     return connectionIssue;
   }
