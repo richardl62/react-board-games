@@ -4,9 +4,10 @@
 // closed connection).
 export interface WsCloseConnection {
   closeConnection: true;
-  blockReconnectionMs: number; // milliseconds to block reconnection attempts for, 0 = no blocking
+  reconnection:
+    | { blockedMs: number } // milliseconds to block reconnection attempts for
+    | 'prevent'; // tell the client not to attempt reconnection.
 }
-
 export interface WsResponseDelay {
   responseDelay: number; // milliseconds
 }
@@ -16,7 +17,7 @@ export type WsTestAction = WsCloseConnection | WsResponseDelay;
 export function isWsCloseConnection(obj: unknown): obj is WsCloseConnection {
   if (typeof obj !== 'object' || obj === null) return false;
   const candidate = obj as WsCloseConnection;
-  return candidate.closeConnection === true && typeof candidate.blockReconnectionMs === 'number';
+  return candidate.closeConnection === true && candidate.reconnection !== undefined;
 }
 
 export function isWsResponseDelay(obj: unknown): obj is WsResponseDelay {

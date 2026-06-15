@@ -1,6 +1,6 @@
 import { ChangeEvent, JSX, useState } from 'react';
 import styled from 'styled-components';
-import { ServerConnection } from './use-server-connection';
+import { ConnectionStatus, describeClose, ServerConnection } from './use-server-connection';
 
 const OuterDiv = styled.div`
   display: flex;
@@ -24,6 +24,22 @@ const NumberInput = styled.input`
   width: 6rem;
   margin-right: 0.3rem;
 `;
+
+const SpacedButton = styled.button`
+  margin-left: 0.3rem;
+`;
+
+function ShowConnectionStatus({ status }: { status: ConnectionStatus }): JSX.Element {
+  let str = 'Connection: ';
+  if (status === 'connecting' || status === 'connected') {
+    str += status;
+  } else {
+    str +=
+      `disconnected (${describeClose(status.closeEvent)})` +
+      (status.reconnecting ? ', reconnecting...' : '');
+  }
+  return <div>{str}</div>;
+}
 
 // Extra options for use in debug mode.
 export function DebugModeActions({
@@ -57,11 +73,19 @@ export function DebugModeActions({
   };
 
   const handleCloseConnection = () => {
-    serverConnection.sendMatchRequest({ closeConnection: true, blockReconnectionMs });
+    serverConnection.sendMatchRequest({
+      closeConnection: true,
+      reconnection: { blockedMs: blockReconnectionMs },
+    });
+  };
+
+  const handleCloseConnectionPermanently = () => {
+    serverConnection.sendMatchRequest({ closeConnection: true, reconnection: 'prevent' });
   };
 
   return (
     <OuterDiv>
+      <ShowConnectionStatus status={serverConnection.connectionStatus} />
       <Row>
         <Label htmlFor="blockReconnection">Block reconnections (ms):</Label>
         <NumberInput
@@ -72,6 +96,9 @@ export function DebugModeActions({
           onChange={handleBlockReconnectionChange}
         />
         <button onClick={handleCloseConnection}>Close Connection</button>
+        <SpacedButton onClick={handleCloseConnectionPermanently}>
+          Close Connection (No Reconnect)
+        </SpacedButton>
       </Row>
 
       <Row>

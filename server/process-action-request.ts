@@ -19,11 +19,20 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
 
   // Process test actions
   if (isWsCloseConnection(clientRequest)) {
-    // Test action: Close without giving a reasons (this should trigger
-    // the client to attempt to reconnect).
-    if (clientRequest.blockReconnectionMs > 0) {
-      player.blockReconnectionUntil(Date.now() + clientRequest.blockReconnectionMs);
+    // Test action.
+    if (clientRequest.reconnection === 'prevent') {
+      // Close with a code that tells the client not to attempt reconnection.
+      ws.close(4001, 'Connection closed by server (no reconnection)');
+      return;
     }
+
+    const blockMs = clientRequest.reconnection.blockedMs;
+    if (blockMs > 0) {
+      player.blockReconnectionUntil(Date.now() + blockMs);
+    }
+
+    //  Close without giving a reasons (this should trigger
+    // the client to attempt to reconnect).
     ws.close();
     return;
   }

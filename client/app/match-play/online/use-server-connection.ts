@@ -97,6 +97,9 @@ export function useServerConnection({
     },
 
     onClose: (event) => {
+      // According to MDN Event codes 4000-4999 are 'for private uses [and] can be used by
+      // prior agreements between WebSocket applications. Here they are used to mean 'do not
+      // attempted reconnection'.
       attemptReconnection.current = !(event.code >= 4000 && event.code < 5000);
 
       setConnectionStatus({
