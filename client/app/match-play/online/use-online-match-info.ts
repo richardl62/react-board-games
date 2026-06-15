@@ -4,22 +4,25 @@
 // server connection. Its job is to make online play feel as immediate as offline
 // play, and to behave sensibly when the network is unreliable.
 //
-// The code here is a thin adapter around usePendingActions. Its job is to map the
-// game's moves/events onto action submissions, register the response handler on the
-// connection, and choose what state to show the board. All of the reliability
-// machinery - the optimistic prediction shown on the board, the queue of actions
-// awaiting confirmation, the "send only over a confirmed connection" policy,
-// reconnection handling, and server reconciliation - lives in usePendingActions
-// (see use-pending-actions.ts).
+// It is the game-specific layer: it predicts an action's result (applyActionLocally,
+// which mirrors the server's validation), decides from the prediction whether the
+// action is valid, maps the game's moves/events onto request submissions, and reports
+// a locally-rejected action's error (without sending anything). All of the
+// game-agnostic reliability machinery - the queue of requests awaiting confirmation,
+// the optimistic state shown on the board, the "send only over a confirmed connection"
+// policy, reconnection handling, and server reconciliation - lives in
+// usePendingRequests (see use-pending-requests.ts).
 import { AppGame } from '@/app-game-support/app-game';
 import { Player } from '@/app-game-support/types';
 import { EventsAPI } from '@shared/game-control/events';
+import { WsRequestedAction } from '@shared/ws-requested-action';
 import { UntypedMoves } from '@/app-game-support/board-props';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ServerConnection } from './use-server-connection';
 import { ActionRequestStatus } from '../game-board-wrapper';
 import { MatchState } from '@shared/match-state';
-import { usePendingActions } from './use-pending-actions';
+import { applyActionLocally } from '../apply-action-locally';
+import { usePendingRequests } from './use-pending-requests';
 
 // Return information suitable for an online game.  This is
 // - match state (which may be an optimistic prediction)
@@ -36,30 +39,42 @@ export function useOnlineMatchInfo(
   actionRequestStatus: ActionRequestStatus;
   matchState: MatchState;
 } {
-  const pending = usePendingActions(
-    appGame,
-    player,
-    connectionStatus,
-    sendMatchRequest,
-    matchState,
-  );
+  const pending = usePendingRequests(player.id, connectionStatus, sendMatchRequest, matchState);
 
   responseHandlerRef.current = pending.handleServerResponse;
 
-  const { submit } = pending;
+  // The error, if any, from the last action attempted here (i.e. from the last call to
+  // applyActionLocally). Such actions don't change the displayed match state other than
+  // the error flag, and are not sent to the server.
+  const [localError, setLocalError] = useState<string | null>(null);
+
+  const { submit, predictionBase } = pending;
   const { moves, events } = useMemo(() => {
+    // Predict the action's result on top of the current chain tip. If the prediction
+    // carries an error (e.g. the action is locally invalid) just report it - the server
+    // would only reject it identically. Otherwise clear any earlier error and submit.
+    const submitAction = (action: WsRequestedAction) => {
+      const expected = applyActionLocally(appGame, action, player.id, predictionBase());
+      if (expected.errorInLastAction !== null) {
+        setLocalError(expected.errorInLastAction);
+      } else {
+        setLocalError(null);
+        submit(action, expected);
+      }
+    };
+
     const moves: UntypedMoves = {};
     for (const moveName of Object.keys(appGame.moves)) {
-      moves[moveName] = (arg) => submit({ move: moveName, arg });
+      moves[moveName] = (arg) => submitAction({ move: moveName, arg });
     }
 
     const events: EventsAPI = {
-      endTurn: () => submit({ endTurn: true }),
-      endMatch: () => submit({ endMatch: true }),
+      endTurn: () => submitAction({ endTurn: true }),
+      endMatch: () => submitAction({ endMatch: true }),
     };
 
     return { moves, events };
-  }, [appGame.moves, submit]);
+  }, [appGame, player.id, submit, predictionBase]);
 
   const { waitingForServer, lastActionUnconfirmed, predictionDiverged } = pending;
 
@@ -68,7 +83,9 @@ export function useOnlineMatchInfo(
       moves,
       events,
       actionRequestStatus: { waitingForServer, lastActionUnconfirmed, predictionDiverged },
-      matchState: pending.matchState,
+      // Overlay a locally-rejected action's error onto the displayed state without
+      // otherwise changing it.
+      matchState: { ...pending.matchState, errorInLastAction: localError },
     }),
     [
       moves,
@@ -77,6 +94,7 @@ export function useOnlineMatchInfo(
       lastActionUnconfirmed,
       predictionDiverged,
       pending.matchState,
+      localError,
     ],
   );
 }
