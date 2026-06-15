@@ -46,9 +46,9 @@ await pageA.waitForTimeout(4000);
 
 const body = await pageA.innerText('body');
 
-const hasMovesNote = body.includes('Recent moves may not have been saved');
+const hasMovesNote = body.includes('Recent moves may not have been fully processed');
 console.log(
-  `Warning shows "Recent moves may not have been saved.": ${hasMovesNote ? 'PASS' : 'FAIL'}`,
+  `Warning shows "Recent moves may not have been fully processed.": ${hasMovesNote ? 'PASS' : 'FAIL'}`,
 );
 
 const stillReconnecting = body.includes('attempting reconnection');
