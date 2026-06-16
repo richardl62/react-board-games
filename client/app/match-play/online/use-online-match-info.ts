@@ -53,6 +53,14 @@ export function useOnlineMatchInfo(
     // Predict the action's result on top of the current chain tip. If the prediction
     // carries an error (e.g. the action is locally invalid) just report it - the server
     // would only reject it identically. Otherwise clear any earlier error and submit.
+    //
+    // The base is predictionBase() (the live chain tip), not the displayed matchState.
+    // The two are identical at the start of a handler, but a single user action can be
+    // implemented by two or more move/event calls in one synchronous handler or effect
+    // (e.g. crosstiles' make-grid calls recordGrid then doneRecordingGrid) - there is no
+    // re-render between them, so the displayed matchState would still be the pre-first-
+    // call value, whereas predictionBase() reflects the first submission so the second
+    // chains on it correctly.
     const submitAction = (action: WsRequestedAction) => {
       const expected = applyActionLocally(appGame, action, player.id, predictionBase());
       if (expected.errorInLastAction !== null) {

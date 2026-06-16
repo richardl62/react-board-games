@@ -12,11 +12,13 @@
 // -------------------------
 // `pendingRequests` is a FIFO of requests awaiting a server response. Each entry
 // carries the state it is expected to produce. The caller chains predictions by
-// building each one on top of predictionBase() - the last pending request's expected
-// state, or the last server-confirmed matchState when the queue is empty - which lets
-// several requests be in flight at once. The board shows
-// `optimisticMatchState ?? serverMatchState` - the latest optimistic state when one is
-// set, otherwise the server's state.
+// building each one on top of predictionBase() - the chain tip, i.e. the last pending
+// request's expected state, or the last server-confirmed matchState when the queue is
+// empty - which lets several requests be in flight at once. The board shows that same
+// chain tip (the returned matchState), so a move is always predicted from the state on
+// display: matchState is the tip read from render state, predictionBase() is the tip
+// read live from refs (see chainTip). They differ only within a single synchronous
+// burst of submissions, where chaining off the live tip is what's wanted.
 //
 // Reconciliation
 // --------------
@@ -89,6 +91,13 @@ function predictionMatches(predicted: MatchState, actual: MatchState): boolean {
   return JSON.stringify(predictableFields(predicted)) === JSON.stringify(predictableFields(actual));
 }
 
+// The chain tip: the state the next prediction builds on and the state shown on the
+// board - the last pending request's expected state, or the server's state when the
+// queue is empty.
+function chainTip(pending: PendingRequest[], serverMatchState: MatchState): MatchState {
+  return pending.length > 0 ? pending[pending.length - 1].expected : serverMatchState;
+}
+
 export interface PendingRequests {
   // The state to display: the latest optimistic prediction if any requests are
   // pending, otherwise the server's authoritative state.
@@ -117,7 +126,6 @@ export function usePendingRequests(
   serverMatchState: MatchState,
 ): PendingRequests {
   const [pendingRequests, setPendingRequests] = useState<PendingRequest[]>([]);
-  const [optimisticMatchState, setOptimisticMatchState] = useState<MatchState | null>(null);
   const [lastActionUnconfirmed, setLastActionUnconfirmed] = useState(false);
   const [predictionDiverged, setPredictionDiverged] = useState(false);
 
@@ -154,12 +162,11 @@ export function usePendingRequests(
     setPendingRequests(next);
   }, []);
 
-  // Clear the pending queue and any optimistic prediction - used whenever a response
-  // can no longer be trusted (lost connection, out-of-order response, or a diverged
-  // prediction) and the board should fall back to the server's state.
+  // Clear the pending queue - used whenever a response can no longer be trusted (lost
+  // connection, out-of-order response, or a diverged prediction). The displayed state
+  // derives from the queue, so emptying it falls the board back to the server's state.
   const dropPendingQueue = useCallback(() => {
     setPending([]);
-    setOptimisticMatchState(null);
   }, [setPending]);
 
   // Handle a wsClientConnection broadcast confirmed (by the dispatcher below) to be
@@ -223,11 +230,7 @@ export function usePendingRequests(
       }
 
       if (predictionMatches(head.expected, response.matchState)) {
-        const rest = pending.slice(1);
-        setPending(rest);
-        if (rest.length === 0) {
-          setOptimisticMatchState(null);
-        }
+        setPending(pending.slice(1));
       } else {
         console.error('Optimistic prediction diverged from server response', {
           predicted: head.expected,
@@ -269,18 +272,22 @@ export function usePendingRequests(
     [handleActionResponse, handleConnectionConfirmed, playerId],
   );
 
+  // The live counterpart of the returned matchState: the chain tip read from refs
+  // rather than render state. This matters when several requests are submitted in one
+  // synchronous handler/effect (no re-render between them) - each then chains on the
+  // previous one, which the rendered matchState wouldn't yet reflect.
   const predictionBase = useCallback(() => {
-    const pending = pendingRequestsRef.current;
-    return pending.length > 0 ? pending[pending.length - 1].expected : matchStateRef.current;
+    return chainTip(pendingRequestsRef.current, matchStateRef.current);
   }, []);
 
   const submit = useCallback(
     (action: WsRequestedAction, expected: MatchState) => {
       // The caller is acting, so clear any earlier problem warning - they've seen
-      // wherever the board ended up - and show the predicted state immediately.
+      // wherever the board ended up. (The predicted state shows on the board as soon as
+      // setPending below appends it, since the displayed matchState derives from the
+      // queue.)
       setLastActionUnconfirmed(false);
       setPredictionDiverged(false);
-      setOptimisticMatchState(expected);
 
       lastRequestNumber.current += 1;
       const id: WsRequestId = { playerId, number: lastRequestNumber.current };
@@ -296,7 +303,7 @@ export function usePendingRequests(
   );
 
   return {
-    matchState: optimisticMatchState ?? serverMatchState,
+    matchState: chainTip(pendingRequests, serverMatchState),
     waitingForServer: pendingRequests.length > 0,
     lastActionUnconfirmed,
     predictionDiverged,
