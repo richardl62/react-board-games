@@ -1,8 +1,16 @@
 import { JSX } from 'react';
-import { StandardMatchPlay } from './standard-match-play';
-import { ConnectionStatus, useServerConnection } from './use-server-connection';
+import { ServerConnection, useServerConnection } from './use-server-connection';
 import { AppGame } from '@/app-game-support/app-game';
 import { Player, MatchID } from '@/app-game-support/types';
+import { connectionStatusText } from './connection-status-text';
+import { useSearchParamData } from '@/url-tools';
+import { GameBoardWrapper } from '../game-board-wrapper';
+import { DebugModeActions } from './debug-mode-actions';
+import { useOnlineMatchInfo } from './use-online-match-info';
+
+interface ServerConnectionWithResponse extends ServerConnection {
+  serverResponse: NonNullable<ServerConnection['serverResponse']>;
+}
 
 // This together with OfflineMatch are the entry points used to start a match.
 export function OnlineMatch({
@@ -18,11 +26,15 @@ export function OnlineMatch({
   const { serverResponse, connectionStatus } = serverConnection;
 
   if (!serverResponse) {
-    return <ShowConnectionStatus connectionStatus={connectionStatus} />;
+    const message =
+      connectionStatus === 'connected'
+        ? 'Server connected: awaiting response ...'
+        : `Server not connected: ${connectionStatusText(connectionStatus)}`;
+    return <div>{message}</div>;
   }
 
   return (
-    <StandardMatchPlay
+    <ConnectedMatch
       game={game}
       player={player}
       serverConnection={{ ...serverConnection, serverResponse }}
@@ -30,23 +42,36 @@ export function OnlineMatch({
   );
 }
 
-// A simple component for use when there has not been a response from the server.
-// (To Do: Try to think of a better name.)
-function ShowConnectionStatus({
-  connectionStatus,
+function ConnectedMatch({
+  game,
+  player,
+  serverConnection,
 }: {
-  connectionStatus: ConnectionStatus;
+  game: AppGame;
+  player: Player;
+  serverConnection: ServerConnectionWithResponse;
 }): JSX.Element {
-  // If the status is 'connected' then assume we are waiting a response from the server
-  // and to keep things simple, report this in the same way as when waiting to connect..
-  if (connectionStatus === 'connecting' || connectionStatus === 'connected') {
-    return <div>Connecting ...</div>;
-  }
+  const { connectionStatus, serverResponse } = serverConnection;
+  const { moves, events, actionRequestStatus, matchState } = useOnlineMatchInfo(
+    game,
+    player,
+    serverConnection,
+    serverResponse.matchState,
+  );
+  const { debugMode } = useSearchParamData();
 
-  const { reason, code } = connectionStatus.closeEvent;
-  if (reason) {
-    return <div>ERROR: Cannot join match ({reason})</div>;
-  }
-
-  return <div>ERROR: Cannot connect to server (code {code})</div>;
+  return (
+    <div>
+      {debugMode && <DebugModeActions serverConnection={serverConnection} />}
+      <GameBoardWrapper
+        game={game}
+        viewingPlayer={player.id}
+        connectionStatus={connectionStatus}
+        actionRequestStatus={actionRequestStatus}
+        matchState={matchState}
+        moves={moves}
+        events={events}
+      />
+    </div>
+  );
 }
