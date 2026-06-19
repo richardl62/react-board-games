@@ -1,8 +1,10 @@
 import { ClientMoveFunctions } from '../../move-fn.js';
-import { add } from './add.js';
+import { addPlayerCount } from './add-player-count.js';
+import { addSharedCount } from './add-shared-count.js';
 
 export const moves = {
-  add,
+  addSharedCount,
+  addPlayerCount,
 };
 
 export type ClientMoves = ClientMoveFunctions<typeof moves>;

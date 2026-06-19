@@ -5,11 +5,19 @@ export interface SetupOptions {
 }
 
 export interface ServerData {
-  count: number;
+  sharedCount: number;
+
+  playerCount: Record<string, number>;
 }
 
-export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): ServerData {
+  const playerCount: Record<string, number> = {};
+  for (const pid of ctx.playOrder) {
+    playerCount[pid] = 0;
+  }
+
   return {
-    count: options.startingValue,
+    sharedCount: options.startingValue,
+    playerCount,
   };
 }

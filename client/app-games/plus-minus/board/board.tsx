@@ -7,7 +7,7 @@ const OuterDiv = styled.div`
   margin: ${standardOuterMargin};
 `;
 
-const Name = styled.span`
+const PlayerInfoDiv = styled.span`
   margin-right: 1em;
 `;
 
@@ -16,19 +16,22 @@ const CurrentPlayer = styled.div`
   margin-bottom: 0.3em;
 `;
 
-function PlayerNames(): JSX.Element {
+function PlayerInfo(): JSX.Element {
   const {
-    ctx: { playOrder, currentPlayer },
+    G,
+    viewingPlayer,
+    ctx: { playOrder },
     getPlayerName,
   } = useMatchState();
 
   const name = (id: string) => {
-    return getPlayerName(id) + (id === currentPlayer ? ' (you)' : '');
+    const count = G.playerCount[id];
+    return `${getPlayerName(id)}:${count} ${id === viewingPlayer ? ' (you)' : ''}`;
   };
   return (
     <div>
       {playOrder.map((id) => (
-        <Name key={id}> {name(id)} </Name>
+        <PlayerInfoDiv key={id}> {name(id)} </PlayerInfoDiv>
       ))}
     </div>
   );
@@ -37,28 +40,31 @@ function PlayerNames(): JSX.Element {
 function Board(): JSX.Element {
   const context = useMatchState();
   const {
-    G: { count },
+    G: { sharedCount: count },
     moves,
     events,
-    viewingPlayer: playerID,
+    viewingPlayer,
     getPlayerName,
   } = context;
 
-  const current = context.ctx.currentPlayer === playerID;
+  const current = context.ctx.currentPlayer === viewingPlayer;
   const currentPlayerName = current ? 'You' : getPlayerName(context.ctx.currentPlayer);
   return (
     <OuterDiv>
-      <PlayerNames />
+      <PlayerInfo />
 
       <CurrentPlayer>Current player: {currentPlayerName}</CurrentPlayer>
 
-      <button onClick={() => moves.add(1)}>+1</button>
+      <button onClick={() => moves.addSharedCount(1)}>+1</button>
 
-      <button onClick={() => moves.add(-1)}>-1</button>
+      <button onClick={() => moves.addSharedCount(-1)}>-1</button>
 
       <button onClick={() => events.endTurn()}>End Turn</button>
 
       <div>{count}</div>
+      <div>
+        <button onClick={() => moves.addPlayerCount(1)}>+1 (Player)</button>
+      </div>
     </OuterDiv>
   );
 }
