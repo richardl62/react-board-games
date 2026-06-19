@@ -28,8 +28,8 @@ export function PlayerStatus(props: PlayerStatusProps): JSX.Element {
     const msg = message(pid);
     if (msg) {
       elems.push(
-        <span>
-          <Name key={pid + 'name'}>{getPlayerName(pid) + ':'}</Name>
+        <span key={pid + 'name'}>
+          <Name>{getPlayerName(pid) + ':'}</Name>
           <Message key={pid + 'msg'}>{msg}</Message>
         </span>,
       );
