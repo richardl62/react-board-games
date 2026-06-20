@@ -9,6 +9,11 @@ export interface MoveArg0<G> {
   viewingPlayer: PlayerID;
   random: RandomAPI;
   events: EventsAPI;
+  // Update the game-defined per-player data for the given player. The value is
+  // stored in PublicPlayerMetadata.gameData and broadcast to all clients.
+  // Calling this for a player other than viewingPlayer sets changesOtherPlayersData
+  // on the server response, causing clients to discard their optimistic chain.
+  setPlayerData: (playerId: PlayerID, data: unknown) => void;
 }
 
 export type MoveFn<G> = (

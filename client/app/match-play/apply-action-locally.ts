@@ -22,22 +22,30 @@ export function applyActionLocally(
   matchState: MatchState,
 ): MatchState {
   try {
-    let mutated;
     if (isWsMove(action)) {
-      mutated = matchMove(game, action.move, playerID, matchState, action.arg);
-    } else if (isWsEndTurn(action)) {
+      const { playerDataChanges, ...activeState } = matchMove(game, action.move, playerID, matchState, action.arg);
+      const playerData = matchState.playerData.map((p) =>
+        Object.prototype.hasOwnProperty.call(playerDataChanges, p.id)
+          ? { ...p, gameData: playerDataChanges[p.id] }
+          : p,
+      );
+      return { ...activeState, playerData, errorInLastAction: null };
+    }
+
+    let activeState;
+    if (isWsEndTurn(action)) {
       const { ctxData, state, prngState } = structuredClone(matchState);
       endTurn(ctxData);
-      mutated = { ctxData, state, prngState };
+      activeState = { ctxData, state, prngState };
     } else if (isWsEndMatch(action)) {
       const { ctxData, state, prngState } = structuredClone(matchState);
       endMatch(ctxData);
-      mutated = { ctxData, state, prngState };
+      activeState = { ctxData, state, prngState };
     } else {
       throw new Error('Unrecognised action');
     }
 
-    return { ...mutated, playerData: matchState.playerData, errorInLastAction: null };
+    return { ...activeState, playerData: matchState.playerData, errorInLastAction: null };
   } catch (e) {
     const errorInLastAction = e instanceof Error ? e.message : `Unrecognised error: ${String(e)}`;
     return { ...matchState, errorInLastAction };

@@ -229,6 +229,16 @@ export function usePendingRequests(
         return;
       }
 
+      if (response.changesOtherPlayersData) {
+        // An out-of-sequence move changed other players' gameData. Any remaining
+        // optimistic chain may have been built on stale other-player state, so drop
+        // it silently and let the server's authoritative matchState take over.
+        console.log('Out-of-sequence move changed other players\' data — dropping optimistic queue');
+        dropPendingQueue();
+        setLastActionUnconfirmed(false);
+        return;
+      }
+
       if (predictionMatches(head.expected, response.matchState)) {
         setPending(pending.slice(1));
       } else {

@@ -38,6 +38,7 @@ export class Player {
   private name_: string | null;
   private ws: WebSocket | null;
   private reconnectionBlockedUntil: number | null = null;
+  private gameData_: unknown = undefined;
 
   get name(): string | null {
     return this.name_;
@@ -93,13 +94,16 @@ export class Player {
     return this.reconnectionBlockedUntil !== null && Date.now() < this.reconnectionBlockedUntil;
   }
 
-  publicMetadata(): PublicPlayerMetadata {
-    const { name_: name, isConnected } = this;
+  setGameData(data: unknown) {
+    this.gameData_ = data;
+  }
 
-    return {
-      id: this.id,
-      name,
-      isConnected,
-    };
+  publicMetadata(): PublicPlayerMetadata {
+    const { name_: name, isConnected, gameData_ } = this;
+    const meta: PublicPlayerMetadata = { id: this.id, name, isConnected };
+    if (gameData_ !== undefined) {
+      meta.gameData = gameData_;
+    }
+    return meta;
   }
 }

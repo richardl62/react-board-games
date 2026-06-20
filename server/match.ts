@@ -87,9 +87,23 @@ export class Match {
   }
 
   // Can throw, in which case no data is changed.
-  move(request: WsMove, playerID: string) {
+  // Returns true if the move changed gameData for any player other than the acting player.
+  move(request: WsMove, playerID: string): boolean {
     const { move, arg } = request;
-    this.activeData = matchMove(this.definition, move, playerID, this.activeData, arg);
+    const { playerDataChanges, ...activeState } = matchMove(this.definition, move, playerID, this.activeData, arg);
+    this.activeData = activeState;
+
+    let changesOtherPlayersData = false;
+    for (const [changedId, data] of Object.entries(playerDataChanges)) {
+      const player = this.findPlayer({ id: changedId });
+      if (player) {
+        player.setGameData(data);
+        if (changedId !== playerID) {
+          changesOtherPlayersData = true;
+        }
+      }
+    }
+    return changesOtherPlayersData;
   }
 
   // Can throw, in which case no data is changed.
@@ -116,10 +130,15 @@ export class Match {
     this.responseDelay = responseDelay;
   }
 
-  broadcastMatchState(trigger: WsResponseTrigger, errorInLastAction: string | null) {
+  broadcastMatchState(
+    trigger: WsResponseTrigger,
+    errorInLastAction: string | null,
+    changesOtherPlayersData?: boolean,
+  ) {
     const response: WsServerResponse = {
       trigger,
       matchState: this.matchState(errorInLastAction),
+      ...(changesOtherPlayersData ? { changesOtherPlayersData: true as const } : {}),
     };
 
     const doIt = () => {
