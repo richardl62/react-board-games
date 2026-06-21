@@ -4,7 +4,7 @@ import { addSharedCount } from './add-shared-count.js';
 
 export const moves = {
   addSharedCount,
-  addPlayerCount,
+  addPlayerCount: { outOfSequence: true as const, fn: addPlayerCount },
 };
 
 export type ClientMoves = ClientMoveFunctions<typeof moves>;

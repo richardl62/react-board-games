@@ -14,6 +14,10 @@ export interface MoveArg0<G> {
   // Calling this for a player other than viewingPlayer sets changesOtherPlayersData
   // on the server response, causing clients to discard their optimistic chain.
   setPlayerData: (playerId: PlayerID, data: unknown) => void;
+  // Read the current game data for a player. Returns the value set by setPlayerData
+  // within this move (if called for that player), otherwise the server-authoritative
+  // value from PublicPlayerMetadata.gameData.
+  getPlayerData: (playerId: PlayerID) => unknown;
 }
 
 export type MoveFn<G> = (
@@ -22,9 +26,12 @@ export type MoveFn<G> = (
   arg: any,
 ) => void;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type UnwrapMoveFn<T> = T extends { fn: infer F extends MoveFn<any> } ? F : T extends MoveFn<any> ? T : never;
+
 export type ClientMoveFunctions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  functions extends Record<string, MoveFn<any>>,
+  functions extends Record<string, MoveFn<any> | { readonly fn: MoveFn<any> }>,
 > = {
-  [Name in keyof functions]: (arg: Parameters<functions[Name]>[1]) => void;
+  [Name in keyof functions]: (arg: Parameters<UnwrapMoveFn<functions[Name]>>[1]) => void;
 };

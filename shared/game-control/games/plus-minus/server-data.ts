@@ -7,22 +7,14 @@ export interface SetupOptions {
 export interface ServerData {
   sharedCount: number;
 
-  playerCount: Record<string, number>;
-
-  // When all player counts are equal, snapCount is set to that
-  // value and the play counts are then reset to 0
+  // When all players' counts (stored in PublicPlayerMetadata.gameData) are equal,
+  // lastSnap is set to that value and all counts are reset to 0.
   lastSnap: number;
 }
 
-export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): ServerData {
-  const playerCount: Record<string, number> = {};
-  for (const pid of ctx.playOrder) {
-    playerCount[pid] = 0;
-  }
-
+export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
   return {
     sharedCount: options.startingValue,
-    playerCount,
     lastSnap: 0,
   };
 }

@@ -90,7 +90,7 @@ export class Match {
   // Returns true if the move changed gameData for any player other than the acting player.
   move(request: WsMove, playerID: string): boolean {
     const { move, arg } = request;
-    const { playerDataChanges, ...activeState } = matchMove(this.definition, move, playerID, this.activeData, arg);
+    const { playerDataChanges, ...activeState } = matchMove(this.definition, move, playerID, this.matchState(null), arg);
     this.activeData = activeState;
 
     let changesOtherPlayersData = false;

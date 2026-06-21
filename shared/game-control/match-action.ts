@@ -1,4 +1,4 @@
-import { ActiveMatchState } from '../match-state.js';
+import { ActiveMatchState, MatchState } from '../match-state.js';
 import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
 import { AllActive, GameControl, getMoveFunction, isOutOfSequenceMove } from './game-control.js';
@@ -22,7 +22,7 @@ export function matchMove<Param>(
   gameControl: Readonly<GameControl>,
   moveName: string,
   playerID: string,
-  matchState: Readonly<ActiveMatchState>,
+  matchState: Readonly<MatchState>,
   param: Param,
 ): MoveResult {
   const { state, ctxData } = structuredClone(matchState);
@@ -56,6 +56,12 @@ export function matchMove<Param>(
     },
     setPlayerData: (playerId, data) => {
       playerDataChanges[playerId] = data;
+    },
+    getPlayerData: (playerId) => {
+      if (Object.prototype.hasOwnProperty.call(playerDataChanges, playerId)) {
+        return playerDataChanges[playerId];
+      }
+      return matchState.playerData.find((p) => p.id === playerId)?.gameData;
     },
   };
 

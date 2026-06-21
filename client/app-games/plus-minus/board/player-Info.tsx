@@ -7,16 +7,18 @@ const PlayerInfoDiv = styled.span<{ isCurrent: boolean }>`
   text-decoration: ${(props) => (props.isCurrent ? 'underline' : 'none')};
 `;
 
+interface PlayerGameData { count: number }
+
 export function PlayerInfo(): JSX.Element {
   const {
-    G,
+    matchStatus: { playerData },
     viewingPlayer,
     ctx: { playOrder, currentPlayer },
     getPlayerName,
   } = useMatchState();
 
   const playerInfo = (id: string) => {
-    const count = G.playerCount[id];
+    const count = (playerData.find((p: { id: string }) => p.id === id)?.gameData as PlayerGameData | undefined)?.count ?? 0;
     let text = `${getPlayerName(id)}:${count}`;
     if (id === viewingPlayer) {
       text += ' (you)';

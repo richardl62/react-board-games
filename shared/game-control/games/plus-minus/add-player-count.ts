@@ -1,21 +1,29 @@
 import { ServerData } from './server-data.js';
 import { MoveArg0 } from '../../move-fn.js';
 
+interface PlayerGameData { count: number }
+
 export function addPlayerCount(
-  { G, ctx, viewingPlayer }: MoveArg0<ServerData>,
+  { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData>,
   value: number,
 ): void {
-  G.playerCount[viewingPlayer] += value;
+  const current = (getPlayerData(viewingPlayer) as PlayerGameData | undefined)?.count ?? 0;
+  const newCount = current + value;
+  setPlayerData(viewingPlayer, { count: newCount });
 
-  const playerCounts = ctx.playOrder.map((pid) => G.playerCount[pid]);
-  if (playerCounts.length > 1) {
-    const candidateSnap = playerCounts[0];
+  // Snap: when all players reach the same count, record it and reset all to 0.
+  const allCounts = ctx.playOrder.map((pid) => {
+    if (pid === viewingPlayer) return newCount;
+    return (getPlayerData(pid) as PlayerGameData | undefined)?.count ?? 0;
+  });
 
-    if (playerCounts.every((x) => x === candidateSnap)) {
+  if (allCounts.length > 1) {
+    const candidate = allCounts[0];
+    if (allCounts.every((c) => c === candidate)) {
       for (const pid of ctx.playOrder) {
-        G.playerCount[pid] = 0;
+        setPlayerData(pid, { count: 0 });
       }
-      G.lastSnap = candidateSnap;
+      G.lastSnap = candidate;
     }
   }
 }
