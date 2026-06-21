@@ -43,7 +43,10 @@ export interface ServerData {
 
 // Starting heights for one player
 function startingColumnsHeights(playerID: string, partiallyFillAtStart: boolean): ColumnHeight[] {
-  const data: ColumnHeight[] = [];
+  // Indices 0 and 1 are unused. Explicit null (not sparse holes) ensures offline
+  // state matches post-JSON-round-trip online state, so forEach bugs surface equally
+  // in both environments.
+  const data = [null, null] as unknown as ColumnHeight[];
   for (const col of columnValues) {
     let height: number | 'full' = 0;
     if (partiallyFillAtStart) {
