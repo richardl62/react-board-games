@@ -8,6 +8,10 @@ export interface ServerData {
   sharedCount: number;
 
   playerCount: Record<string, number>;
+
+  // When all player counts are equal, snapCount is set to that
+  // value and the play counts are then reset to 0
+  lastSnap: number;
 }
 
 export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): ServerData {
@@ -19,5 +23,6 @@ export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): S
   return {
     sharedCount: options.startingValue,
     playerCount,
+    lastSnap: 0,
   };
 }

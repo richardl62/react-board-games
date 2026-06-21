@@ -1,71 +1,62 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
-import { standardOuterMargin } from '../../../app-game-support/styles';
 import { useMatchState } from '../match-state';
+import { PlayerInfo } from './player-Info';
 
-const OuterDiv = styled.div`
-  margin: ${standardOuterMargin};
+const ButtonArea = styled.div`
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 `;
 
-const PlayerInfoDiv = styled.span`
-  margin-right: 1em;
+const ButtonRow = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  > button {
+    width: 2em;
+  }
+
+  > :first-child {
+    width: 6em;
+  }
+
+  > :last-child {
+    margin-left: 0.5em;
+  }
 `;
-
-const CurrentPlayer = styled.div`
-  margin-top: 0.7em;
-  margin-bottom: 0.3em;
-`;
-
-function PlayerInfo(): JSX.Element {
-  const {
-    G,
-    viewingPlayer,
-    ctx: { playOrder },
-    getPlayerName,
-  } = useMatchState();
-
-  const name = (id: string) => {
-    const count = G.playerCount[id];
-    return `${getPlayerName(id)}:${count} ${id === viewingPlayer ? ' (you)' : ''}`;
-  };
-  return (
-    <div>
-      {playOrder.map((id) => (
-        <PlayerInfoDiv key={id}> {name(id)} </PlayerInfoDiv>
-      ))}
-    </div>
-  );
-}
 
 function Board(): JSX.Element {
   const context = useMatchState();
   const {
-    G: { sharedCount: count },
+    G: { sharedCount: count, lastSnap },
     moves,
     events,
-    viewingPlayer,
-    getPlayerName,
   } = context;
 
-  const current = context.ctx.currentPlayer === viewingPlayer;
-  const currentPlayerName = current ? 'You' : getPlayerName(context.ctx.currentPlayer);
   return (
-    <OuterDiv>
+    <div>
       <PlayerInfo />
 
-      <CurrentPlayer>Current player: {currentPlayerName}</CurrentPlayer>
+      <ButtonArea>
+        <ButtonRow>
+          <div>Player Count </div>
+          <button onClick={() => moves.addPlayerCount(1)}>+1</button>
+          <button onClick={() => moves.addPlayerCount(-1)}>-1</button>
+          <div> Last snap: {lastSnap}</div>
+        </ButtonRow>
 
-      <button onClick={() => moves.addSharedCount(1)}>+1</button>
+        <ButtonRow>
+          <div>Shared Count </div>
+          <button onClick={() => moves.addSharedCount(1)}>+1</button>
+          <button onClick={() => moves.addSharedCount(-1)}>-1</button>
+          <div>{count}</div>
+        </ButtonRow>
+      </ButtonArea>
 
-      <button onClick={() => moves.addSharedCount(-1)}>-1</button>
-
-      <button onClick={() => events.endTurn()}>End Turn</button>
-
-      <div>{count}</div>
       <div>
-        <button onClick={() => moves.addPlayerCount(1)}>+1 (Player)</button>
+        <button onClick={() => events.endTurn()}>End Turn</button>
       </div>
-    </OuterDiv>
+    </div>
   );
 }
 
