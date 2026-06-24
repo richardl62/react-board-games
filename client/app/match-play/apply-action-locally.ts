@@ -23,12 +23,7 @@ export function applyActionLocally(
 ): MatchState {
   try {
     if (isWsMove(action)) {
-      const { playerDataChanges, ...activeState } = matchMove(game, action.move, playerID, matchState, action.arg);
-      const playerData = matchState.playerData.map((p) =>
-        Object.prototype.hasOwnProperty.call(playerDataChanges, p.id)
-          ? { ...p, gameData: playerDataChanges[p.id] }
-          : p,
-      );
+      const { playerData, ...activeState } = matchMove(game, action.move, playerID, matchState, action.arg);
       return { ...activeState, playerData, errorInLastAction: null };
     }
 

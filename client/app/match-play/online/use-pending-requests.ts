@@ -87,8 +87,13 @@ function predictableFields(matchState: MatchState) {
   return { ctxData, state, prngState, errorInLastAction };
 }
 
-function predictionMatches(predicted: MatchState, actual: MatchState): boolean {
-  return JSON.stringify(predictableFields(predicted)) === JSON.stringify(predictableFields(actual));
+function predictionMatches(predicted: MatchState, actual: MatchState, actingPlayerId: string): boolean {
+  if (JSON.stringify(predictableFields(predicted)) !== JSON.stringify(predictableFields(actual))) {
+    return false;
+  }
+  const predictedGameData = predicted.playerData.find((p) => p.id === actingPlayerId)?.gameData;
+  const actualGameData = actual.playerData.find((p) => p.id === actingPlayerId)?.gameData;
+  return JSON.stringify(predictedGameData) === JSON.stringify(actualGameData);
 }
 
 // The chain tip: the state the next prediction builds on and the state shown on the
@@ -229,17 +234,7 @@ export function usePendingRequests(
         return;
       }
 
-      if (response.changesOtherPlayersData) {
-        // An out-of-sequence move changed other players' gameData. Any remaining
-        // optimistic chain may have been built on stale other-player state, so drop
-        // it silently and let the server's authoritative matchState take over.
-        console.log('Out-of-sequence move changed other players\' data — dropping optimistic queue');
-        dropPendingQueue();
-        setLastActionUnconfirmed(false);
-        return;
-      }
-
-      if (predictionMatches(head.expected, response.matchState)) {
+      if (predictionMatches(head.expected, response.matchState, head.id.playerId)) {
         setPending(pending.slice(1));
       } else {
         console.error('Optimistic prediction diverged from server response', {

@@ -48,14 +48,13 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
   }
 
   let error: string | null = null;
-  let changesOtherPlayersData = false;
   try {
     if (isWsEndTurn(clientRequest.action)) {
       match.endTurn();
     } else if (isWsEndMatch(clientRequest.action)) {
       match.endMatch();
     } else if (isWsMove(clientRequest.action)) {
-      changesOtherPlayersData = match.move(clientRequest.action, player.id);
+      match.move(clientRequest.action, player.id);
     } else {
       // Should never happen.
       throw new Error('Unrecognised client request');
@@ -65,7 +64,7 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
     console.warn(`Error: ${error} when processing client request ${request}`);
   }
 
-  match.broadcastMatchState(clientRequest, error, changesOtherPlayersData);
+  match.broadcastMatchState(clientRequest, error);
 }
 
 // Handle a player-requested action (move, end turn, etc)

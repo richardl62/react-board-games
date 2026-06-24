@@ -1,14 +1,14 @@
 import { ActiveMatchState, MatchState } from '../match-state.js';
+import { PublicPlayerMetadata } from '../lobby/types.js';
 import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
 import { AllActive, GameControl, getMoveFunction, isOutOfSequenceMove } from './game-control.js';
 import { MoveArg0 } from './move-fn.js';
 
-// The result of a move: the new ActiveMatchState plus any per-player data
-// changes requested by the move via setPlayerData. playerDataChanges maps
-// playerId -> new gameData value; empty object if setPlayerData was not called.
+// The result of a move: the new ActiveMatchState plus the updated per-player data
+// (a clone of the input playerData with any setPlayerData mutations applied).
 export interface MoveResult extends ActiveMatchState {
-  playerDataChanges: Record<string, unknown>;
+  playerData: PublicPlayerMetadata[];
 }
 
 /**
@@ -25,7 +25,7 @@ export function matchMove<Param>(
   matchState: Readonly<MatchState>,
   param: Param,
 ): MoveResult {
-  const { state, ctxData } = structuredClone(matchState);
+  const { state, ctxData, playerData: clonedPlayerData } = structuredClone(matchState);
   const random = RandomAPI.fromState(matchState.prngState);
 
   const moveDef = gameControl.moves[moveName];
@@ -44,7 +44,6 @@ export function matchMove<Param>(
     throw new Error(`It is not player ${playerID}'s turn.`);
   }
 
-  const playerDataChanges: Record<string, unknown> = {};
   const arg0: MoveArg0<unknown> = {
     G: state,
     ctx,
@@ -55,17 +54,13 @@ export function matchMove<Param>(
       endMatch: () => endMatch(ctxData),
     },
     setPlayerData: (playerId, data) => {
-      playerDataChanges[playerId] = data;
+      const p = clonedPlayerData.find((pd) => pd.id === playerId);
+      if (p) p.gameData = data;
     },
-    getPlayerData: (playerId) => {
-      if (Object.prototype.hasOwnProperty.call(playerDataChanges, playerId)) {
-        return playerDataChanges[playerId];
-      }
-      return matchState.playerData.find((p) => p.id === playerId)?.gameData;
-    },
+    getPlayerData: (playerId) => clonedPlayerData.find((p) => p.id === playerId)?.gameData,
   };
 
   getMoveFunction(moveDef)(arg0, param);
 
-  return { state, ctxData, prngState: random.getState(), playerDataChanges };
+  return { state, ctxData, prngState: random.getState(), playerData: clonedPlayerData };
 }
