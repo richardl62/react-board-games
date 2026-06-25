@@ -1,22 +1,18 @@
-import { ServerData } from './server-data.js';
+import { PlayerGameData, ServerData } from './server-data.js';
 import { MoveArg0, outOfSequenceMove } from '../../move-fn.js';
 
-interface PlayerGameData {
-  count: number;
-}
-
 function doAddPlayerCount(
-  { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData>,
+  { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerGameData>,
   value: number,
 ): void {
-  const current = (getPlayerData(viewingPlayer) as PlayerGameData | undefined)?.count ?? 0;
+  const current = getPlayerData(viewingPlayer).count;
   const newCount = current + value;
   setPlayerData(viewingPlayer, { count: newCount });
 
   // Snap: when all players reach the same count, record it and reset all to 0.
   const allCounts = ctx.playOrder.map((pid) => {
     if (pid === viewingPlayer) return newCount;
-    return (getPlayerData(pid) as PlayerGameData | undefined)?.count ?? 0;
+    return getPlayerData(pid).count;
   });
 
   if (allCounts.length > 1) {

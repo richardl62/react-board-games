@@ -12,6 +12,10 @@ export interface ServerData {
   lastSnap: number;
 }
 
+export interface PlayerGameData {
+  count: number;
+}
+
 export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
   return {
     sharedCount: options.startingValue,

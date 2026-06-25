@@ -3,38 +3,31 @@ import { EventsAPI } from './events.js';
 import { PlayerID } from './playerid.js';
 import { RandomAPI } from '../utils/random-api.js';
 
-export interface MoveArg0<G> {
+export interface MoveArg0<G, PD = unknown> {
   G: G;
   ctx: Ctx;
   viewingPlayer: PlayerID;
   random: RandomAPI;
   events: EventsAPI;
+
   // Update the game-defined per-player data for the given player. The value is
   // stored in PublicPlayerMetadata.gameData and broadcast to all clients.
-  // Calling this for a player other than viewingPlayer sets changesOtherPlayersData
-  // on the server response, causing clients to discard their optimistic chain.
-  setPlayerData: (playerId: PlayerID, data: unknown) => void;
-  // Read the current game data for a player. Returns the value set by setPlayerData
-  // within this move (if called for that player), otherwise the server-authoritative
-  // value from PublicPlayerMetadata.gameData.
-  getPlayerData: (playerId: PlayerID) => unknown;
+  setPlayerData: (playerId: PlayerID, data: PD) => void;
+
+  // Read the current game data for a player.
+  getPlayerData: (playerId: PlayerID) => PD;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type MoveFn<G = any, Arg = any> = (
-  context: MoveArg0<G>,
-  arg: Arg,
-) => void;
+export type MoveFn<G = any, Arg = any, PD = any> = (context: MoveArg0<G, PD>, arg: Arg) => void;
 
 // A move that any player may make regardless of whose turn it is.
-// The move function may call setPlayerData (see MoveArg0) to update per-player
-// game data. If it changes data for players other than the acting player, the
-// framework sets changesOtherPlayersData on the server response so the client
-// can discard any optimistic chain that depended on stale other-player state.
+// Only these moves may use getPlayerData and setPlayerData (see MoveArg0) to access
+// per-player game data.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface OutOfSequenceMove<G = any, Arg = any> {
+export interface OutOfSequenceMove<G = any, Arg = any, PD = any> {
   readonly outOfSequence: true;
-  readonly fn: MoveFn<G, Arg>;
+  readonly fn: MoveFn<G, Arg, PD>;
 }
 
 export function isOutOfSequenceMove(move: MoveFn | OutOfSequenceMove): move is OutOfSequenceMove {
@@ -45,7 +38,9 @@ export function getMoveFunction(move: MoveFn | OutOfSequenceMove): MoveFn {
   return isOutOfSequenceMove(move) ? move.fn : move;
 }
 
-export function outOfSequenceMove<G, Arg>(fn: MoveFn<G, Arg>): OutOfSequenceMove<G, Arg> {
+export function outOfSequenceMove<G, Arg, PD>(
+  fn: MoveFn<G, Arg, PD>,
+): OutOfSequenceMove<G, Arg, PD> {
   return { outOfSequence: true, fn };
 }
 

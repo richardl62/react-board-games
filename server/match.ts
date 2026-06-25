@@ -47,7 +47,11 @@ export class Match {
 
     this.players = [];
     for (let id = 0; id < numPlayers; ++id) {
-      this.players[id] = new Player(this.activeData.ctxData.playOrder[id]);
+      const player = new Player(this.activeData.ctxData.playOrder[id]);
+      if (gameControl.setupPlayerData) {
+        player.setGameData(gameControl.setupPlayerData(player.id));
+      }
+      this.players[id] = player;
     }
   }
 

@@ -6,11 +6,12 @@ import { PublicPlayerMetadata } from '@shared/lobby/types';
 import { MatchState } from '@shared/match-state';
 import { RandomAPI } from '@shared/utils/random-api';
 
-function playerData(playOrder: string[]): PublicPlayerMetadata[] {
+function playerData(game: AppGame, playOrder: string[]): PublicPlayerMetadata[] {
   return playOrder.map((id) => ({
     id,
     name: defaultPlayerName(id),
     isConnected: true,
+    ...(game.setupPlayerData ? { gameData: game.setupPlayerData(id) } : {}),
   }));
 }
 
@@ -26,7 +27,7 @@ export function makeInitialMatchState(
   const matchState = makeActiveMatchState(game, numPlayers, options, random);
   return {
     ...matchState,
-    playerData: playerData(matchState.ctxData.playOrder),
+    playerData: playerData(game, matchState.ctxData.playOrder),
     errorInLastAction: null,
   };
 }
