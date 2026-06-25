@@ -1,9 +1,11 @@
 import { ServerData } from './server-data.js';
-import { MoveArg0 } from '../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../move-fn.js';
 
-interface PlayerGameData { count: number }
+interface PlayerGameData {
+  count: number;
+}
 
-export function addPlayerCount(
+function doAddPlayerCount(
   { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData>,
   value: number,
 ): void {
@@ -27,3 +29,5 @@ export function addPlayerCount(
     }
   }
 }
+
+export const addPlayerCount = outOfSequenceMove(doAddPlayerCount);

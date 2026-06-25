@@ -20,18 +20,39 @@ export interface MoveArg0<G> {
   getPlayerData: (playerId: PlayerID) => unknown;
 }
 
-export type MoveFn<G> = (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MoveFn<G = any, Arg = any> = (
   context: MoveArg0<G>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  arg: any,
+  arg: Arg,
 ) => void;
 
+// A move that any player may make regardless of whose turn it is.
+// The move function may call setPlayerData (see MoveArg0) to update per-player
+// game data. If it changes data for players other than the acting player, the
+// framework sets changesOtherPlayersData on the server response so the client
+// can discard any optimistic chain that depended on stale other-player state.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type UnwrapMoveFn<T> = T extends { fn: infer F extends MoveFn<any> } ? F : T extends MoveFn<any> ? T : never;
+export interface OutOfSequenceMove<G = any, Arg = any> {
+  readonly outOfSequence: true;
+  readonly fn: MoveFn<G, Arg>;
+}
+
+export function isOutOfSequenceMove(move: MoveFn | OutOfSequenceMove): move is OutOfSequenceMove {
+  return typeof move === 'object' && move.outOfSequence === true;
+}
+
+export function getMoveFunction(move: MoveFn | OutOfSequenceMove): MoveFn {
+  return isOutOfSequenceMove(move) ? move.fn : move;
+}
+
+export function outOfSequenceMove<G, Arg>(fn: MoveFn<G, Arg>): OutOfSequenceMove<G, Arg> {
+  return { outOfSequence: true, fn };
+}
+
+type UnwrapMoveFn<T> = T extends { fn: infer F extends MoveFn } ? F : T extends MoveFn ? T : never;
 
 export type ClientMoveFunctions<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  functions extends Record<string, MoveFn<any> | { readonly fn: MoveFn<any> }>,
+  functions extends Record<string, MoveFn | { readonly fn: MoveFn }>,
 > = {
   [Name in keyof functions]: (arg: Parameters<UnwrapMoveFn<functions[Name]>>[1]) => void;
 };
