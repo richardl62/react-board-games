@@ -7,14 +7,15 @@ export function labelAndInputFixedString(
   { label, options }: { label: string; options: readonly string[] },
 ): [JSX.Element, JSX.Element] {
   sAssert(options.includes(value), 'String value does not match given options');
+  const id = label.replace(/\s+/g, '-').toLowerCase();
   return [
-    <label htmlFor={label} key={label + 'label'}>
+    <label htmlFor={id} key={label + 'label'}>
       {' '}
       {label}{' '}
     </label>,
     <select
       key={label + 'select'}
-      id="pet-select"
+      id={id}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => setValue(e.target.value)}
     >
       {options.map((str) => (
