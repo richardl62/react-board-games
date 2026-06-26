@@ -23,7 +23,13 @@ export function applyActionLocally(
 ): MatchState {
   try {
     if (isWsMove(action)) {
-      const { playerData, ...activeState } = matchMove(game, action.move, playerID, matchState, action.arg);
+      const { playerData, ...activeState } = matchMove(
+        game,
+        action.move,
+        playerID,
+        matchState,
+        action.arg,
+      );
       return { ...activeState, playerData, errorInLastAction: null };
     }
 

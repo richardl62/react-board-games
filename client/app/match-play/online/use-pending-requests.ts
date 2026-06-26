@@ -87,7 +87,11 @@ function predictableFields(matchState: MatchState) {
   return { ctxData, state, prngState, errorInLastAction };
 }
 
-function predictionMatches(predicted: MatchState, actual: MatchState, actingPlayerId: string): boolean {
+function predictionMatches(
+  predicted: MatchState,
+  actual: MatchState,
+  actingPlayerId: string,
+): boolean {
   if (JSON.stringify(predictableFields(predicted)) !== JSON.stringify(predictableFields(actual))) {
     return false;
   }
@@ -224,10 +228,13 @@ export function usePendingRequests(
 
       const head = pending[0];
       if (!sameRequestID(head.id, trigger.id)) {
-        console.error('Response received out of order - expected response for a different request', {
-          expectedId: head.id,
-          responseId: trigger.id,
-        });
+        console.error(
+          'Response received out of order - expected response for a different request',
+          {
+            expectedId: head.id,
+            responseId: trigger.id,
+          },
+        );
         dropPendingQueue();
         setPredictionDiverged(true);
         setLastActionUnconfirmed(false);

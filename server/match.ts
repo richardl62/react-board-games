@@ -93,7 +93,13 @@ export class Match {
   // Can throw, in which case no data is changed.
   move(request: WsMove, playerID: string) {
     const { move, arg } = request;
-    const { playerData: updatedPlayerData, ...activeState } = matchMove(this.definition, move, playerID, this.matchState(null), arg);
+    const { playerData: updatedPlayerData, ...activeState } = matchMove(
+      this.definition,
+      move,
+      playerID,
+      this.matchState(null),
+      arg,
+    );
     this.activeData = activeState;
 
     for (const p of updatedPlayerData) {
