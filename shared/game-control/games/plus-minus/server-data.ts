@@ -16,6 +16,10 @@ export interface PlayerGameData {
   count: number;
 }
 
+export function startingPlayerData() {
+  return { count: 0 };
+}
+
 export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
   return {
     sharedCount: options.startingValue,
