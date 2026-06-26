@@ -1,6 +1,6 @@
 import { ScrabbleConfig } from './config/scrabble-config.js';
 import { GameState, isGameState, startingGameState } from './moves/game-state.js';
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 
 export interface SetupOptions {
   readonly allowIllegalWords: boolean;
@@ -23,9 +23,11 @@ export function startingServerData(
   arg0: SetupArg0,
   options: SetupOptions,
   config: ScrabbleConfig,
-): ServerData {
+): SetupResult {
   return {
-    states: [startingGameState(arg0, config)],
-    options,
+    state: {
+      states: [startingGameState(arg0, config)],
+      options,
+    },
   };
 }

@@ -1,11 +1,11 @@
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 import { valuesPerPlayer, maxValue } from './config.js';
 
 export interface ServerData {
   playerValues: Record<string, number[]>;
 }
 
-export function startingServerData(arg0: SetupArg0): ServerData {
+export function startingServerData(arg0: SetupArg0): SetupResult {
   const { ctx, random } = arg0;
 
   const playerValues: ServerData['playerValues'] = {};
@@ -17,7 +17,5 @@ export function startingServerData(arg0: SetupArg0): ServerData {
     }
   }
 
-  return {
-    playerValues,
-  };
+  return { state: { playerValues } };
 }

@@ -10,6 +10,13 @@ export interface SetupArg0 {
   random: RandomAPI;
 }
 
+export interface SetupResult {
+  state: unknown;
+  // Per-player data keyed by player ID. If present, move functions may use
+  // getPlayerData and setPlayerData. If absent, those functions throw.
+  playerData?: Record<PlayerID, unknown>;
+}
+
 // GameControl is used by the server and the app (c.f. AppGame which is used
 // just by the app).
 export interface GameControl {
@@ -20,11 +27,7 @@ export interface GameControl {
   maxPlayers: number;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup: (arg0: SetupArg0, setupData: any) => unknown;
-
-  // If defined, called once per player at match creation.
-  // Required if move functions are to use getPlayerData and setPlayerData.
-  setupPlayerData?: (playerId: PlayerID) => unknown;
+  setup: (arg0: SetupArg0, setupData: any) => SetupResult;
 
   moves: Record<string, MoveFn | OutOfSequenceMove>;
 

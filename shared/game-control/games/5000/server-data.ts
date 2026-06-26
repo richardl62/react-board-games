@@ -1,4 +1,4 @@
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 
 const numberOfDice = 6;
 
@@ -40,7 +40,7 @@ export interface ServerData {
   turnOverRollCount: number;
 }
 
-export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): SetupResult {
   const faces = Array<number>(numberOfDice).fill(1);
   const held = Array<boolean>(numberOfDice).fill(false);
 
@@ -53,29 +53,31 @@ export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): S
   const scoreToBeat = options.mustBeatPreviousScores ? { value: 0, setBy: '' /*kludge*/ } : null;
 
   return {
-    faces,
-    held,
-    scoreToBeat,
-    scoreCarriedOver: 0,
+    state: {
+      faces,
+      held,
+      scoreToBeat,
+      scoreCarriedOver: 0,
 
-    heldDice: {
-      score: 0,
-      categories: [],
-      numScoringFaces: 0,
+      heldDice: {
+        score: 0,
+        categories: [],
+        numScoringFaces: 0,
+      },
+
+      maxDiceScore: 0,
+
+      prevRollHeldScore: 0,
+
+      playerScores,
+
+      rollCount: 0,
+      // Kludge?: Treat the start of the game as the end of a turn.
+      turnOverRollCount: 0,
+
+      lastRound: false,
+
+      options,
     },
-
-    maxDiceScore: 0,
-
-    prevRollHeldScore: 0,
-
-    playerScores,
-
-    rollCount: 0,
-    // Kludge?: Treat the start of the game as the end of a turn.
-    turnOverRollCount: 0,
-
-    lastRound: false,
-
-    options,
   };
 }

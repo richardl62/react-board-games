@@ -1,4 +1,4 @@
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 import { columnValues, maxColumnHeight, nDice } from './config.js';
 
 export interface SetupOptions {
@@ -70,7 +70,7 @@ function startingColumnsHeights(playerID: string, partiallyFillAtStart: boolean)
   return data;
 }
 
-export function startingServerData(arg0: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData(arg0: SetupArg0, options: SetupOptions): SetupResult {
   const { ctx } = arg0;
 
   const columnHeights: Record<string, ColumnHeight[]> = {};
@@ -79,14 +79,16 @@ export function startingServerData(arg0: SetupArg0, options: SetupOptions): Serv
   }
 
   return {
-    options,
+    state: {
+      options,
 
-    columnHeights,
+      columnHeights,
 
-    diceValues: Array<number>(nDice).fill(1),
-    scoringOptions: [],
-    scoringChoice: 'rollRequired',
+      diceValues: Array<number>(nDice).fill(1),
+      scoringOptions: [],
+      scoringChoice: 'rollRequired',
 
-    rollCount: 0,
+      rollCount: 0,
+    },
   };
 }

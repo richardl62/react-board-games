@@ -1,4 +1,4 @@
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 
 export interface SetupOptions {
   readonly startingValue: number;
@@ -16,13 +16,17 @@ export interface PlayerGameData {
   count: number;
 }
 
-export function startingPlayerData() {
-  return { count: 0 };
-}
-
-export function startingServerData(_arg0: SetupArg0, options: SetupOptions): ServerData {
-  return {
+export function startingServerData(
+  { ctx }: SetupArg0,
+  options: SetupOptions,
+): SetupResult {
+  const state: ServerData = {
     sharedCount: options.startingValue,
     lastSnap: 0,
   };
+  const playerData: Record<string, PlayerGameData> = {};
+  for (const id of ctx.playOrder) {
+    playerData[id] = { count: 0 };
+  }
+  return { state, playerData };
 }

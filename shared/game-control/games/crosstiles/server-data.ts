@@ -1,4 +1,4 @@
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 import { Letter } from './config.js';
 import { ScoreCategory } from './score-categories.js';
 import { ScoreCard, startingScoreCard } from './moves/score-card.js';
@@ -69,19 +69,19 @@ export function startingPlayerData(): PlayerData {
   };
 }
 
-export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): SetupResult {
   const playerData: Record<string, PlayerData> = {};
 
   for (const pid of ctx.playOrder) {
     playerData[pid] = startingPlayerData();
   }
 
-  const G: ServerData = {
-    stage: GameStage.starting,
-    round: 0,
-    playerData: playerData,
-    options,
+  return {
+    state: {
+      stage: GameStage.starting,
+      round: 0,
+      playerData,
+      options,
+    },
   };
-
-  return G;
 }

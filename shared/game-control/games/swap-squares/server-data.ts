@@ -1,4 +1,4 @@
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 import { RandomAPI } from '../../../utils/random-api.js';
 
 export const startingOrders = ['forward', 'backwards', 'random'] as const;
@@ -36,7 +36,7 @@ export function setSquares(G: ServerData, random: RandomAPI): void {
   G.squares = makeSquares();
 }
 
-export function startingServerData({ random }: SetupArg0, options: SetupOptions): ServerData {
+export function startingServerData({ random }: SetupArg0, options: SetupOptions): SetupResult {
   const G: ServerData = {
     squares: [],
     options,
@@ -44,5 +44,5 @@ export function startingServerData({ random }: SetupArg0, options: SetupOptions)
 
   setSquares(G, random);
 
-  return G;
+  return { state: G };
 }

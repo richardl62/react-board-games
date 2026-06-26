@@ -1,5 +1,5 @@
 import { cardsPerHand } from './config.js';
-import { SetupArg0 } from '../../game-control.js';
+import { SetupArg0, SetupResult } from '../../game-control.js';
 import { RandomAPI } from '../../../utils/random-api.js';
 import { Card } from '../../../utils/cards/types.js';
 import { deckNoJokers } from '../../../utils/cards/deck.js';
@@ -48,7 +48,7 @@ export function newDealData(pegPos: PlayerPegPositions, random: RandomAPI): Serv
   };
 }
 
-export function startingServerData({ random }: SetupArg0): ServerData {
+export function startingServerData({ random }: SetupArg0): SetupResult {
   const startingPegPos: PlayerPegPositions = {
     player0: {
       score: 0,
@@ -60,7 +60,5 @@ export function startingServerData({ random }: SetupArg0): ServerData {
     },
   };
 
-  return {
-    ...newDealData(startingPegPos, random),
-  };
+  return { state: newDealData(startingPegPos, random) };
 }

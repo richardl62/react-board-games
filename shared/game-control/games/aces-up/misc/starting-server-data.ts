@@ -1,4 +1,4 @@
-import { SetupArg0 } from '../../../game-control.js';
+import { SetupArg0, SetupResult } from '../../../game-control.js';
 import { RandomAPI } from '../../../../utils/random-api.js';
 import { CardNonJoker, ranks, suits } from '../../../../utils/cards/types.js';
 import { debugOptions } from '../config.js';
@@ -81,7 +81,7 @@ function makeRandomSharedPile(gameOptions: GameOptions, random: RandomAPI) {
 export function startingServerData(
   { ctx, random }: SetupArg0,
   setupOptions: SetupOptions,
-): ServerData {
+): SetupResult {
   const options = makeGameOptions(setupOptions);
   const sd: ServerData = {
     deck: [],
@@ -112,5 +112,5 @@ export function startingServerData(
     sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
   }
 
-  return sd;
+  return { state: sd };
 }

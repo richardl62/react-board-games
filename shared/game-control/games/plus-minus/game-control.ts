@@ -1,6 +1,6 @@
 import { GameControl } from '../../game-control.js';
 import { moves } from './moves.js';
-import { startingPlayerData, startingServerData } from './server-data.js';
+import { startingServerData } from './server-data.js';
 
 export const gameControl: GameControl = {
   name: 'plusminus',
@@ -9,7 +9,6 @@ export const gameControl: GameControl = {
   maxPlayers: 8,
 
   setup: startingServerData,
-  setupPlayerData: startingPlayerData,
 
   moves,
 };

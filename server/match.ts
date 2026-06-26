@@ -43,13 +43,16 @@ export class Match {
     this.matchID = matchID;
     this.random = randomAPI;
 
-    this.activeData = makeActiveMatchState(gameControl, numPlayers, setupData, randomAPI);
+    const { playerData: setupPlayerData, ...activeMatchState } =
+      makeActiveMatchState(gameControl, numPlayers, setupData, randomAPI);
+    this.activeData = activeMatchState;
 
     this.players = [];
     for (let id = 0; id < numPlayers; ++id) {
-      const player = new Player(this.activeData.ctxData.playOrder[id]);
-      if (gameControl.setupPlayerData) {
-        player.setGameData(gameControl.setupPlayerData(player.id));
+      const playerId = this.activeData.ctxData.playOrder[id];
+      const player = new Player(playerId);
+      if (setupPlayerData?.[playerId] !== undefined) {
+        player.setGameData(setupPlayerData[playerId]);
       }
       this.players[id] = player;
     }

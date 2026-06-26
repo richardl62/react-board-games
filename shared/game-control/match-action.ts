@@ -53,29 +53,19 @@ export function matchMove<Param>(
       endTurn: () => endTurn(ctxData),
       endMatch: () => endMatch(ctxData),
     },
-    setPlayerData:
-      gameControl.setupPlayerData && outOfSequence
-        ? (playerId, data) => {
-            const p = clonedPlayerData.find((pd) => pd.id === playerId);
-            if (p) p.gameData = data;
-          }
-        : () => {
-            throw new Error(
-              !gameControl.setupPlayerData
-                ? `Game "${gameControl.name}" does not define setupPlayerData but called setPlayerData.`
-                : `Move "${moveName}" called setPlayerData but is not an out-of-sequence move.`,
-            );
-          },
-    getPlayerData:
-      gameControl.setupPlayerData && outOfSequence
-        ? (playerId) => clonedPlayerData.find((p) => p.id === playerId)?.gameData
-        : () => {
-            throw new Error(
-              !gameControl.setupPlayerData
-                ? `Game "${gameControl.name}" does not define setupPlayerData but called getPlayerData.`
-                : `Move "${moveName}" called getPlayerData but is not an out-of-sequence move.`,
-            );
-          },
+    setPlayerData: outOfSequence
+      ? (playerId, data) => {
+          const p = clonedPlayerData.find((pd) => pd.id === playerId);
+          if (p) p.gameData = data;
+        }
+      : () => {
+          throw new Error(`Move "${moveName}" called setPlayerData but is not an out-of-sequence move.`);
+        },
+    getPlayerData: outOfSequence
+      ? (playerId) => clonedPlayerData.find((p) => p.id === playerId)?.gameData
+      : () => {
+          throw new Error(`Move "${moveName}" called getPlayerData but is not an out-of-sequence move.`);
+        },
   };
 
   getMoveFunction(moveDef)(arg0, param);

@@ -6,12 +6,15 @@ import { PublicPlayerMetadata } from '@shared/lobby/types';
 import { MatchState } from '@shared/match-state';
 import { RandomAPI } from '@shared/utils/random-api';
 
-function playerData(game: AppGame, playOrder: string[]): PublicPlayerMetadata[] {
+function buildPlayerData(
+  playOrder: string[],
+  setupPlayerData: Record<string, unknown> | undefined,
+): PublicPlayerMetadata[] {
   return playOrder.map((id) => ({
     id,
     name: defaultPlayerName(id),
     isConnected: true,
-    ...(game.setupPlayerData ? { gameData: game.setupPlayerData(id) } : {}),
+    ...(setupPlayerData?.[id] !== undefined ? { gameData: setupPlayerData[id] } : {}),
   }));
 }
 
@@ -24,10 +27,15 @@ export function makeInitialMatchState(
   options: OptionValues,
 ): MatchState {
   const random = RandomAPI.fromSeed(seed);
-  const matchState = makeActiveMatchState(game, numPlayers, options, random);
+  const { playerData: setupPlayerData, ...activeMatchState } = makeActiveMatchState(
+    game,
+    numPlayers,
+    options,
+    random,
+  );
   return {
-    ...matchState,
-    playerData: playerData(game, matchState.ctxData.playOrder),
+    ...activeMatchState,
+    playerData: buildPlayerData(activeMatchState.ctxData.playOrder, setupPlayerData),
     errorInLastAction: null,
   };
 }
