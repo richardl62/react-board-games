@@ -11,6 +11,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Match existing code style even if you'd do it differently.
 - If you notice unrelated dead code or other problems, mention them but don't fix them automatically.
 
+## Coding conventions
+
+- Use `sAssert` (from `shared/utils/assert.ts`) for runtime invariant checks — prefer it over ad-hoc `if (!x) throw` patterns.
+- When an invariant is violated, throw explicitly rather than silently skipping. Prefer `sAssert(x, "reason"); use(x)` over `if (x) { use(x) }` when `x` should always be present.
+
 ## Commands
 
 ```bash

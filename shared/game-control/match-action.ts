@@ -4,6 +4,7 @@ import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
 import { AllActive, GameControl } from './game-control.js';
 import { MoveArg0, getMoveFunction, isOutOfSequenceMove } from './move-fn.js';
+import { sAssert } from '@shared/utils/assert.js';
 
 // The result of a move: the new ActiveMatchState plus the updated per-player data
 // (a clone of the input playerData with any setPlayerData mutations applied).
@@ -53,19 +54,33 @@ export function matchMove<Param>(
       endTurn: () => endTurn(ctxData),
       endMatch: () => endMatch(ctxData),
     },
-    setPlayerData: outOfSequence
-      ? (playerId, data) => {
-          const p = clonedPlayerData.find((pd) => pd.id === playerId);
-          if (p) p.gameData = data;
-        }
-      : () => {
-          throw new Error(`Move "${moveName}" called setPlayerData but is not an out-of-sequence move.`);
-        },
-    getPlayerData: outOfSequence
-      ? (playerId) => clonedPlayerData.find((p) => p.id === playerId)?.gameData
-      : () => {
-          throw new Error(`Move "${moveName}" called getPlayerData but is not an out-of-sequence move.`);
-        },
+
+    // To do: Consider whether there is a neat way to reduce the duplication between getPlayerData
+    // and setPlayerData.
+    setPlayerData: (playerId, data) => {
+      if (!outOfSequence) {
+        throw new Error(
+          `Move "${moveName}" called setPlayerData but is not an out-of-sequence move.`,
+        );
+      }
+      const p = clonedPlayerData.find((pd) => pd.id === playerId);
+      sAssert(p, `Unrecognised player id "${playerId}"`);
+
+      p.gameData = data;
+    },
+
+    getPlayerData: (playerId) => {
+      if (!outOfSequence) {
+        throw new Error(
+          `Move "${moveName}" called getPlayerData but is not an out-of-sequence move.`,
+        );
+      }
+
+      const p = clonedPlayerData.find((pd) => pd.id === playerId);
+      sAssert(p, `Unrecognised player id "${playerId}"`);
+
+      return p.gameData;
+    },
   };
 
   getMoveFunction(moveDef)(arg0, param);

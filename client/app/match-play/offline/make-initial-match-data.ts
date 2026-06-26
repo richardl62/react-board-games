@@ -14,7 +14,7 @@ function buildPlayerData(
     id,
     name: defaultPlayerName(id),
     isConnected: true,
-    ...(setupPlayerData?.[id] !== undefined ? { gameData: setupPlayerData[id] } : {}),
+    gameData: setupPlayerData?.[id],
   }));
 }
 
