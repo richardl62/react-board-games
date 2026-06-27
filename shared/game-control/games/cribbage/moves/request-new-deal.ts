@@ -1,25 +1,30 @@
 import { processGameRequest } from './process-game-request.js';
-import { GameRequest, PlayerID, ServerData } from '../server-data.js';
+import { GameRequest, PegPositions, PlayerData, ServerData } from '../server-data.js';
 import { newDealData } from '../starting-server-data.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
-export function requestNewDeal(
-  { G: inputG, ctx, random }: MoveArg0<ServerData>,
-  playerID: PlayerID,
-): ServerData {
-  // If returning a new G, the existing G must not be changed.
-  const newG = JSON.parse(JSON.stringify(inputG)) as ServerData;
-
-  if (processGameRequest(newG, GameRequest.NewDeal, ctx, playerID)) {
-    const ndd = newDealData(newG, random);
-
-    const res = {
-      ...newG,
-      ...ndd,
-    };
-
-    return res;
+export const requestNewDeal = outOfSequenceMove(function requestNewDeal(
+  { G, ctx, random, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
+  _arg: void,
+): void {
+  if (!processGameRequest(GameRequest.NewDeal, ctx, viewingPlayer, getPlayerData, setPlayerData)) {
+    return;
   }
 
-  return newG; // BUG: Move function should not return any data.
-}
+  const pegPositions: Record<string, PegPositions> = {};
+  for (const pid of ctx.playOrder) {
+    const pd = getPlayerData(pid);
+    pegPositions[pid] = { score: pd.score, trailingPeg: pd.trailingPeg };
+  }
+
+  const { serverData, playerData } = newDealData(ctx, pegPositions, random);
+
+  G.shared = serverData.shared;
+  G.stage = serverData.stage;
+  G.box = serverData.box;
+  G.cutCard = serverData.cutCard;
+
+  for (const [pid, pd] of Object.entries(playerData)) {
+    setPlayerData(pid, pd);
+  }
+});

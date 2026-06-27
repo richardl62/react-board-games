@@ -8,7 +8,7 @@ function CardsLeft() {
   const { moves, me } = context;
 
   const cardsPegged = context.shared.hand.length > 0;
-  const restartPegging = () => moves.requestRestartPegging(me);
+  const restartPegging = () => moves.requestRestartPegging();
   const clearRequested = context[me].request === GameRequest.RestartPegging;
 
   return (
@@ -32,7 +32,7 @@ export function Pegging(): JSX.Element | null {
   }
 
   const cardsLeft = context[me].hand.length > 0 || context[pone].hand.length > 0;
-  const revealHands = () => moves.requestRevealHands(me);
+  const revealHands = () => moves.requestRevealHands();
   const revealRequested = context[me].request === GameRequest.RevealHand;
 
   return (

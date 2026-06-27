@@ -12,7 +12,7 @@ export function MakingBox(): JSX.Element | null {
     return null;
   }
 
-  const doneMakingBox = () => moves.doneMakingBox(me);
+  const doneMakingBox = () => moves.doneMakingBox();
   const full = boxFull(context, me);
   const done = context[me].request === GameRequest.FinishSettingBox;
   return (

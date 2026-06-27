@@ -1,18 +1,22 @@
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 import { sAssert } from '../../../../utils/assert.js';
-import { GameRequest, GameStage, PlayerID, ServerData } from '../server-data.js';
+import { GameRequest, GameStage, PlayerData, ServerData } from '../server-data.js';
 import { processGameRequest } from './process-game-request.js';
 
-export function doneMakingBox({ G, ctx }: MoveArg0<ServerData>, playerID: PlayerID): void {
+export const doneMakingBox = outOfSequenceMove(function doneMakingBox(
+  { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
+  _arg: void,
+): void {
   sAssert(G.stage === GameStage.SettingBox);
 
-  if (processGameRequest(G, GameRequest.FinishSettingBox, ctx, playerID)) {
-    G.player0.fullHand = [...G.player0.hand];
-    G.player1.fullHand = [...G.player1.hand];
+  if (processGameRequest(GameRequest.FinishSettingBox, ctx, viewingPlayer, getPlayerData, setPlayerData)) {
+    for (const pid of ctx.playOrder) {
+      const pd = getPlayerData(pid);
+      setPlayerData(pid, { ...pd, fullHand: [...pd.hand] });
+    }
 
     G.box = G.shared.hand;
-
     G.shared.hand = [];
     G.stage = GameStage.Pegging;
   }
-}
+});

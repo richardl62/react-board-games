@@ -1,8 +1,8 @@
 import { sAssert } from '../../../../utils/assert.js';
 import { Card } from '../../../../utils/cards/types.js';
 import { reorderFollowingDrag } from '../../../../utils/reorder-following-drag.js';
-import { ServerData, GameStage, makeCardSetID, CardSetID } from '../server-data.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { ServerData, GameStage, makeCardSetID, CardSetID, PlayerID, cardSetIDToPlayerID, PlayerData } from '../server-data.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
 interface FromTo {
   from: { cardSetID: CardSetID; index: number };
@@ -49,7 +49,10 @@ function moveBetweenCardSets(
   }
 }
 
-export function drag({ G: state }: MoveArg0<ServerData>, { to, from }: FromTo): void {
+export const drag = outOfSequenceMove(function drag(
+  { G: state, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
+  { to, from }: FromTo,
+): void {
   if (!dragPermitted(state, { to, from })) {
     console.log('Attempted drag is not pemitted: from ', from, ' to ', to);
     return;
@@ -61,13 +64,40 @@ export function drag({ G: state }: MoveArg0<ServerData>, { to, from }: FromTo): 
   sAssert(from.index !== null);
   if (fromID === toID) {
     if (to.index !== undefined) {
-      reorderFollowingDrag(state[fromID].hand, from.index, to.index);
+      if (fromID === CardSetID.Shared) {
+        reorderFollowingDrag(state.shared.hand, from.index, to.index);
+      } else {
+        const pid = cardSetIDToPlayerID(fromID as PlayerID);
+        const pd = getPlayerData(pid);
+        reorderFollowingDrag(pd.hand, from.index, to.index);
+        setPlayerData(pid, pd);
+      }
     }
   } else if (state.stage === GameStage.Pegging) {
     sAssert(toID === CardSetID.Shared, 'unexpected action during pegging');
-    const card = state[fromID].hand.splice(from.index, 1)[0];
-    state[toID].hand.push(card);
+    const fromPid = cardSetIDToPlayerID(fromID as PlayerID);
+    const fromPd = getPlayerData(fromPid);
+    const card = fromPd.hand.splice(from.index, 1)[0];
+    setPlayerData(fromPid, fromPd);
+    state.shared.hand.push(card);
   } else {
-    moveBetweenCardSets(state[fromID].hand, from.index, state[toID].hand, to.index);
+    // SettingBox: move between card sets
+    const getHand = (id: CardSetID): Card[] =>
+      id === CardSetID.Shared
+        ? state.shared.hand
+        : getPlayerData(cardSetIDToPlayerID(id as PlayerID)).hand;
+
+    const fromHand = getHand(fromID);
+    const toHand = getHand(toID);
+    moveBetweenCardSets(fromHand, from.index, toHand, to.index);
+
+    if (fromID !== CardSetID.Shared) {
+      const pid = cardSetIDToPlayerID(fromID as PlayerID);
+      setPlayerData(pid, getPlayerData(pid));
+    }
+    if (toID !== CardSetID.Shared) {
+      const pid = cardSetIDToPlayerID(toID as PlayerID);
+      setPlayerData(pid, getPlayerData(pid));
+    }
   }
-}
+});

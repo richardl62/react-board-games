@@ -1,14 +1,18 @@
 import { processGameRequest } from './process-game-request.js';
-import { GameRequest, GameStage, PlayerID, ServerData } from '../server-data.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { GameRequest, GameStage, PlayerData, ServerData } from '../server-data.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
-export function requestRevealHands({ G, ctx }: MoveArg0<ServerData>, playerID: PlayerID): void {
-  if (processGameRequest(G, GameRequest.RevealHand, ctx, playerID)) {
-    G.player0.hand = [...G.player0.fullHand];
-    G.player1.hand = [...G.player1.fullHand];
+export const requestRevealHands = outOfSequenceMove(function requestRevealHands(
+  { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
+  _arg: void,
+): void {
+  if (processGameRequest(GameRequest.RevealHand, ctx, viewingPlayer, getPlayerData, setPlayerData)) {
+    for (const pid of ctx.playOrder) {
+      const pd = getPlayerData(pid);
+      setPlayerData(pid, { ...pd, hand: [...pd.fullHand] });
+    }
     G.shared.hand = G.box;
     G.box = [];
-
     G.stage = GameStage.HandsRevealed;
   }
-}
+});

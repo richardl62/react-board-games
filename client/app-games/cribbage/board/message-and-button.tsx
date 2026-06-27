@@ -22,7 +22,7 @@ function Scoring() {
     return null;
   }
 
-  const newDeal = () => moves.requestNewDeal(me);
+  const newDeal = () => moves.requestNewDeal();
   const requested = context[me].request === GameRequest.NewDeal;
   return (
     <OuterDiv>

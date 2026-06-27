@@ -23,6 +23,11 @@ export function makeCardSetID(csid: string): CardSetID {
   return csidEnum;
 }
 
+/** Map a PlayerID (CardSetID.Player0/Player1) to the actual player ID string ('0'/'1'). */
+export function cardSetIDToPlayerID(csid: PlayerID): string {
+  return csid === CardSetID.Player0 ? '0' : '1';
+}
+
 interface CardSetData {
   /** 'visible' cards.  Does not include cards in play */
   hand: Card[];
@@ -56,9 +61,6 @@ export enum GameStage {
 }
 
 export interface ServerData {
-  player0: PlayerData;
-  player1: PlayerData;
-
   shared: CardSetData;
 
   stage: GameStage;
