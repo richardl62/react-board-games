@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - If something is unclear, ask — don't hide confusion.
 - If a simpler or cleaner approach exists, say so and push back when warranted.
 - Match existing code style even if you'd do it differently.
-- If you notice unrelated dead code or other problems, mention them but don't fix them automatically.
+- Aim to keep code changes surgical. If you see tidy ups that are not required for the current task, mention them but don't fix them.
 
 ## Coding conventions
 
