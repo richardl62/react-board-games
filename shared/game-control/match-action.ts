@@ -4,7 +4,7 @@ import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
 import { AllActive, GameControl } from './game-control.js';
 import { MoveArg0, getMoveFunction, isOutOfSequenceMove } from './move-fn.js';
-import { sAssert } from '@shared/utils/assert.js';
+import { sAssert } from '../utils/assert.js';
 
 // The result of a move: the new ActiveMatchState plus the updated per-player data
 // (a clone of the input playerData with any setPlayerData mutations applied).
