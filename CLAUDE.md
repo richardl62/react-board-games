@@ -5,7 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Working preferences
 
 - Favour simplicity and clarity over performance.
-- Aim for robustness: make good use of TypeScript, avoid unnecessary `any`. New games are likely to be added, so future-proofing is worthwhile.
+- Use a fail-fast principle. Prefer throws, assertions, or even exceptions to workarounds that might hide mistakes in the design.
+- Make good use of TypeScript, in particular avoid unnecessary `any`.
+- New games are likely to be added, so future-proofing is worthwhile.
 - If something is unclear, ask — don't hide confusion.
 - If a simpler or cleaner approach exists, say so and push back when warranted.
 - Match existing code style even if you'd do it differently.
