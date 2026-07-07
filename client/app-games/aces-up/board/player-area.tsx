@@ -44,6 +44,7 @@ export function PlayerArea(props: Props): JSX.Element {
     getPlayerName,
     moves,
     G,
+    getPlayerData,
     ctx: { currentPlayer },
   } = useMatchState();
   const { undoItems } = G;
@@ -62,7 +63,7 @@ export function PlayerArea(props: Props): JSX.Element {
     return message;
   };
 
-  const notification = illegalMoveNotication(G, playerInfo);
+  const notification = illegalMoveNotication({ G, getPlayerData }, playerInfo);
 
   return (
     <OuterDiv>

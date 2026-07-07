@@ -1,13 +1,16 @@
+import { MoveArg0 } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
-import { ServerData } from '../server-data.js';
+import { PlayerData, ServerData } from '../server-data.js';
 import { DiscardPile } from '../misc/discard-pile.js';
 
-export function makeDiscardPiles(G: ServerData, playerID: PlayerID): DiscardPile[] {
-  const discardPileData = G.playerData[playerID].discardPileData;
-  return discardPileData.map((data) => new DiscardPile(data, G.options));
+type Arg0 = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'getPlayerData'>;
+
+export function makeDiscardPiles(arg0: Arg0, playerID: PlayerID): DiscardPile[] {
+  const discardPileData = arg0.getPlayerData(playerID).discardPileData;
+  return discardPileData.map((data) => new DiscardPile(data, arg0.G.options));
 }
 
-export function makeDiscardPile(G: ServerData, playerID: PlayerID, pileIndex: number): DiscardPile {
-  const discardPileData = G.playerData[playerID].discardPileData;
-  return new DiscardPile(discardPileData[pileIndex], G.options);
+export function makeDiscardPile(arg0: Arg0, playerID: PlayerID, pileIndex: number): DiscardPile {
+  const discardPileData = arg0.getPlayerData(playerID).discardPileData;
+  return new DiscardPile(discardPileData[pileIndex], arg0.G.options);
 }

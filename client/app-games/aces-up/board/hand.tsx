@@ -26,7 +26,7 @@ interface Props {
 export function Hand(props: Props): JSX.Element {
   const { playerInfo } = props;
 
-  const { hand } = useMatchState().G.getPlayerData(playerInfo.owner);
+  const { hand } = useMatchState().getPlayerData(playerInfo.owner);
 
   const makeCard = (card: CardNonJoker, index: number) => {
     const key = cardShortName(card) + index;

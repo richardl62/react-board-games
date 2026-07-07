@@ -5,24 +5,21 @@ import { ClientMoves } from '@game-control/games/aces-up/moves/moves';
 import { PlayerID } from '@game-control/playerid';
 import { sAssert } from '@utils/assert';
 
-interface ExtendedServerData extends ServerData {
+export interface MatchState extends BoardProps<ServerData, ClientMoves> {
   getPlayerData: (owner: PlayerID) => PlayerData;
 }
 
-export interface MatchState extends BoardProps<ServerData, ClientMoves> {
-  G: ExtendedServerData;
-}
 export function useMatchState(): MatchState {
   const ctx = useStandardBoardContext() as BoardProps<ServerData, ClientMoves>;
 
-  const getPlayerData = (owner: PlayerID) => {
-    const playerData = ctx.G.playerData[owner];
-    sAssert(playerData);
-    return playerData;
+  const getPlayerData = (owner: PlayerID): PlayerData => {
+    const meta = ctx.matchStatus.playerData.find((p) => p.id === owner);
+    sAssert(meta?.gameData != null, `Player data not found for player ${owner}`);
+    return meta.gameData as PlayerData;
   };
 
   return {
     ...ctx,
-    G: { ...ctx.G, getPlayerData },
+    getPlayerData,
   };
 }

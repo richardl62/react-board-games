@@ -18,7 +18,7 @@ export interface PlayerData {
   cardPlayedToSharedPiles: boolean;
 }
 
-type PlayerDataDictionary = Record<string, PlayerData>;
+export type PlayerDataDictionary = Record<string, PlayerData>;
 type MoveToSharedPile = 'not done' | 'done' | 'omitted'; // Not dome when it should have been, so user should be told.
 
 export interface UndoItem {
@@ -40,8 +40,6 @@ export interface ServerData extends PerTurnServerData {
 
   /** The piles that any play can add to */
   sharedPileData: SharedPileData[];
-
-  playerData: PlayerDataDictionary;
 
   options: GameOptions;
 }

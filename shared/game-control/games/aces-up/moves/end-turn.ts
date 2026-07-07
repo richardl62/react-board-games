@@ -2,7 +2,7 @@ import { Ctx } from '../../../ctx.js';
 import { PlayerID } from '../../../playerid.js';
 import { handSize } from '../config.js';
 import { ExtendingDeck } from '../misc/extendable-deck.js';
-import { ServerData } from '../server-data.js';
+import { PlayerData, ServerData } from '../server-data.js';
 import { turnStartServerData } from '../misc/starting-server-data.js';
 import { MoveArg0 } from '../../../move-fn.js';
 import { makeSharedPileData, makeSharedPiles } from '../misc/shared-pile.js';
@@ -12,17 +12,22 @@ function nextPlayerID(ctx: Ctx) {
   return ctx.playOrder[ctx.nextPlayOrderPos()];
 }
 
-export function refillHand({ G, random }: MoveArg0<ServerData>, playerID: PlayerID): void {
-  const playerData = G.playerData[playerID];
+export function refillHand(
+  { G, random, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
+  playerID: PlayerID,
+): void {
+  const playerData = getPlayerData(playerID);
   const deck = new ExtendingDeck(random, G.deck);
 
   while (playerData.hand.length < handSize) {
     playerData.hand.push(deck.draw());
   }
+
+  setPlayerData(playerID, playerData);
 }
 
-export function endTurn(arg0: MoveArg0<ServerData>): void {
-  const { ctx, G, events } = arg0;
+export function endTurn(arg0: MoveArg0<ServerData, PlayerData>): void {
+  const { ctx, G, events, getPlayerData, setPlayerData } = arg0;
   const sharedPiles = makeSharedPiles(G);
 
   Object.assign(G, turnStartServerData);
@@ -36,11 +41,12 @@ export function endTurn(arg0: MoveArg0<ServerData>): void {
   }
 
   // Iterate over all players and all discard piles, resetting them.
-  for (const playerID of Object.keys(G.playerData)) {
-    const discardPiles = makeDiscardPiles(G, playerID);
+  for (const playerID of ctx.playOrder) {
+    const discardPiles = makeDiscardPiles(arg0, playerID);
     for (const discardPile of discardPiles) {
       discardPile.resetForStartOfRound();
     }
+    setPlayerData(playerID, getPlayerData(playerID));
   }
 
   // Clear any full or empty shared piles.

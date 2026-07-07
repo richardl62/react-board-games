@@ -1,14 +1,17 @@
+import { MoveArg0 } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
 import { CardNonJoker } from '../../../../utils/cards/types.js';
 import { moveableToSharedPile } from './move-type.js';
-import { ServerData } from '../server-data.js';
+import { PlayerData, ServerData } from '../server-data.js';
 import { makeSharedPiles } from '../misc/shared-pile.js';
 import { makeDiscardPiles } from './make-discard-pile.js';
 
-function moveableCards(G: ServerData, playerID: PlayerID): CardNonJoker[] {
+type Arg0 = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'getPlayerData'>;
+
+function moveableCards(arg0: Arg0, playerID: PlayerID): CardNonJoker[] {
   const moveable: CardNonJoker[] = [];
 
-  const discardPiles = makeDiscardPiles(G, playerID);
+  const discardPiles = makeDiscardPiles(arg0, playerID);
   for (const pile of discardPiles) {
     const topCard = pile.topCard;
     if (topCard) {
@@ -16,7 +19,7 @@ function moveableCards(G: ServerData, playerID: PlayerID): CardNonJoker[] {
     }
   }
 
-  const playerData = G.playerData[playerID];
+  const playerData = arg0.getPlayerData(playerID);
   for (const card of playerData.hand) {
     moveable.push(card);
   }
@@ -28,12 +31,12 @@ function moveableCards(G: ServerData, playerID: PlayerID): CardNonJoker[] {
   return moveable;
 }
 
-export function cardsMovableToSharedPile(G: ServerData, playerID: PlayerID): CardNonJoker[] {
-  const sharedPiles = makeSharedPiles(G);
+export function cardsMovableToSharedPile(arg0: Arg0, playerID: PlayerID): CardNonJoker[] {
+  const sharedPiles = makeSharedPiles(arg0.G);
 
   const moveable = (card: CardNonJoker) => {
     for (const pile of sharedPiles) {
-      if (moveableToSharedPile(G.options, card, pile)) {
+      if (moveableToSharedPile(arg0.G.options, card, pile)) {
         return true;
       }
     }
@@ -41,5 +44,5 @@ export function cardsMovableToSharedPile(G: ServerData, playerID: PlayerID): Car
     return false;
   };
 
-  return moveableCards(G, playerID).filter(moveable);
+  return moveableCards(arg0, playerID).filter(moveable);
 }

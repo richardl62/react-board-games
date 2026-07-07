@@ -1,4 +1,4 @@
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
 import { sAssert } from '../../../../utils/assert.js';
 import { reorderFollowingDrag } from '../../../../utils/reorder-following-drag.js';
@@ -10,14 +10,17 @@ import { DiscardPile } from '../misc/discard-pile.js';
 import { endTurn, refillHand } from './end-turn.js';
 import { makeDiscardPiles } from './make-discard-pile.js';
 import { moveType as getMoveType } from './move-type.js';
-import { ServerData, UndoItem } from '../server-data.js';
+import { PlayerData, ServerData, UndoItem } from '../server-data.js';
 import { makeUndoItem } from './undo.js';
 
-function moveToSharedPileRequired(G: ServerData, playerID: PlayerID) {
+type Arg0 = MoveArg0<ServerData, PlayerData>;
+
+function moveToSharedPileRequired(arg0: Arg0, playerID: PlayerID) {
+  const { G } = arg0;
   return (
     G.options.addToSharedPileEachTurn &&
     G.moveToSharedPile !== 'done' &&
-    cardsMovableToSharedPile(G, playerID).length !== 0
+    cardsMovableToSharedPile(arg0, playerID).length !== 0
   );
 }
 
@@ -37,45 +40,45 @@ function moveWithinDiscardPiles(
 }
 
 function doMoveCard(
-  arg0: MoveArg0<ServerData>,
+  arg0: Arg0,
   /** PlayerID is the ID of the play who requested the move */
   { from, to }: { from: CardID; to: CardID },
 ): UndoItem | null {
-  const { G, ctx } = arg0;
-  const playerID = ctx.currentPlayer;
-  const playerData = G.playerData[playerID];
+  const { viewingPlayer: playerID, getPlayerData, setPlayerData } = arg0;
 
-  let undoItem: UndoItem | null = makeUndoItem(G, playerID);
+  let undoItem: UndoItem | null = makeUndoItem(arg0, playerID);
 
   const moveType = getMoveType(arg0, { from, to });
   if (moveType === 'steal') {
-    const fromCard = removeCard(G, from);
-    const stollenCard = stealTopCard(G, to, fromCard);
-    addCard(G, from, stollenCard);
+    const fromCard = removeCard(arg0, from);
+    const stollenCard = stealTopCard(arg0, to, fromCard);
+    addCard(arg0, from, stollenCard);
   } else if (moveType === 'clear') {
-    const fromCard = removeCard(G, from);
-    clearPile(G, to, fromCard);
+    const fromCard = removeCard(arg0, from);
+    clearPile(arg0, to, fromCard);
   } else if (to.area === 'hand' && from.area === 'hand') {
     sAssert(to.owner === playerID && from.owner === playerID);
+    const playerData = getPlayerData(playerID);
     reorderFollowingDrag(playerData.hand, from.index, to.index);
+    setPlayerData(playerID, playerData);
     undoItem = null;
   } else if (to.area === 'discardPileAll' && from.area === 'discardPileCard') {
-    moveWithinDiscardPiles(makeDiscardPiles(G, playerID), { from, to });
+    moveWithinDiscardPiles(makeDiscardPiles(arg0, playerID), { from, to });
+    setPlayerData(playerID, getPlayerData(playerID));
   } else {
-    const card = removeCard(G, from);
-    addCard(G, to, card);
+    const card = removeCard(arg0, from);
+    addCard(arg0, to, card);
   }
 
   return undoItem;
 }
 
-export function moveCard(
-  arg0: MoveArg0<ServerData>,
+export const moveCard = outOfSequenceMove(function moveCard(
+  arg0: Arg0,
   /** PlayerID is the ID of the play who requested the move */
   { from, to }: { from: CardID; to: CardID },
 ): void {
-  const { G, ctx } = arg0;
-  const playerID = ctx.currentPlayer;
+  const { G, viewingPlayer: playerID, getPlayerData } = arg0;
 
   if (sameJSON(from, to)) {
     return;
@@ -89,7 +92,7 @@ export function moveCard(
   const endOfTurn = moveType === 'move' && to.area === 'discardPileAll';
 
   if (endOfTurn) {
-    if (moveToSharedPileRequired(G, playerID)) {
+    if (moveToSharedPileRequired(arg0, playerID)) {
       G.moveToSharedPile = 'omitted';
       return;
     }
@@ -105,7 +108,7 @@ export function moveCard(
   if (endOfTurn) {
     endTurn(arg0);
   } else {
-    const playerData = G.playerData[playerID];
+    const playerData = getPlayerData(playerID);
     if (playerData.hand.length === 0) {
       refillHand(arg0, playerID);
       G.undoItems = [];
@@ -115,4 +118,4 @@ export function moveCard(
       }
     }
   }
-}
+});

@@ -5,7 +5,7 @@ import { debugOptions } from '../config.js';
 import { handSize } from '../config.js';
 import { makeDiscardPileData } from './discard-pile.js';
 import { ExtendingDeck } from './extendable-deck.js';
-import { PerTurnServerData, PlayerData, ServerData } from '../server-data.js';
+import { PerTurnServerData, PlayerData, PlayerDataDictionary, ServerData } from '../server-data.js';
 import { makeSharedPileData } from './shared-pile.js';
 import { GameOptions, makeGameOptions, OptionWrapper, SetupOptions } from '../options.js';
 
@@ -87,8 +87,6 @@ export function startingServerData(
     deck: [],
     sharedPileData: [],
 
-    playerData: {},
-
     ...turnStartServerData,
 
     options,
@@ -108,9 +106,10 @@ export function startingServerData(
 
   sd.sharedPileData.push(makeSharedPileData([]));
 
+  const playerData: PlayerDataDictionary = {};
   for (const pid of ctx.playOrder) {
-    sd.playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
+    playerData[pid] = startingPlayerData(mainPileDeck, handDeck, options);
   }
 
-  return { state: sd };
+  return { state: sd, playerData };
 }

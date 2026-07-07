@@ -1,10 +1,14 @@
+import { MoveArg0 } from '../../../move-fn.js';
 import { sAssert } from '../../../../utils/assert.js';
 import { CardNonJoker } from '../../../../utils/cards/types.js';
 import { handSize } from '../config.js';
 import { CardID } from './card-id.js';
 import { makeDiscardPile } from './make-discard-pile.js';
-import { ServerData } from '../server-data.js';
+import { PlayerData, ServerData } from '../server-data.js';
 import { makeSharedPileData, makeSharedPiles, SharedPile } from '../misc/shared-pile.js';
+
+type ReadArg0 = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'getPlayerData'>;
+type WriteArg0 = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'getPlayerData' | 'setPlayerData'>;
 
 function removeOneCard(cards: CardNonJoker[], index: number): CardNonJoker {
   const card = cards.splice(index, 1)[0];
@@ -12,79 +16,94 @@ function removeOneCard(cards: CardNonJoker[], index: number): CardNonJoker {
   return card;
 }
 
-export function emptyPile(G: ServerData, id: CardID): boolean {
+export function emptyPile(arg0: ReadArg0, id: CardID): boolean {
   if (id.area === 'discardPileAll') {
-    return makeDiscardPile(G, id.owner, id.pileIndex).isEmpty;
+    return makeDiscardPile(arg0, id.owner, id.pileIndex).isEmpty;
   }
 
-  return !getCard(G, id);
+  return !getCard(arg0, id);
 }
 
-export function getCard(G: ServerData, id: CardID): CardNonJoker | undefined {
+export function getCard(arg0: ReadArg0, id: CardID): CardNonJoker | undefined {
+  const { G, getPlayerData } = arg0;
+
   if (id.area === 'sharedPiles') {
     const sp = new SharedPile(G.sharedPileData[id.index], G.options);
     return sp.top;
   }
 
-  const playerData = G.playerData[id.owner];
   if (id.area === 'hand') {
-    return playerData.hand[id.index];
+    return getPlayerData(id.owner).hand[id.index];
   }
 
   if (id.area === 'discardPileCard') {
-    const pile = makeDiscardPile(G, id.owner, id.pileIndex);
+    const pile = makeDiscardPile(arg0, id.owner, id.pileIndex);
     sAssert(pile.length === id.cardIndex + 1, 'getCard: unexpected card index in discard pile');
     return pile.topCard;
   }
 
   if (id.area === 'playerPile') {
-    return playerData.mainPile.at(-1);
+    return getPlayerData(id.owner).mainPile.at(-1);
   }
 
   throw new Error('Problem getting cards - unexpected card ID');
 }
-export function stealTopCard(G: ServerData, id: CardID, thiefCard: CardNonJoker): CardNonJoker {
+
+export function stealTopCard(arg0: WriteArg0, id: CardID, thiefCard: CardNonJoker): CardNonJoker {
+  const { G, getPlayerData, setPlayerData } = arg0;
+
   if (id.area === 'sharedPiles') {
     const sp = makeSharedPiles(G)[id.index];
     return sp.stealTopCard(thiefCard);
   }
 
   if (id.area === 'discardPileCard' || id.area === 'discardPileAll') {
-    const pile = makeDiscardPile(G, id.owner, id.pileIndex);
-    return pile.stealTopCard(thiefCard);
+    const pile = makeDiscardPile(arg0, id.owner, id.pileIndex);
+    const stolen = pile.stealTopCard(thiefCard);
+    setPlayerData(id.owner, getPlayerData(id.owner));
+    return stolen;
   }
 
   throw new Error('Problem removing card - unexpected card ID');
 }
 
-export function removeCard(G: ServerData, id: CardID): CardNonJoker {
+export function removeCard(arg0: WriteArg0, id: CardID): CardNonJoker {
   sAssert(id.area !== 'sharedPiles', 'removeCard: sharedPiles not supported');
+  const { getPlayerData, setPlayerData } = arg0;
 
-  const playerData = G.playerData[id.owner];
   if (id.area === 'hand') {
-    return removeOneCard(playerData.hand, id.index);
+    const playerData = getPlayerData(id.owner);
+    const card = removeOneCard(playerData.hand, id.index);
+    setPlayerData(id.owner, playerData);
+    return card;
   }
 
   if (id.area === 'discardPileCard') {
-    const pile = makeDiscardPile(G, id.owner, id.pileIndex);
+    const pile = makeDiscardPile(arg0, id.owner, id.pileIndex);
     sAssert(
       pile.length === id.cardIndex + 1,
       'removeCard: attempt to remove non-top card from discard pile',
     );
-    return pile.removeFromTop(1)[0];
+    const card = pile.removeFromTop(1)[0];
+    setPlayerData(id.owner, getPlayerData(id.owner));
+    return card;
   }
 
   if (id.area === 'playerPile') {
+    const playerData = getPlayerData(id.owner);
     const card = playerData.mainPile.pop();
     sAssert(card);
+    setPlayerData(id.owner, playerData);
     return card;
   }
 
   throw new Error('Problem removing card - unexpected card ID');
 }
 
-export function addCard(G: ServerData, id: CardID, card: CardNonJoker): void {
+export function addCard(arg0: WriteArg0, id: CardID, card: CardNonJoker): void {
+  const { G, getPlayerData, setPlayerData } = arg0;
   const sharedPiles = makeSharedPiles(G);
+
   if (id.area === 'sharedPiles') {
     sharedPiles[id.index].addStandardCard(card);
 
@@ -97,37 +116,43 @@ export function addCard(G: ServerData, id: CardID, card: CardNonJoker): void {
     return;
   }
 
-  const playerData = G.playerData[id.owner];
-
   if (id.area === 'hand') {
+    const playerData = getPlayerData(id.owner);
     sAssert(playerData.hand.length < handSize, 'Cannot add card to full hand');
     playerData.hand.splice(id.index, 0, card);
+    setPlayerData(id.owner, playerData);
     return;
   }
 
   if (id.area === 'playerPile') {
+    const playerData = getPlayerData(id.owner);
     playerData.mainPile.push(card);
+    setPlayerData(id.owner, playerData);
     return;
   }
 
   if (id.area === 'discardPileAll' || id.area === 'discardPileCard') {
-    const discardPile = makeDiscardPile(G, id.owner, id.pileIndex);
+    const discardPile = makeDiscardPile(arg0, id.owner, id.pileIndex);
     discardPile.add(card);
+    setPlayerData(id.owner, getPlayerData(id.owner));
     return;
   }
 
   throw new Error('Cannot add card - unexpected card ID');
 }
 
-export function clearPile(G: ServerData, id: CardID, killerCard: CardNonJoker): void {
+export function clearPile(arg0: WriteArg0, id: CardID, killerCard: CardNonJoker): void {
+  const { G, getPlayerData, setPlayerData } = arg0;
+
   if (id.area === 'sharedPiles') {
     makeSharedPiles(G)[id.index].clear(killerCard);
     return;
   }
 
   if (id.area === 'discardPileAll' || id.area === 'discardPileCard') {
-    const discardPile = makeDiscardPile(G, id.owner, id.pileIndex);
+    const discardPile = makeDiscardPile(arg0, id.owner, id.pileIndex);
     discardPile.clear(killerCard);
+    setPlayerData(id.owner, getPlayerData(id.owner));
     return;
   }
 

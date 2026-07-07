@@ -1,5 +1,6 @@
 import { Ctx } from '../../../ctx.js';
 import { PlayerID } from '../../../playerid.js';
+import { MoveArg0 } from '../../../move-fn.js';
 import { sAssert } from '../../../../utils/assert.js';
 import { CardNonJoker, nextRank } from '../../../../utils/cards/types.js';
 import { debugOptions } from '../config.js';
@@ -7,8 +8,13 @@ import { GameOptions, OptionWrapper } from '../options.js';
 import { emptyPile, getCard } from './add-remove-card.js';
 import { CardID } from './card-id.js';
 import { makeDiscardPile } from './make-discard-pile.js';
-import { ServerData } from '../server-data.js';
+import { PlayerData, ServerData } from '../server-data.js';
 import { SharedPile, makeSharedPiles } from '../misc/shared-pile.js';
+
+export type MoveTypeArg = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'getPlayerData'> & {
+  ctx: Ctx;
+  viewingPlayer: PlayerID;
+};
 
 export function moveableToSharedPile(
   options: GameOptions,
@@ -30,12 +36,13 @@ export function moveableToSharedPile(
 type MoveType = 'move' | 'steal' | 'clear' | null;
 
 export function moveType(
-  { G, viewingPlayer: playerID }: { G: ServerData; ctx: Ctx; viewingPlayer: PlayerID },
+  arg0: MoveTypeArg,
   { to, from }: { to: CardID; from: CardID },
 ): MoveType {
+  const { G, viewingPlayer: playerID } = arg0;
   const options = new OptionWrapper(G.options);
 
-  const fromCard = getCard(G, from);
+  const fromCard = getCard(arg0, from);
   sAssert(fromCard);
 
   const isCurrentPlayer = (card: CardID) => card.owner === playerID;
@@ -66,7 +73,7 @@ export function moveType(
 
   if (options.isThief(fromCard)) {
     // Can't steal empty piles
-    if (emptyPile(G, to)) {
+    if (emptyPile(arg0, to)) {
       return null;
     }
 
@@ -80,7 +87,7 @@ export function moveType(
 
   if (options.isKiller(fromCard)) {
     // Can't clear empty piles
-    if (emptyPile(G, to)) {
+    if (emptyPile(arg0, to)) {
       return null;
     }
 
@@ -104,7 +111,7 @@ export function moveType(
 
   // With the exception above, only the top card of a discard pile can be moved.
   if (from.area === 'discardPileCard') {
-    const fromPile = makeDiscardPile(G, from.owner, from.pileIndex);
+    const fromPile = makeDiscardPile(arg0, from.owner, from.pileIndex);
     if (from.cardIndex !== fromPile.length - 1) {
       // Not the top of the pile.
       return null;

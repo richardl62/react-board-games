@@ -17,7 +17,7 @@ interface Props {
 export function MainPile(props: Props): JSX.Element {
   const { playerInfo } = props;
 
-  const { mainPile } = useMatchState().G.getPlayerData(playerInfo.owner);
+  const { mainPile } = useMatchState().getPlayerData(playerInfo.owner);
 
   const message = `${mainPile.length} cards`;
 

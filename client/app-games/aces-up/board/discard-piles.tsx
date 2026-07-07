@@ -39,9 +39,9 @@ export function Discards(props: { playerInfo: PlayerInfo }): JSX.Element {
   const {
     playerInfo: { owner },
   } = props;
-  const { G } = useMatchState();
+  const { G, getPlayerData } = useMatchState();
 
-  const discardPiles = makeDiscardPiles(G, owner);
+  const discardPiles = makeDiscardPiles({ G, getPlayerData }, owner);
 
   return (
     <div>
