@@ -1,4 +1,4 @@
-import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
+import { MoveArg0 } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
 import { sAssert } from '../../../../utils/assert.js';
 import { reorderFollowingDrag } from '../../../../utils/reorder-following-drag.js';
@@ -73,7 +73,7 @@ function doMoveCard(
   return undoItem;
 }
 
-export const moveCard = outOfSequenceMove(function moveCard(
+export function moveCard(
   arg0: Arg0,
   /** PlayerID is the ID of the play who requested the move */
   { from, to }: { from: CardID; to: CardID },
@@ -118,4 +118,4 @@ export const moveCard = outOfSequenceMove(function moveCard(
       }
     }
   }
-});
+}

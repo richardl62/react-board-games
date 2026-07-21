@@ -2,7 +2,7 @@ import { PlayerID } from '../../../playerid.js';
 import { sAssert } from '../../../../utils/assert.js';
 import { copyJSON } from '../../../../utils/copy-json.js';
 import { PlayerData, PlayerDataDictionary, ServerData, UndoItem } from '../server-data.js';
-import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
+import { MoveArg0 } from '../../../move-fn.js';
 
 type Arg0 = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'ctx' | 'getPlayerData'>;
 
@@ -20,7 +20,7 @@ export function makeUndoItem({ G, ctx, getPlayerData }: Arg0, playerID: PlayerID
   };
 }
 
-export const undo = outOfSequenceMove(function undo(
+export function undo(
   { G, ctx, setPlayerData }: MoveArg0<ServerData, PlayerData>,
   _arg: void,
 ): void {
@@ -36,4 +36,4 @@ export const undo = outOfSequenceMove(function undo(
 
   // We don't want the move required message after an undo
   G.moveToSharedPile = undoItem.moveToSharedPile === 'done' ? 'done' : 'not done';
-});
+}

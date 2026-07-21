@@ -22,8 +22,6 @@ export interface MoveArg0<G, PD = unknown> {
 export type MoveFn<G = any, Arg = any, PD = any> = (context: MoveArg0<G, PD>, arg: Arg) => void;
 
 // A move that any player may make regardless of whose turn it is.
-// Only these moves may use getPlayerData and setPlayerData (see MoveArg0) to access
-// per-player game data.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface OutOfSequenceMove<G = any, Arg = any, PD = any> {
   readonly outOfSequence: true;

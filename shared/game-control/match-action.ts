@@ -55,14 +55,7 @@ export function matchMove<Param>(
       endMatch: () => endMatch(ctxData),
     },
 
-    // To do: Consider whether there is a neat way to reduce the duplication between getPlayerData
-    // and setPlayerData.
     setPlayerData: (playerId, data) => {
-      if (!outOfSequence) {
-        throw new Error(
-          `Move "${moveName}" called setPlayerData but is not an out-of-sequence move.`,
-        );
-      }
       const p = clonedPlayerData.find((pd) => pd.id === playerId);
       sAssert(p, `Unrecognised player id "${playerId}"`);
 
@@ -70,12 +63,6 @@ export function matchMove<Param>(
     },
 
     getPlayerData: (playerId) => {
-      if (!outOfSequence) {
-        throw new Error(
-          `Move "${moveName}" called getPlayerData but is not an out-of-sequence move.`,
-        );
-      }
-
       const p = clonedPlayerData.find((pd) => pd.id === playerId);
       sAssert(p, `Unrecognised player id "${playerId}"`);
 
