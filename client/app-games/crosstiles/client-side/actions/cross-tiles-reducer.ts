@@ -37,7 +37,7 @@ export function initialReducerState(playerID: string): ReducerState {
 }
 
 export type ActionType =
-  | { type: 'reflectServerData'; data: ServerData }
+  | { type: 'reflectServerData'; data: ServerData; selectedLetters: Letter[] | null }
   | { type: 'move'; data: { from: SquareID; to: SquareID } } // Used after a drag
   | { type: 'tileClicked'; data: { id: SquareID } }
   | { type: 'clearClickMoveStart' }
@@ -120,7 +120,7 @@ function gridChangeReducerActions(state: ReducerState, action: ActionType): Redu
 
 export function crossTilesReducer(state: ReducerState, action: ActionType): ReducerState {
   if (action.type === 'reflectServerData') {
-    return reflectServerData(state, action.data);
+    return reflectServerData(state, action.data, action.selectedLetters);
   }
 
   const newState = gridChangeReducerActions(state, action);

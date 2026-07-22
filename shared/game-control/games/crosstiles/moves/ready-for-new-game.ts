@@ -1,22 +1,23 @@
-import { GameStage, ServerData, startingServerData } from '../server-data.js';
+import { GameStage, PlayerData, ServerData, initialGameData } from '../server-data.js';
 import { startRound } from './start-round.js';
 import { MoveArg0 } from '../../../move-fn.js';
 
-export function readyForNewGame(arg0: MoveArg0<ServerData>, _option: void): void {
-  const { G, viewingPlayer: playerID, random } = arg0;
+export function readyForNewGame(arg0: MoveArg0<ServerData, PlayerData>, _option: void): void {
+  const { G, ctx, viewingPlayer: playerID, getPlayerData, setPlayerData } = arg0;
 
-  G.playerData[playerID].readyForNewGame = true;
+  setPlayerData(playerID, { ...getPlayerData(playerID), readyForNewGame: true });
 
-  let allReady = true;
-  for (const pid in G.playerData) {
-    allReady = allReady && G.playerData[pid].readyForNewGame;
-  }
+  const allReady = ctx.playOrder.every((pid) => getPlayerData(pid).readyForNewGame);
 
   if (allReady) {
-    const newG = startingServerData(arg0, G.options);
-    Object.assign(G, newG);
+    const { state, playerData } = initialGameData(ctx, G.options);
+    Object.assign(G, state);
+
+    for (const pid of ctx.playOrder) {
+      setPlayerData(pid, playerData[pid]);
+    }
 
     G.stage = GameStage.makingGrids;
-    startRound(G, random);
+    startRound(arg0);
   }
 }

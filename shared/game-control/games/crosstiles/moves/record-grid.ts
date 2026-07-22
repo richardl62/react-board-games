@@ -1,7 +1,7 @@
 import { sAssert } from '../../../../utils/assert.js';
 import { Letter } from '../config.js';
 import { makeEmptyGrid } from './make-empty-grid.js';
-import { ServerData, GameStage } from '../server-data.js';
+import { PlayerData, ServerData, GameStage } from '../server-data.js';
 import { ScoreWithCategory } from './set-score.js';
 import { MoveArg0 } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
@@ -12,32 +12,39 @@ interface GridAndScore {
   score: ScoreWithCategory | null;
 }
 
-function doRecordGrid(G: ServerData, playerID: PlayerID, gridAndScore: GridAndScore): void {
+type Arg0 = Pick<MoveArg0<ServerData, PlayerData>, 'G' | 'getPlayerData' | 'setPlayerData'>;
+
+function doRecordGrid(arg0: Arg0, playerID: PlayerID, gridAndScore: GridAndScore): void {
+  const { G, getPlayerData, setPlayerData } = arg0;
+
   if (G.stage !== GameStage.makingGrids) {
     throw new Error('Unexpected call to recordGrid - ' + G.stage);
   }
 
   const { grid, rack, score } = gridAndScore;
 
-  G.playerData[playerID].gridRackAndScore = {
-    grid: grid.map((row) => [...row]),
-    rack: [...rack],
-    score,
-  };
+  setPlayerData(playerID, {
+    ...getPlayerData(playerID),
+    gridRackAndScore: {
+      grid: grid.map((row) => [...row]),
+      rack: [...rack],
+      score,
+    },
+  });
 }
 
 export function recordGrid(
-  { G, viewingPlayer: playerID }: MoveArg0<ServerData>,
+  arg0: MoveArg0<ServerData, PlayerData>,
   gridAndScore: GridAndScore,
 ): void {
-  doRecordGrid(G, playerID, gridAndScore);
+  doRecordGrid(arg0, arg0.viewingPlayer, gridAndScore);
 }
 
-export function recordEmptyGrid(G: ServerData, playerID: PlayerID): void {
-  const { selectedLetters } = G.playerData[playerID];
+export function recordEmptyGrid(arg0: Arg0, playerID: PlayerID): void {
+  const { selectedLetters } = arg0.getPlayerData(playerID);
   sAssert(selectedLetters);
 
-  doRecordGrid(G, playerID, {
+  doRecordGrid(arg0, playerID, {
     grid: makeEmptyGrid(),
     rack: selectedLetters,
     score: null,

@@ -1,4 +1,5 @@
 import { SetupArg0, SetupResult } from '../../game-control.js';
+import { Ctx } from '../../ctx.js';
 import { Letter } from './config.js';
 import { ScoreCategory } from './score-categories.js';
 import { ScoreCard, startingScoreCard } from './moves/score-card.js';
@@ -30,7 +31,7 @@ interface GridRackAndScore {
   score: ScoreWithCategory | null;
 }
 
-interface PlayerData {
+export interface PlayerData {
   readyToStartGame: boolean;
   readyForNewGame: boolean;
   readyForNextRound: boolean;
@@ -51,8 +52,6 @@ export interface ServerData {
   options: SetupOptions;
   stage: GameStage;
   round: number;
-
-  playerData: Record<string, PlayerData>;
 }
 
 export function startingPlayerData(): PlayerData {
@@ -69,7 +68,13 @@ export function startingPlayerData(): PlayerData {
   };
 }
 
-export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): SetupResult {
+export interface InitialGameData {
+  state: ServerData;
+  playerData: Record<string, PlayerData>;
+}
+
+// Used both for the initial game setup and, mid-game, by readyForNewGame.
+export function initialGameData(ctx: Ctx, options: SetupOptions): InitialGameData {
   const playerData: Record<string, PlayerData> = {};
 
   for (const pid of ctx.playOrder) {
@@ -80,8 +85,12 @@ export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): S
     state: {
       stage: GameStage.starting,
       round: 0,
-      playerData,
       options,
     },
+    playerData,
   };
+}
+
+export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): SetupResult {
+  return initialGameData(ctx, options);
 }

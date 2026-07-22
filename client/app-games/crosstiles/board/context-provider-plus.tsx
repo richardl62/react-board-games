@@ -1,5 +1,6 @@
 import { JSX, useCallback, useEffect, useReducer } from 'react';
 import { useAsync } from 'react-async-hook';
+import { sAssert } from '@utils/assert';
 import { AsyncStatus } from '@utils/async-status';
 import { getScrabbleWords } from '@utils/get-scrabble-words';
 import {
@@ -8,7 +9,7 @@ import {
 } from '../client-side/actions/cross-tiles-context';
 import { CrossTilesGameProps } from '../client-side/actions/cross-tiles-game-props';
 import { crossTilesReducer, initialReducerState } from '../client-side/actions/cross-tiles-reducer';
-import { GameStage } from '@game-control/games/crosstiles/server-data';
+import { GameStage, PlayerData } from '@game-control/games/crosstiles/server-data';
 
 interface ContextProviderPlusProps {
   gameProps: CrossTilesGameProps;
@@ -52,7 +53,10 @@ function ContextProviderPlus(props: ContextProviderPlusProps): JSX.Element {
   }, [stage, downHandler]);
 
   if (JSON.stringify(reducerState.serverData) !== JSON.stringify(gameProps.G)) {
-    dispatch({ type: 'reflectServerData', data: gameProps.G });
+    const meta = gameProps.matchStatus.playerData.find((p) => p.id === playerID);
+    sAssert(meta?.gameData != null, `Player data not found for player ${playerID}`);
+    const { selectedLetters } = meta.gameData as PlayerData;
+    dispatch({ type: 'reflectServerData', data: gameProps.G, selectedLetters });
   }
 
   const asyncWordChecker = useAsync(() => {

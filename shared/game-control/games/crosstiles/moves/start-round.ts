@@ -1,26 +1,26 @@
 import { scoreCardFull } from './score-card.js';
 import { selectLetters } from './select-letters.js';
-import { GameStage, ServerData, startingPlayerData } from '../server-data.js';
-import { RandomAPI } from '../../../../utils/random-api.js';
+import { GameStage, PlayerData, ServerData, startingPlayerData } from '../server-data.js';
 import { sAssert } from '../../../../utils/assert.js';
+import { MoveArg0 } from '../../../move-fn.js';
 
-export function startRound(G: ServerData, random: RandomAPI): void {
-  const { stage, playerData, options } = G;
+export function startRound({
+  G,
+  ctx,
+  random,
+  getPlayerData,
+  setPlayerData,
+}: MoveArg0<ServerData, PlayerData>): void {
+  const { stage, options } = G;
 
   sAssert(stage === GameStage.makingGrids);
 
-  for (const pid in G.playerData) {
-    const scoreCard = G.playerData[pid].scoreCard;
-    G.playerData[pid] = startingPlayerData();
-    G.playerData[pid].scoreCard = scoreCard;
+  for (const pid of ctx.playOrder) {
+    const { scoreCard } = getPlayerData(pid);
+    setPlayerData(pid, { ...startingPlayerData(), scoreCard });
   }
 
-  let gameOver = true;
-  for (const pid in playerData) {
-    if (!scoreCardFull(playerData[pid].scoreCard)) {
-      gameOver = false;
-    }
-  }
+  const gameOver = ctx.playOrder.every((pid) => scoreCardFull(getPlayerData(pid).scoreCard));
 
   if (gameOver) {
     G.stage = GameStage.over;
@@ -29,12 +29,15 @@ export function startRound(G: ServerData, random: RandomAPI): void {
 
     if (G.options.playersGetSameLetters) {
       const sharedLetters = selectLetters(options, random);
-      for (const pid in G.playerData) {
-        G.playerData[pid].selectedLetters = sharedLetters;
+      for (const pid of ctx.playOrder) {
+        setPlayerData(pid, { ...getPlayerData(pid), selectedLetters: sharedLetters });
       }
     } else {
-      for (const pid in G.playerData) {
-        G.playerData[pid].selectedLetters = selectLetters(options, random);
+      for (const pid of ctx.playOrder) {
+        setPlayerData(pid, {
+          ...getPlayerData(pid),
+          selectedLetters: selectLetters(options, random),
+        });
       }
     }
   }

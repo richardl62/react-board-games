@@ -2,7 +2,7 @@ import { sAssert } from '@utils/assert';
 import { bonusScore } from '@game-control/games/crosstiles/config';
 import { ScoreCategory } from '@game-control/games/crosstiles/score-categories';
 import { ScoreCard } from '@game-control/games/crosstiles/moves/score-card';
-import { ServerData } from '@game-control/games/crosstiles/server-data';
+import { PlayerData } from '@game-control/games/crosstiles/server-data';
 import { checkGrid } from './check-grid';
 
 interface ScoringData extends ReturnType<typeof checkGrid> {
@@ -12,7 +12,7 @@ interface ScoringData extends ReturnType<typeof checkGrid> {
 export class ScoreOptions {
   private playerScoreOptions: Record<string, ScoringData> = {};
 
-  constructor(playerData: ServerData['playerData'], isLegalWord: (word: string) => boolean) {
+  constructor(playerData: Record<string, PlayerData>, isLegalWord: (word: string) => boolean) {
     for (const pid in playerData) {
       const { scoreCard, gridRackAndScore } = playerData[pid];
       sAssert(gridRackAndScore);

@@ -2,7 +2,7 @@ import { Dispatch } from 'react';
 import { sAssert } from '@utils/assert';
 import { ActionType, ReducerState } from './cross-tiles-reducer';
 import { ClientMoves } from '@game-control/games/crosstiles/moves/moves';
-import { ServerData } from '@game-control/games/crosstiles/server-data';
+import { PlayerData, ServerData } from '@game-control/games/crosstiles/server-data';
 import { CrossTilesGameProps } from './cross-tiles-game-props';
 import { BoardProps } from '../../../../app-game-support/board-props';
 import React from 'react';
@@ -13,6 +13,8 @@ export interface CrossTilesContext extends ServerData, ReducerState {
   readonly dispatch: Dispatch<ActionType>;
 
   readonly nPlayers: number;
+
+  readonly playerData: Record<string, PlayerData>;
 
   // Get the ID of the nth player, with players ordered to start with the
   // active player (i.e. playerID).  This is provided as a function rather
@@ -33,11 +35,8 @@ export function useCrossTilesContext(): CrossTilesContext {
 }
 
 // Return an array of player IDs starting with 'first'.
-function orderedPlayerIDs(G: ServerData, first: string) {
-  const pids: string[] = [];
-  for (const pid in G.playerData) {
-    pids.push(pid);
-  }
+function orderedPlayerIDs(playOrder: readonly string[], first: string) {
+  const pids = [...playOrder];
 
   sAssert(pids.includes(first));
 
@@ -48,6 +47,19 @@ function orderedPlayerIDs(G: ServerData, first: string) {
   return pids;
 }
 
+// Reconstruct the per-player data dictionary from the broadcast per-player
+// metadata (matchStatus.playerData), since it's no longer nested in G.
+function getPlayerData(gameProps: CrossTilesGameProps): Record<string, PlayerData> {
+  const playerData: Record<string, PlayerData> = {};
+
+  for (const meta of gameProps.matchStatus.playerData) {
+    sAssert(meta.gameData != null, `Player data not found for player ${meta.id}`);
+    playerData[meta.id] = meta.gameData as PlayerData;
+  }
+
+  return playerData;
+}
+
 export function makeCrossTilesContext(
   crossTilesGameProps: CrossTilesGameProps,
   reducerState: ReducerState,
@@ -56,11 +68,12 @@ export function makeCrossTilesContext(
 ): CrossTilesContext {
   const G = crossTilesGameProps.G;
 
-  const pids = orderedPlayerIDs(G, reducerState.playerID);
+  const pids = orderedPlayerIDs(crossTilesGameProps.ctx.playOrder, reducerState.playerID);
 
   return {
     ...G,
     ...reducerState,
+    playerData: getPlayerData(crossTilesGameProps),
     nPlayers: pids.length,
     nthPlayerID: (n: number) => pids[n], // See comment on CrossTilesContext
     wrappedGameProps: crossTilesGameProps, //kludge? Note that 'G' is not available to clients
