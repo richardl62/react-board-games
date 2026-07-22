@@ -23,7 +23,13 @@ type PlayerDataDictionary = Record<string, GamePlayerData>;
 /** The state of the game at a particular point in history */
 export interface GameState {
   board: BoardData;
+
+  // KLUDGE: Player data is recorded in GameState rather that by use of getPlayerData
+  // and setPlayerData. (This code pre-dates the introduction of getPlayerData and
+  // setPlayerData, and coverting to use them is not straight-forward as the player
+  // data needs to change when game history si reviewed.)
   playerData: PlayerDataDictionary;
+
   bag: Letter[];
 
   currentPlayer: string;
