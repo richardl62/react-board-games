@@ -1,7 +1,7 @@
 import { GameStage, PlayerData, ServerData } from '../server-data.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
-export function setMakeGridStartTime(
+export const setMakeGridStartTime = outOfSequenceMove(function (
   { G, viewingPlayer: playerID, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
   startTime: number,
 ): void {
@@ -18,4 +18,4 @@ export function setMakeGridStartTime(
   }
 
   setPlayerData(playerID, { ...playerData, makeGridStartTime: startTime });
-}
+});

@@ -1,6 +1,6 @@
 import { ScoreCategory } from '../score-categories.js';
 import { PlayerData, ServerData, GameStage } from '../server-data.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
 
 export interface ScoreWithCategory {
@@ -25,7 +25,7 @@ export function doSetScore(arg0: Arg0, playerID: PlayerID, arg: ScoreWithCategor
   setPlayerData(playerID, { ...playerData, scoreCard, chosenCategory: category });
 }
 
-export function setScore(
+export const setScore = outOfSequenceMove(function (
   { G, viewingPlayer: playerID, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
   arg: ScoreWithCategory,
 ): void {
@@ -34,4 +34,4 @@ export function setScore(
   }
 
   doSetScore({ getPlayerData, setPlayerData }, playerID, arg);
-}
+});

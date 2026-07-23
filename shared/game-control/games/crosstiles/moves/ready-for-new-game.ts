@@ -1,8 +1,11 @@
 import { GameStage, PlayerData, ServerData, initialGameData } from '../server-data.js';
 import { startRound } from './start-round.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
-export function readyForNewGame(arg0: MoveArg0<ServerData, PlayerData>, _option: void): void {
+export const readyForNewGame = outOfSequenceMove(function (
+  arg0: MoveArg0<ServerData, PlayerData>,
+  _option: void,
+): void {
   const { G, ctx, viewingPlayer: playerID, getPlayerData, setPlayerData } = arg0;
 
   setPlayerData(playerID, { ...getPlayerData(playerID), readyForNewGame: true });
@@ -20,4 +23,4 @@ export function readyForNewGame(arg0: MoveArg0<ServerData, PlayerData>, _option:
     G.stage = GameStage.makingGrids;
     startRound(arg0);
   }
-}
+});

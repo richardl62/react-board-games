@@ -3,7 +3,7 @@ import { Letter } from '../config.js';
 import { makeEmptyGrid } from './make-empty-grid.js';
 import { PlayerData, ServerData, GameStage } from '../server-data.js';
 import { ScoreWithCategory } from './set-score.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 import { PlayerID } from '../../../playerid.js';
 
 interface GridAndScore {
@@ -33,12 +33,12 @@ function doRecordGrid(arg0: Arg0, playerID: PlayerID, gridAndScore: GridAndScore
   });
 }
 
-export function recordGrid(
+export const recordGrid = outOfSequenceMove(function (
   arg0: MoveArg0<ServerData, PlayerData>,
   gridAndScore: GridAndScore,
 ): void {
   doRecordGrid(arg0, arg0.viewingPlayer, gridAndScore);
-}
+});
 
 export function recordEmptyGrid(arg0: Arg0, playerID: PlayerID): void {
   const { selectedLetters } = arg0.getPlayerData(playerID);

@@ -2,7 +2,7 @@ import { ActiveMatchState, MatchState } from '../match-state.js';
 import { PublicPlayerMetadata } from '../lobby/types.js';
 import { RandomAPI } from '../utils/random-api.js';
 import { Ctx, endMatch, endTurn } from './ctx.js';
-import { AllActive, GameControl } from './game-control.js';
+import { GameControl } from './game-control.js';
 import { MoveArg0, getMoveFunction, isOutOfSequenceMove } from './move-fn.js';
 import { sAssert } from '../utils/assert.js';
 
@@ -41,7 +41,7 @@ export function matchMove<Param>(
   }
 
   const outOfSequence = isOutOfSequenceMove(moveDef);
-  if (!outOfSequence && ctx.currentPlayer !== playerID && gameControl.turnOrder !== AllActive) {
+  if (!outOfSequence && ctx.currentPlayer !== playerID) {
     throw new Error(`It is not player ${playerID}'s turn.`);
   }
 

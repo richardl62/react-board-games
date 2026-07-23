@@ -1,9 +1,12 @@
 import { recordEmptyGrid } from './record-grid.js';
 import { PlayerData, ServerData, GameStage } from '../server-data.js';
 import { doSetScore } from './set-score.js';
-import { MoveArg0 } from '../../../move-fn.js';
+import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
-export function doneRecordingGrid(arg0: MoveArg0<ServerData, PlayerData>, _arg: void): void {
+export const doneRecordingGrid = outOfSequenceMove(function (
+  arg0: MoveArg0<ServerData, PlayerData>,
+  _arg: void,
+): void {
   const { G, ctx, viewingPlayer: playerID, getPlayerData, setPlayerData } = arg0;
 
   // This function is called during the scoring stage occur if no grid has been recorded.
@@ -25,7 +28,7 @@ export function doneRecordingGrid(arg0: MoveArg0<ServerData, PlayerData>, _arg: 
     G.stage = GameStage.scoring;
     applyRecordedScores(arg0);
   }
-}
+});
 
 function applyRecordedScores(arg0: MoveArg0<ServerData, PlayerData>): void {
   const { ctx, getPlayerData } = arg0;
