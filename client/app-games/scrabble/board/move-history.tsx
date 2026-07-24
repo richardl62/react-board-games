@@ -22,7 +22,6 @@ const Word = styled.span`
 
 const IllegalWord = styled(Word)`
   color: red;
-  text-transform: uppercase;
 `;
 
 const Message = styled.div`
@@ -37,15 +36,15 @@ interface WordPlayedProps {
 }
 
 function WordPlayed(props: WordPlayedProps) {
-  const { pid, words, illegalWords, score } = props.wordPlayed;
+  const { pid, displayWords, illegalWords, score } = props.wordPlayed;
   const { getPlayerName: name } = useScrabbleState().wrappedGameProps;
 
-  const illegal = (word: string) => illegalWords.includes(word);
+  const illegal = (word: string) => illegalWords.includes(word.toUpperCase());
   return (
     <div>
       <FirstSpan>{name(pid)}</FirstSpan>
       <span>Played</span>
-      {words.map((word, index) => {
+      {displayWords.map((word, index) => {
         const Elem = illegal(word) ? IllegalWord : Word;
         return <Elem key={index}>{word}</Elem>;
       })}

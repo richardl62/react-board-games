@@ -199,6 +199,8 @@ function validWordPosition(board: BoardData, active: RowCol[]): boolean {
 
 interface WordsAndScore {
   words: string[];
+  displayWords: string[];
+
   score: number;
 
   /** For later convenience, use null rather than an empty array */
@@ -237,7 +239,9 @@ export function getWordsAndScore(
 
   const score = getScore(context.board, active, config);
 
-  const words = candidateWords.map((cw) => getWord(context.board, cw));
+  const wordMap = candidateWords.map((cw) => getWord(context.board, cw));
+  const words = wordMap.map((wm) => wm.word);
+  const displayWords = wordMap.map((wm) => wm.displayWord);
 
   let illegalWords: string[] | null = words.filter((wd) => !context.legalWords.hasWord(wd));
   if (illegalWords.length === 0) {
@@ -245,8 +249,9 @@ export function getWordsAndScore(
   }
 
   return {
-    words: words,
-    illegalWords: illegalWords,
-    score: score,
+    words,
+    displayWords,
+    illegalWords,
+    score,
   };
 }

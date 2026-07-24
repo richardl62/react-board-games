@@ -4,7 +4,9 @@
 export interface WordsPlayedInfo {
   pid: string;
 
-  words: string[];
+  // Letters that where previously on the board are lowercase.
+  displayWords: string[];
+
   score: number;
 
   illegalWords: string[];

@@ -46,14 +46,23 @@ export function getWord(
 
   /** must refer to non-empty board positions */
   positions: RowCol[],
-): string {
+): {
+  word: string;
+  // As word, but letters that were already on the board are lower case.
+  // This is used when displaying game history.
+  displayWord: string;
+} {
   const letters = positions.map((rc) => {
     const sq = board[rc.row][rc.col];
     sAssert(sq);
-    return sq.letter;
+    return sq.active ? sq.letter : sq.letter.toLocaleLowerCase();
   });
 
-  return ''.concat(...letters);
+  const displayWord = ''.concat(...letters);
+  return {
+    word: displayWord.toUpperCase(),
+    displayWord,
+  };
 }
 
 export function addToRack(rack: Rack, tile: ExtendedLetter): void {
