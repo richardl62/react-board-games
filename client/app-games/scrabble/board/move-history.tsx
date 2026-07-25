@@ -20,10 +20,6 @@ const Word = styled.span`
   margin-left: 0.25em;
 `;
 
-const IllegalWord = styled(Word)`
-  color: red;
-`;
-
 const Message = styled.div`
   font-family: helvetica;
   font-size: 14px;
@@ -31,12 +27,29 @@ const Message = styled.div`
   margin-top: 6px;
 `;
 
-interface WordPlayedProps {
-  wordPlayed: WordsPlayedInfo;
+const Letter = styled.span<{ previouslyPlayed: boolean; illegal: boolean }>`
+  text-transform: uppercase;
+  font-weight: ${(props) => (props.previouslyPlayed ? 'normal' : 'bold')};
+
+  color: ${(props) => (props.illegal ? 'red' : 'black')};
+`;
+
+function OneWord({ displayWord, illegal }: { displayWord: string; illegal: boolean }) {
+  const letters = [];
+  for (let ind = 0; ind < displayWord.length; ++ind) {
+    const c = displayWord[ind];
+    letters.push(
+      <Letter key={ind} previouslyPlayed={c === c.toLocaleLowerCase()} illegal={illegal}>
+        {c}
+      </Letter>,
+    );
+  }
+
+  return <Word>{letters}</Word>;
 }
 
-function WordPlayed(props: WordPlayedProps) {
-  const { pid, displayWords, illegalWords, score } = props.wordPlayed;
+function WordsPlayed({ wordPlayed }: { wordPlayed: WordsPlayedInfo }) {
+  const { pid, displayWords, illegalWords, score } = wordPlayed;
   const { getPlayerName: name } = useScrabbleState().wrappedGameProps;
 
   const illegal = (word: string) => illegalWords.includes(word.toUpperCase());
@@ -44,10 +57,9 @@ function WordPlayed(props: WordPlayedProps) {
     <div>
       <FirstSpan>{name(pid)}</FirstSpan>
       <span>Played</span>
-      {displayWords.map((word, index) => {
-        const Elem = illegal(word) ? IllegalWord : Word;
-        return <Elem key={index}>{word}</Elem>;
-      })}
+      {displayWords.map((word, index) => (
+        <OneWord key={index} displayWord={word} illegal={illegal(word)} />
+      ))}
       <Word>{`for ${score}`}</Word>
     </div>
   );
@@ -130,7 +142,7 @@ function TurnDescription(props: TurnDescriptionProps): JSX.Element {
   const { getPlayerName: name } = useScrabbleState().wrappedGameProps;
 
   if (elem.wordsPlayed) {
-    return <WordPlayed wordPlayed={elem.wordsPlayed} />;
+    return <WordsPlayed wordPlayed={elem.wordsPlayed} />;
   }
 
   if (elem.tilesSwapped) {
