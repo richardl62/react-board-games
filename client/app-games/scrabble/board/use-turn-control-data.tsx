@@ -63,7 +63,8 @@ export function useTurnControlData(): TurnControlData {
           rack: context.rack,
           score: wordsAndScore.score,
           playedWordinfo: {
-            ...wordsAndScore,
+            displayWords: wordsAndScore.displayWords,
+            score: wordsAndScore.score,
             illegalWords: wordsAndScore.illegalWords ?? [],
           },
         });
