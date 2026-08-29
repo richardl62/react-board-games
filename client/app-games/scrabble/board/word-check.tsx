@@ -42,7 +42,7 @@ export function WordChecker({
       setDefinition('Loading definition...');
       fetchDefinition(word)
         .then((def) => setDefinition(def ?? 'No definition found.'))
-        .catch(() => setDefinition('Could not fetch definition.'));
+        .catch(() => setDefinition('Load failed: Could not access online dictionary.'));
     }
   };
 
