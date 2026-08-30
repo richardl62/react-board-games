@@ -5,7 +5,7 @@ as a hobby/learning project.
 
 The project was created using create-react-app, but was later ported to Vite.
 
-The project originally used boardgame.io, but that was replaced with home-grown 
+The project originally used boardgame.io, but that was replaced with home-grown
 code as boardgame.io is no longer being maintained. The currect code is still
 influenced by the design of boardgame.io.
 
@@ -22,7 +22,7 @@ https://richards-board-games.herokuapp.com/
 
 # Testing
 
-More testing is needed, particularly of the effects of network problems. 
+More testing is needed, particularly of the effects of network problems.
 
 ## WebSocket Keepalive
 
@@ -41,12 +41,4 @@ Client impact: no code changes required; browsers auto‑reply to `ping` with `p
 
 ## Dictionary Lookup API Key
 
-Looking up a word's definition (e.g. in Scrabble) uses the Merriam-Webster Collegiate Dictionary API (https://dictionaryapi.com). The lookup is proxied through the server rather than called directly from the client, so the API key is read from the `DICTIONARY_API_KEY` environment variable on the server and is never sent to players.
-
-- Local development: copy `.env.example` to `.env` and fill in your own key (register for a free one at https://dictionaryapi.com/register/index). The server loads `.env` automatically via `dotenv`.
-
-Example (Heroku):
-
-```
-heroku config:set DICTIONARY_API_KEY=your-key-here
-```
+Looking up a word's definition (e.g. in Scrabble) uses the Merriam-Webster Collegiate Dictionary API (https://dictionaryapi.com). The lookup is proxied through the server rather than called directly from the client, so the API key is read from the `DICTIONARY_API_KEY` environment variable on the server and is never sent to players. See .env.example for details of how to set the key.
