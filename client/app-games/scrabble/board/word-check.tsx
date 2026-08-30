@@ -40,7 +40,7 @@ export function WordChecker({
 
     if (isValid) {
       setDefinition('Loading definition...');
-      fetchDefinition(word)
+      fetchDefinition(word, 'merriam-webster')
         .then((def) => setDefinition(def ?? 'No definition found.'))
         .catch(() => setDefinition('Load failed: Could not access online dictionary.'));
     }

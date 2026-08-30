@@ -1,3 +1,7 @@
+// Must be the first import so DICTIONARY_API_KEY (from .env, in development) is
+// set on process.env before './dictionary.js' reads it below.
+import 'dotenv/config';
+
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
@@ -8,6 +12,8 @@ import { Matches } from './matches.js';
 import { defaultPort } from '../shared/default-port.js';
 import { processConnection, processDisconnection } from './process-connection.js';
 import { processActionRequest } from './process-action-request.js';
+import { lookupDefinition } from './dictionary.js';
+import { sAssert } from '../shared/utils/assert.js';
 
 // Used to keep connections alive and to detect dead connections.  A connection
 // that does not respond to pings for this interval will be closed.
@@ -83,6 +89,22 @@ app.get('/lobby', (req, res) => {
     const message = err instanceof Error ? err.message : 'unknown error';
     console.error('Error in /lobby:', message);
     res.status(400).send(`Lobby error: ${message}`);
+  }
+});
+
+// Look up a word's definition via the Merriam-Webster Collegiate Dictionary API.
+// This is proxied through the server (rather than called directly from the
+// client) so that the API key is never exposed to players.
+app.get('/dictionary', async (req, res) => {
+  try {
+    const { word } = req.query;
+    sAssert(typeof word === 'string', 'word query parameter must be a string');
+    const result = await lookupDefinition(word);
+    res.send(JSON.stringify(result));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'unknown error';
+    console.error('Error in /dictionary:', message);
+    res.status(400).send(`Dictionary error: ${message}`);
   }
 });
 

@@ -29,6 +29,7 @@
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^5.1.0",
     "qs": "^6.15.2",
     "rdndmb-html5-to-touch": "^9.0.0",

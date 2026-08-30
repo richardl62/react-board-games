@@ -38,3 +38,15 @@ heroku config:set KEEPALIVE_MS=25000
 ```
 
 Client impact: no code changes required; browsers auto‑reply to `ping` with `pong`. If you want auto‑reconnect for transient network changes, you can enable `shouldReconnect` in the `react-use-websocket` hook on the client side.
+
+## Dictionary Lookup API Key
+
+Looking up a word's definition (e.g. in Scrabble) uses the Merriam-Webster Collegiate Dictionary API (https://dictionaryapi.com). The lookup is proxied through the server rather than called directly from the client, so the API key is read from the `DICTIONARY_API_KEY` environment variable on the server and is never sent to players.
+
+- Local development: copy `.env.example` to `.env` and fill in your own key (register for a free one at https://dictionaryapi.com/register/index). The server loads `.env` automatically via `dotenv`.
+
+Example (Heroku):
+
+```
+heroku config:set DICTIONARY_API_KEY=your-key-here
+```
