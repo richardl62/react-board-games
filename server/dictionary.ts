@@ -17,6 +17,13 @@ interface CollegiateEntry {
     stems?: string[];
   };
   shortdef?: string[];
+  // Present on cross-reference entries, e.g. British spellings such as
+  // "colour" have no shortdef of their own, only a cxs entry pointing to the
+  // main ("color") headword: { cxl: "chiefly British spelling of", cxtis: [{ cxt: "color" }] }.
+  cxs?: {
+    cxl?: string;
+    cxtis?: { cxt?: string }[];
+  }[];
 }
 
 // Look up a definition using the Merriam-Webster Collegiate Dictionary API.
@@ -57,6 +64,15 @@ export async function lookupDefinition(word: string): Promise<DictionaryLookupRe
   if (typeof def === 'string') {
     return { definition: def };
   }
+
+  // Some entries (e.g. British spellings like "colour") have no shortdef of
+  // their own, only a cross-reference to the main headword.
+  const crossRef = match.cxs?.[0];
+  const crossRefTarget = crossRef?.cxtis?.[0]?.cxt;
+  if (crossRef?.cxl && crossRefTarget) {
+    return { definition: `${crossRef.cxl} ${crossRefTarget}` };
+  }
+
   console.warn('Unexpected response format from dictionary API:', data);
   throw new Error('Unexpected response format from dictionary API.');
 }
