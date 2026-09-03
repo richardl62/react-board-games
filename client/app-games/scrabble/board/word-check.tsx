@@ -41,7 +41,15 @@ export function WordChecker({
     if (isValid) {
       setDefinition('Loading definition...');
       fetchDefinition(word, 'merriam-webster')
-        .then((def) => setDefinition(def ?? 'No definition found.'))
+        .then(({ definition, baseWord }) => {
+          if (definition === null) {
+            setDefinition('No definition found.');
+          } else if (baseWord) {
+            setDefinition(`Derived from ${baseWord}: ${definition}`);
+          } else {
+            setDefinition(definition);
+          }
+        })
         .catch(() => setDefinition('Load failed: Could not access online dictionary.'));
     }
   };

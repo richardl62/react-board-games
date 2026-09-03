@@ -11,20 +11,21 @@ export type DictionarySource = 'merriam-webster' | 'dictionaryapi-dev';
 
 // Look up a definition using the given dictionary source.
 // Returns a promise that
-// - Resolves to the first definition string if the word is found
-// - Resolves to null if the word is not found.
+// - Resolves to a result whose definition is the found string, or null if
+//   the word is not found. See DictionaryLookupResult for the meaning of
+//   baseWord (only ever set by the 'merriam-webster' source).
 // - Fails if there is a problem with the lookup.
 export function fetchDefinition(
   wordToCheck: string,
   source: DictionarySource,
-): Promise<string | null> {
+): Promise<DictionaryLookupResult> {
   if (source === 'merriam-webster') {
     return fetchFromMerriamWebster(wordToCheck);
   }
   return fetchFromDictionaryApiDev(wordToCheck);
 }
 
-async function fetchFromMerriamWebster(wordToCheck: string): Promise<string | null> {
+async function fetchFromMerriamWebster(wordToCheck: string): Promise<DictionaryLookupResult> {
   const searchParams = new URLSearchParams({ word: wordToCheck });
   const response = await fetch(`${serverAddress()}/dictionary?${searchParams.toString()}`);
 
@@ -32,8 +33,7 @@ async function fetchFromMerriamWebster(wordToCheck: string): Promise<string | nu
     throw new Error(`Dictionary lookup failed: fetch reported ${response.status}`);
   }
 
-  const result = (await response.json()) as DictionaryLookupResult;
-  return result.definition;
+  return (await response.json()) as DictionaryLookupResult;
 }
 
 interface DictionaryApiDevEntry {
@@ -44,7 +44,7 @@ interface DictionaryApiDevEntry {
   }[];
 }
 
-function fetchFromDictionaryApiDev(wordToCheck: string): Promise<string | null> {
+function fetchFromDictionaryApiDev(wordToCheck: string): Promise<DictionaryLookupResult> {
   return fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(wordToCheck)}`,
   )
@@ -52,12 +52,12 @@ function fetchFromDictionaryApiDev(wordToCheck: string): Promise<string | null> 
     .then((data: unknown) => {
       if (!Array.isArray(data)) {
         // No definition was found.
-        return null;
+        return { definition: null };
       }
       const entries = data as DictionaryApiDevEntry[];
       const def = entries[0]?.meanings?.[0]?.definitions?.[0]?.definition;
       if (typeof def === 'string') {
-        return def;
+        return { definition: def };
       }
       console.warn('Unexpected response format from dictionary API:', data);
       throw new Error('Unexpected response format from dictionary API.');
