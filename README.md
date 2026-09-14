@@ -12,6 +12,18 @@ influenced by the design of boardgame.io.
 An earlier version of this project is deployed at
 https://richards-board-games.herokuapp.com/
 
+A fully static build is also deployed to GitHub Pages at
+https://richardl62.github.io/react-board-games/, via
+`.github/workflows/deploy-pages.yml` (auto-deploys on push to `main`; can
+also be run manually from the Actions tab). This build has no server, so:
+
+- The online lobby (create/join match over WebSocket) is still shown but
+  will not work there, since there's no server to talk to. Use the
+  "Play and pass (offline)" option instead.
+- Scrabble's definition lookup (which normally goes via the server to keep
+  the Merriam-Webster API key secret) is disabled; word *validity*
+  checking still works fully offline.
+
 # Known problems
 
 - The server restarted test does not work.

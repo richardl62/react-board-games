@@ -2,6 +2,7 @@ import { JSX, useState } from 'react';
 import styled from 'styled-components';
 import { useScrabbleState } from '../client-side/scrabble-state';
 import { fetchDefinition } from '@/utils/fetch-definition';
+import { isStaticBuild } from '@utils/is-static-build';
 
 const WordInput = styled.input`
   margin-right: 0.2em;
@@ -38,7 +39,9 @@ export function WordChecker({
     const isValid = legalWords.hasWord(word.toUpperCase());
     setValid(isValid);
 
-    if (isValid) {
+    // Definition lookup goes via the server (to keep the dictionary API key
+    // secret) so it's unavailable in the static (serverless) build.
+    if (isValid && !isStaticBuild) {
       setDefinition('Loading definition...');
       fetchDefinition(word, 'merriam-webster')
         .then(({ definition, baseWord }) => {
