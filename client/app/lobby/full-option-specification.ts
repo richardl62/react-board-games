@@ -18,7 +18,7 @@ export function fullOptionSpecification(game: AppGame) {
     ...gameOptions,
 
     offline: {
-      label: 'Play and pass (offline)',
+      label: 'Play offline',
       default: false,
       debugOnly: false,
     },
