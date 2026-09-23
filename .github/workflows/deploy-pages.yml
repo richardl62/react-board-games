@@ -31,6 +31,11 @@ jobs:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
 
+      # GitHub Pages serves 404.html for unknown paths. Making it a copy of the app
+      # lets deep links (e.g. /react-board-games/scrabble?arc=...) load the app,
+      # whose router then displays the right page.
+      - run: cp dist/index.html dist/404.html
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

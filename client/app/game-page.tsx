@@ -2,6 +2,7 @@ import { AppGame } from '@/app-game-support/app-game';
 import { useSearchParamData } from '@/url-tools';
 import { JSX, useState } from 'react';
 import styled from 'styled-components';
+import { ArchivedMatch } from './match-play/archived/archived-match';
 import { OfflineMatch } from './match-play/offline/offline-match';
 import { OnlineMatch } from './match-play/online/online-match';
 import { OfflineOptions } from './offline-options';
@@ -21,10 +22,14 @@ const OuterDiv = styled.div`
 
 function InnerGamePage(props: { game: AppGame }) {
   const { game } = props;
-  const { matchID, player } = useSearchParamData();
+  const { matchID, player, archiveID } = useSearchParamData();
 
   const startingOfflineOptions = useStartingOfflineOptions(game);
   const [offlineOptions, setOfflineOptions] = useState(startingOfflineOptions);
+
+  if (archiveID) {
+    return <ArchivedMatch game={game} archiveID={archiveID} />;
+  }
 
   if (offlineOptions) {
     return <OfflineMatch game={game} options={offlineOptions} />;

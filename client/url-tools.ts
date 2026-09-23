@@ -9,6 +9,7 @@ const knownParams = {
   numPlayers: 'np', // implies offline mode if set
   seed: 'seed', // (Pseudo) random seed
   debug: 'db', // enable debug mode
+  archiveID: 'arc', // ID of an archived (saved) match to review
 };
 
 export interface SearchParamData {
@@ -21,6 +22,9 @@ export interface SearchParamData {
   seed: number | null;
 
   debugMode: boolean;
+
+  // ID of an archived match to review, if any.
+  archiveID: string | null;
 }
 
 export function useSearchParamData(): SearchParamData {
@@ -38,6 +42,7 @@ export function useSearchParamData(): SearchParamData {
     matchID: null,
     seed: null,
     debugMode: false,
+    archiveID: foundParams.get(knownParams.archiveID),
   };
 
   const numPlayers_ = foundParams.get(knownParams.numPlayers);
@@ -81,6 +86,11 @@ export function useSearchParamData(): SearchParamData {
   }
 
   return result;
+}
+
+// The search string (e.g. "arc=1234") used to link to an archived match.
+export function archivedMatchSearch(archiveID: string): string {
+  return new URLSearchParams({ [knownParams.archiveID]: archiveID }).toString();
 }
 
 export function useSetSearchParam() {

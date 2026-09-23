@@ -6,6 +6,8 @@ import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import './app.css';
 import { GamePage } from './game-page';
+import { gamePath, pastGamesPath } from './app-paths';
+import { PastGamesPage } from './past-games';
 
 const HomePageStyles = styled.div`
   font-size: 18px;
@@ -28,10 +30,6 @@ const ErrorMessage = styled.div`
   font-size: 200%;
   margin-bottom: 0.5em;
 `;
-
-function gamePath(game: AppGame): string {
-  return '/' + game.name;
-}
 
 interface LinkListProps {
   games: AppGame[];
@@ -86,6 +84,12 @@ function HomePage(props: HomePageProps) {
     <HomePageStyles>
       <h1>Available Games</h1>
       <GameLinks {...props} />
+      <h2>Past Games</h2>
+      <ul>
+        <li>
+          <Link to={pastGamesPath}>Review saved games</Link>
+        </li>
+      </ul>
     </HomePageStyles>
   );
 }
@@ -112,6 +116,12 @@ export function App(): JSX.Element {
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route key="/" path="/" element={<HomePage games={appGames} />} />
+
+        <Route
+          key={pastGamesPath}
+          path={pastGamesPath}
+          element={<PastGamesPage games={appGames} />}
+        />
 
         {appGames.map((appGame) => (
           <Route
