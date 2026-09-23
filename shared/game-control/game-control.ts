@@ -24,6 +24,10 @@ export interface GameControl {
   minPlayers: number;
   maxPlayers: number;
 
+  // If true, the server saves the match state to the online match archive
+  // after every successful action, so the match can be reviewed later.
+  archive: boolean;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup: (arg0: SetupArg0, setupData: any) => SetupResult;
 

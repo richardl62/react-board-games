@@ -1,5 +1,5 @@
-// Must be the first import so DICTIONARY_API_KEY (from .env, in development) is
-// set on process.env before './dictionary.js' reads it below.
+// Must be the first import so DICTIONARY_API_KEY, SUPABASE_URL etc. (from .env, in
+// development) are set on process.env before the modules below read them.
 import 'dotenv/config';
 
 import express from 'express';

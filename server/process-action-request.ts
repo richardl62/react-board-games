@@ -64,6 +64,10 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
     console.warn(`Error: ${error} when processing client request ${request}`);
   }
 
+  if (error === null) {
+    match.archive();
+  }
+
   match.broadcastMatchState(clientRequest, error);
 }
 

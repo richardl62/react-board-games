@@ -7,6 +7,7 @@ export const gameControl: GameControl = {
 
   minPlayers: 1,
   maxPlayers: 8,
+  archive: false,
 
   setup: startingServerData,
 

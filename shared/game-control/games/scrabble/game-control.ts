@@ -10,6 +10,8 @@ function makeAppGame(config: ScrabbleConfig): GameControl {
   return {
     ...config,
 
+    archive: true,
+
     setup: (arg0: SetupArg0, options: unknown) =>
       startingServerData(arg0, options as SetupOptions, config),
 

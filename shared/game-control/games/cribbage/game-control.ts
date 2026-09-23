@@ -9,6 +9,7 @@ export const gameControl: GameControl = {
 
   minPlayers: 2,
   maxPlayers: 2,
+  archive: false,
 
   moves,
 };

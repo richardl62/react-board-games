@@ -11,6 +11,7 @@ import { makeActiveMatchState } from '../shared/game-control/make-active-match-d
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
+import { isArchiveEnabled, saveMatch } from './match-archive.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -24,6 +25,13 @@ export class Match {
   private activeData: ActiveMatchState;
 
   private responseDelay = 0;
+
+  // Unique across server restarts (unlike matchID). Used as the key in the match archive.
+  private readonly archiveID = crypto.randomUUID();
+
+  // Archive saves are chained so that they complete in the order they were requested.
+  // Otherwise, an older state could overwrite a newer one.
+  private archiveQueue: Promise<void> = Promise.resolve();
 
   constructor(
     gameControl: GameControl,
@@ -125,6 +133,31 @@ export class Match {
   // Can throw, in which case no data is changed.
   endMatch() {
     endMatch(this.activeData.ctxData);
+  }
+
+  // Save the current match state to the online archive, if archiving is enabled
+  // for this game. The save happens asynchronously. Failures are logged rather than
+  // thrown, so that problems with the archive do not affect live matches.
+  archive() {
+    if (!this.definition.archive || !isArchiveEnabled) {
+      return;
+    }
+
+    // Snapshot now, as the match state can be changed in place before the save runs.
+    const record = structuredClone({
+      id: this.archiveID,
+      game: this.gameName,
+      players: this.players.map((p) => p.name),
+      matchState: this.matchState(null),
+    });
+    const updatedAt = new Date();
+
+    this.archiveQueue = this.archiveQueue
+      .then(() => saveMatch(record, updatedAt))
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : 'unknown error';
+        console.error(`Failed to archive match ${this.matchID}: ${message}`);
+      });
   }
 
   findPlayer(arg: { id: string } | { name: string } | { ws: WebSocket }): Player | undefined {
