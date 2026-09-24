@@ -27,14 +27,18 @@ npm run serve                # Run server from already-built dist/
 
 npm run lint                 # ESLint across client, server, shared
 npm run type-check           # tsc --noEmit (all tsconfig references)
-npm run validate             # type-check + lint (run before reporting work done)
+npm run static-check         # type-check + lint
+npm run validate             # static-check + unit tests (run before reporting work done)
 npm run format               # Prettier format
 
 npm run build                # Full build: client (Vite) + server (tsc)
 npm run deploy               # Push to Heroku
 
-npm run verify               # Run all Playwright E2E tests (requires servers running)
 npx vitest <path-to-test>    # Run a single unit test file
+npx run test                 # Run all unit tests
+npm run fullstack-test       # Run all Playwright E2E tests (requires servers running)
+npx vitest <path-to-test>    # Run a single unit test file
+npm test                     # Run all unit tests
 ```
 
 Unit tests (`.test.ts` files) use Vitest. E2E tests in `e2e/*.mjs` use Playwright and require `npm run buildAndRunServer` and `npm run dev` to be running first.

@@ -12,17 +12,18 @@
     "build": "npm run buildApp && npm run buildServer",
     "preview": "vite preview",
     "serve": "node dist/server/server.js",
-    "verify": "node e2e/verify-multi-move.mjs && node e2e/verify-block-reconnect.mjs && node e2e/verify-other-player-connection.mjs && node e2e/verify-reconnect-given-up.mjs",
-    "deploy": "git push heroku main",
     "lint": "eslint .",
     "type-check": "tsc -b --noEmit",
-    "validate": "npm run type-check && npm run lint",
+    "static-check": "npm run type-check && npm run lint",
+    "validate": "npm run static-check && npm test",
+    "test": "vitest run",
+    "fullstack-test": "node e2e/verify-multi-move.mjs && node e2e/verify-block-reconnect.mjs && node e2e/verify-other-player-connection.mjs && node e2e/verify-reconnect-given-up.mjs",
     "knip": "knip",
     "format": "prettier --write \"{client,server,shared}/**/*.{ts,tsx}\"",
+    "deploy": "git push heroku main",
     "heroku:off": "heroku ps:scale web=0 --app richards-board-games",
     "heroku:on": "heroku ps:scale web=1 --app richards-board-games",
-    "heroku:restart": "heroku restart --app richards-board-games",
-    "test": "vitest run"
+    "heroku:restart": "heroku restart --app richards-board-games"
   },
   "engines": {
     "node": "22.x",
