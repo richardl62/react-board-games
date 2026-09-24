@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { LetterSet } from './letter-set.js';
 import { Trie } from './trie.js';
 import { WordConstraint } from './word-contraint.js';

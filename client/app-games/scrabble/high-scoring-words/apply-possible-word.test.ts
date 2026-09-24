@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { BoardAndRack } from '../client-side/board-and-rack';
 import { Letter } from '@game-control/games/scrabble/config/letters';
 import { BoardSquareData } from '@game-control/games/scrabble/moves/game-state';

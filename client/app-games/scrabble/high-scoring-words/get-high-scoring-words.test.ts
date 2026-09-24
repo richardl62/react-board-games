@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { Trie } from '@utils/word-finder/trie';
 import { BoardAndRack, Rack } from '../client-side/board-and-rack';
 import { SquareType } from '@game-control/games/scrabble/config/square-type';

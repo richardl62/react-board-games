@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { Trie } from '../trie.js';
 import { findMissingLetters } from './find-missing-letter.js';
 

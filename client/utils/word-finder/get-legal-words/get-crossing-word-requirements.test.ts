@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { allowedLetters, givenLetter } from '../letter-requirement.js';
 import { Trie } from '../trie.js';
 import { getCrossingWordRequirements } from './get-crossing-word-requirements.js';

@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { allowedLetters, givenLetter } from '../letter-requirement.js';
 import { LetterSet } from '../letter-set.js';
 import { Trie } from '../trie.js';

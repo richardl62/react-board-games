@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { compareJSON } from '../../compare-JSON.js';
 import { LetterSet } from '../letter-set.js';
 import { Trie } from '../trie.js';

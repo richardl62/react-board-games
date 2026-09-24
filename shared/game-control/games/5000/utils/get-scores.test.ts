@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { DiceScore, zeroScore } from './dice-score.js';
 import { getScores } from './get-scores.js';
 
