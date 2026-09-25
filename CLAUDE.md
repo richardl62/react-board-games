@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use a fail-fast principle. Prefer throws, assertions, or even exceptions to workarounds that might hide mistakes in the design.
 - Make good use of TypeScript, in particular avoid unnecessary `any`.
 - New games are likely to be added, so future-proofing is worthwhile.
-- If something is unclear, ask — don't hide confusion.
+- Ask questions and push back where appropriate.
 - If a simpler or cleaner approach exists, say so and push back when warranted.
 - Match existing code style even if you'd do it differently.
 - Aim to keep code changes surgical. If you see tidy ups that are not required for the current task, mention them but don't fix them.
