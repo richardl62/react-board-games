@@ -19,6 +19,7 @@ export interface ArchivedMatchSummary {
 export interface ArchivedMatch {
   game: string; // GameControl.name
   updatedAt: Date;
+  archiveVersion: number; // GameControl.archive.version when the match was saved
   matchState: MatchState;
 }
 
@@ -40,18 +41,27 @@ export async function listArchivedMatches(): Promise<ArchivedMatchSummary[]> {
 
 export async function fetchArchivedMatch(id: string): Promise<ArchivedMatch> {
   const rows = await fetchRows(
-    `select=game,updated_at,match_state&id=eq.${encodeURIComponent(id)}`,
+    `select=game,updated_at,archive_version,match_state&id=eq.${encodeURIComponent(id)}`,
   );
   if (rows.length === 0) {
     throw new Error('Saved game not found');
   }
   sAssert(rows.length === 1, 'Unexpected number of archived matches found');
 
-  const { game, updated_at, match_state } = rows[0];
+  const { game, updated_at, archive_version, match_state } = rows[0];
   sAssert(typeof game === 'string', 'Archived match has invalid game');
+  sAssert(
+    typeof archive_version === 'number' && Number.isInteger(archive_version),
+    'Archived match has invalid archive version',
+  );
   sAssert(isMatchState(match_state), 'Archived match has invalid match state');
 
-  return { game, updatedAt: toDate(updated_at), matchState: match_state };
+  return {
+    game,
+    updatedAt: toDate(updated_at),
+    archiveVersion: archive_version,
+    matchState: match_state,
+  };
 }
 
 // Run a PostgREST query on the matches table.

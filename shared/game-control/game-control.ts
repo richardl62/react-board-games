@@ -24,9 +24,11 @@ export interface GameControl {
   minPlayers: number;
   maxPlayers: number;
 
-  // If true, the server saves the match state to the online match archive
-  // after every successful action, so the match can be reviewed later.
-  archive: boolean;
+  // If not false, the server saves the match state to the online match
+  // archive after every successful action, so the match can be reviewed later.
+  // The version should be updated if a change is made that would make old matches
+  // unusable. Archived matches with a different version are not displayed.
+  archive: false | { version: number };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup: (arg0: SetupArg0, setupData: any) => SetupResult;

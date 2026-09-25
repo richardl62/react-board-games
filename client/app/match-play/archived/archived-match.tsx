@@ -95,5 +95,37 @@ export function ArchivedMatch({
     );
   }
 
+  const problem = versionProblem(game, archived.archiveVersion);
+  if (problem) {
+    return <div>{problem}</div>;
+  }
+
   return <ArchivedMatchBoard game={game} archived={archived} />;
+}
+
+// Return a message explaining why a match saved with the given archive version
+// cannot be displayed, or null if it can be.
+function versionProblem(game: AppGame, savedVersion: number): string | null {
+  const { archive, displayName } = game;
+  if (!archive) {
+    return `${displayName} games are no longer saved, so this saved game cannot be displayed.`;
+  }
+
+  if (savedVersion < archive.version) {
+    return (
+      `This game was saved by an older version of ${displayName} ` +
+      `(archive version ${savedVersion}, current version ${archive.version}) ` +
+      'and can no longer be displayed.'
+    );
+  }
+
+  if (savedVersion > archive.version) {
+    return (
+      `This game was saved by a newer version of ${displayName} ` +
+      `(archive version ${savedVersion}, this page has version ${archive.version}). ` +
+      'Try reloading the page.'
+    );
+  }
+
+  return null;
 }

@@ -19,6 +19,7 @@ export interface ArchiveRecord {
   id: string;
   game: string;
   players: (string | null)[];
+  archiveVersion: number; // GameControl.archive.version
   matchState: MatchState;
 }
 
@@ -40,6 +41,7 @@ export async function saveMatch(record: ArchiveRecord, updatedAt: Date): Promise
       game: record.game,
       players: record.players,
       updated_at: updatedAt.toISOString(),
+      archive_version: record.archiveVersion,
       match_state: record.matchState,
     }),
   });

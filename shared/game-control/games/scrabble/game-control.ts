@@ -6,11 +6,13 @@ import { SetupArg0 } from '../../game-control.js';
 import { simple, standard } from './config/scrabble-config.js';
 import { SetupOptions } from './server-data.js';
 
+const archiveVersion = 1;
+
 function makeAppGame(config: ScrabbleConfig): GameControl {
   return {
     ...config,
 
-    archive: true,
+    archive: { version: archiveVersion },
 
     setup: (arg0: SetupArg0, options: unknown) =>
       startingServerData(arg0, options as SetupOptions, config),

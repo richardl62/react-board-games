@@ -139,7 +139,8 @@ export class Match {
   // for this game. The save happens asynchronously. Failures are logged rather than
   // thrown, so that problems with the archive do not affect live matches.
   archive() {
-    if (!this.definition.archive || !isArchiveEnabled) {
+    const { archive } = this.definition;
+    if (!archive || !isArchiveEnabled) {
       return;
     }
 
@@ -148,6 +149,7 @@ export class Match {
       id: this.archiveID,
       game: this.gameName,
       players: this.players.map((p) => p.name),
+      archiveVersion: archive.version,
       matchState: this.matchState(null),
     });
     const updatedAt = new Date();
