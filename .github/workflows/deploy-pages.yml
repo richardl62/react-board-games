@@ -34,12 +34,13 @@ jobs:
       # GitHub Pages serves 404.html for unknown paths. Making it a copy of the app
       # lets deep links (e.g. /react-board-games/scrabble?arc=...) load the app,
       # whose router then displays the right page.
-      - run: cp dist/index.html dist/404.html
+      - run: cp dist/client/index.html dist/client/404.html
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          # Just the client build (see vite.config.ts), not the compiled server.
+          path: dist/client
 
   deploy:
     needs: build

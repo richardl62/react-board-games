@@ -75,8 +75,9 @@ wss.on('close', () => clearInterval(interval));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the dist directory
-const distPath = path.resolve(__dirname, '../../dist');
+// Serve static files from the client build (see vite.config.ts). Only the client
+// directory is served, so the compiled server code is not publicly readable.
+const distPath = path.resolve(__dirname, '../../dist/client');
 
 // Run all the functions provided by the LobbyClient
 // The name of the function to run (createMatch, joinMatch etc)
