@@ -6,7 +6,7 @@
 -- (anon / publishable) key, which RLS restricts to SELECT only.
 
 create table public.matches (
-  id          uuid        primary key,
+  id          text        primary key,
   game        text        not null,
   players     jsonb       not null,
   created_at  timestamptz not null default now(),

@@ -12,6 +12,7 @@ import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
 import { isArchiveEnabled, saveMatch } from './match-archive.js';
+import { createAlphanumericString } from '../shared/utils/random-string.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -27,7 +28,9 @@ export class Match {
   private responseDelay = 0;
 
   // Unique across server restarts (unlike matchID). Used as the key in the match archive.
-  private readonly archiveID = crypto.randomUUID();
+  // Not secret. 10 characters make a collision (which would overwrite a saved match)
+  // vanishingly unlikely.
+  private readonly archiveID = createAlphanumericString(10);
 
   // Archive saves are chained so that they complete in the order they were requested.
   // Otherwise, an older state could overwrite a newer one.
