@@ -23,10 +23,31 @@ export interface ArchivedMatch {
   matchState: MatchState;
 }
 
-/** The most recently updated archived matches, newest first */
-export async function listArchivedMatches(): Promise<ArchivedMatchSummary[]> {
+// The current archive version of a game (i.e. GameControl.archive.version)
+export interface ArchiveGameVersion {
+  game: string; // GameControl.name
+  version: number;
+}
+
+// How the archive version of saved matches compares to the current version.
+export interface ArchiveVersionCounts {
+  // Saved with an older version of the game.
+  older: number;
+  // Saved with a newer version of the game (e.g. when this page is out of date).
+  newer: number;
+  // Of a game that is not in 'currentVersions', e.g. because it is no longer archived.
+  notArchived: number;
+}
+
+/** The most recently updated archived matches that were saved with the current
+ * version of their game, newest first */
+export async function listArchivedMatches(
+  currentVersions: ArchiveGameVersion[],
+): Promise<ArchivedMatchSummary[]> {
   const rows = await fetchRows(
-    `select=id,game,players,created_at,updated_at&order=updated_at.desc&limit=${listLimit}`,
+    'select=id,game,players,created_at,updated_at' +
+      `&or=${versionsFilter(currentVersions, 'eq')}` +
+      `&order=updated_at.desc&limit=${listLimit}`,
   );
 
   return rows.map((row) => {
@@ -37,6 +58,21 @@ export async function listArchivedMatches(): Promise<ArchivedMatchSummary[]> {
 
     return { id, game, players, createdAt: toDate(created_at), updatedAt: toDate(updated_at) };
   });
+}
+
+/** Count the archived matches that were not saved with the current version of their game */
+export async function countOtherVersionMatches(
+  currentVersions: ArchiveGameVersion[],
+): Promise<ArchiveVersionCounts> {
+  const archivedGames = currentVersions.map(({ game }) => checkedGameName(game)).join(',');
+
+  const [older, newer, notArchived] = await Promise.all([
+    countRows(`or=${versionsFilter(currentVersions, 'lt')}`),
+    countRows(`or=${versionsFilter(currentVersions, 'gt')}`),
+    countRows(`game=not.in.(${archivedGames})`),
+  ]);
+
+  return { older, newer, notArchived };
 }
 
 export async function fetchArchivedMatch(id: string): Promise<ArchivedMatch> {
@@ -65,7 +101,7 @@ export async function fetchArchivedMatch(id: string): Promise<ArchivedMatch> {
 }
 
 // Run a PostgREST query on the matches table.
-async function fetchRows(query: string): Promise<Record<string, unknown>[]> {
+async function queryMatches(query: string, init: RequestInit = {}): Promise<Response> {
   const url = import.meta.env.VITE_SUPABASE_URL;
   const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   sAssert(
@@ -73,14 +109,55 @@ async function fetchRows(query: string): Promise<Record<string, unknown>[]> {
     'VITE_SUPABASE_URL and/or VITE_SUPABASE_PUBLISHABLE_KEY are not set (see .env.example)',
   );
 
-  const response = await fetch(`${url}/rest/v1/matches?${query}`, { headers: { apikey: key } });
+  const response = await fetch(`${url}/rest/v1/matches?${query}`, {
+    ...init,
+    headers: { ...init.headers, apikey: key },
+  });
   if (!response.ok) {
     throw new Error(`Match archive request failed: ${response.status} ${await response.text()}`);
   }
+  return response;
+}
+
+async function fetchRows(query: string): Promise<Record<string, unknown>[]> {
+  const response = await queryMatches(query);
 
   const rows: unknown = await response.json();
   sAssert(Array.isArray(rows), 'Match archive returned unexpected data');
   return rows as Record<string, unknown>[];
+}
+
+// Return the number of rows matching the query (without fetching them).
+async function countRows(query: string): Promise<number> {
+  const response = await queryMatches(query, {
+    method: 'HEAD',
+    headers: { Prefer: 'count=exact' },
+  });
+
+  // The count is given in the Content-Range header, e.g. "0-4/5" or "*/0".
+  const count = Number(response.headers.get('Content-Range')?.split('/')[1]);
+  sAssert(Number.isInteger(count), 'Match archive returned no valid count');
+  return count;
+}
+
+// Return a PostgREST 'or' filter matching matches of any of the given games whose
+// archive version compares to the game's version as specified, e.g. for 'eq'
+// "(and(game.eq.scrabble,archive_version.eq.2),and(game.eq.scrabble-simple,archive_version.eq.2))"
+function versionsFilter(versions: ArchiveGameVersion[], comparison: 'eq' | 'lt' | 'gt'): string {
+  sAssert(versions.length > 0, 'No archived games');
+
+  const terms = versions.map(
+    ({ game, version }) =>
+      `and(game.eq.${checkedGameName(game)},archive_version.${comparison}.${version})`,
+  );
+  return `(${terms.join(',')})`;
+}
+
+// Game names are used unquoted in PostgREST filters, so must not contain
+// characters that are special to PostgREST (e.g. commas or brackets).
+function checkedGameName(game: string): string {
+  sAssert(/^[\w-]+$/.test(game), `Unexpected characters in game name "${game}"`);
+  return game;
 }
 
 function isPlayerNames(obj: unknown): obj is (string | null)[] {

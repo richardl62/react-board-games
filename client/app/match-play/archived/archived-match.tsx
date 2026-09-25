@@ -10,6 +10,7 @@ import { useAsync } from 'react-async-hook';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ActionRequestStatus, GameBoardWrapper } from '../game-board-wrapper';
+import { archiveVersionStatus } from './archive-version';
 
 const Banner = styled.div`
   margin: 0.25em 0.5em 0.5em;
@@ -107,25 +108,24 @@ export function ArchivedMatch({
 // cannot be displayed, or null if it can be.
 function versionProblem(game: AppGame, savedVersion: number): string | null {
   const { archive, displayName } = game;
-  if (!archive) {
-    return `${displayName} games are no longer saved, so this saved game cannot be displayed.`;
-  }
+  const currentVersion = archive ? archive.version : null;
 
-  if (savedVersion < archive.version) {
-    return (
-      `This game was saved by an older version of ${displayName} ` +
-      `(archive version ${savedVersion}, current version ${archive.version}) ` +
-      'and can no longer be displayed.'
-    );
+  switch (archiveVersionStatus(game, savedVersion)) {
+    case 'current':
+      return null;
+    case 'notArchived':
+      return `${displayName} games are no longer saved, so this saved game cannot be displayed.`;
+    case 'older':
+      return (
+        `This game was saved by an older version of ${displayName} ` +
+        `(archive version ${savedVersion}, current version ${currentVersion}) ` +
+        'and can no longer be displayed.'
+      );
+    case 'newer':
+      return (
+        `This game was saved by a newer version of ${displayName} ` +
+        `(archive version ${savedVersion}, this page has version ${currentVersion}). ` +
+        'Try reloading the page.'
+      );
   }
-
-  if (savedVersion > archive.version) {
-    return (
-      `This game was saved by a newer version of ${displayName} ` +
-      `(archive version ${savedVersion}, this page has version ${archive.version}). ` +
-      'Try reloading the page.'
-    );
-  }
-
-  return null;
 }
