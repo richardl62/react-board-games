@@ -1,22 +1,22 @@
 import { AppGame } from '@/app-game-support/app-game';
 import { UntypedMoves } from '@/app-game-support/board-props';
-import { pastGamesPath } from '@/app/app-paths';
 import { ArchivedMatch as ArchivedMatchData, fetchArchivedMatch } from '@utils/match-archive';
 import { AsyncStatus } from '@utils/async-status';
 import { Ctx } from '@shared/game-control/ctx';
 import { EventsAPI } from '@shared/game-control/events';
 import { JSX } from 'react';
 import { useAsync } from 'react-async-hook';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ActionRequestStatus, GameBoardWrapper } from '../game-board-wrapper';
 import { archiveVersionStatus } from './archive-version';
 
 const Banner = styled.div`
-  margin: 0.25em 0.5em 0.5em;
+  margin-left: 1.5em;
+  margin-bottom: 0.5em;
 
-  > *:not(:first-child) {
-    margin-left: 1em;
+  > *:first-child {
+    font-weight: bold;
+    margin-right: 0.5em;
   }
 `;
 
@@ -53,11 +53,19 @@ function ArchivedMatchBoard({
   const viewingPlayer = new Ctx(matchState.ctxData).playOrder[0];
   const { moves, events } = makeDisabledActions(game);
 
+  const recordedDate = updatedAt.toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
   return (
     <div>
       <Banner>
-        <span>Saved game - last updated {updatedAt.toLocaleString()}</span>
-        <Link to={pastGamesPath}>Past games</Link>
+        <span>Saved game</span>
+        <span>(Recorded {recordedDate})</span>
       </Banner>
       <GameBoardWrapper
         game={game}
