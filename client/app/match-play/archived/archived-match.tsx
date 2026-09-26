@@ -8,8 +8,6 @@ import { JSX } from 'react';
 import { useAsync } from 'react-async-hook';
 import styled from 'styled-components';
 import { ActionRequestStatus, GameBoardWrapper } from '../game-board-wrapper';
-import { archiveVersionStatus } from './archive-version';
-
 const Banner = styled.div`
   margin-left: 1.5em;
   margin-bottom: 0.5em;
@@ -115,25 +113,9 @@ export function ArchivedMatch({
 // Return a message explaining why a match saved with the given archive version
 // cannot be displayed, or null if it can be.
 function versionProblem(game: AppGame, savedVersion: number): string | null {
-  const { archive, displayName } = game;
-  const currentVersion = archive ? archive.version : null;
-
-  switch (archiveVersionStatus(game, savedVersion)) {
-    case 'current':
-      return null;
-    case 'notArchived':
-      return `${displayName} games are no longer saved, so this saved game cannot be displayed.`;
-    case 'older':
-      return (
-        `This game was saved by an older version of ${displayName} ` +
-        `(archive version ${savedVersion}, current version ${currentVersion}) ` +
-        'and can no longer be displayed.'
-      );
-    case 'newer':
-      return (
-        `This game was saved by a newer version of ${displayName} ` +
-        `(archive version ${savedVersion}, this page has version ${currentVersion}). ` +
-        'Try reloading the page.'
-      );
+  if (game.archive && game.archive.version === savedVersion) {
+    return null;
   }
+
+  return `This game was saved by a different version of ${game.displayName} and cannot be displayed.`;
 }

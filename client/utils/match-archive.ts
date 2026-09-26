@@ -29,16 +29,6 @@ export interface ArchiveGameVersion {
   version: number;
 }
 
-// How the archive version of saved matches compares to the current version.
-export interface ArchiveVersionCounts {
-  // Saved with an older version of the game.
-  older: number;
-  // Saved with a newer version of the game (e.g. when this page is out of date).
-  newer: number;
-  // Of a game that is not in 'currentVersions', e.g. because it is no longer archived.
-  notArchived: number;
-}
-
 /** The most recently updated archived matches that were saved with the current
  * version of their game, newest first */
 export async function listArchivedMatches(
@@ -46,7 +36,7 @@ export async function listArchivedMatches(
 ): Promise<ArchivedMatchSummary[]> {
   const rows = await fetchRows(
     'select=id,game,players,created_at,updated_at' +
-      `&or=${versionsFilter(currentVersions, 'eq')}` +
+      `&or=${versionsFilter(currentVersions)}` +
       `&order=updated_at.desc&limit=${listLimit}`,
   );
 
@@ -60,19 +50,13 @@ export async function listArchivedMatches(
   });
 }
 
-/** Count the archived matches that were not saved with the current version of their game */
+/** Count the archived matches that were not saved with the current version of
+ * their game (i.e. those that listArchivedMatches never returns). This includes
+ * matches of games that are not in 'currentVersions'. */
 export async function countOtherVersionMatches(
   currentVersions: ArchiveGameVersion[],
-): Promise<ArchiveVersionCounts> {
-  const archivedGames = currentVersions.map(({ game }) => checkedGameName(game)).join(',');
-
-  const [older, newer, notArchived] = await Promise.all([
-    countRows(`or=${versionsFilter(currentVersions, 'lt')}`),
-    countRows(`or=${versionsFilter(currentVersions, 'gt')}`),
-    countRows(`game=not.in.(${archivedGames})`),
-  ]);
-
-  return { older, newer, notArchived };
+): Promise<number> {
+  return countRows(`not.or=${versionsFilter(currentVersions)}`);
 }
 
 export async function fetchArchivedMatch(id: string): Promise<ArchivedMatch> {
@@ -140,15 +124,14 @@ async function countRows(query: string): Promise<number> {
   return count;
 }
 
-// Return a PostgREST 'or' filter matching matches of any of the given games whose
-// archive version compares to the game's version as specified, e.g. for 'eq'
+// Return a PostgREST 'or' filter matching matches that were saved with the given
+// version of their game, e.g.
 // "(and(game.eq.scrabble,archive_version.eq.2),and(game.eq.scrabble-simple,archive_version.eq.2))"
-function versionsFilter(versions: ArchiveGameVersion[], comparison: 'eq' | 'lt' | 'gt'): string {
+function versionsFilter(versions: ArchiveGameVersion[]): string {
   sAssert(versions.length > 0, 'No archived games');
 
   const terms = versions.map(
-    ({ game, version }) =>
-      `and(game.eq.${checkedGameName(game)},archive_version.${comparison}.${version})`,
+    ({ game, version }) => `and(game.eq.${checkedGameName(game)},archive_version.eq.${version})`,
   );
   return `(${terms.join(',')})`;
 }

@@ -5,7 +5,7 @@ import { archivedMatchSearch } from '@/url-tools';
 import { AsyncStatus } from '@utils/async-status';
 import {
   ArchivedMatchSummary,
-  ArchiveVersionCounts,
+  ArchiveGameVersion,
   countOtherVersionMatches,
   listArchivedMatches,
 } from '@utils/match-archive';
@@ -15,7 +15,6 @@ import { useAsync } from 'react-async-hook';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { gamePath } from './app-paths';
-import { currentArchiveVersions } from './match-play/archived/archive-version';
 
 const PageStyles = styled.div`
   font-size: 18px;
@@ -39,6 +38,7 @@ const PageStyles = styled.div`
 `;
 
 const UnlistedStyles = styled.div`
+  margin-top: 0.5em;
   margin-bottom: 0.5em;
 `;
 
@@ -90,32 +90,30 @@ function MatchTable({ matches, games }: { matches: ArchivedMatchSummary[]; games
 }
 
 // Report matches that are not listed because they can't be displayed.
-function UnlistedMatches({ counts }: { counts: ArchiveVersionCounts }) {
-  const { older, newer, notArchived } = counts;
-  const gamesWere = (n: number) => (n === 1 ? '1 game was' : `${n} games were`);
-  const games = (n: number) => (n === 1 ? '1 saved game' : `${n} saved games`);
+function UnlistedMatches({ count }: { count: number }) {
+  if (count === 0) {
+    return null;
+  }
 
+  const games = count === 1 ? '1 saved game has' : `${count} saved games have`;
   return (
-    <UnlistedStyles>
-      {older > 0 && (
-        <div>
-          {gamesWere(older)} saved by an older version of the game and can no longer be displayed.
-        </div>
-      )}
-      {newer > 0 && (
-        <div>{gamesWere(newer)} saved by a newer version of the game. Try reloading the page.</div>
-      )}
-      {notArchived > 0 && (
-        <div>
-          {games(notArchived)} cannot be displayed as the game is no longer saved or recognised.
-        </div>
-      )}
-    </UnlistedStyles>
+    <UnlistedStyles>{games} an unsupported version and cannot be displayed.</UnlistedStyles>
   );
 }
 
+// The current archive versions of those games that are archived.
+function currentArchiveVersions(games: AppGame[]): ArchiveGameVersion[] {
+  const versions: ArchiveGameVersion[] = [];
+  for (const { name, archive } of games) {
+    if (archive) {
+      versions.push({ game: name, version: archive.version });
+    }
+  }
+  return versions;
+}
+
 // Lists recent matches from the online match archive, with links to review them.
-// Matches that can't be displayed (e.g. because they were saved by an older
+// Matches that can't be displayed (because they were saved by a different
 // version of the game) are counted rather than listed.
 export function PastGamesPage({ games }: { games: AppGame[] }): JSX.Element {
   const asyncMatches = useAsync(() => {
@@ -134,7 +132,7 @@ export function PastGamesPage({ games }: { games: AppGame[] }): JSX.Element {
       {result ? (
         <>
           <MatchTable matches={result[0]} games={games} />
-          <UnlistedMatches counts={result[1]} />
+          <UnlistedMatches count={result[1]} />
         </>
       ) : (
         <AsyncStatus status={asyncMatches} activity="loading past games" />
