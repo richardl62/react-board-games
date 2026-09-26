@@ -96,9 +96,7 @@ function UnlistedMatches({ count }: { count: number }) {
   }
 
   const games = count === 1 ? '1 saved game has' : `${count} saved games have`;
-  return (
-    <UnlistedStyles>{games} an unsupported version and cannot be displayed.</UnlistedStyles>
-  );
+  return <UnlistedStyles>{games} an unsupported version and cannot be displayed.</UnlistedStyles>;
 }
 
 // The current archive versions of those games that are archived.
