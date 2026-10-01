@@ -41,7 +41,11 @@ export function WordChecker({
 
     // Definition lookup goes via the server (to keep the dictionary API key
     // secret) so it's unavailable in the static (serverless) build.
-    if (isValid && !isStaticBuild) {
+    if (isValid) {
+      if (isStaticBuild) {
+        setDefinition('Definitions not available in offline play.');
+        return;
+      }
       setDefinition('Loading definition...');
       fetchDefinition(word, 'merriam-webster')
         .then(({ definition, baseWord }) => {
