@@ -58,7 +58,7 @@ export function AsyncStatus(props: AsyncStatusProps): JSX.Element {
 export function loadingOrError(props: AsyncStatus): boolean {
   const { loading, error } = props;
 
-  return Boolean(loading ?? error);
+  return loading === true || error !== undefined;
 }
 
 // Convenience function
