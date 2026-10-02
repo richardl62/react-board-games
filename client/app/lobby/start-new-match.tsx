@@ -9,6 +9,8 @@ import { OfflineOptions } from '../offline-options';
 import { fullOptionSpecification } from './full-option-specification';
 import { lobbyClient } from './lobby-client';
 import { defaultValues } from '@/option-specification/tools';
+import { OptionValues } from '@/option-specification/types';
+import { sAssert } from '@shared/utils/assert';
 import styled from 'styled-components';
 
 const OuterDiv = styled.div`
@@ -44,17 +46,17 @@ export function StartNewMatch(props: {
   }
 
   const doStartNewMatch = () => {
+    const setupData = gameSetupData(game, options);
     if (options.offline) {
       setOfflineOptions({
-        ...options,
-
-        // KLUDGE - includes more that just the values from game.setupValues
-        setupData: options,
+        numPlayers: options.numPlayers,
+        passAndPlay: options.passAndPlay,
+        setupData,
       });
     } else {
       void asyncCreateMatch.execute({
         numPlayers: options.numPlayers,
-        setupData: options,
+        setupData,
       });
     }
   };
@@ -67,5 +69,17 @@ export function StartNewMatch(props: {
         <button onClick={() => doStartNewMatch()}>Start Game</button>
       </OuterDiv>
     </BoxWithLegend>
+  );
+}
+
+// Extract the values of the game's own options from the full set of lobby options.
+function gameSetupData(game: AppGame, options: OptionValues): OptionValues {
+  const gameOptionNames = Object.keys(game.options ?? {});
+  return Object.fromEntries(
+    gameOptionNames.map((name) => {
+      const value = options[name];
+      sAssert(value !== undefined, `Missing value for game option '${name}'`);
+      return [name, value];
+    }),
   );
 }

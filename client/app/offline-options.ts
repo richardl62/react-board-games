@@ -1,11 +1,11 @@
 import { OptionValues } from '@/option-specification/types';
 
-// Part of a KLUDGE. See comments in game-page.tsx.
+// Options for an offline match. Set from the lobby (StartNewMatch) or the URL,
+// held in GamePage state and consumed by OfflineMatch.
 export interface OfflineOptions {
   numPlayers: number;
   passAndPlay: boolean;
 
-  // KLUDGE? An empty object (rather than null) is used when there is no
-  // setup data.
+  // Values for the game's own options (empty if the game has none).
   setupData: OptionValues;
 }
