@@ -21,11 +21,15 @@ const OuterDiv = styled.div`
 export function StartNewMatch(props: {
   game: AppGame;
   setOfflineOptions: (opts: OfflineOptions) => void;
+  offlineByDefault: boolean;
 }): JSX.Element {
-  const { game, setOfflineOptions } = props;
+  const { game, setOfflineOptions, offlineByDefault } = props;
   const { addMatchID } = useSetSearchParam();
   const { seed: seedParam } = useSearchParamData();
-  const optionsSpec = useMemo(() => fullOptionSpecification(game), [game]);
+  const optionsSpec = useMemo(
+    () => fullOptionSpecification(game, offlineByDefault),
+    [game, offlineByDefault],
+  );
 
   const [options, setOptions] = useState(defaultValues(optionsSpec));
 

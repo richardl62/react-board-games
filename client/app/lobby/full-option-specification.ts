@@ -3,7 +3,7 @@ import { defaultNumPlayers } from '@/app-game-support/app-game';
 import { OptionValues } from '@/option-specification/types';
 import { sAssert } from '@shared/utils/assert';
 
-export function fullOptionSpecification(game: AppGame) {
+export function fullOptionSpecification(game: AppGame, offlineByDefault: boolean) {
   const { minPlayers, maxPlayers } = game;
   const gameOptions = game.options ?? {};
 
@@ -19,7 +19,7 @@ export function fullOptionSpecification(game: AppGame) {
 
     offline: {
       label: 'Play offline',
-      default: false,
+      default: offlineByDefault,
       debugOnly: false,
     },
 
