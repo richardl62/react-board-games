@@ -35,10 +35,7 @@ export function moveableToSharedPile(
 
 type MoveType = 'move' | 'steal' | 'clear' | null;
 
-export function moveType(
-  arg0: MoveTypeArg,
-  { to, from }: { to: CardID; from: CardID },
-): MoveType {
+export function moveType(arg0: MoveTypeArg, { to, from }: { to: CardID; from: CardID }): MoveType {
   const { G, viewingPlayer: playerID } = arg0;
   const options = new OptionWrapper(G.options);
 

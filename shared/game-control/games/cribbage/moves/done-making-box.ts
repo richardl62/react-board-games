@@ -9,7 +9,15 @@ export const doneMakingBox = outOfSequenceMove(function doneMakingBox(
 ): void {
   sAssert(G.stage === GameStage.SettingBox);
 
-  if (processGameRequest(GameRequest.FinishSettingBox, ctx, viewingPlayer, getPlayerData, setPlayerData)) {
+  if (
+    processGameRequest(
+      GameRequest.FinishSettingBox,
+      ctx,
+      viewingPlayer,
+      getPlayerData,
+      setPlayerData,
+    )
+  ) {
     for (const pid of ctx.playOrder) {
       const pd = getPlayerData(pid);
       setPlayerData(pid, { ...pd, fullHand: [...pd.hand] });

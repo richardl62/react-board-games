@@ -1,7 +1,15 @@
 import { sAssert } from '../../../../utils/assert.js';
 import { Card } from '../../../../utils/cards/types.js';
 import { reorderFollowingDrag } from '../../../../utils/reorder-following-drag.js';
-import { ServerData, GameStage, makeCardSetID, CardSetID, PlayerID, cardSetIDToPlayerID, PlayerData } from '../server-data.js';
+import {
+  ServerData,
+  GameStage,
+  makeCardSetID,
+  CardSetID,
+  PlayerID,
+  cardSetIDToPlayerID,
+  PlayerData,
+} from '../server-data.js';
 import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
 interface FromTo {

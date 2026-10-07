@@ -1,4 +1,10 @@
-import { PegPositions, PlayerID, PlayerData, ServerData, cardSetIDToPlayerID } from '../server-data.js';
+import {
+  PegPositions,
+  PlayerID,
+  PlayerData,
+  ServerData,
+  cardSetIDToPlayerID,
+} from '../server-data.js';
 import { MoveArg0, outOfSequenceMove } from '../../../move-fn.js';
 
 interface Arg {

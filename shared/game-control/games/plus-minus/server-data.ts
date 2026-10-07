@@ -16,10 +16,7 @@ export interface PlayerGameData {
   count: number;
 }
 
-export function startingServerData(
-  { ctx }: SetupArg0,
-  options: SetupOptions,
-): SetupResult {
+export function startingServerData({ ctx }: SetupArg0, options: SetupOptions): SetupResult {
   const state: ServerData = {
     sharedCount: options.startingValue,
     lastSnap: 0,

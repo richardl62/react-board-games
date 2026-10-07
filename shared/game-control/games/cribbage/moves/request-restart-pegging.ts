@@ -6,7 +6,9 @@ export const requestRestartPegging = outOfSequenceMove(function requestRestartPe
   { G, ctx, viewingPlayer, getPlayerData, setPlayerData }: MoveArg0<ServerData, PlayerData>,
   _arg: void,
 ): void {
-  if (processGameRequest(GameRequest.RestartPegging, ctx, viewingPlayer, getPlayerData, setPlayerData)) {
+  if (
+    processGameRequest(GameRequest.RestartPegging, ctx, viewingPlayer, getPlayerData, setPlayerData)
+  ) {
     G.shared.hand = [];
   }
 });

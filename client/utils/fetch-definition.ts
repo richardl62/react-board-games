@@ -45,9 +45,7 @@ interface DictionaryApiDevEntry {
 }
 
 function fetchFromDictionaryApiDev(wordToCheck: string): Promise<DictionaryLookupResult> {
-  return fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(wordToCheck)}`,
-  )
+  return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(wordToCheck)}`)
     .then((response) => response.json())
     .then((data: unknown) => {
       if (!Array.isArray(data)) {
