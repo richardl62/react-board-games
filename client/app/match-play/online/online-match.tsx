@@ -7,6 +7,7 @@ import { useSearchParamData } from '@/url-tools';
 import { GameBoardWrapper } from '../game-board-wrapper';
 import { DebugModeActions } from './debug-mode-actions';
 import { useOnlineMatchInfo } from './use-online-match-info';
+import { RematchControls } from './rematch-controls';
 
 interface ServerConnectionWithResponse extends ServerConnection {
   serverResponse: NonNullable<ServerConnection['serverResponse']>;
@@ -51,7 +52,7 @@ function ConnectedMatch({
   player: Player;
   serverConnection: ServerConnectionWithResponse;
 }): JSX.Element {
-  const { connectionStatus, serverResponse } = serverConnection;
+  const { connectionStatus, serverResponse, sendMatchRequest } = serverConnection;
   const { moves, events, actionRequestStatus, matchState } = useOnlineMatchInfo(
     game,
     player,
@@ -63,6 +64,11 @@ function ConnectedMatch({
   return (
     <div>
       {debugMode && <DebugModeActions serverConnection={serverConnection} />}
+      <RematchControls
+        playerData={serverResponse.matchState.playerData}
+        playerID={player.id}
+        sendRematchRequest={sendMatchRequest}
+      />
       <GameBoardWrapper
         game={game}
         viewingPlayer={player.id}

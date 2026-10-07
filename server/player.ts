@@ -39,6 +39,7 @@ export class Player {
   private ws: WebSocket | null;
   private reconnectionBlockedUntil: number | null = null;
   private gameData_: unknown = undefined;
+  private wantsRematch_ = false;
 
   get name(): string | null {
     return this.name_;
@@ -98,11 +99,23 @@ export class Player {
     this.gameData_ = data;
   }
 
+  /** True if this player has proposed or accepted a rematch */
+  get wantsRematch(): boolean {
+    return this.wantsRematch_;
+  }
+
+  setWantsRematch(wantsRematch: boolean) {
+    this.wantsRematch_ = wantsRematch;
+  }
+
   publicMetadata(): PublicPlayerMetadata {
-    const { name_: name, isConnected, gameData_ } = this;
+    const { name_: name, isConnected, gameData_, wantsRematch_ } = this;
     const meta: PublicPlayerMetadata = { id: this.id, name, isConnected };
     if (gameData_ !== undefined) {
       meta.gameData = gameData_;
+    }
+    if (wantsRematch_) {
+      meta.wantsRematch = true;
     }
     return meta;
   }

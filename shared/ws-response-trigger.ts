@@ -21,6 +21,15 @@ export function wsMatchRestart(): WsMatchRestart {
   return { matchRestart: true };
 }
 
+// Used when a rematch is proposed, accepted (but not yet by all players) or declined.
+export interface WsRematchUpdate {
+  readonly rematchUpdate: true;
+}
+
+export function wsRematchUpdate(): WsRematchUpdate {
+  return { rematchUpdate: true };
+}
+
 interface WsBadClientRequest {
   readonly badClientRequest: true;
 }
@@ -33,6 +42,7 @@ export type WsResponseTrigger =
   | WsBadClientRequest
   | WsClientConnection
   | WsMatchRestart
+  | WsRematchUpdate
   | WsUnknownProblem;
 
 export function isWsClientConnection(obj: unknown): obj is WsClientConnection {
@@ -47,6 +57,13 @@ export function isWsMatchRestart(obj: unknown): obj is WsMatchRestart {
 
   const candidate = obj as WsMatchRestart;
   return candidate.matchRestart === true;
+}
+
+function isWsRematchUpdate(obj: unknown): obj is WsRematchUpdate {
+  if (typeof obj !== 'object' || obj === null) return false;
+
+  const candidate = obj as WsRematchUpdate;
+  return candidate.rematchUpdate === true;
 }
 
 function isWsBadClientRequest(obj: unknown): obj is WsBadClientRequest {
@@ -67,6 +84,7 @@ export function isWsResponseTrigger(obj: unknown): obj is WsResponseTrigger {
     isWsClientRequest(obj) ||
     isWsClientConnection(obj) ||
     isWsMatchRestart(obj) ||
+    isWsRematchUpdate(obj) ||
     isWsBadClientRequest(obj) ||
     isWsUnknownProblem(obj)
   );

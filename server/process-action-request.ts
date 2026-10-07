@@ -4,6 +4,8 @@ import { isWsClientRequest } from '../shared/ws-client-request.js';
 import { isWsCloseConnection, isWsResponseDelay } from '../shared/ws-test-actions.js';
 import { Matches } from './matches.js';
 import { closeWithReason } from './web-socket-actions.js';
+import { isWsRematchRequest } from '../shared/ws-rematch-request.js';
+import { wsMatchRestart, wsRematchUpdate } from '../shared/ws-response-trigger.js';
 
 // Throw if there is an error that prevent the requested action being attempted, for example
 // if the web socket is not associated with a player. Other errors (for example invalid moves)
@@ -39,6 +41,19 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
 
   if (isWsResponseDelay(clientRequest)) {
     match.setResponseDelay(clientRequest.responseDelay);
+    return;
+  }
+
+  if (isWsRematchRequest(clientRequest)) {
+    let restarted = false;
+    let error: string | null = null;
+    try {
+      restarted = match.handleRematchRequest(player, clientRequest);
+    } catch (err) {
+      error = err instanceof Error ? err.message : 'unknown error';
+      console.warn(`Error: ${error} when processing rematch request ${request}`);
+    }
+    match.broadcastMatchState(restarted ? wsMatchRestart() : wsRematchUpdate(), error);
     return;
   }
 

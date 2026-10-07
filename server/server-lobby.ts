@@ -1,7 +1,6 @@
 import { Matches } from './matches.js';
 import { LobbyInterface } from '../shared/lobby/interface.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
-import { wsMatchRestart } from '../shared/ws-response-trigger.js';
 
 export class ServerLobby implements LobbyInterface {
   constructor(matches: Matches) {
@@ -66,29 +65,6 @@ export class ServerLobby implements LobbyInterface {
     const player = match.allocatePlayer(playerName);
 
     return { playerID: player.id.toString(), playerCredentials: player.credentials };
-  }
-
-  restartMatch({
-    gameName,
-    matchID,
-    randomSeed,
-  }: {
-    gameName: string;
-    matchID: string;
-    randomSeed: number;
-  }): null {
-    const match = this.matches.findMatch(matchID);
-    if (!match) {
-      throw new Error(`Match ${matchID} not found`);
-    }
-
-    if (match.gameName !== gameName) {
-      throw new Error('selected match is not of the expected game');
-    }
-
-    match.restart(randomSeed);
-    match.broadcastMatchState(wsMatchRestart(), null);
-    return null;
   }
 
   updatePlayer({

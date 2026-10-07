@@ -5,6 +5,8 @@ export interface PublicPlayerMetadata {
   // Game-defined per-player state (e.g. vote, draw offer, hand of cards).
   // Set by moves via setPlayerData; absent for games that don't use it.
   gameData?: unknown;
+  // Set if this player has proposed or accepted a rematch.
+  wantsRematch?: true;
 }
 
 export interface JoinedMatch {

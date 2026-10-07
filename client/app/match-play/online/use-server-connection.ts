@@ -5,6 +5,7 @@ import useWebSocket from 'react-use-websocket';
 import { serverAddress } from '../../server-address';
 import { WsClientRequest } from '@shared/ws-client-request';
 import { WsTestAction } from '@shared/ws-test-actions';
+import { WsRematchRequest } from '@shared/ws-rematch-request';
 
 /** Status of connection with server. For closed connections includes
  * indication of whether reconnection is being attempted.
@@ -31,7 +32,7 @@ export interface ServerConnection {
   connectionStatus: ConnectionStatus;
 
   serverResponse: WsServerResponse | null;
-  sendMatchRequest: (data: WsClientRequest | WsTestAction) => void;
+  sendMatchRequest: (data: WsClientRequest | WsTestAction | WsRematchRequest) => void;
 
   // Registered by useOnlineMatchActions with a callback to be invoked, in order and
   // exactly once, for every server response - see onMessage below.

@@ -13,6 +13,7 @@ import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
 import { isArchiveEnabled, saveMatch } from './match-archive.js';
 import { createAlphanumericString } from '../shared/utils/random-string.js';
+import { WsRematchRequest } from '../shared/ws-rematch-request.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -27,6 +28,10 @@ export class Match {
 
   // Data that can be changed by a move or event.
   private activeData: ActiveMatchState;
+
+  // The random seed supplied by the proposer of a rematch. Null if there is no
+  // rematch proposal.
+  private rematchSeed: number | null = null;
 
   private responseDelay = 0;
 
@@ -112,8 +117,50 @@ export class Match {
     for (const player of this.players) {
       player.setGameData(setupPlayerData?.[player.id]);
     }
+    this.clearRematchProposal();
 
     this.archiveID = createAlphanumericString(10);
+  }
+
+  // Process a rematch request (see WsRematchRequest), restarting the match if all
+  // players now want a rematch. Returns true if the match was restarted.
+  // Throws if the request is invalid, in which case no data is changed.
+  handleRematchRequest(player: Player, request: WsRematchRequest): boolean {
+    switch (request.rematch) {
+      case 'propose':
+        if (!this.players.every((p) => p.isAllocated)) {
+          throw new Error('Cannot propose a rematch until all players have joined');
+        }
+        // If a rematch has already been proposed, treat this as an acceptance.
+        this.rematchSeed ??= request.randomSeed;
+        player.setWantsRematch(true);
+        break;
+
+      case 'accept':
+        // Ignore an acceptance if the proposal has since been declined.
+        if (this.rematchSeed !== null) {
+          player.setWantsRematch(true);
+        }
+        break;
+
+      case 'decline':
+        this.clearRematchProposal();
+        break;
+    }
+
+    if (this.rematchSeed !== null && this.players.every((p) => p.wantsRematch)) {
+      this.restart(this.rematchSeed);
+      return true;
+    }
+
+    return false;
+  }
+
+  private clearRematchProposal() {
+    this.rematchSeed = null;
+    for (const player of this.players) {
+      player.setWantsRematch(false);
+    }
   }
 
   lobbyMatch(): LobbyTypes.Match {
