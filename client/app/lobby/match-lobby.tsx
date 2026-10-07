@@ -9,6 +9,7 @@ import { useAsync } from 'react-async-hook';
 import styled from 'styled-components';
 import { JoinGame } from './join-game';
 import { lobbyClient } from './lobby-client';
+import { RestartGame } from './restart-game';
 
 const Names = styled.div`
     display: flex
@@ -98,6 +99,8 @@ export function MatchLobbyWithApiInfo(props: MatchLobbyWithApiInfoProps): JSX.El
         ) : (
           <JoinGame game={game} matchID={matchID} gameFull={gameFull} />
         )}
+
+        <RestartGame game={game} matchID={matchID} />
       </MatchLobbyDiv>
     </BoxWithLegend>
   );

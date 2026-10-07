@@ -22,6 +22,9 @@ export class Match {
   readonly players: Player[];
   readonly random: RandomAPI;
 
+  // Kept so that the match can be restarted.
+  private readonly setupData: unknown;
+
   // Data that can be changed by a move or event.
   private activeData: ActiveMatchState;
 
@@ -30,7 +33,8 @@ export class Match {
   // Unique across server restarts (unlike matchID). Used as the key in the match archive.
   // Not secret. 10 characters make a collision (which would overwrite a saved match)
   // vanishingly unlikely.
-  private readonly archiveID = createAlphanumericString(10);
+  // Changed when the match is restarted, so the restarted match is archived separately.
+  private archiveID = createAlphanumericString(10);
 
   // Archive saves are chained so that they complete in the order they were requested.
   // Otherwise, an older state could overwrite a newer one.
@@ -53,6 +57,7 @@ export class Match {
     this.definition = gameControl;
     this.matchID = matchID;
     this.random = randomAPI;
+    this.setupData = setupData;
 
     const { playerData: setupPlayerData, ...activeMatchState } = makeActiveMatchState(
       gameControl,
@@ -90,6 +95,25 @@ export class Match {
     player.allocate(name);
 
     return player;
+  }
+
+  // Restart the match from scratch, using the original setup data. Players (including
+  // their IDs, names, credentials and connections) are unchanged, but the match will
+  // be archived under a new ID.
+  restart(randomSeed: number) {
+    const { playerData: setupPlayerData, ...activeMatchState } = makeActiveMatchState(
+      this.definition,
+      this.players.length,
+      this.setupData,
+      RandomAPI.fromSeed(randomSeed),
+    );
+    this.activeData = activeMatchState;
+
+    for (const player of this.players) {
+      player.setGameData(setupPlayerData?.[player.id]);
+    }
+
+    this.archiveID = createAlphanumericString(10);
   }
 
   lobbyMatch(): LobbyTypes.Match {

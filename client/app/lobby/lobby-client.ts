@@ -26,6 +26,10 @@ export const lobbyClient: LobbyPromises = {
     return callLobby('joinMatch', options);
   },
 
+  restartMatch: (options) => {
+    return callLobby('restartMatch', options);
+  },
+
   updatePlayer: (options) => {
     return callLobby('updatePlayer', options);
   },

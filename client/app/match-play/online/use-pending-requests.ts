@@ -56,7 +56,7 @@ import { WsRequestedAction } from '@shared/ws-requested-action';
 import { useCallback, useRef, useState } from 'react';
 import { ConnectionStatus, ServerConnection } from './use-server-connection';
 import { MatchState } from '@shared/match-state';
-import { isWsClientConnection } from '@shared/ws-response-trigger';
+import { isWsClientConnection, isWsMatchRestart } from '@shared/ws-response-trigger';
 import { WsServerResponse } from '@shared/ws-server-response';
 
 function sameRequestID(a: WsRequestId, b: WsRequestId) {
@@ -271,6 +271,12 @@ export function usePendingRequests(
         return;
       }
 
+      if (isWsMatchRestart(trigger)) {
+        // Any pending predictions were based on the pre-restart state.
+        dropPendingQueue();
+        return;
+      }
+
       if (!isWsClientRequest(trigger)) {
         return; // badClientRequest / unknownProblem - not relevant to the queue.
       }
@@ -281,7 +287,7 @@ export function usePendingRequests(
 
       handleActionResponse(trigger, response);
     },
-    [handleActionResponse, handleConnectionConfirmed, playerId],
+    [dropPendingQueue, handleActionResponse, handleConnectionConfirmed, playerId],
   );
 
   // The live counterpart of the returned matchState: the chain tip read from refs
