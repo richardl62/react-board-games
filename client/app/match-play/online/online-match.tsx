@@ -7,8 +7,8 @@ import { useSearchParamData } from '@/url-tools';
 import { GameBoardWrapper } from '../game-board-wrapper';
 import { DebugModeActions } from './debug-mode-actions';
 import { useOnlineMatchInfo } from './use-online-match-info';
-import { RematchGameControl, RematchProposal } from './rematch-controls';
-import { GameControls } from './game-controls';
+import { rematchMatchControls } from '../match-control-sets';
+import { MatchWithControls } from '../match-controls';
 
 interface ServerConnectionWithResponse extends ServerConnection {
   serverResponse: NonNullable<ServerConnection['serverResponse']>;
@@ -61,32 +61,27 @@ function ConnectedMatch({
     serverResponse.matchState,
   );
   const { debugMode } = useSearchParamData();
-  const serverPlayerData = serverResponse.matchState.playerData;
 
   return (
     <div>
       {debugMode && <DebugModeActions serverConnection={serverConnection} />}
-      <RematchProposal
-        playerData={serverPlayerData}
-        playerID={player.id}
-        sendRematchRequest={sendMatchRequest}
-      />
-      <GameBoardWrapper
-        game={game}
-        viewingPlayer={player.id}
-        connectionStatus={connectionStatus}
-        actionRequestStatus={actionRequestStatus}
-        matchState={matchState}
-        moves={moves}
-        events={events}
-      />
-      <GameControls>
-        <RematchGameControl
-          playerData={serverPlayerData}
-          playerID={player.id}
-          sendRematchRequest={sendMatchRequest}
+      <MatchWithControls
+        matchControls={rematchMatchControls({
+          playerData: serverResponse.matchState.playerData,
+          playerID: player.id,
+          sendRematchRequest: sendMatchRequest,
+        })}
+      >
+        <GameBoardWrapper
+          game={game}
+          viewingPlayer={player.id}
+          connectionStatus={connectionStatus}
+          actionRequestStatus={actionRequestStatus}
+          matchState={matchState}
+          moves={moves}
+          events={events}
         />
-      </GameControls>
+      </MatchWithControls>
     </div>
   );
 }

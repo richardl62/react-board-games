@@ -15,7 +15,7 @@ const OuterDiv = styled.div`
 
 // A rematch is a restart of the match with the same players. Any player can propose
 // one, and the match is restarted once all players want a rematch.
-interface RematchControlsProps {
+export interface RematchControlsProps {
   // Should be the server's (rather than an optimistically predicted) player data.
   playerData: PublicPlayerMetadata[];
   playerID: string;

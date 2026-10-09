@@ -1,12 +1,13 @@
 import { AppGame } from '@/app-game-support/app-game';
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import styled from 'styled-components';
 import { OfflineOptions } from '../../offline-options';
 import { GameBoardWrapper } from '../game-board-wrapper';
-import { makeInitialMatchState } from './make-initial-match-data';
 import { Ctx } from '@shared/game-control/ctx';
 import { makePlayerActions } from './make-player-actions';
-import { useSearchParamData } from '@/url-tools';
+import { useOfflineMatchState } from './use-offline-match-state';
+import { MatchWithControls } from '../match-controls';
+import { rematchMatchControls, restartMatchControls } from '../match-control-sets';
 
 const OptionalDisplay = styled.div<{ display_: boolean }>`
   display: ${(props) => (props.display_ ? 'block' : 'none')};
@@ -20,11 +21,10 @@ export function OfflineMatch({
   game: AppGame;
   options: OfflineOptions;
 }): JSX.Element {
-  const { numPlayers, passAndPlay, setupData } = options;
-  const { seed: seedParam } = useSearchParamData();
-
-  const [matchState, setMatchState] = useState(() =>
-    makeInitialMatchState(game, numPlayers, seedParam ?? Math.random(), setupData),
+  const { passAndPlay } = options;
+  const { matchState, setMatchState, restart, sendRematchRequest } = useOfflineMatchState(
+    game,
+    options,
   );
 
   const ctx = new Ctx(matchState.ctxData);
@@ -56,8 +56,32 @@ export function OfflineMatch({
     const show = !passAndPlay || viewingPlayer === ctx.currentPlayer;
     boards.push(
       <OptionalDisplay key={viewingPlayer} display_={show}>
-        {board}
+        {passAndPlay ? (
+          board
+        ) : (
+          // Without pass-and-play (intended for testing) each player's board is shown
+          // as it would be in an online match.
+          <MatchWithControls
+            matchControls={rematchMatchControls({
+              playerData: matchState.playerData,
+              playerID: viewingPlayer,
+              sendRematchRequest: (request) => sendRematchRequest(viewingPlayer, request),
+            })}
+          >
+            {board}
+          </MatchWithControls>
+        )}
       </OptionalDisplay>,
+    );
+  }
+
+  if (passAndPlay) {
+    // A single set of controls (rather than one per board) so that, for example,
+    // whether the controls are shown does not change when the turn passes.
+    return (
+      <MatchWithControls matchControls={restartMatchControls(restart)}>
+        <div>{boards}</div>
+      </MatchWithControls>
     );
   }
 
