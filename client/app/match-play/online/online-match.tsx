@@ -7,7 +7,8 @@ import { useSearchParamData } from '@/url-tools';
 import { GameBoardWrapper } from '../game-board-wrapper';
 import { DebugModeActions } from './debug-mode-actions';
 import { useOnlineMatchInfo } from './use-online-match-info';
-import { RematchControls } from './rematch-controls';
+import { RematchGameControl, RematchProposal } from './rematch-controls';
+import { GameControls } from './game-controls';
 
 interface ServerConnectionWithResponse extends ServerConnection {
   serverResponse: NonNullable<ServerConnection['serverResponse']>;
@@ -60,12 +61,13 @@ function ConnectedMatch({
     serverResponse.matchState,
   );
   const { debugMode } = useSearchParamData();
+  const serverPlayerData = serverResponse.matchState.playerData;
 
   return (
     <div>
       {debugMode && <DebugModeActions serverConnection={serverConnection} />}
-      <RematchControls
-        playerData={serverResponse.matchState.playerData}
+      <RematchProposal
+        playerData={serverPlayerData}
         playerID={player.id}
         sendRematchRequest={sendMatchRequest}
       />
@@ -78,6 +80,13 @@ function ConnectedMatch({
         moves={moves}
         events={events}
       />
+      <GameControls>
+        <RematchGameControl
+          playerData={serverPlayerData}
+          playerID={player.id}
+          sendRematchRequest={sendMatchRequest}
+        />
+      </GameControls>
     </div>
   );
 }
