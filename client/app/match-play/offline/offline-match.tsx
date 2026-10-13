@@ -21,7 +21,8 @@ export function OfflineMatch({
   game: AppGame;
   options: OfflineOptions;
 }): JSX.Element {
-  const { passAndPlay } = options;
+  const { passAndPlay, matchOptions } = options;
+  const { supportGameControls } = matchOptions;
   const { matchState, setMatchState, restart, sendRematchRequest } = useOfflineMatchState(
     game,
     options,
@@ -43,6 +44,7 @@ export function OfflineMatch({
         viewingPlayer={viewingPlayer}
         connectionStatus={'connected'}
         matchState={matchState}
+        matchOptions={matchOptions}
         actionRequestStatus={{
           waitingForServer: false,
           lastActionUnconfirmed: false,
@@ -62,11 +64,15 @@ export function OfflineMatch({
           // Without pass-and-play (intended for testing) each player's board is shown
           // as it would be in an online match.
           <MatchWithControls
-            matchControls={rematchMatchControls({
-              playerData: matchState.playerData,
-              playerID: viewingPlayer,
-              sendRematchRequest: (request) => sendRematchRequest(viewingPlayer, request),
-            })}
+            matchControls={
+              supportGameControls
+                ? rematchMatchControls({
+                    playerData: matchState.playerData,
+                    playerID: viewingPlayer,
+                    sendRematchRequest: (request) => sendRematchRequest(viewingPlayer, request),
+                  })
+                : null
+            }
           >
             {board}
           </MatchWithControls>
@@ -79,7 +85,7 @@ export function OfflineMatch({
     // A single set of controls (rather than one per board) so that, for example,
     // whether the controls are shown does not change when the turn passes.
     return (
-      <MatchWithControls matchControls={restartMatchControls(restart)}>
+      <MatchWithControls matchControls={supportGameControls ? restartMatchControls(restart) : null}>
         <div>{boards}</div>
       </MatchWithControls>
     );

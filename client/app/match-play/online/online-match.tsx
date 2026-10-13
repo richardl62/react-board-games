@@ -61,23 +61,27 @@ function ConnectedMatch({
     serverResponse.matchState,
   );
   const { debugMode } = useSearchParamData();
+  const { matchOptions } = serverResponse;
+
+  const matchControls = matchOptions.supportGameControls
+    ? rematchMatchControls({
+        playerData: serverResponse.matchState.playerData,
+        playerID: player.id,
+        sendRematchRequest: sendMatchRequest,
+      })
+    : null;
 
   return (
     <div>
       {debugMode && <DebugModeActions serverConnection={serverConnection} />}
-      <MatchWithControls
-        matchControls={rematchMatchControls({
-          playerData: serverResponse.matchState.playerData,
-          playerID: player.id,
-          sendRematchRequest: sendMatchRequest,
-        })}
-      >
+      <MatchWithControls matchControls={matchControls}>
         <GameBoardWrapper
           game={game}
           viewingPlayer={player.id}
           connectionStatus={connectionStatus}
           actionRequestStatus={actionRequestStatus}
           matchState={matchState}
+          matchOptions={matchOptions}
           moves={moves}
           events={events}
         />

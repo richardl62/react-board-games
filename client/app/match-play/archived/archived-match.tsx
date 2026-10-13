@@ -4,6 +4,7 @@ import { ArchivedMatch as ArchivedMatchData, fetchArchivedMatch } from '@utils/m
 import { AsyncStatus } from '@utils/async-status';
 import { Ctx } from '@shared/game-control/ctx';
 import { EventsAPI } from '@shared/game-control/events';
+import { MatchOptions } from '@shared/match-options';
 import { JSX } from 'react';
 import { useAsync } from 'react-async-hook';
 import styled from 'styled-components';
@@ -22,6 +23,13 @@ const actionRequestStatus: ActionRequestStatus = {
   waitingForServer: false,
   lastActionUnconfirmed: false,
   predictionDiverged: false,
+};
+
+// The match options are not archived, so those the match was played with are not
+// known. These are the values suitable for reviewing a match. (All the options are
+// listed, so that a value must be chosen here when an option is added.)
+const matchOptions: MatchOptions = {
+  supportGameControls: false,
 };
 
 function disabledAction(): never {
@@ -70,6 +78,7 @@ function ArchivedMatchBoard({
         viewingPlayer={viewingPlayer}
         connectionStatus={'connected'}
         matchState={matchState}
+        matchOptions={matchOptions}
         actionRequestStatus={actionRequestStatus}
         moves={moves}
         events={events}

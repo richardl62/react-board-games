@@ -1,6 +1,7 @@
 import { JSX, useCallback, useEffect, useMemo } from 'react';
 import { AppGame } from '@/app-game-support/app-game';
 import { MatchState } from '@shared/match-state';
+import { MatchOptions } from '@shared/match-options';
 import { Ctx } from '@shared/game-control/ctx';
 import { ConnectionStatus } from './online/use-server-connection';
 import { MatchStatus, UntypedMoves } from '@/app-game-support/board-props';
@@ -40,6 +41,7 @@ interface Props {
   viewingPlayer: PlayerID;
 
   matchState: MatchState;
+  matchOptions: MatchOptions;
 
   connectionStatus: ConnectionStatus;
   actionRequestStatus: ActionRequestStatus;
@@ -51,8 +53,16 @@ interface Props {
 // Renders the game board for a particular game.
 // It is the highest level at which the no distinction between online and offline matches is made.
 export function GameBoardWrapper(props: Props): JSX.Element {
-  const { game, matchState, viewingPlayer, connectionStatus, actionRequestStatus, moves, events } =
-    props;
+  const {
+    game,
+    matchState,
+    matchOptions,
+    viewingPlayer,
+    connectionStatus,
+    actionRequestStatus,
+    moves,
+    events,
+  } = props;
 
   const getPlayerName = useCallback(
     (playerID: string) => {
@@ -100,6 +110,7 @@ export function GameBoardWrapper(props: Props): JSX.Element {
       events={events}
       getPlayerName={getPlayerName}
       matchStatus={matchStatus}
+      matchOptions={matchOptions}
       allJoined={allJoined}
     />
   );

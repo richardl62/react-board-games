@@ -4,6 +4,7 @@ import { Ctx } from '@shared/game-control/ctx';
 import { EventsAPI } from '@shared/game-control/events';
 import { PlayerID } from '@shared/game-control/playerid';
 import { PublicPlayerMetadata } from '@shared/lobby/types';
+import { MatchOptions } from '@shared/match-options';
 
 export interface MatchStatus {
   connectionStatus: ConnectionStatus;
@@ -39,6 +40,10 @@ export interface BoardProps<TypeG = unknown, Moves extends UntypedMoves = Untype
   events: EventsAPI;
 
   matchStatus: MatchStatus;
+
+  /** Options for the match that apply whatever the game (c.f. the game's own options,
+  which a game can record in G). */
+  matchOptions: MatchOptions;
 
   // Start of convenience properties.
   getPlayerName: (pid: string) => string;

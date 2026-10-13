@@ -17,9 +17,14 @@ export function MatchWithControls({
   matchControls,
   children,
 }: {
-  matchControls: MatchControls;
+  // Null if the match does not support game controls.
+  matchControls: MatchControls | null;
   children: ReactNode;
 }): JSX.Element {
+  if (!matchControls) {
+    return <div>{children}</div>;
+  }
+
   const { notices, controls } = matchControls;
   return (
     <div>
