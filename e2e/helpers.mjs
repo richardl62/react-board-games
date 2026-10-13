@@ -30,7 +30,9 @@ export function score(text) {
 // contexts/pages plus the match id and Alice's full URL (which carries her
 // pid+credentials). Console errors from both players (and Alice's page errors)
 // are pushed onto the supplied array.
-export async function joinTwoPlayers(browser, consoleErrors) {
+// If setOptions is supplied, it is called with Alice's page before she starts the
+// match, so that it can change the options in the lobby.
+export async function joinTwoPlayers(browser, consoleErrors, setOptions = null) {
   const ctxA = await browser.newContext();
   const pageA = await ctxA.newPage();
   pageA.on('pageerror', (e) => console.log('[A][pageerror]', e.message));
@@ -43,6 +45,9 @@ export async function joinTwoPlayers(browser, consoleErrors) {
   await pageA.goto(`${BASE}/?db=1`);
   await pageA.click('text=Plus Minus');
   await pageA.waitForTimeout(600);
+  if (setOptions) {
+    await setOptions(pageA);
+  }
   await pageA.click('text=Start Game');
   await pageA.waitForTimeout(1200);
   await pageA.fill('input', 'Alice');

@@ -46,6 +46,7 @@ npx playwright install chromium
    node e2e/verify-block-reconnect.mjs
    node e2e/verify-other-player-connection.mjs
    node e2e/verify-reconnect-given-up.mjs
+   node e2e/verify-rematch.mjs
    ```
 
 Override the client URL with `E2E_BASE` if the dev server isn't on
@@ -59,5 +60,6 @@ Override the client URL with `E2E_BASE` if the dev server isn't on
 | `verify-block-reconnect.mjs` | Moves queued while reconnection is blocked are delivered once, in order, on reconnect — no divergence. |
 | `verify-other-player-connection.mjs` | Another player connecting/disconnecting doesn't disturb this player's pending action. |
 | `verify-reconnect-given-up.mjs` | When reconnection is abandoned with a move pending, the player is warned ("Recent moves may not have been saved.") and the optimistic move isn't rolled back. |
+| `verify-rematch.mjs` | Game controls are hidden until asked for; a rematch proposal can be declined, withdrawn or accepted; the match restarts once both players accept; a match created without support for game controls offers none. |
 
 Shared setup (`joinTwoPlayers`, `score`, screenshot paths) lives in `helpers.mjs`.

@@ -17,7 +17,7 @@
     "static-check": "npm run type-check && npm run lint",
     "validate": "npm run static-check && npm test",
     "test": "vitest run",
-    "fullstack-test": "node e2e/verify-multi-move.mjs && node e2e/verify-block-reconnect.mjs && node e2e/verify-other-player-connection.mjs && node e2e/verify-reconnect-given-up.mjs",
+    "fullstack-test": "node e2e/verify-multi-move.mjs && node e2e/verify-block-reconnect.mjs && node e2e/verify-other-player-connection.mjs && node e2e/verify-reconnect-given-up.mjs && node e2e/verify-rematch.mjs",
     "knip": "knip",
     "format": "prettier --write \"{client,server,shared}/**/*.{ts,tsx}\"",
     "deploy": "git push heroku main",
