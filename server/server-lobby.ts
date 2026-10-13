@@ -1,6 +1,8 @@
 import { Matches } from './matches.js';
 import { LobbyInterface } from '../shared/lobby/interface.js';
 import * as LobbyTypes from '../shared/lobby/types.js';
+import { isMatchOptions, MatchOptions } from '../shared/match-options.js';
+import { sAssert } from '../shared/utils/assert.js';
 
 export class ServerLobby implements LobbyInterface {
   constructor(matches: Matches) {
@@ -12,14 +14,19 @@ export class ServerLobby implements LobbyInterface {
     gameName,
     numPlayers,
     setupData,
+    matchOptions,
     randomSeed,
   }: {
     gameName: string;
     numPlayers: number;
     setupData: unknown;
+    matchOptions: MatchOptions;
     randomSeed: number;
   }): LobbyTypes.CreatedMatch {
-    const match = this.matches.addMatch(gameName, numPlayers, setupData, randomSeed);
+    // The argument comes from the client, so its type cannot be relied on.
+    sAssert(isMatchOptions(matchOptions), 'Match options missing or invalid');
+
+    const match = this.matches.addMatch(gameName, numPlayers, setupData, matchOptions, randomSeed);
     return match.lobbyMatch();
   }
 

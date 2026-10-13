@@ -1,3 +1,4 @@
+import { MatchOptions } from '../match-options.js';
 import { MatchList, Match, CreatedMatch, JoinedMatch } from './types.js';
 
 export interface LobbyInterface {
@@ -10,6 +11,7 @@ export interface LobbyInterface {
     numPlayers: number;
     randomSeed: number;
     setupData: unknown;
+    matchOptions: MatchOptions;
   }) => CreatedMatch;
 
   joinMatch: (options: { matchID: string; playerName: string }) => JoinedMatch;

@@ -10,6 +10,8 @@ import { fullOptionSpecification } from './full-option-specification';
 import { lobbyClient } from './lobby-client';
 import { defaultValues, specifiedValues } from '@/option-specification/tools';
 import styled from 'styled-components';
+import { matchOptionSpecification } from '../match-option-specification';
+import { MatchOptions } from '@shared/match-options';
 
 const OuterDiv = styled.div`
   display: inline-flex;
@@ -31,17 +33,20 @@ export function StartNewMatch(props: {
 
   const [options, setOptions] = useState(defaultValues(optionsSpec));
 
-  const asyncCreateMatch = useAsyncCallback((arg: { numPlayers: number; setupData: unknown }) => {
-    const randomSeed = seedParam ?? Math.random();
-    return lobbyClient
-      .createMatch({
-        gameName: game.name,
-        numPlayers: arg.numPlayers,
-        randomSeed,
-        setupData: arg.setupData,
-      })
-      .then((m) => addMatchID({ mid: m.matchID }));
-  });
+  const asyncCreateMatch = useAsyncCallback(
+    (arg: { numPlayers: number; setupData: unknown; matchOptions: MatchOptions }) => {
+      const randomSeed = seedParam ?? Math.random();
+      return lobbyClient
+        .createMatch({
+          gameName: game.name,
+          numPlayers: arg.numPlayers,
+          randomSeed,
+          setupData: arg.setupData,
+          matchOptions: arg.matchOptions,
+        })
+        .then((m) => addMatchID({ mid: m.matchID }));
+    },
+  );
 
   if (loadingOrError(asyncCreateMatch)) {
     return <LoadingOrError status={asyncCreateMatch} activity="starting match" />;
@@ -50,16 +55,19 @@ export function StartNewMatch(props: {
   const doStartNewMatch = () => {
     // The values of the game's own options.
     const setupData = specifiedValues(game.options ?? {}, options);
+    const matchOptions = specifiedValues(matchOptionSpecification, options);
     if (options.offline) {
       setOfflineOptions({
         numPlayers: options.numPlayers,
         passAndPlay: options.passAndPlay,
         setupData,
+        matchOptions,
       });
     } else {
       void asyncCreateMatch.execute({
         numPlayers: options.numPlayers,
         setupData,
+        matchOptions,
       });
     }
   };

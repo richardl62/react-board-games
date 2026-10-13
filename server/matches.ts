@@ -4,6 +4,7 @@ import { allGames } from '../shared/game-control/games/all-games.js';
 import { Match } from './match.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { Player } from './player.js';
+import { MatchOptions } from '../shared/match-options.js';
 
 // Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {
@@ -14,7 +15,13 @@ export class Matches {
   }
 
   /** Create a new match and return it's ID */
-  addMatch(game: string, numPlayers: number, setupData: unknown, randomSeed: number): Match {
+  addMatch(
+    game: string,
+    numPlayers: number,
+    setupData: unknown,
+    matchOptions: MatchOptions,
+    randomSeed: number,
+  ): Match {
     // Base the id on the number of recorded matches.  This feels like
     // a bit of a kludge, but should ensure a unique id.
     const matchID = (this.matches.length + 1).toString();
@@ -23,6 +30,7 @@ export class Matches {
       matchID,
       numPlayers,
       setupData,
+      matchOptions,
       randomAPI: RandomAPI.fromSeed(randomSeed),
     });
     this.matches.push(match);

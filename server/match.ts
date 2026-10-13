@@ -14,6 +14,7 @@ import { sendServerResponse } from './web-socket-actions.js';
 import { isArchiveEnabled, saveMatch } from './match-archive.js';
 import { createAlphanumericString } from '../shared/utils/random-string.js';
 import { WsRematchRequest } from '../shared/ws-rematch-request.js';
+import { MatchOptions } from '../shared/match-options.js';
 
 // A match is an instance of a game.
 export class Match {
@@ -25,6 +26,9 @@ export class Match {
 
   // Kept so that the match can be restarted.
   private readonly setupData: unknown;
+
+  // Not used by the server, but passed on to the clients.
+  private readonly matchOptions: MatchOptions;
 
   // Data that can be changed by a move or event.
   private activeData: ActiveMatchState;
@@ -51,11 +55,13 @@ export class Match {
       matchID,
       numPlayers,
       setupData,
+      matchOptions,
       randomAPI,
     }: {
       matchID: string;
       numPlayers: number;
       setupData: unknown;
+      matchOptions: MatchOptions;
       randomAPI: RandomAPI;
     },
   ) {
@@ -63,6 +69,7 @@ export class Match {
     this.matchID = matchID;
     this.random = randomAPI;
     this.setupData = setupData;
+    this.matchOptions = matchOptions;
 
     const { playerData: setupPlayerData, ...activeMatchState } = makeActiveMatchState(
       gameControl,
@@ -254,6 +261,7 @@ export class Match {
     const response: WsServerResponse = {
       trigger,
       matchState: this.matchState(errorInLastAction),
+      matchOptions: this.matchOptions,
     };
 
     const doIt = () => {

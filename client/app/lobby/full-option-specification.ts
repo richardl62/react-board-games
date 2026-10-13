@@ -1,5 +1,6 @@
 import { AppGame, defaultNumPlayers } from '@/app-game-support/app-game';
 import { OptionValues } from '@/option-specification/types';
+import { matchOptionSpecification } from '../match-option-specification';
 import { sAssert } from '@shared/utils/assert';
 
 export function fullOptionSpecification(game: AppGame, offlineByDefault: boolean) {
@@ -29,12 +30,7 @@ export function fullOptionSpecification(game: AppGame, offlineByDefault: boolean
       default: false,
     },
 
-    // Control whether the 'show game controls' option is available.
-    supportGameControls: {
-      label: 'Support game controls',
-      default: true,
-      debugOnly: true,
-    },
+    ...matchOptionSpecification,
 
     passAndPlay: {
       label: 'Play and pass (offline only)',

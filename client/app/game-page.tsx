@@ -9,6 +9,7 @@ import { OfflineOptions } from './offline-options';
 import { GameLobby } from './lobby/game-lobby';
 import { MatchLobby } from './lobby/match-lobby';
 import { defaultValues } from '@/option-specification/tools';
+import { matchOptionSpecification } from './match-option-specification';
 
 const OuterDiv = styled.div`
   font-size: 18px;
@@ -62,6 +63,7 @@ function useStartingOfflineOptions(game: AppGame): OfflineOptions | null {
     numPlayers: isOffline.numPlayers,
     passAndPlay: true,
     setupData,
+    matchOptions: defaultValues(matchOptionSpecification),
   };
 }
 
