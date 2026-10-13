@@ -24,10 +24,14 @@ export function SetOptions<Spec extends OptionSpecifications>({
   specification,
   options,
   setOptions,
+  showDebugOnly,
 }: {
   specification: Spec;
   options: SpecifiedValues<Spec>;
   setOptions: (options: SpecifiedValues<Spec>) => void;
+
+  // Whether to show options that are specified as debugOnly.
+  showDebugOnly: boolean;
 }): JSX.Element {
   const inputAndLabel = (key: keyof Spec, debugOnly: boolean) => {
     const spec = specification[key];
@@ -37,7 +41,7 @@ export function SetOptions<Spec extends OptionSpecifications>({
       return [];
     }
 
-    if (spec.debugOnly && !options.showDebugOptions) {
+    if (spec.debugOnly && !showDebugOnly) {
       return [];
     }
 
