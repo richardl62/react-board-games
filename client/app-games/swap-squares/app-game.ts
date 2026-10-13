@@ -11,6 +11,7 @@ export const appGame: AppGame = {
 
   displayName: 'Swap Squares',
   category: GameCategory.test,
+  supportGameControlsDefault: false,
 
   options: setupOptions,
   board: (props) => standardBoard(LazyBoard, props),

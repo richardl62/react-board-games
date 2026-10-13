@@ -12,6 +12,7 @@ const appGameSimple: AppGame = {
 
   displayName: 'Simple Scrabble',
   category: GameCategory.test,
+  supportGameControlsDefault: false,
 
   options: setupOptions,
   board: (props: BoardProps) => standardBoard(LazyBoard, props, gameControlSimple),
@@ -22,6 +23,7 @@ const appGameStandard: AppGame = {
 
   displayName: 'Scrabble',
   category: GameCategory.standard,
+  supportGameControlsDefault: false,
 
   options: setupOptions,
   board: (props: BoardProps) => standardBoard(LazyBoard, props, gameControlStandard),

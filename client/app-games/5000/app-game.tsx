@@ -11,6 +11,7 @@ export const appGame: AppGame = {
 
   displayName: '5000',
   category: GameCategory.standard,
+  supportGameControlsDefault: false,
 
   options: setupOptions,
   board: (props) => standardBoard(LazyBoard, props),

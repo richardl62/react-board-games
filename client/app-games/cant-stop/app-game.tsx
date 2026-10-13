@@ -11,6 +11,7 @@ export const appGame: AppGame = {
 
   displayName: "Can't Stop",
   category: GameCategory.standard,
+  supportGameControlsDefault: false,
 
   options: setupOptions,
   board: (props) => standardBoard(LazyBoard, props),

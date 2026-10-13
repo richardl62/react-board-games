@@ -30,7 +30,7 @@ export function fullOptionSpecification(game: AppGame, offlineByDefault: boolean
       default: false,
     },
 
-    ...matchOptionSpecification,
+    ...matchOptionSpecification(game),
 
     passAndPlay: {
       label: 'Play and pass (offline only)',

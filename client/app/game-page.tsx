@@ -63,7 +63,7 @@ function useStartingOfflineOptions(game: AppGame): OfflineOptions | null {
     numPlayers: isOffline.numPlayers,
     passAndPlay: true,
     setupData,
-    matchOptions: defaultValues(matchOptionSpecification),
+    matchOptions: defaultValues(matchOptionSpecification(game)),
   };
 }
 

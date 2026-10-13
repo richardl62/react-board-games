@@ -55,7 +55,7 @@ export function StartNewMatch(props: {
   const doStartNewMatch = () => {
     // The values of the game's own options.
     const setupData = specifiedValues(game.options ?? {}, options);
-    const matchOptions = specifiedValues(matchOptionSpecification, options);
+    const matchOptions = specifiedValues(matchOptionSpecification(game), options);
     if (options.offline) {
       setOfflineOptions({
         numPlayers: options.numPlayers,

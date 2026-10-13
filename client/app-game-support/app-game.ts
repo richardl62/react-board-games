@@ -20,6 +20,12 @@ export interface AppGame extends GameControl {
   category: GameCategory;
 
   options?: OptionSpecifications;
+
+  // The default value of the supportGameControls option.
+  // The idea is that it is set to true in games for which the controls
+  // are fully supported.
+  supportGameControlsDefault: boolean;
+
   board: (props: BoardProps) => JSX.Element;
 }
 

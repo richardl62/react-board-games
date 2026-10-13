@@ -10,6 +10,7 @@ export const appGame: AppGame = {
 
   displayName: 'Ticker',
   category: GameCategory.test,
+  supportGameControlsDefault: false,
 
   board: (props) => standardBoard(LazyBoard, props),
 };

@@ -10,6 +10,7 @@ export const appGame: AppGame = {
 
   displayName: 'Random Draw',
   category: GameCategory.test,
+  supportGameControlsDefault: false,
 
   options: {},
   board: (props) => standardBoard(LazyBoard, props),

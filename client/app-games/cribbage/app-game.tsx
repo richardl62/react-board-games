@@ -10,6 +10,7 @@ export const appGame: AppGame = {
 
   displayName: 'Cribbage',
   category: GameCategory.development,
+  supportGameControlsDefault: false,
 
   board: (props) => standardBoard(LazyBoard, props),
 };

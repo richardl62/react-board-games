@@ -11,6 +11,7 @@ export const appGame: AppGame = {
 
   displayName: 'Plus Minus',
   category: GameCategory.test,
+  supportGameControlsDefault: true,
 
   options: setupOptions,
   board: (props) => standardBoard(LazyBoard, props),
