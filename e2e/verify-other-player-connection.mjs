@@ -2,7 +2,7 @@
 // must not disturb this player's own pending action: no "Last action unconfirmed"
 // warning, the move still confirms correctly, and play continues.
 
-import { launch, joinTwoPlayers, score, shot } from './helpers.mjs';
+import { launch, joinTwoPlayers, score, shot, PLUS } from './helpers.mjs';
 
 const browser = await launch();
 const consoleErrors = [];
@@ -18,7 +18,7 @@ await pageA.click('text=Apply');
 await pageA.waitForTimeout(100);
 
 // Alice makes a move - sent immediately (she's connected), response delayed.
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
 await pageA.waitForTimeout(100);
 
 const scoreRightAfterClick = score(await pageA.innerText('body'));
@@ -69,7 +69,7 @@ if (divergenceErrors.length > 0) {
 }
 
 // Confirm Alice can still act normally afterwards.
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
 await pageA.waitForTimeout(1000);
 const scoreAfterFurtherMove = score(await pageA.innerText('body'));
 console.log(

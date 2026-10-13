@@ -20,9 +20,14 @@ export function launch() {
   return chromium.launch();
 }
 
-// Extract the Plus Minus turn score from the page body text.
+// Selectors for the buttons that add to the Plus Minus shared count. (The first
+// +1 and -1 buttons on the page are those for the player's own count.)
+export const PLUS = 'button:has-text("+1") >> nth=1';
+export const MINUS = 'button:has-text("-1") >> nth=1';
+
+// Extract the Plus Minus shared count from the page body text.
 export function score(text) {
-  const m = text.match(/End Turn\s*\n?\s*(-?\d+)/);
+  const m = text.match(/Shared Count\s*\+1\s*-1\s*(-?\d+)/);
   return m ? parseInt(m[1], 10) : null;
 }
 

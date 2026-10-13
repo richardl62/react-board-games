@@ -6,21 +6,17 @@
 // - If the match is created without support for game controls, neither player is
 //   offered them.
 
-import { launch, joinTwoPlayers, shot } from './helpers.mjs';
+import { launch, joinTwoPlayers, score, shot, PLUS } from './helpers.mjs';
 
 function report(description, pass, detail = '') {
   console.log(`${description}: ${pass ? 'PASS' : 'FAIL'}${detail && ` (${detail})`}`);
 }
 
-// Extract the Plus Minus shared count from the page.
-async function sharedCount(page) {
-  const m = (await page.innerText('body')).match(/Shared Count\s*\+1\s*-1\s*(-?\d+)/);
-  return m ? parseInt(m[1], 10) : null;
-}
+const sharedCount = async (page) => score(await page.innerText('body'));
 
 // Add one to the shared count.
 async function addToSharedCount(page) {
-  await page.locator('button:has-text("+1")').nth(1).click();
+  await page.click(PLUS);
   await page.waitForTimeout(800);
 }
 

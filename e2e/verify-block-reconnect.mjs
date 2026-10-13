@@ -2,7 +2,7 @@
 // optimistically and then be delivered (once, in order) when reconnection finally
 // succeeds - with no divergence and no spurious warnings.
 
-import { launch, joinTwoPlayers, score, shot } from './helpers.mjs';
+import { launch, joinTwoPlayers, score, shot, PLUS } from './helpers.mjs';
 
 const browser = await launch();
 const consoleErrors = [];
@@ -17,8 +17,8 @@ await pageA.click('text=Close Connection');
 await pageA.waitForTimeout(300);
 
 // Queue two moves while disconnected
-await pageA.click('button:has-text("+1")');
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
+await pageA.click(PLUS);
 
 let changedWhileDisconnected = null;
 const t1 = Date.now();
@@ -49,7 +49,7 @@ if (divergenceErrors.length > 0) {
 }
 
 // Confirm action still works afterwards
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
 await pageA.waitForTimeout(1000);
 const finalScore = score(await pageA.innerText('body'));
 console.log(`Can still act after reconnect (expect ${initialScore + 3}): ${finalScore === initialScore + 3 ? 'PASS' : 'FAIL'} (got ${finalScore})`);

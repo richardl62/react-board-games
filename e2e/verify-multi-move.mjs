@@ -2,7 +2,7 @@
 // queued while disconnected should all apply instantly and settle to the correct
 // server-confirmed state.
 
-import { launch, joinTwoPlayers, score, shot } from './helpers.mjs';
+import { launch, joinTwoPlayers, score, shot, PLUS, MINUS } from './helpers.mjs';
 
 const browser = await launch();
 const consoleErrors = [];
@@ -14,9 +14,9 @@ await pageA.click('text=Apply');
 await pageA.waitForTimeout(200);
 
 const t0 = Date.now();
-await pageA.click('button:has-text("+1")');
-await pageA.click('button:has-text("+1")');
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
+await pageA.click(PLUS);
+await pageA.click(PLUS);
 let changedTo3 = null;
 for (let i = 0; i < 20; i++) {
   if (score(await pageA.innerText('body')) === 3) { changedTo3 = Date.now() - t0; break; }
@@ -40,9 +40,9 @@ await pageA.locator('#delay').fill('0');
 await pageA.click('text=Apply');
 await pageA.waitForTimeout(300);
 
-await pageA.click('button:has-text("+1")');
-await pageA.click('button:has-text("-1")');
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
+await pageA.click(MINUS);
+await pageA.click(PLUS);
 await pageA.waitForTimeout(1500);
 const scoreAfterMixed = score(await pageA.innerText('body'));
 console.log(`[Test 2] Score after +1,-1,+1 from 3 (expect 4): ${scoreAfterMixed === 4 ? 'PASS' : 'FAIL'} (got ${scoreAfterMixed})`);
@@ -51,8 +51,8 @@ console.log(`[Test 2] Score after +1,-1,+1 from 3 (expect 4): ${scoreAfterMixed 
 await pageA.click('text=Close Connection');
 await pageA.waitForTimeout(200);
 
-await pageA.click('button:has-text("+1")');
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
+await pageA.click(PLUS);
 let changedWhileDisconnected = null;
 const t1 = Date.now();
 for (let i = 0; i < 20; i++) {
@@ -69,8 +69,9 @@ await pageA.screenshot({ path: shot('multi-2-after-reconnect.png') });
 // Confirm not stuck - end turn works
 await pageA.click('button:has-text("End Turn")');
 await pageA.waitForTimeout(1500);
-const bodyAfterEndTurn = await pageA.innerText('body');
-console.log(`[Test 3] Player can act after reconnect (expect Bob's turn): ${bodyAfterEndTurn.includes("Bob (you)") || bodyAfterEndTurn.includes('Current player: Bob') ? 'PASS' : 'FAIL'}`);
+// The current player is given in the page title (the board just underlines the name).
+const titleAfterEndTurn = await pageA.title();
+console.log(`[Test 3] Player can act after reconnect (expect Bob's turn): ${titleAfterEndTurn.startsWith('Bob to play') ? 'PASS' : 'FAIL'} (title: ${titleAfterEndTurn})`);
 
 // ── Console error / divergence check ───────────────────────────────────────
 const divergenceErrors = consoleErrors.filter((e) => e.includes('diverged') || e.includes('out of order'));

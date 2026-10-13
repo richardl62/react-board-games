@@ -10,7 +10,7 @@
 // 4000 "player connected elsewhere" -> first page: reconnecting=false, move still
 // pending.
 
-import { launch, joinTwoPlayers, score, shot } from './helpers.mjs';
+import { launch, joinTwoPlayers, score, shot, PLUS } from './helpers.mjs';
 
 const browser = await launch();
 const consoleErrors = [];
@@ -26,7 +26,7 @@ await pageA.click('text=Apply');
 await pageA.waitForTimeout(100);
 
 // Alice makes a move - sent immediately (she's connected), response delayed.
-await pageA.click('button:has-text("+1")');
+await pageA.click(PLUS);
 await pageA.waitForTimeout(150);
 
 const scoreAfterClick = score(await pageA.innerText('body'));
