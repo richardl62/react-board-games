@@ -26,7 +26,9 @@ create policy "Anyone can read matches"
   to anon, authenticated
   using (true);
 
--- Explicit grants: harmless if Supabase's defaults already cover them.
+-- Grants are required for the table to be accessible through the Data API.
+-- Unlike Supabase's suggested grants, 'authenticated' is given read-only access,
+-- as only the server (service_role) writes.
 grant select on public.matches to anon, authenticated;
 revoke insert, update, delete on public.matches from anon, authenticated;
 grant select, insert, update, delete on public.matches to service_role;
