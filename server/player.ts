@@ -2,6 +2,7 @@ import { WebSocket } from 'ws';
 import { PublicPlayerMetadata } from '../shared/lobby/types.js';
 import { sAssert } from '../shared/utils/assert.js';
 import { createAlphanumericString } from '../shared/utils/random-string.js';
+import { SavedPlayer } from './live-matches.js';
 
 // Put loosely, a Player represents someone sitting around the table at which
 // a match is being played.
@@ -118,5 +119,12 @@ export class Player {
       meta.wantsRematch = true;
     }
     return meta;
+  }
+
+  /** The data needed to restore this player after a server restart. Includes the
+   * (secret) credentials. */
+  savedData(): SavedPlayer {
+    const { id, name_: name, credentials, gameData_: gameData, wantsRematch_: wantsRematch } = this;
+    return { id, name, credentials, gameData, wantsRematch };
   }
 }

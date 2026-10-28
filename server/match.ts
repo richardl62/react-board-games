@@ -11,7 +11,9 @@ import { makeActiveMatchState } from '../shared/game-control/make-active-match-d
 import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
-import { isArchiveEnabled, saveMatch } from './match-archive.js';
+import { saveMatch } from './match-archive.js';
+import { saveLiveMatch, SavedMatch } from './live-matches.js';
+import { isSupabaseEnabled } from './supabase.js';
 import { WsRematchRequest } from '../shared/ws-rematch-request.js';
 import { MatchOptions } from '../shared/match-options.js';
 
@@ -42,9 +44,10 @@ export class Match {
   // each time the match is restarted (i.e. on a rematch).
   private gameNumber = 1;
 
-  // Archive saves are chained so that they complete in the order they were requested.
-  // Otherwise, an older state could overwrite a newer one.
-  private archiveQueue: Promise<void> = Promise.resolve();
+  // Saves (to the archive and of the live match) are chained so that they complete
+  // in the order they were requested. Otherwise, an older state could overwrite a
+  // newer one.
+  private saveQueue: Promise<void> = Promise.resolve();
 
   constructor(
     gameControl: GameControl,
@@ -224,7 +227,7 @@ export class Match {
   // thrown, so that problems with the archive do not affect live matches.
   archive() {
     const { archive, stateVersion } = this.definition;
-    if (!archive || !isArchiveEnabled) {
+    if (!archive || !isSupabaseEnabled) {
       return;
     }
 
@@ -238,12 +241,50 @@ export class Match {
     });
     const updatedAt = new Date();
 
-    this.archiveQueue = this.archiveQueue
-      .then(() => saveMatch(record, updatedAt))
-      .catch((err: unknown) => {
-        const message = err instanceof Error ? err.message : 'unknown error';
-        console.error(`Failed to archive match ${this.matchID}: ${message}`);
-      });
+    this.queueSave('archive', () => saveMatch(record, updatedAt));
+  }
+
+  // Save everything needed to restore the match after a server restart. Should be
+  // called after any change to the match (including players joining or being
+  // renamed). As for archive(), the save is asynchronous and failures are logged.
+  saveLive() {
+    if (!isSupabaseEnabled) {
+      return;
+    }
+
+    // Snapshot now, as for archive().
+    const record = structuredClone({
+      id: this.matchID,
+      game: this.gameName,
+      stateVersion: this.definition.stateVersion,
+      data: this.savedData(),
+    });
+    const updatedAt = new Date();
+
+    this.queueSave('save', () => saveLiveMatch(record, updatedAt));
+  }
+
+  // Resolves when all the saves requested so far have completed (successfully or not).
+  get savesCompleted(): Promise<void> {
+    return this.saveQueue;
+  }
+
+  private savedData(): SavedMatch {
+    return {
+      setupData: this.setupData,
+      matchOptions: this.matchOptions,
+      activeData: this.activeData,
+      players: this.players.map((p) => p.savedData()),
+      rematchSeed: this.rematchSeed,
+      gameNumber: this.gameNumber,
+    };
+  }
+
+  private queueSave(description: string, save: () => Promise<void>) {
+    this.saveQueue = this.saveQueue.then(save).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : 'unknown error';
+      console.error(`Failed to ${description} match ${this.matchID}: ${message}`);
+    });
   }
 
   findPlayer(arg: { id: string } | { name: string } | { ws: WebSocket }): Player | undefined {

@@ -42,6 +42,11 @@ export class Matches {
     return match;
   }
 
+  /** Resolves when all saves requested so far, for all matches, have completed */
+  async allSavesCompleted(): Promise<void> {
+    await Promise.all(this.matches.map((m) => m.savesCompleted));
+  }
+
   findMatch(matchID: string): Match | undefined {
     return this.matches.find((m) => m.matchID === matchID);
   }

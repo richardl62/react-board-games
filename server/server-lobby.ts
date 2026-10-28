@@ -27,6 +27,7 @@ export class ServerLobby implements LobbyInterface {
     sAssert(isMatchOptions(matchOptions), 'Match options missing or invalid');
 
     const match = this.matches.addMatch(gameName, numPlayers, setupData, matchOptions, randomSeed);
+    match.saveLive();
     return match.lobbyMatch();
   }
 
@@ -70,6 +71,7 @@ export class ServerLobby implements LobbyInterface {
     }
 
     const player = match.allocatePlayer(playerName);
+    match.saveLive();
 
     return { playerID: player.id.toString(), playerCredentials: player.credentials };
   }
@@ -104,6 +106,7 @@ export class ServerLobby implements LobbyInterface {
     }
 
     player.changeName(newName);
+    match.saveLive();
     return null;
   }
 }

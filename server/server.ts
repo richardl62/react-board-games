@@ -135,3 +135,30 @@ wss.on('connection', (ws, req) => {
 
   processConnection(matches, ws, req.url);
 });
+
+// The longest time to wait, on shutdown, for pending saves. (Heroku allows 30
+// seconds between SIGTERM and forcibly stopping the process.)
+const SHUTDOWN_SAVE_TIMEOUT = 10 * 1000; // 10 seconds
+
+// Shut down gracefully, e.g. when Heroku restarts the server or a new version is
+// deployed. New connections are refused and existing ones are closed with a code that
+// tells clients to try to reconnect. Pending saves are then given a chance to complete,
+// so that the latest moves are not lost.
+function shutdown(signal: string) {
+  console.log(`${signal} received: shutting down`);
+
+  for (const ws of wss.clients) {
+    ws.close(1012, 'Server restarting'); // 1012: 'Service Restart'
+  }
+  wss.close();
+  server.close();
+
+  const timeout = new Promise((resolve) => setTimeout(resolve, SHUTDOWN_SAVE_TIMEOUT));
+  void Promise.race([matches.allSavesCompleted(), timeout]).then(() => {
+    console.log('Shutdown complete');
+    process.exit(0);
+  });
+}
+
+process.once('SIGTERM', () => shutdown('SIGTERM'));
+process.once('SIGINT', () => shutdown('SIGINT'));

@@ -53,6 +53,9 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
       error = err instanceof Error ? err.message : 'unknown error';
       console.warn(`Error: ${error} when processing rematch request ${request}`);
     }
+    if (error === null) {
+      match.saveLive();
+    }
     match.broadcastMatchState(restarted ? wsMatchRestart() : wsRematchUpdate(), error);
     return;
   }
@@ -81,6 +84,7 @@ function doProcessActionRequest(matches: Matches, ws: WebSocket, request: string
 
   if (error === null) {
     match.archive();
+    match.saveLive();
   }
 
   match.broadcastMatchState(clientRequest, error);
