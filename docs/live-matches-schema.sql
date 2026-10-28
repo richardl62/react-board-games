@@ -14,7 +14,10 @@ create table public.live_matches (
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now(),
   -- Everything needed to restore the match (SavedMatch in server/live-matches.ts).
-  data          jsonb       not null
+  -- 'json' rather than 'jsonb', as jsonb does not preserve the order of object keys.
+  -- A restored match must match the original exactly, as clients compare states
+  -- as JSON text when checking optimistic updates.
+  data          json        not null
 );
 
 -- Row level security with no policies: no access other than via the secret key.

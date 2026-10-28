@@ -24,13 +24,23 @@ import { SavedPlayer } from './live-matches.js';
 // be possible for a client to re-establish a lost connection.
 //
 export class Player {
-  constructor(id: string) {
+  constructor(id: string, credentials = createAlphanumericString(8)) {
     this.id = id;
 
-    this.credentials = createAlphanumericString(8);
+    this.credentials = credentials;
 
     this.name_ = null;
     this.ws = null;
+  }
+
+  /** Restore a player saved by savedData(), e.g. after a server restart. The
+   * restored player is not connected. */
+  static restore(saved: SavedPlayer): Player {
+    const player = new Player(saved.id, saved.credentials);
+    player.name_ = saved.name;
+    player.gameData_ = saved.gameData;
+    player.wantsRematch_ = saved.wantsRematch;
+    return player;
   }
 
   readonly id: string;

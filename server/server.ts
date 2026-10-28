@@ -82,9 +82,9 @@ const distPath = path.resolve(__dirname, '../../dist/client');
 // Run all the functions provided by the LobbyClient
 // The name of the function to run (createMatch, joinMatch etc)
 // is provided as a query parameter.
-app.get('/lobby', (req, res) => {
+app.get('/lobby', async (req, res) => {
   try {
-    const result = runLobbyFunction(matches, req.query);
+    const result = await runLobbyFunction(matches, req.query);
     res.send(JSON.stringify(result));
   } catch (err) {
     const message = err instanceof Error ? err.message : 'unknown error';
@@ -122,18 +122,23 @@ wss.on('connection', (ws, req) => {
 
   ws.on('pong', () => isAliveMap.set(ws, true));
 
+  // Processing the connection can take a while if the match has to be restored (e.g.
+  // after a server restart). Messages and disconnection are processed after it, in
+  // order. (On reconnection, a client may immediately resend unconfirmed requests.)
+  const connected = processConnection(matches, ws, req.url);
+
   ws.on('message', (message) => {
     lastUserRequest.set(ws, Date.now()); // Update last activity
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    processActionRequest(matches, ws, message.toString());
+    void connected.then(() => {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      processActionRequest(matches, ws, message.toString());
+    });
   });
 
   ws.on('close', () => {
-    processDisconnection(matches, ws);
+    void connected.then(() => processDisconnection(matches, ws));
     // WeakMap entries are garbage collected automatically
   });
-
-  processConnection(matches, ws, req.url);
 });
 
 // The longest time to wait, on shutdown, for pending saves. (Heroku allows 30

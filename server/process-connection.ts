@@ -28,11 +28,35 @@ function urlParam(requestUrl: string | undefined, name: string) {
   return param;
 }
 
-export function processConnection(matches: Matches, ws: WebSocket, requestUrl: string | undefined) {
+// Asynchronous, as the match may need to be restored from the saved live matches
+// (e.g. after a server restart). Does not reject.
+export async function processConnection(
+  matches: Matches,
+  ws: WebSocket,
+  requestUrl: string | undefined,
+): Promise<void> {
   try {
     const matchID = urlParam(requestUrl, 'matchID');
     const playerID = urlParam(requestUrl, 'playerID');
     const credentials = urlParam(requestUrl, 'credentials');
+
+    try {
+      await matches.ensureLoaded(matchID);
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'unknown error';
+      console.error(`Failed to load match ${matchID}:`, error);
+
+      // Close without using a private (4000-4999) code, so the client will retry.
+      getFlags(ws).suppressDisconnectionActions = true;
+      ws.close(1011, 'Unable to load match'); // 1011: 'Internal Error'
+      return;
+    }
+
+    if (ws.readyState !== ws.OPEN) {
+      // The connection was closed while the match was being loaded.
+      getFlags(ws).suppressDisconnectionActions = true;
+      return;
+    }
 
     const match = matches.findMatch(matchID);
     if (!match) {

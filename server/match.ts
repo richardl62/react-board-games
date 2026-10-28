@@ -49,24 +49,39 @@ export class Match {
   // newer one.
   private saveQueue: Promise<void> = Promise.resolve();
 
+  // Create a new match or, if 'saved' is given, restore a match that was saved by
+  // saveLive() (e.g. after a server restart).
   constructor(
     gameControl: GameControl,
-    {
-      matchID,
-      numPlayers,
-      setupData,
-      matchOptions,
-      randomAPI,
-    }: {
-      matchID: string;
-      numPlayers: number;
-      setupData: unknown;
-      matchOptions: MatchOptions;
-      randomAPI: RandomAPI;
-    },
+    args:
+      | {
+          matchID: string;
+          numPlayers: number;
+          setupData: unknown;
+          matchOptions: MatchOptions;
+          randomAPI: RandomAPI;
+        }
+      | {
+          matchID: string;
+          saved: SavedMatch;
+        },
   ) {
     this.definition = gameControl;
-    this.matchID = matchID;
+    this.matchID = args.matchID;
+
+    if ('saved' in args) {
+      const { saved } = args;
+      this.random = RandomAPI.fromState(saved.activeData.prngState);
+      this.setupData = saved.setupData;
+      this.matchOptions = saved.matchOptions;
+      this.activeData = saved.activeData;
+      this.players = saved.players.map((p) => Player.restore(p));
+      this.rematchSeed = saved.rematchSeed;
+      this.gameNumber = saved.gameNumber;
+      return;
+    }
+
+    const { numPlayers, setupData, matchOptions, randomAPI } = args;
     this.random = randomAPI;
     this.setupData = setupData;
     this.matchOptions = matchOptions;
