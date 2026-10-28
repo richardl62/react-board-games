@@ -12,7 +12,6 @@ import { WsResponseTrigger } from '../shared/ws-response-trigger.js';
 import { WsServerResponse } from '../shared/ws-server-response.js';
 import { sendServerResponse } from './web-socket-actions.js';
 import { isArchiveEnabled, saveMatch } from './match-archive.js';
-import { createAlphanumericString } from '../shared/utils/random-string.js';
 import { WsRematchRequest } from '../shared/ws-rematch-request.js';
 import { MatchOptions } from '../shared/match-options.js';
 
@@ -39,11 +38,9 @@ export class Match {
 
   private responseDelay = 0;
 
-  // Unique across server restarts (unlike matchID). Used as the key in the match archive.
-  // Not secret. 10 characters make a collision (which would overwrite a saved match)
-  // vanishingly unlikely.
-  // Changed when the match is restarted, so the restarted match is archived separately.
-  private archiveID = createAlphanumericString(10);
+  // The number of the current game within this match: 1 initially, and increased
+  // each time the match is restarted (i.e. on a rematch).
+  private gameNumber = 1;
 
   // Archive saves are chained so that they complete in the order they were requested.
   // Otherwise, an older state could overwrite a newer one.
@@ -126,7 +123,13 @@ export class Match {
     }
     this.clearRematchProposal();
 
-    this.archiveID = createAlphanumericString(10);
+    ++this.gameNumber;
+  }
+
+  // The key of the current game in the match archive. Each game in a match (i.e.
+  // the original game and any rematches) is archived separately.
+  private get archiveID(): string {
+    return `${this.matchID}-${this.gameNumber}`;
   }
 
   // Process a rematch request (see WsRematchRequest), restarting the match if all

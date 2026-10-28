@@ -5,6 +5,8 @@ import { Match } from './match.js';
 import { RandomAPI } from '../shared/utils/random-api.js';
 import { Player } from './player.js';
 import { MatchOptions } from '../shared/match-options.js';
+import { createAlphanumericString } from '../shared/utils/random-string.js';
+import { sAssert } from '../shared/utils/assert.js';
 
 // Matches is intended as a fairly simple wrapper around a collection of matches.
 export class Matches {
@@ -22,9 +24,11 @@ export class Matches {
     matchOptions: MatchOptions,
     randomSeed: number,
   ): Match {
-    // Base the id on the number of recorded matches.  This feels like
-    // a bit of a kludge, but should ensure a unique id.
-    const matchID = (this.matches.length + 1).toString();
+    // A random ID, so that it is unique across server restarts (and so that links to
+    // a match remain valid if the match is restored after a restart). 10 characters
+    // make a collision vanishingly unlikely.
+    const matchID = createAlphanumericString(10);
+    sAssert(!this.findMatch(matchID), `Duplicate match ID ${matchID}`);
 
     const match = new Match(getGameControl(game), {
       matchID,
