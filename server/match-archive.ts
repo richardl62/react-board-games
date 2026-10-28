@@ -19,7 +19,7 @@ export interface ArchiveRecord {
   id: string;
   game: string;
   players: (string | null)[];
-  archiveVersion: number; // GameControl.archive.version
+  archiveVersion: number; // GameControl.stateVersion
   matchState: MatchState;
 }
 

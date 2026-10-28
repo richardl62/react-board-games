@@ -99,12 +99,12 @@ function UnlistedMatches({ count }: { count: number }) {
   return <UnlistedStyles>{games} an unsupported version and cannot be displayed.</UnlistedStyles>;
 }
 
-// The current archive versions of those games that are archived.
+// The current state versions of those games that are archived.
 function currentArchiveVersions(games: AppGame[]): ArchiveGameVersion[] {
   const versions: ArchiveGameVersion[] = [];
-  for (const { name, archive } of games) {
+  for (const { name, archive, stateVersion } of games) {
     if (archive) {
-      versions.push({ game: name, version: archive.version });
+      versions.push({ game: name, version: stateVersion });
     }
   }
   return versions;

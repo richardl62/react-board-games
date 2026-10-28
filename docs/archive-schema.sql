@@ -11,7 +11,7 @@ create table public.matches (
   players     jsonb       not null,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now(),
-  -- GameControl.archive.version of the game when the match was saved.
+  -- GameControl.stateVersion of the game when the match was saved.
   archive_version integer not null,
   match_state jsonb       not null
 );

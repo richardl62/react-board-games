@@ -19,11 +19,11 @@ export interface ArchivedMatchSummary {
 export interface ArchivedMatch {
   game: string; // GameControl.name
   updatedAt: Date;
-  archiveVersion: number; // GameControl.archive.version when the match was saved
+  archiveVersion: number; // GameControl.stateVersion when the match was saved
   matchState: MatchState;
 }
 
-// The current archive version of a game (i.e. GameControl.archive.version)
+// The current state version of a game (i.e. GameControl.stateVersion)
 export interface ArchiveGameVersion {
   game: string; // GameControl.name
   version: number;

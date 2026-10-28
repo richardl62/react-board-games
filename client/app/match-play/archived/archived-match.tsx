@@ -119,10 +119,10 @@ export function ArchivedMatch({
   return <ArchivedMatchBoard game={game} archived={archived} />;
 }
 
-// Return a message explaining why a match saved with the given archive version
+// Return a message explaining why a match saved with the given state version
 // cannot be displayed, or null if it can be.
 function versionProblem(game: AppGame, savedVersion: number): string | null {
-  if (game.archive && game.archive.version === savedVersion) {
+  if (game.archive && game.stateVersion === savedVersion) {
     return null;
   }
 
