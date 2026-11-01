@@ -119,12 +119,17 @@ export function ArchivedMatch({
   return <ArchivedMatchBoard game={game} archived={archived} />;
 }
 
-// Return a message explaining why a match saved with the given state version
-// cannot be displayed, or null if it can be.
+// Return a message explaining why an archived match of the given game, saved with
+// the given state version, cannot be displayed, or null if it can be.
 function versionProblem(game: AppGame, savedVersion: number): string | null {
-  if (game.archive && game.stateVersion === savedVersion) {
-    return null;
+  if (!game.archive) {
+    // The game was archived before archiving was turned off for it.
+    return `Saved games of ${game.displayName} can no longer be displayed.`;
   }
 
-  return `This game was saved by a different version of ${game.displayName} and cannot be displayed.`;
+  if (game.stateVersion !== savedVersion) {
+    return `This game was saved by a different version of ${game.displayName} and cannot be displayed.`;
+  }
+
+  return null;
 }

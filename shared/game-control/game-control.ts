@@ -29,8 +29,13 @@ export interface GameControl {
   // different version are not displayed or restored.
   stateVersion: number;
 
-  // If true, the server saves the match state to the online match archive after
-  // every successful action, so the match can be reviewed later.
+  // If true, each online game (including rematches) is recorded so it can be
+  // reviewed from the Past Games page. The state is saved after every successful
+  // action, but only the latest is kept, so this is worthwhile only if that state
+  // is meaningful on its own (e.g. Scrabble, whose state includes the move history).
+  // (This is separate from the private save of live matches, which is done for all
+  // games so that matches can be resumed after a server restart.)
+  // Note: all archived data is publicly readable from the database.
   archive: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
