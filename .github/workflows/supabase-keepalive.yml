@@ -1,12 +1,14 @@
 name: Supabase keepalive
 
 # Free Supabase projects are paused after 7 days without activity, which would
-# stop the match archive (see docs/archive-schema.sql) from being read. A small
-# read twice a week keeps the project active. A failed run is reported by
-# GitHub in the usual way (e.g. by email).
+# stop the match archive (see docs/archive-schema.sql) from being read. Supabase
+# says "a few requests a day" is usually enough to count as activity (a read
+# twice a week was not), so a small read runs every 6 hours. A failed run is
+# reported by GitHub in the usual way (e.g. by email).
+# See https://supabase.com/kb/faqs/platform/free-project-pausing
 on:
   schedule:
-    - cron: '17 6 * * 1,4' # 06:17 UTC on Mondays and Thursdays
+    - cron: '17 */6 * * *' # 00:17, 06:17, 12:17 and 18:17 UTC daily
   workflow_dispatch:
 
 permissions: {}
